@@ -54,6 +54,7 @@ class CommonFieldsView: MDCCard {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         buildView();
+        setObservation(observation: observation);
     }
 
     required init?(coder: NSCoder) {

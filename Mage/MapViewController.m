@@ -19,7 +19,6 @@
 #import "Locations.h"
 #import "Observations.h"
 #import "MapDelegate.h"
-#import "ObservationEditViewController.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "Event.h"

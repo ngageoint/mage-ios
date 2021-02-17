@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MaterialComponents/MaterialContainerScheme.h>
-#import "ObservationEditTableViewController.h"
+
+@protocol PropertyEditDelegate
+- (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
+- (void) invalidValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
+@end
 
 @interface SelectEditViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
 

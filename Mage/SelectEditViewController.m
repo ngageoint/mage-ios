@@ -7,7 +7,6 @@
 //
 
 #import "SelectEditViewController.h"
-#import "Theme+UIResponder.h"
 
 @interface SelectEditViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

@@ -6,10 +6,7 @@
 #import "DataConnectionUtilities.h"
 #import "StoredPassword.h"
 
-#import "ObservationEditViewController.h"
 #import "ObservationFields.h"
-#import "ObservationEditListener.h"
-//#import "ObservationEditGeometryTableViewCell.h"
 #import "ObservationAccuracy.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"

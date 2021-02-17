@@ -35,20 +35,15 @@
 		2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323A72463666700D2866B /* ObservationAccuracy.m */; };
 		2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323AD246366B800D2866B /* LocationAccuracy.m */; };
 		2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323B0246366CF00D2866B /* LocationAccuracyRenderer.m */; };
-		2F0323B32466002D00D2866B /* ObservationLocationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F0323B22466002D00D2866B /* ObservationLocationTableViewCell.xib */; };
-		2F0323B62466017900D2866B /* ObservationLocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */; };
-		2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */; };
 		2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1069DC221C9005009F661A /* SettingsCoordinator.m */; };
 		2F142433220A6B610070EB46 /* LocationServicesHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142432220A6B610070EB46 /* LocationServicesHeaderView.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
 		2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */; };
-		2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */; };
 		2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
 		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
-		2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */; };
 		2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38DF1622B942C800485DA4 /* LdapLoginView.m */; };
 		2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F38DF1D22B957C300485DA4 /* ldap-authView.xib */; };
 		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
@@ -75,10 +70,6 @@
 		2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1622012D1C007FE473 /* EventInformationView.m */; };
 		2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F8A2C182201305D007FE473 /* EventInformationView.xib */; };
 		2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */; };
-		2F8A2C27220235B2007FE473 /* FormDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F8A2C26220235B2007FE473 /* FormDefaults.xib */; };
-		2F8A2C2F2202590A007FE473 /* FormDefaultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C2E2202590A007FE473 /* FormDefaultsTableViewController.m */; };
-		2F8A2C3C220894AA007FE473 /* FormDefaultsFormHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F8A2C3B220894AA007FE473 /* FormDefaultsFormHeader.xib */; };
-		2F8A2C3F220895AC007FE473 /* FormDefaultsSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C3E220895AC007FE473 /* FormDefaultsSectionHeader.m */; };
 		2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F99EC201E2982E700E0CBB6 /* Filter.m */; };
 		2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */; };
 		2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */; };
@@ -87,10 +78,8 @@
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
 		2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FB41CDE1DC79436005C18F9 /* Filter.storyboard */; };
 		2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */; };
-		2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB46F9A1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m */; };
 		2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */; };
 		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
-		2FC590401DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC5903F1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m */; };
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC99DC41DDA30C5003C1D36 /* UserDataStore.m */; };
 		2FC99DC81DDA335A003C1D36 /* UserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC99DC71DDA335A003C1D36 /* UserTableViewController.m */; };
@@ -101,7 +90,6 @@
 		2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FCDC35722C2888C004189AD /* AuthenticationButton.xib */; };
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
-		2FDB66A51EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */; };
 		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
@@ -133,8 +121,6 @@
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
-		F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */; };
-		F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
 		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
@@ -154,12 +140,10 @@
 		F71B724E246B1DCC00E4CF33 /* EditDateViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */; };
 		F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */; };
 		F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B7252246C412900E4CF33 /* BaseFieldView.swift */; };
-		F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */; };
 		F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */; };
 		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
 		F721B3691913E6E000F1CAB4 /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */; };
 		F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723232B251CE92800AD168A /* MapSettingsTests.swift */; };
-		F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */; };
 		F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723D608253F66AC00C6BE34 /* MAGEScheme.swift */; };
 		F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F723D60C253F6D9900C6BE34 /* Colors.xcassets */; };
 		F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */; };
@@ -189,18 +173,6 @@
 		F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F743008B254775AB00DCE050 /* SplitLayout.swift */; };
 		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
 		F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B7B209A2F0B00EABA63 /* OrView.m */; };
-		F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687351F449CD7009D7CF4 /* ObservationEditCell.xib */; };
-		F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687391F44B621009D7CF4 /* ObservationDateEditCell.xib */; };
-		F746873C1F44B659009D7CF4 /* ObservationGeometryEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746873B1F44B659009D7CF4 /* ObservationGeometryEditCell.xib */; };
-		F746873E1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746873D1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib */; };
-		F74687401F44D4D2009D7CF4 /* ObservationEmailEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746873F1F44D4D2009D7CF4 /* ObservationEmailEditCell.xib */; };
-		F74687421F44D51B009D7CF4 /* ObservationNumberEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687411F44D51B009D7CF4 /* ObservationNumberEditCell.xib */; };
-		F74687451F44D546009D7CF4 /* ObservationTextAreaEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687441F44D546009D7CF4 /* ObservationTextAreaEditCell.xib */; };
-		F74687471F44D585009D7CF4 /* ObservationAttachmentEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687461F44D585009D7CF4 /* ObservationAttachmentEditCell.xib */; };
-		F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687481F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib */; };
-		F746874B1F44D605009D7CF4 /* ObservationPasswordEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746874A1F44D605009D7CF4 /* ObservationPasswordEditCell.xib */; };
-		F746874D1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F746874C1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib */; };
-		F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */; };
 		F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */; };
 		F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
@@ -212,20 +184,16 @@
 		F75A10FE2049D628002F9906 /* UIColor+Mage.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10FD2049D628002F9906 /* UIColor+Mage.m */; };
 		F75A11012049D6A3002F9906 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11002049D6A3002F9906 /* ThemeManager.m */; };
 		F75A11082049E61A002F9906 /* Theme+UIResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A11072049E61A002F9906 /* Theme+UIResponder.m */; };
-		F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
 		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
 		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
-		F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
 		F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */; };
-		F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C61A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m */; };
 		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
-		F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */; };
 		F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DF247C14DA0089F3AC /* FieldKey.swift */; };
 		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */; };
@@ -247,7 +215,6 @@
 		F77B7D7E24797B9900C51953 /* allFieldTypesForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */; };
 		F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77C21A5254C6E7000D9257F /* HexColor.swift */; };
 		F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */; };
-		F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */; };
 		F7813A8124621237003666ED /* ObservationFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8024621237003666ED /* ObservationFormView.swift */; };
 		F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8224632E9A003666ED /* TextFieldView.swift */; };
 		F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8524647B10003666ED /* CommonFieldsView.swift */; };
@@ -271,7 +238,6 @@
 		F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.m */; };
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
 		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
-		F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */; };
 		F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */; };
 		F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0624B8F15D0028FBFC /* UserViewController.swift */; };
@@ -287,15 +253,10 @@
 		F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */ = {isa = PBXBuildFile; fileRef = F796E44C24193D00005CA09C /* AskToDownload.xib */; };
 		F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */; };
 		F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */; };
-		F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */; };
-		F798FAB219A4E5200010B052 /* ObservationEditSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F798FAB119A4E5200010B052 /* ObservationEditSelectTableViewCell.m */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */; };
 		F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */; };
 		F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */; };
 		F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */; };
-		F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */; };
-		F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */; };
-		F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */; };
 		F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */; };
 		F7A7B6EC25D47DC100DAB232 /* SFPointSecure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */; };
 		F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */; };
@@ -326,26 +287,6 @@
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
 		F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89A1F506627002C78D3 /* ObservationCell.xib */; };
 		F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89C1F506D76002C78D3 /* PersonCell.xib */; };
-		F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */; };
-		F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */; };
-		F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */; };
-		F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */; };
-		F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */; };
-		F7C5C8B41F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */; };
-		F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */; };
-		F7C5C8B81F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */; };
-		F7C5C8BA1F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8B91F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib */; };
-		F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8BB1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib */; };
-		F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8BD1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib */; };
-		F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8BF1F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib */; };
-		F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C11F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib */; };
-		F7C5C8C41F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C31F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib */; };
-		F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C51F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib */; };
-		F7C5C8C81F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C71F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib */; };
-		F7C5C8CA1F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8C91F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib */; };
-		F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8CB1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib */; };
-		F7C5C8CE1F5F0505002C78D3 /* ObservationDateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8CD1F5F0505002C78D3 /* ObservationDateTableViewCell.xib */; };
-		F7C5C8D01F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8CF1F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib */; };
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
 		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
@@ -367,9 +308,6 @@
 		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
-		F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */; };
-		F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */; };
-		F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */; };
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
 		F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */; };
@@ -383,7 +321,6 @@
 		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
 		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */; };
 		F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */; };
-		F7DCCC211F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */; };
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
@@ -399,7 +336,6 @@
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
 		F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.m */; };
-		F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */; };
 		F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */; };
 		F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */; };
 		F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D141FFD95B5007BD768 /* MapSettingsCoordinator.m */; };
@@ -426,7 +362,6 @@
 		F7F9122724804D2100C068B6 /* EditCheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
-		F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m */; };
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
@@ -504,11 +439,6 @@
 		2F0323AD246366B800D2866B /* LocationAccuracy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LocationAccuracy.m; path = Map/Overlay/LocationAccuracy.m; sourceTree = "<group>"; };
 		2F0323AF246366CF00D2866B /* LocationAccuracyRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocationAccuracyRenderer.h; path = Map/Overlay/LocationAccuracyRenderer.h; sourceTree = "<group>"; };
 		2F0323B0246366CF00D2866B /* LocationAccuracyRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LocationAccuracyRenderer.m; path = Map/Overlay/LocationAccuracyRenderer.m; sourceTree = "<group>"; };
-		2F0323B22466002D00D2866B /* ObservationLocationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ObservationLocationTableViewCell.xib; sourceTree = "<group>"; };
-		2F0323B42466017900D2866B /* ObservationLocationTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationLocationTableViewCell.h; sourceTree = "<group>"; };
-		2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationLocationTableViewCell.m; sourceTree = "<group>"; };
-		2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusOkTableViewCell.h; sourceTree = "<group>"; };
-		2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusOkTableViewCell.m; sourceTree = "<group>"; };
 		2F1069DB221C9005009F661A /* SettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsCoordinator.h; sourceTree = "<group>"; };
 		2F1069DC221C9005009F661A /* SettingsCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsCoordinator.m; sourceTree = "<group>"; };
 		2F142431220A6B610070EB46 /* LocationServicesHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationServicesHeaderView.h; sourceTree = "<group>"; };
@@ -519,8 +449,6 @@
 		2F1542E01CF76FC90022AABA /* ObservationFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFields.m; sourceTree = "<group>"; };
 		2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailCoordinator.h; sourceTree = "<group>"; };
 		2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailCoordinator.m; sourceTree = "<group>"; };
-		2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditNumberFieldTableViewCell.h; sourceTree = "<group>"; };
-		2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditNumberFieldTableViewCell.m; sourceTree = "<group>"; };
 		2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemSummary.swift; sourceTree = "<group>"; };
 		2F2F58F41BFA504B00B78993 /* ServerURLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLController.h; sourceTree = "<group>"; };
 		2F2F58F51BFA504B00B78993 /* ServerURLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerURLController.m; sourceTree = "<group>"; };
@@ -528,8 +456,6 @@
 		2F320B6C1BEABF0200C7F66C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
 		2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
-		2F3826AE1D9C252D007E0D75 /* ObservationImportantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportantTableViewCell.h; sourceTree = "<group>"; };
-		2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImportantTableViewCell.m; sourceTree = "<group>"; };
 		2F38DF1522B942C800485DA4 /* LdapLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LdapLoginView.h; sourceTree = "<group>"; };
 		2F38DF1622B942C800485DA4 /* LdapLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LdapLoginView.m; sourceTree = "<group>"; };
 		2F38DF1D22B957C300485DA4 /* ldap-authView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ldap-authView.xib"; sourceTree = "<group>"; };
@@ -554,7 +480,6 @@
 		2F52827124732B740023E974 /* IDPCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IDPCoordinator.m; sourceTree = "<group>"; };
 		2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationView.h; sourceTree = "<group>"; };
 		2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotationView.m; sourceTree = "<group>"; };
-		2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationChangedDelegate.h; sourceTree = "<group>"; };
 		2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTapped.h; sourceTree = "<group>"; };
 		2F763C8E1DD10D2900780250 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2F763C8F1DD10D2900780250 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
@@ -573,12 +498,6 @@
 		2F8A2C1622012D1C007FE473 /* EventInformationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventInformationView.m; sourceTree = "<group>"; };
 		2F8A2C182201305D007FE473 /* EventInformationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventInformationView.xib; sourceTree = "<group>"; };
 		2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsCoordinator.swift; sourceTree = "<group>"; };
-		2F8A2C26220235B2007FE473 /* FormDefaults.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormDefaults.xib; sourceTree = "<group>"; };
-		2F8A2C2D2202590A007FE473 /* FormDefaultsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDefaultsTableViewController.h; sourceTree = "<group>"; };
-		2F8A2C2E2202590A007FE473 /* FormDefaultsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FormDefaultsTableViewController.m; sourceTree = "<group>"; };
-		2F8A2C3B220894AA007FE473 /* FormDefaultsFormHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormDefaultsFormHeader.xib; sourceTree = "<group>"; };
-		2F8A2C3D220895AC007FE473 /* FormDefaultsSectionHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDefaultsSectionHeader.h; sourceTree = "<group>"; };
-		2F8A2C3E220895AC007FE473 /* FormDefaultsSectionHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FormDefaultsSectionHeader.m; sourceTree = "<group>"; };
 		2F99EC1F1E2982E700E0CBB6 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
 		2F99EC201E2982E700E0CBB6 /* Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filter.m; sourceTree = "<group>"; };
 		2F9B48DC1ED3BCC1001D07AB /* MageOfflineObservationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageOfflineObservationManager.h; sourceTree = "<group>"; };
@@ -594,14 +513,9 @@
 		2FB41CDF1DC79436005C18F9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Filter.storyboard; sourceTree = "<group>"; };
 		2FB41CE21DC79C8F005C18F9 /* ObservationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFilterTableViewController.h; sourceTree = "<group>"; };
 		2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFilterTableViewController.m; sourceTree = "<group>"; };
-		2FB46F991D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationMultiSelectTableViewCell.h; sourceTree = "<group>"; };
-		2FB46F9A1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationMultiSelectTableViewCell.m; sourceTree = "<group>"; };
 		2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeatureDetail.xib; sourceTree = "<group>"; };
 		2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailViewController.h; sourceTree = "<group>"; };
 		2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailViewController.m; sourceTree = "<group>"; };
-		2FC5903E1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAddImportantTableViewCell.h; sourceTree = "<group>"; };
-		2FC5903F1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAddImportantTableViewCell.m; sourceTree = "<group>"; };
-		2FC590411DC26D04003F60C7 /* ObservationImportantDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportantDelegate.h; sourceTree = "<group>"; };
 		2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+PersonIcon.h"; sourceTree = "<group>"; };
 		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FC99DC31DDA30C5003C1D36 /* UserDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataStore.h; sourceTree = "<group>"; };
@@ -619,8 +533,6 @@
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Thumbnail.h"; sourceTree = "<group>"; };
 		2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Thumbnail.m"; sourceTree = "<group>"; };
-		2FDB66A31EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationStatusErrorTableViewCell.h; sourceTree = "<group>"; };
-		2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationStatusErrorTableViewCell.m; sourceTree = "<group>"; };
 		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
 		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
@@ -669,10 +581,6 @@
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
-		F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewController.h; sourceTree = "<group>"; };
-		F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTableViewController.m; sourceTree = "<group>"; };
-		F70DA76419A3C16500D7A3B9 /* ObservationEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTableViewCell.h; sourceTree = "<group>"; };
-		F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTableViewCell.m; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
 		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
@@ -696,8 +604,6 @@
 		F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDateViewTests.swift; sourceTree = "<group>"; };
 		F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGeometryViewTests.swift; sourceTree = "<group>"; };
 		F71B7252246C412900E4CF33 /* BaseFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFieldView.swift; sourceTree = "<group>"; };
-		F720712A19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextAreaTableViewCell.h; sourceTree = "<group>"; };
-		F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextAreaTableViewCell.m; sourceTree = "<group>"; };
 		F72088A71E73600100EBFF81 /* TimeSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSettingsTableViewController.h; sourceTree = "<group>"; };
 		F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeSettingsTableViewController.m; sourceTree = "<group>"; };
 		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
@@ -705,8 +611,6 @@
 		F721B3671913E6E000F1CAB4 /* ValueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTableViewCell.h; sourceTree = "<group>"; };
 		F721B3681913E6E000F1CAB4 /* ValueTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTableViewCell.m; sourceTree = "<group>"; };
 		F723232B251CE92800AD168A /* MapSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsTests.swift; sourceTree = "<group>"; };
-		F723872419797BFD00810818 /* ObservationPropertyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPropertyTableViewCell.h; sourceTree = "<group>"; };
-		F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertyTableViewCell.m; sourceTree = "<group>"; };
 		F723D608253F66AC00C6BE34 /* MAGEScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAGEScheme.swift; sourceTree = "<group>"; };
 		F723D60C253F6D9900C6BE34 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator.h; sourceTree = "<group>"; };
@@ -747,22 +651,9 @@
 		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
 		F7467B7A209A2F0B00EABA63 /* OrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrView.h; sourceTree = "<group>"; };
 		F7467B7B209A2F0B00EABA63 /* OrView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrView.m; sourceTree = "<group>"; };
-		F74687351F449CD7009D7CF4 /* ObservationEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditCell.xib; sourceTree = "<group>"; };
-		F74687391F44B621009D7CF4 /* ObservationDateEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDateEditCell.xib; sourceTree = "<group>"; };
-		F746873B1F44B659009D7CF4 /* ObservationGeometryEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationGeometryEditCell.xib; sourceTree = "<group>"; };
-		F746873D1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationCheckboxEditCell.xib; sourceTree = "<group>"; };
-		F746873F1F44D4D2009D7CF4 /* ObservationEmailEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEmailEditCell.xib; sourceTree = "<group>"; };
-		F74687411F44D51B009D7CF4 /* ObservationNumberEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationNumberEditCell.xib; sourceTree = "<group>"; };
-		F74687441F44D546009D7CF4 /* ObservationTextAreaEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationTextAreaEditCell.xib; sourceTree = "<group>"; };
-		F74687461F44D585009D7CF4 /* ObservationAttachmentEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationAttachmentEditCell.xib; sourceTree = "<group>"; };
-		F74687481F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDropdownEditCell.xib; sourceTree = "<group>"; };
-		F746874A1F44D605009D7CF4 /* ObservationPasswordEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationPasswordEditCell.xib; sourceTree = "<group>"; };
-		F746874C1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationTextfieldEditCell.xib; sourceTree = "<group>"; };
-		F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
 		F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangePasswordView.xib; sourceTree = "<group>"; };
 		F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
 		F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
-		F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationEditListener.h; sourceTree = "<group>"; };
 		F7531EF819100E7D00CA084C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		F7531EF919100E7D00CA084C /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerObserver.swift; sourceTree = "<group>"; };
@@ -778,8 +669,6 @@
 		F75A11002049D6A3002F9906 /* ThemeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemeManager.m; sourceTree = "<group>"; };
 		F75A11062049E61A002F9906 /* Theme+UIResponder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Theme+UIResponder.h"; sourceTree = "<group>"; };
 		F75A11072049E61A002F9906 /* Theme+UIResponder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Theme+UIResponder.m"; sourceTree = "<group>"; };
-		F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxViewTableViewCell.h; sourceTree = "<group>"; };
-		F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxViewTableViewCell.m; sourceTree = "<group>"; };
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
 		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
@@ -788,8 +677,6 @@
 		F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = authorizeLocalSuccess.json; sourceTree = "<group>"; };
 		F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkSyncOptionTetsts.m; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
-		F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditTableViewCell.h; sourceTree = "<group>"; };
-		F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditTableViewCell.m; sourceTree = "<group>"; };
 		F76949141AA6436000CB680B /* EventChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserController.h; sourceTree = "<group>"; };
 		F76949151AA6436000CB680B /* EventChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserController.m; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
@@ -797,12 +684,8 @@
 		F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FirstResponder.h"; sourceTree = "<group>"; };
 		F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+FirstResponder.m"; sourceTree = "<group>"; };
 		F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ../LaunchScreen.storyboard; sourceTree = "<group>"; };
-		F76A15C51A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationHeaderTableViewCell.h; sourceTree = "<group>"; };
-		F76A15C61A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationHeaderTableViewCell.m; sourceTree = "<group>"; };
 		F76A15D11A96536700F2BDF1 /* UIImageView+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+IB.h"; sourceTree = "<group>"; };
 		F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+IB.m"; sourceTree = "<group>"; };
-		F76A15D41A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationHeaderAttachmentTableViewCell.h; sourceTree = "<group>"; };
-		F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationHeaderAttachmentTableViewCell.m; sourceTree = "<group>"; };
 		F76EB1DF247C14DA0089F3AC /* FieldKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldKey.swift; sourceTree = "<group>"; };
 		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNumberFieldViewTests.swift; sourceTree = "<group>"; };
@@ -829,7 +712,6 @@
 		F77C21A5254C6E7000D9257F /* HexColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
 		F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecordingDelegate.h; sourceTree = "<group>"; };
 		F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoImageProvider.swift; sourceTree = "<group>"; };
-		F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
 		F7813A8024621237003666ED /* ObservationFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormView.swift; sourceTree = "<group>"; };
 		F7813A8224632E9A003666ED /* TextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
 		F7813A8524647B10003666ED /* CommonFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsView.swift; sourceTree = "<group>"; };
@@ -864,8 +746,6 @@
 		F7929C8023C8F48C00396D11 /* countries_dark.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries_dark.gpkg; sourceTree = "<group>"; };
 		F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTableHeaderView.h; sourceTree = "<group>"; };
 		F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTableHeaderView.m; sourceTree = "<group>"; };
-		F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewDataStore.h; sourceTree = "<group>"; };
-		F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewDataStore.m; sourceTree = "<group>"; };
 		F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMageServer.swift; sourceTree = "<group>"; };
 		F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateDisplay.swift; sourceTree = "<group>"; };
 		F795ED0624B8F15D0028FBFC /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
@@ -881,20 +761,10 @@
 		F796E44C24193D00005CA09C /* AskToDownload.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AskToDownload.xib; sourceTree = "<group>"; };
 		F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadViewController.swift; sourceTree = "<group>"; };
 		F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewControllerTests.swift; sourceTree = "<group>"; };
-		F798FAAD19A4E4580010B052 /* ObservationDatePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDatePickerTableViewCell.h; sourceTree = "<group>"; };
-		F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDatePickerTableViewCell.m; sourceTree = "<group>"; };
-		F798FAB019A4E5200010B052 /* ObservationEditSelectTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditSelectTableViewCell.h; sourceTree = "<group>"; };
-		F798FAB119A4E5200010B052 /* ObservationEditSelectTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditSelectTableViewCell.m; sourceTree = "<group>"; };
 		F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageRootViewController.swift; sourceTree = "<group>"; };
 		F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLControllerTests.swift; sourceTree = "<group>"; };
 		F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewTests.swift; sourceTree = "<group>"; };
 		F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewTests.swift; sourceTree = "<group>"; };
-		F79E9D3C19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationCheckboxTableViewCell.h; sourceTree = "<group>"; };
-		F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationCheckboxTableViewCell.m; sourceTree = "<group>"; };
-		F79E9D3F19D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditGeometryTableViewCell.h; sourceTree = "<group>"; };
-		F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditGeometryTableViewCell.m; sourceTree = "<group>"; };
-		F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditTextFieldTableViewCell.h; sourceTree = "<group>"; };
-		F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsViewController.swift; sourceTree = "<group>"; };
 		F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFPointSecure.swift; sourceTree = "<group>"; };
 		F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDropdownFieldView.swift; sourceTree = "<group>"; };
@@ -940,26 +810,6 @@
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
 		F7C5C89A1F506627002C78D3 /* ObservationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationCell.xib; sourceTree = "<group>"; };
 		F7C5C89C1F506D76002C78D3 /* PersonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonCell.xib; sourceTree = "<group>"; };
-		F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationViewIPadHeaderCell.xib; sourceTree = "<group>"; };
-		F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDeleteCell.xib; sourceTree = "<group>"; };
-		F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationViewIPhoneHeaderCell.xib; sourceTree = "<group>"; };
-		F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationMapTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationActionsTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationImportantTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationAddImportantTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationPropertyTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8B91F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationCheckboxViewTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8BB1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationPasswordTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8BD1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusErrorTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8BF1F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusNeedsSyncTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8C11F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusSyncingTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8C31F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationStatusOkTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8C51F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationSyncTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8C71F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationSyncingTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8C91F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationAttachmentTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8CB1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationGeometryTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8CD1F5F0505002C78D3 /* ObservationDateTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationDateTableViewCell.xib; sourceTree = "<group>"; };
-		F7C5C8CF1F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationMultiSelectTableViewCell.xib; sourceTree = "<group>"; };
 		F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageAppCoordinator.h; sourceTree = "<group>"; };
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
 		F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerURLView.xib; sourceTree = "<group>"; };
@@ -985,12 +835,6 @@
 		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
 		F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMSTileOverlay.h; sourceTree = "<group>"; };
 		F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMSTileOverlay.m; sourceTree = "<group>"; };
-		F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationGeometryTableViewCell.h; sourceTree = "<group>"; };
-		F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationGeometryTableViewCell.m; sourceTree = "<group>"; };
-		F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPasswordTableViewCell.h; sourceTree = "<group>"; };
-		F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPasswordTableViewCell.m; sourceTree = "<group>"; };
-		F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDateTableViewCell.h; sourceTree = "<group>"; };
-		F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDateTableViewCell.m; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
 		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
 		F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsAlternate.json; sourceTree = "<group>"; };
@@ -1010,8 +854,6 @@
 		F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyle.h; sourceTree = "<group>"; };
 		F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyleParser.h; sourceTree = "<group>"; };
 		F7DCCC1B1F4626C600E4C616 /* GeometryEditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeometryEditView.xib; sourceTree = "<group>"; };
-		F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPropertiesEditCoordinator.h; sourceTree = "<group>"; };
-		F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPropertiesEditCoordinator.m; sourceTree = "<group>"; };
 		F7DCCC231F46366F00E4C616 /* ExternalDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDevice.h; sourceTree = "<group>"; };
 		F7DCCC241F46366F00E4C616 /* ExternalDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExternalDevice.m; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
@@ -1032,8 +874,6 @@
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		F7E457651F61E2380082F527 /* EventChooserCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserCoordinator.h; sourceTree = "<group>"; };
 		F7E457661F61E2380082F527 /* EventChooserCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserCoordinator.m; sourceTree = "<group>"; };
-		F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditViewController.h; sourceTree = "<group>"; };
-		F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditViewController.m; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GondolaMage-Regular.otf"; sourceTree = "<group>"; };
 		F7ED5D131FFD95B5007BD768 /* MapSettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapSettingsCoordinator.h; sourceTree = "<group>"; };
@@ -1067,8 +907,6 @@
 		F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
-		F7FC59291F3CF68F0010351A /* ObservationEditCoordinator_legacy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationEditCoordinator_legacy.h; sourceTree = "<group>"; };
-		F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationEditCoordinator_legacy.m; sourceTree = "<group>"; };
 		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
 		F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolygon.m; sourceTree = "<group>"; };
 		F7FD4DF71A80126300DAABA6 /* StyledPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolyline.h; sourceTree = "<group>"; };
@@ -1188,8 +1026,6 @@
 				F796E44B24193C9A005CA09C /* Attachment */,
 				F7ED5D0F1FFD7F88007BD768 /* Settings */,
 				F7A292291FC3938F00DE5463 /* Authentication */,
-				F7C5C89E1F546649002C78D3 /* ViewCells */,
-				F74687381F44B4E5009D7CF4 /* EditCells */,
 				F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */,
 				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
@@ -1635,47 +1471,13 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		F74687381F44B4E5009D7CF4 /* EditCells */ = {
-			isa = PBXGroup;
-			children = (
-				F74687351F449CD7009D7CF4 /* ObservationEditCell.xib */,
-				F74687391F44B621009D7CF4 /* ObservationDateEditCell.xib */,
-				F746873B1F44B659009D7CF4 /* ObservationGeometryEditCell.xib */,
-				F746873D1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib */,
-				F746873F1F44D4D2009D7CF4 /* ObservationEmailEditCell.xib */,
-				F74687411F44D51B009D7CF4 /* ObservationNumberEditCell.xib */,
-				F74687441F44D546009D7CF4 /* ObservationTextAreaEditCell.xib */,
-				F74687461F44D585009D7CF4 /* ObservationAttachmentEditCell.xib */,
-				F74687481F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib */,
-				F746874A1F44D605009D7CF4 /* ObservationPasswordEditCell.xib */,
-				F746874C1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib */,
-				F74687511F44E781009D7CF4 /* ObservationEditSelectPickerView.xib */,
-				F77FBF4D1F44E8C00089A2D5 /* DropdownChoiceCell.xib */,
-				F7C5C8A11F546A28002C78D3 /* ObservationDeleteCell.xib */,
-			);
-			name = EditCells;
-			sourceTree = "<group>";
-		};
 		F7481F0219A663B100E9C56D /* Edit */ = {
 			isa = PBXGroup;
 			children = (
 				F7813A842463337F003666ED /* Components */,
 				F7CFC09A201FD40C003250A3 /* Geometry */,
-				F75DD30C1A97AA3B0007FA3F /* Cells */,
-				F7EC4E631F340E4A0046FDD3 /* ObservationEditViewController.h */,
-				F7EC4E641F340E4A0046FDD3 /* ObservationEditViewController.m */,
-				F74F232B19A7AE5F0068DE1B /* ObservationEditListener.h */,
-				F7FC59291F3CF68F0010351A /* ObservationEditCoordinator_legacy.h */,
-				F7FC592A1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m */,
-				2F5D68F51C4F20DA00E95DF6 /* ObservationAnnotationChangedDelegate.h */,
-				F70DA76119A3BC7100D7A3B9 /* ObservationEditTableViewController.h */,
-				F70DA76219A3BC7100D7A3B9 /* ObservationEditTableViewController.m */,
-				F7959F8919DC5B4000982664 /* ObservationEditViewDataStore.h */,
-				F7959F8A19DC5B4000982664 /* ObservationEditViewDataStore.m */,
 				2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */,
 				2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */,
-				F7DCCC1F1F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.h */,
-				F7DCCC201F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m */,
 				F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */,
 				F7813A8024621237003666ED /* ObservationFormView.swift */,
 				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
@@ -1718,74 +1520,14 @@
 			name = Segues;
 			sourceTree = "<group>";
 		};
-		F75DD30C1A97AA3B0007FA3F /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				F70DA76419A3C16500D7A3B9 /* ObservationEditTableViewCell.h */,
-				F70DA76519A3C16500D7A3B9 /* ObservationEditTableViewCell.m */,
-				F798FAAD19A4E4580010B052 /* ObservationDatePickerTableViewCell.h */,
-				F798FAAE19A4E4580010B052 /* ObservationDatePickerTableViewCell.m */,
-				F798FAB019A4E5200010B052 /* ObservationEditSelectTableViewCell.h */,
-				F798FAB119A4E5200010B052 /* ObservationEditSelectTableViewCell.m */,
-				F79E9D3C19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.h */,
-				F79E9D3D19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m */,
-				F79E9D3F19D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.h */,
-				F79E9D4019D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m */,
-				F79E9D4519D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.h */,
-				F79E9D4619D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m */,
-				F720712A19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.h */,
-				F720712B19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m */,
-				F76655811A2CD0CE00558EBB /* AttachmentEditTableViewCell.h */,
-				F76655821A2CD0CE00558EBB /* AttachmentEditTableViewCell.m */,
-				2F2353001CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.h */,
-				2F2353011CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m */,
-			);
-			name = Cells;
-			sourceTree = "<group>";
-		};
 		F75DD30D1A97AABD0007FA3F /* View */ = {
 			isa = PBXGroup;
 			children = (
 				F738870D258A997500EDA036 /* Components */,
-				F75DD30E1A97AAC30007FA3F /* Cells */,
 				F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */,
 				F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */,
 			);
 			name = View;
-			sourceTree = "<group>";
-		};
-		F75DD30E1A97AAC30007FA3F /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				2FC590411DC26D04003F60C7 /* ObservationImportantDelegate.h */,
-				2FC5903E1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.h */,
-				2FC5903F1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m */,
-				2F3826AE1D9C252D007E0D75 /* ObservationImportantTableViewCell.h */,
-				2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */,
-				2F0323B42466017900D2866B /* ObservationLocationTableViewCell.h */,
-				2F0323B52466017900D2866B /* ObservationLocationTableViewCell.m */,
-				F75DD30F1A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.h */,
-				F75DD3101A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m */,
-				F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */,
-				F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */,
-				F7D6E2B9197FEFB800A71FB0 /* ObservationGeometryTableViewCell.h */,
-				F7D6E2BA197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m */,
-				F76A15D41A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.h */,
-				F76A15D51A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m */,
-				F76A15C51A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.h */,
-				F76A15C61A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m */,
-				2FB46F991D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.h */,
-				2FB46F9A1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m */,
-				F7D6E2BC198035FF00A71FB0 /* ObservationPasswordTableViewCell.h */,
-				F7D6E2BD198035FF00A71FB0 /* ObservationPasswordTableViewCell.m */,
-				F723872419797BFD00810818 /* ObservationPropertyTableViewCell.h */,
-				F723872519797BFD00810818 /* ObservationPropertyTableViewCell.m */,
-				2F09C8B41EA14AE300547F37 /* ObservationStatusOkTableViewCell.h */,
-				2F09C8B51EA14AE300547F37 /* ObservationStatusOkTableViewCell.m */,
-				2FDB66A31EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.h */,
-				2FDB66A41EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m */,
-			);
-			name = Cells;
 			sourceTree = "<group>";
 		};
 		F7614DA820068FF300676366 /* responses */ = {
@@ -1848,10 +1590,6 @@
 				2F4E10A5220DDC46001C9F12 /* FormDefaults.h */,
 				2F4E10A6220DDC46001C9F12 /* FormDefaults.m */,
 				2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */,
-				2F8A2C3D220895AC007FE473 /* FormDefaultsSectionHeader.h */,
-				2F8A2C3E220895AC007FE473 /* FormDefaultsSectionHeader.m */,
-				2F8A2C2D2202590A007FE473 /* FormDefaultsTableViewController.h */,
-				2F8A2C2E2202590A007FE473 /* FormDefaultsTableViewController.m */,
 				F76EB1DF247C14DA0089F3AC /* FieldKey.swift */,
 				F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */,
 			);
@@ -2173,33 +1911,6 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		F7C5C89E1F546649002C78D3 /* ViewCells */ = {
-			isa = PBXGroup;
-			children = (
-				F7C5C8AF1F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib */,
-				2F0323B22466002D00D2866B /* ObservationLocationTableViewCell.xib */,
-				F7C5C8B51F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib */,
-				F7C5C8C91F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib */,
-				F7C5C8B91F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib */,
-				F7C5C8CD1F5F0505002C78D3 /* ObservationDateTableViewCell.xib */,
-				F7C5C8CB1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib */,
-				F7C5C8B31F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib */,
-				F7C5C8AD1F5EE239002C78D3 /* ObservationMapTableViewCell.xib */,
-				F7C5C8CF1F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib */,
-				F7C5C8BB1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib */,
-				F7C5C8B71F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib */,
-				F7C5C8BD1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib */,
-				F7C5C8BF1F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib */,
-				F7C5C8C31F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib */,
-				F7C5C8C11F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib */,
-				F7C5C8C71F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib */,
-				F7C5C8C51F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib */,
-				F7C5C89F1F546685002C78D3 /* ObservationViewIPadHeaderCell.xib */,
-				F7C5C8AB1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib */,
-			);
-			name = ViewCells;
-			sourceTree = "<group>";
-		};
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -2260,8 +1971,6 @@
 				2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */,
 				2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */,
 				2F8A2C182201305D007FE473 /* EventInformationView.xib */,
-				2F8A2C26220235B2007FE473 /* FormDefaults.xib */,
-				2F8A2C3B220894AA007FE473 /* FormDefaultsFormHeader.xib */,
 				2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */,
 				F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */,
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
@@ -2401,82 +2110,46 @@
 			files = (
 				F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */,
 				F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */,
-				F746874D1F44D62E009D7CF4 /* ObservationTextfieldEditCell.xib in Resources */,
 				2F4E10AD220E1493001C9F12 /* LocationDisplay.xib in Resources */,
-				F7C5C8B81F5EE449002C78D3 /* ObservationPropertyTableViewCell.xib in Resources */,
 				2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */,
-				F746873E1F44D49D009D7CF4 /* ObservationCheckboxEditCell.xib in Resources */,
-				F7C5C8CC1F5F03E0002C78D3 /* ObservationGeometryTableViewCell.xib in Resources */,
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */,
-				F7C5C8AC1F5EE1FB002C78D3 /* ObservationViewIPhoneHeaderCell.xib in Resources */,
-				F74687521F44E781009D7CF4 /* ObservationEditSelectPickerView.xib in Resources */,
-				F7C5C8B01F5EE37C002C78D3 /* ObservationActionsTableViewCell.xib in Resources */,
-				F746873A1F44B621009D7CF4 /* ObservationDateEditCell.xib in Resources */,
-				F7C5C8C01F5EE926002C78D3 /* ObservationStatusNeedsSyncTableViewCell.xib in Resources */,
 				2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */,
 				2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
-				F7C5C8A21F546A28002C78D3 /* ObservationDeleteCell.xib in Resources */,
 				2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */,
-				2F8A2C27220235B2007FE473 /* FormDefaults.xib in Resources */,
 				2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */,
 				F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */,
-				F7C5C8C61F5EEDEF002C78D3 /* ObservationSyncTableViewCell.xib in Resources */,
-				F74687471F44D585009D7CF4 /* ObservationAttachmentEditCell.xib in Resources */,
-				F74687491F44D5C2009D7CF4 /* ObservationDropdownEditCell.xib in Resources */,
 				2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */,
-				2F8A2C3C220894AA007FE473 /* FormDefaultsFormHeader.xib in Resources */,
-				F74687401F44D4D2009D7CF4 /* ObservationEmailEditCell.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
-				2F0323B32466002D00D2866B /* ObservationLocationTableViewCell.xib in Resources */,
-				F7C5C8A01F546685002C78D3 /* ObservationViewIPadHeaderCell.xib in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
 				F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */,
-				F7C5C8BE1F5EE5F6002C78D3 /* ObservationStatusErrorTableViewCell.xib in Resources */,
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
-				F746874B1F44D605009D7CF4 /* ObservationPasswordEditCell.xib in Resources */,
-				F7C5C8C41F5EED1D002C78D3 /* ObservationStatusOkTableViewCell.xib in Resources */,
-				F7C5C8CE1F5F0505002C78D3 /* ObservationDateTableViewCell.xib in Resources */,
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
-				F746873C1F44B659009D7CF4 /* ObservationGeometryEditCell.xib in Resources */,
 				F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */,
 				2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */,
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
-				F7C5C8BA1F5EE475002C78D3 /* ObservationCheckboxViewTableViewCell.xib in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,
-				F7C5C8CA1F5EEFE0002C78D3 /* ObservationAttachmentTableViewCell.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
-				F74687451F44D546009D7CF4 /* ObservationTextAreaEditCell.xib in Resources */,
-				F7C5C8B41F5EE3D3002C78D3 /* ObservationImportantTableViewCell.xib in Resources */,
 				F7E457641F61C14F0082F527 /* EventCell.xib in Resources */,
 				F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */,
 				F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */,
-				F74687421F44D51B009D7CF4 /* ObservationNumberEditCell.xib in Resources */,
 				2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
-				F7C5C8AE1F5EE239002C78D3 /* ObservationMapTableViewCell.xib in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
 				F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */,
 				F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */,
-				F74687361F449CD7009D7CF4 /* ObservationEditCell.xib in Resources */,
-				F7C5C8C81F5EEE18002C78D3 /* ObservationSyncingTableViewCell.xib in Resources */,
 				F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */,
 				F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */,
 				F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */,
 				F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */,
-				F7C5C8B61F5EE408002C78D3 /* ObservationAddImportantTableViewCell.xib in Resources */,
-				F7C5C8D01F5F0560002C78D3 /* ObservationMultiSelectTableViewCell.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
-				F7C5C8C21F5EECF5002C78D3 /* ObservationStatusSyncingTableViewCell.xib in Resources */,
 				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
-				F7C5C8BC1F5EE4F5002C78D3 /* ObservationPasswordTableViewCell.xib in Resources */,
-				F77FBF4E1F44E8C00089A2D5 /* DropdownChoiceCell.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
 			);
@@ -2747,13 +2420,10 @@
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
 				F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */,
 				F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */,
-				F79E9D3E19D49E6A00AA55E6 /* ObservationCheckboxTableViewCell.m in Sources */,
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
-				F7959F8B19DC5B4000982664 /* ObservationEditViewDataStore.m in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
-				F79E9D4719D4B16E00AA55E6 /* ObservationEditTextFieldTableViewCell.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
 				F7859740206AEBFB00C68A23 /* ThemeSettingsTableViewController.m in Sources */,
 				F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */,
@@ -2765,19 +2435,16 @@
 				2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */,
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
-				F7D6E2C11980416B00A71FB0 /* ObservationDateTableViewCell.m in Sources */,
 				F75A10FE2049D628002F9906 /* UIColor+Mage.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
-				2F0323B62466017900D2866B /* ObservationLocationTableViewCell.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
-				F7EC4E651F340E4A0046FDD3 /* ObservationEditViewController.m in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
 				F7C812E925C1B37200D4332B /* ObservationDataStore.swift in Sources */,
 				F795ED0924B8F34D0028FBFC /* UserTableHeaderView.swift in Sources */,
@@ -2802,8 +2469,6 @@
 				F75A10E7204881F6002F9906 /* DarkTheme.m in Sources */,
 				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
-				F76655831A2CD0CE00558EBB /* AttachmentEditTableViewCell.m in Sources */,
-				2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
@@ -2813,7 +2478,6 @@
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
-				F798FAAF19A4E4580010B052 /* ObservationDatePickerTableViewCell.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
 				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
@@ -2827,11 +2491,9 @@
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
-				F76A15C71A962ECD00F2BDF1 /* ObservationHeaderTableViewCell.m in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
 				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
-				2FC590401DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m in Sources */,
 				2FC99DC81DDA335A003C1D36 /* UserTableViewController.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
@@ -2841,7 +2503,6 @@
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
-				F720712C19DDA245008E3FA9 /* ObservationEditTextAreaTableViewCell.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
@@ -2852,7 +2513,6 @@
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
-				F723872619797BFD00810818 /* ObservationPropertyTableViewCell.m in Sources */,
 				F7F4754925BA3C7D006634F7 /* ObservationSummaryView.swift in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F7F4755125BB3D77006634F7 /* AttachmentSlideshow.swift in Sources */,
@@ -2873,7 +2533,6 @@
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
-				F7D6E2BB197FEFB800A71FB0 /* ObservationGeometryTableViewCell.m in Sources */,
 				F7C812DB25C08D3C00D4332B /* ObservationTableViewController.swift in Sources */,
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */,
@@ -2885,12 +2544,10 @@
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
-				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
-				F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
@@ -2899,25 +2556,20 @@
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
 				2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */,
-				F79E9D4119D4A01900AA55E6 /* ObservationEditGeometryTableViewCell.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */,
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,
-				2FDB66A51EA7E83F0088F187 /* ObservationStatusErrorTableViewCell.m in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
-				2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
-				2F8A2C3F220895AC007FE473 /* FormDefaultsSectionHeader.m in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
-				F7D6E2BE198035FF00A71FB0 /* ObservationPasswordTableViewCell.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
@@ -2925,7 +2577,6 @@
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
-				F7DCCC211F4632FB00E4C616 /* ObservationPropertiesEditCoordinator.m in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
@@ -2934,26 +2585,21 @@
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
-				F76A15D61A966E2200F2BDF1 /* ObservationHeaderAttachmentTableViewCell.m in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
 				F7A7B6EC25D47DC100DAB232 /* SFPointSecure.swift in Sources */,
-				F798FAB219A4E5200010B052 /* ObservationEditSelectTableViewCell.m in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
-				F7FC592B1F3CF68F0010351A /* ObservationEditCoordinator_legacy.m in Sources */,
 				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
-				2F8A2C2F2202590A007FE473 /* FormDefaultsTableViewController.m in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
-				F75DD3111A97C13F0007FA3F /* ObservationCheckboxViewTableViewCell.m in Sources */,
 				F75A10E2204856E4002F9906 /* DayTheme.m in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
@@ -2965,9 +2611,7 @@
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
-				2F09C8B61EA14AE300547F37 /* ObservationStatusOkTableViewCell.m in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
-				2F2353021CBAD9C9000DDA76 /* ObservationEditNumberFieldTableViewCell.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */,
