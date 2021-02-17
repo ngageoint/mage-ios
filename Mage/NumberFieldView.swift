@@ -99,7 +99,7 @@ class NumberFieldView : BaseFieldView {
         return number;
     }
     
-    override func setValue(_ value: Any) {
+    override func setValue(_ value: Any?) {
         setValue(value as? String);
     }
     

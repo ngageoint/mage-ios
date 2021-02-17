@@ -34,15 +34,16 @@ class FieldSelectionCoordinator {
     }
     
     func fieldSelected() {
-        if (field[FieldKey.type.key] as? String == "dropdown" ||
-            field[FieldKey.type.key] as? String == "radio" ||
-            field[FieldKey.type.key] as? String == "multiselectdropdown") {
+        if (field[FieldKey.type.key] as? String == FieldType.dropdown.key ||
+                field[FieldKey.type.key] as? String == FieldType.radio.key ||
+                field[FieldKey.type.key] as? String == FieldType.multiselectdropdown.key) {
+            currentEditValue = formField.value;
             editSelect = SelectEditViewController(fieldDefinition: field, andValue: formField.value, andDelegate: self, scheme: self.scheme);
             editSelect.title = field[FieldKey.title.key] as? String;
             editSelect.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.editDone));
             editSelect.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.editCanceled));
             delegate.launchFieldSelectionViewController(viewController: editSelect);
-        } else if (field[FieldKey.type.key] as? String == "geometry") {
+        } else if (field[FieldKey.type.key] as? String == FieldType.geometry.key) {
             geometryCoordinator = GeometryEditCoordinator(fieldDefinition: field, andGeometry: formField.value as? SFGeometry, andPinImage: nil, andDelegate: self, andNavigationController: nil, scheme: self.scheme);
             geometryEdit = geometryCoordinator?.createViewController();
             delegate.launchFieldSelectionViewController(viewController: geometryEdit);
@@ -50,12 +51,9 @@ class FieldSelectionCoordinator {
     }
     
     @objc func editDone() {
-        self.formField.setValue(currentEditValue!);
-        // if this comes back without an error, dismiss
-        if (self.formField.isValid()) {
-            self.formField.delegate?.fieldValueChanged(field, value: currentEditValue);
-            editSelect?.navigationController?.popViewController(animated: true);
-        }
+        self.formField.setValue(currentEditValue);
+        self.formField.delegate?.fieldValueChanged(field, value: currentEditValue);
+        editSelect?.navigationController?.popViewController(animated: true);
     }
     
     @objc func editCanceled() {

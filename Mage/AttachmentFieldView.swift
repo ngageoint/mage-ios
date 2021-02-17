@@ -173,7 +173,7 @@ class AttachmentFieldView : BaseFieldView {
         return self.attachments == nil || self.attachments?.count == 0;
     }
     
-    override func setValue(_ value: Any) {
+    override func setValue(_ value: Any?) {
         setValue(value as? Set<Attachment>);
     }
     

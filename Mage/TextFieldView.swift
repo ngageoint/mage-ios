@@ -91,7 +91,7 @@ class TextFieldView : BaseFieldView {
         }
     }
     
-    override func setValue(_ value: Any) {
+    override func setValue(_ value: Any?) {
         self.setValue(value as? String);
     }
     

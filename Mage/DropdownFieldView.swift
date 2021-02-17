@@ -50,7 +50,10 @@ class DropdownFieldView : BaseFieldView {
         }
     }
     
-    override func setValue(_ value: Any) {
+    override func setValue(_ value: Any?) {
+        if (value == nil) {
+            self.value = nil;
+        }
         if (value is String) {
             self.value = [value];
         } else if (value is [String]) {

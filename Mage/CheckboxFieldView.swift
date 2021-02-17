@@ -80,7 +80,7 @@ class CheckboxFieldView : BaseFieldView {
         }
     }
     
-    override func setValue(_ value: Any) {
+    override func setValue(_ value: Any?) {
         if let boolValue = value as? Bool {
             setValue(boolValue);
         }

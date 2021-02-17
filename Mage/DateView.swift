@@ -121,7 +121,7 @@ class DateView : BaseFieldView {
         return (textField.text ?? "").count == 0
     }
     
-    override func setValue(_ value: Any) {
+    override func setValue(_ value: Any?) {
         self.setValue(value as? String)
     }
     
