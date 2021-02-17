@@ -564,12 +564,14 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
     func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
         // delete the attachment
         attachment.markedForDeletion = true;
+        attachment.dirty = true;
         handler(true);
         let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Attachment Deleted");
         let messageAction = MDCSnackbarMessageAction();
         messageAction.title = "UNDO";
         let actionHandler = {() in
             attachment.markedForDeletion = false;
+            attachment.dirty = false;
             handler(false);
         }
         messageAction.handler = actionHandler;
