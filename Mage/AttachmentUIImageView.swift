@@ -90,6 +90,7 @@ import Kingfisher
                   indicator: Indicator? = nil,
                   progressBlock: DownloadProgressBlock? = nil,
                   completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+        self.contentMode = .scaleAspectFill;
         
         if (url.isFileURL) {
             let provider = LocalFileImageDataProvider(fileURL: url)
@@ -118,7 +119,7 @@ import Kingfisher
                 
         let placeholder = PlaceholderImage();
         placeholder.contentMode = .scaleAspectFit;
-        self.contentMode = .scaleAspectFill;
+        
         self.clipsToBounds = true;
         
         if (self.useDownloadPlaceholder && thumbnail) {
