@@ -103,7 +103,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
 
@@ -128,7 +128,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -154,7 +154,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -179,7 +179,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -204,7 +204,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -230,7 +230,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -255,7 +255,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -280,7 +280,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -306,7 +306,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -331,7 +331,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -356,7 +356,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -382,7 +382,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -409,7 +409,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -436,7 +436,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -464,7 +464,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -491,7 +491,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -587,7 +587,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -612,7 +612,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -638,7 +638,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -663,7 +663,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -688,7 +688,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -714,7 +714,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -739,7 +739,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -764,7 +764,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -790,7 +790,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -815,7 +815,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -840,7 +840,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -866,7 +866,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -893,7 +893,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -920,7 +920,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -948,7 +948,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -975,7 +975,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 
@@ -1002,7 +1002,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
-                    controller = FeedItemViewController(feedItem: feedItem)
+                    controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
                 

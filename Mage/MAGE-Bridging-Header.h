@@ -55,7 +55,7 @@
 #import "TimeFilter.h"
 #import "ObservationImage.h"
 #import "UserTableViewController.h"
-#import "Filter.h"
+#import "MageFilter.h"
 #import "UINavigationItem+Subtitle.h"
 #import "ObservationFilterTableViewController.h"
 #import "ObservationTableHeaderView.h"

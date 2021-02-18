@@ -97,49 +97,6 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 HTTPStubs.removeAllStubs();
             }
             
-
-            
-            it("initialize the ObservationViewController") {
-                var completeTest = false;
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            print("user added")
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                print("user added to event")
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    print("observation added")
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
-                UserDefaults.standard.currentUserId = "userabc";
-                
-                let observations = Observation.mr_findAll();
-                expect(observations?.count).to(equal(1));
-                let observation: Observation = observations![0] as! Observation;
-                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let observationViewController: ObservationViewController = ObservationViewController()
-                observationViewController.observation = observation;
-                controller.pushViewController(observationViewController, animated: true);
-
-                view = window;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
-            }
-            
             it("initialize the ObservationViewCardCollectionViewController") {
                 var completeTest = false;
                 waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
@@ -163,7 +120,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 expect(observations?.count).to(equal(1));
                 let observation: Observation = observations![0] as! Observation;
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation);
+                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: MAGEScheme.scheme());
                 controller.pushViewController(observationViewController, animated: true);
                 
                 view = window;
@@ -203,7 +160,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 observation.dirty = true;
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation);
+                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: MAGEScheme.scheme());
                 controller.pushViewController(observationViewController, animated: true);
                 
                 view = window;
@@ -243,7 +200,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 observation.dirty = true;
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation);
+                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: MAGEScheme.scheme());
                 controller.pushViewController(observationViewController, animated: true);
                 tester().waitForAnimationsToFinish();
                 view = window;

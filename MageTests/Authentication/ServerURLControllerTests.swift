@@ -67,7 +67,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should load empty the ServerURLController") {
-                view = ServerURLController(delegate: delegate);
+                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
@@ -80,7 +80,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should not allow setting an empty server URL") {
-                view = ServerURLController(delegate: delegate);
+                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
@@ -95,7 +95,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should allow setting a server URL") {
-                view = ServerURLController(delegate: delegate);
+                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
@@ -110,7 +110,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should allow setting a server URL with the enter key") {
-                view = ServerURLController(delegate: delegate);
+                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
@@ -127,7 +127,7 @@ class ServerURLControllerTests: KIFSpec {
             it("should load current URL into the ServerURLController") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                view = ServerURLController(delegate: delegate);
+                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
@@ -141,7 +141,7 @@ class ServerURLControllerTests: KIFSpec {
             it("should load current URL into the ServerURLController with an error") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                view = ServerURLController(delegate: delegate, andError: "Something wrong");
+                view = ServerURLController(delegate: delegate, andError: "Something wrong", andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
@@ -158,7 +158,7 @@ class ServerURLControllerTests: KIFSpec {
             it("should cancel the ServerURLController") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                view = ServerURLController(delegate: delegate);
+                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));

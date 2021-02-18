@@ -176,7 +176,7 @@ class ObservationTableViewController: UITableViewController {
     }
     
     func setNavBarTitle() {
-        let timeFilterString = Filter.getString();
+        let timeFilterString = MageFilter.getString();
         self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
     }
     

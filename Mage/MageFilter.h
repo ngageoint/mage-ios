@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Filter : NSObject
+@interface MageFilter : NSObject
 + (NSString *) getFilterString;
 + (NSString *) getLocationFilterString;
 @end

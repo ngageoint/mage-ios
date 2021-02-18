@@ -20,6 +20,7 @@
 #import "Authentication.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"
+#import "MAGE-Swift.h"
 
 @interface ServerURLController ()
 @property (strong, nonatomic) NSString *error;
@@ -86,7 +87,7 @@
     id delegatePartialMock = OCMPartialMock(delegate);
     OCMExpect([delegatePartialMock authenticationSuccessful]);
     
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -209,7 +210,7 @@
     id delegatePartialMock = OCMPartialMock(delegate);
     OCMExpect([delegatePartialMock authenticationSuccessful]);
     
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -299,7 +300,7 @@
     id delegatePartialMock = OCMPartialMock(delegate);
     OCMExpect([delegatePartialMock authenticationSuccessful]);
 
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
 
@@ -390,7 +391,7 @@
     id delegatePartialMock = OCMPartialMock(delegate);
     OCMExpect([delegatePartialMock authenticationSuccessful]);
     
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -476,7 +477,7 @@
     id delegatePartialMock = OCMPartialMock(delegate);
     OCMExpect([delegatePartialMock authenticationSuccessful]);
     
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -558,7 +559,7 @@
     id delegatePartialMock = OCMPartialMock(delegate);
     OCMExpect([delegatePartialMock authenticationSuccessful]);
     
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -643,7 +644,7 @@
     
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
     
-    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -738,7 +739,7 @@
 
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
 
-    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
 
     id navControllerPartialMock = OCMPartialMock(navigationController);
 
@@ -830,7 +831,7 @@
     
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
     
-    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -905,7 +906,7 @@
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
     
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"response of async request has arrived"];
@@ -932,7 +933,7 @@
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
     
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"response of async request has arrived"];
@@ -965,7 +966,7 @@
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"response of async request has arrived"];
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
 
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     
@@ -1009,7 +1010,7 @@
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"response of async request has arrived"];
     AuthenticationTestDelegate *delegate = [[AuthenticationTestDelegate alloc] init];
 
-    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate];
+    AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:delegate andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     

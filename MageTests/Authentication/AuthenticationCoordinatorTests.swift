@@ -66,7 +66,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 window?.rootViewController = navigationController;
                 window?.makeKeyAndVisible();
                 
-                coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate);
+                coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme());
             }
             
             afterEach {

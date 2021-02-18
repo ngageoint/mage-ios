@@ -23,7 +23,7 @@
 #import "ObservationAnnotation.h"
 #import "Event.h"
 #import "GPSLocation.h"
-#import "Filter.h"
+#import "MageFilter.h"
 #import "SFPoint.h"
 #import "ObservationAnnotationView.h"
 #import "Layer.h"
@@ -350,7 +350,7 @@
 }
 
 - (void) setNavBarTitle {
-    if ([[Filter getFilterString] length] != 0 || [[Filter getLocationFilterString] length] != 0) {
+    if ([[MageFilter getFilterString] length] != 0 || [[MageFilter getLocationFilterString] length] != 0) {
         [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
     } else {
         [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:nil];

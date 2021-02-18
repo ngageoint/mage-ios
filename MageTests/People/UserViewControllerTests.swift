@@ -87,7 +87,7 @@ class UserViewControllerTests: QuickSpec {
                 let user: User = User.mr_findFirst()!;
                 let userLastLocation: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.0085, longitude: -105.2678), altitude: 0, horizontalAccuracy: 4.3, verticalAccuracy: 0, timestamp: Date(timeIntervalSince1970: 1));
                 
-                controller = UserViewController(user: user);
+                controller = UserViewController(user: user, scheme: MAGEScheme.scheme());
                 window.rootViewController = controller;
                 
                 maybeRecordSnapshot(controller.view, doneClosure: {

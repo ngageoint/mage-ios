@@ -4,8 +4,6 @@
 //
 //
 
-@import DateTools;
-
 #import "LocationDataStore.h"
 #import "PersonTableViewCell.h"
 #import "Location.h"

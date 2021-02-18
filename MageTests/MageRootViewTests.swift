@@ -128,7 +128,7 @@ class MageRootViewTests: KIFSpec {
                     })
                 }
 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme());
                 window.rootViewController = controller;
 
                 let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
@@ -161,7 +161,7 @@ class MageRootViewTests: KIFSpec {
                     })
                 }
 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
 
                 let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
@@ -197,7 +197,7 @@ class MageRootViewTests: KIFSpec {
                     }
                 }
                 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
                 
                 let mapDelegate = MockMapViewDelegate()
@@ -240,7 +240,7 @@ class MageRootViewTests: KIFSpec {
                                 
                 UserDefaults.standard.set(["0"], forKey: "selectedFeeds-1");
                 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
                 
                 let mapDelegate = MockMapViewDelegate()
@@ -277,7 +277,7 @@ class MageRootViewTests: KIFSpec {
                     }
                 }
                 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme());
                 window.rootViewController = controller;
                 
                 let mapDelegate = MockMapViewDelegate()
@@ -313,7 +313,7 @@ class MageRootViewTests: KIFSpec {
                     }
                 }
 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 controller.selectedIndex = 1;
 
                 window.rootViewController = controller;
@@ -339,7 +339,7 @@ class MageRootViewTests: KIFSpec {
                     }
                 }
 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");
@@ -369,7 +369,7 @@ class MageRootViewTests: KIFSpec {
                     }
                 }
 
-                controller = MageRootViewController()
+                controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");

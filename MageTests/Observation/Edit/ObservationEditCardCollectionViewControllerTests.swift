@@ -87,7 +87,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                     
                     let delegate = MockObservationEditCardDelegate();
-                    observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                    observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                     
                     window.rootViewController = observationEditController;
                     view = observationEditController.view;
@@ -116,7 +116,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                     
                     let delegate = MockObservationEditCardDelegate();
-                    observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                    observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                     
                     window.rootViewController = observationEditController;
                     view = observationEditController.view;
@@ -151,7 +151,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -182,7 +182,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -213,7 +213,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -246,7 +246,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -279,7 +279,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -306,7 +306,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -328,7 +328,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -384,7 +384,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ])
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -433,7 +433,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ])
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -490,7 +490,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ])
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -539,7 +539,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ])
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -568,7 +568,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -604,7 +604,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -643,7 +643,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 let navigationController = UINavigationController(rootViewController: observationEditController);
                 
@@ -698,7 +698,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
@@ -741,7 +741,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 
                 let delegate = MockObservationEditCardDelegate();
-                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true);
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;

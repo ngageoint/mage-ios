@@ -5,11 +5,11 @@
 //  Created by William Newman on 1/13/17.
 //
 
-#import "Filter.h"
+#import "MageFilter.h"
 #import "TimeFilter.h"
 #import "Observations.h"
 
-@implementation Filter
+@implementation MageFilter
 
 + (NSString *) getFilterString {
     NSMutableArray *filters = [[NSMutableArray alloc] init];

@@ -7,7 +7,7 @@
 //
 
 #import "FilterTableViewController.h"
-#import "Filter.h"
+#import "MageFilter.h"
 #import "ObservationFilterTableViewController.h"
 #import "LocationFilterTableViewController.h"
 #import <MaterialComponents/MDCContainerScheme.h>
@@ -49,12 +49,12 @@
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     NSString *filterString = @"";
     if ([indexPath row] == 0) {
-        filterString = [Filter getFilterString];
+        filterString = [MageFilter getFilterString];
         if ([filterString length] == 0) {
             filterString = @"All";
         }
     } else if ([indexPath row] == 1) {
-        filterString = [Filter getLocationFilterString];
+        filterString = [MageFilter getLocationFilterString];
         if ([filterString length] == 0) {
             filterString = @"All";
         }

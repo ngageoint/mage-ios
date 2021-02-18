@@ -11,6 +11,10 @@ import Foundation
 @testable import MAGE
 
 class MockObservationEditCardDelegate: ObservationEditCardDelegate, FieldSelectionDelegate, ObservationEditListener {
+    func reorderForms(observation: Observation) {
+        
+    }
+    
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
         
     }

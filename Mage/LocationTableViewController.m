@@ -9,7 +9,7 @@
 #import "Event.h"
 #import "MageSessionManager.h"
 #import "TimeFilter.h"
-#import "Filter.h"
+#import "MageFilter.h"
 #import "UINavigationItem+Subtitle.h"
 #import "LocationFilterTableViewController.h"
 #import "MAGE-Swift.h"
@@ -181,7 +181,7 @@
 }
 
 - (void) setNavBarTitle {
-    NSString *timeFilterString = [Filter getLocationFilterString];
+    NSString *timeFilterString = [MageFilter getLocationFilterString];
     [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString scheme:self.scheme];
 }
 

@@ -74,7 +74,7 @@ class FormPickerTests: KIFSpec {
             it("initialized") {
                 var completeTest = false;
                 
-                formPicker = FormPickerViewController();
+                formPicker = FormPickerViewController(scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
                 
@@ -99,7 +99,7 @@ class FormPickerTests: KIFSpec {
                     "id": 2
                 ]]
                 
-                formPicker = FormPickerViewController(forms: forms);
+                formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
                 
@@ -143,7 +143,7 @@ class FormPickerTests: KIFSpec {
                     "id": 4
                 ]]
                 
-                formPicker = FormPickerViewController(forms: forms);
+                formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
                 
@@ -214,7 +214,7 @@ class FormPickerTests: KIFSpec {
                 ]]
                 let delegate = MockFormPickerDelegate();
 
-                formPicker = FormPickerViewController(delegate: delegate, forms: forms);
+                formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
                 let container = UIViewController();
                 
@@ -270,7 +270,7 @@ class FormPickerTests: KIFSpec {
                 
                 let delegate = MockFormPickerDelegate();
                 
-                formPicker = FormPickerViewController(delegate: delegate, forms: forms);
+                formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
                 
@@ -290,7 +290,7 @@ class FormPickerTests: KIFSpec {
                     "id": 2
                 ]]
                 
-                formPicker = FormPickerViewController(forms: forms);
+                formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
                 

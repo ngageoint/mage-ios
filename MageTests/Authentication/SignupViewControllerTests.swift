@@ -95,7 +95,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "API request did not happened")
@@ -129,7 +129,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
@@ -160,7 +160,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
@@ -194,7 +194,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
@@ -234,7 +234,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Cancel");
@@ -258,7 +258,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Show Password");
@@ -292,7 +292,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Password");
@@ -334,7 +334,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Phone");
@@ -358,7 +358,7 @@ class SignUpViewControllerTests: KIFSpec {
                     };
                 }
                 
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(server: mageServer, andDelegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");

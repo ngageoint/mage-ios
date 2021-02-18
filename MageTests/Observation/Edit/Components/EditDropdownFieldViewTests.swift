@@ -25,6 +25,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             var window: UIWindow!;
             
             var dropdownFieldView: DropdownFieldView!
+            var multidropdownFieldView: MultiDropdownFieldView!
             var view: UIView!
             var field: [String: Any]!
             
@@ -138,13 +139,13 @@ class EditDropdownFieldViewTests: KIFSpec {
             }
             
             it("initial value set with multiple values") {
-                dropdownFieldView = DropdownFieldView(field: field, value: ["Hello", "hi"]);
+                multidropdownFieldView = MultiDropdownFieldView(field: field, value: ["Hello", "hi"]);
                 
                 view.addSubview(dropdownFieldView)
-                dropdownFieldView.autoPinEdgesToSuperviewEdges();
+                multidropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                expect(dropdownFieldView.isEmpty()) == false;
+                expect(multidropdownFieldView.isEmpty()) == false;
 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -207,7 +208,7 @@ class EditDropdownFieldViewTests: KIFSpec {
                 expect(dropdownFieldView.isEmpty()) == true;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
                 dropdownFieldView.setValue("purple");
-                expect(dropdownFieldView.getValue()) == ["purple"];
+                expect(dropdownFieldView.getValue()) == "purple";
                 expect(dropdownFieldView.isEmpty()) == false;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
                 maybeRecordSnapshot(view, doneClosure: {

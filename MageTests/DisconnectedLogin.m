@@ -20,6 +20,7 @@
 #import "Event.h"
 #import "Authentication.h"
 #import "UserUtility.h"
+#import "MAGE-Swift.h"
 
 @interface AuthenticationCoordinator ()
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
@@ -61,7 +62,7 @@
     
     XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
     
-    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:nil];
+    __block AuthenticationCoordinator *coordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:nil andScheme:[MAGEScheme scheme]];
     
     id navControllerPartialMock = OCMPartialMock(navigationController);
     

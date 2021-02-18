@@ -68,7 +68,7 @@
 		2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1622012D1C007FE473 /* EventInformationView.m */; };
 		2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F8A2C182201305D007FE473 /* EventInformationView.xib */; };
 		2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */; };
-		2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F99EC201E2982E700E0CBB6 /* Filter.m */; };
+		2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F99EC201E2982E700E0CBB6 /* MageFilter.m */; };
 		2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */; };
 		2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */; };
 		2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43A31CE4F68400D99AAF /* TimeFilter.m */; };
@@ -483,8 +483,8 @@
 		2F8A2C1622012D1C007FE473 /* EventInformationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventInformationView.m; sourceTree = "<group>"; };
 		2F8A2C182201305D007FE473 /* EventInformationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventInformationView.xib; sourceTree = "<group>"; };
 		2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsCoordinator.swift; sourceTree = "<group>"; };
-		2F99EC1F1E2982E700E0CBB6 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
-		2F99EC201E2982E700E0CBB6 /* Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filter.m; sourceTree = "<group>"; };
+		2F99EC1F1E2982E700E0CBB6 /* MageFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageFilter.h; sourceTree = "<group>"; };
+		2F99EC201E2982E700E0CBB6 /* MageFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageFilter.m; sourceTree = "<group>"; };
 		2F9B48DC1ED3BCC1001D07AB /* MageOfflineObservationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageOfflineObservationManager.h; sourceTree = "<group>"; };
 		2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageOfflineObservationManager.m; sourceTree = "<group>"; };
 		2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewCell.h; sourceTree = "<group>"; };
@@ -1039,8 +1039,8 @@
 				2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */,
 				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
 				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
-				2F99EC1F1E2982E700E0CBB6 /* Filter.h */,
-				2F99EC201E2982E700E0CBB6 /* Filter.m */,
+				2F99EC1F1E2982E700E0CBB6 /* MageFilter.h */,
+				2F99EC201E2982E700E0CBB6 /* MageFilter.m */,
 				F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */,
 				F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */,
 				F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */,
@@ -2219,7 +2219,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2470,7 +2470,7 @@
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
-				2F99EC211E2982E700E0CBB6 /* Filter.m in Sources */,
+				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
@@ -2809,12 +2809,10 @@
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/AFNetworking/AFNetworking.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DateTools/DateTools.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/EDSunriseSet/EDSunriseSet.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/HexColors/HexColors.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/KIF/KIF.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/KTCenterFlowLayout/KTCenterFlowLayout.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/MagicalRecord/MagicalRecord.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/Nimble-Snapshots/Nimble_Snapshots.framework/Headers\"",
@@ -2824,7 +2822,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/PureLayout/PureLayout.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/Quick/Quick.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/SSZipArchive/SSZipArchive.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/UIImage-Categories/UIImage_Categories.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage_ios.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework/Headers\"",
@@ -2866,8 +2863,6 @@
 					"-framework",
 					"\"DateTools\"",
 					"-framework",
-					"\"EDSunriseSet\"",
-					"-framework",
 					"\"FBSnapshotTestCase\"",
 					"-framework",
 					"\"Foundation\"",
@@ -2877,8 +2872,6 @@
 					"\"IOKit\"",
 					"-framework",
 					"\"KIF\"",
-					"-framework",
-					"\"KTCenterFlowLayout\"",
 					"-framework",
 					"\"Kingfisher\"",
 					"-framework",
@@ -2907,8 +2900,6 @@
 					"\"SafariServices\"",
 					"-framework",
 					"\"Security\"",
-					"-framework",
-					"\"SkyFloatingLabelTextField\"",
 					"-framework",
 					"\"SystemConfiguration\"",
 					"-framework",
@@ -3005,8 +2996,6 @@
 					"-framework",
 					"\"DateTools\"",
 					"-framework",
-					"\"EDSunriseSet\"",
-					"-framework",
 					"\"FBSnapshotTestCase\"",
 					"-framework",
 					"\"Foundation\"",
@@ -3016,8 +3005,6 @@
 					"\"IOKit\"",
 					"-framework",
 					"\"KIF\"",
-					"-framework",
-					"\"KTCenterFlowLayout\"",
 					"-framework",
 					"\"Kingfisher\"",
 					"-framework",
@@ -3046,8 +3033,6 @@
 					"\"SafariServices\"",
 					"-framework",
 					"\"Security\"",
-					"-framework",
-					"\"SkyFloatingLabelTextField\"",
 					"-framework",
 					"\"SystemConfiguration\"",
 					"-framework",
