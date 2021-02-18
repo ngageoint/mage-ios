@@ -248,7 +248,6 @@
 		F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */; };
 		F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */; };
 		F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */; };
-		F7A7B6EC25D47DC100DAB232 /* SFPointSecure.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */; };
 		F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */; };
 		F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */; };
 		F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */; };
@@ -735,7 +734,6 @@
 		F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewTests.swift; sourceTree = "<group>"; };
 		F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewTests.swift; sourceTree = "<group>"; };
 		F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsViewController.swift; sourceTree = "<group>"; };
-		F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFPointSecure.swift; sourceTree = "<group>"; };
 		F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDropdownFieldView.swift; sourceTree = "<group>"; };
 		F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationTableHeaderView.h; sourceTree = "<group>"; };
 		F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationTableHeaderView.m; sourceTree = "<group>"; };
@@ -1421,7 +1419,6 @@
 		F743008A2547759C00DCE050 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				F7A7B6EA25D47DAD00DAB232 /* SFSecure */,
 				F743008B254775AB00DCE050 /* SplitLayout.swift */,
 				F77C21A5254C6E7000D9257F /* HexColor.swift */,
 				F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */,
@@ -1649,14 +1646,6 @@
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 			);
 			name = Authentication;
-			sourceTree = "<group>";
-		};
-		F7A7B6EA25D47DAD00DAB232 /* SFSecure */ = {
-			isa = PBXGroup;
-			children = (
-				F7A7B6EB25D47DC100DAB232 /* SFPointSecure.swift */,
-			);
-			path = SFSecure;
 			sourceTree = "<group>";
 		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
@@ -2232,7 +2221,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2515,7 +2504,6 @@
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
-				F7A7B6EC25D47DC100DAB232 /* SFPointSecure.swift in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
