@@ -9,7 +9,6 @@
 #import "ObservationFilterTableViewController.h"
 #import "TimeFilter.h"
 #import "Observations.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
 

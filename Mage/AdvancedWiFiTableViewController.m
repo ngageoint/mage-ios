@@ -5,7 +5,6 @@
 //
 
 #import "AdvancedWiFiTableViewController.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
 #import "ValuePickerTableViewController.h"

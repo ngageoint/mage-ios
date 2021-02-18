@@ -36,7 +36,6 @@
 #import "Server.h"
 #import "MageAppCoordinator.h"
 #import "TransitionViewController.h"
-#import "Theme+UIResponder.h"
 #import "Layer.h"
 #import "MageConstants.h"
 #import "MageInitializer.h"
@@ -89,15 +88,7 @@
         [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[UIColor whiteColor]];
     }
 
-    [self registerForThemeChanges];
 	return YES;
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor colorNamed:@"primaryVariant"]];
-    [[UINavigationBar appearance] setOpaque:YES];
-    [[UINavigationBar appearance] setTranslucent:NO];
 }
 
 - (void) setupMageApplication: (UIApplication *) application {

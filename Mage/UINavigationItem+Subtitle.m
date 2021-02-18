@@ -7,7 +7,6 @@
 //
 
 #import "UINavigationItem+Subtitle.h"
-#import "Theme+UIResponder.h"
 #import <objc/runtime.h>
 
 @implementation UINavigationItem (Subtitle)
@@ -28,7 +27,7 @@
     objc_setAssociatedObject(self, @selector(titleLabel), titleLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void) setTitle:(NSString *) title subtitle:(nullable NSString *) subtitle {
+- (void) setTitle:(NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<MDCContainerScheming>)containerScheme {
     if ([subtitle length] == 0) {
         self.title = title;
         self.titleView = nil;
@@ -37,14 +36,14 @@
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.titleLabel.backgroundColor = [UIColor clearColor];
-    self.titleLabel.textColor = [UIColor navBarPrimaryText];
+    self.titleLabel.textColor = containerScheme.colorScheme.onPrimaryColor;
     self.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     self.titleLabel.text = title;
     [self.titleLabel sizeToFit];
     
     self.subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 22, 0, 0)];
     self.subtitleLabel.backgroundColor = [UIColor clearColor];
-    self.subtitleLabel.textColor = [UIColor navBarSecondaryText];
+    self.subtitleLabel.textColor = [containerScheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.87];
     
     self.subtitleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightRegular];
     self.subtitleLabel.text = subtitle;

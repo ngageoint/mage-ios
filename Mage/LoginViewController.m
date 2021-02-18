@@ -6,15 +6,11 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-@import SkyFloatingLabelTextField;
-@import HexColors;
-
 #import "LoginViewController.h"
 #import "UserUtility.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
-#import "Theme+UIResponder.h"
 #import "IDPLoginView.h"
 #import "LocalLoginView.h"
 #import "LdapLoginView.h"
@@ -144,6 +140,7 @@
             IDPLoginView *view = [[[UINib nibWithNibName:@"idp-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
             view.delegate = self.delegate;
+            [view applyThemeWithContainerScheme:self.scheme];
             [self.loginsStackView addArrangedSubview:view];
         }
     }

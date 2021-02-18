@@ -13,7 +13,6 @@
 #import "XYZDirectoryCacheOverlay.h"
 #import "GeoPackageCacheOverlay.h"
 #import "GPKGGeoPackageFactory.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "StaticLayer.h"
 #import "Layer.h"

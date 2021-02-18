@@ -129,7 +129,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         locationLabel.autoSetDimension(.height, toSize: 30);
         locationLabel.backgroundColor = UIColor.clear;
         locationLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular);
-        locationLabel.textColor = UIColor.flatButton();
         locationLabel.isEditable = false;
         locationLabel.dataDetectorTypes = .all;
         locationLabel.textContentType = .location;
@@ -162,7 +161,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         phoneLabel.autoSetDimension(.height, toSize: 30);
         phoneLabel.backgroundColor = UIColor.clear;
         phoneLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular);
-        phoneLabel.textColor = UIColor.flatButton();
         phoneLabel.dataDetectorTypes = .phoneNumber;
         phoneLabel.textContentType = .telephoneNumber;
         phoneLabel.isEditable = false;
@@ -195,7 +193,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         emailLabel.autoSetDimension(.height, toSize: 30);
         emailLabel.backgroundColor = UIColor.clear;
         emailLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular);
-        emailLabel.textColor = UIColor.flatButton();
         emailLabel.dataDetectorTypes = .all;
         emailLabel.textContentType = .emailAddress;
         emailLabel.isEditable = false;
@@ -314,8 +311,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let accuracyFont = UIFont.systemFont(ofSize: 11);
         
         let locationText = NSMutableAttributedString();
-        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: UIColor.mageBlue()]));
-        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: UIColor.secondaryText()]));
+        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.primaryColor]));
+        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]));
         
         self.locationLabel.attributedText = locationText;
     }

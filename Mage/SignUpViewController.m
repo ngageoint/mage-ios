@@ -6,7 +6,7 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-@import SkyFloatingLabelTextField;
+@import MaterialComponents;
 
 #import "SignUpViewController.h"
 #import "UINextField.h"
@@ -19,12 +19,19 @@
 
 @interface SignUpViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *displayName;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *username;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *password;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordConfirm;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *email;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *phone;
+@property (weak, nonatomic) IBOutlet MDCTextField *displayName;
+@property (weak, nonatomic) IBOutlet MDCTextField *username;
+@property (weak, nonatomic) IBOutlet MDCTextField *password;
+@property (weak, nonatomic) IBOutlet MDCTextField *passwordConfirm;
+@property (weak, nonatomic) IBOutlet MDCTextField *email;
+@property (weak, nonatomic) IBOutlet MDCTextField *phone;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *displayNameController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *usernameController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *passwordController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *passwordConfirmController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *emailController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *phoneController;
+
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UIView *signupView;
 @property (weak, nonatomic) IBOutlet UIView *errorView;
@@ -75,19 +82,12 @@
     self.passwordStrengthText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.showPasswordText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    [self themeTextField:self.username];
-    [self themeTextField:self.displayName];
-    [self themeTextField:self.password];
-    [self themeTextField:self.passwordConfirm];
-    [self themeTextField:self.email];
-    [self themeTextField:self.phone];
-    
-    self.username.iconText = @"\U0000f007";
-    self.password.iconText = @"\U0000f084";
-    self.passwordConfirm.iconText = @"\U0000f084";
-    self.email.iconText = @"\U0000f0e0";
-    self.phone.iconText = @"\U0000f095";
-    self.displayName.iconText = @"\U0000f2bc";
+    [self themeTextField:self.username controller:self.usernameController];
+    [self themeTextField:self.displayName controller:self.displayNameController];
+    [self themeTextField:self.password controller:self.passwordController];
+    [self themeTextField:self.passwordConfirm controller:self.passwordConfirmController];
+    [self themeTextField:self.email controller:self.emailController];
+    [self themeTextField:self.phone controller:self.phoneController];
     
     if ([self.server serverHasLocalAuthenticationStrategy]) {
         self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
@@ -95,21 +95,81 @@
     }
 }
 
-- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    field.selectedLineColor = self.scheme.colorScheme.primaryColor;
-    field.selectedTitleColor = self.scheme.colorScheme.primaryColor;
-    field.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    field.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    field.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    field.errorColor = self.scheme.colorScheme.errorColor;
-    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+- (void) themeTextField: (MDCTextField *) field controller: (MDCTextInputControllerUnderline *) controller {
+    [controller applyThemeWithScheme:self.scheme];
+    // these appear to be deficiencies in the underline controller and these colors are not set
+    controller.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    controller.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    field.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
 #pragma mark -
 
+- (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
+    NSLayoutConstraint *constraint0 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0f constant: 30];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant: 20];
+    [leadingIcon addConstraint:constraint0];
+    [leadingIcon addConstraint:constraint1];
+    leadingIcon.contentMode = UIViewContentModeScaleAspectFit;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.usernameController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.username];
+    UIImageView *meImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"me"]];
+    [self addLeadingIconConstraints:meImage];
+    [self.username setLeadingView:meImage];
+    self.username.leadingViewMode = UITextFieldViewModeAlways;
+    self.username.accessibilityLabel = @"Username";
+    self.usernameController.placeholderText = @"Username *";
+    self.usernameController.floatingEnabled = true;
+    
+    self.displayNameController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.displayName];
+    UIImageView *displayNameImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact_card"]];
+    [self addLeadingIconConstraints:displayNameImage];
+    [self.displayName setLeadingView:displayNameImage];
+    self.displayName.leadingViewMode = UITextFieldViewModeAlways;
+    self.displayName.accessibilityLabel = @"Display Name";
+    self.displayNameController.placeholderText = @"Display Name *";
+    self.displayNameController.floatingEnabled = true;
+    
+    self.emailController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.email];
+    UIImageView *emailImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"email"]];
+    [self addLeadingIconConstraints:emailImage];
+    [self.email setLeadingView:emailImage];
+    self.email.leadingViewMode = UITextFieldViewModeAlways;
+    self.email.accessibilityLabel = @"Email";
+    self.emailController.placeholderText = @"Email";
+    self.emailController.floatingEnabled = true;
+    
+    self.phoneController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.phone];
+    UIImageView *phoneImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"phone"]];
+    [self addLeadingIconConstraints:phoneImage];
+    [self.phone setLeadingView:phoneImage];
+    self.phone.leadingViewMode = UITextFieldViewModeAlways;
+    self.phone.accessibilityLabel = @"Phone";
+    self.phoneController.placeholderText = @"Phone";
+    self.phoneController.floatingEnabled = true;
+    
+    self.passwordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.password];
+    UIImageView *passwordImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
+    [self addLeadingIconConstraints:passwordImage];
+    [self.password setLeadingView:passwordImage];
+    self.password.leadingViewMode = UITextFieldViewModeAlways;
+    self.password.accessibilityLabel = @"Password";
+    self.passwordController.placeholderText = @"Password *";
+    self.passwordController.floatingEnabled = true;
+    
+    self.passwordConfirmController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.passwordConfirm];
+    UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
+    [self addLeadingIconConstraints:passwordConfirmImage];
+    [self.passwordConfirm setLeadingView:passwordConfirmImage];
+    self.passwordConfirm.leadingViewMode = UITextFieldViewModeAlways;
+    self.passwordConfirm.accessibilityLabel = @"Confirm Password";
+    self.passwordConfirmController.placeholderText = @"Confirm Password *";
+    self.passwordConfirmController.floatingEnabled = true;
+    
     
     [self setupAuthentication];
     self.zxcvbn = [[DBZxcvbn alloc] init];
@@ -201,26 +261,29 @@
 }
 
 - (IBAction) onSignup:(id) sender {
+    [self clearFieldErrors];
     NSMutableArray *requiredFields = [[NSMutableArray alloc] init];
     if ([_username.text length] == 0) {
-        [self markFieldError:_username];
+        [self markFieldError:_usernameController errorText:@"Required"];
         [requiredFields addObject:@"Username"];
     }
     if ([self.displayName.text length] == 0) {
-        [self markFieldError:self.displayName];
+        [self markFieldError:self.displayNameController errorText:@"Required"];
         [requiredFields addObject:@"Display Name"];
     }
     if ([self.password.text length] == 0) {
-        [self markFieldError:self.password];
+        [self markFieldError:self.passwordController errorText:@"Required"];
         [requiredFields addObject:@"Password"];
     }
     if ([self.passwordConfirm.text length] == 0) {
-        [self markFieldError:self.passwordConfirm];
+        [self markFieldError:self.passwordConfirmController errorText:@"Required"];
         [requiredFields addObject:@"Password Confirm"];
     }
     if ([requiredFields count] != 0) {
         [self showDialogForRequiredFields:requiredFields];
     } else if (![self.password.text isEqualToString:self.passwordConfirm.text]) {
+        [self markFieldError:self.passwordController errorText:@"Passwords Do Not Match"];
+        [self markFieldError:self.passwordConfirmController errorText:@"Passwords Do Not Match"];
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
@@ -269,8 +332,17 @@
     [self.delegate signUpCanceled];
 }
 
-- (void) markFieldError: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.errorMessage = field.placeholder;
+- (void) clearFieldErrors {
+    [self.displayNameController setErrorText:nil errorAccessibilityValue:nil];
+    [self.usernameController setErrorText:nil errorAccessibilityValue:nil];
+    [self.passwordController setErrorText:nil errorAccessibilityValue:nil];
+    [self.passwordConfirmController setErrorText:nil errorAccessibilityValue:nil];
+    [self.emailController setErrorText:nil errorAccessibilityValue:nil];
+    [self.phoneController setErrorText:nil errorAccessibilityValue:nil];
+}
+
+- (void) markFieldError: (MDCTextInputControllerUnderline *) field errorText: (NSString *) errorText {
+    [field setErrorText:errorText errorAccessibilityValue:nil];
 }
 
 - (void) showDialogForRequiredFields:(NSArray *) fields {

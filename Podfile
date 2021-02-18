@@ -16,10 +16,9 @@ target 'MAGE' do
     pod 'libPhoneNumber-iOS', '~> 0.8'
     pod 'KTCenterFlowLayout'
     pod 'zxcvbn-ios'
-    pod 'SkyFloatingLabelTextField', '~> 3.7.0'
     pod 'DateTools', '~> 2.0.0'
-    pod 'EDSunriseSet', '~> 1.0'
     pod 'MaterialComponents'
+    pod 'MDFInternationalization'
     pod 'Kingfisher', '~> 5'
     pod 'PureLayout'
     target 'MAGETests' do

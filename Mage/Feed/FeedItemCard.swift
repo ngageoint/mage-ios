@@ -154,8 +154,6 @@ class FeedItemCard : UITableViewCell {
     
     private lazy var locationIcon: UIImageView = {
         let image = UIImageView(image: UIImage(named: "location_tracking_on"))
-        image.tintColor = UIColor.mageBlue()
-        
         return image
     }()
     
@@ -190,12 +188,13 @@ class FeedItemCard : UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.backgroundColor = UIColor.background()
-        self.timestamp.textColor = UIColor.primaryText()
-        self.primaryField.textColor = UIColor.primaryText()
-        self.secondaryField.textColor = UIColor.secondaryText()
-        self.locationLabel.textColor = UIColor.primaryText()
+    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        self.backgroundColor = scheme?.colorScheme.surfaceColor;
+        self.timestamp.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        self.primaryField.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        self.secondaryField.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        self.locationLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        self.locationIcon.tintColor = scheme?.colorScheme.primaryColor;
     }
     
     func bind(feedItem: FeedItem) {
@@ -255,8 +254,6 @@ class FeedItemCard : UITableViewCell {
             self.mapView.isHidden = true;
             self.locationTextView.isHidden = true;
         }
-        
-        self.registerForThemeChanges()
     }
     
     private func isEmpty(feedItem: FeedItem) -> Bool {

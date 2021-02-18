@@ -78,6 +78,29 @@
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
+    
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.titleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    
+    
     self.trackingButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.trackingButton.tintColor = self.scheme.colorScheme.primaryColor;
     self.reportLocationButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -335,7 +358,7 @@
 }
 
 - (void) setNavBarTitle: (NSString *) title andSubtitle: (NSString *) subtitle {
-    [self.navigationItem setTitle:title subtitle:subtitle];
+    [self.navigationItem setTitle:title subtitle:subtitle scheme:self.scheme];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -584,7 +607,7 @@
                                                                                               NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                                          documentAttributes:nil
                                                                                       error:nil];
-    FeatureDetailCoordinator *detailCoordinator = [[FeatureDetailCoordinator alloc] initWithViewController:self detail:attributedMessage];
+    FeatureDetailCoordinator *detailCoordinator = [[FeatureDetailCoordinator alloc] initWithViewController:self detail:attributedMessage containerScheme:self.scheme];
     detailCoordinator.delegate = self;
     [detailCoordinator start];
     [self.childCoordinators addObject:detailCoordinator];
@@ -653,7 +676,7 @@
 }
 
 - (void) feedItemSelected:(FeedItem *)feedItem {
-    FeedItemViewController *fivc = [[FeedItemViewController alloc] initWithFeedItem:feedItem];
+    FeedItemViewController *fivc = [[FeedItemViewController alloc] initWithFeedItem:feedItem scheme:self.scheme];
     [self.navigationController pushViewController:fivc animated:YES];
 }
 

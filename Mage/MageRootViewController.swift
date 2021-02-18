@@ -177,7 +177,7 @@ import Kingfisher
     
     func createFeedViewController(feed: Feed) -> UINavigationController {
         let size = 24;
-        let fvc = FeedItemsViewController(feed: feed);
+        let fvc = FeedItemsViewController(feed: feed, scheme: self.scheme);
         let nc = UINavigationController(rootViewController: fvc);
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
         nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));

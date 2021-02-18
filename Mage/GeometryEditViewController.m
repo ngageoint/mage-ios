@@ -4,8 +4,6 @@
 //
 //
 
-@import HexColors;
-
 #import "GeometryEditViewController.h"
 #import "ObservationAnnotation.h"
 #import "ObservationAnnotationView.h"
@@ -26,16 +24,14 @@
 #import "ObservationShapeStyle.h"
 #import "Event.h"
 #import "GeometryEditMapDelegate.h"
-#import "UIColor+Mage.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
-#import "Theme+UIResponder.h"
 #import "BaseMapOverlay.h"
 #import "GPKGGeoPackageFactory.h"
 #import <mgrs/MGRS.h>
 #import <mgrs/mgrs-umbrella.h>
 
-@import SkyFloatingLabelTextField;
+@import MaterialComponents;
 
 static float paddingPercentage = .1;
 
@@ -56,9 +52,12 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
 @property (nonatomic) BOOL rectangleSameXSide1;
 @property (nonatomic) BOOL validLocation;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *latitudeField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *longitudeField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *mgrsField;
+@property (weak, nonatomic) IBOutlet MDCTextField *latitudeField;
+@property (weak, nonatomic) IBOutlet MDCTextField *longitudeField;
+@property (weak, nonatomic) IBOutlet MDCTextField *mgrsField;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *latitudeController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *longitudeController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *mgrsController;
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (strong, nonatomic) NSTimer *textFieldChangedTimer;
@@ -80,30 +79,33 @@ static float paddingPercentage = .1;
 #define degreesToRadians(x) (M_PI * x / 180.0)
 #define radiansToDegrees(x) (x * 180.0 / M_PI)
 
-- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    field.selectedLineColor = self.scheme.colorScheme.primaryColor;
-    field.selectedTitleColor = self.scheme.colorScheme.primaryColor;
-    field.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    field.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    field.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    field.disabledColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    field.errorColor = self.scheme.colorScheme.errorColor;
-    field.iconText = @"\U0000f0ac";
-    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+- (void) themeTextField: (MDCTextField *) field controller: (MDCTextInputControllerUnderline *) controller {
+    [controller applyThemeWithScheme:self.scheme];
+    // these appear to be deficiencies in the underline controller and these colors are not set
+    controller.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    controller.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    field.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     self.scheme = containerScheme;
     self.fieldEntryBackground.backgroundColor = containerScheme.colorScheme.surfaceColor;
     [self setShapeTypeSelection];
-    [self themeTextField:self.latitudeField];
-    [self themeTextField:self.longitudeField];
-    [self themeTextField:self.mgrsField];
+    [self themeTextField:self.latitudeField controller:self.latitudeController];
+    [self themeTextField:self.longitudeField controller:self.longitudeController];
+    [self themeTextField:self.mgrsField controller:self.mgrsController];
     [self.locationEntryMethod setTintColor:containerScheme.colorScheme.primaryColor];
     [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self setupMapType:defaults];
+}
+
+- (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
+    NSLayoutConstraint *constraint0 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0f constant: 30];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant: 20];
+    [leadingIcon addConstraint:constraint0];
+    [leadingIcon addConstraint:constraint1];
+    leadingIcon.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 -(void) setShapeTypeSelection {
@@ -155,7 +157,7 @@ static float paddingPercentage = .1;
 }
 
 - (void) addBackgroundMap {
-    if ([UIColor darkMap]) {
+    if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
         if (self.backgroundOverlay) {
             [self.map removeOverlay:self.backgroundOverlay];
         }
@@ -217,6 +219,34 @@ static float paddingPercentage = .1;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    self.latitudeController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.latitudeField];
+    UIImageView *worldImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"world"]];
+    [self addLeadingIconConstraints:worldImage];
+    [self.latitudeField setLeadingView:worldImage];
+    self.latitudeField.leadingViewMode = UITextFieldViewModeAlways;
+    self.latitudeField.accessibilityLabel = @"Latitude";
+    self.latitudeController.placeholderText = @"Latitude";
+    self.latitudeController.floatingEnabled = true;
+    
+    self.longitudeController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.longitudeField];
+    UIImageView *worldImage2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"world"]];
+    [self addLeadingIconConstraints:worldImage2];
+    [self.longitudeField setLeadingView:worldImage2];
+    self.longitudeField.leadingViewMode = UITextFieldViewModeAlways;
+    self.longitudeField.accessibilityLabel = @"Longitude";
+    self.longitudeController.placeholderText = @"Longitude";
+    self.longitudeController.floatingEnabled = true;
+    
+    self.mgrsController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.mgrsField];
+    UIImageView *worldImage3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"world"]];
+    [self addLeadingIconConstraints:worldImage3];
+    [self.mgrsField setLeadingView:worldImage3];
+    self.mgrsField.leadingViewMode = UITextFieldViewModeAlways;
+    self.mgrsField.accessibilityLabel = @"MGRS";
+    self.mgrsController.placeholderText = @"MGRS";
+    self.mgrsController.floatingEnabled = true;
+    
     self.map.delegate = _mapDelegate;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -298,7 +328,7 @@ static float paddingPercentage = .1;
 }
 
 - (void) setNavBarSubtitle: (NSString *) subtitle {
-    [self.navigationItem setTitle:[self.coordinator fieldName] subtitle:subtitle];
+    [self.navigationItem setTitle:[self.coordinator fieldName] subtitle:subtitle scheme:self.scheme];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -672,13 +702,6 @@ static float paddingPercentage = .1;
     self.longitudeField.enabled = enabled;
     self.mgrsField.enabled = enabled;
     self.locationEntryMethod.enabled = enabled;
-    UIColor *backgroundColor = nil;
-    if(!enabled){
-        backgroundColor = [UIColor colorWithHexString:@"DDDDDD"];
-    }
-    self.latitudeField.backgroundColor = backgroundColor;
-    self.longitudeField.backgroundColor = backgroundColor;
-    self.mgrsField.backgroundColor = backgroundColor;
 }
 
 - (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{

@@ -7,7 +7,6 @@
 //
 
 #import "ObservationTableHeaderView.h"
-#import "Theme+UIResponder.h"
 
 @interface ObservationTableHeaderView()
 
@@ -28,7 +27,6 @@
         [self addSubview:self.label];
         [self.label setTextColor:containerScheme.colorScheme.primaryColor];
         [self setBackgroundColor:containerScheme.colorScheme.backgroundColor];
-//        [self registerForThemeChanges];
     }
     
     return self;
@@ -37,10 +35,5 @@
 - (void) safeAreaInsetsDidChange {
     [self setFrame:CGRectMake(self.superview.safeAreaInsets.left, self.superview.safeAreaInsets.top, self.superview.bounds.size.width - self.superview.safeAreaInsets.left - self.superview.safeAreaInsets.right, 45)];
 }
-
-//- (void) themeDidChange:(MageTheme)theme {
-//    [self setBackgroundColor:[UIColor tableBackground]];
-//    [self.label setTextColor:[UIColor flatButton]];
-//}
 
 @end

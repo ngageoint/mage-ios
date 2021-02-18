@@ -34,8 +34,8 @@
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor navBarPrimaryText]};
-    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor navBarPrimaryText]};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : containerScheme.colorScheme.onPrimaryColor};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: containerScheme.colorScheme.onPrimaryColor};
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.titleTextAttributes = @{
@@ -182,7 +182,7 @@
 
 - (void) setNavBarTitle {
     NSString *timeFilterString = [Filter getLocationFilterString];
-    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString];
+    [self.navigationItem setTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name subtitle:[timeFilterString isEqualToString:@"All"] ? nil : timeFilterString scheme:self.scheme];
 }
 
 - (void) userDetailSelected:(User *)user {

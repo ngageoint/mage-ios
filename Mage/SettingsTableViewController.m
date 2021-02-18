@@ -24,7 +24,6 @@
 #import "EventInformationCoordinator.h"
 #import "AttributionsViewController.h"
 #import "DisclaimerViewController.h"
-#import "ThemeSettingsTableViewController.h"
 #import "LocationDisplayTableViewController.h"
 #import "TimeSettingsTableViewController.h"
 #import "DataSynchronizationSettingsTableViewController.h"

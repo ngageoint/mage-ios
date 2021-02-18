@@ -177,7 +177,7 @@ class ObservationTableViewController: UITableViewController {
     
     func setNavBarTitle() {
         let timeFilterString = Filter.getString();
-        self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString));
+        self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
     }
     
     @objc func filterButtonPressed() {

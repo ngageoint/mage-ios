@@ -180,44 +180,35 @@
                                         <action selector="locationEntryMethodChanged:" destination="-1" eventType="valueChanged" id="X1X-RV-5fk"/>
                                     </connections>
                                 </segmentedControl>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l11-wK-EQI" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l11-wK-EQI" customClass="MDCTextField">
                                     <rect key="frame" x="0.0" y="35" width="335" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <accessibility key="accessibilityConfiguration" label="Latitude"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="45" id="18i-3G-RMv"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="18i-3G-RMv"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad" returnKeyType="done"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Latitude"/>
-                                    </userDefinedRuntimeAttributes>
                                 </textField>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mBQ-mB-CtT" userLabel="Longitude Field" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mBQ-mB-CtT" userLabel="Longitude Field" customClass="MDCTextField">
                                     <rect key="frame" x="0.0" y="84" width="335" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <accessibility key="accessibilityConfiguration" label="Longitude"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="45" id="EVM-kN-h9f"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="EVM-kN-h9f"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="decimalPad" returnKeyType="done"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Longitude"/>
-                                    </userDefinedRuntimeAttributes>
                                 </textField>
-                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rj2-0x-yis" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rj2-0x-yis" customClass="MDCTextField">
                                     <rect key="frame" x="0.0" y="133" width="335" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <accessibility key="accessibilityConfiguration" label="MGRS"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="45" id="l7T-e9-XQM"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="l7T-e9-XQM"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="MGRS"/>
-                                    </userDefinedRuntimeAttributes>
                                 </textField>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -253,17 +244,6 @@
             <point key="canvasLocation" x="34.5" y="53.5"/>
         </view>
     </objects>
-    <designables>
-        <designable name="Rj2-0x-yis">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-        <designable name="l11-wK-EQI">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-        <designable name="mBQ-mB-CtT">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-    </designables>
     <resources>
         <image name="line_string" width="36.5" height="36.5"/>
         <image name="observations" width="24" height="24"/>

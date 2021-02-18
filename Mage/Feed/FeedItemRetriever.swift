@@ -53,11 +53,11 @@ extension UIImage {
                     let image: UIImage = value.image.resized(to: CGSize(width: size, height: size));
                     annotationView.image = image;
                 case .failure(_):
-                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: UIColor.mageBlue());
+                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
                 }
             }
         } else {
-            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: UIColor.mageBlue());
+            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
         }
     }
     

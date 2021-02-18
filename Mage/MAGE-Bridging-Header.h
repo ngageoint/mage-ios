@@ -20,11 +20,9 @@
 #import "MageInitializer.h"
 #import "Server.h"
 #import <MGRS.h>
-#import "UIColor+Mage.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "SettingsTableViewController.h"
-#import "Theme+UIResponder.h"
 #import "NSDate+display.h"
 #import "MapDelegate.h"
 #import "Locations.h"

@@ -7,7 +7,6 @@
 #import "LocationServicesSettingsTableViewController.h"
 #import "LocationService.h"
 #import "ObservationTableHeaderView.h"
-#import "LocationServicesHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
 
 @interface LocationServicesSettingsTableViewController ()<LocationServicesDelegate>

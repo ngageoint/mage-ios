@@ -7,17 +7,16 @@
 //
 
 #import "LdapLoginView.h"
-#import "Theme+UIResponder.h"
 #import "DeviceUUID.h"
 #import "AuthenticationButton.h"
-
-@import SkyFloatingLabelTextField;
-@import HexColors;
+@import MaterialComponents;
 
 @interface LdapLoginView() <UITextFieldDelegate, AuthenticationButtonDelegate>
 
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *usernameField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordField;
+@property (weak, nonatomic) IBOutlet MDCTextField *usernameField;
+@property (weak, nonatomic) IBOutlet MDCTextField *passwordField;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *usernameController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *passwordController;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -32,32 +31,51 @@
 @implementation LdapLoginView
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    self.usernameField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    self.usernameField.selectedLineColor = self.scheme.colorScheme.primaryColorVariant;
-    self.usernameField.selectedTitleColor = self.scheme.colorScheme.primaryColorVariant;
-    self.usernameField.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.usernameField.disabledColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.usernameField.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.usernameField.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.usernameField.errorColor = self.scheme.colorScheme.errorColor;
-    self.usernameField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
-    self.usernameField.iconText = @"\U0000f007";
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    [self.usernameController applyThemeWithScheme:containerScheme];
+    [self.passwordController applyThemeWithScheme:containerScheme];
     
-    self.passwordField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    self.passwordField.selectedLineColor = self.scheme.colorScheme.primaryColorVariant;
-    self.passwordField.selectedTitleColor = self.scheme.colorScheme.primaryColorVariant;
-    self.passwordField.placeholderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordField.disabledColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordField.lineColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordField.titleColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.passwordField.errorColor = self.scheme.colorScheme.errorColor;
-    self.passwordField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
-    self.passwordField.iconText = @"\U0000f084";
+    // these appear to be deficiencies in the underline controller and these colors are not set
+    self.usernameController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.passwordController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.usernameController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.passwordController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    
+    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
     self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    
+    [self.authenticationButton applyThemeWithContainerScheme:containerScheme];
+}
+
+- (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
+    NSLayoutConstraint *constraint0 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0f constant: 30];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant: 20];
+    [leadingIcon addConstraint:constraint0];
+    [leadingIcon addConstraint:constraint1];
+    leadingIcon.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 - (void) didMoveToSuperview {
+    self.usernameController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.usernameField];
+    UIImageView *meImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"me"]];
+    [self addLeadingIconConstraints:meImage];
+    [self.usernameField setLeadingView:meImage];
+    self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
+    self.usernameField.accessibilityLabel = @"Username";
+    self.usernameController.placeholderText = @"Username";
+    self.usernameController.floatingEnabled = true;
+    self.passwordField.accessibilityLabel = @"Password";
+    self.passwordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.passwordField];
+    UIImageView *keyImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
+    [self addLeadingIconConstraints:keyImage];
+    [self.passwordField setLeadingView:keyImage];
+    self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.passwordController.placeholderText = @"Password";
+    self.passwordController.textInput = self.passwordField;
     self.authenticationButton.strategy = self.strategy;
     self.authenticationButton.delegate = self;
     
@@ -76,6 +94,8 @@
     NSString *title = [strategy objectForKey:@"title"];
     self.usernameField.placeholder = [NSString stringWithFormat:@"%@ Username", title];
     self.passwordField.placeholder = [NSString stringWithFormat:@"%@ Password", title];
+    
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
@@ -106,9 +126,7 @@
     } else {
         textField.text = updatedString;
     }
-    
-    self.usernameField.textColor = self.passwordField.textColor = [UIColor primaryText];
-    
+        
     return NO;
 }
 
@@ -191,8 +209,6 @@
 }
 
 - (void) resetLogin: (BOOL) clear {
-    self.usernameField.errorMessage = nil;
-    self.passwordField.errorMessage = nil;
     
     if (clear) {
         [self.usernameField setText:@""];

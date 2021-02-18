@@ -11,7 +11,6 @@
 #import "GeometryUtility.h"
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"
-#import "Theme+UIResponder.h"
 
 @interface ObservationAnnotation ()
 
@@ -63,7 +62,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-        rightButton.tintColor = [UIColor mageBlue];
+//        rightButton.tintColor = [UIColor mageBlue];
         annotationView.rightCalloutAccessoryView = rightButton;
     } else {
         annotationView.annotation = self;

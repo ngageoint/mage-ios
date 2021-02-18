@@ -11,6 +11,8 @@ import Kingfisher
 
 @objc class FeedItemsViewController : UITableViewController {
     
+    var scheme: MDCContainerScheming?;
+    
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
@@ -37,8 +39,9 @@ import Kingfisher
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(feed:Feed, selectionDelegate: FeedItemSelectionDelegate? = nil) {
+    @objc public init(feed:Feed, selectionDelegate: FeedItemSelectionDelegate? = nil, scheme: MDCContainerScheming?) {
         self.feed = feed
+        self.scheme = scheme;
         self.selectionDelegate = selectionDelegate;
         super.init(style: .grouped)
         self.title = feed.title;
@@ -47,12 +50,31 @@ import Kingfisher
         tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.navigationController?.navigationBar.barTintColor = UIColor.primary();
-        self.navigationController?.navigationBar.tintColor = UIColor.navBarPrimaryText();
-        self.view.backgroundColor = UIColor.background();
-        self.tableView.backgroundColor = UIColor.tableBackground()
-        self.tableView.separatorColor = UIColor.tableSeparator()
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
+        self.navigationController?.navigationBar.isTranslucent = false;
+        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        let appearance = UINavigationBarAppearance();
+        appearance.configureWithOpaqueBackground();
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
+        ];
+        appearance.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
+        ];
+        
+        self.navigationController?.navigationBar.standardAppearance = appearance;
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
+        
+        self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
     }
 
     override func viewDidLoad() {
@@ -72,7 +94,14 @@ import Kingfisher
             print("Unable to Perform Fetch Request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
-        self.registerForThemeChanges();
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        
+        if let safeScheme = self.scheme {
+            applyTheme(withContainerScheme: safeScheme);
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -91,7 +120,7 @@ import Kingfisher
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell;
         let feedCell: FeedItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemTableViewCell;
-        
+        feedCell.applyTheme(withContainerScheme: self.scheme);
         let feedItem = fetchedResultsController.object(at: indexPath)
         feedCell.populate(feedItem: feedItem);
         cell = feedCell;
@@ -104,7 +133,7 @@ import Kingfisher
         if (selectionDelegate != nil) {
             self.selectionDelegate?.feedItemSelected(feedItem);
         } else {
-            let feedItemViewController: FeedItemViewController = FeedItemViewController(feedItem: feedItem);
+            let feedItemViewController: FeedItemViewController = FeedItemViewController(feedItem: feedItem, scheme: self.scheme);
             self.navigationController?.pushViewController(feedItemViewController, animated: true);
         }
     }

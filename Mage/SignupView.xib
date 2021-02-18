@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -44,7 +44,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sso-gG-3z7">
-                    <rect key="frame" x="16" y="40" width="343" height="55"/>
+                    <rect key="frame" x="16" y="0.0" width="343" height="55"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cRc-G2-cIA">
                             <rect key="frame" x="63.5" y="0.0" width="216.5" height="55"/>
@@ -103,7 +103,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fH-La-tFM">
-                    <rect key="frame" x="0.0" y="103" width="375" height="506"/>
+                    <rect key="frame" x="0.0" y="63" width="375" height="546"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="djZ-oe-5cp">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="473"/>
@@ -111,105 +111,87 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6sO-r7-N50">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="473"/>
                                     <subviews>
-                                        <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tkk-eU-cI7" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
+                                        <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tkk-eU-cI7" customClass="MDCTextField">
                                             <rect key="frame" x="20" y="0.0" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" hint="" label="Username"/>
                                             <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="45" id="c5q-B1-9lP"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="c5q-B1-9lP"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Username *"/>
-                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <outlet property="delegate" destination="-1" id="h91-tj-MRf"/>
                                                 <outlet property="nextField" destination="BRG-7p-IkC" id="cyA-wf-mD7"/>
                                             </connections>
                                         </textField>
-                                        <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Display Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BRG-7p-IkC" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                            <rect key="frame" x="20" y="57" width="335" height="45"/>
+                                        <textField autoresizesSubviews="NO" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Display Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BRG-7p-IkC" customClass="MDCTextField">
+                                            <rect key="frame" x="20" y="45" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" hint="" label="Display Name"/>
                                             <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="45" id="AwW-PA-RMN"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="AwW-PA-RMN"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Display Name *"/>
-                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <outlet property="delegate" destination="-1" id="Gl6-Gc-bFB"/>
                                                 <outlet property="nextField" destination="Ppn-lM-Kd3" id="grj-nI-03C"/>
                                             </connections>
                                         </textField>
-                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ppn-lM-Kd3" userLabel="email" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                            <rect key="frame" x="20" y="114" width="335" height="45"/>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ppn-lM-Kd3" userLabel="email" customClass="MDCTextField">
+                                            <rect key="frame" x="20" y="90" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" label="Email"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="45" id="Wbw-m2-5nE"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="Wbw-m2-5nE"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Email"/>
-                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <outlet property="delegate" destination="-1" id="GnZ-zA-yhV"/>
                                                 <outlet property="nextField" destination="QbZ-cp-HSy" id="h9H-kK-0Kb"/>
                                             </connections>
                                         </textField>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QbZ-cp-HSy" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                            <rect key="frame" x="20" y="171" width="335" height="45"/>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QbZ-cp-HSy" customClass="MDCTextField">
+                                            <rect key="frame" x="20" y="135" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" label="Phone"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="45" id="kwp-kx-bia"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="kwp-kx-bia"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" keyboardType="phonePad" returnKeyType="next"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Phone"/>
-                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <outlet property="delegate" destination="-1" id="HKP-Ts-zg1"/>
                                                 <outlet property="nextField" destination="sfe-cM-xS2" id="iEe-8a-fQR"/>
                                             </connections>
                                         </textField>
-                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sfe-cM-xS2" userLabel="password" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                            <rect key="frame" x="20" y="228" width="335" height="45"/>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sfe-cM-xS2" userLabel="password" customClass="MDCTextField">
+                                            <rect key="frame" x="20" y="180" width="335" height="45"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" label="Password"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="45" id="hkg-ID-OI8"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="hkg-ID-OI8"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Password *"/>
-                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <outlet property="delegate" destination="-1" id="bgV-lK-NcJ"/>
                                                 <outlet property="nextField" destination="XX4-h8-cXB" id="qV5-O3-KHc"/>
                                             </connections>
                                         </textField>
-                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XX4-h8-cXB" userLabel="password confirm" customClass="SkyFloatingLabelTextFieldWithIcon" customModule="SkyFloatingLabelTextField">
-                                            <rect key="frame" x="20" y="285" width="335" height="45"/>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XX4-h8-cXB" userLabel="password confirm" customClass="MDCTextField">
+                                            <rect key="frame" x="20" y="225" width="335" height="113"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <accessibility key="accessibilityConfiguration" label="Password Confirm"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="45" id="ian-2b-uhx"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="ian-2b-uhx"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Confirm Password *"/>
-                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <outlet property="delegate" destination="-1" id="yuB-gB-Gkv"/>
                                             </connections>
@@ -314,18 +296,18 @@
                                         <constraint firstItem="cI7-dz-MoF" firstAttribute="leading" secondItem="6sO-r7-N50" secondAttribute="leading" constant="20" id="D3K-3w-54N"/>
                                         <constraint firstItem="Uhq-eM-MfT" firstAttribute="centerY" secondItem="GJQ-bL-xCi" secondAttribute="centerY" id="DiF-el-Ff8"/>
                                         <constraint firstItem="XX4-h8-cXB" firstAttribute="leading" secondItem="6sO-r7-N50" secondAttribute="leading" constant="20" symbolic="YES" id="FE9-7w-1Ux"/>
-                                        <constraint firstItem="Ppn-lM-Kd3" firstAttribute="top" secondItem="BRG-7p-IkC" secondAttribute="bottom" constant="12" id="IID-2O-dGr"/>
+                                        <constraint firstItem="Ppn-lM-Kd3" firstAttribute="top" secondItem="BRG-7p-IkC" secondAttribute="bottom" id="IID-2O-dGr"/>
                                         <constraint firstItem="Z1z-Nc-TYh" firstAttribute="leading" secondItem="XX4-h8-cXB" secondAttribute="leading" id="JMS-sy-GDR"/>
                                         <constraint firstItem="S3E-a2-52h" firstAttribute="centerY" secondItem="gCm-GX-f4X" secondAttribute="centerY" id="Ma8-Vm-CTT"/>
                                         <constraint firstItem="GJQ-bL-xCi" firstAttribute="leading" secondItem="XX4-h8-cXB" secondAttribute="leading" id="Meb-C1-b3v"/>
                                         <constraint firstItem="QbZ-cp-HSy" firstAttribute="leading" secondItem="6sO-r7-N50" secondAttribute="leading" constant="20" symbolic="YES" id="NDk-pq-OLh"/>
                                         <constraint firstItem="Tkk-eU-cI7" firstAttribute="top" secondItem="6sO-r7-N50" secondAttribute="top" id="NJP-iw-AGX"/>
                                         <constraint firstItem="fum-f9-TSY" firstAttribute="leading" secondItem="cI7-dz-MoF" secondAttribute="trailing" constant="8" symbolic="YES" id="NRd-V8-Sal"/>
-                                        <constraint firstItem="BRG-7p-IkC" firstAttribute="top" secondItem="Tkk-eU-cI7" secondAttribute="bottom" constant="12" id="Qck-CA-hqv"/>
+                                        <constraint firstItem="BRG-7p-IkC" firstAttribute="top" secondItem="Tkk-eU-cI7" secondAttribute="bottom" id="Qck-CA-hqv"/>
                                         <constraint firstAttribute="trailing" secondItem="sfe-cM-xS2" secondAttribute="trailing" constant="20" symbolic="YES" id="UA4-gL-jg8"/>
                                         <constraint firstAttribute="trailing" secondItem="Tkk-eU-cI7" secondAttribute="trailing" constant="20" symbolic="YES" id="WUf-Pa-Haz"/>
                                         <constraint firstItem="gCm-GX-f4X" firstAttribute="trailing" secondItem="XX4-h8-cXB" secondAttribute="trailing" id="Xf0-mR-OiO"/>
-                                        <constraint firstItem="cI7-dz-MoF" firstAttribute="top" secondItem="XX4-h8-cXB" secondAttribute="bottom" constant="12" id="YE1-eJ-tV3"/>
+                                        <constraint firstItem="cI7-dz-MoF" firstAttribute="top" secondItem="XX4-h8-cXB" secondAttribute="bottom" constant="4" id="YE1-eJ-tV3"/>
                                         <constraint firstAttribute="trailing" secondItem="XX4-h8-cXB" secondAttribute="trailing" constant="20" symbolic="YES" id="g7a-Mk-RIB"/>
                                         <constraint firstItem="fum-f9-TSY" firstAttribute="centerY" secondItem="cI7-dz-MoF" secondAttribute="centerY" id="hvb-od-iAK"/>
                                         <constraint firstAttribute="trailing" secondItem="Ppn-lM-Kd3" secondAttribute="trailing" constant="20" symbolic="YES" id="iVH-f6-Smf"/>
@@ -335,9 +317,9 @@
                                         <constraint firstItem="mQc-Hw-40O" firstAttribute="top" secondItem="Z1z-Nc-TYh" secondAttribute="bottom" constant="12" id="nhz-0s-L7U"/>
                                         <constraint firstItem="Uhq-eM-MfT" firstAttribute="leading" secondItem="GJQ-bL-xCi" secondAttribute="trailing" constant="7" id="o0s-2S-15M"/>
                                         <constraint firstItem="GJQ-bL-xCi" firstAttribute="top" secondItem="cI7-dz-MoF" secondAttribute="bottom" constant="12" id="qEe-pD-36y"/>
-                                        <constraint firstItem="QbZ-cp-HSy" firstAttribute="top" secondItem="Ppn-lM-Kd3" secondAttribute="bottom" constant="12" id="t07-5u-IQl"/>
-                                        <constraint firstItem="XX4-h8-cXB" firstAttribute="top" secondItem="sfe-cM-xS2" secondAttribute="bottom" constant="12" id="uPD-Y2-1FH"/>
-                                        <constraint firstItem="sfe-cM-xS2" firstAttribute="top" secondItem="QbZ-cp-HSy" secondAttribute="bottom" constant="12" id="w5R-MM-vjX"/>
+                                        <constraint firstItem="QbZ-cp-HSy" firstAttribute="top" secondItem="Ppn-lM-Kd3" secondAttribute="bottom" id="t07-5u-IQl"/>
+                                        <constraint firstItem="XX4-h8-cXB" firstAttribute="top" secondItem="sfe-cM-xS2" secondAttribute="bottom" id="uPD-Y2-1FH"/>
+                                        <constraint firstItem="sfe-cM-xS2" firstAttribute="top" secondItem="QbZ-cp-HSy" secondAttribute="bottom" id="w5R-MM-vjX"/>
                                         <constraint firstItem="mQc-Hw-40O" firstAttribute="leading" secondItem="XX4-h8-cXB" secondAttribute="leading" id="wxO-Fr-7QM"/>
                                         <constraint firstItem="mQc-Hw-40O" firstAttribute="width" secondItem="gCm-GX-f4X" secondAttribute="width" id="xm9-Es-Oho"/>
                                         <constraint firstItem="sfe-cM-xS2" firstAttribute="leading" secondItem="6sO-r7-N50" secondAttribute="leading" constant="20" symbolic="YES" id="ykK-em-9MO"/>
@@ -367,31 +349,11 @@
                 <constraint firstItem="sso-gG-3z7" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" constant="16" id="nrE-hy-w4R"/>
                 <constraint firstAttribute="bottomMargin" secondItem="Jub-3d-HY1" secondAttribute="bottom" id="otl-Sa-Jt6" customClass="KeyboardConstraint"/>
                 <constraint firstItem="8fH-La-tFM" firstAttribute="leading" secondItem="LIg-r8-Wga" secondAttribute="leading" id="p1r-p7-xHf"/>
-                <constraint firstItem="sso-gG-3z7" firstAttribute="top" secondItem="LIg-r8-Wga" secondAttribute="topMargin" constant="40" id="rZe-cm-1Jv"/>
+                <constraint firstItem="sso-gG-3z7" firstAttribute="top" secondItem="LIg-r8-Wga" secondAttribute="topMargin" id="rZe-cm-1Jv"/>
                 <constraint firstItem="iYb-oq-i8M" firstAttribute="top" secondItem="8fH-La-tFM" secondAttribute="bottom" constant="8" id="rwm-oJ-pvD"/>
                 <constraint firstAttribute="trailing" secondItem="iYb-oq-i8M" secondAttribute="trailing" id="v1P-3l-oHz"/>
             </constraints>
             <point key="canvasLocation" x="35.5" y="53.5"/>
         </view>
     </objects>
-    <designables>
-        <designable name="BRG-7p-IkC">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-        <designable name="Ppn-lM-Kd3">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-        <designable name="QbZ-cp-HSy">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-        <designable name="Tkk-eU-cI7">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-        <designable name="XX4-h8-cXB">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-        <designable name="sfe-cM-xS2">
-            <size key="intrinsicContentSize" width="335" height="39.220703125"/>
-        </designable>
-    </designables>
 </document>

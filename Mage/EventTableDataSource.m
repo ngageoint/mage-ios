@@ -10,7 +10,6 @@
 #import "EventChooserController.h"
 #import "Observation.h"
 #import "EventTableViewCell.h"
-#import "Theme+UIResponder.h"
 #import "EventTableHeaderView.h"
 
 @interface EventTableDataSource()
@@ -271,7 +270,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (self.filteredFetchedResultsController != nil) {
         NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-        return [[EventTableHeaderView alloc] initWithName:name];
+        return [[EventTableHeaderView alloc] initWithName:name containerScheme:self.scheme];
     }
         
     if (section == 0) return [[UIView alloc] initWithFrame:CGRectZero];
@@ -279,7 +278,7 @@
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     
     NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-    return [[EventTableHeaderView alloc] initWithName:name];
+    return [[EventTableHeaderView alloc] initWithName:name containerScheme:self.scheme];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@import MaterialComponents;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSDictionary *strategy;
 @property (weak, nonatomic) id<AuthenticationButtonDelegate> delegate;
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end
 

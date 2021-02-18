@@ -7,7 +7,6 @@
 //
 
 #import "OrView.h"
-#import "Theme+UIResponder.h"
 
 @interface OrView()
 

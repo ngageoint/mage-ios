@@ -56,7 +56,6 @@
 #import "TMSTileOverlay.h"
 #import "ImageryLayer.h"
 #import "BaseMapOverlay.h"
-#import "UIColor+Mage.h"
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 
@@ -899,8 +898,7 @@
 }
 
 - (void) addBackgroundMap {
-    NSLog(@"ADDING BACKGROUND MAPADDING BACKGROUND MAPADDING BACKGROUND MAPADDING BACKGROUND MAPADDING BACKGROUND MAP");
-    if ([UIColor darkMap]) {
+    if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
         [self.mapView removeOverlay:self.backgroundOverlay];
         [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
     } else {
@@ -1288,7 +1286,7 @@
             annotationView.canShowCallout = YES;
         }
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-        rightButton.tintColor = [UIColor mageBlue];
+//        rightButton.tintColor = [UIColor mageBlue];
         annotationView.rightCalloutAccessoryView = rightButton;
         [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
         annotationView.annotation = annotation;
