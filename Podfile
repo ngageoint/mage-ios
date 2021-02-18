@@ -14,7 +14,6 @@ target 'MAGE' do
     pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
     pod 'mgrs', '~>0.1.0'
     pod 'libPhoneNumber-iOS', '~> 0.8'
-    pod 'KTCenterFlowLayout'
     pod 'zxcvbn-ios'
     pod 'DateTools', '~> 2.0.0'
     pod 'MaterialComponents'
