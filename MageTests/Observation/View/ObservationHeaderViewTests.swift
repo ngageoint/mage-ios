@@ -157,7 +157,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 expect(delegate.getDirectionsCalled).to(beTrue());
             }
             
-            fit("tap important button") {
+            it("tap important button") {
                 var completeTest = false;
 
                 waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
