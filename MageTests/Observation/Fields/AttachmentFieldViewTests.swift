@@ -1,5 +1,5 @@
 //
-//  EditAttachmentFieldViewTests.swift
+//  AttachmentFieldViewTests.swift
 //  MAGETests
 //
 //  Created by Daniel Barela on 10/24/20.
@@ -24,11 +24,11 @@ class MockAttachmentSelectionDelegate: AttachmentSelectionDelegate {
     }
 }
 
-class EditAttachmentFieldViewTests: KIFSpec {
+class AttachmentFieldViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("EditAttachmentFieldViewTests") {
+        describe("AttachmentFieldViewTests") {
             var field: [String: Any]!
             let recordSnapshots = false;
             

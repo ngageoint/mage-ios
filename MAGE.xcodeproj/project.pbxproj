@@ -294,7 +294,7 @@
 		F7CE2300254368B000D710DE /* allTheThings.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE22FF254368B000D710DE /* allTheThings.json */; };
 		F7CE2304254369BD00D710DE /* checkboxForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2303254369BD00D710DE /* checkboxForm.json */; };
 		F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE23092544676800D710DE /* AttachmentFieldView.swift */; };
-		F7CE230E2544714900D710DE /* EditAttachmentFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE230D2544714900D710DE /* EditAttachmentFieldViewTests.swift */; };
+		F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */; };
 		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
@@ -350,7 +350,7 @@
 		F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */; };
 		F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */; };
 		F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */; };
-		F7F9122724804D2100C068B6 /* EditCheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */; };
+		F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
@@ -799,7 +799,7 @@
 		F7CE22FF254368B000D710DE /* allTheThings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allTheThings.json; sourceTree = "<group>"; };
 		F7CE2303254369BD00D710DE /* checkboxForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = checkboxForm.json; sourceTree = "<group>"; };
 		F7CE23092544676800D710DE /* AttachmentFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFieldView.swift; sourceTree = "<group>"; };
-		F7CE230D2544714900D710DE /* EditAttachmentFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentFieldViewTests.swift; sourceTree = "<group>"; };
+		F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFieldViewTests.swift; sourceTree = "<group>"; };
 		F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingFisherUIImageView.swift; sourceTree = "<group>"; };
 		F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeometryEditCoordinator.h; sourceTree = "<group>"; };
 		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
@@ -875,7 +875,7 @@
 		F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldView.swift; sourceTree = "<group>"; };
 		F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldView.swift; sourceTree = "<group>"; };
-		F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCheckboxFieldViewTests.swift; sourceTree = "<group>"; };
+		F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
 		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
@@ -1654,6 +1654,20 @@
 			name = Authentication;
 			sourceTree = "<group>";
 		};
+		F7A2B5E825E55F1600F1F27A /* Fields */ = {
+			isa = PBXGroup;
+			children = (
+				F7BE036D246609A100D2F7C3 /* EditTextFieldViewTests.swift */,
+				F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */,
+				F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */,
+				F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */,
+				F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */,
+				F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */,
+				F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */,
+			);
+			path = Fields;
+			sourceTree = "<group>";
+		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
@@ -1812,6 +1826,7 @@
 		F7BE036A2466093700D2F7C3 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F7A2B5E825E55F1600F1F27A /* Fields */,
 				F73886CA258A6BF700EDA036 /* View */,
 				F7D9B82D2562EFE900A76E2C /* Attachment */,
 				F7BE036B2466095100D2F7C3 /* Edit */,
@@ -1834,14 +1849,7 @@
 		F7BE036C2466095500D2F7C3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F7BE036D246609A100D2F7C3 /* EditTextFieldViewTests.swift */,
-				F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */,
-				F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */,
-				F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */,
-				F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */,
-				F7F9122624804D2100C068B6 /* EditCheckboxFieldViewTests.swift */,
 				F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */,
-				F7CE230D2544714900D710DE /* EditAttachmentFieldViewTests.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2664,7 +2672,7 @@
 				F7C641042581504F00C02335 /* MapViewControllerTests.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */,
 				F71B724E246B1DCC00E4CF33 /* EditDateViewTests.swift in Sources */,
-				F7F9122724804D2100C068B6 /* EditCheckboxFieldViewTests.swift in Sources */,
+				F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */,
 				F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */,
 				F7BE036F24660A9D00D2F7C3 /* EditTextFieldViewTests.swift in Sources */,
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
@@ -2673,7 +2681,7 @@
 				F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */,
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
-				F7CE230E2544714900D710DE /* EditAttachmentFieldViewTests.swift in Sources */,
+				F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
