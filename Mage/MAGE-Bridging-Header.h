@@ -47,6 +47,7 @@
 #import "FormDefaults.h"
 #import "AttachmentCollectionDataStore.h"
 #import "AudioRecorderViewController.h"
+#import "Recording.h"
 //#import "ObservationSelectionDelegate.h"
 #import "SelectEditViewController.h"
 #import "GeometryEditCoordinator.h"
