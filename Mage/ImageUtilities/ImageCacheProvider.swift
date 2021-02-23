@@ -18,7 +18,7 @@ import Kingfisher
         
         self.accessTokenModifier = AnyModifier { request in
             var r = request
-            r.setValue(String(format: "Bearer %@", StoredPassword.retrieveStoredToken()), forHTTPHeaderField: "Authorization")
+            r.setValue("Bearer \(StoredPassword.retrieveStoredToken() ?? "")", forHTTPHeaderField: "Authorization")
             return r
         }
     }
