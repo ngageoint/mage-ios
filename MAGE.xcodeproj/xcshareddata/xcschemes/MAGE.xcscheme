@@ -48,6 +48,16 @@
                ReferencedContainer = "container:MAGE.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F7EF2A2725E0368000A55BFC"
+               BuildableName = "MAGEUITests.xctest"
+               BlueprintName = "MAGEUITests"
+               ReferencedContainer = "container:MAGE.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
