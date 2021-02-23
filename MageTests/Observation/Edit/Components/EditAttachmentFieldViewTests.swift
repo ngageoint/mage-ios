@@ -57,7 +57,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                     DispatchQueue.global(qos: .userInitiated).async {
                         Thread.sleep(forTimeInterval: 0.5);
                         DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
+                            expect(view) == recordSnapshot(usesDrawRect: true);
                             doneClosure?();
                         }
                     }
@@ -107,6 +107,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -122,7 +123,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -140,6 +141,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -155,7 +157,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -164,6 +166,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, value: nil);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -179,7 +182,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -197,6 +200,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -212,7 +216,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -242,6 +246,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -257,7 +262,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -293,6 +298,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -308,7 +314,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -350,6 +356,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -365,7 +372,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -383,11 +390,12 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
                     
-                    attachmentFieldView.setValue(observation.attachments);
+                    attachmentFieldView.setValue(observation.attachments as Any?);
                 }
                 
                 window.rootViewController = controller;
@@ -400,7 +408,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -424,6 +432,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -441,7 +450,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -459,6 +468,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -476,7 +486,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -494,6 +504,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                            
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -519,7 +530,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -537,6 +548,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -570,7 +582,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -588,6 +600,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -623,7 +636,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -641,6 +654,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -676,7 +690,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -687,6 +701,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -705,7 +720,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -725,6 +740,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 
                 controller.viewDidLoadClosure = {
                     attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -743,7 +759,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -775,6 +791,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -790,6 +807,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
                 attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -803,6 +821,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
                 attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -811,11 +830,26 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 expect(coordinator.addVideoAttachmentCalled).to(beTrue());
             }
             
+            it("should tap audio button to add attachment") {
+                window.rootViewController = controller;
+                controller.view.addSubview(view);
+                let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
+                attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Audio");
+                tester().tapView(withAccessibilityLabel: (field[FieldKey.name.key] as? String ?? "") + " Audio");
+                expect(coordinator.addVoiceAttachmentCalled).to(beTrue());
+            }
+            
             it("should tap gallery button to add attachment") {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
                 attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -843,6 +877,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
                 attachmentFieldView = AttachmentFieldView(field: field, attachmentCreationCoordinator: coordinator);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
@@ -879,7 +914,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
@@ -900,6 +935,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 let attachmentSelectionDelegate = MockAttachmentSelectionDelegate();
 
                 attachmentFieldView = AttachmentFieldView(field: field, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 view.addSubview(attachmentFieldView)
@@ -952,6 +988,7 @@ class EditAttachmentFieldViewTests: KIFSpec {
                 let attachmentSelectionDelegate = MockAttachmentSelectionDelegate();
                 
                 attachmentFieldView = AttachmentFieldView(field: field, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 view.addSubview(attachmentFieldView)
