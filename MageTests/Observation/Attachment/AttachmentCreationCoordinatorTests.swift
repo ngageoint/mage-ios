@@ -98,11 +98,10 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 
                 attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: controller, observation: observation, delegate: delegate)
                 
-                attachmentCreationCoordinator.addGalleryAttachment();
+                attachmentCreationCoordinator.presentGallery();
                 
-                tester().waitForAnimationsToFinish();
-                expect(attachmentCreationCoordinator.pickerController).toEventuallyNot(beNil());
-                expect(attachmentCreationCoordinator.pickerController?.mediaTypes).toEventually(contain(kUTTypeImage as String, kUTTypeMovie as String))
+                let mockPicker: UIImagePickerController = MockUIImagePickerController();
+                mockPicker.sourceType = .camera;
                 
                 let info: [UIImagePickerController.InfoKey : Any] = [
                     .mediaType: kUTTypeImage as String,
@@ -110,8 +109,8 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                     .mediaMetadata: [ "mykey": "myvalue" ]
                 ];
                 
-                attachmentCreationCoordinator.pickerController!.delegate?.imagePickerController?(attachmentCreationCoordinator.pickerController!, didFinishPickingMediaWithInfo: info);
-                
+                attachmentCreationCoordinator.imagePickerController(mockPicker, didFinishPickingMediaWithInfo: info)
+
                 expect(delegate.attachmentCreatedCalled).to(beTrue());
                 expect(delegate.createdAttachment).toNot(beNil());
                 
@@ -132,11 +131,6 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 let delegate = MockAttachmentCreationCoordinatorDelegate();
                 
                 attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: controller, observation: observation, delegate: delegate)
-                
-                attachmentCreationCoordinator.addGalleryAttachment();
-                
-                expect(attachmentCreationCoordinator.pickerController).toEventuallyNot(beNil());
-                expect(attachmentCreationCoordinator.pickerController?.mediaTypes).toEventually(contain(kUTTypeImage as String, kUTTypeMovie as String))
 
                 let url = Bundle(for: AttachmentCreationCoordinatorTests.self).url(forResource: "testmovie", withExtension: "MOV")!
                 
@@ -146,8 +140,11 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                     .mediaType: kUTTypeMovie as String,
                     .mediaURL: url
                 ];
-
-                attachmentCreationCoordinator.pickerController!.delegate?.imagePickerController?(attachmentCreationCoordinator.pickerController!, didFinishPickingMediaWithInfo: info);
+                
+                let mockPicker: UIImagePickerController = MockUIImagePickerController();
+                mockPicker.sourceType = .camera;
+                
+                attachmentCreationCoordinator.imagePickerController(mockPicker, didFinishPickingMediaWithInfo: info)
                 
                 expect(delegate.attachmentCreatedCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Movie failed to export");
                 expect(delegate.createdAttachment).toEventuallyNot(beNil());
@@ -170,9 +167,11 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 
                 attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: controller, observation: observation, delegate: delegate)
                 
+                let url = Bundle(for: AttachmentCreationCoordinatorTests.self).url(forResource: "testRecording", withExtension: "mp4")!
+                
                 let recording: Recording = Recording();
-                recording.fileName = "recording.mp4";
-                recording.filePath = "/path/to/file/recording.mp4";
+                recording.fileName = "testRecording.mp4";
+                recording.filePath = url.absoluteString;
                 recording.mediaType = "audio/mp4";
                 
                 attachmentCreationCoordinator.recordingAvailable(recording);
@@ -191,53 +190,6 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 expect(createdAttachment.contentType).to(equal(recording.mediaType));
                 expect(createdAttachment.name).to(equal(recording.fileName))
                 expect(createdAttachment.localPath).to(equal(recording.filePath))
-            }
-            
-            // this will simply present an alert about the camera not being available on the simulator
-            // good enough to verify it tried to launch
-            it("present camera") {
-                let observation = Observation();
-                let delegate = MockAttachmentCreationCoordinatorDelegate();
-                
-                attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: controller, observation: observation, delegate: delegate)
-                
-                attachmentCreationCoordinator.addCameraAttachment();
-                
-                tester().waitForAnimationsToFinish();
-                
-                expect(UIApplication.getTopViewController()?.isKind(of: NSClassFromString("UIAlertController")!)).toEventually(beTrue());
-                
-                tester().waitForView(withAccessibilityLabel: "No Camera");
-            }
-            
-            // this will simply present an alert about the camera not being available on the simulator
-            // good enough to verify it tried to launch
-            it("present video") {
-                let observation = Observation();
-                let delegate = MockAttachmentCreationCoordinatorDelegate();
-                
-                attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: controller, observation: observation, delegate: delegate)
-                
-                attachmentCreationCoordinator.addVideoAttachment();
-                
-                tester().waitForAnimationsToFinish();
-                
-                expect(UIApplication.getTopViewController()?.isKind(of: NSClassFromString("UIAlertController")!)).toEventually(beTrue());
-                
-                tester().waitForView(withAccessibilityLabel: "No Camera");
-            }
-            
-            it("present voice recorder") {
-                let observation = Observation();
-                let delegate = MockAttachmentCreationCoordinatorDelegate();
-                
-                attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: controller, observation: observation, delegate: delegate)
-                
-                attachmentCreationCoordinator.addVoiceAttachment();
-                
-                tester().waitForAnimationsToFinish();
-                
-                expect(UIApplication.getTopViewController()?.isKind(of: NSClassFromString("AudioRecorderViewController")!)).toEventually(beTrue());
             }
         }
     }
