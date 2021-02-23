@@ -128,22 +128,22 @@
     self.usernameController.placeholderText = @"Username";
     self.usernameController.floatingEnabled = true;
     
-    self.passwordField.accessibilityLabel = @"Password";
+    self.passwordField.accessibilityLabel = @"New Password";
     self.passwordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.passwordField];
     UIImageView *keyImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
     [self addLeadingIconConstraints:keyImage];
     [self.passwordField setLeadingView:keyImage];
     self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
-    self.passwordController.placeholderText = @"Password";
+    self.passwordController.placeholderText = @"New Password";
     self.passwordController.textInput = self.passwordField;
     
-    self.confirmPasswordField.accessibilityLabel = @"Confirm Password";
+    self.confirmPasswordField.accessibilityLabel = @"Confirm New Password";
     self.confirmPasswordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.confirmPasswordField];
     UIImageView *keyImage2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
     [self addLeadingIconConstraints:keyImage2];
     [self.confirmPasswordField setLeadingView:keyImage2];
     self.confirmPasswordField.leadingViewMode = UITextFieldViewModeAlways;
-    self.confirmPasswordController.placeholderText = @"Confirm Password";
+    self.confirmPasswordController.placeholderText = @"Confirm New Password";
     self.confirmPasswordController.textInput = self.confirmPasswordField;
     
     self.currentPasswordField.accessibilityLabel = @"Current Password";
