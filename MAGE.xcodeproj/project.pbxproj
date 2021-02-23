@@ -135,7 +135,7 @@
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
 		F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */; };
 		F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B81F43978B001D120A /* ObservationEditView.xib */; };
-		F71B724E246B1DCC00E4CF33 /* EditDateViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */; };
+		F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */; };
 		F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */; };
 		F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B7252246C412900E4CF33 /* BaseFieldView.swift */; };
 		F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */; };
@@ -588,7 +588,7 @@
 		F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderViewController.m; sourceTree = "<group>"; };
 		F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderViewController.xib; sourceTree = "<group>"; };
 		F71B34B81F43978B001D120A /* ObservationEditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditView.xib; sourceTree = "<group>"; };
-		F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDateViewTests.swift; sourceTree = "<group>"; };
+		F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewTests.swift; sourceTree = "<group>"; };
 		F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGeometryViewTests.swift; sourceTree = "<group>"; };
 		F71B7252246C412900E4CF33 /* BaseFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFieldView.swift; sourceTree = "<group>"; };
 		F72088A71E73600100EBFF81 /* TimeSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -1658,7 +1658,7 @@
 			isa = PBXGroup;
 			children = (
 				F7BE036D246609A100D2F7C3 /* EditTextFieldViewTests.swift */,
-				F71B724C246B1ACA00E4CF33 /* EditDateViewTests.swift */,
+				F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */,
 				F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */,
 				F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */,
 				F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */,
@@ -2671,7 +2671,7 @@
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
 				F7C641042581504F00C02335 /* MapViewControllerTests.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* EditGeometryViewTests.swift in Sources */,
-				F71B724E246B1DCC00E4CF33 /* EditDateViewTests.swift in Sources */,
+				F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */,
 				F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */,
 				F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */,
 				F7BE036F24660A9D00D2F7C3 /* EditTextFieldViewTests.swift in Sources */,
