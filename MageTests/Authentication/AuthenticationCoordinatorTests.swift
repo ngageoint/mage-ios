@@ -620,7 +620,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
                 tester().tapView(withAccessibilityLabel: "Sign Up");
@@ -657,7 +657,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
                 tester().tapView(withAccessibilityLabel: "Sign Up");
@@ -697,7 +697,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
                 tester().tapView(withAccessibilityLabel: "Sign Up");
@@ -730,7 +730,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 
                 tester().waitForView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
