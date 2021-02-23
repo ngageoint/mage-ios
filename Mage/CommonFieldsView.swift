@@ -91,7 +91,7 @@ class CommonFieldsView: MDCCard {
     
     func setDateValue() {
         if let observationProperties: [String : Any] = observation.properties as? [String : Any] {
-            dateView.setValue(observationProperties[dateField[FieldKey.name.key] as! String] as? String?);
+            dateView.setValue(observationProperties[dateField[FieldKey.name.key] as! String]);
         }
     }
     
