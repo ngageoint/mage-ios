@@ -298,6 +298,7 @@
 		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
+		F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */; };
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
 		F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */; };
@@ -804,6 +805,7 @@
 		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
 		F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMSTileOverlay.h; sourceTree = "<group>"; };
 		F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMSTileOverlay.m; sourceTree = "<group>"; };
+		F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIImagePickerController.swift; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
 		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
 		F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsAlternate.json; sourceTree = "<group>"; };
@@ -1276,6 +1278,7 @@
 				F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */,
 				F7C6410925817BC000C02335 /* MockLocationService.swift */,
 				F770854B2593FDD8008903BA /* MockObservationActionsDelegate.swift */,
+				F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -2690,6 +2693,7 @@
 				F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
+				F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */,
 				F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */,
 				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
