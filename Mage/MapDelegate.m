@@ -1235,7 +1235,6 @@
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-	
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
         MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView];
@@ -1252,7 +1251,7 @@
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
         annotationView.enabled = !self.hideObservations;
-        annotationView.accessibilityLabel = [NSString stringWithFormat:@"Observation %@", observationAnnotation.observation.objectID];
+        annotationView.accessibilityLabel = [NSString stringWithFormat:@"Observation Annotation %@", observationAnnotation.observation.objectID.URIRepresentation];
         return annotationView;
     }
     else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
@@ -1262,8 +1261,10 @@
         AreaAnnotation *areaAnnotation = annotation;
         return [areaAnnotation viewForAnnotationOnMapView:self.mapView];
     } else if ([annotation isKindOfClass:[MKPointAnnotation class]]) {
+        MKPointAnnotation *pointAnnotation = (MKPointAnnotation *)annotation;
         MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
         [pinView setPinTintColor:[UIColor redColor]];
+        pinView.accessibilityLabel = [NSString stringWithFormat:@"Pin Annotation %f, %f", pointAnnotation.coordinate.latitude, pointAnnotation.coordinate.longitude];
         return pinView;
     } else if ([annotation isKindOfClass:[GPKGMapPoint class]]) {
         GPKGMapPoint *point = annotation;

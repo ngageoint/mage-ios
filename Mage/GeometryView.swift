@@ -24,7 +24,7 @@ class GeometryView : BaseFieldView {
         return MapDelegate();
     }()
     
-    private lazy var latitudeLongitudeButton: MDCButton = {
+    lazy var latitudeLongitudeButton: MDCButton = {
         let button = MDCButton(forAutoLayout: ());
         button.accessibilityLabel = "location";
         button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
@@ -33,7 +33,7 @@ class GeometryView : BaseFieldView {
         return button;
     }()
     
-    private lazy var accuracyLabel: UILabel = {
+    lazy var accuracyLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         return label;
     }()
@@ -169,8 +169,8 @@ class GeometryView : BaseFieldView {
                 viewStack.addArrangedSubview(fieldNameSpacerView);
                 viewStack.setCustomSpacing(0, after: fieldNameSpacerView);
             } else {
-                viewStack.addArrangedSubview(fieldNameLabel);
-                viewStack.setCustomSpacing(4, after: fieldNameLabel);
+                viewStack.addArrangedSubview(fieldNameSpacerView);
+                viewStack.setCustomSpacing(4, after: fieldNameSpacerView);
             }
         }
         viewStack.addArrangedSubview(mapView);
