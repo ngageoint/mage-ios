@@ -1,5 +1,5 @@
 //
-//  EditDropdownFieldViewTests.swift
+//  DropdownFieldViewTests.swift
 //  MAGETests
 //
 //  Created by Daniel Barela on 5/27/20.
@@ -13,11 +13,10 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class EditDropdownFieldViewTests: KIFSpec {
+class DropdownFieldViewTests: KIFSpec {
     
     override func spec() {
-        
-        describe("DropdownFieldView Single selection") {
+        describe("DropdownFieldView") {
             let recordSnapshots = false;
             var completeTest = false;
             
@@ -25,7 +24,6 @@ class EditDropdownFieldViewTests: KIFSpec {
             var window: UIWindow!;
             
             var dropdownFieldView: DropdownFieldView!
-            var multidropdownFieldView: MultiDropdownFieldView!
             var view: UIView!
             var field: [String: Any]!
             
@@ -72,6 +70,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             
             it("non edit mode") {
                 dropdownFieldView = DropdownFieldView(field: field, editMode: false, value: "The Value");
+                dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -89,6 +88,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             
             it("no initial value") {
                 dropdownFieldView = DropdownFieldView(field: field);
+                dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -107,6 +107,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             
             it("initial value set") {
                 dropdownFieldView = DropdownFieldView(field: field, value: "Hello");
+                dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -127,6 +128,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             it("set value via input") {
                 let delegate = MockFieldDelegate();
                 dropdownFieldView = DropdownFieldView(field: field, delegate: delegate);
+                dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -138,48 +140,10 @@ class EditDropdownFieldViewTests: KIFSpec {
                 expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(SelectEditViewController.self));
             }
             
-            it("initial value set with multiple values") {
-                multidropdownFieldView = MultiDropdownFieldView(field: field, value: ["Hello", "hi"]);
-                
-                view.addSubview(dropdownFieldView)
-                multidropdownFieldView.autoPinEdgesToSuperviewEdges();
-                
-                controller.view.addSubview(view);
-                expect(multidropdownFieldView.isEmpty()) == false;
-
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
-            }
-            
-            it("set value later") {
-                dropdownFieldView = DropdownFieldView(field: field);
-                
-                view.addSubview(dropdownFieldView)
-                dropdownFieldView.autoPinEdgesToSuperviewEdges();
-                
-                controller.view.addSubview(view);
-                expect(dropdownFieldView.isEmpty()) == true;
-                dropdownFieldView.setValue(["green", "purple"]);
-                expect(dropdownFieldView.isEmpty()) == false;
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
-            }
-            
             it("required field should show status") {
                 field[FieldKey.required.key] = true;
                 dropdownFieldView = DropdownFieldView(field: field);
+                dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
@@ -200,6 +164,7 @@ class EditDropdownFieldViewTests: KIFSpec {
             it("required field should show status after value has been added") {
                 field[FieldKey.required.key] = true;
                 dropdownFieldView = DropdownFieldView(field: field);
+                dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();

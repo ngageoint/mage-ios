@@ -188,6 +188,7 @@
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
 		F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */; };
 		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
+		F76BB96825E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76BB96725E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift */; };
 		F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DF247C14DA0089F3AC /* FieldKey.swift */; };
 		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */; };
@@ -348,7 +349,7 @@
 		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
 		F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */; };
-		F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */; };
+		F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */; };
 		F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */; };
 		F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
@@ -664,6 +665,7 @@
 		F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ../LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F76A15D11A96536700F2BDF1 /* UIImageView+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+IB.h"; sourceTree = "<group>"; };
 		F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+IB.m"; sourceTree = "<group>"; };
+		F76BB96725E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDropdownFieldViewTests.swift; sourceTree = "<group>"; };
 		F76EB1DF247C14DA0089F3AC /* FieldKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldKey.swift; sourceTree = "<group>"; };
 		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNumberFieldViewTests.swift; sourceTree = "<group>"; };
@@ -873,7 +875,7 @@
 		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
 		F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormViewTests.swift; sourceTree = "<group>"; };
 		F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldView.swift; sourceTree = "<group>"; };
-		F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDropdownFieldViewTests.swift; sourceTree = "<group>"; };
+		F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldView.swift; sourceTree = "<group>"; };
 		F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
@@ -1661,9 +1663,10 @@
 				F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */,
 				F71B724F246B53F500E4CF33 /* EditGeometryViewTests.swift */,
 				F76EB1E3247D83FD0089F3AC /* EditNumberFieldViewTests.swift */,
-				F7F91221247F046500C068B6 /* EditDropdownFieldViewTests.swift */,
+				F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */,
 				F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */,
 				F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */,
+				F76BB96725E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift */,
 			);
 			path = Fields;
 			sourceTree = "<group>";
@@ -2663,7 +2666,7 @@
 			files = (
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
 				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
-				F7F91222247F046500C068B6 /* EditDropdownFieldViewTests.swift in Sources */,
+				F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */,
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,
 				F76EB1E4247D83FD0089F3AC /* EditNumberFieldViewTests.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
@@ -2679,6 +2682,7 @@
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
 				F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */,
+				F76BB96825E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift in Sources */,
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */,
