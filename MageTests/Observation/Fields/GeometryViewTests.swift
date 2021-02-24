@@ -500,6 +500,46 @@ class GeometryViewTests: KIFSpec {
                 
                 expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
             }
+            
+            it("set value later wtih observation with accuracy and provider") {
+                var completeTest = false;
+                let observation: Observation = ObservationBuilder.createPointObservation();
+                ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
+                ObservationBuilder.addObservationProperty(observation: observation, key: "provider", value: "gps")
+                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
+                
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    tester().waitForAnimationsToFinish();
+                    let point: SFPoint = observation.getGeometry().centroid();
+                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
+                    completeTest = true;
+                }
+                
+                window.rootViewController = controller;
+                
+                geometryFieldView = GeometryView(field: field, observation: nil, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                
+                controller.view.addSubview(view);
+                
+                geometryFieldView.setObservation(observation: observation);
+                
+                expect(geometryFieldView.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
+                expect(geometryFieldView.latitudeLongitudeButton.isEnabled).to(beTrue());
+                expect(geometryFieldView.accuracyLabel.text) == "GPS ± 100.49m";
+                expect(geometryFieldView.fieldNameLabel.text) == "Field Title (Lat, Long)";
+                expect(geometryFieldView.fieldNameSpacerView.superview).toNot(beNil());
+                expect(geometryFieldView.editFab.superview).toNot(beNil());
+                
+                expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+            }
 
             it("set value later") {
                 var completeTest = false;
@@ -720,6 +760,44 @@ class GeometryViewTests: KIFSpec {
                 expect(delegate.launchFieldSelectionViewControllerCalled).to(beTrue());
                 expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(GeometryEditViewController.self));
 
+            }
+            
+            it("copy location") {
+                var completeTest = false;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockMapDelegate = MockMapViewDelegate()
+                
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                    tester().waitForAnimationsToFinish();
+                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    completeTest = true;
+                }
+                
+                window.rootViewController = controller;
+                
+                let mockActionsDelegate: MockObservationActionsDelegate = MockObservationActionsDelegate();
+                
+                geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate, observationActionsDelegate: mockActionsDelegate);
+                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(geometryFieldView)
+                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                controller.view.addSubview(view);
+                
+                expect(geometryFieldView.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
+                expect(geometryFieldView.latitudeLongitudeButton.isEnabled).to(beTrue());
+                expect(geometryFieldView.accuracyLabel.text) == "GPS ± 100.49m";
+                expect(geometryFieldView.fieldNameLabel.text) == "Field Title (Lat, Long)"
+                expect(geometryFieldView.fieldNameSpacerView.superview).toNot(beNil());
+                expect(geometryFieldView.editFab.superview).toNot(beNil());
+                
+                tester().tapView(withAccessibilityLabel: "location");
+                expect(mockActionsDelegate.copyLocationCalled).to(beTrue());
+                expect(mockActionsDelegate.locationStringCopied) == "40.00850, -105.26780";
+                
+                expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
             }
         }
     }

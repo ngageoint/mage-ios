@@ -17,6 +17,8 @@ class MockObservationActionsDelegate: ObservationActionsDelegate {
     var makeImportantCalled = false;
     var makeImportantReason: String?;
     var removeImportantCalled = false;
+    var locationStringCopied: String?;
+    var copyLocationCalled = false;
     
     var observationSent: Observation?;
     
@@ -44,5 +46,10 @@ class MockObservationActionsDelegate: ObservationActionsDelegate {
     func removeImportant(_ observation: Observation) {
         removeImportantCalled = true;
         observationSent = observation;
+    }
+    
+    func copyLocation(_ locationString: String) {
+        copyLocationCalled = true;
+        locationStringCopied = locationString;
     }
 }
