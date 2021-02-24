@@ -203,7 +203,7 @@ import MaterialComponents.MDCCard
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
-        if (eventForms.count == 0) {
+        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms.count == 0) {
             addFormFAB.isHidden = true;
         }
         if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
