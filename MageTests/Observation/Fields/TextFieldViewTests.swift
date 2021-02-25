@@ -1,5 +1,5 @@
 //
-//  EditTextFieldViewTests.swift
+//  TextFieldViewTests.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 5/8/20.
@@ -13,13 +13,13 @@ import Nimble_Snapshots
 
 @testable import MAGE
 
-class EditTextFieldViewTests: KIFSpec {
+class TextFieldViewTests: KIFSpec {
     
     override func spec() {
         
         let recordSnapshots = false;
         
-        describe("EditTextFieldView Single Line") {
+        describe("TextFieldView Single Line") {
             
             var textFieldView: TextFieldView!
             var field: [String: Any]!
@@ -271,7 +271,7 @@ class EditTextFieldViewTests: KIFSpec {
             }
         }
         
-        describe("EditTextFieldView Multi Line") {
+        describe("TextFieldView Multi Line") {
             
             var textFieldView: TextFieldView!
             var field: [String: Any]!
