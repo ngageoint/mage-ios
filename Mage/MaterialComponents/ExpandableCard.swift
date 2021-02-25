@@ -102,6 +102,8 @@ class ExpandableCard: MDCCard {
     
     private lazy var expandableView: UIView = {
         let expandableView = UIView(forAutoLayout: ());
+        expandableView.accessibilityLabel = "expandableArea"
+        expandableView.isAccessibilityElement = true;
         expandableView.isHidden = !self.showExpanded;
         return expandableView;
     }()
@@ -175,6 +177,7 @@ class ExpandableCard: MDCCard {
     func configure(header: String?, subheader: String?, imageName: String?, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView?) {
         if let safeImageName = imageName {
             self.thumbnail.image  = UIImage(named: safeImageName)
+            self.thumbnail.accessibilityLabel = safeImageName;
         }
         self.header = header;
         self.subheader = subheader;
