@@ -36,7 +36,7 @@ class BaseFieldView : UIView {
     lazy var fieldNameLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.autoSetDimension(.height, toSize: 16);
-        label.text = "\(field[FieldKey.title.key] as? String ?? "")\((field[FieldKey.required.key] as? Bool ?? false) ? " *" : "")";
+        label.text = "\(field[FieldKey.title.key] as? String ?? "")\((editMode && (field[FieldKey.required.key] as? Bool ?? false)) ? " *" : "")";
         label.accessibilityLabel = "\((field[FieldKey.name.key] as? String ?? "")) Label";
         return label;
     }()

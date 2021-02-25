@@ -14,7 +14,7 @@ class NumberFieldView : BaseFieldView {
     private var min: NSNumber?;
     private var max: NSNumber?;
     
-    private lazy var helperText: String? = {
+    lazy var helperText: String? = {
         var helper: String? = nil;
         if (self.min != nil && self.max != nil) {
             helper = "Must be between \(self.min!) and \(self.max!)";
@@ -26,7 +26,7 @@ class NumberFieldView : BaseFieldView {
         return helper;
     }()
     
-    private lazy var titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.text = helperText;
         label.sizeToFit();

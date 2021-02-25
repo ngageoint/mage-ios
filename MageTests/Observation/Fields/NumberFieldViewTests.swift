@@ -1,5 +1,5 @@
 //
-//  EditNumberFieldViewTests.swift
+//  NumberFieldViewTests.swift
 //  MAGETests
 //
 //  Created by Daniel Barela on 5/26/20.
@@ -25,7 +25,7 @@ extension UITextField {
     }
 }
 
-class EditNumberFieldViewTests: KIFSpec {
+class NumberFieldViewTests: KIFSpec {
     
     override func spec() {
         
@@ -42,9 +42,9 @@ class EditNumberFieldViewTests: KIFSpec {
             
             func maybeSnapshot() -> Snapshot {
                 if (recordSnapshots) {
-                    return recordSnapshot()
+                    return recordSnapshot(usesDrawRect: true)
                 } else {
-                    return snapshot()
+                    return snapshot(usesDrawRect: true)
                 }
             }
             
@@ -74,131 +74,216 @@ class EditNumberFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
-            it("non edit mode") {
-                numberFieldView = NumberFieldView(field: field, editMode: false, value: "2");
+            it("edit mode reference image") {
+                field[FieldKey.min.key] = 2;
+                field[FieldKey.required.key] = true;
+                numberFieldView = NumberFieldView(field: field, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
+                
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.textField.placeholder) == "Number Field *"
+                expect(numberFieldView.controller.helperText) == "Must be greater than 2 "
+                expect(numberFieldView.titleLabel.text) == "Must be greater than 2 "
+                
                 expect(view) == maybeSnapshot();
+            }
+            
+            it("non edit mode reference image") {
+                field[FieldKey.min.key] = 2;
+                field[FieldKey.required.key] = true;
+                numberFieldView = NumberFieldView(field: field, editMode: false, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(numberFieldView)
+                numberFieldView.autoPinEdgesToSuperviewEdges();
+                
+                expect(numberFieldView.fieldValue.text) == "2";
+                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
+                
+                expect(view) == maybeSnapshot();
+            }
+            
+            it("non edit mode") {
+                numberFieldView = NumberFieldView(field: field, editMode: false, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(numberFieldView)
+                numberFieldView.autoPinEdgesToSuperviewEdges();
+                
+                expect(numberFieldView.fieldValue.text) == "2";
+                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
             }
             
             it("no initial value") {
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == maybeSnapshot()
+                
+                expect(numberFieldView.fieldValue.text).to(beNil());
+                expect(numberFieldView.textField.text) == "";
+                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
             }
             
             it("initial value set") {
                 numberFieldView = NumberFieldView(field: field, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == maybeSnapshot();
+                
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
             }
             
             it("set value via input") {
                 let delegate = MockFieldDelegate();
                 
                 numberFieldView = NumberFieldView(field: field, delegate: delegate);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
-                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
-                tester().enterText("2", intoViewWithAccessibilityLabel: field["name"] as? String);
+                expect(numberFieldView.textField.text) == "";
+                
+                tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
+                tester().enterText("2", intoViewWithAccessibilityLabel: field[FieldKey.name.key] as? String);
                 tester().tapView(withAccessibilityLabel: "Done");
                 
-                expect(delegate.fieldChangedCalled).to(beTrue());
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
                 
-                expect(view) == maybeSnapshot();
+                expect(delegate.fieldChangedCalled).to(beTrue());
             }
             
             it("initial value set with min") {
                 field[FieldKey.min.key] = 2;
                 numberFieldView = NumberFieldView(field: field, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == maybeSnapshot();
+                
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.textField.placeholder) == "Number Field"
+                expect(numberFieldView.controller.helperText) == "Must be greater than 2 "
+                expect(numberFieldView.titleLabel.text) == "Must be greater than 2 "
             }
             
             it("initial value set with max") {
                 field[FieldKey.max.key] = 8;
                 numberFieldView = NumberFieldView(field: field, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == maybeSnapshot();
+                
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.textField.placeholder) == "Number Field"
+                expect(numberFieldView.controller.helperText) == "Must be less than 8"
+                expect(numberFieldView.titleLabel.text) == "Must be less than 8"
             }
             
             it("initial value set with min and max") {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
                 numberFieldView = NumberFieldView(field: field, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == maybeSnapshot();
+                
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.textField.placeholder) == "Number Field"
+                expect(numberFieldView.controller.helperText) == "Must be between 2 and 8"
+                expect(numberFieldView.titleLabel.text) == "Must be between 2 and 8"
             }
             
             it("set value later") {
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
-                numberFieldView.setValue( "2")
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.textField.text) == "";
+                
+                numberFieldView.setValue("2")
+                
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
             }
             
             it("set valid false") {
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
                 numberFieldView.setValid(false);
+                
+                expect(numberFieldView.textField.text) == "";
+                expect(numberFieldView.textField.placeholder) == "Number Field"
+                expect(numberFieldView.controller.errorText) == "Must be a number"
                 expect(view) == maybeSnapshot();
             }
             
             it("set valid true after being invalid") {
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
+                expect(numberFieldView.textField.text) == "";
+                expect(numberFieldView.textField.placeholder) == "Number Field"
+                expect(numberFieldView.controller.errorText).to(beNil());
                 numberFieldView.setValid(false);
+                expect(numberFieldView.controller.errorText) == "Must be a number"
                 numberFieldView.setValid(true);
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.controller.errorText).to(beNil());
             }
             
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(numberFieldView.isEmpty()) == true;
                 expect(numberFieldView.isValid(enforceRequired: true)) == false;
+                
+                expect(numberFieldView.textField.text) == "";
+                expect(numberFieldView.textField.placeholder) == "Number Field *"
             }
             
             it("required field is invalid if text is nil") {
                 field[FieldKey.required.key] = true;
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 numberFieldView.textField.text = nil;
                 expect(numberFieldView.isEmpty()) == true;
                 expect(numberFieldView.isValid(enforceRequired: true)) == false;
+                expect(numberFieldView.textField.placeholder) == "Number Field *"
             }
             
             it("field is invalid if text is a letter") {
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 numberFieldView.textField.text = "a";
                 expect(numberFieldView.isEmpty()) == false;
                 expect(numberFieldView.isValid(enforceRequired: true)) == false;
+                expect(numberFieldView.textField.placeholder) == "Number Field"
             }
             
             it("field should allow changing text to a valid number") {
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 numberFieldView.textField.text = "1";
                 expect(numberFieldView.textField(numberFieldView.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 1), replacementString: "2")) == true;
                 expect(numberFieldView.isEmpty()) == false;
@@ -206,6 +291,7 @@ class EditNumberFieldViewTests: KIFSpec {
             
             it("field should allow changing text to a blank") {
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 numberFieldView.textField.text = "1";
                 expect(numberFieldView.textField(numberFieldView.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 1), replacementString: "")) == true;
             }
@@ -213,25 +299,30 @@ class EditNumberFieldViewTests: KIFSpec {
             it("required field is valid if not empty") {
                 field[FieldKey.required.key] = true;
                 numberFieldView = NumberFieldView(field: field, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(numberFieldView.isEmpty()) == false;
                 expect(numberFieldView.isValid(enforceRequired: true)) == true;
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.textField.placeholder) == "Number Field *"
             }
             
             it("required field has title which indicates required") {
                 field[FieldKey.required.key] = true;
                 numberFieldView = NumberFieldView(field: field);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.textField.placeholder) == "Number Field *"
             }
             
             it("field is not valid if value is below min") {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
                 numberFieldView = NumberFieldView(field: field, value: "1");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(numberFieldView.isValid()) == false;
             }
@@ -240,6 +331,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
                 numberFieldView = NumberFieldView(field: field, value: "9");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(numberFieldView.isValid()) == false;
             }
@@ -248,6 +340,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 field[FieldKey.min.key] = 2;
                 field[FieldKey.max.key] = 8;
                 numberFieldView = NumberFieldView(field: field, value: "5");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(numberFieldView.isValid()) == true;
             }
@@ -255,6 +348,7 @@ class EditNumberFieldViewTests: KIFSpec {
             it("field is valid if value is above min") {
                 field[FieldKey.min.key] = 2;
                 numberFieldView = NumberFieldView(field: field, value: "5");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(numberFieldView.isValid()) == true;
             }
@@ -262,6 +356,7 @@ class EditNumberFieldViewTests: KIFSpec {
             it("field is valid if value is below max") {
                 field[FieldKey.max.key] = 8;
                 numberFieldView = NumberFieldView(field: field, value: "5");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(numberFieldView.isValid()) == true;
             }
@@ -269,17 +364,19 @@ class EditNumberFieldViewTests: KIFSpec {
             it("verify only numbers are allowed") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
                 expect(numberFieldView.textField(numberFieldView.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 1), replacementString: "a")) == false;
                 expect(delegate.fieldChangedCalled) == false;
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.textField.text) == "2";
             }
             
             it("verify if a non number is set it will be invalid") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -289,7 +386,19 @@ class EditNumberFieldViewTests: KIFSpec {
                 expect(numberFieldView.textField.text) == "a";
                 expect(numberFieldView.getValue()).to(beNil());
                 expect(numberFieldView.isValid()).to(beFalse());
-                expect(view) == maybeSnapshot();
+            }
+            
+            it("verify setting values on BaseFieldView returns the correct values") {
+                let delegate = MockFieldDelegate()
+                numberFieldView = NumberFieldView(field: field, delegate: delegate);
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                view.addSubview(numberFieldView)
+                numberFieldView.autoPinEdgesToSuperviewEdges();
+                
+                (numberFieldView as BaseFieldView).setValue("2");
+                expect(numberFieldView.textField.text) == "2";
+                expect(numberFieldView.getValue()) == 2;
+                expect(((numberFieldView as BaseFieldView).getValue() as! NSNumber)) == 2;
             }
             
             it("verify if number below min is set it will be invalid") {
@@ -297,6 +406,7 @@ class EditNumberFieldViewTests: KIFSpec {
 
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -305,7 +415,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "1";
                 expect(numberFieldView.getValue()) == 1;
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.isValid()).to(beFalse());
             }
             
             it("verify if number above max is set it will be invalid") {
@@ -313,6 +423,7 @@ class EditNumberFieldViewTests: KIFSpec {
 
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -321,7 +432,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "3";
                 expect(numberFieldView.getValue()) == 3;
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.isValid()).to(beFalse());
             }
             
             it("verify if number too low is set it will be invalid") {
@@ -330,6 +441,7 @@ class EditNumberFieldViewTests: KIFSpec {
 
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -338,7 +450,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "1";
                 expect(numberFieldView.getValue()) == 1;
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.isValid()).to(beFalse());
             }
             
             it("verify if number too high is set it will be invalid") {
@@ -347,6 +459,7 @@ class EditNumberFieldViewTests: KIFSpec {
                 
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -355,12 +468,13 @@ class EditNumberFieldViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "9";
                 expect(numberFieldView.getValue()) == 9;
-                expect(view) == maybeSnapshot();
+                expect(numberFieldView.isValid()).to(beFalse());
             }
             
             it("test delegate") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                
@@ -368,12 +482,12 @@ class EditNumberFieldViewTests: KIFSpec {
                 numberFieldView.textFieldDidEndEditing(numberFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? NSNumber) == 5;
-                expect(view) == maybeSnapshot();
             }
             
             it("allow canceling") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 
@@ -382,12 +496,12 @@ class EditNumberFieldViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == false;
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.getValue()) == 2;
-                expect(view) == maybeSnapshot();
             }
             
             it("done button should change value") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 numberFieldView.textField.text = "4";
@@ -396,12 +510,12 @@ class EditNumberFieldViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == true;
                 expect(numberFieldView.textField.text) == "4";
                 expect(numberFieldView.getValue()) == 4;
-                expect(view) == maybeSnapshot();
             }
             
             it("done button should send nil as new value") {
                 let delegate = MockFieldDelegate()
                 numberFieldView = NumberFieldView(field: field, delegate: delegate, value: "2");
+                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(numberFieldView)
                 numberFieldView.autoPinEdgesToSuperviewEdges();
                 numberFieldView.textField.text = "";
