@@ -92,10 +92,9 @@ class FeedItemsViewControllerTests: KIFSpec {
                     
                     var completeTest = false;
                     
-                    if let feed: Feed = Feed.mr_findFirst() {
-                        controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
-                        window.rootViewController = controller;
-                    }
+                    let feed: Feed = Feed.mr_findFirst()!
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
+                    window.rootViewController = controller;
                     
                     self.maybeRecordSnapshot(controller.view, doneClosure: {
                         completeTest = true;
