@@ -33,9 +33,8 @@
 @implementation LocalLoginView
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
-    if (containerScheme != nil) {
-        self.scheme = containerScheme;
-    }
+    if (containerScheme == nil) return;
+    self.scheme = containerScheme;
     [self.usernameController applyThemeWithScheme:containerScheme];
     [self.passwordController applyThemeWithScheme:containerScheme];
     

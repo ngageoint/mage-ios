@@ -222,6 +222,9 @@ class FormPickerTests: KIFSpec {
                 
                 let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: formPicker);
                 container.present(bottomSheet, animated: true, completion: nil);
+                tester().waitForAnimationsToFinish();
+                tester().waitForView(withAccessibilityLabel: "Add A Form Table");
+                tester().waitForCell(at: IndexPath(row: forms.count - 1, section: 0), in: viewTester().usingLabel("Add A Form Table").view as? UITableView);
                 tester().waitForTappableView(withAccessibilityLabel: "Suspect");
                 tester().tapView(withAccessibilityLabel: "Suspect");
                 

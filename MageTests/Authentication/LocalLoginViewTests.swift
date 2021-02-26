@@ -105,7 +105,8 @@ class LocalLoginViewTests: KIFSpec {
             }
             
             it("should load the Local Login View as a nib") {
-                localLoginView = UINib(nibName: "local-authView", bundle: nil).instantiate(withOwner: self, options: nil)[0] as! LocalLoginView;
+                localLoginView = UINib(nibName: "local-authView", bundle: nil).instantiate(withOwner: self, options: nil)[0] as? LocalLoginView;
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 view.addSubview(localLoginView);
                 localLoginView?.autoPinEdgesToSuperviewEdges();
                 
@@ -118,6 +119,7 @@ class LocalLoginViewTests: KIFSpec {
             it("should load the Local Login View") {
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 view.addSubview(localLoginView);
                 localLoginView?.autoPinEdgesToSuperviewEdges();
                 
@@ -142,6 +144,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -185,6 +188,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -215,6 +219,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -247,6 +252,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 localLoginView.user = User.mr_findFirst();
@@ -274,6 +280,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -305,6 +312,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -341,6 +349,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -377,6 +386,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -414,6 +424,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -451,6 +462,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 

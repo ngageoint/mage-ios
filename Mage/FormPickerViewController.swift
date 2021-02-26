@@ -67,6 +67,7 @@ import MaterialComponents.MDCButton;
         self.forms = forms;
         self.observation = observation;
         self.scheme = scheme;
+        applyTheme(withScheme: scheme);
         if let safeObservation = self.observation, let safeProperties = safeObservation.properties {
             if (safeProperties.keys.contains("forms")) {
                 let observationForms: [[String: Any]] = safeProperties["forms"] as! [[String: Any]];
