@@ -12,7 +12,7 @@ import Foundation
 
 class MockObservationEditCardDelegate: ObservationEditCardDelegate, FieldSelectionDelegate, ObservationEditListener {
     func reorderForms(observation: Observation) {
-        
+        reorderFormsCalled = true;
     }
     
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
@@ -20,7 +20,8 @@ class MockObservationEditCardDelegate: ObservationEditCardDelegate, FieldSelecti
     }
     
     func launchFieldSelectionViewController(viewController: UIViewController) {
-        
+        launchFieldSelectionViewControllerCalled = true;
+        viewControllerToLaunch = viewController;
     }
     
     var addVoiceAttachmentCalled = false;
@@ -33,6 +34,9 @@ class MockObservationEditCardDelegate: ObservationEditCardDelegate, FieldSelecti
     var addFormCalled = false;
     var saveObservationCalled = false;
     var cancelEditCalled = false;
+    var launchFieldSelectionViewControllerCalled = false;
+    var viewControllerToLaunch: UIViewController?;
+    var reorderFormsCalled = false;
     
     var selectedAttachment: Attachment?;
     var selectedField: [String : Any]?;

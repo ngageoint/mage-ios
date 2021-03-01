@@ -192,7 +192,7 @@ class MageCoreDataFixtures {
         }, completion: completion)
     }
     
-    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", formsJsonFile: String = "oneForm", completion: MRSaveCompletionHandler?) {
+    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler?) {
         
         guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
             fatalError("\(formsJsonFile).json not found")
@@ -215,6 +215,8 @@ class MageCoreDataFixtures {
                 e.remoteId = remoteId;
                 e.eventDescription = "Test event description";
                 e.forms = jsonDictionary;
+                e.maxObservationForms = maxObservationForms;
+                e.minObservationForms = minObservationForms;
                 let teamJson: [String: Any] = [
                     "id": "teamid",
                     "name": "Team Name",

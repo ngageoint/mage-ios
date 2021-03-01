@@ -20,4 +20,6 @@
 
 - (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate scheme: (id<MDCContainerScheming>) containerScheme;
 
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+
 @end

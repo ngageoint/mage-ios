@@ -189,6 +189,7 @@
 		F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */; };
 		F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */; };
 		F76BB96825E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76BB96725E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift */; };
+		F76BB9F725ED8195004CFB97 /* oneFormRestricted.json in Resources */ = {isa = PBXBuildFile; fileRef = F76BB9F625ED8195004CFB97 /* oneFormRestricted.json */; };
 		F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1DF247C14DA0089F3AC /* FieldKey.swift */; };
 		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */; };
@@ -666,6 +667,7 @@
 		F76A15D11A96536700F2BDF1 /* UIImageView+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+IB.h"; sourceTree = "<group>"; };
 		F76A15D21A96536700F2BDF1 /* UIImageView+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+IB.m"; sourceTree = "<group>"; };
 		F76BB96725E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDropdownFieldViewTests.swift; sourceTree = "<group>"; };
+		F76BB9F625ED8195004CFB97 /* oneFormRestricted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = oneFormRestricted.json; sourceTree = "<group>"; };
 		F76EB1DF247C14DA0089F3AC /* FieldKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldKey.swift; sourceTree = "<group>"; };
 		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldViewTests.swift; sourceTree = "<group>"; };
@@ -1508,6 +1510,7 @@
 				F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */,
 				F7D9B821255D6D9500A76E2C /* attachmentForm.json */,
 				F7C640FE257EB29100C02335 /* geometryField.json */,
+				F76BB9F625ED8195004CFB97 /* oneFormRestricted.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2129,6 +2132,7 @@
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
 				F795ED1224BD04730028FBFC /* oneForm.json in Resources */,
 				F777B00E252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json in Resources */,
+				F76BB9F725ED8195004CFB97 /* oneFormRestricted.json in Resources */,
 				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
 				F7CE2300254368B000D710DE /* allTheThings.json in Resources */,
 				F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */,

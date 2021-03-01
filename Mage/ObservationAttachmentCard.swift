@@ -37,6 +37,7 @@ class ObservationAttachmentCard: MDCCard {
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
+        self.accessibilityLabel = "Observation Attachment Card"
         buildView();
     }
     
@@ -59,7 +60,7 @@ class ObservationAttachmentCard: MDCCard {
     
     func buildView() {
         // for legacy servers add the attachment field to common
-        if (UserDefaults.standard.serverMajorVersion == 5) {
+        if (MageServer.isServerVersion5()) {
             self.addSubview(attachmentView);
         }
     }

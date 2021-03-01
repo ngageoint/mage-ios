@@ -20,7 +20,7 @@ class FormsHeader: UIView {
     
     lazy var reorderButton: UIButton = {
         let reorderButton = UIButton(type: .custom);
-        reorderButton.accessibilityLabel = "important";
+        reorderButton.accessibilityLabel = "reorder";
         reorderButton.setImage(UIImage(named: "reorder"), for: .normal);
         return reorderButton;
     }()

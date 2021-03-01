@@ -66,6 +66,7 @@ class ObservationFormView: UIStackView {
         self.observationFormListener = observationFormListener;
         self.observationActionsDelegate = observationActionsDelegate;
         constructView();
+        self.accessibilityLabel = "Form \(self.eventForm?[FormKey.id.key] ?? "")";
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {

@@ -49,7 +49,7 @@ import MaterialComponents.MDCCard
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-
+        scrollView.accessibilityIdentifier = "card scroll";
         return scrollView;
     }()
     
@@ -198,6 +198,7 @@ import MaterialComponents.MDCCard
     
     func setupFormDependentButtons() {
         addFormFAB.isEnabled = true;
+        addFormFAB.isHidden = false;
         if let safeScheme = self.scheme {
             addFormFAB.applySecondaryTheme(withScheme: safeScheme);
         }
@@ -251,7 +252,7 @@ import MaterialComponents.MDCCard
     
     // for legacy servers add the attachment field to common
     func addLegacyAttachmentCard(stackView: UIStackView) {
-        if (UserDefaults.standard.serverMajorVersion == 5) {
+        if (MageServer.isServerVersion5()) {
             if let safeObservation = observation {
                 let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
                 if let safeScheme = self.scheme {
@@ -389,7 +390,7 @@ import MaterialComponents.MDCCard
 
         if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // max amount of forms for this event have been added
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
@@ -420,9 +421,31 @@ import MaterialComponents.MDCCard
         
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
         
+        // if this is a legacy server and the event has forms, there needs to be 1
+        if (MageServer.isServerVersion5()) {
+            if (eventForms.count > 0 && realFormCount == 0) {
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "One form must be added to this observation");
+                let messageAction = MDCSnackbarMessageAction();
+                messageAction.title = "OK";
+                message.action = messageAction;
+                MDCSnackbarManager.default.show(message);
+                return false;
+            }
+            // this case should have already been prevented, but just in case
+            if (realFormCount > 1) {
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Only one form can be added to this observation");
+                let messageAction = MDCSnackbarMessageAction();
+                messageAction.title = "OK";
+                message.action = messageAction;
+                MDCSnackbarManager.default.show(message);
+                return false;
+            }
+        }
+        // end legacy check
+        
         if (realFormCount > (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // too many forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
@@ -431,7 +454,7 @@ import MaterialComponents.MDCCard
         }
         if (realFormCount < (event.minObservationForms ?? NSNumber(value: 0)) as! Int) {
             // not enough forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least  \(event.minObservationForms ?? 0)");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least \(event.minObservationForms ?? 0)");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
@@ -458,6 +481,7 @@ import MaterialComponents.MDCCard
             let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
             let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
             let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
+            print("event form min \(eventFormMin) max \(eventFormMax) form count \(formCount)")
             if (formCount < eventFormMin) {
                 // not enough of this form
                 let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
@@ -478,6 +502,13 @@ import MaterialComponents.MDCCard
             }
         }
         
+        if (!valid) {
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "The observation has validation errors.");
+            let messageAction = MDCSnackbarMessageAction();
+            messageAction.title = "OK";
+            message.action = messageAction;
+            MDCSnackbarManager.default.show(message);
+        }
         return valid;
     }
     

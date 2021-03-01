@@ -43,6 +43,7 @@ class EditAttachmentCardView: MDCCard {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         buildView();
+        self.accessibilityLabel = "Edit Attachment Card"
     }
     
     override func applyTheme(withScheme scheme: MDCContainerScheming) {

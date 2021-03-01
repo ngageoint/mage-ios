@@ -26,6 +26,7 @@ class MapViewControllerTests: KIFSpec {
             var controller: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
+            var mapViewController: MapViewController!;
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = true, doneClosure: (() -> Void)?) {
                 print("Record snapshot?", recordSnapshots);
@@ -70,10 +71,13 @@ class MapViewControllerTests: KIFSpec {
             afterEach {
                 tester().waitForAnimationsToFinish();
                 waitUntil { done in
-                    controller.dismiss(animated: false, completion: {
-                        done();
+                    mapViewController.dismiss(animated: false, completion: {
+                        controller.dismiss(animated: false, completion: {
+                            done();
+                        });
                     });
                 }
+                
                 window?.resignKey();
                 window.rootViewController = nil;
                 controller = nil;
@@ -95,7 +99,7 @@ class MapViewControllerTests: KIFSpec {
                 }
                 UserDefaults.standard.currentUserId = "user";
 
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 controller.pushViewController(mapViewController, animated: true);
                 
                 view = window;
@@ -124,7 +128,7 @@ class MapViewControllerTests: KIFSpec {
                 }
                 UserDefaults.standard.currentUserId = "user";
 
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
                 mapViewController.locationService = mockedLocationService;
@@ -159,7 +163,7 @@ class MapViewControllerTests: KIFSpec {
                 }
                 UserDefaults.standard.currentUserId = "user";
 
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = nil;
                 mapViewController.locationService = mockedLocationService;
@@ -194,7 +198,7 @@ class MapViewControllerTests: KIFSpec {
                 }
                 UserDefaults.standard.currentUserId = "user";
 
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
                 mapViewController.locationService = mockedLocationService;
@@ -255,13 +259,17 @@ class MapViewControllerTests: KIFSpec {
                 }
                 UserDefaults.standard.currentUserId = "user";
                 
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
                 mapViewController.locationService = mockedLocationService;
                 controller.pushViewController(mapViewController, animated: true);
                 
                 tester().waitForView(withAccessibilityLabel: "map");
+                expect(mapViewController.mapView).toEventuallyNot(beNil());
+
+                print("view with label map is \(viewTester().usingLabel("map").view)");
+                print(mapViewController.mapView);
                 mapViewController.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), latitudinalMeters: 1, longitudinalMeters: 1), animated: false);
                 mapViewController.mapView.setCenter(CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), animated: false);
                 tester().longPressView(withAccessibilityLabel: "map", duration: 1.0);
@@ -319,7 +327,7 @@ class MapViewControllerTests: KIFSpec {
                 
                 UserDefaults.standard.currentUserId = "user";
                 
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
                 mapViewController.locationService = mockedLocationService;
@@ -402,7 +410,7 @@ class MapViewControllerTests: KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc";
 
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
                 mapViewController.locationService = mockedLocationService;
@@ -451,7 +459,7 @@ class MapViewControllerTests: KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc";
 
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
                 mapViewController.locationService = mockedLocationService;
@@ -509,7 +517,7 @@ class MapViewControllerTests: KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc";
 
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let mapViewController: MapViewController = MapViewController();
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 let mockedLocationService = MockLocationService();
                 mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
                 mapViewController.locationService = mockedLocationService;
