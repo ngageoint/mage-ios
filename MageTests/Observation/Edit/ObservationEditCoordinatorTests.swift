@@ -9,7 +9,6 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
 
 import MagicalRecord
 
@@ -20,27 +19,8 @@ class ObservationEditCoordinatorTests: KIFSpec {
     override func spec() {
         
         describe("ObservationEditCoordinator") {
-            let recordSnapshots = false;
-            Nimble_Snapshots.setNimbleTolerance(0.1);
-            
             var controller: UINavigationController!
-            var view: UIView!
             var window: UIWindow!;
-            
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = true, doneClosure: (() -> Void)?) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 5.0);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
@@ -52,19 +32,27 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 controller = UINavigationController();
                 window.rootViewController = controller;
+                NSDate.setDisplayGMT(true);
             }
             
             afterEach {
                 tester().waitForAnimationsToFinish();
                 waitUntil { done in
-                    controller.dismiss(animated: false, completion: {
-                        done();
-                    });
+                    if let safePresented = controller.presentedViewController {
+                        safePresented.dismiss(animated: false, completion: {
+                            controller.dismiss(animated: false, completion: {
+                                done();
+                            })
+                        })
+                    } else {
+                        controller.dismiss(animated: false, completion: {
+                            done();
+                        })
+                    }
                 }
                 window?.resignKey();
                 window.rootViewController = nil;
                 controller = nil;
-                view = nil;
                 window = nil;
                 TestHelpers.cleanUpStack();
             }
@@ -145,10 +133,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, observation: observation);
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 coordinator.start();
-                
-                view = window;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "You are not part of this event");
                 let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("You are not part of this event"));
@@ -156,8 +143,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
             }
             
             it("should allow a user in the event to edit an observation") {
-                var completeTest = false;
-                waitUntil { done in
+                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
                         MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
@@ -181,23 +167,15 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, observation: observation);
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 coordinator.start();
+                                
+                tester().expect(viewTester().usingLabel("timestamp").view, toContainText: "April 26, 1970 at 5:46:40 PM GMT")
                 
-                view = window;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                tester().expect(viewTester().usingLabel("geometry").view, toContainText: "40.00850, -105.26780");
             }
             
             it("should show form chooser with new observation") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -214,24 +192,16 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
 
                 coordinator.start();
                 
-                view = window;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                tester().waitForAnimationsToFinish();
+                tester().waitForView(withAccessibilityLabel: "Add A Form Table");
+                tester().waitForView(withAccessibilityLabel: "Test");
             }
             
             it("should show form chooser with new observation and pick a form") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -248,27 +218,17 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 
                 coordinator.start();
-                
-                view = window;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "Test");
                 tester().tapView(withAccessibilityLabel: "Test");
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                tester().waitForAnimationsToFinish();
+                tester().waitForView(withAccessibilityLabel: "Form 1")
             }
             
             it("should show form chooser with new observation and pick a form and select a combo field") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -285,10 +245,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 
                 coordinator.start();
-                
-                view = window;
                 
                 tester().waitForView(withAccessibilityLabel: "Test");
                 tester().tapView(withAccessibilityLabel: "Test");
@@ -303,19 +262,10 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Done");
                 tester().waitForAnimationsToFinish();
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                tester().expect(viewTester().usingLabel("field1")?.view, toContainText: "Low")
             }
             
             it("should show form chooser with new observation and pick a form and select the observation geometry field") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -332,11 +282,10 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 
                 coordinator.start();
-                
-                view = window;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "Test");
                 tester().tapView(withAccessibilityLabel: "Test");
                 
@@ -362,20 +311,13 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let obsPoint: SFPoint = coordinator.observation?.getGeometry() as! SFPoint;
                 expect(obsPoint.y).to(beCloseTo(40.1));
                 expect(obsPoint.x).to(beCloseTo(-105.26));
+                TestHelpers.printAllAccessibilityLabelsInWindows();
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.10000, -105.26000"
+                expect((viewTester().usingLabel("location field1")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
             }
             
             it("should show form chooser with new observation and pick a form and select a geometry field") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -392,11 +334,10 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 
                 coordinator.start();
-                
-                view = window;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "Test");
                 tester().tapView(withAccessibilityLabel: "Test");
                 
@@ -423,20 +364,12 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let fieldPoint: SFPoint = forms[0]["field1"] as! SFPoint;
                 expect(fieldPoint.y).to(beCloseTo(40.0));
                 expect(fieldPoint.x).to(beCloseTo(-105.26));
-                                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                expect((viewTester().usingLabel("location field1")!.view as! MDCButton).currentTitle) == "40.00000, -105.26000"
+                expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780"
             }
             
             it("should show form chooser with new observation and pick a form and set the observations date") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "geometryField") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -448,15 +381,21 @@ class ObservationEditCoordinatorTests: KIFSpec {
                         }
                     }
                 }
+                
+                let formatter = DateFormatter();
+                formatter.dateFormat = "yyyy-MM-dd'T'HH:mmZ";
+                formatter.locale = Locale(identifier: "en_US_POSIX");
                                                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 
+                // set the time on the observation to something so the date picker functions correctly
+                coordinator.observation?.properties?["timestamp"] = "2020-10-29T07:00:00.000Z"
+                coordinator.observation?.timestamp = formatter.date(from: "2020-10-29T07:00:00.000Z");
                 coordinator.start();
-                
-                view = window;
                 
                 tester().waitForView(withAccessibilityLabel: "Test");
                 tester().tapView(withAccessibilityLabel: "Test");
@@ -466,12 +405,8 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "timestamp");
                 tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: "timestamp Date Picker");
-                tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .backwardFromCurrentValue);
+                tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .forwardFromCurrentValue);
                 tester().tapView(withAccessibilityLabel: "Done");
-                
-                let formatter = DateFormatter();
-                formatter.dateFormat = "yyyy-MM-dd'T'HH:mmZ";
-                formatter.locale = Locale(identifier: "en_US_POSIX");
                 
                 let formatterWithSeconds = ISO8601DateFormatter()
                 formatterWithSeconds.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
@@ -480,22 +415,11 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let timestampString: String? = coordinator.observation?.properties?["timestamp"] as? String;
                 let observationDate: Date = formatterWithSeconds.date(from: timestampString!)!;
                 
-                expect(formatter.string(from: observationDate) == formatter.string(from: date)).to(beTrue());
-                expect(formatter.string(from: (coordinator.observation?.timestamp)!) == formatter.string(from: date)).to(beTrue());
-
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                expect(formatter.string(from: observationDate)) == formatter.string(from: date);
+                expect(formatter.string(from: (coordinator.observation?.timestamp)!)) == formatter.string(from: date);
             }
             
             it("should show form chooser with new observation and cancel it") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -512,27 +436,15 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 
                 coordinator.start();
-                
-                view = window;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
             }
             
             it("should cancel editing") {
-                var completeTest = false;
                 waitUntil { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
                         Server.setCurrentEventId(1);
@@ -558,22 +470,13 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, observation: observation);
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 coordinator.start();
-                
-                view = window;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+                tester().waitForView(withAccessibilityLabel: "Discard Changes");
             }
         }
     }

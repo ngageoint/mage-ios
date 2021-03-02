@@ -173,7 +173,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
+                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
                 }
@@ -193,7 +193,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
+                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
                     
@@ -203,7 +203,7 @@ class CommonFieldsViewTests: KIFSpec {
                     let nc = UINavigationController(rootViewController: mockFieldSelectionDelegate.viewControllerToLaunch!);
                     controller.present(nc, animated: false, completion: nil);
                     tester().tapView(withAccessibilityLabel: "Done");
-                    expect((viewTester().usingLabel("location")!.view as! MDCButton).currentTitle) == "1.00000, 1.00000"
+                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "1.00000, 1.00000"
                 }
                 
                 it("empty observation set date") {
@@ -221,7 +221,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: initialTime)! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
+                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
                     
@@ -268,7 +268,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location")!.view as! MDCButton).currentTitle) == "40.00850, -105.26655"
+                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26655"
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
@@ -287,7 +287,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location")!.view as! MDCButton).currentTitle) == "40.00935, -105.26655"
+                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00935, -105.26655"
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());

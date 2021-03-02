@@ -121,6 +121,8 @@
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
+		F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */; };
+		F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */; };
 		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
 		F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */; };
 		F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */ = {isa = PBXBuildFile; fileRef = F71446F0249BB5BC005A5EC1 /* icon27.png */; };
@@ -572,6 +574,8 @@
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
+		F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
+		F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
 		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
 		F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedServiceTests.swift; sourceTree = "<group>"; };
 		F71446F0249BB5BC005A5EC1 /* icon27.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon27.png; sourceTree = "<group>"; };
@@ -998,6 +1002,7 @@
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */,
 				F796E44B24193C9A005CA09C /* Attachment */,
 				F7ED5D0F1FFD7F88007BD768 /* Settings */,
 				F7A292291FC3938F00DE5463 /* Authentication */,
@@ -1014,6 +1019,7 @@
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
 				F75A10F12048B037002F9906 /* TableSectionHeader.xib */,
 				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
+				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -2066,6 +2072,7 @@
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */,
 				2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */,
+				F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */,
 				2F8A2C192201305D007FE473 /* EventInformationView.xib in Resources */,
 				F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */,
 				2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */,
@@ -2079,6 +2086,7 @@
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
 				F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */,
+				F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7DCCC1C1F4626C600E4C616 /* GeometryEditView.xib in Resources */,
 				2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */,

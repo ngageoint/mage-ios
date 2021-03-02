@@ -26,7 +26,7 @@ class GeometryView : BaseFieldView {
     
     lazy var latitudeLongitudeButton: MDCButton = {
         let button = MDCButton(forAutoLayout: ());
-        button.accessibilityLabel = "location";
+        button.accessibilityLabel = "location \(field[FieldKey.name.key] ?? "")";
         button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
         button.addTarget(self, action: #selector(locationTapped), for: .touchUpInside);
