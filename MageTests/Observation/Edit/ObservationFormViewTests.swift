@@ -74,6 +74,7 @@ class ObservationFormViewTests: KIFSpec {
             it("no initial values in the observation") {
                 observation = ObservationBuilder.createBlankObservation();
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller);
+                formView.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -93,6 +94,7 @@ class ObservationFormViewTests: KIFSpec {
             it("observation filled in completely") {
                 observation = ObservationBuilder.createPointObservation();
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller);
+                formView.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -137,6 +139,7 @@ class ObservationFormViewTests: KIFSpec {
                 form = properties?["forms"]?[0] ?? [ : ];
                 print("")
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, observationFormListener: delegate);
+                formView.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -167,6 +170,7 @@ class ObservationFormViewTests: KIFSpec {
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, observationFormListener: delegate);
+                formView.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();
@@ -206,6 +210,7 @@ class ObservationFormViewTests: KIFSpec {
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);
+                formView.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(formView)
                 formView.autoPinEdgesToSuperviewEdges();

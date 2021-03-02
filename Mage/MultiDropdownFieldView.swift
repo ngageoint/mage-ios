@@ -50,7 +50,11 @@ class MultiDropdownFieldView : BaseFieldView {
     }
     
     override func setValue(_ value: Any?) {
-        self.value = value;
+        if (value is String) {
+            self.value = [value];
+        } else {
+            self.value = value;
+        }
         
         self.editMode ? (textField.text = getDisplayValue()) : (fieldValue.text = getDisplayValue());
     }
