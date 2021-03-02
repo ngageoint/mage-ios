@@ -134,6 +134,7 @@ class ServerURLControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Server URL");
                 expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
                 tester().expect(viewTester().usingLabel("Server URL")?.view, toContainText: "https://magetest");
+
                 expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
             }
@@ -145,9 +146,10 @@ class ServerURLControllerTests: KIFSpec {
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
-                tester().waitForView(withAccessibilityLabel: "Server URL");
-                expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
-                tester().expect(viewTester().usingLabel("Server URL")?.view, toContainText: "https://magetest");
+                tester().waitForView(withAccessibilityLabel: "Server URL, Error: Something wrong");
+                expect(viewTester().usingLabel("Server URL, Error: Something wrong")?.view).toEventuallyNot(beNil());
+
+                tester().expect(viewTester().usingLabel("Server URL, Error: Something wrong")?.view, toContainText: "https://magetest");
                 expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
                 
                 tester().waitForView(withAccessibilityLabel: "Server URL Error");
