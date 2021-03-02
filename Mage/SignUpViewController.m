@@ -277,7 +277,7 @@
     }
     if ([self.passwordConfirm.text length] == 0) {
         [self markFieldError:self.passwordConfirmController errorText:@"Required"];
-        [requiredFields addObject:@"Password Confirm"];
+        [requiredFields addObject:@"Confirm Password"];
     }
     if ([requiredFields count] != 0) {
         [self showDialogForRequiredFields:requiredFields];

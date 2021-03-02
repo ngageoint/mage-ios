@@ -105,7 +105,7 @@ class SignUpViewControllerTests: KIFSpec {
                 expect(viewTester().usingLabel("Email")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Phone")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Password")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Password Confirm")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Confirm Password")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Sign Up")?.view).toEventuallyNot(beNil());
                 tester().waitForView(withAccessibilityLabel: "Version");
@@ -139,7 +139,7 @@ class SignUpViewControllerTests: KIFSpec {
                 let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
                 expect(alert.title).to(equal("Missing Required Fields"));
                 expect(alert.message).to(contain("Password"));
-                expect(alert.message).to(contain("Password Confirm"));
+                expect(alert.message).to(contain("Confirm Password"));
                 expect(alert.message).to(contain("Username"));
                 expect(alert.message).to(contain("Display Name"));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -168,7 +168,7 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("passwordsthatdonotmatch", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("passwordsthatdonotmatch", intoViewWithAccessibilityLabel: "Confirm Password");
                 
                 tester().tapView(withAccessibilityLabel: "Sign Up");
                 
@@ -202,7 +202,7 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 tester().enterText("5555555555", intoViewWithAccessibilityLabel: "Phone", traits: .none, expectedResult: "(555) 555-5555");
                 tester().setText("email@email.com", intoViewWithAccessibilityLabel: "Email");
                 
@@ -263,10 +263,10 @@ class SignUpViewControllerTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Show Password");
                 let passwordField: UITextField = viewTester().usingLabel("Password").view as! UITextField;
-                let passwordConfirmField: UITextField = viewTester().usingLabel("Password Confirm").view as! UITextField;
+                let passwordConfirmField: UITextField = viewTester().usingLabel("Confirm Password").view as! UITextField;
 
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 expect(passwordConfirmField.isSecureTextEntry).to(beTrue());
@@ -371,7 +371,7 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().waitForFirstResponder(withAccessibilityLabel: "Phone");
                 tester().enterText("5555555555", intoViewWithAccessibilityLabel: "Phone", traits: .none, expectedResult: "(555) 555-5555");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 tester().tapView(withAccessibilityLabel: "Sign Up")
                 
                 expect(delegate?.signUpCalled).toEventually(beTrue());
