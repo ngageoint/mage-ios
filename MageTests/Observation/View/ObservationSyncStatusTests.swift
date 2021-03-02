@@ -19,8 +19,7 @@ class ObservationSyncStatusTests: KIFSpec {
     override func spec() {
         
         describe("ObservationSyncStatusTests") {
-            let recordSnapshots = false
-            ;
+            let recordSnapshots = false;
             
             var view: UIView!
             var controller: UIViewController!
@@ -37,18 +36,16 @@ class ObservationSyncStatusTests: KIFSpec {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 350);
-                
+                window = UIWindow(frame: UIScreen.main.bounds);
+
                 controller = UIViewController();
+                window.makeKeyAndVisible();
+                window.rootViewController = controller;
                 view = UIView(forAutoLayout: ());
                 view.backgroundColor = .systemBackground;
                 window.makeKeyAndVisible();
-                window.rootViewController = controller;
                 controller.view.addSubview(view);
-                view.autoSetDimension(.height, toSize: 120);
-                view.autoSetDimension(.width, toSize: 350);
-                view.autoAlignAxis(toSuperviewAxis: .horizontal);
+                view.autoPinEdgesToSuperviewEdges();
             }
             
             afterEach {
@@ -56,6 +53,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
+                view = nil;
                 HTTPStubs.removeAllStubs();
             }
             
@@ -85,9 +83,12 @@ class ObservationSyncStatusTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 
                 let syncStatus = ObservationSyncStatus(observation: observation);
+                syncStatus.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(syncStatus);
-                syncStatus.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                expect(syncStatus.isHidden).to(beTrue());
+                syncStatus.autoPinEdge(toSuperviewEdge: .left);
+                syncStatus.autoPinEdge(toSuperviewEdge: .right);
+                syncStatus.autoAlignAxis(toSuperviewAxis: .horizontal);
+                expect(syncStatus.isHidden).to(beFalse());
             }
         
             it("pushed as current user") {
@@ -116,8 +117,14 @@ class ObservationSyncStatusTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 
                 let syncStatus = ObservationSyncStatus(observation: observation);
+                syncStatus.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(syncStatus);
-                syncStatus.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                syncStatus.autoPinEdge(toSuperviewEdge: .left);
+                syncStatus.autoPinEdge(toSuperviewEdge: .right);
+                syncStatus.autoAlignAxis(toSuperviewAxis: .horizontal);
+                
+                tester().waitForView(withAccessibilityLabel: "Pushed on June 5, 2020 at 11:21:54 AM MDT");
+                
                 maybeRecordSnapshot(syncStatus);
             }
             
@@ -148,8 +155,15 @@ class ObservationSyncStatusTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 
                 let syncStatus = ObservationSyncStatus(observation: observation);
+                syncStatus.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(syncStatus);
-                syncStatus.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                syncStatus.autoPinEdge(toSuperviewEdge: .left);
+                syncStatus.autoPinEdge(toSuperviewEdge: .right);
+                syncStatus.autoAlignAxis(toSuperviewAxis: .horizontal);
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "Changes Queued");
+                tester().waitForView(withAccessibilityLabel: "Sync Now");
+                
                 maybeRecordSnapshot(syncStatus);
             }
             
@@ -184,8 +198,14 @@ class ObservationSyncStatusTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 
                 let syncStatus = ObservationSyncStatus(observation: observation);
+                syncStatus.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(syncStatus);
-                syncStatus.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                syncStatus.autoPinEdge(toSuperviewEdge: .left);
+                syncStatus.autoPinEdge(toSuperviewEdge: .right);
+                syncStatus.autoAlignAxis(toSuperviewAxis: .horizontal);
+                
+                tester().waitForView(withAccessibilityLabel: "Error Pushing Changes\nSomething Bad");
+                
                 maybeRecordSnapshot(syncStatus);
             }
             
@@ -225,8 +245,11 @@ class ObservationSyncStatusTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 
                 let syncStatus = ObservationSyncStatus(observation: observation);
+                syncStatus.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(syncStatus);
-                syncStatus.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                syncStatus.autoPinEdge(toSuperviewEdge: .left);
+                syncStatus.autoPinEdge(toSuperviewEdge: .right);
+                syncStatus.autoAlignAxis(toSuperviewAxis: .horizontal);
                 
                 tester().waitForView(withAccessibilityLabel: "Sync Now");
                 tester().tapView(withAccessibilityLabel: "Sync Now");
@@ -261,41 +284,16 @@ class ObservationSyncStatusTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 
                 let syncStatus = ObservationSyncStatus(observation: observation);
+                syncStatus.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(syncStatus);
-                syncStatus.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                syncStatus.autoPinEdge(toSuperviewEdge: .left);
+                syncStatus.autoPinEdge(toSuperviewEdge: .right);
+                syncStatus.autoAlignAxis(toSuperviewAxis: .horizontal);
                 tester().wait(forTimeInterval: 0.5);
                 observation.dirty = false;
                 syncStatus.updateObservationStatus();
                 maybeRecordSnapshot(syncStatus);
             }
-            
-            // tests to write
-            
-            // observation which does not have important set
-            
-            // observation with no attachments in the observation
-            
-            // observation with no primary or secondary field
-            
-            // observation with user who cannot set important
-            
-            // observation which is not favorited by the current user
-            
-            // observation actions - important, favorite, directions
-            
-            // click the favorite count button should show the users who favorited it
-            
-            // need to figure out what to do when a form exists but there are no fields filled out
-            
-            // edit button only shows up if user can edit
-            
-            // observation not synced
-            
-            // observation manual sync
-            
-            // obsrvation failed to sync
-            
-            // observation push delegate
         }
     }
 }
