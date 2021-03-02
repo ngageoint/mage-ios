@@ -68,6 +68,8 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 TestHelpers.clearAndSetUpStack();
                 window = UIWindow(frame: UIScreen.main.bounds);
                 window.makeKeyAndVisible();
+                UserDefaults.standard.serverMajorVersion = 5;
+                UserDefaults.standard.serverMinorVersion = 4;
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
                 Server.setCurrentEventId(1);
@@ -124,6 +126,8 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 controller.pushViewController(observationViewController, animated: true);
                 
                 view = window;
+                
+                tester().waitForAnimationsToFinish();
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
