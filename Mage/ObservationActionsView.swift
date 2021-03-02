@@ -141,6 +141,7 @@ class ObservationActionsView: UIView {
     
     private lazy var importantWrapperView: UIView = {
         let importantWrapperView = UIView.newAutoLayout();
+        importantWrapperView.accessibilityLabel = "edit important";
         importantWrapperView.isHidden = true;
         importantWrapperView.clipsToBounds = true;
         
@@ -189,6 +190,7 @@ class ObservationActionsView: UIView {
         if let safeScheme = self.scheme {
             applyTheme(withScheme: safeScheme);
         }
+        self.accessibilityLabel = "actions";
     }
     
     func layoutView() {

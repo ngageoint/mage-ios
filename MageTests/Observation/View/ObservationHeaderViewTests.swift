@@ -19,7 +19,7 @@ class ObservationHeaderViewTests: KIFSpec {
     override func spec() {
         
         describe("ObservationHeaderViewTests") {
-            let recordSnapshots = true;
+            let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var controller: UINavigationController!
@@ -105,11 +105,24 @@ class ObservationHeaderViewTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let delegate = MockObservationActionsDelegate();
                 let headerView = ObservationHeaderView(observation: observation, observationActionsDelegate: delegate)
+                headerView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(headerView);
                 headerView.autoPinEdge(toSuperviewEdge: .left);
                 headerView.autoPinEdge(toSuperviewEdge: .right);
                 headerView.autoAlignAxis(toSuperviewAxis: .horizontal);
                 view = headerView;
+                
+                tester().waitForView(withAccessibilityLabel: "This is important");
+                tester().waitForView(withAccessibilityLabel: "FLAGGED BY USER ABC");
+                tester().waitForView(withAccessibilityLabel: "USER ABC • JUN 5, 2020 AT 11:21 AM");
+                tester().waitForView(withAccessibilityLabel: "At Venue");
+                tester().waitForView(withAccessibilityLabel: "None");
+                tester().waitForView(withAccessibilityLabel: "location geometry")
+                expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
+                tester().waitForView(withAccessibilityLabel: "1 FAVORITE");
+                expect((viewTester().usingLabel("favorite").view as! UIButton).tintColor).to(be(MDCPalette.green.accent700));
+                let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! UIButton
+                expect(importantButton.tintColor).to(be(MDCPalette.orange.accent400));
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -144,6 +157,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let delegate = MockObservationActionsDelegate();
                 let headerView = ObservationHeaderView(observation: observation, observationActionsDelegate: delegate)
+                headerView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(headerView);
                 headerView.autoPinEdge(toSuperviewEdge: .left);
                 headerView.autoPinEdge(toSuperviewEdge: .right);
@@ -181,6 +195,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let delegate = MockObservationActionsDelegate();
                 let headerView = ObservationHeaderView(observation: observation, observationActionsDelegate: delegate)
+                headerView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(headerView);
                 headerView.autoPinEdge(toSuperviewEdge: .left);
                 headerView.autoPinEdge(toSuperviewEdge: .right);
@@ -188,13 +203,33 @@ class ObservationHeaderViewTests: KIFSpec {
                 
                 view = headerView;
                 
+                tester().waitForView(withAccessibilityLabel: "This is important");
+                tester().waitForView(withAccessibilityLabel: "FLAGGED BY USER ABC");
+                tester().waitForView(withAccessibilityLabel: "USER ABC • JUN 5, 2020 AT 11:21 AM");
+                tester().waitForView(withAccessibilityLabel: "At Venue");
+                tester().waitForView(withAccessibilityLabel: "None");
+                tester().waitForView(withAccessibilityLabel: "location geometry")
+                expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
+                tester().waitForView(withAccessibilityLabel: "1 FAVORITE");
+                expect((viewTester().usingLabel("favorite").view as! UIButton).tintColor).to(be(MDCPalette.green.accent700));
+                let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! UIButton
+                expect(importantButton.tintColor).to(be(MDCPalette.orange.accent400));
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "edit important");
+                
                 tester().waitForView(withAccessibilityLabel: "important");
                 tester().tapView(withAccessibilityLabel: "important");
-                
-                expect(delegate.makeImportantCalled).to(beTrue());
-                
                 tester().waitForAnimationsToFinish();
                 
+                tester().waitForView(withAccessibilityLabel: "edit important");
+                tester().expect(viewTester().usingLabel("Important Description").view, toContainText: "This is important");
+                tester().clearText(fromAndThenEnterText: "New important!", intoViewWithAccessibilityLabel: "Important Description");
+                tester().tapView(withAccessibilityLabel: "Update Important");
+                expect(delegate.makeImportantCalled).to(beTrue());
+                expect(delegate.makeImportantReason) == "New important!";
+                observation.observationImportant?.reason = "New important!";
+                headerView.populate(observation: observation);
+                tester().waitForView(withAccessibilityLabel: "New important!");
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "edit important");
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -228,6 +263,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let delegate = MockObservationActionsDelegate();
                 let headerView = ObservationHeaderView(observation: observation, observationActionsDelegate: delegate)
+                headerView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(headerView);
                 headerView.autoPinEdge(toSuperviewEdge: .left);
                 headerView.autoPinEdge(toSuperviewEdge: .right);
