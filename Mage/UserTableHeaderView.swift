@@ -11,6 +11,7 @@ import PureLayout
 
 class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
+    var viewWasInitialized = false;
     var userLastLocation: CLLocation?;
     var user: User?;
     var currentUserIsMe: Bool = false;
@@ -90,6 +91,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
     private lazy var nameField: UILabel = {
         let nameField = UILabel(forAutoLayout: ());
+        nameField.accessibilityLabel = "name";
         nameField.font = UIFont.systemFont(ofSize: 18.0, weight: .bold);
         nameField.textColor = UIColor.label.withAlphaComponent(0.87);
         nameField.autoSetDimension(.height, toSize: 24);
@@ -111,6 +113,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         locationView.addSubview(locationIcon);
         locationView.addSubview(locationLabel);
         locationIcon.autoPinEdge(toSuperviewEdge: .leading);
+        locationIcon.autoAlignAxis(.horizontal, toSameAxisOf: locationLabel);
         locationLabel.autoPinEdge(.leading, to: .trailing, of: locationIcon, withOffset: 0);
         locationLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
         
@@ -132,6 +135,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         locationLabel.isEditable = false;
         locationLabel.dataDetectorTypes = .all;
         locationLabel.textContentType = .location;
+        locationLabel.accessibilityLabel = "location";
         return locationLabel;
     }()
     
@@ -151,6 +155,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         phoneView.addSubview(phoneIcon);
         phoneView.addSubview(phoneLabel);
         phoneIcon.autoPinEdge(toSuperviewEdge: .leading);
+        phoneIcon.autoAlignAxis(.horizontal, toSameAxisOf: phoneLabel);
         phoneLabel.autoPinEdge(.leading, to: .trailing, of: phoneIcon, withOffset: 0);
         phoneLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
         return phoneView;
@@ -164,6 +169,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         phoneLabel.dataDetectorTypes = .phoneNumber;
         phoneLabel.textContentType = .telephoneNumber;
         phoneLabel.isEditable = false;
+        phoneLabel.accessibilityLabel = "phone";
         return phoneLabel;
     }()
     
@@ -183,6 +189,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         emailView.addSubview(emailIcon);
         emailView.addSubview(emailLabel);
         emailIcon.autoPinEdge(toSuperviewEdge: .leading);
+        emailIcon.autoAlignAxis(.horizontal, toSameAxisOf: emailLabel);
         emailLabel.autoPinEdge(.leading, to: .trailing, of: emailIcon, withOffset: 0);
         emailLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
         return emailView;
@@ -196,6 +203,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         emailLabel.dataDetectorTypes = .all;
         emailLabel.textContentType = .emailAddress;
         emailLabel.isEditable = false;
+        emailLabel.accessibilityLabel = "email";
         return emailLabel;
     }()
     
@@ -214,6 +222,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     }
     
     func layoutView() {
+        if (viewWasInitialized) {
+            return;
+        }
         self.addSubview(mapView);
         self.addSubview(avatarBorder);
         self.addSubview(stack);
@@ -222,10 +233,13 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         avatarBorder.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: -32);
         stack.autoPinEdge(.top, to: .bottom, of: avatarBorder, withOffset: 4);
         stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8), excludingEdge: .top);
+        
+        viewWasInitialized = true;
     }
     
     
     @objc public func populate(user: User) {
+        layoutView();
         self.user = user;
         currentUserIsMe = UserDefaults.standard.currentUserId == user.remoteId;
         

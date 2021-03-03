@@ -11,6 +11,7 @@ import MagicalRecord
 import sf_ios
 import Quick
 import Nimble
+import OHHTTPStubs
 
 @testable import MAGE
 
@@ -72,10 +73,30 @@ class MageCoreDataFixtures {
             fatalError("Unable to convert userabc.json to Data")
         }
         
-        guard let jsonDictionary: [AnyHashable : Any] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! [AnyHashable : Any] else {
+        guard var jsonDictionary: [AnyHashable : Any] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! [AnyHashable : Any] else {
             fatalError("Unable to convert userabc.json to JSON dictionary")
         }
         
+        let stubPath: String! = OHPathForFile("icon27.png", self);
+        
+        let documentsDir: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0];
+        let iconPath = documentsDir.appendingPathComponent("icon27.png")
+        do {
+            try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: iconPath);
+        } catch {
+            print("Error", error);
+        }
+        
+        let markerStubPath: String! = OHPathForFile("test_marker.png", self);
+        let markerIconPath = documentsDir.appendingPathComponent("test_marker.png")
+        do {
+            try FileManager.default.copyItem(at: URL(fileURLWithPath: markerStubPath), to: markerIconPath);
+        } catch {
+            print("Error", error);
+        }
+        
+        jsonDictionary["avatarUrl"] = "icon27.png";
+        jsonDictionary["iconUrl"] = "test_marker.png";
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
             var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
@@ -85,10 +106,6 @@ class MageCoreDataFixtures {
             } else {
                 print("role already existed")
             }
-            
-//            let u: User = User.insert(forJson: jsonDictionary, in: localContext)
-//            u.remoteId = userId;
-//            u.role = existingRole;
             
         }) { (success, error) in
             print("role was inserted")
