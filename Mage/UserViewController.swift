@@ -12,7 +12,7 @@ import Foundation
     let user : User
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
-    var scheme : MDCContainerScheming;
+    var scheme : MDCContainerScheming!;
     
     private lazy var observationDataStore: ObservationDataStore = {
         let observationDataStore: ObservationDataStore = ObservationDataStore(tableView: self.tableView, observationActionsDelegate: self, attachmentSelectionDelegate: self, scheme: self.scheme);
@@ -35,13 +35,31 @@ import Foundation
         super.init(style: .grouped)
         self.title = user.name;
         self.tableView.register(cellClass: ObservationListCardCell.self);
+        self.tableView.accessibilityIdentifier = "user observations";
     }
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
         self.scheme = containerScheme;
-        self.navigationController?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
+        
+        self.navigationController?.navigationBar.isTranslucent = false;
+        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        let appearance = UINavigationBarAppearance();
+        appearance.configureWithOpaqueBackground();
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
+        ];
+        appearance.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
+        ];
+        
+        self.navigationController?.navigationBar.standardAppearance = appearance;
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
     }
     
     override func viewDidLoad() {
@@ -56,6 +74,7 @@ import Foundation
         super.viewWillAppear(animated);
         userTableHeaderView.navigationController = self.navigationController;
         observationDataStore.startFetchController(observations: Observations(for: user));
+        applyTheme(withContainerScheme: self.scheme);
     }
 }
 

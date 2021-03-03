@@ -60,6 +60,7 @@ class AttachmentSlideShow: UIView {
         self.addSubview(slidescroll);
         self.addSubview(pageControl);
         setNeedsUpdateConstraints();
+        self.accessibilityLabel = "attachment slideshow";
     }
     
     func getAttachmentUrl(size: Int, attachment: Attachment) -> URL {
@@ -90,6 +91,7 @@ class AttachmentSlideShow: UIView {
             let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
             if (attachment.contentType?.hasPrefix("image") ?? false) {
                 imageView.setAttachment(attachment: attachment);
+                imageView.accessibilityLabel = "attachment \(attachment.name ?? "")";
                 imageView.showThumbnail(completionHandler:
                                                 { result in
                                                     switch result {

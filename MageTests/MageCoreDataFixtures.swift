@@ -171,11 +171,10 @@ class MageCoreDataFixtures {
         
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
-            if let o: Observation = Observation.mr_createEntity(in: localContext) {
-                o.eventId = eventId;
-                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
-                o.user = user;
-            }
+            let o: Observation = Observation.createObservation(jsonDictionary[0] as! [AnyHashable : Any], in: localContext);
+            o.eventId = eventId;
+            o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
+            o.user = user;
         }, completion: completion)
     }
     

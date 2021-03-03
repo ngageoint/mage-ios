@@ -20,7 +20,6 @@ import MaterialComponents.MDCCard;
         let card = MDCCard(forAutoLayout: ());
         card.enableRippleBehavior = true
         card.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
-        
         return card;
     }()
     
@@ -88,6 +87,7 @@ import MaterialComponents.MDCCard;
     
     @objc public func configure(observation: Observation, scheme: MDCContainerScheming?, actionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.observation = observation;
+        card.accessibilityLabel = "observation card \(observation.objectID.uriRepresentation().absoluteString)"
         self.actionsDelegate = actionsDelegate;
         if (observation.isImportant()) {
             importantView.populate(observation: observation);

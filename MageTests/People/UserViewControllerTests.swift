@@ -11,10 +11,11 @@ import Quick
 import Nimble
 import Nimble_Snapshots
 import MagicalRecord
+import OHHTTPStubs
 
 @testable import MAGE
 
-class UserViewControllerTests: QuickSpec {
+class UserViewControllerTests: KIFSpec {
     
     override func spec() {
         
@@ -32,6 +33,20 @@ class UserViewControllerTests: QuickSpec {
             var view: UIView!
             var controller: UserViewController!
             var window: UIWindow!;
+            
+            func createGradientImage(startColor: UIColor, endColor: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+                let rect = CGRect(origin: .zero, size: size)
+                let gradientLayer = CAGradientLayer()
+                gradientLayer.frame = rect
+                gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
+                
+                UIGraphicsBeginImageContext(gradientLayer.bounds.size)
+                gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                guard let cgImage = image?.cgImage else { return UIImage() }
+                return UIImage(cgImage: cgImage)
+            }
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
                 print("Record snapshot?", recordSnapshots);
@@ -52,14 +67,17 @@ class UserViewControllerTests: QuickSpec {
                 
                 clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 414);
-                window.autoSetDimension(.height, toSize: 896);
+                window = UIWindow(frame: UIScreen.main.bounds);
                 window.makeKeyAndVisible();
                 
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
+                
+                stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath("/api/events/1/observations/observationabc/attachments/attachmentabc")) { (request) -> HTTPStubsResponse in
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
+                }
             }
             
             afterEach {
@@ -67,6 +85,7 @@ class UserViewControllerTests: QuickSpec {
                 window.rootViewController = nil;
                 controller = nil;
                 TestHelpers.cleanUpStack();
+                HTTPStubs.removeAllStubs();
             }
             
             it("user view") {
@@ -85,10 +104,45 @@ class UserViewControllerTests: QuickSpec {
                 }
                 
                 let user: User = User.mr_findFirst()!;
-                let userLastLocation: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.0085, longitude: -105.2678), altitude: 0, horizontalAccuracy: 4.3, verticalAccuracy: 0, timestamp: Date(timeIntervalSince1970: 1));
                 
                 controller = UserViewController(user: user, scheme: MAGEScheme.scheme());
-                window.rootViewController = controller;
+                let nc = UINavigationController(rootViewController: controller);
+                window.rootViewController = nc;
+                
+                tester().waitForAnimationsToFinish();
+                tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
+                tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 266.16m");
+                tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
+                tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
+                
+                tester().tapView(withAccessibilityLabel: "location", traits: UIAccessibilityTraits(arrayLiteral: .button));
+                tester().waitForView(withAccessibilityLabel: "Location copied to clipboard");
+
+                tester().tapView(withAccessibilityLabel: "favorite", traits: UIAccessibilityTraits(arrayLiteral: .button));
+                tester().waitForAnimationsToFinish();
+                expect((viewTester().usingLabel("favorite").view as! UIButton).tintColor).to(be(MDCPalette.green.accent700));
+
+                tester().tapView(withAccessibilityLabel: "directions", traits: UIAccessibilityTraits(arrayLiteral: .button));
+                tester().waitForView(withAccessibilityLabel: "Apple Maps");
+                tester().waitForView(withAccessibilityLabel: "Google Maps");
+                tester().waitForView(withAccessibilityLabel: "Cancel");
+                tester().tapView(withAccessibilityLabel: "Cancel");
+
+                let observation: Observation = (user.observations?.first!)!;
+                let attachment: Attachment = (observation.attachments?.first!)!;
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "")")
+                tester().tapView(withAccessibilityLabel: "attachment \(attachment.name ?? "")");
+                expect(nc.topViewController).toEventually(beAnInstanceOf(ImageAttachmentViewController.self));
+                tester().tapView(withAccessibilityLabel: "User ABC");
+                expect(nc.topViewController).toEventually(beAnInstanceOf(UserViewController.self));
+                let tableView: UITableView = viewTester().usingIdentifier("user observations").view as! UITableView;
+                let cell: ObservationListCardCell = tester().waitForCell(at: IndexPath(row: 0, section: 0), in: tableView) as! ObservationListCardCell;
+                let card: MDCCard = viewTester().usingLabel("observation card \(observation.objectID.uriRepresentation().absoluteString)").view as! MDCCard;
+                cell.tap(card);
+                tester().waitForAnimationsToFinish();
+                expect(nc.topViewController).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
+                tester().tapView(withAccessibilityLabel: "User ABC");
+                expect(nc.topViewController).toEventually(beAnInstanceOf(UserViewController.self));
                 
                 maybeRecordSnapshot(controller.view, doneClosure: {
                     completeTest = true;
