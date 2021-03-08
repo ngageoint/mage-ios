@@ -387,7 +387,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
-                
+                tester().waitForView(withAccessibilityLabel: "field1 value", value: "None", traits: .none);
+
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -397,6 +398,41 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 } else {
                     expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
+            }
+            
+            it("user defaults") {
+                waitUntil { done in
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
+                        done();
+                    }
+                }
+                
+                let formDefaults = FormDefaults(eventId: 1, formId: 1);
+                var defaults = formDefaults.getDefaults() as! [String : AnyHashable];
+                defaults["field0"] = "Protest";
+                formDefaults.setDefaults(defaults);
+                
+                let observation = ObservationBuilder.createBlankObservation(1);
+                ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                
+                let delegate = MockObservationEditCardDelegate();
+                observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
+                
+                window.rootViewController = observationEditController;
+                view = observationEditController.view;
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Add Form");
+                tester().tapView(withAccessibilityLabel: "Add Form")
+                expect(delegate.addFormCalled).to(beTrue());
+                tester().waitForAnimationsToFinish();
+                if let event: Event = Event.mr_findFirst() {
+                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                }
+                
+                tester().waitForView(withAccessibilityLabel: "Form 1")
+                tester().waitForAnimationsToFinish();
+                tester().waitForView(withAccessibilityLabel: "field1 value", value: "", traits: .none);
+                tester().waitForView(withAccessibilityLabel: "field0 value", value: "Protest", traits: .none);
             }
             
             it("should undo a deleted form") {
@@ -514,6 +550,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 // have to do this or the view never actually gets tapped
                 tester().waitForAnimationsToFinish();
                 tester().tapView(withAccessibilityLabel: "reorder")
+                tester().waitForAnimationsToFinish();
                 
                 expect(delegate.reorderFormsCalled).toEventually(beTrue());
                 var obsForms: [[String: Any]] = observation.properties![ObservationKey.forms.key] as! [[String : Any]];
@@ -530,7 +567,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("cannot add more forms than maxObservationForms or less than minObservationForms") {
-                waitUntil { done in
+                waitUntil(timeout: DispatchTimeInterval.seconds(2)) { done in
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm", maxObservationForms: 1, minObservationForms: 1) { (success: Bool, error: Error?) in
                         done();
                     }

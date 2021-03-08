@@ -38,6 +38,7 @@ class DropdownFieldView : BaseFieldView {
             viewStack.addArrangedSubview(textField);
             let tapView = addTapRecognizer();
             tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
+            textField.accessibilityLabel = "\(field[FieldKey.name.key] as? String ?? "") value"
             setupController();
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
