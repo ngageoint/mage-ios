@@ -250,7 +250,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         return LAYERS_SECTION_NAME;
     } else if (section == MAGE_SECTION) {
         return MAGE_SECTION_NAME;
-    } else if (section == FEED_SECTION) {
+    } else if (section == FEED_SECTION && [_feeds count] != 0) {
         return FEED_SECTION_NAME;
     }
     
