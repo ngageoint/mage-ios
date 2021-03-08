@@ -93,7 +93,7 @@ class ObservationTableViewController: UITableViewController {
         refreshControl?.addTarget(self, action: #selector(refreshObservations), for: .valueChanged);
         self.tableView.refreshControl = self.refreshControl;
         self.tableView.rowHeight = UITableView.automaticDimension;
-        self.tableView.estimatedRowHeight = 64;
+        self.tableView.estimatedRowHeight = 155;
     }
     
     func setupFilterListeners() {
