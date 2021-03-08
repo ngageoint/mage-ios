@@ -250,7 +250,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780"
+                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780"
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
                 }

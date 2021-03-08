@@ -793,7 +793,7 @@ class GeometryViewTests: KIFSpec {
                 expect(geometryFieldView.fieldNameSpacerView.superview).toNot(beNil());
                 expect(geometryFieldView.editFab.superview).toNot(beNil());
                 
-                tester().tapView(withAccessibilityLabel: "location");
+                tester().tapView(withAccessibilityLabel: "location field8");
                 expect(mockActionsDelegate.copyLocationCalled).to(beTrue());
                 expect(mockActionsDelegate.locationStringCopied) == "40.00850, -105.26780";
                 
