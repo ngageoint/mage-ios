@@ -635,10 +635,6 @@
     [self.childCoordinators removeObject:coordinator];
 }
 
-- (void) observationDeleted:(Observation *)observation coordinator:(NSObject *) coordinator {
-    [self.childCoordinators removeObject:coordinator];
-}
-
 #pragma mark - Feature Detail Coordinator Delegate
 
 - (void) featureDetailComplete:(NSObject *)coordinator {

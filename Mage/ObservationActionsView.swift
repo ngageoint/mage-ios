@@ -77,6 +77,7 @@ class ObservationActionsView: UIView {
     
     private lazy var favoriteCountButton: UIButton = {
         let button = UIButton(type: .custom);
+        button.accessibilityLabel = "show favorites";
         button.addTarget(self, action: #selector(showFavorites), for: .touchUpInside);
         return button;
     }()
@@ -118,6 +119,7 @@ class ObservationActionsView: UIView {
         textField.autocapitalizationType = .none;
         controller.textInput = textField;
         controller.placeholderText = "Important Description"
+        textField.accessibilityLabel = "Important Description";
         return textField;
     }()
     

@@ -50,6 +50,7 @@ class ObservationImportantView: UIView {
         self.addSubview(flagImage);
         self.addSubview(flaggedByLabel);
         self.addSubview(reasonLabel);
+        reasonLabel.accessibilityLabel = "important reason";
         flagImage.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
         flagImage.autoSetDimensions(to: CGSize(width: 32, height: 32));
         flagImage.autoAlignAxis(toSuperviewAxis: .horizontal);

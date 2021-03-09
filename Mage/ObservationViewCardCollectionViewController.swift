@@ -32,7 +32,9 @@ import MaterialComponents.MDCContainerScheme;
     }()
     
     private lazy var scrollView: UIScrollView = {
-        return UIScrollView.newAutoLayout();
+        let scrollView = UIScrollView.newAutoLayout();
+        scrollView.accessibilityIdentifier = "card scroll";
+        return scrollView;
     }()
     
     private lazy var stackView: UIStackView = {
@@ -209,7 +211,7 @@ import MaterialComponents.MDCContainerScheme;
                 formSecondaryValue = obsfield;
             }
         }
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, observationFormListener: self, attachmentSelectionDelegate: self);
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, attachmentSelectionDelegate: self, observationActionsDelegate: self);
         if let safeScheme = self.scheme {
             formView.applyTheme(withScheme: safeScheme);
         }
@@ -232,21 +234,6 @@ import MaterialComponents.MDCContainerScheme;
         stackView.addArrangedSubview(card);
         cards.append(card);
         return card;
-    }
-    
-    @objc func editObservation(sender: UIBarButtonItem) {
-        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
-        observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
-        observationEditCoordinator?.start();
-    }
-}
-
-extension ObservationViewCardCollectionViewController: ObservationFormListener {
-    func formUpdated(_ form: [String : Any], eventForm: [String : Any], form index: Int) {
-//        observationForms[index] = form
-//        observationProperties["forms"] = observationForms;
-//        observation?.properties = observationProperties;
-//        setExpandableCardHeaderInformation(form: form, index: index);
     }
 }
 
@@ -371,10 +358,5 @@ extension ObservationViewCardCollectionViewController: ObservationEditDelegate {
         self.observation!.managedObjectContext?.refresh(self.observation!, mergeChanges: false);
         // reload the observation
         setupObservation();
-    }
-    
-    func observationDeleted(_ observation: Observation, coordinator: NSObject) {
-        observationEditCoordinator = nil;
-        self.navigationController?.popViewController(animated: false);
     }
 }

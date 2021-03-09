@@ -70,7 +70,15 @@ class ObservationActionsSheetController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userHasEditPermissions ? 4 : 1;
+        if (userHasEditPermissions) {
+            // not enough forms to reorder
+            if((((observation.properties?["forms"] as? [[AnyHashable : Any]])?.count ?? 0) <= 1)) {
+                return 3;
+            } else {
+                return 4;
+            }
+        }
+        return 1;
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -89,8 +97,7 @@ class ObservationActionsSheetController: UITableViewController {
         }
         cell.accessoryType = .none;
         
-        let correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 3);
-        
+        var correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 3);
         if (correctedRow == 0) {
             cell.textLabel?.text = "Delete Observation";
             cell.accessibilityLabel = "Delete Observation";
@@ -99,12 +106,19 @@ class ObservationActionsSheetController: UITableViewController {
                 cell.textLabel?.textColor = safeScheme.colorScheme.errorColor;
                 cell.imageView?.tintColor = safeScheme.colorScheme.errorColor;
             }
+            return cell;
         }
         
         if (correctedRow == 1) {
             cell.textLabel?.text = "Edit Observation";
             cell.accessibilityLabel = "Edit Observation";
             cell.imageView?.image = UIImage(named: "edit")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
+            return cell;
+        }
+        
+        if (((observation.properties?["forms"] as? [[AnyHashable : Any]])?.count ?? 0) <= 1) {
+            // if there is 1 form or less, don't show reorder
+            correctedRow = correctedRow + 1;
         }
         
         if (correctedRow == 2) {
@@ -112,6 +126,7 @@ class ObservationActionsSheetController: UITableViewController {
             cell.accessibilityLabel = "Reorder Forms";
             cell.imageView?.image = UIImage(named: "form")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.accessoryType = .disclosureIndicator;
+            return cell;
         }
         
         if (correctedRow == 3) {
@@ -119,6 +134,7 @@ class ObservationActionsSheetController: UITableViewController {
             cell.accessibilityLabel = "View Other Observations";
             cell.imageView?.image = UIImage(named: "observations")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.accessoryType = .disclosureIndicator;
+            return cell;
         }
         
         return cell;
@@ -129,7 +145,7 @@ class ObservationActionsSheetController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 2);
+        var correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 2);
         tableView.deselectRow(at: indexPath, animated: true);
         if (correctedRow == 0) {
             delegate.deleteObservation?(observation);
@@ -137,8 +153,19 @@ class ObservationActionsSheetController: UITableViewController {
         if (correctedRow == 1) {
             delegate.editObservation?(observation);
         }
+        
+        if (((observation.properties?["forms"] as? [[AnyHashable : Any]])?.count ?? 0) <= 1) {
+            // if there is 1 form or less, don't show reorder
+            correctedRow = correctedRow + 1;
+        }
+        
         if (correctedRow == 2) {
             delegate.reorderForms?(observation);
+        }
+        
+        if (correctedRow == 3) {
+            // show the user page
+            
         }
         
     }

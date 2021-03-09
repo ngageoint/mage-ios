@@ -252,10 +252,6 @@ extension ObservationTableViewController: ObservationEditDelegate {
     func editComplete(_ observation: Observation, coordinator: NSObject) {
         removeChildCoordinator(coordinator);
     }
-    
-    func observationDeleted(_ observation: Observation, coordinator: NSObject) {
-        removeChildCoordinator(coordinator);
-    }
 }
 
 extension ObservationTableViewController: AttachmentViewDelegate {

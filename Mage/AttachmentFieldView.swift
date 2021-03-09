@@ -39,6 +39,7 @@ class AttachmentFieldView : BaseFieldView {
         cv.delegate = attachmentCollectionDataStore;
         cv.dataSource = attachmentCollectionDataStore;
         cv.accessibilityLabel = "Attachment Collection";
+        cv.accessibilityIdentifier = "Attachment Collection";
         attachmentCollectionDataStore.attachmentCollection = cv;
         return cv;
     }();

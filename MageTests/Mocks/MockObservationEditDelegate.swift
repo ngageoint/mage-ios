@@ -11,6 +11,7 @@ import Foundation
 @testable import MAGE
 
 class MockObservationEditDelegate: ObservationEditDelegate {
+    
     var editCancelCalled = false;
     var editCancelCoordinator: NSObject?;
     
@@ -18,25 +19,13 @@ class MockObservationEditDelegate: ObservationEditDelegate {
     var editCompleteCoordinator: NSObject?;
     var editCompleteObservation: Observation?;
     
-    var observationDeletedCalled = false;
-    var observationDeletedCoordinator: NSObject?;
-    var observationDeletedObservation: Observation?;
-    
-    func editCancel(_ coordinator: NSObject!) {
+    func editCancel(_ coordinator: NSObject) {
         editCancelCalled = true;
     }
     
-    func editComplete(_ observation: Observation!, coordinator: NSObject!) {
+    func editComplete(_ observation: Observation, coordinator: NSObject) {
         editCompleteCalled = true;
         editCompleteObservation = observation;
         editCompleteCoordinator = coordinator;
     }
-    
-    func observationDeleted(_ observation: Observation!, coordinator: NSObject!) {
-        observationDeletedCalled = true;
-        observationDeletedObservation = observation;
-        observationDeletedCoordinator = coordinator;
-    }
-    
-    
 }

@@ -43,6 +43,7 @@ class BaseFieldView : UIView {
     
     lazy var fieldValue: UILabel = {
         let label = UILabel(forAutoLayout: ());
+        label.accessibilityLabel = "\((field[FieldKey.name.key] as? String ?? "")) Value"
         label.numberOfLines = 0;
         return label;
     }()

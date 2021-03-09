@@ -123,6 +123,8 @@
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
 		F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */; };
 		F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */; };
+		F711241E25F69BF5008849B1 /* geometryObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711241D25F69BF5008849B1 /* geometryObservations.json */; };
+		F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711248925F7B8B0008849B1 /* twoFormsObservations.json */; };
 		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
 		F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */; };
 		F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */ = {isa = PBXBuildFile; fileRef = F71446F0249BB5BC005A5EC1 /* icon27.png */; };
@@ -576,6 +578,8 @@
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
 		F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
 		F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
+		F711241D25F69BF5008849B1 /* geometryObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryObservations.json; sourceTree = "<group>"; };
+		F711248925F7B8B0008849B1 /* twoFormsObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsObservations.json; sourceTree = "<group>"; };
 		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
 		F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedServiceTests.swift; sourceTree = "<group>"; };
 		F71446F0249BB5BC005A5EC1 /* icon27.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon27.png; sourceTree = "<group>"; };
@@ -1517,6 +1521,8 @@
 				F7D9B821255D6D9500A76E2C /* attachmentForm.json */,
 				F7C640FE257EB29100C02335 /* geometryField.json */,
 				F76BB9F625ED8195004CFB97 /* oneFormRestricted.json */,
+				F711241D25F69BF5008849B1 /* geometryObservations.json */,
+				F711248925F7B8B0008849B1 /* twoFormsObservations.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2138,8 +2144,10 @@
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
+				F711241E25F69BF5008849B1 /* geometryObservations.json in Resources */,
 				F795ED1224BD04730028FBFC /* oneForm.json in Resources */,
 				F777B00E252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json in Resources */,
+				F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */,
 				F76BB9F725ED8195004CFB97 /* oneFormRestricted.json in Resources */,
 				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
 				F7CE2300254368B000D710DE /* allTheThings.json in Resources */,

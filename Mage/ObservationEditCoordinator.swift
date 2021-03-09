@@ -18,7 +18,6 @@ import MaterialComponents.MaterialBottomSheet
 @objc protocol ObservationEditDelegate {
     @objc func editCancel(_ coordinator: NSObject);
     @objc func editComplete(_ observation: Observation, coordinator: NSObject);
-    @objc func observationDeleted(_ observation: Observation, coordinator: NSObject);
 }
 
 @objc class ObservationEditCoordinator: NSObject {

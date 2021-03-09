@@ -135,20 +135,20 @@ class MageCoreDataFixtures {
         }, completion: completion)
     }
     
-    public static func loadObservationsJson() -> [AnyHashable : Any] {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "observations", ofType: "json") else {
-            fatalError("observations.json not found")
+    public static func loadObservationsJson(filename: String = "observations") -> [AnyHashable : Any] {
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: filename, ofType: "json") else {
+            fatalError("\(filename).json not found")
         }
         guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert observations.json to String")
+            fatalError("Unable to convert \(filename).json to String")
         }
         
         guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert observations.json to Data")
+            fatalError("Unable to convert \(filename).json to Data")
         }
         
         guard let jsonDictionary: [[AnyHashable : Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[AnyHashable : Any]] else {
-            fatalError("Unable to convert observations.json to JSON dictionary")
+            fatalError("Unable to convert \(filename).json to JSON dictionary")
         }
         return jsonDictionary[0];
     }
@@ -224,6 +224,8 @@ class MageCoreDataFixtures {
         guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
             fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
         }
+        
+        print("Adding this event with the forms: \(jsonDictionary)")
         
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             if let e: Event = Event.mr_createEntity(in: localContext) {
