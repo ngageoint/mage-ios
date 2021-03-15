@@ -15,10 +15,10 @@ import MaterialComponents.MDCButton;
 
 @objc class FormPickerViewController: UIViewController {
 
-    var delegate: FormPickedDelegate?;
+    weak var delegate: FormPickedDelegate?;
     var forms: [[String: Any]]?;
     var scheme: MDCContainerScheming?;
-    var observation: Observation?;
+    weak var observation: Observation?;
     var formIdCount: [Int : Int] = [ : ];
     
     var tableView: UITableView = {

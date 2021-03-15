@@ -82,6 +82,8 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 controller = UINavigationController();
                 window.rootViewController = controller;
                 NSManagedObject.mr_setDefaultBatchSize(0);
+                
+                ObservationPushService.singleton().stop();
             }
             
             afterEach {
@@ -311,8 +313,9 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 observation.dirty = true;
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: MAGEScheme.scheme());
-                controller.pushViewController(observationViewController, animated: true);
+                controller.pushViewController(UIViewController(), animated: false);
+                var observationViewController: ObservationViewCardCollectionViewController? = ObservationViewCardCollectionViewController(observation: observation, scheme: MAGEScheme.scheme());
+                controller.pushViewController(observationViewController!, animated: true);
                 
                 view = window;
                 
@@ -325,6 +328,11 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Reorder Forms");
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
+                controller.popToRootViewController(animated: false);
+                expect(UIApplication.getTopViewController()).toEventuallyNot(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
+                
+                observationViewController = nil;
+                print("popped")
             }
             
             it("delete observation") {
@@ -627,8 +635,8 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 observation.dirty = true;
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let scheme = MAGEScheme.scheme();
-                let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
-                controller.pushViewController(observationViewController, animated: true);
+                var observationViewController: ObservationViewCardCollectionViewController? = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme);
+                controller.pushViewController(observationViewController!, animated: true);
                 
                 view = window;
                 tester().waitForAnimationsToFinish();
@@ -649,6 +657,13 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 
                 expect(controller.topViewController).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
                 tester().expect(viewTester().usingLabel("field2 Value").view, toContainText: "Test");
+                waitUntil { done in
+                    controller.dismiss(animated: false) {
+                        observationViewController = nil;
+                        done();
+                    }
+                }
+//                observationViewController = nil;
             }
         }
     }

@@ -45,6 +45,7 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+    @property (nonatomic) BOOL listenersSetUp;
 
 @end
 
@@ -53,6 +54,7 @@
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [self init]) {
         self.scheme = containerScheme;
+        self.listenersSetUp = false;
     }
     return self;
 }
@@ -181,69 +183,12 @@
     
     [self setNavBarTitle];
     
-    [defaults addObserver:self
-               forKeyPath:kObservationTimeFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:kObservationTimeFilterUnitKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:kObservationTimeFilterNumberKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:kImportantFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
-    [defaults addObserver:self
-               forKeyPath:kFavortiesFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-    
+    [self setupListeners];
     Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupMapSettingsButton];
     
-    [defaults addObserver:self
-               forKeyPath:@"hideObservations"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:@"hidePeople"
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:kReportLocationKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:kLocationTimeFilterKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:kLocationTimeFilterUnitKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:kLocationTimeFilterNumberKey
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
-
-    [defaults addObserver:self
-               forKeyPath:GeoPackageImported
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
+    
 
     // Start the timer for updating the circles
     [self startMapAnnotationsUpdateTimer];
@@ -261,6 +206,73 @@
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
     [self.mapDelegate ensureMapLayout];
     [self setupNavigationBar];
+}
+
+- (void) setupListeners {
+    if (self.listenersSetUp) return;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kObservationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kImportantFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kFavortiesFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:@"hideObservations"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:@"hidePeople"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kReportLocationKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterUnitKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:kLocationTimeFilterNumberKey
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:GeoPackageImported
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    self.listenersSetUp = true;
 }
 
 - (void) setupToastView {
@@ -363,7 +375,6 @@
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
     @try {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults removeObserver:self forKeyPath:@"hideObservations"];
@@ -382,6 +393,9 @@
     @catch (id exception) {
         NSLog(@"Exception removing observers %@", exception);
     }
+    
+    self.listenersSetUp = false;
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 

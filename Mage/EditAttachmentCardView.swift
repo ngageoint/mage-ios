@@ -18,8 +18,8 @@ import PureLayout
 class EditAttachmentCardView: MDCCard {
     var didSetupConstraints = false;
     var observation: Observation;
-    var viewController: UIViewController;
-    var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    weak var viewController: UIViewController?;
+    weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     var scheme: MDCContainerScheming?;
     
     lazy var attachmentField: [String: Any] = {

@@ -10,7 +10,7 @@ import Foundation
 
 class ObservationSummaryView: UIView {
     
-    private var observation: Observation?;
+    private weak var observation: Observation?;
     private var didSetUpConstraints = false;
     
     private lazy var stack: UIStackView = {

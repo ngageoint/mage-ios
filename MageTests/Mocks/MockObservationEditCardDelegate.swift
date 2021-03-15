@@ -11,18 +11,6 @@ import Foundation
 @testable import MAGE
 
 class MockObservationEditCardDelegate: ObservationEditCardDelegate, FieldSelectionDelegate, ObservationEditListener {
-    func reorderForms(observation: Observation) {
-        reorderFormsCalled = true;
-    }
-    
-    func fieldValueChanged(_ field: [String : Any], value: Any?) {
-        
-    }
-    
-    func launchFieldSelectionViewController(viewController: UIViewController) {
-        launchFieldSelectionViewControllerCalled = true;
-        viewControllerToLaunch = viewController;
-    }
     
     var addVoiceAttachmentCalled = false;
     var addVideoAttachmentCalled = false;
@@ -84,5 +72,19 @@ class MockObservationEditCardDelegate: ObservationEditCardDelegate, FieldSelecti
     
     func cancelEdit() {
         cancelEditCalled = true;
+    }
+    
+    func reorderForms(observation: Observation) {
+        print("reorder forms called")
+        reorderFormsCalled = true;
+    }
+    
+    func fieldValueChanged(_ field: [String : Any], value: Any?) {
+        
+    }
+    
+    func launchFieldSelectionViewController(viewController: UIViewController) {
+        launchFieldSelectionViewControllerCalled = true;
+        viewControllerToLaunch = viewController;
     }
 }

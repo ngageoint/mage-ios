@@ -18,8 +18,8 @@ import MaterialComponents.MDCButton;
 
 class AttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
+    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
         let ads: AttachmentCollectionDataStore = self.editMode ? AttachmentCollectionDataStore(buttonImage: "trash", useErrorColor: true) : AttachmentCollectionDataStore();

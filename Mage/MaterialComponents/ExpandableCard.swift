@@ -168,6 +168,10 @@ class ExpandableCard: MDCCard {
         }
     }
     
+    deinit {
+        self.expandedView = nil;
+    }
+    
     convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView? = nil) {
         self.init(frame: .zero);
         self.configureForAutoLayout();

@@ -28,7 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loginFailure;
-@property (strong, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
+@property (weak, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
 @property (strong, nonatomic) User *user;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;

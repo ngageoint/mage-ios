@@ -14,9 +14,9 @@ import PureLayout
 
 class CommonFieldsView: MDCCard {
     var didSetupConstraints = false;
-    var observation: Observation;
+    weak var observation: Observation?;
     var eventForms: [[String:Any]]?;
-    var fieldSelectionDelegate: FieldSelectionDelegate?;
+    weak var fieldSelectionDelegate: FieldSelectionDelegate?;
     
     lazy var dateField: [String: Any] = {
         let dateField: [String: Any] =
@@ -90,7 +90,7 @@ class CommonFieldsView: MDCCard {
     }
     
     func setDateValue() {
-        if let observationProperties: [String : Any] = observation.properties as? [String : Any] {
+        if let observationProperties: [String : Any] = observation?.properties as? [String : Any] {
             dateView.setValue(observationProperties[dateField[FieldKey.name.key] as! String]);
         }
     }
@@ -98,7 +98,9 @@ class CommonFieldsView: MDCCard {
     func setObservation(observation: Observation) {
         self.observation = observation;
         setDateValue();
-        geometryView.setObservation(observation: self.observation);
+        if let safeObservation = self.observation {
+            geometryView.setObservation(observation: safeObservation);
+        }
     }
 }
 
@@ -110,21 +112,22 @@ extension CommonFieldsView: FieldSelectionDelegate {
 
 extension CommonFieldsView: ObservationFormFieldListener {
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
-        var newProperties = self.observation.properties as? [String: Any];
+        guard let safeObservation = self.observation else { return }
+        var newProperties = safeObservation.properties as? [String: Any];
         
         if (field[FieldKey.name.key] as! String == dateField[FieldKey.name.key] as! String) {
             let formatter = ISO8601DateFormatter();
             formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
             if (value == nil) {
                 newProperties?.removeValue(forKey: dateField[FieldKey.name.key] as! String)
-                self.observation.timestamp = nil;
+                safeObservation.timestamp = nil;
             } else {
                 newProperties?[dateField[FieldKey.name.key] as! String] = value as! String;
-                self.observation.timestamp = dateView.value as? Date;
+                safeObservation.timestamp = dateView.value as? Date;
             }
         } else if (field[FieldKey.name.key] as! String == locationField[FieldKey.name.key] as! String) {
-            self.observation.setGeometry(value as! SFGeometry);
+            safeObservation.setGeometry(value as! SFGeometry);
         }
-        self.observation.properties = newProperties;
+        safeObservation.properties = newProperties;
     }
 }

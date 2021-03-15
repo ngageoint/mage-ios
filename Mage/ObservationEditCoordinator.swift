@@ -24,9 +24,9 @@ import MaterialComponents.MaterialBottomSheet
     
     var newObservation = false;
     var observation: Observation?;
-    var rootViewController: UIViewController?;
+    weak var rootViewController: UIViewController?;
     var navigationController: UINavigationController?;
-    var delegate: ObservationEditDelegate?;
+    weak var delegate: ObservationEditDelegate?;
     var observationEditController: ObservationEditCardCollectionViewController?;
     var observationFormReorder: ObservationFormReorder?;
     var bottomSheet: MDCBottomSheetController?;
@@ -128,10 +128,12 @@ extension ObservationEditCoordinator: FormPickedDelegate {
     func formPicked(form: [String : Any]) {
         observationEditController?.formAdded(form: form);
         bottomSheet?.dismiss(animated: true, completion: nil);
+        bottomSheet = nil;
     }
     
     func cancelSelection() {
         bottomSheet?.dismiss(animated: true, completion: nil);
+        bottomSheet = nil;
     }
 }
 
@@ -206,6 +208,8 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
             print("Saved the observation \(observation.remoteId ?? "")");
             delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
+            observationEditController = nil;
+            navigationController = nil;
         }
     }
     
@@ -216,6 +220,8 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
             self.navigationController?.dismiss(animated: true, completion: nil);
             self.managedObjectContext.reset();
             delegate?.editCancel(self as NSObject);
+            observationEditController = nil;
+            navigationController = nil;
         }));
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil));
         self.navigationController?.present(alert, animated: true, completion: nil);

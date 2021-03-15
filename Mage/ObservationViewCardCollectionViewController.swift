@@ -16,7 +16,7 @@ import MaterialComponents.MDCContainerScheme;
     
     var didSetupConstraints = false;
     
-    var observation: Observation?;
+    weak var observation: Observation?;
     var observationForms: [[String: Any]] = [];
     var cards: [ExpandableCard] = [];
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
@@ -140,6 +140,21 @@ import MaterialComponents.MDCContainerScheme;
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
+        headerCard?.stop();
+        headerCard = nil;
+        
+        let removedSubviews = cards.reduce([]) { (allSubviews, subview) -> [UIView] in
+            stackView.removeArrangedSubview(subview)
+            return allSubviews + [subview]
+        }
+        
+        for v in removedSubviews {
+            if v.superview != nil {
+                v.removeFromSuperview()
+            }
+        }
+        stackView.removeFromSuperview();
+        cards = [];
         ObservationPushService.singleton()?.remove(self);
     }
     
@@ -177,7 +192,7 @@ import MaterialComponents.MDCContainerScheme;
         if (MageServer.isServerVersion5()) {
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
-                    attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
+                    attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self);
                     if let safeScheme = self.scheme {
                         attachmentCard!.applyTheme(withScheme: safeScheme);
                     }

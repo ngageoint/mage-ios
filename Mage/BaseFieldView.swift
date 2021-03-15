@@ -12,7 +12,7 @@ import MaterialComponents.MDCTextField;
 class BaseFieldView : UIView {
     internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
     internal var field: [String: Any]!;
-    internal var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?;
+    internal weak var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?;
     internal var fieldValueValid: Bool! = false;
     internal var value: Any?;
     internal var editMode: Bool = true;

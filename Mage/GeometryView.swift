@@ -13,16 +13,13 @@ import MaterialComponents.MDCButton;
 class GeometryView : BaseFieldView {
     private var accuracy: Double?;
     private var provider: String?;
-    private var mapEventDelegate: MKMapViewDelegate?;
-    private var observationActionsDelegate: ObservationActionsDelegate?;
-    private var observation: Observation?;
+    private weak var mapEventDelegate: MKMapViewDelegate?;
+    private weak var observationActionsDelegate: ObservationActionsDelegate?;
+    private weak var observation: Observation?;
     private var eventForms: [[String: Any]]?;
+    private var mapDelegate: MapDelegate?;
     
     private var mapObservation: MapObservation?;
-    
-    private lazy var mapDelegate: MapDelegate = {
-        return MapDelegate();
-    }()
     
     lazy var latitudeLongitudeButton: MDCButton = {
         let button = MDCButton(forAutoLayout: ());
@@ -42,10 +39,10 @@ class GeometryView : BaseFieldView {
         let mapView = MKMapView(forAutoLayout: ());
         mapView.mapType = .standard;
         mapView.autoSetDimension(.height, toSize: editMode ? 95 : 200);
-        mapDelegate.setMapView(mapView);
+        mapDelegate?.setMapView(mapView);
         mapView.delegate = mapDelegate;
-        mapDelegate.setupListeners();
-        mapDelegate.hideStaticLayers = true;
+        mapDelegate?.setupListeners();
+        mapDelegate?.hideStaticLayers = true;
         return mapView;
     }()
     
@@ -89,7 +86,8 @@ class GeometryView : BaseFieldView {
         self.observation = observation;
         self.eventForms = eventForms;
         self.observationActionsDelegate = observationActionsDelegate;
-        mapDelegate.setMapEventDelegte(mapEventDelegate);
+        self.mapDelegate = MapDelegate();
+        mapDelegate?.setMapEventDelegte(mapEventDelegate);
         buildView();
         
         setValue(value, accuracy: accuracy, provider: provider);
@@ -108,9 +106,14 @@ class GeometryView : BaseFieldView {
         }
     }
     
+    func cleanup() {
+        self.mapDelegate?.cleanup();
+        self.mapDelegate = nil;
+    }
+    
     deinit {
-        print("Cleaning up the map delegate");
-        self.mapDelegate.cleanup();
+        self.mapDelegate?.cleanup();
+        self.mapDelegate = nil;
     }
     
     @objc func locationTapped() {
@@ -192,7 +195,7 @@ class GeometryView : BaseFieldView {
         
         viewStack.addArrangedSubview(wrapper);
         
-        mapDelegate.ensureMapLayout();
+        mapDelegate?.ensureMapLayout();
     }
     
     override func isEmpty() -> Bool{

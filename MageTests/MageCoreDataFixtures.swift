@@ -213,7 +213,14 @@ class MageCoreDataFixtures {
         guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
             fatalError("\(formsJsonFile).json not found")
         }
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+//        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
+//            fatalError("Unable to convert \(formsJsonFile).json to String")
+//        }
+        var jsonString: String = "";
+        do {
+            jsonString = try String(contentsOfFile: pathString, encoding: .utf8);
+        } catch {
+            print("error parsing \(error)")
             fatalError("Unable to convert \(formsJsonFile).json to String")
         }
         
@@ -224,9 +231,7 @@ class MageCoreDataFixtures {
         guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
             fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
         }
-        
-        print("Adding this event with the forms: \(jsonDictionary)")
-        
+                
         MagicalRecord.save({ (localContext: NSManagedObjectContext) in
             if let e: Event = Event.mr_createEntity(in: localContext) {
                 e.name = name;

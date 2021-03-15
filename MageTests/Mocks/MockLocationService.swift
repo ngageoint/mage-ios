@@ -16,6 +16,10 @@ class MockLocationService: LocationService {
     
     override init() {
         mockedLocation = CLLocation(latitude: 40.0085, longitude: -105.2678);
+        super.init();
+        UserDefaults.standard.removeObserver(self, forKeyPath: "reportLocation");
+        UserDefaults.standard.removeObserver(self, forKeyPath: "gpsDistanceFilter");
+        UserDefaults.standard.removeObserver(self, forKeyPath: "userReportingFrequency");
     }
     
     override func location() -> CLLocation! {

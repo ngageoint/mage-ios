@@ -12,7 +12,7 @@ import MaterialComponents.MDCPalettes
 
 class ObservationSyncStatus: UIView {
     private var didSetupConstraints = false;
-    private var observation: Observation?;
+    private weak var observation: Observation?;
     private var manualSync: Bool = false;
     private var scheme: MDCContainerScheming?;
     

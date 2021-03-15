@@ -153,12 +153,12 @@ import MaterialComponents.MDCCard
         
         setupFormDependentButtons();
         
-        keyboardHelper = KeyboardHelper { animation, keyboardFrame, duration in
+        keyboardHelper = KeyboardHelper { [weak self] animation, keyboardFrame, duration in
             switch animation {
             case .keyboardWillShow:
-                self.navigationItem.rightBarButtonItem?.isEnabled = false;
+                self?.navigationItem.rightBarButtonItem?.isEnabled = false;
             case .keyboardWillHide:
-                self.navigationItem.rightBarButtonItem?.isEnabled = true;
+                self?.navigationItem.rightBarButtonItem?.isEnabled = true;
             }
         }
     }
@@ -178,6 +178,14 @@ import MaterialComponents.MDCCard
         if (newObservation && eventForms.count != 0 && observationForms.isEmpty) {
             self.delegate?.addForm();
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        self.commonFieldView = nil;
+        self.keyboardHelper = nil;
+        self.formsHeader.reorderButton.removeTarget(self, action: #selector(reorderForms), for: .touchUpInside);
+        self.formsHeader.removeFromSuperview();
     }
     
     init(frame: CGRect) {
@@ -381,7 +389,9 @@ import MaterialComponents.MDCCard
     
     @objc func reorderForms() {
         removeDeletedForms();
-        guard let safeObservation = self.observation else { return }
+        guard let safeObservation = self.observation else {
+            return
+        }
         self.delegate?.reorderForms(observation: safeObservation);
     }
     
@@ -481,7 +491,6 @@ import MaterialComponents.MDCCard
             let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
             let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
             let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
-            print("event form min \(eventFormMin) max \(eventFormMax) form count \(formCount)")
             if (formCount < eventFormMin) {
                 // not enough of this form
                 let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");

@@ -21,7 +21,7 @@
 @property (assign, nonatomic) BOOL multiselect;
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 @property (strong, nonatomic) id value;
-@property (strong, nonatomic) id<PropertyEditDelegate> delegate;
+@property (weak, nonatomic) id<PropertyEditDelegate> delegate;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectedChoicesConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UILabel *selectedTextLabel;

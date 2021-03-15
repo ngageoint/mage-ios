@@ -111,11 +111,15 @@ class MageRootViewTests: KIFSpec {
             }
 
             afterEach {
-                controller.dismiss(animated: false, completion: nil);
-                window.rootViewController = nil;
-                controller = nil;
-                TestHelpers.clearAndSetUpStack();
-                HTTPStubs.removeAllStubs();
+                waitUntil { done in
+                    controller.dismiss(animated: false, completion: {
+                        window.rootViewController = nil;
+                        controller = nil;
+                        TestHelpers.clearAndSetUpStack();
+                        HTTPStubs.removeAllStubs();
+                        done();
+                    })
+                }
             }
             
             it("no feeds") {

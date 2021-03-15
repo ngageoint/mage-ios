@@ -58,6 +58,8 @@ class CommonFieldsViewTests: KIFSpec {
             
             afterEach {
                 tester().waitForAnimationsToFinish();
+                commonFieldsView.removeFromSuperview();
+                commonFieldsView = nil;
                 waitUntil { done in
                     controller.dismiss(animated: false, completion: {
                         done();
@@ -181,6 +183,9 @@ class CommonFieldsViewTests: KIFSpec {
                 it("empty observation set geometry") {
                     let observation = ObservationBuilder.createBlankObservation();
                     ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
+                    window.rootViewController = nil;
+                    let nc = UINavigationController(rootViewController: controller);
+                    window.rootViewController = nc;
                     
                     let mockFieldSelectionDelegate: MockFieldDelegate = MockFieldDelegate();
                     
@@ -200,10 +205,14 @@ class CommonFieldsViewTests: KIFSpec {
                     tester().tapView(withAccessibilityLabel: "geometry");
                     expect(mockFieldSelectionDelegate.launchFieldSelectionViewControllerCalled).to(beTrue());
                     expect(mockFieldSelectionDelegate.viewControllerToLaunch).toNot(beNil());
-                    let nc = UINavigationController(rootViewController: mockFieldSelectionDelegate.viewControllerToLaunch!);
-                    controller.present(nc, animated: false, completion: nil);
+                    
+                    nc.pushViewController(mockFieldSelectionDelegate.viewControllerToLaunch!, animated: false);
                     tester().tapView(withAccessibilityLabel: "Done");
                     expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "1.00000, 1.00000"
+                    
+                    expect(UIApplication.getTopViewController()).toNot(beAnInstanceOf(mockFieldSelectionDelegate.viewControllerToLaunch!.classForCoder));
+                    
+                    nc.popToRootViewController(animated: false);
                 }
                 
                 it("empty observation set date") {

@@ -144,6 +144,14 @@ import Kingfisher
         UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        mapTab.viewControllers = [];
+        Mage.singleton()?.stopServices();
+        offlineObservationManager.stop();
+        UserDefaults.standard.removeObserver(self, forKeyPath: "loginType", context: nil);
+    }
+    
     func createOrderedTabs() {
         var allTabs: [UIViewController] = self.viewControllers ?? [];
         allTabs.append(mapTab);

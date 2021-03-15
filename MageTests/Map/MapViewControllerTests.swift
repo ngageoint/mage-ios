@@ -20,7 +20,7 @@ class MapViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("MapViewControllerTests") {
-            let recordSnapshots = true;
+            let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var controller: UINavigationController!
@@ -104,6 +104,8 @@ class MapViewControllerTests: KIFSpec {
                 
                 view = window;
                 
+                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -147,6 +149,13 @@ class MapViewControllerTests: KIFSpec {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
                     expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+                    expect(UIApplication.getTopViewController()).to(beAnInstanceOf(MDCBottomSheetController.self))
+                    
+                    tester().tapView(withAccessibilityLabel: "Cancel");
+                    expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(ObservationEditCardCollectionViewController.self))
+                    tester().tapView(withAccessibilityLabel: "Cancel");
+                    tester().tapView(withAccessibilityLabel: "Yes, Discard")
+                    expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
                 }
             }
             
@@ -182,6 +191,14 @@ class MapViewControllerTests: KIFSpec {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
                     expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+                    
+                    expect(UIApplication.getTopViewController()).to(beAnInstanceOf(MDCBottomSheetController.self))
+                    
+                    tester().tapView(withAccessibilityLabel: "Cancel");
+                    expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(ObservationEditCardCollectionViewController.self))
+                    tester().tapView(withAccessibilityLabel: "Cancel");
+                    tester().tapView(withAccessibilityLabel: "Yes, Discard")
+                    expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
                 }
             }
             
@@ -246,6 +263,51 @@ class MapViewControllerTests: KIFSpec {
                 }
             }
             
+            it("initialize the MapViewController and cancel creating new observation") {
+                var completeTest = false;
+                waitUntil { done in
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
+                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
+                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
+                                done();
+                            }
+                        }
+                    }
+                }
+                UserDefaults.standard.currentUserId = "user";
+                
+                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
+                let mockedLocationService = MockLocationService();
+                mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
+                mapViewController.locationService = mockedLocationService;
+                controller.pushViewController(mapViewController, animated: true);
+                
+                tester().waitForTappableView(withAccessibilityLabel: "New");
+                tester().tapView(withAccessibilityLabel: "New");
+                
+                // form picker
+                tester().waitForTappableView(withAccessibilityLabel: "Cancel");
+                tester().tapView(withAccessibilityLabel: "Cancel");
+                tester().waitForAnimationsToFinish();
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Cancel");
+                tester().tapView(withAccessibilityLabel: "Cancel");
+                tester().tapView(withAccessibilityLabel: "Yes, Discard");
+                expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
+                
+                view = window;
+                
+                maybeRecordSnapshot(view, doneClosure: {
+                    completeTest = true;
+                })
+                
+                if (recordSnapshots) {
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                } else {
+                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+                }
+            }
+            
             it("initialize the MapViewController and create new empty observation with long press") {
                 var completeTest = false;
                 waitUntil { done in
@@ -268,8 +330,6 @@ class MapViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "map");
                 expect(mapViewController.mapView).toEventuallyNot(beNil());
 
-                print("view with label map is \(viewTester().usingLabel("map").view)");
-                print(mapViewController.mapView);
                 mapViewController.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), latitudinalMeters: 1, longitudinalMeters: 1), animated: false);
                 mapViewController.mapView.setCenter(CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), animated: false);
                 tester().longPressView(withAccessibilityLabel: "map", duration: 1.0);
@@ -372,62 +432,15 @@ class MapViewControllerTests: KIFSpec {
                 expect(observation.remoteId).to(beNil());
                 
                 tester().waitForAnimationsToFinish();
-                tester().waitForView(withAccessibilityLabel: "Observation \(observation.objectID)");
-                tester().tapView(withAccessibilityLabel: "Observation \(observation.objectID)")
+                tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
+                tester().tapView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "More Info");
                 tester().tapView(withAccessibilityLabel: "More Info");
                 
                 TestHelpers.printAllAccessibilityLabelsInWindows();
                 
-                view = window;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
-            }
-            
-            it("initialize the MapViewController and edit an observation") {
-                var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                MageCoreDataFixtures.addObservationToEvent(eventId: 1) { (success: Bool, error: Error?) in
-                                    
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
-                UserDefaults.standard.currentUserId = "userabc";
-
-                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
-                let mockedLocationService = MockLocationService();
-                mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
-                mapViewController.locationService = mockedLocationService;
-                controller.pushViewController(mapViewController, animated: true);
-                
-                let observations = Observation.mr_findAll();
-                expect(observations?.count).to(equal(1));
-                let observation: Observation = observations![0] as! Observation;
-                
-                tester().waitForView(withAccessibilityLabel: "Observation \(observation.objectID)");
-                tester().tapView(withAccessibilityLabel: "Observation \(observation.objectID)")
-                
-                tester().waitForTappableView(withAccessibilityLabel: "More Info");
-                tester().tapView(withAccessibilityLabel: "More Info");
-                
-                tester().waitForView(withAccessibilityLabel: "Edit");
-                tester().tapView(withAccessibilityLabel: "Edit");
+                expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self))
                 
                 view = window;
                 
@@ -439,125 +452,9 @@ class MapViewControllerTests: KIFSpec {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
                     expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
-            }
-            
-            it("initialize the MapViewController and cancel an edit") {
-                var completeTest = false;
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                MageCoreDataFixtures.addObservationToEvent(eventId: 1) { (success: Bool, error: Error?) in
-                                    
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
-                UserDefaults.standard.currentUserId = "userabc";
-
-                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
-                let mockedLocationService = MockLocationService();
-                mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
-                mapViewController.locationService = mockedLocationService;
-                controller.pushViewController(mapViewController, animated: true);
-                
-                let observations = Observation.mr_findAll();
-                expect(observations?.count).to(equal(1));
-                let observation: Observation = observations![0] as! Observation;
-                
-                tester().waitForView(withAccessibilityLabel: "Observation \(observation.objectID)");
-                tester().tapView(withAccessibilityLabel: "Observation \(observation.objectID)")
-                
-                tester().waitForTappableView(withAccessibilityLabel: "More Info");
-                tester().tapView(withAccessibilityLabel: "More Info");
-                
-                tester().waitForView(withAccessibilityLabel: "Edit");
-                tester().tapView(withAccessibilityLabel: "Edit");
-                
-                tester().waitForAnimationsToFinish();
-                tester().waitForView(withAccessibilityLabel: "Cancel");
-                tester().tapView(withAccessibilityLabel: "Cancel");
-                
-                tester().waitForAnimationsToFinish();
-                tester().waitForView(withAccessibilityLabel: "Yes, Discard");
-                tester().tapView(withAccessibilityLabel: "Yes, Discard");
-                
-                view = window;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
-            }
-            
-            it("initialize the MapViewController and save an edit") {
-                var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                MageCoreDataFixtures.addObservationToEvent(eventId: 1) { (success: Bool, error: Error?) in
-                                    
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                UserDefaults.standard.currentUserId = "userabc";
-
-                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
-                mapViewController = MapViewController(scheme: MAGEScheme.scheme());
-                let mockedLocationService = MockLocationService();
-                mockedLocationService.mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, timestamp: Date());
-                mapViewController.locationService = mockedLocationService;
-                controller.pushViewController(mapViewController, animated: true);
-                
-                let observations = Observation.mr_findAll();
-                expect(observations?.count).to(equal(1));
-                let observation: Observation = observations![0] as! Observation;
-                
-                tester().waitForView(withAccessibilityLabel: "Observation \(observation.objectID)");
-                tester().tapView(withAccessibilityLabel: "Observation \(observation.objectID)")
-                
-                tester().waitForTappableView(withAccessibilityLabel: "More Info");
-                tester().tapView(withAccessibilityLabel: "More Info");
-                
-                tester().waitForView(withAccessibilityLabel: "Edit");
-                tester().tapView(withAccessibilityLabel: "Edit");
-                
-                tester().waitForAnimationsToFinish();
-                TestHelpers.printAllAccessibilityLabelsInWindows();
-                tester().waitForView(withAccessibilityLabel: "expand");
-                tester().tapView(withAccessibilityLabel: "expand");
-                tester().waitForView(withAccessibilityLabel: "field2");
-                tester().clearText(fromAndThenEnterText: "new description", intoViewWithAccessibilityLabel: "field2");
-                tester().tapView(withAccessibilityLabel: "Done");
-                tester().waitForView(withAccessibilityLabel: "Save");
-                tester().tapView(withAccessibilityLabel: "Save");
-                
-                tester().waitForAnimationsToFinish();
-                
-                view = window;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+                    
+                    tester().tapView(withAccessibilityLabel: "Back");
+                    expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
                 }
             }
         }

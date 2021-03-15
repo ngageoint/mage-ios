@@ -16,6 +16,7 @@ class ObservationTableViewController: UITableViewController {
     var scheme: MDCContainerScheming?;
     var childCoordinators: [NSObject] = [];
     var updateTimer: Timer?;
+    var listenersSetUp = false;
     
     public lazy var observationDataStore: ObservationDataStore = {
         var dataStoreAttachmentDelegate = self.attachmentDelegate;
@@ -102,8 +103,20 @@ class ObservationTableViewController: UITableViewController {
         UserDefaults.standard.addObserver(self, forKeyPath: kObservationTimeFilterUnitKey, options: .new, context: nil);
         UserDefaults.standard.addObserver(self, forKeyPath: kImportantFilterKey, options: .new, context: nil);
         UserDefaults.standard.addObserver(self, forKeyPath: kFavortiesFilterKey, options: .new, context: nil);
+        listenersSetUp = true;
     }
     
+    func removeFilterListeners() {
+        if (listenersSetUp) {
+            UserDefaults.standard.removeObserver(self, forKeyPath: kObservationTimeFilterKey, context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: kObservationTimeFilterNumberKey, context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: kObservationTimeFilterUnitKey, context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: kImportantFilterKey, context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: kFavortiesFilterKey, context: nil);
+        }
+        listenersSetUp = false;
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         
@@ -126,6 +139,8 @@ class ObservationTableViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
         self.stopUpdateTimer();
+        self.observationDataStore.observations?.delegate = nil;
+        removeFilterListeners();
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -149,10 +164,6 @@ class ObservationTableViewController: UITableViewController {
     
     @objc func onUpdateTimerFire() {
         self.observationDataStore.updatePredicates();
-    }
-    
-    deinit {
-        self.observationDataStore.observations?.delegate = nil;
     }
     
     func updateFilterButtonPosition() {

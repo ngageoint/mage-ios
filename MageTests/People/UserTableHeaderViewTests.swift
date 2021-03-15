@@ -107,6 +107,7 @@ class UserTableHeaderViewTests: KIFSpec {
                 userTableHeaderView = UserTableHeaderView(forAutoLayout: ());
                 userTableHeaderView.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 userTableHeaderView.populate(user: user);
+                userTableHeaderView.start();
                 view.addSubview(userTableHeaderView);
                 userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
 
@@ -147,6 +148,7 @@ class UserTableHeaderViewTests: KIFSpec {
                 userTableHeaderView = UserTableHeaderView(forAutoLayout: ());
                 userTableHeaderView.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 userTableHeaderView.populate(user: user);
+                userTableHeaderView.start();
                 view.addSubview(userTableHeaderView);
                 userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
                 
@@ -181,6 +183,7 @@ class UserTableHeaderViewTests: KIFSpec {
                 
                 let user: User = User.mr_findFirst()!;
                 userTableHeaderView = UserTableHeaderView(user: user, scheme: MAGEScheme.scheme());
+                userTableHeaderView.start();
                 view.addSubview(userTableHeaderView);
                 userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
 

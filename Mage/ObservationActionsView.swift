@@ -12,8 +12,8 @@ import MaterialComponents.MDCPalettes
 
 class ObservationActionsView: UIView {
     var didSetupConstraints = false;
-    var observation: Observation?;
-    var observationActionsDelegate: ObservationActionsDelegate?;
+    weak var observation: Observation?;
+    weak var observationActionsDelegate: ObservationActionsDelegate?;
     internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
     internal var currentUserFavorited: Bool = false;
     internal var isImportant: Bool = false;

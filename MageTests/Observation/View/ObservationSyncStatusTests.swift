@@ -235,7 +235,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 stub(condition: isMethodPUT() && isHost("magetest") && isScheme("https") && isPath("/api/events/1/observations/observationabc")) { (request) -> HTTPStubsResponse in
                     let response: [String: Any] = [ : ];
                     stubCalled = true;
-                    return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil).requestTime(5, responseTime: 5);
+                    return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
                 }
                 
                 let observations = Observation.mr_findAll();

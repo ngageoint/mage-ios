@@ -10,7 +10,7 @@ import Foundation
 import PureLayout
 
 class ObservationImportantView: UIView {
-    var observation: Observation?;
+    weak var observation: Observation?;
     var scheme: MDCContainerScheming?;
     var reasonLabel: UILabel = UILabel(forAutoLayout: ());
     var flaggedByLabel: UILabel = UILabel(forAutoLayout: ());

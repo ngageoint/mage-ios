@@ -39,22 +39,13 @@
       </MacroExpansion>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F7ED5D2320052161007BD768"
                BuildableName = "MAGETests.xctest"
                BlueprintName = "MAGETests"
-               ReferencedContainer = "container:MAGE.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F7EF2A2725E0368000A55BFC"
-               BuildableName = "MAGEUITests.xctest"
-               BlueprintName = "MAGEUITests"
                ReferencedContainer = "container:MAGE.xcodeproj">
             </BuildableReference>
          </TestableReference>

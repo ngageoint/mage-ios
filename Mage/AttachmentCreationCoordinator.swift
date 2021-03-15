@@ -16,13 +16,13 @@ protocol AttachmentCreationCoordinatorDelegate {
 }
 
 class AttachmentCreationCoordinator: NSObject {
-    var rootViewController: UIViewController;
+    weak var rootViewController: UIViewController?;
     var observation: Observation;
     var delegate: AttachmentCreationCoordinatorDelegate?;
     var pickerController: UIImagePickerController?;
     var audioRecorderViewController: AudioRecorderViewController?;
     
-    init(rootViewController: UIViewController, observation: Observation, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
+    init(rootViewController: UIViewController?, observation: Observation, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
         self.rootViewController = rootViewController;
         self.observation = observation;
         self.delegate = delegate;
@@ -41,7 +41,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
         DispatchQueue.main.async {
             print("Present the voice recorder");
             self.audioRecorderViewController = AudioRecorderViewController(delegate: self);
-            self.rootViewController.present(self.audioRecorderViewController!, animated: true);
+            self.rootViewController?.present(self.audioRecorderViewController!, animated: true);
         }
     }
     
@@ -65,7 +65,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             self.pickerController!.sourceType = .camera;
             self.pickerController!.mediaTypes = [kUTTypeMovie as String];
             self.pickerController!.videoQuality = .typeHigh;
-            self.rootViewController.present(self.pickerController!, animated: true, completion: nil);
+            self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
         }
     }
     
@@ -86,7 +86,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             self.pickerController!.allowsEditing = true;
             self.pickerController!.sourceType = .camera;
             self.pickerController!.mediaTypes = [kUTTypeImage as String];
-            self.rootViewController.present(self.pickerController!, animated: true, completion: nil);
+            self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
         }
     }
     
@@ -108,7 +108,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             self.pickerController!.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
             self.pickerController!.sourceType = .photoLibrary;
             self.pickerController!.videoQuality = .typeHigh;
-            self.rootViewController.present(self.pickerController!, animated: true, completion: nil);
+            self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
         }
     }
     

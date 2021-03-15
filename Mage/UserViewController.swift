@@ -73,8 +73,14 @@ import Foundation
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         userTableHeaderView.navigationController = self.navigationController;
+        userTableHeaderView.start();
         observationDataStore.startFetchController(observations: Observations(for: user));
         applyTheme(withContainerScheme: self.scheme);
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        userTableHeaderView.stop();
     }
 }
 

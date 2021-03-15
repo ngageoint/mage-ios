@@ -111,8 +111,9 @@ class ObservationHeaderViewTests: KIFSpec {
                 headerView.autoPinEdge(toSuperviewEdge: .right);
                 headerView.autoAlignAxis(toSuperviewAxis: .horizontal);
                 view = headerView;
-                
-                tester().waitForView(withAccessibilityLabel: "This is important");
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "important reason");
+                tester().expect(viewTester().usingLabel("important reason").view, toContainText: "This is important")
                 tester().waitForView(withAccessibilityLabel: "FLAGGED BY USER ABC");
                 tester().waitForView(withAccessibilityLabel: "USER ABC • JUN 5, 2020 AT 11:21 AM");
                 tester().waitForView(withAccessibilityLabel: "At Venue");
@@ -127,6 +128,8 @@ class ObservationHeaderViewTests: KIFSpec {
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
+                
+                tester().waitForAnimationsToFinish();
                 
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
@@ -203,7 +206,8 @@ class ObservationHeaderViewTests: KIFSpec {
                 
                 view = headerView;
                 
-                tester().waitForView(withAccessibilityLabel: "This is important");
+                tester().waitForView(withAccessibilityLabel: "important reason");
+                tester().expect(viewTester().usingLabel("important reason").view, toContainText: "This is important")
                 tester().waitForView(withAccessibilityLabel: "FLAGGED BY USER ABC");
                 tester().waitForView(withAccessibilityLabel: "USER ABC • JUN 5, 2020 AT 11:21 AM");
                 tester().waitForView(withAccessibilityLabel: "At Venue");
@@ -228,7 +232,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 expect(delegate.makeImportantReason) == "New important!";
                 observation.observationImportant?.reason = "New important!";
                 headerView.populate(observation: observation);
-                tester().waitForView(withAccessibilityLabel: "New important!");
+                tester().expect(viewTester().usingLabel("important reason").view, toContainText: "New important!")
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "edit important");
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;

@@ -16,7 +16,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var user: User?;
     var currentUserIsMe: Bool = false;
     var childCoordinators: [Any] = [];
-    var navigationController: UINavigationController?;
+    weak var navigationController: UINavigationController?;
     var scheme: MDCContainerScheming!;
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
@@ -219,6 +219,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
     deinit {
         NotificationCenter.default.removeObserver(self);
+        self.mapDelegate.cleanup();
+        self.mapView.delegate = nil;
     }
     
     func layoutView() {
@@ -237,48 +239,27 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         viewWasInitialized = true;
     }
     
-    
-    @objc public func populate(user: User) {
-        layoutView();
-        self.user = user;
-        currentUserIsMe = UserDefaults.standard.currentUserId == user.remoteId;
-        
-        nameField.text = user.name;
-        
-        phoneLabel.text = user.phone;
-        phoneView.isHidden = user.phone == nil ? true : false;
-        
-        emailLabel.text = user.email;
-        emailView.isHidden = user.email == nil ? true : false;
-        
+    func start() {
         mapDelegate.setupListeners();
         mapDelegate.observations = Observations.init(for: user);
         mapDelegate.locations = Locations.init(for: user);
         
-        if let avatarUrl = user.avatarUrl {
-            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
-                let avatarFile: String = (documentsDirectories[0] as NSString).appendingPathComponent(avatarUrl);
-                avatarImage.image = UIImage(contentsOfFile: avatarFile);
-            }
-        }
-        
         if (currentUserIsMe) {
             let locations: [GPSLocation] = GPSLocation.fetchLastXGPSLocations(1)
-                if locations.count != 0 {
-                    let location: GPSLocation = locations[0]
-                    let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
-                    let dictionary: [String : Any] = location.properties as! [String : Any];
-                    userLastLocation = CLLocation(
-                        coordinate: CLLocationCoordinate2D(
-                            latitude: centroid.y as! CLLocationDegrees,
-                            longitude: centroid.x as! CLLocationDegrees),
-                        altitude: dictionary["altitude"] as! CLLocationDistance,
-                        horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
-                        verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
-                        timestamp: location.timestamp!);
-                    self.mapDelegate.update(location, for: user);
-                }
+            if locations.count != 0 {
+                let location: GPSLocation = locations[0]
+                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
+                let dictionary: [String : Any] = location.properties as! [String : Any];
+                userLastLocation = CLLocation(
+                    coordinate: CLLocationCoordinate2D(
+                        latitude: centroid.y as! CLLocationDegrees,
+                        longitude: centroid.x as! CLLocationDegrees),
+                    altitude: dictionary["altitude"] as! CLLocationDistance,
+                    horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
+                    verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
+                    timestamp: location.timestamp!);
+                self.mapDelegate.update(location, for: user);
+            }
             
         }
         if (userLastLocation == nil) {
@@ -302,6 +283,32 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             zoomAndCenterMap(location: userLastLocation!);
         } else {
             locationView.isHidden = true;
+        }
+    }
+    
+    func stop() {
+        mapDelegate.cleanup();
+    }
+    
+    @objc public func populate(user: User) {
+        layoutView();
+        self.user = user;
+        currentUserIsMe = UserDefaults.standard.currentUserId == user.remoteId;
+        
+        nameField.text = user.name;
+        
+        phoneLabel.text = user.phone;
+        phoneView.isHidden = user.phone == nil ? true : false;
+        
+        emailLabel.text = user.email;
+        emailView.isHidden = user.email == nil ? true : false;
+        
+        if let avatarUrl = user.avatarUrl {
+            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
+                let avatarFile: String = (documentsDirectories[0] as NSString).appendingPathComponent(avatarUrl);
+                avatarImage.image = UIImage(contentsOfFile: avatarFile);
+            }
         }
     }
     

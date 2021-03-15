@@ -73,6 +73,7 @@
     @property (nonatomic) BOOL updatingCacheOverlays;
     @property (nonatomic) BOOL waitingCacheOverlaysUpdate;
     @property (nonatomic, strong) GPKGGeoPackageCache *geoPackageCache;
+    @property (nonatomic, strong) GPKGGeoPackageManager * geoPackageManager;
     @property (nonatomic, strong) NSMutableDictionary *staticLayers;
     @property (nonatomic, strong) NSMutableDictionary *onlineLayers;
     @property (nonatomic, strong) NSMutableArray *currentFeeds;
@@ -86,23 +87,29 @@
     @property (strong, nonatomic) MapObservationManager *mapObservationManager;
 @property (strong, nonatomic) NSMutableArray *listenersRegistered;
 @property (nonatomic) id<MKMapViewDelegate> mapEventDelegate;
+@property (strong, nonatomic) GPKGGeoPackage * countriesGeoPackage;
+@property (strong, nonatomic) GPKGGeoPackage * darkCountriesGeoPackage;
 @end
 
 @implementation MapDelegate
 
 - (void) setupListeners {
     if (self.mapView) {
-        self.listenersRegistered = [NSMutableArray arrayWithObjects:@"mapType", kCurrentEventIdKey, @"selectedOnlineLayers", [NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]], nil];
-        if (!self.hideStaticLayers) {
-            [self.listenersRegistered addObject:@"selectedStaticLayers"];
-        }
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        
-        for (NSString *keyPath in self.listenersRegistered) {
-            [defaults addObserver:self
-                       forKeyPath:keyPath
-                          options:NSKeyValueObservingOptionNew
-                          context:NULL];
+        @synchronized (self) {
+            if (!self.listenersRegistered) {
+                self.listenersRegistered = [NSMutableArray arrayWithObjects:@"mapType", kCurrentEventIdKey, @"selectedOnlineLayers", [NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]], nil];
+                if (!self.hideStaticLayers) {
+                    [self.listenersRegistered addObject:@"selectedStaticLayers"];
+                }
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                
+                for (NSString *keyPath in self.listenersRegistered) {
+                    [defaults addObserver:self
+                               forKeyPath:keyPath
+                                  options:NSKeyValueObservingOptionNew
+                                  context:NULL];
+                }
+            }
         }
 
         self.locationManager = [[CLLocationManager alloc] init];
@@ -119,8 +126,8 @@
     self.cacheOverlayUpdateLock = [[NSObject alloc] init];
     self.updatingCacheOverlays = false;
     self.waitingCacheOverlaysUpdate = false;
-    GPKGGeoPackageManager * geoPackageManager = [GPKGGeoPackageFactory manager];
-    self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:geoPackageManager];
+    self.geoPackageManager = [GPKGGeoPackageFactory manager];
+    self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:self.geoPackageManager];
     [self addFeeds];
 }
 
@@ -290,6 +297,7 @@
         for (NSString *keyPath in self.listenersRegistered) {
             [defaults removeObserver:self forKeyPath:keyPath];
         }
+        self.listenersRegistered = nil;
     }
     @catch (id exception) {
         NSLog(@"Failed to remove observer from user defaults: %@", exception);
@@ -307,6 +315,24 @@
     self.observations = nil;
     self.locations.fetchedResultsController.delegate = nil;
     self.locations = nil;
+    if (self.selectedUserAccuracy) {
+        [self.mapView removeOverlay:self.selectedUserAccuracy];
+        self.selectedUserAccuracy = nil;
+    }
+    if (self.selectedObservationAccuracy) {
+        [self.mapView removeOverlay:self.selectedObservationAccuracy];
+        self.selectedObservationAccuracy = nil;
+    }
+    [self.darkCountriesGeoPackage close];
+    [self.darkCountriesGeoPackage.metadataDb close];
+    self.darkCountriesGeoPackage = nil;
+    [self.countriesGeoPackage close];
+    [self.countriesGeoPackage.metadataDb close];
+    self.countriesGeoPackage = nil;
+    [self.geoPackageCache closeAll];
+    [self.geoPackageManager close];
+    self.geoPackageManager = nil;
+    self.geoPackageCache = nil;
 }
 
 - (void) addFeeds {
@@ -406,7 +432,6 @@
 
 - (void) formFetched: (NSNotification *) notification {
     Event *event = (Event *)notification.object;
-    NSLog(@"Form fetched for event %@", event.name);
     if ([[Server currentEventId] isEqualToNumber:event.remoteId]) {
         __weak typeof(self) weakSelf = self;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
@@ -866,13 +891,13 @@
 - (void) createBackgroundOverlay {
     if (self.backgroundOverlay) return;
     GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
-    GPKGGeoPackage * geoPackage = [manager open:@"countries"];
-    if (geoPackage) {
-        GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
+    self.countriesGeoPackage = [manager open:@"countries"];
+    if (self.countriesGeoPackage) {
+        GPKGFeatureDao * featureDao = [self.countriesGeoPackage featureDaoWithTableName:@"countries"];
         
         // If indexed, add as a tile overlay
-        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
-        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
+        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.countriesGeoPackage andFeatureDao:featureDao];
+        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.countriesGeoPackage andFeatureDao:featureDao]];
         
         self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
         [self.backgroundOverlay setMinZoom:0];
@@ -881,13 +906,13 @@
         self.backgroundOverlay.canReplaceMapContent = true;
     }
     
-    GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
-    if (darkGeoPackage) {
-        GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
+    self.darkCountriesGeoPackage = [manager open:@"countries_dark"];
+    if (self.darkCountriesGeoPackage) {
+        GPKGFeatureDao * darkFeatureDao = [self.darkCountriesGeoPackage featureDaoWithTableName:@"countries"];
         
         // If indexed, add as a tile overlay
-        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
-        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
+        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.darkCountriesGeoPackage andFeatureDao:darkFeatureDao];
+        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.darkCountriesGeoPackage andFeatureDao:darkFeatureDao]];
         
         self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
         [self.darkBackgroundOverlay setMinZoom:0];

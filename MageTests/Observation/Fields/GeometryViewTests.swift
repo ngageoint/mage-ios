@@ -68,7 +68,7 @@ class GeometryViewTests: KIFSpec {
             afterEach {
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
-//                geometryFieldView.removeFromSuperview();
+                geometryFieldView.removeFromSuperview();
                 
                 controller = nil;
                 view = nil;
@@ -746,7 +746,9 @@ class GeometryViewTests: KIFSpec {
             it("set value via input") {
                 let delegate = MockFieldDelegate();
                 
-                window.rootViewController = controller;
+                let nc = UINavigationController(rootViewController: controller);
+                
+                window.rootViewController = nc;
                 
                 geometryFieldView = GeometryView(field: field, delegate: delegate);
                 geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
@@ -759,7 +761,14 @@ class GeometryViewTests: KIFSpec {
                 geometryFieldView.handleTap();
                 expect(delegate.launchFieldSelectionViewControllerCalled).to(beTrue());
                 expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(GeometryEditViewController.self));
-
+                
+                nc.pushViewController(delegate.viewControllerToLaunch!, animated: false);
+                tester().tapView(withAccessibilityLabel: "Done");
+                expect((viewTester().usingLabel("location field8")!.view as! MDCButton).currentTitle) == "1.00000, 1.00000"
+                
+                expect(UIApplication.getTopViewController()).toNot(beAnInstanceOf(delegate.viewControllerToLaunch!.classForCoder));
+                
+                nc.popToRootViewController(animated: false);
             }
             
             it("copy location") {

@@ -18,16 +18,16 @@ import MaterialComponents.MaterialTextControls_OutlinedTextAreasTheming
 class ObservationFormView: UIStackView {
     
     var observation: Observation!;
-    public var containingCard: ExpandableCard?;
+    public weak var containingCard: ExpandableCard?;
     private var eventForm: [String:Any]?;
     private var form: [String: Any]!;
     private var formIndex: Int!;
     private var fieldViews: [String: BaseFieldView] = [ : ];
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var viewController: UIViewController!;
-    private var fieldSelectionDelegate: FieldSelectionDelegate?;
-    private var observationFormListener: ObservationFormListener?;
-    private var observationActionsDelegate: ObservationActionsDelegate?;
+    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private weak var viewController: UIViewController!;
+    private weak var fieldSelectionDelegate: FieldSelectionDelegate?;
+    private weak var observationFormListener: ObservationFormListener?;
+    private weak var observationActionsDelegate: ObservationActionsDelegate?;
     private var editMode: Bool = true;
     private var formFieldAdded: Bool = false;
     private var scheme: MDCContainerScheming?;
@@ -67,6 +67,13 @@ class ObservationFormView: UIStackView {
         self.observationActionsDelegate = observationActionsDelegate;
         constructView();
         self.accessibilityLabel = "Form \(self.eventForm?[FormKey.id.key] ?? "")";
+    }
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview();
+        self.viewController = nil;
+        self.attachmentSelectionDelegate = nil;
+        self.fieldViews = [:];
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {

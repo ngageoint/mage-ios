@@ -16,7 +16,7 @@
 @property (strong, nonatomic) NSDictionary *strategy;
 @property (strong, nonatomic) User *user;
 
-@property (strong, nonatomic) id<LoginDelegate> delegate;
+@property (weak, nonatomic) id<LoginDelegate> delegate;
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 

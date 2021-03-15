@@ -11,7 +11,7 @@ import MaterialComponents.MDCAppBar;
 
 class ObservationActionsSheetController: UITableViewController {
     var observation: Observation!;
-    var delegate: ObservationActionsDelegate!;
+    weak var delegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
     var userHasEditPermissions: Bool = false;
     
@@ -148,10 +148,10 @@ class ObservationActionsSheetController: UITableViewController {
         var correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 2);
         tableView.deselectRow(at: indexPath, animated: true);
         if (correctedRow == 0) {
-            delegate.deleteObservation?(observation);
+            delegate?.deleteObservation?(observation);
         }
         if (correctedRow == 1) {
-            delegate.editObservation?(observation);
+            delegate?.editObservation?(observation);
         }
         
         if (((observation.properties?["forms"] as? [[AnyHashable : Any]])?.count ?? 0) <= 1) {
@@ -160,7 +160,7 @@ class ObservationActionsSheetController: UITableViewController {
         }
         
         if (correctedRow == 2) {
-            delegate.reorderForms?(observation);
+            delegate?.reorderForms?(observation);
         }
         
         if (correctedRow == 3) {

@@ -14,9 +14,13 @@ import MaterialComponents.MaterialCards
 
 class ObservationHeaderView : MDCCard {
     var didSetupConstraints = false;
-    var observation: Observation!;
-    var observationActionsDelegate: ObservationActionsDelegate?;
+    weak var observation: Observation?;
+    weak var observationActionsDelegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
+    
+    func stop() {
+        geometryView.cleanup();
+    }
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView(forAutoLayout: ());
