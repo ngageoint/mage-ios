@@ -522,9 +522,6 @@ class MapViewControllerTests: KIFSpec {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
                     expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                    
-                    tester().tapView(withAccessibilityLabel: "Back");
-                    expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
                 }
             }
         }
