@@ -69,9 +69,10 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 expect(viewTester().usingLabel("Confirm New Password")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Change")?.view).toEventuallyNot(beNil());
-                
-                let newPasswordField: UITextField = viewTester().usingLabel("New Password")?.view as! UITextField;
-                expect(newPasswordField.placeholder).toEventually(equal("New Password (minimum 14 characters)"))
+                let newPasswordField: UITextField = viewTester().usingLabel("New Password, minimum 14 characters")?.view as! UITextField;
+                expect(newPasswordField.placeholder).toEventually(equal("New Password"))
+                let confirmNewPasswordField: UITextField = viewTester().usingLabel("Confirm New Password, minimum 14 characters")?.view as! UITextField;
+                expect(confirmNewPasswordField.placeholder).toEventually(equal("Confirm New Password"))
             }
             
             it("should alert if it could not contact the server") {
@@ -126,10 +127,10 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 tester().waitForFirstResponder(withAccessibilityLabel: "Current Password");
                 tester().clearTextFromView(withAccessibilityLabel: "Current Password");
                 tester().enterText("password\n", intoViewWithAccessibilityLabel: "Current Password");
-                tester().waitForFirstResponder(withAccessibilityLabel: "New Password");
-                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "New Password");
-                tester().waitForFirstResponder(withAccessibilityLabel: "Confirm New Password");
-                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().waitForFirstResponder(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().waitForFirstResponder(withAccessibilityLabel: "Confirm New Password, minimum 14 characters");
+                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/myself/password")));
@@ -165,15 +166,15 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Username");
                 expect(viewTester().usingLabel("Username")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Current Password")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("New Password")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Confirm New Password")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("New Password, minimum 14 characters")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Confirm New Password, minimum 14 characters")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Change")?.view).toEventuallyNot(beNil());
                 
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Current Password");
-                tester().setText("newpassword", intoViewWithAccessibilityLabel: "New Password");
-                tester().setText("newpassword", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().setText("newpassword", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("newpassword", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 tester().tapView(withAccessibilityLabel: "Change");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
@@ -219,8 +220,8 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Current Password");
-                tester().setText("newpassword", intoViewWithAccessibilityLabel: "New Password");
-                tester().setText("newpasswordnomatch", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().setText("newpassword", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("newpasswordnomatch", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 tester().tapView(withAccessibilityLabel: "Change");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
@@ -243,8 +244,8 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Change");
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Current Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "New Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 tester().waitForAnimationsToFinish();
                 tester().tapView(withAccessibilityLabel: "Change");
                 
@@ -266,11 +267,11 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Show Password");
-                let passwordField: UITextField = viewTester().usingLabel("New Password").view as! UITextField;
-                let passwordConfirmField: UITextField = viewTester().usingLabel("Confirm New Password").view as! UITextField;
+                let passwordField: UITextField = viewTester().usingLabel("New Password, minimum 14 characters").view as! UITextField;
+                let passwordConfirmField: UITextField = viewTester().usingLabel("Confirm New Password, minimum 14 characters").view as! UITextField;
                 
-                tester().setText("password", intoViewWithAccessibilityLabel: "New Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 expect(passwordConfirmField.isSecureTextEntry).to(beTrue());
@@ -312,23 +313,23 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "New Password");
                 tester().waitForAnimationsToFinish();
                 
-                tester().enterText("turtle", intoViewWithAccessibilityLabel: "New Password");
+                tester().enterText("turtle", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Weak");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Fair");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt3", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt3", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Good");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt3!", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt3!", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Strong");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt3!@@", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt3!@@", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Excellent");
             }
             

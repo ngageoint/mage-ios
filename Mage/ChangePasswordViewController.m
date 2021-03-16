@@ -239,8 +239,10 @@
         
         if ([mageServer serverHasLocalAuthenticationStrategy]) {
             ServerAuthentication *server = [mageServer.authenticationModules objectForKey:@"server"];
-            weakSelf.passwordController.placeholderText = [NSString stringWithFormat:@"New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
-            weakSelf.confirmPasswordController.placeholderText = [NSString stringWithFormat:@"Confirm New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+            weakSelf.passwordController.helperText = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
+            weakSelf.passwordController.placeholderText = @"New Password";
+            weakSelf.confirmPasswordController.helperText = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
+            weakSelf.confirmPasswordController.placeholderText = @"Confirm New Password";
         }
     } failure:^(NSError *error) {
         NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
