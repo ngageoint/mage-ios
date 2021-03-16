@@ -26,6 +26,7 @@
 @property (nonatomic) LocationService *locationService;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme andMapEventDelegate: (id<MKMapViewDelegate>) mapEventDelegate;
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
 -(void) filterTapped:(id) sender;
 -(void) createNewObservation:(id) sender;

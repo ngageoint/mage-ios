@@ -117,4 +117,13 @@ extension UserDefaults {
             set(newValue, forKey: #function);
         }
     }
+    
+    var observationTimeFilter: TimeFilterType {
+        get {
+            return TimeFilterType.init(rawValue: UInt(integer(forKey: "timeFilterKey"))) ?? TimeFilterType.all;
+        }
+        set {
+            set(newValue.rawValue, forKey: "timeFilterKey");
+        }
+    }
 }

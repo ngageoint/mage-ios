@@ -552,7 +552,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "reorder")
                 tester().waitForAnimationsToFinish();
                 
-                expect(delegate.reorderFormsCalled).toEventually(beTrue());
+                expect(delegate.reorderFormsCalled).to(beTrue());
                 var obsForms: [[String: Any]] = observation.properties![ObservationKey.forms.key] as! [[String : Any]];
                 obsForms.reverse();
                 observation.properties![ObservationKey.forms.key] = obsForms;

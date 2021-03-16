@@ -46,10 +46,18 @@
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
     @property (nonatomic) BOOL listenersSetUp;
+    @property (weak, nonatomic) id<MKMapViewDelegate> mapEventDelegate;
 
 @end
 
 @implementation MapViewController
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme andMapEventDelegate: (id<MKMapViewDelegate>) mapEventDelegate {
+    if (self = [self initWithScheme:containerScheme]) {
+        self.mapEventDelegate = mapEventDelegate;
+    }
+    return self;
+}
 
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [self init]) {
@@ -126,6 +134,7 @@
     
     self.childCoordinators = [[NSMutableArray alloc] init];
     self.mapDelegate = [[MapDelegate alloc] init];
+    [self.mapDelegate setMapEventDelegte:self.mapEventDelegate];
     self.mapDelegate.mapCalloutDelegate = self;
 
     [self.mapDelegate setMapView:self.mapView];

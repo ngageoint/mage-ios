@@ -1,0 +1,53 @@
+[
+    {
+        "createdAt": "2020-06-05T17:21:54.220Z",
+        "deviceId": "deviceabc",
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+                [-105.2678,40.0085],
+                [-105.2653,40.0085],
+                [-105.2653,40.0102],
+                [-105.2678,40.0102],
+                [-105.2678,40.0085]
+            ]]
+        },
+        "lastModified": "2020-06-05T17:21:54.220Z",
+        "properties": {
+            "timestamp": "2020-06-05T17:21:46.969Z",
+            "forms": [
+                {
+                    "formId": 1,
+                    "field0": "At Venue",
+                    "field1": "None",
+                    "field2": "Test"
+                }
+            ]
+        },
+        "type": "Feature",
+        "userId": "userabc",
+        "important":{"description":"This is important","timestamp":"2020-06-05T17:21:54.220Z","userId":"userabc"},
+        "favoriteUserIds": ["userabc"],
+        "attachments": [{
+            "contentType": "image/jpeg",
+            "size": 69937,
+            "name": "attachment.jpg",
+            "relativePath": "observations1/2020/06/05/attachment.jpg",
+            "lastModified": "2020-06-05T17:21:54.220Z",
+            "height": 668,
+            "width": 1356,
+            "oriented": true,
+            "id": "attachmentabc",
+            "url": "https://magetest/api/events/1/observations/observationabc/attachments/attachmentabc"
+        }],
+        "id": "observationabc",
+        "eventId": 1,
+        "url": "https://magetest/api/events/1/observations/observationabc",
+        "state": {
+            "userId": "userabc",
+            "name": "active",
+            "id": "stateabc",
+            "url": "https://magetest/api/events/1/observations/observationabc/states/stateabc"
+        }
+    }
+]
