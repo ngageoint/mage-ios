@@ -41,7 +41,7 @@
 #import "MapSettingsCoordinator.h"
 #import "FeatureDetailCoordinator.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate>
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate, UIGestureRecognizerDelegate>
     @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
     @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
     @property (weak, nonatomic) IBOutlet UIView *toastView;
@@ -53,8 +53,7 @@
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
     @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-@property (nonatomic, strong) id previewingContext;
-
+    @property (nonatomic, strong) id previewingContext;
 @end
 
 @implementation MapViewController
@@ -103,12 +102,14 @@
         //self.mapDelegate.previewDelegate = self;
     }
     
-    UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
-                                                 initWithTarget:self action:@selector(singleTapGesture:)];
+    UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapGesture:)];
     singleTapGesture.numberOfTapsRequired = 1;
+    singleTapGesture.delaysTouchesBegan = YES;
+    singleTapGesture.cancelsTouchesInView = YES;
+    singleTapGesture.delegate = self;
     [self.mapView addGestureRecognizer:singleTapGesture];
-    UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc]
-                                                 initWithTarget:self action:@selector(doubleTapGesture:)];
+    
+    UITapGestureRecognizer * doubleTapGesture = [[UITapGestureRecognizer alloc] init];
     doubleTapGesture.numberOfTapsRequired = 2;
     [self.mapView addGestureRecognizer:doubleTapGesture];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
@@ -574,16 +575,11 @@
     [self.childCoordinators addObject:detailCoordinator];
 }
 
--(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
-    
-    if(tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
+-(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer {
+    if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
         CGPoint cgPoint = [tapGestureRecognizer locationInView:self.mapView];
         [self.mapDelegate mapClickAtPoint:cgPoint];
     }
-}
-
--(void) doubleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer{
-    
 }
 
 #pragma mark - Observation Edit Coordinator Delegate
@@ -610,6 +606,19 @@
 
 - (void) mapSettingsComplete:(NSObject *) coordinator {
     [self.childCoordinators removeObject:coordinator];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    CGPoint point = [gestureRecognizer locationInView:self.mapView];
+    if ([otherGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] && ((UITapGestureRecognizer *) otherGestureRecognizer).numberOfTapsRequired == 1) {
+        CLLocationCoordinate2D location = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
+        MapShapeObservation *mapShapeObservation = [self.mapDelegate.mapObservations clickedShapeAtLocation:location];
+        if (mapShapeObservation != nil) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 @end

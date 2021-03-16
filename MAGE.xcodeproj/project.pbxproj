@@ -55,7 +55,6 @@
 		2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */; };
 		2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38DF1622B942C800485DA4 /* LdapLoginView.m */; };
 		2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F38DF1D22B957C300485DA4 /* ldap-authView.xib */; };
-		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
 		2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E1099220CA195001C9F12 /* AttributionCell.xib */; };
 		2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */; };
 		2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */; };
@@ -444,8 +443,6 @@
 		2F38DF1522B942C800485DA4 /* LdapLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LdapLoginView.h; sourceTree = "<group>"; };
 		2F38DF1622B942C800485DA4 /* LdapLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LdapLoginView.m; sourceTree = "<group>"; };
 		2F38DF1D22B957C300485DA4 /* ldap-authView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ldap-authView.xib"; sourceTree = "<group>"; };
-		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
-		2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
 		2F4E1099220CA195001C9F12 /* AttributionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttributionCell.xib; sourceTree = "<group>"; };
 		2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Disclaimer.xib; sourceTree = "<group>"; };
 		2F4E10A2220CCF39001C9F12 /* UITableViewCell+Setting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Setting.h"; sourceTree = "<group>"; };
@@ -1032,15 +1029,6 @@
 				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		2F4551831BA33A7700EE3DA6 /* Date */ = {
-			isa = PBXGroup;
-			children = (
-				2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */,
-				2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */,
-			);
-			name = Date;
 			sourceTree = "<group>";
 		};
 		2F4E10BA220E388A001C9F12 /* Cells */ = {
@@ -1691,7 +1679,6 @@
 				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
 				F7FC59281F3CEDEB0010351A /* Form */,
 				2FD853701BDAAB2300602CEA /* Authentication */,
-				2F4551831BA33A7700EE3DA6 /* Date */,
 				F76949131AA6434A00CB680B /* Event */,
 				2FF467091A12794000BA8357 /* Categories */,
 				F727516B19C888A3006C63CB /* Fetch */,
@@ -2193,7 +2180,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2220,23 +2207,23 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/mage-ios-sdk.momd",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model10To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model11To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model12To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model13To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To16.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model15To16.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model1To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model2To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model3To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model4To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model5To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model6To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model7To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model8To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model9To15.cdm",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_ROOT}/tuneup_js/assertions.js",
 				"${PODS_ROOT}/tuneup_js/image_assertion.js",
@@ -2470,7 +2457,6 @@
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
-				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
@@ -2689,7 +2675,7 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
@@ -2723,7 +2709,7 @@
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;

@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 2.1.2
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Pull in new mage-ios-sdk to fix crash when translating feed fields to strings.
+* Fix bug showing polygon/polyline map callout.
+
 ## 2.1.1
 
 ##### Release Notes
