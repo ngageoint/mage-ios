@@ -109,7 +109,6 @@ class GeometryViewTests: KIFSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        tester().waitForAnimationsToFinish();
                         expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                         expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
@@ -146,7 +145,6 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    tester().waitForAnimationsToFinish();
                     expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     completeTest = true;
@@ -178,7 +176,6 @@ class GeometryViewTests: KIFSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     maybeRecordSnapshot(view, doneClosure: {
-                        tester().waitForAnimationsToFinish();
                         expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                         expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                         completeTest = true;
@@ -215,7 +212,6 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    tester().waitForAnimationsToFinish();
                     expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     completeTest = true;
@@ -247,7 +243,6 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    tester().waitForAnimationsToFinish();
                     expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     completeTest = true;
@@ -404,7 +399,6 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    tester().waitForAnimationsToFinish();
                     let point: SFPoint = observation.getGeometry().centroid();
                     expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
@@ -511,7 +505,6 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    tester().waitForAnimationsToFinish();
                     let point: SFPoint = observation.getGeometry().centroid();
                     expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
@@ -778,7 +771,6 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    tester().waitForAnimationsToFinish();
                     expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     completeTest = true;

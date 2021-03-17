@@ -57,7 +57,6 @@ class CommonFieldsViewTests: KIFSpec {
             }
             
             afterEach {
-                tester().waitForAnimationsToFinish();
                 commonFieldsView.removeFromSuperview();
                 commonFieldsView = nil;
                 waitUntil { done in
@@ -236,7 +235,6 @@ class CommonFieldsViewTests: KIFSpec {
                     
                     tester().tapView(withAccessibilityLabel: "timestamp");
                     
-                    tester().waitForAnimationsToFinish();
                     tester().waitForView(withAccessibilityLabel: "timestamp Date Picker");
                     tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .forwardFromCurrentValue);
                     tester().tapView(withAccessibilityLabel: "Done");

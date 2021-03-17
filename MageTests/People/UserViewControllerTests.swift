@@ -91,17 +91,9 @@ class UserViewControllerTests: KIFSpec {
             it("user view") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser() { (_, error: Error?) in
-                        MageCoreDataFixtures.addLocation() { (_, error: Error?) in
-                            print("error", error);
-                            MageCoreDataFixtures.addObservationToEvent()  { (_, error: Error?) in
-                                print("error", error);
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addLocation()
+                MageCoreDataFixtures.addObservationToEvent()
                 
                 let user: User = User.mr_findFirst()!;
                 
@@ -109,7 +101,6 @@ class UserViewControllerTests: KIFSpec {
                 let nc = UINavigationController(rootViewController: controller);
                 window.rootViewController = nc;
                 
-                tester().waitForAnimationsToFinish();
                 tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
                 tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 266.16m");
                 tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
@@ -119,7 +110,6 @@ class UserViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Location copied to clipboard");
 
                 tester().tapView(withAccessibilityLabel: "favorite", traits: UIAccessibilityTraits(arrayLiteral: .button));
-                tester().waitForAnimationsToFinish();
                 expect((viewTester().usingLabel("favorite").view as! UIButton).tintColor).to(be(MDCPalette.green.accent700));
 
                 tester().tapView(withAccessibilityLabel: "directions", traits: UIAccessibilityTraits(arrayLiteral: .button));
@@ -139,7 +129,6 @@ class UserViewControllerTests: KIFSpec {
                 let cell: ObservationListCardCell = tester().waitForCell(at: IndexPath(row: 0, section: 0), in: tableView) as! ObservationListCardCell;
                 let card: MDCCard = viewTester().usingLabel("observation card \(observation.objectID.uriRepresentation().absoluteString)").view as! MDCCard;
                 cell.tap(card);
-                tester().waitForAnimationsToFinish();
                 expect(nc.topViewController).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
                 tester().tapView(withAccessibilityLabel: "User ABC");
                 expect(nc.topViewController).toEventually(beAnInstanceOf(UserViewController.self));

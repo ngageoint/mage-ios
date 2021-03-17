@@ -42,13 +42,8 @@ class ObservationHeaderViewTests: KIFSpec {
             }
             
             beforeEach {
-                tester().waitForAnimationsToFinish();
                 if (controller != nil) {
-                    waitUntil { done in
-                        controller.dismiss(animated: false, completion: {
-                            done();
-                        });
-                    }
+                    controller.dismiss(animated: false);
                 }
                 TestHelpers.clearAndSetUpStack();
                 window = UIWindow(frame: UIScreen.main.bounds);
@@ -67,12 +62,7 @@ class ObservationHeaderViewTests: KIFSpec {
             }
             
             afterEach {
-                tester().waitForAnimationsToFinish();
-                waitUntil { done in
-                    controller.dismiss(animated: false, completion: {
-                        done();
-                    });
-                }
+                controller.dismiss(animated: false);
                 window?.resignKey();
                 window.rootViewController = nil;
                 controller = nil;
@@ -84,19 +74,12 @@ class ObservationHeaderViewTests: KIFSpec {
             
             it("initialize the ObservationHeaderView") {
                 var completeTest = false;
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
+                
                 UserDefaults.standard.currentUserId = "userabc";
                 
                 let observations = Observation.mr_findAll();
@@ -128,9 +111,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
-                
-                tester().waitForAnimationsToFinish();
-                
+                                
                 if (recordSnapshots) {
                     expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
@@ -139,19 +120,12 @@ class ObservationHeaderViewTests: KIFSpec {
             }
             
             it("tap directions button") {
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
+                
                 UserDefaults.standard.currentUserId = "userabc";
                 
                 let observations = Observation.mr_findAll();
@@ -177,19 +151,12 @@ class ObservationHeaderViewTests: KIFSpec {
             it("tap important button") {
                 var completeTest = false;
 
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
+                
                 UserDefaults.standard.currentUserId = "userabc";
                 
                 let observations = Observation.mr_findAll();
@@ -222,7 +189,6 @@ class ObservationHeaderViewTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "important");
                 tester().tapView(withAccessibilityLabel: "important");
-                tester().waitForAnimationsToFinish();
                 
                 tester().waitForView(withAccessibilityLabel: "edit important");
                 tester().expect(viewTester().usingLabel("Important Description").view, toContainText: "This is important");
@@ -246,19 +212,12 @@ class ObservationHeaderViewTests: KIFSpec {
             }
             
             it("tap favorite button") {
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
+                
                 UserDefaults.standard.currentUserId = "userabc";
                 
                 let observations = Observation.mr_findAll();

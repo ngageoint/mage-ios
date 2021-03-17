@@ -63,7 +63,6 @@ class ServerURLControllerTests: KIFSpec {
                 window?.resignKey();
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
             }
             
             it("should load empty the ServerURLController") {
@@ -71,7 +70,6 @@ class ServerURLControllerTests: KIFSpec {
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
-                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: "Server URL");
                 expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
                 TestHelpers.printAllAccessibilityLabelsInWindows();

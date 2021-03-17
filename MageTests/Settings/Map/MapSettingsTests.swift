@@ -31,26 +31,22 @@ class MapSettingsTests: KIFSpec {
             
             beforeEach {
                 
-                waitUntil { done in
-                    clearAndSetUpStack();
-                    MageCoreDataFixtures.quietLogging();
+                clearAndSetUpStack();
+                MageCoreDataFixtures.quietLogging();
+                
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
+                
+                Server.setCurrentEventId(1);
+                
+                window = UIWindow(forAutoLayout: ());
+                window.autoSetDimension(.width, toSize: 414);
+                window.autoSetDimension(.height, toSize: 896);
+                
+                window.makeKeyAndVisible();
                     
-                    UserDefaults.standard.baseServerUrl = "https://magetest";
-                    UserDefaults.standard.mapType = 0;
-                    UserDefaults.standard.showMGRS = false;
-                    
-                    Server.setCurrentEventId(1);
-                    
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: 414);
-                    window.autoSetDimension(.height, toSize: 896);
-                    
-                    window.makeKeyAndVisible();
-                    
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent();
             }
             
             afterEach {
@@ -72,7 +68,6 @@ class MapSettingsTests: KIFSpec {
                 window.rootViewController = mapSettings;
                 tester().waitForView(withAccessibilityLabel: "feed-switch-1");
                 tester().setOn(false, forSwitchWithAccessibilityLabel: "feed-switch-1");
-                tester().waitForAnimationsToFinish();
                 let selected = UserDefaults.standard.array(forKey: "selectedFeeds-1");
                 expect(selected).to(beEmpty());
             }

@@ -83,7 +83,7 @@ class TestHelpers {
         MageInitializer.initializePreferences();
         
 //        if (NSManagedObjectContext.mr_default() != nil) {
-            NSManagedObjectContext.mr_default().reset();
+//            NSManagedObjectContext.mr_default().reset();
 //        }
         MagicalRecord.cleanUp();
     }

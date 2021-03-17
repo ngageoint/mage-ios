@@ -136,7 +136,6 @@ class DateViewTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().tapView(withAccessibilityLabel: field["name"] as? String);
-                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: (field["name"] as? String ?? "") + " Date Picker");
                 tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .forwardFromCurrentValue);
                 tester().tapView(withAccessibilityLabel: "Done");
@@ -165,7 +164,6 @@ class DateViewTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().tapView(withAccessibilityLabel: field["name"] as? String);
-                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: (field["name"] as? String ?? "") + " Date Picker");
                 
                 tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .forwardFromCurrentValue);
@@ -174,11 +172,12 @@ class DateViewTests: KIFSpec {
                 let formatter = DateFormatter();
                 formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
                 formatter.locale = Locale(identifier: "en_US_POSIX");
-                
+                print("what time zone \(NSTimeZone.system)")
                 var date = formatter.date(from: "2020-11-02T07:00:00.000Z")!;
                 // IMPORTANT: THIS IS TO CORRECT FOR A BUG IN KIF, YOU MUST COMPARE AGAINST THE DATE YOU SET
                 // PLUS THE OFFSET FROM GMT OR IT WILL NOT WORK
                 // IF THIS BUG IS CLOSED YOU CAN REMOVE THIS LINE: https://github.com/kif-framework/KIF/issues/1214
+                print("how many seconds from gmt are we \(TimeZone.current.secondsFromGMT())")
                 date.addTimeInterval(TimeInterval(-TimeZone.current.secondsFromGMT()));
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == formatter.string(from: date);
@@ -198,7 +197,6 @@ class DateViewTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().tapView(withAccessibilityLabel: field["name"] as? String);
-                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: (field["name"] as? String ?? "") + " Date Picker");
                 tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .forwardFromCurrentValue);
                 tester().tapView(withAccessibilityLabel: "Cancel");
@@ -226,7 +224,6 @@ class DateViewTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().tapView(withAccessibilityLabel: field["name"] as? String);
-                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: (field["name"] as? String ?? "") + " Date Picker");
                 TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().clearTextFromFirstResponder();

@@ -53,12 +53,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             afterEach {
-                tester().waitForAnimationsToFinish();
-                waitUntil { done in
-                    observationEditController.dismiss(animated: false, completion: {
-                        done();
-                    });
-                }
+                observationEditController.dismiss(animated: false);
                 window?.resignKey();
                 window.rootViewController = nil;
                 observationEditController = nil;
@@ -77,11 +72,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 it("empty observation") {
                     var completeTest = false;
                     
-                    waitUntil { done in
-                        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     
                     let observation = ObservationBuilder.createBlankObservation(1);
                     ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -104,11 +95,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 
                 it("verify legacy behavior") {
-                    waitUntil { done in
-                        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     
                     let observation = ObservationBuilder.createBlankObservation(1);
                     ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -127,7 +114,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     let addFormButton: MDCFloatingButton = viewTester().usingLabel("Add Form").view as! MDCFloatingButton
                     tester().tapView(withAccessibilityLabel: "Add Form")
                     expect(delegate.addFormCalled).to(beTrue());
-                    tester().waitForAnimationsToFinish();
                     if let event: Event = Event.mr_findFirst() {
                         observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                     }
@@ -161,11 +147,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("empty observation not new") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -178,7 +160,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 window.rootViewController = nc;
                 view = observationEditController.view;
                 
-                tester().waitForAnimationsToFinish();
+                
                 
                 expect(observationEditController.title) == "Edit Observation";
                 
@@ -196,11 +178,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("empty new observation zero forms") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -211,7 +189,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
                 
-                tester().waitForAnimationsToFinish();
+                
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -225,11 +203,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("validation error on observation") {                
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -240,7 +214,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 window.rootViewController = nc;
                 view = observationEditController.view;
                 
-                tester().waitForAnimationsToFinish();
+                
                 tester().tapView(withAccessibilityLabel: "Save");
                 tester().waitForView(withAccessibilityLabel: "The observation has validation errors.");
             }
@@ -248,11 +222,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("add form button should call delegate") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -265,7 +235,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form");
-                tester().waitForAnimationsToFinish();
+                
                 expect(delegate.addFormCalled).to(beTrue());
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -281,11 +251,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("show the form button if there are two forms") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -298,7 +264,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form");
-                tester().waitForAnimationsToFinish();
+                
                 expect(delegate.addFormCalled).to(beTrue());
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -314,11 +280,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("not show the add form button if there are no forms") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -328,7 +290,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -341,11 +303,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("empty new observation two forms should call add form") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -355,19 +313,15 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                tester().waitForAnimationsToFinish();
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
+                tester().tapView(withAccessibilityLabel: "Add Form");
                 expect(delegate.addFormCalled).to(beTrue());
             }
             
             it("when form is added it should show") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -381,7 +335,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
                 expect(delegate.addFormCalled).to(beTrue());
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
@@ -401,11 +355,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("user defaults") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let formDefaults = FormDefaults(eventId: 1, formId: 1);
                 var defaults = formDefaults.getDefaults() as! [String : AnyHashable];
@@ -424,24 +374,20 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
                 expect(delegate.addFormCalled).to(beTrue());
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
-                tester().waitForAnimationsToFinish();
+                
                 tester().waitForView(withAccessibilityLabel: "field1 value", value: "", traits: .none);
                 tester().waitForView(withAccessibilityLabel: "field0 value", value: "Protest", traits: .none);
             }
             
             it("should undo a deleted form") {
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -455,7 +401,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
                 expect(delegate.addFormCalled).to(beTrue());
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
@@ -471,11 +417,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("should delete a form") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createPointObservation(eventId: 1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -491,7 +433,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
                 expect(delegate.addFormCalled).to(beTrue());
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
@@ -507,11 +449,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("should reorder forms") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createPointObservation(eventId: 1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -527,7 +465,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
                 expect(delegate.addFormCalled).to(beTrue());
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
@@ -540,17 +478,12 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Form 2")
                 
-                tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: 1.0);
+                tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: 0.5);
                 
-                TestHelpers.printAllAccessibilityLabelsInWindows();
-                tester().waitForTappableView(withAccessibilityLabel: "reorder")
                 let reorderButton: UIButton = viewTester().usingLabel("reorder").view as! UIButton;
                 expect(reorderButton.isHidden).to(beFalse());
                 expect(reorderButton.isEnabled).to(beTrue());
-                // have to do this or the view never actually gets tapped
-                tester().waitForAnimationsToFinish();
                 tester().tapView(withAccessibilityLabel: "reorder")
-                tester().waitForAnimationsToFinish();
                 
                 expect(delegate.reorderFormsCalled).to(beTrue());
                 var obsForms: [[String: Any]] = observation.properties![ObservationKey.forms.key] as! [[String : Any]];
@@ -567,11 +500,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("cannot add more forms than maxObservationForms or less than minObservationForms") {
-                waitUntil(timeout: DispatchTimeInterval.seconds(2)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm", maxObservationForms: 1, minObservationForms: 1) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm", maxObservationForms: 1, minObservationForms: 1)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -594,11 +523,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 // reset the delegate
                 delegate.addFormCalled = false;
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
-                tester().waitForAnimationsToFinish();
+                
                 let addFormFab: MDCFloatingButton = viewTester().usingLabel("Add Form").view as! MDCFloatingButton;
                 // add form button should be enabled but show a message if the user taps it
                 expect(addFormFab.isEnabled).to(beTrue());
@@ -612,18 +541,14 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
-                tester().waitForAnimationsToFinish();
+                
                 tester().tapView(withAccessibilityLabel: "Save")
                 tester().waitForView(withAccessibilityLabel: "Total number of forms in an observation cannot be more than 1")
                 expect(delegate.saveObservationCalled).to(beFalse());
             }
             
             it("must add the proper number of forms specified by the form") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneFormRestricted") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneFormRestricted")
                 
                 let observation = ObservationBuilder.createPointObservation(eventId: 1)
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -646,11 +571,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 // reset the delegate
                 delegate.addFormCalled = false;
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
-                tester().waitForAnimationsToFinish();
+                
                 let addFormFab: MDCFloatingButton = viewTester().usingLabel("Add Form").view as! MDCFloatingButton;
                 expect(addFormFab.isEnabled).to(beTrue());
                 
@@ -658,7 +583,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
-                tester().waitForAnimationsToFinish();
+                
                 tester().tapView(withAccessibilityLabel: "Save")
                 tester().waitForView(withAccessibilityLabel: "Test form cannot be included in an observation more than 1 time")
                 expect(delegate.saveObservationCalled).to(beFalse());
@@ -668,11 +593,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 var completeTest = false;
                 let formsJsonFile = "twoForms";
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -701,7 +622,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -717,11 +638,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 var completeTest = false;
                 let formsJsonFile = "twoForms";
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -753,7 +670,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "expand");
                 tester().tapView(withAccessibilityLabel: "expand");
-                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -769,11 +686,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 var completeTest = false;
                 let formsJsonFile = "twoForms";
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -807,7 +720,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -823,11 +736,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 var completeTest = false;
                 let formsJsonFile = "allTheThings";
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -856,7 +765,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -871,11 +780,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("observation should show checkbox form") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "checkboxForm") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "checkboxForm")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -893,7 +798,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
-                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })
@@ -908,11 +813,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("filling out the form should update the form header") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -926,7 +827,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
                 expect(delegate.addFormCalled).to(beTrue());
-                tester().waitForAnimationsToFinish();
+                
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
@@ -948,11 +849,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("saving the form should send the observation to the delegate") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1006,11 +903,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("clearing a field should update the form header") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1033,7 +926,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Done");
                 tester().clearTextFromView(withAccessibilityLabel: "field1")
                 tester().tapView(withAccessibilityLabel: "Done");
-                tester().waitForAnimationsToFinish();
+                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })

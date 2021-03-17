@@ -504,7 +504,6 @@ class ExpandableCardTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "expand");
                 tester().tapView(withAccessibilityLabel: "expand");
-                tester().waitForAnimationsToFinish();
                 
                 expect(expandableCard.showExpanded).to(beFalse());
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expandableArea")

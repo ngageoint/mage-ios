@@ -31,20 +31,16 @@ class FeedServiceTests: KIFSpec {
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
-                waitUntil { done in
-                    clearAndSetUpStack();
-                    MageCoreDataFixtures.quietLogging();
+                clearAndSetUpStack();
+                MageCoreDataFixtures.quietLogging();
 
-                    UserDefaults.standard.baseServerUrl = "https://magetest";
-                    UserDefaults.standard.mapType = 0;
-                    UserDefaults.standard.showMGRS = false;
-                    
-                    Server.setCurrentEventId(1);
-                    
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
+                
+                Server.setCurrentEventId(1);
+                
+                MageCoreDataFixtures.addEvent();
             }
             
             afterEach {
@@ -54,11 +50,7 @@ class FeedServiceTests: KIFSpec {
             }
             
             it("should request feed items") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
 
                 var feedItemsServerCallCount = 0;
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/events/1/feeds/1/content", filePath: "feedContent.json")
@@ -88,9 +80,7 @@ class FeedServiceTests: KIFSpec {
                 };
                 FeedService.shared.start();
                 
-                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                    print("Added the feed");
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
                 expect(feedItemsServerCallCount).toEventually(beGreaterThan(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Feed Items Pulled");
             }
         }

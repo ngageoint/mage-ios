@@ -60,22 +60,11 @@ class ObservationSyncStatusTests: KIFSpec {
             it("not current user") {
                 UserDefaults.standard.currentUserId = "different";
                 
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            print("user added")
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                print("user added to event")
-                                
-                                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    print("observation added")
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
                 expect(observations?.count).to(equal(1));
@@ -94,22 +83,11 @@ class ObservationSyncStatusTests: KIFSpec {
             it("pushed as current user") {
                 UserDefaults.standard.currentUserId = "userabc";
                 
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            print("user added")
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                print("user added to event")
-                                
-                                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    print("observation added")
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
                 expect(observations?.count).to(equal(1));
@@ -131,22 +109,11 @@ class ObservationSyncStatusTests: KIFSpec {
             it("dirty") {
                 UserDefaults.standard.currentUserId = "userabc";
                 
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            print("user added")
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                print("user added to event")
-                                
-                                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    print("observation added")
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
                 expect(observations?.count).to(equal(1));
@@ -170,22 +137,11 @@ class ObservationSyncStatusTests: KIFSpec {
             it("error") {
                 UserDefaults.standard.currentUserId = "userabc";
                 
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            print("user added")
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                print("user added to event")
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    print("observation added")
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
                 expect(observations?.count).to(equal(1));
@@ -212,22 +168,11 @@ class ObservationSyncStatusTests: KIFSpec {
             it("tap sync now") {
                 UserDefaults.standard.currentUserId = "userabc";
                 
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            print("user added")
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                print("user added to event")
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    print("observation added")
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 var stubCalled = false;
                 
@@ -260,22 +205,11 @@ class ObservationSyncStatusTests: KIFSpec {
             it("dirty and then pushed") {
                 UserDefaults.standard.currentUserId = "userabc";
                 
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                            print("user added")
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                                print("user added to event")
-                                
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    print("observation added")
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
                 expect(observations?.count).to(equal(1));

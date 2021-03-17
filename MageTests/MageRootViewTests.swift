@@ -84,42 +84,34 @@ class MageRootViewTests: KIFSpec {
             }
 
             beforeEach {
-                waitUntil { done in
-                    TestHelpers.clearAndSetUpStack();
-                    UserDefaults.standard.baseServerUrl = "https://magetest";
-                    
-                    stub(condition: isHost("magetest")) { (request) -> HTTPStubsResponse in
-                        return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil);
-                    };
-                    
-                    MockMageServer.initializeHttpStubs();
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: 414);
-                    window.autoSetDimension(.height, toSize: 896);
-                    
-                    window.makeKeyAndVisible();
-                    
-                    let domain = Bundle.main.bundleIdentifier!
-                    UserDefaults.standard.removePersistentDomain(forName: domain)
-                    UserDefaults.standard.synchronize()
-                    
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        Server.setCurrentEventId(1);
-                        done();
-                    }
-                }
+                TestHelpers.clearAndSetUpStack();
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                
+                stub(condition: isHost("magetest")) { (request) -> HTTPStubsResponse in
+                    return HTTPStubsResponse(data: Data(), statusCode: 200, headers: nil);
+                };
+                
+                MockMageServer.initializeHttpStubs();
+                window = UIWindow(forAutoLayout: ());
+                window.autoSetDimension(.width, toSize: 414);
+                window.autoSetDimension(.height, toSize: 896);
+                
+                window.makeKeyAndVisible();
+                
+                let domain = Bundle.main.bundleIdentifier!
+                UserDefaults.standard.removePersistentDomain(forName: domain)
+                UserDefaults.standard.synchronize()
+                
+                MageCoreDataFixtures.addEvent()
+                Server.setCurrentEventId(1);
             }
 
             afterEach {
-                waitUntil { done in
-                    controller.dismiss(animated: false, completion: {
-                        window.rootViewController = nil;
-                        controller = nil;
-                        TestHelpers.clearAndSetUpStack();
-                        HTTPStubs.removeAllStubs();
-                        done();
-                    })
-                }
+                controller.dismiss(animated: false)
+                window.rootViewController = nil;
+                controller = nil;
+                TestHelpers.clearAndSetUpStack();
+                HTTPStubs.removeAllStubs();
             }
             
             it("no feeds") {
@@ -152,11 +144,7 @@ class MageRootViewTests: KIFSpec {
             it("one feed") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
 
                 let mapDelegate = MockMapViewDelegate()
                 mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
@@ -187,19 +175,11 @@ class MageRootViewTests: KIFSpec {
             it("two mappable feeds and two non mappable brand new") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
-                                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2") { (success: Bool, error: Error?) in
-                                    MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "3") { (success: Bool, error: Error?) in
-                                        done();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.populateFeedsFromJson();
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0")
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1")
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2")
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "3")
                 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
@@ -228,19 +208,11 @@ class MageRootViewTests: KIFSpec {
             it("two mappable feeds and two non mappable one selected") {
                 var completeTest = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
-                                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2") { (success: Bool, error: Error?) in
-                                    MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "3") { (success: Bool, error: Error?) in
-                                        done();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.populateFeedsFromJson();
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0")
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1")
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "2")
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "3")
                                 
                 UserDefaults.standard.set(["0"], forKey: "selectedFeeds-1");
                 
@@ -271,15 +243,9 @@ class MageRootViewTests: KIFSpec {
             it("two mappable feeds and two non mappable other one selected") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.populateFeedsFromJson { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1") { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.populateFeedsFromJson();
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0")
+                MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "1")
                 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme());
                 window.rootViewController = controller;
@@ -311,11 +277,7 @@ class MageRootViewTests: KIFSpec {
             it("tap observations button one feed") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 controller.selectedIndex = 1;
@@ -337,11 +299,7 @@ class MageRootViewTests: KIFSpec {
             it("tap more button one feed") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
@@ -363,15 +321,9 @@ class MageRootViewTests: KIFSpec {
             it("tap more button two feeds") {
                 var completeTest = false;
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Second Feed") { (success: Bool, error: Error?) in
-                            let feeds = Feed.mr_findAll();
-                            print("Feeds \(feeds)")
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Second Feed")
+                let feeds = Feed.mr_findAll();
 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;

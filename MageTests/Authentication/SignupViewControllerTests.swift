@@ -52,11 +52,7 @@ class SignUpViewControllerTests: KIFSpec {
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent();
                 
                 Server.setCurrentEventId(1);
                 
@@ -77,7 +73,7 @@ class SignUpViewControllerTests: KIFSpec {
                 window = nil;
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
+                
             }
             
             it("should load the SignUpViewController") {
@@ -271,7 +267,7 @@ class SignUpViewControllerTests: KIFSpec {
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 expect(passwordConfirmField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Password");
-                tester().waitForAnimationsToFinish();
+                
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
                 expect(passwordConfirmField.isSecureTextEntry).to(beFalse());

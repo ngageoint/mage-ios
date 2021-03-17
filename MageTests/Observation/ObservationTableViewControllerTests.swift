@@ -20,7 +20,7 @@ class ObservationTableViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        fdescribe("ObservationTableViewControllerTests") {
+        describe("ObservationTableViewControllerTests") {
             
             var window: UIWindow?;
             var view: ObservationTableViewController?;
@@ -37,12 +37,8 @@ class ObservationTableViewControllerTests: KIFSpec {
                 window?.rootViewController = navigationController;
                 window?.makeKeyAndVisible();
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        Server.setCurrentEventId(1);
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent();
+                Server.setCurrentEventId(1);
                 NSManagedObject.mr_setDefaultBatchSize(0);
             }
             
@@ -55,7 +51,6 @@ class ObservationTableViewControllerTests: KIFSpec {
                 window?.resignKey();
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
                 HTTPStubs.removeAllStubs();
                 NSManagedObject.mr_setDefaultBatchSize(20);
             }
@@ -65,59 +60,40 @@ class ObservationTableViewControllerTests: KIFSpec {
                 navigationController?.pushViewController(view!, animated: false);
                 expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(ObservationTableViewController.self));
                 
-                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).to(be(0));
+                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).toEventually(equal(0));
             }
             
             it("should load an ObservationTableViewController with one item") {
-                waitUntil(timeout: DispatchTimeInterval.seconds(2)) { done in
-                    MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                            let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                            MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser(userId: "userabc");
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson);
                 
                 UserDefaults.standard.observationTimeFilter = TimeFilterType.all;
                 
                 view = ObservationTableViewController(scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
-                tester().waitForAnimationsToFinish();
                 expect(UIApplication.getTopViewController()).to(beAnInstanceOf(ObservationTableViewController.self));
-                
-                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).to(be(1));
-                expect(view?.tableView.numberOfRows(inSection: 0)).to(be(1));
+                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).toEventually(equal(1));
+                expect(view?.tableView.numberOfRows(inSection: 0)).to(equal(1));
             }
             
             it("should load an empty ObservationTableViewController and add one item") {
-                waitUntil(timeout: DispatchTimeInterval.seconds(2)) { done in
-                    MageCoreDataFixtures.addUser(userId: "userabc") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")  { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser(userId: "userabc");
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 
                 UserDefaults.standard.observationTimeFilter = TimeFilterType.all;
                 
                 view = ObservationTableViewController(scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
-                tester().waitForAnimationsToFinish();
                 expect(UIApplication.getTopViewController()).to(beAnInstanceOf(ObservationTableViewController.self));
                 
-                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).to(be(0));
+                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).toEventually(equal(0));
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson);
                 
-                waitUntil { done in
-                    let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
-                    MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
-                
-                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).to(be(1));
-                expect(view?.tableView.numberOfRows(inSection: 0)).to(be(1));
+                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).toEventually(equal(1));
+                expect(view?.tableView.numberOfRows(inSection: 0)).to(equal(1));
             }
         }
     }

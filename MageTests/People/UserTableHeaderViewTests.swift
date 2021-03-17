@@ -94,14 +94,8 @@ class UserTableHeaderViewTests: KIFSpec {
             
             it("user view") {
                 var completeTest = false;
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addUser() { (_, error: Error?) in
-                        MageCoreDataFixtures.addLocation() { (_, error: Error?) in
-                            print("error", error);
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addLocation()
                 
                 let user: User = User.mr_findFirst()!;
                 userTableHeaderView = UserTableHeaderView(forAutoLayout: ());
@@ -111,7 +105,6 @@ class UserTableHeaderViewTests: KIFSpec {
                 view.addSubview(userTableHeaderView);
                 userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
 
-                tester().waitForAnimationsToFinish();
                 maybeRecordSnapshot(userTableHeaderView, doneClosure: {
                     completeTest = true;
                 })
@@ -135,14 +128,8 @@ class UserTableHeaderViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addUser() { (_, error: Error?) in
-                        MageCoreDataFixtures.addGPSLocation() { (_, error: Error?) in
-                            print("error", error);
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addGPSLocation()
                 
                 let user: User = User.mr_findFirst()!;
                 userTableHeaderView = UserTableHeaderView(forAutoLayout: ());
@@ -151,9 +138,7 @@ class UserTableHeaderViewTests: KIFSpec {
                 userTableHeaderView.start();
                 view.addSubview(userTableHeaderView);
                 userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                
-                tester().waitForAnimationsToFinish();
-                
+                                
                 tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
                 tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 4.20m");
                 tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
@@ -172,14 +157,8 @@ class UserTableHeaderViewTests: KIFSpec {
             }
             
             it("init with constructor") {
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addUser() { (_, error: Error?) in
-                        MageCoreDataFixtures.addLocation() { (_, error: Error?) in
-                            print("error", error);
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addLocation()
                 
                 let user: User = User.mr_findFirst()!;
                 userTableHeaderView = UserTableHeaderView(user: user, scheme: MAGEScheme.scheme());
@@ -187,7 +166,6 @@ class UserTableHeaderViewTests: KIFSpec {
                 view.addSubview(userTableHeaderView);
                 userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
 
-                tester().waitForAnimationsToFinish();
                 tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
                 tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 266.16m");
                 tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");

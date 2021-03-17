@@ -44,7 +44,7 @@ class MapViewControllerTests: KIFSpec {
             }
             
             beforeEach {
-                tester().waitForAnimationsToFinish();
+                
                 if (controller != nil) {
                     waitUntil { done in
                         controller.dismiss(animated: false, completion: {
@@ -69,7 +69,7 @@ class MapViewControllerTests: KIFSpec {
             }
             
             afterEach {
-                tester().waitForAnimationsToFinish();
+                
                 waitUntil { done in
                     mapViewController.dismiss(animated: false, completion: {
                         controller.dismiss(animated: false, completion: {
@@ -88,15 +88,9 @@ class MapViewControllerTests: KIFSpec {
             
             it("initialize the MapViewController") {
                 var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm");
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
                 UserDefaults.standard.currentUserId = "user";
 
                 mapViewController = MapViewController(scheme: MAGEScheme.scheme());
@@ -104,7 +98,7 @@ class MapViewControllerTests: KIFSpec {
                 
                 view = window;
                 
-                tester().waitForAnimationsToFinish();
+                
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -119,15 +113,10 @@ class MapViewControllerTests: KIFSpec {
             
             it("initialize the MapViewController and create new observation") {
                 var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                
                 UserDefaults.standard.currentUserId = "user";
 
                 mapViewController = MapViewController(scheme: MAGEScheme.scheme());
@@ -161,15 +150,9 @@ class MapViewControllerTests: KIFSpec {
             
             it("initialize the MapViewController and create new observation with no location") {
                 var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
                 UserDefaults.standard.currentUserId = "user";
 
                 mapViewController = MapViewController(scheme: MAGEScheme.scheme());
@@ -204,15 +187,10 @@ class MapViewControllerTests: KIFSpec {
             
             it("initialize the MapViewController and create new empty observation") {
                 var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                
                 UserDefaults.standard.currentUserId = "user";
 
                 mapViewController = MapViewController(scheme: MAGEScheme.scheme());
@@ -265,15 +243,10 @@ class MapViewControllerTests: KIFSpec {
             
             it("initialize the MapViewController and cancel creating new observation") {
                 var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                    
                 UserDefaults.standard.currentUserId = "user";
                 
                 mapViewController = MapViewController(scheme: MAGEScheme.scheme());
@@ -288,7 +261,7 @@ class MapViewControllerTests: KIFSpec {
                 // form picker
                 tester().waitForTappableView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
-                tester().waitForAnimationsToFinish();
+                
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
@@ -310,15 +283,10 @@ class MapViewControllerTests: KIFSpec {
             
             it("initialize the MapViewController and create new empty observation with long press") {
                 var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                
                 UserDefaults.standard.currentUserId = "user";
                 
                 mapViewController = MapViewController(scheme: MAGEScheme.scheme());
@@ -375,15 +343,9 @@ class MapViewControllerTests: KIFSpec {
             
             it("initialize the MapViewController and create an observation and view it") {
                 var completeTest = false;
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
                 
                 UserDefaults.standard.currentUserId = "user";
                 
@@ -403,7 +365,7 @@ class MapViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 
                 tester().tapView(withAccessibilityLabel: "timestamp");
-                tester().waitForAnimationsToFinish();
+                
                 tester().waitForView(withAccessibilityLabel: "timestamp Date Picker");
                 tester().selectDatePickerValue(["Nov 2", "7", "00", "AM"], with: .backwardFromCurrentValue);
                 tester().tapView(withAccessibilityLabel: "Done");
@@ -431,7 +393,7 @@ class MapViewControllerTests: KIFSpec {
                 expect(observation.eventId).to(equal(1));
                 expect(observation.remoteId).to(beNil());
                 
-                tester().waitForAnimationsToFinish();
+                
                 tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
                 tester().tapView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())")
                 
@@ -461,18 +423,12 @@ class MapViewControllerTests: KIFSpec {
             it("initialize the MapViewController and view a polygon observation") {
                 Server.setCurrentEventId(1);
                 var completeTest = false;
-                waitUntil(timeout: DispatchTimeInterval.seconds(5)) { done in
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addUser(userId: "user") { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")  { (success: Bool, error: Error?) in
-                                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson(filename: "polygonObservation");
-                                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)  { (success: Bool, error: Error?) in
-                                    done();
-                                }
-                            }
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson(filename: "polygonObservation");
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
+                
                 UserDefaults.standard.observationTimeFilter = TimeFilterType.all;
                 UserDefaults.standard.currentUserId = "user";
                 let mockMapDelegate = MockMKMapViewDelegate();
@@ -503,7 +459,7 @@ class MapViewControllerTests: KIFSpec {
                 
                 TestHelpers.printAllAccessibilityLabelsInWindows();
 
-                tester().waitForAnimationsToFinish();
+                
                 expect(mockMapDelegate.finishedRendering).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map never rendered");
                 tester().tapScreen(at: CGPoint(x: 200, y: 390));
                 

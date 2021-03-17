@@ -328,7 +328,6 @@ class TextFieldViewTests: KIFSpec {
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges()
-                tester().waitForAnimationsToFinish();
                 
                 expect(textFieldView.multilineTextField.text) == "Hi\nHello";
                 expect(textFieldView.controller.placeholderText) == "Multi Line Field Title *"

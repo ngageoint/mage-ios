@@ -53,11 +53,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent()
                 
                 Server.setCurrentEventId(1);
                 
@@ -80,7 +76,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 window = nil;
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
+                
             }
             
             it("should load the LoginViewController") {
@@ -189,13 +185,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should login as a different user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        MageCoreDataFixtures.addUnsyncedObservationToEvent { (_, _) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -238,13 +229,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should stop logging in as a different user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        MageCoreDataFixtures.addUnsyncedObservationToEvent { (_, _) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -282,11 +268,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in with an inactive user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -320,11 +302,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should fail to get a token") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -366,11 +344,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should not be able to log in offline with no stored password") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -407,11 +381,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in offline with stored password") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -458,11 +428,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in offline again with stored password") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
                 UserDefaults.standard.loginType = "local";
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -505,11 +471,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should initialize the login view with a user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";

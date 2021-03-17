@@ -62,7 +62,6 @@ class ObservationFormViewTests: KIFSpec {
             }
             
             afterEach {
-                tester().waitForAnimationsToFinish();
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
@@ -151,7 +150,6 @@ class ObservationFormViewTests: KIFSpec {
                 tester().enterText("new text", intoViewWithAccessibilityLabel: fieldId);
                 tester().tapView(withAccessibilityLabel: "Done");
 
-                tester().waitForAnimationsToFinish();
                 expect(delegate.formUpdatedCalled).to(beTrue());
                 expect(delegate.formUpdatedForm?[fieldId] as? String).to(equal("new text"));
 

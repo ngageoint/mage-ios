@@ -49,7 +49,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 window?.resignKey();
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
                 HTTPStubs.removeAllStubs();
             }
             
@@ -246,7 +245,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 tester().setText("password", intoViewWithAccessibilityLabel: "Current Password");
                 tester().setText("password", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
-                tester().waitForAnimationsToFinish();
                 tester().tapView(withAccessibilityLabel: "Change");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
@@ -276,7 +274,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 expect(passwordConfirmField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Password");
-                tester().waitForAnimationsToFinish();
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
                 expect(passwordConfirmField.isSecureTextEntry).to(beFalse());
@@ -297,7 +294,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Current Password");
-                tester().waitForAnimationsToFinish();
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
             }
@@ -311,7 +307,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "New Password");
-                tester().waitForAnimationsToFinish();
                 
                 tester().enterText("turtle", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Weak");
@@ -350,12 +345,8 @@ class ChangePasswordViewControllerTests: KIFSpec {
             }
             
             it("should set the currently logged in user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        UserDefaults.standard.currentUserId = "userabc";
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
@@ -364,7 +355,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 tester().waitForView(withAccessibilityLabel: "Change");
-                tester().waitForAnimationsToFinish();
                 tester().expect(viewTester().usingLabel("Username")?.view, toContainText: "userabc");
             }
         }

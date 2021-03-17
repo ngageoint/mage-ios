@@ -905,9 +905,7 @@ class AttachmentFieldViewTests: KIFSpec {
                                 
                 let attachment = Attachment(forJson: attachmentJson, in: NSManagedObjectContext.mr_default());
                 coordinator.delegate?.attachmentCreated(attachment: attachment);
-                
-                tester().waitForAnimationsToFinish();
-                
+                                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })

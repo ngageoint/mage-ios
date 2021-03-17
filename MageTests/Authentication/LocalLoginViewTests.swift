@@ -100,7 +100,6 @@ class LocalLoginViewTests: KIFSpec {
                 window?.resignKey();
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
                 HTTPStubs.removeAllStubs();
             }
             
@@ -202,7 +201,6 @@ class LocalLoginViewTests: KIFSpec {
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Password");
-                tester().waitForAnimationsToFinish();
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
             }
@@ -233,13 +231,8 @@ class LocalLoginViewTests: KIFSpec {
             }
             
             it("should fill in username for passed in user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        MageCoreDataFixtures.addUnsyncedObservationToEvent { (_, _) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 let strategy: [AnyHashable : Any?] = [
                     "identifier": "local",
