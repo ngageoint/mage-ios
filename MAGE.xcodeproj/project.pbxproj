@@ -1792,7 +1792,6 @@
 		F7A94D6818AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F7D9B82A248E7FB4008DC568 /* XCTest.framework */,
 				F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */,
 				F73E29DC20597737001B9307 /* Pods_MAGE.framework */,
 				2FF74A4C1BEBFAD900416090 /* WebKit.framework */,
@@ -2372,23 +2371,23 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/mage-ios-sdk.momd",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model10To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model11To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model12To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model13To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To16.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model15To16.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model1To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model2To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model3To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model4To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model5To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model6To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model7To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model8To15.cdm",
-				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model9To15.cdm",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
