@@ -6,10 +6,21 @@
 	<string>3</string>
 	<key>videoUploadSize</key>
 	<string>AVAssetExportPresetHighestQuality</string>
-	<key>serverMajorVersion</key>
-	<integer>5</integer>
-	<key>serverMinorVersion</key>
-	<integer>4</integer>
+    <key>serverCompatibilities</key>
+    <array>
+        <dict>
+            <key>serverMajorVersion</key>
+            <integer>6</integer>
+            <key>serverMinorVersion</key>
+            <integer>0</integer>
+        </dict>
+        <dict>
+            <key>serverMajorVersion</key>
+            <integer>5</integer>
+            <key>serverMinorVersion</key>
+            <integer>4</integer>
+        </dict>
+    </array>
 	<key>attachmentPushFrequency</key>
 	<integer>60</integer>
 	<key>baseServerUrl</key>

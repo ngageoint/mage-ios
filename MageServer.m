@@ -12,6 +12,7 @@
 #import "IdpAuthentication.h"
 #import "StoredPassword.h"
 
+NSString * const kServerCompatibilitiesKey = @"serverCompatibilities";
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
 NSString * const kServerMinorVersionKey = @"serverMinorVersion";
 NSString * const kServerAuthenticationStrategiesKey = @"serverAuthenticationStrategies";
@@ -96,20 +97,32 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
 + (BOOL) checkServerCompatibility: (NSDictionary *) api {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *serverCompatibilities  = [defaults arrayForKey:kServerCompatibilitiesKey];
     
-    NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
-    NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
-    
-    NSNumber *serverMajorVersion = [api valueForKeyPath:@"version.major"];
-    NSNumber *serverMinorVersion = [api valueForKeyPath:@"version.minor"];
-    
-    [defaults synchronize];
-    
-    return ([serverCompatibilityMajorVersion intValue] == [serverMajorVersion intValue] && [serverCompatibilityMinorVersion intValue] <= [serverMinorVersion intValue]);
+    for (NSDictionary *compatibility in serverCompatibilities) {
+        NSNumber *serverCompatibilityMajorVersion = [compatibility valueForKey:kServerMajorVersionKey];
+        NSNumber *serverCompatibilityMinorVersion = [compatibility valueForKey:kServerMinorVersionKey];
+        
+        NSNumber *serverMajorVersion = [api valueForKeyPath:@"version.major"];
+        NSNumber *serverMinorVersion = [api valueForKeyPath:@"version.minor"];
+        
+        if ([serverCompatibilityMajorVersion intValue] == [serverMajorVersion intValue] && [serverCompatibilityMinorVersion intValue] <= [serverMinorVersion intValue]) {
+            // server is compatible.  save the version
+            [defaults setObject:[api valueForKeyPath:@"version.major"] forKey:@"serverMajorVersion"];
+            [defaults setObject:[api valueForKeyPath:@"version.minor"] forKey:@"serverMinorVersion"];
+            [defaults synchronize];
+            return true;
+        }
+    }
+    return false;
 }
 
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api {
     return [[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.  Please contact your MAGE administrator for more information.", [api valueForKeyPath:@"version.major"], [api valueForKeyPath:@"version.minor"], [api valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]];
+}
+
++ (BOOL) isServerVersion5 {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:@"serverMajorVersion"] == 5;
 }
 
 + (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
