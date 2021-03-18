@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 2.1.3
+
+##### Release Notes
+
+##### Features
+* Local user signup captcha
+
+##### Bug Fixes
+
 ## 2.1.2
 
 ##### Release Notes
