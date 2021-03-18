@@ -12,6 +12,7 @@
 #import "IdpAuthentication.h"
 #import "StoredPassword.h"
 
+NSString * const kServerCompatibilitiesKey = @"serverCompatibilities";
 NSString * const kServerMajorVersionKey = @"serverMajorVersion";
 NSString * const kServerMinorVersionKey = @"serverMinorVersion";
 NSString * const kServerAuthenticationStrategiesKey = @"serverAuthenticationStrategies";
@@ -33,27 +34,19 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         if (authenticationStrategies) {
             NSMutableDictionary *authenticationModules = [[NSMutableDictionary alloc] init];
             [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
-            for (NSString *authenticationType in authenticationStrategies) {
-                NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
-                if ([authenticationType isEqualToString:@"google"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
-                } else if ([authenticationType isEqualToString:@"local"]) {
-                    [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
-                } else if ([authenticationType isEqualToString:@"login-gov"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
-                } else if ([[authParams objectForKey:@"type"] isEqualToString:@"oauth"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
-                } else if ([[authParams objectForKey:@"type"] isEqualToString:@"saml"]) {
-                    [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
-                } else if ([[authParams objectForKey:@"type"] isEqualToString:@"ldap"]) {
-                    [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
+            for (NSString *authenticationStrategy in authenticationStrategies) {
+                NSDictionary *parameters = [authenticationStrategies objectForKey:authenticationStrategy];
+                id authenticationModule = [Authentication authenticationModuleForStrategy:authenticationStrategy parameters:parameters];
+                if (authenticationModule) {
+                    [authenticationModules setObject:authenticationModule forKey:authenticationStrategy];
                 }
             }
+            
             NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
             if (oldLoginParameters != nil) {
                 NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
                 if ([oldUrl isEqualToString:[url absoluteString]] && [StoredPassword retrieveStoredPassword] != nil) {
-                    [authenticationModules setObject:[Authentication authenticationModuleForType:LOCAL] forKey:[Authentication authenticationTypeToString:LOCAL]];
+                    [authenticationModules setObject:[Authentication authenticationModuleForStrategy:@"offline" parameters:nil] forKey:@"offline"];
                 }
             }
             
@@ -104,20 +97,32 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
 
 + (BOOL) checkServerCompatibility: (NSDictionary *) api {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *serverCompatibilities  = [defaults arrayForKey:kServerCompatibilitiesKey];
     
-    NSNumber *serverCompatibilityMajorVersion = [defaults valueForKey:kServerMajorVersionKey];
-    NSNumber *serverCompatibilityMinorVersion = [defaults valueForKey:kServerMinorVersionKey];
-    
-    NSNumber *serverMajorVersion = [api valueForKeyPath:@"version.major"];
-    NSNumber *serverMinorVersion = [api valueForKeyPath:@"version.minor"];
-    
-    [defaults synchronize];
-    
-    return ([serverCompatibilityMajorVersion intValue] == [serverMajorVersion intValue] && [serverCompatibilityMinorVersion intValue] <= [serverMinorVersion intValue]);
+    for (NSDictionary *compatibility in serverCompatibilities) {
+        NSNumber *serverCompatibilityMajorVersion = [compatibility valueForKey:kServerMajorVersionKey];
+        NSNumber *serverCompatibilityMinorVersion = [compatibility valueForKey:kServerMinorVersionKey];
+        
+        NSNumber *serverMajorVersion = [api valueForKeyPath:@"version.major"];
+        NSNumber *serverMinorVersion = [api valueForKeyPath:@"version.minor"];
+        
+        if ([serverCompatibilityMajorVersion intValue] == [serverMajorVersion intValue] && [serverCompatibilityMinorVersion intValue] <= [serverMinorVersion intValue]) {
+            // server is compatible.  save the version
+            [defaults setObject:[api valueForKeyPath:@"version.major"] forKey:@"serverMajorVersion"];
+            [defaults setObject:[api valueForKeyPath:@"version.minor"] forKey:@"serverMinorVersion"];
+            [defaults synchronize];
+            return true;
+        }
+    }
+    return false;
 }
 
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api {
     return [[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.  Please contact your MAGE administrator for more information.", [api valueForKeyPath:@"version.major"], [api valueForKeyPath:@"version.minor"], [api valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]];
+}
+
++ (BOOL) isServerVersion5 {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:@"serverMajorVersion"] == 5;
 }
 
 + (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
@@ -146,25 +151,18 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         NSMutableDictionary *authenticationModules = [[NSMutableDictionary alloc] init];
         NSDictionary *authenticationStrategies = [response valueForKeyPath:@"authenticationStrategies"];
         [defaults setObject:authenticationStrategies forKey:kServerAuthenticationStrategiesKey];
-        for (NSString *authenticationType in authenticationStrategies) {
-            NSDictionary *authParams = [authenticationStrategies objectForKey:authenticationType];
-            if ([authenticationType isEqualToString:@"google"]) {
-                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
-            } else if ([authenticationType isEqualToString:@"local"]) {
-                [authenticationModules setObject:[[ServerAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:SERVER]];
-            } else if ([authenticationType isEqualToString:@"login-gov"]) {
-                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
-            } else if ([authenticationType isEqualToString:@"oauth"]) {
-                [authenticationModules setObject:[[IdpAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:IDP]];
-            } else if ([authenticationType isEqualToString:@"ldap"]) {
-                [authenticationModules setObject:[[LdapAuthentication alloc] initWithParameters: authParams] forKey:[Authentication authenticationTypeToString:LDAP]];
+        for (NSString *authenticationStrategy in authenticationStrategies) {
+            NSDictionary *parameters = [authenticationStrategies objectForKey:authenticationStrategy];
+            id authenticationModule = [Authentication authenticationModuleForStrategy:authenticationStrategy parameters:parameters];
+            if (authenticationModule) {
+                [authenticationModules setObject:authenticationModule forKey:authenticationStrategy];
             }
         }
         NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
         if (oldLoginParameters != nil) {
             NSString *oldUrl = [oldLoginParameters objectForKey:@"serverUrl"];
             if ([oldUrl isEqualToString:[url absoluteString]] && [StoredPassword retrieveStoredPassword] != nil) {
-                [authenticationModules setObject:[Authentication authenticationModuleForType:LOCAL] forKey:[Authentication authenticationTypeToString:LOCAL]];
+                [authenticationModules setObject:[Authentication authenticationModuleForStrategy:@"offline" parameters:nil] forKey:@"offline"];
             }
         }
         
@@ -182,17 +180,16 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             return;
         }
     } failure:^(NSURLSessionTask *operation, NSError *error) {
-        // check if the error indicates that the network is unavailable
-        // and return a local authentication module
+        // check if the error indicates that the network is unavailable and return the offline authentication module
         if ([error.domain isEqualToString:NSURLErrorDomain]
             && (error.code == NSURLErrorCannotConnectToHost
                 || error.code == NSURLErrorNetworkConnectionLost
                 || error.code == NSURLErrorNotConnectedToInternet
                 || error.code == NSURLErrorTimedOut
                 )) {
-                id<Authentication> authentication = [Authentication authenticationModuleForType:LOCAL];
+                id<Authentication> authentication = [Authentication authenticationModuleForStrategy:@"offline" parameters:nil];
                 if ([authentication canHandleLoginToURL:[url absoluteString]]) {
-                    server.authenticationModules = [NSDictionary dictionaryWithObject:authentication forKey:[Authentication authenticationTypeToString:LOCAL]];
+                    server.authenticationModules = [NSDictionary dictionaryWithObject:authentication forKey:@"offline"];
                 }
                 success(server);
             } else {

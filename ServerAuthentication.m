@@ -2,7 +2,6 @@
 //  ServerAuthentication.m
 //  mage-ios-sdk
 //
-//
 
 #import "ServerAuthentication.h"
 #import "StoredPassword.h"
@@ -20,12 +19,12 @@
 
 @implementation ServerAuthentication
 
-- (instancetype) initWithParameters:(NSDictionary *)parameters {
+- (instancetype) initWithParameters:(NSDictionary *) parameters {
     self = [super init];
     if (self == nil) return nil;
-    
+
     self.parameters = parameters;
-    
+
     return self;
 }
 
@@ -183,7 +182,7 @@
         NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
         [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
         [defaults setBool:YES forKey:@"deviceRegistered"];
-        [defaults setValue:[Authentication authenticationTypeToString:SERVER] forKey:@"loginType"];
+        [defaults setValue:@"local" forKey:@"loginType"];
         [defaults synchronize];
         [StoredPassword persistPasswordToKeyChain:password];
         [StoredPassword persistTokenToKeyChain:token];

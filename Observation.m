@@ -17,6 +17,7 @@
 #import "MageSessionManager.h"
 #import "MageEnums.h"
 #import "NSDate+Iso8601.h"
+#import "NSDate+display.h"
 #import "MageServer.h"
 #import "GeometryDeserializer.h"
 #import "SFGeometry.h"
@@ -124,41 +125,72 @@ Event *_event;
     return nil;
 }
 
-- (NSString *) getPrimaryFeedField {
-    NSDictionary *form = [self getPrimaryForm];
-    if (form != nil) {
-        return [form objectForKey:@"primaryFeedField"];
-    }
-    return nil;
-}
-
 - (NSString *) primaryFeedFieldText {
-    NSString *primaryFeedField = [self getPrimaryFeedField];
+    NSDictionary *secondaryFeedField = [self getField:@"primaryFeedField"];
     NSArray *observationForms = [self.properties objectForKey:@"forms"];
     
-    if (primaryFeedField != nil && [observationForms count] > 0) {
-        return [[observationForms objectAtIndex:0] objectForKey:primaryFeedField];
+    if (secondaryFeedField != nil && [observationForms count] > 0) {
+        id value = [[observationForms objectAtIndex:0] objectForKey:[secondaryFeedField objectForKey:@"name"]];
+        return [self fieldValueText:value field:secondaryFeedField];
     }
-    return nil;
-}
-
-- (NSString *) getSecondaryFeedField {
-    NSDictionary *form = [self getPrimaryForm];
-    if (form != nil) {
-        return [form objectForKey:@"secondaryFeedField"];
-    }
+    
     return nil;
 }
 
 - (NSString *) secondaryFeedFieldText {
-    
-    NSString *secondaryFeedField = [self getSecondaryFeedField];
+    NSDictionary *secondaryFeedField = [self getField:@"secondaryFeedField"];
     NSArray *observationForms = [self.properties objectForKey:@"forms"];
     
     if (secondaryFeedField != nil && [observationForms count] > 0) {
-        return [[observationForms objectAtIndex:0] objectForKey:secondaryFeedField];
+        id value = [[observationForms objectAtIndex:0] objectForKey:[secondaryFeedField objectForKey:@"name"]];
+        return [self fieldValueText:value field:secondaryFeedField];
     }
+    
     return nil;
+}
+
+- (NSDictionary *) getField:(NSString *) name {
+    NSDictionary *form = [self getPrimaryForm];
+    if (form != nil) {
+        NSString *fieldName = [form objectForKey:name];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name==%@", fieldName];
+        NSArray *fields = [[form objectForKey:@"fields"] filteredArrayUsingPredicate:predicate];
+        if (fields.count > 0) {
+            return [fields objectAtIndex:0];
+        }
+    }
+    
+    return nil;
+}
+
+- (NSString *) fieldValueText:(id) value field:(NSDictionary *) field {
+    if (value == nil) return @"";
+    
+    NSString *type = [field valueForKey:@"type"];
+    if ([@"geometry" isEqualToString:type]) {
+        SFGeometry *geometry = value;
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
+        return [NSString stringWithFormat:@"%.6f, %.6f", [centroid.y doubleValue], [centroid.x doubleValue]];
+    } else if ([@"date" isEqualToString:type]) {
+        NSDate *date = [NSDate dateFromIso8601String:(NSString *) value];
+        return [date formattedDisplayDate];
+    } else if ([@"checkbox" isEqualToString:type]) {
+        return value ? @"YES" : @"NO";
+    } else if ([@"numberfield" isEqualToString:type]) {
+        return [value stringValue];
+    } else if ([@"multiselectdropdown" isEqualToString:type]) {
+        NSArray *array = (NSArray *) value;
+        return [array componentsJoinedByString:@","];
+    } else if ([@"textfield" isEqualToString:type] ||
+               [@"textarea" isEqualToString:type] ||
+               [@"email" isEqualToString:type] ||
+               [@"password" isEqualToString:type] ||
+               [@"radio" isEqualToString:type] ||
+               [@"dropdown" isEqualToString:type]) {
+        return value;
+    } else {
+        return @"";
+    }
 }
 
 - (NSMutableArray *)transientAttachments {
@@ -177,7 +209,6 @@ Event *_event;
         return [_fieldNameToField objectForKey:[NSString stringWithFormat:@"%@",formId]];
     }
 
-//    _currentEventId = event.remoteId;
     NSArray *forms = event.forms;
     
     NSMutableDictionary *formFieldMap = [[NSMutableDictionary alloc] init];

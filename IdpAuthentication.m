@@ -102,60 +102,7 @@
         NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
         [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
         [defaults setBool:YES forKey:@"deviceRegistered"];
-        [defaults setValue:[Authentication authenticationTypeToString:IDP] forKey:@"loginType"];
-        [defaults synchronize];
-        [StoredPassword persistTokenToKeyChain:token];
-        
-        complete(AUTHENTICATION_SUCCESS, nil);
-    }];
-}
-
-- (void) finishLoginForParameters: (NSDictionary *) parameters withResponse: (NSDictionary *) response complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *api = [response objectForKey:@"api"];
-    
-    if ([api objectForKey:@"disclaimer"] != NULL && [api valueForKey:@"disclaimer"]) {
-        [defaults setObject:[api valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
-        [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
-        [defaults setObject:[api valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
-    }
-    [defaults setObject:[api valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
-    
-    NSDictionary *userJson = [response objectForKey:@"user"];
-    NSString *userId = [userJson objectForKey:@"id"];
-    
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
-        if (!user) {
-            [User insertUserForJson:userJson inManagedObjectContext:localContext];
-        } else {
-            [user updateUserForJson:userJson];
-        }
-    } completion:^(BOOL contextDidSave, NSError *error) {
-        NSString *token = [response objectForKey:@"token"];
-        // Always use this locale when parsing fixed format date strings
-        NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[response objectForKey:@"expirationDate"]];
-        
-        [MageSessionManager sharedManager].token = token;
-        
-        [[UserUtility singleton] resetExpiration];
-        
-        NSDictionary *loginParameters = @{
-                                          @"serverUrl": [[MageServer baseURL] absoluteString],
-                                          @"tokenExpirationDate": tokenExpirationDate
-                                          };
-        
-        [defaults setObject:loginParameters forKey:@"loginParameters"];
-        
-        NSDictionary *userJson = [response objectForKey:@"user"];
-        NSString *userId = [userJson objectForKey:@"id"];
-        [defaults setObject: userId forKey:@"currentUserId"];
-        
-        NSTimeInterval tokenExpirationLength = [tokenExpirationDate timeIntervalSinceNow];
-        [defaults setObject:[NSNumber numberWithDouble:tokenExpirationLength] forKey:@"tokenExpirationLength"];
-        [defaults setBool:YES forKey:@"deviceRegistered"];
-        [defaults setValue:[Authentication authenticationTypeToString:IDP] forKey:@"loginType"];
+        [defaults setValue:[self.parameters objectForKey:@"type"] forKey:@"loginType"];
         [defaults synchronize];
         [StoredPassword persistTokenToKeyChain:token];
         
@@ -244,7 +191,7 @@
         }
         self.loginParameters = loginParameters;
         self.response = responseObject;
-        [self finishLoginForParameters: loginParameters withResponse:responseObject complete:complete];
+        complete(AUTHENTICATION_SUCCESS, nil);
     }];
 
     [manager addTask:task];

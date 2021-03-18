@@ -2,16 +2,8 @@
 //  Authentication.h
 //  mage-ios-sdk
 //
-//
 
 #import "User.h"
-
-typedef NS_ENUM(NSInteger, AuthenticationType) {
-	LOCAL,
-    SERVER,
-    IDP,
-    LDAP
-};
 
 typedef NS_ENUM(NSInteger, AuthenticationStatus) {
     AUTHENTICATION_SUCCESS,
@@ -32,9 +24,5 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
 @end
 
 @interface Authentication : NSObject
-
-+ (id) authenticationModuleForType: (AuthenticationType) type;
-+ (AuthenticationType) authenticationTypeFromString: (NSString *) value;
-+ (NSString *) authenticationTypeToString: (AuthenticationType) authenticationType;
-
++ (id) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters;
 @end
