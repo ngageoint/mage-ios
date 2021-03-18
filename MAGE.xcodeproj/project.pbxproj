@@ -342,6 +342,7 @@
 		F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */; };
 		F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D191FFE99DF007BD768 /* MapTypeTableViewCell.m */; };
 		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
+		F7F118222602A1F600C7DE9A /* ObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F118212602A1F600C7DE9A /* ObservationTests.swift */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4753025B73C3E006634F7 /* FormsHeader.swift */; };
@@ -873,6 +874,7 @@
 		F7ED5D2420052161007BD768 /* MAGETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MAGETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7ED5D2820052161007BD768 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7ED5D2E20052248007BD768 /* AuthenticationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationTests.m; sourceTree = "<group>"; };
+		F7F118212602A1F600C7DE9A /* ObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTests.swift; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
@@ -1858,6 +1860,7 @@
 				F7BE036B2466095100D2F7C3 /* Edit */,
 				F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */,
 				F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */,
+				F7F118212602A1F600C7DE9A /* ObservationTests.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -2729,6 +2732,7 @@
 				F7CE22BC2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift in Sources */,
 				F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */,
 				F7911623249125230043A529 /* MageRootViewTests.swift in Sources */,
+				F7F118222602A1F600C7DE9A /* ObservationTests.swift in Sources */,
 				F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */,
 				F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */,
 				F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */,
