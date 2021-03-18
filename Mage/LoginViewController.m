@@ -69,8 +69,13 @@
     self.mageLabel.textColor = [UIColor brand];
     self.wandLabel.textColor = [UIColor brand];
     self.loginStatus.textColor = [UIColor secondaryText];
-    [self.serverURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
     self.versionLabel.textColor = [UIColor secondaryText];
+    
+    if (self.user) {
+        [self.serverURL setTitleColor:[UIColor secondaryText] forState:UIControlStateNormal];
+    } else {
+        [self.serverURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark -
@@ -95,6 +100,10 @@
         self.statusView.hidden = YES;
     } else {
         self.statusView.hidden = NO;
+    }
+    
+    if (self.user) {
+        self.serverURL.enabled = NO;
     }
 
     [self setupAuthentication];

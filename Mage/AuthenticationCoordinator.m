@@ -9,28 +9,31 @@
 #import "AuthenticationCoordinator.h"
 #import "LoginViewController.h"
 #import "SignUpViewController.h"
+#import "SignUpViewController_Server5.h"
 #import "IDPLoginView.h"
 #import "IDPCoordinator.h"
 #import "DisclaimerViewController.h"
-#import "MageServer.h"
+#import "MagicalRecord+MAGE.h"
 #import "Server.h"
 #import "MageOfflineObservationManager.h"
-#import "MagicalRecord+MAGE.h"
 #import "UserUtility.h"
 #import "FadeTransitionSegue.h"
-#import "ServerURLController.h"
 #import "MageSessionManager.h"
 #import "DeviceUUID.h"
 #import "AppDelegate.h"
 #import "Authentication.h"
+#import "UIColor+Mage.h"
+#import "UIColor+Hex.h"
 
-@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, ServerURLDelegate, SignUpDelegate, IDPButtonDelegate>
+@interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) MageServer *server;
+@property (strong, nonatomic) NSString *signupUsername;
+@property (strong, nonatomic) NSString *captchaToken;
+@property (strong, nonatomic) NSDictionary *signupParameters;
 @property (strong, nonatomic) id<AuthenticationDelegate> delegate;
 @property (strong, nonatomic) LoginViewController *loginView;
-@property (strong, nonatomic) ServerURLController *urlController;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
 
 @end
@@ -52,18 +55,78 @@ BOOL signingIn = YES;
 - (void) createAccount {
     signingIn = NO;
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    SignUpViewController *signupView = [[SignUpViewController alloc] initWithServer:self.server andDelegate:self];
+    
+    SignUpViewController *signupView;
+    if ([MageServer isServerVersion5]) {
+        signupView = [[SignUpViewController_Server5 alloc] initWithDelegate:self];
+    } else {
+        signupView = [[SignUpViewController alloc] initWithDelegate:self];
+    }
+    
     [self.navigationController pushViewController:signupView animated:NO];
 }
 
-- (void) signUpWithParameters:(NSDictionary *)parameters atURL:(NSURL *)url {
+- (void) getCaptcha:(NSString *) username completion:(void (^)(NSString* captcha)) completion  {
+    NSString *background = [[UIColor background] hex];
+    
+    self.signupUsername = username;
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups"]];
+    NSDictionary *parameters = @{
+                                 @"username": username,
+                                 @"background": background
+                                 };
+
+    __weak typeof(self) weakSelf = self;
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSURLSessionDataTask *task = [manager POST_TASK:[url absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
+        weakSelf.captchaToken =  [response objectForKey:@"token"];
+        completion([response objectForKey:@"captcha"]);
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Generating Captcha"
+                                                                       message:errResponse
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
+        });
+    }];
+    
+    [manager addTask:task];
+}
+
+- (void) signupWithParameters:(NSDictionary *) parameters completion:(void (^)(NSHTTPURLResponse *response)) completion  {
     __weak typeof(self) weakSelf = self;
     
-    MageSessionManager *manager = [MageSessionManager sharedManager];
-    NSURLSessionDataTask *task = [manager POST_TASK:[url absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
-        NSString *username = [response objectForKey:@"username"];
-        NSString *displayName = [response objectForKey:@"displayName"];
-        NSString *isActive = [response objectForKey:@"active"];
+    NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups/verifications"];
+
+    MageSessionManager *manager = [MageSessionManager manager];
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
+    [request setValue:[NSString stringWithFormat:@"Bearer %@", self.captchaToken] forHTTPHeaderField:@"Authorization"];
+    NSURLSessionDataTask *task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+        completion(httpResponse);
+        
+        if (error) {
+            NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Creating Account"
+                                                                           message:errResponse
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
+            });
+            
+            return;
+        }
+        
+        NSString *username = [responseObject objectForKey:@"username"];
+        NSString *displayName = [responseObject objectForKey:@"displayName"];
+        NSString *isActive = [responseObject objectForKey:@"active"];
         NSString *msg = isActive.boolValue ? @"Your account is now active." : @"An administrator must approve your account before you can login";
       
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Account Created"
@@ -78,29 +141,25 @@ BOOL signingIn = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
         });
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Creating Account"
-                                                                       message:errResponse
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        alert.accessibilityLabel = @"Error Creating Account";
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
-        });
     }];
     
     [manager addTask:task];
-
 }
 
-- (void) signUpCanceled {
+- (void) signupCanceled {
+    [self cancel];
+}
+
+- (void) captchaCanceled {
+    [self cancel];
+}
+
+- (void) cancel {
     signingIn = YES;
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController popToViewController:self.loginView animated:NO];
 }
+
 
 - (void) signinForStrategy:(NSDictionary *)strategy {
     NSString *url = [NSString stringWithFormat:@"%@/auth/%@/signin", [[MageServer baseURL] absoluteString], [strategy objectForKey:@"identifier"]];
@@ -119,19 +178,8 @@ BOOL signingIn = YES;
     }];
 }
 
-- (void) start {
-    NSURL *url = [MageServer baseURL];
-    if ([url absoluteString].length == 0) {
-        [self changeServerURL];
-        return;
-    } else {
-        __weak __typeof__(self) weakSelf = self;
-        [MageServer serverWithURL:url success:^(MageServer *mageServer) {
-            [weakSelf showLoginViewForServer:mageServer];
-        } failure:^(NSError *error) {
-            [weakSelf changeServerURLWithError: error.localizedDescription];
-        }];
-    }
+- (void) start:(MageServer *) mageServer {
+    [self showLoginViewForServer:mageServer];
 }
 
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
@@ -155,36 +203,8 @@ BOOL signingIn = YES;
     [self.navigationController pushViewController:self.loginView animated:NO];
 }
 
-- (void) changeServerURLWithError: (NSString *) error {
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error];
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    [self.navigationController pushViewController:self.urlController animated:NO];
-}
-
 - (void) changeServerURL {
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self];
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    [self.navigationController pushViewController:self.urlController animated:NO];
-}
-
-- (void) cancelSetServerURL {
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
-- (void) setServerURL:(NSURL *)url {
-    __weak __typeof__(self) weakSelf = self;
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"baseServerUrl"];
-    [MageServer serverWithURL:url success:^(MageServer *mageServer) {
-        [MagicalRecord deleteAndSetupMageCoreDataStack];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [FadeTransitionSegue addFadeTransitionToView:weakSelf.navigationController.view];
-            [weakSelf.navigationController popViewControllerAnimated:NO];
-            [weakSelf showLoginViewForServer:mageServer];
-        });
-    } failure:^(NSError *error) {
-        [weakSelf.urlController showError:error.localizedDescription];
-    }];
+    [self.delegate changeServerUrl];
 }
 
 - (BOOL) didUserChange: (NSString *) username {
@@ -192,10 +212,10 @@ BOOL signingIn = YES;
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 
-- (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationType:(AuthenticationType)authenticationType complete:(void (^)(AuthenticationStatus, NSString *))complete {
-    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:authenticationType]];
+- (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationStrategy:(NSString *) authenticationStrategy complete:(void (^)(AuthenticationStatus, NSString *))complete {
+    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:authenticationStrategy];
     if (!authenticationModule) {
-        authenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
+        authenticationModule = [self.server.authenticationModules objectForKey:@"offline"];
     }
     
     __weak __typeof__(self) weakSelf = self;
@@ -268,7 +288,7 @@ BOOL signingIn = YES;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     // if the user has already logged in offline just tell them
-    if ([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]) {
+    if ([@"offline" isEqualToString:[defaults valueForKey:@"loginType"]]) {
         UIAlertController *alert = [UIAlertController
                                     alertControllerWithTitle:@"Disconnected Login"
                                     message:@"We are still unable to connect to the server to log you in. You will continue to work offline."
@@ -284,8 +304,8 @@ BOOL signingIn = YES;
     }
     
     // If there is a stored password do this
-    id <Authentication> localAuthenticationModel = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
-    if (localAuthenticationModel) {
+    id <Authentication> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
+    if (offlineAuthenticationModel) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Disconnected Login"
                                                                        message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
                                                                 preferredStyle:UIAlertControllerStyleAlert];
@@ -314,10 +334,10 @@ BOOL signingIn = YES;
     __weak typeof(self) weakSelf = self;
 
     NSLog(@"work offline");
-    id<Authentication> localAuthenticationModule = [self.server.authenticationModules objectForKey:[Authentication authenticationTypeToString:LOCAL]];
-    [localAuthenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+    id<Authentication> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
+    [offlineAuthenticationModel loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
-            [weakSelf authenticationWasSuccessfulWithModule:localAuthenticationModule];
+            [weakSelf authenticationWasSuccessfulWithModule:offlineAuthenticationModel];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
             [weakSelf registrationWasSuccessful];
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {

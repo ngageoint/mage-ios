@@ -40,7 +40,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
         [self setCoordinate:location];
         [self setTitle:[observation primaryFeedFieldText]];
         
-        if (self.title == nil) {
+        if ([self.title length] == 0) {
             [self setTitle:@"Observation"];
         }
         [self setSubtitle:observation.timestamp.timeAgoSinceNow];
@@ -74,6 +74,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
         annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f));
     } else {
         annotationView.image = nil;
+        annotationView.frame = CGRectMake(0, 0, 0, 0);
         annotationView.centerOffset = CGPointMake(0, 0);
     }
     

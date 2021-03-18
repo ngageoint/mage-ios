@@ -18,40 +18,43 @@
 #import "ServerAuthentication.h"
 #import "Theme+UIResponder.h"
 #import "DBZxcvbn.h"
+#import "UIColor+Mage.h"
+#import "UIColor+Hex.h"
 
 @interface SignUpViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *displayName;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *username;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *password;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordConfirm;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *email;
 @property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *phone;
-@property (weak, nonatomic) IBOutlet UIView *dividerView;
-@property (weak, nonatomic) IBOutlet UIView *signupView;
-@property (weak, nonatomic) IBOutlet UIView *errorView;
-@property (strong, nonatomic) MageServer *server;
-@property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
-@property (weak, nonatomic) IBOutlet UILabel *mageVersion;
-@property (strong, nonatomic) id<SignUpDelegate> delegate;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *signupButton;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *password;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordConfirm;
+@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *captchaText;
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
+@property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
+@property (weak, nonatomic) IBOutlet UILabel *mageVersion;
+@property (strong, nonatomic) id<SignupDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *signupButton;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthText;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordText;
-
+@property (weak, nonatomic) IBOutlet WKWebView *captchaView;
+@property (weak, nonatomic) IBOutlet UIView *captchaContainer;
+@property (weak, nonatomic) IBOutlet UIButton *refreshCaptchaButton;
+@property (weak, nonatomic) IBOutlet UIView *captchaProgressView;
+@property (weak, nonatomic) IBOutlet UILabel *captchaProgressLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *captchaProgess;
 @end
 
 @implementation SignUpViewController
 
-- (instancetype) initWithServer: (MageServer *) server andDelegate: (id<SignUpDelegate>) delegate {
+- (instancetype) initWithDelegate: (id<SignupDelegate>) delegate {
     if (self = [super initWithNibName:@"SignupView" bundle:nil]) {
-        self.server = server;
         self.delegate = delegate;
     }
     return self;
@@ -78,28 +81,33 @@
     self.mageVersion.textColor = [UIColor secondaryText];
     self.signupButton.backgroundColor = [UIColor themedButton];
     self.cancelButton.backgroundColor = [UIColor themedButton];
+    self.refreshCaptchaButton.tintColor = [UIColor brand];
     self.showPassword.onTintColor = [UIColor themedButton];
     self.passwordStrengthText.textColor = [UIColor secondaryText];
     self.showPasswordText.textColor = [UIColor secondaryText];
-    
+    self.captchaContainer.layer.borderColor = [UIColor inactiveIcon].CGColor;
+    self.captchaProgressView.backgroundColor = [UIColor background];
+    self.captchaProgressLabel.textColor = [UIColor secondaryText];
+    self.captchaProgess.color = [UIColor secondaryText];
+
     [self themeTextField:self.username];
     [self themeTextField:self.displayName];
-    [self themeTextField:self.password];
-    [self themeTextField:self.passwordConfirm];
     [self themeTextField:self.email];
     [self themeTextField:self.phone];
-    
+    [self themeTextField:self.password];
+    [self themeTextField:self.passwordConfirm];
+    [self themeTextField:self.captchaText];
+        
     self.username.iconText = @"\U0000f007";
-    self.password.iconText = @"\U0000f084";
-    self.passwordConfirm.iconText = @"\U0000f084";
     self.email.iconText = @"\U0000f0e0";
     self.phone.iconText = @"\U0000f095";
     self.displayName.iconText = @"\U0000f2bc";
+    self.password.iconText = @"\U0000f084";
+    self.passwordConfirm.iconText = @"\U0000f084";
+    self.captchaText.iconText = @"\U0000f00c";
     
-    if ([self.server serverHasLocalAuthenticationStrategy]) {
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-    }
+    self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
 }
 
 #pragma mark -
@@ -108,20 +116,15 @@
     [super viewDidLoad];
     
     [self registerForThemeChanges];
-        
-    [self setupAuthentication];
     
     self.zxcvbn = [[DBZxcvbn alloc] init];
-
+            
     self.wandLabel.text = @"\U0000f0d0";
     
     self.password.delegate = self;
     
-    if ([self.server serverHasLocalAuthenticationStrategy]) {
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
-    }
-    
+    self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
+    self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [UIColor secondaryText]}];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
@@ -164,29 +167,24 @@
         [self.passwordStrengthBar setProgress:(1+passwordStrength.score)/5.0];
         switch (passwordStrength.score) {
             case 0:
-                // weak
                 self.passwordStrengthLabel.text = @"Weak";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(244.0/255.0) green:(67.0/255.0) blue:(54.0/255.0) alpha:1];
                 break;
             case 1:
-                // fair
                 self.passwordStrengthLabel.text = @"Fair";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(152/255.0) blue:0.0 alpha:1];
                 break;
             case 2:
-                // good
                 self.passwordStrengthLabel.text = @"Good";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:1.0 green:(193.0/255.0) blue:(7.0/255.0) alpha:1];
                 
                 break;
             case 3:
-                // strong
                 self.passwordStrengthLabel.text = @"Strong";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(33.0/255.0) green:(150.0/255.0) blue:(243.0/255.0) alpha:1];
                 
                 break;
             case 4:
-                // excell
                 self.passwordStrengthLabel.text = @"Excellent";
                 self.passwordStrengthBar.progressTintColor = self.passwordStrengthLabel.textColor = [UIColor colorWithRed:(76.0/255.0) green:(175.0/255.0) blue:(80.0/255.0) alpha:1];
                 break;
@@ -203,6 +201,36 @@
     
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [self.mageVersion setText:[NSString stringWithFormat:@"v%@", versionString]];
+}
+
+- (IBAction)onUsernameChanged:(id)sender {
+    __weak typeof(self) weakSelf = self;
+    [self.delegate getCaptcha:self.username.text completion:^(NSString *captcha) {
+        [weakSelf setCaptcha:captcha];
+    }];
+}
+
+- (void) getCaptcha {
+    __weak typeof(self) weakSelf = self;
+    self.captchaProgressView.hidden = NO;
+    [self.delegate getCaptcha:self.username.text completion:^(NSString *captcha) {
+        [weakSelf setCaptcha:captcha];
+        weakSelf.captchaProgressView.hidden = YES;
+    }];
+}
+
+- (void) setCaptcha:(NSString *) captcha {
+    if (captcha == nil) {
+        self.captchaView.hidden = YES;
+        self.refreshCaptchaButton.hidden = YES;
+        return;
+    }
+    
+    self.captchaView.hidden = NO;
+    self.refreshCaptchaButton.hidden = NO;
+    NSString *htmlTemplate = @"<html style=\"overflow: hidden\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, shrink-to-fit=no\"></head><body style=\"background-color: %@\";><div style=\"width:100%%; height:100%%;\"><img style=\"width:100%%; height:100%%;\" alt=\"\" src=\"%@\"></img><div></body></html>";
+    NSString *htmlString = [NSString stringWithFormat:htmlTemplate, [[UIColor background] hex], captcha];
+    [self.captchaView loadHTMLString:htmlString baseURL:nil];
 }
 
 - (IBAction) onSignup:(id) sender {
@@ -234,22 +262,43 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     } else {
-        // delegate signup
-        
-        // All fields validated
-        
         NSDictionary *parameters = @{
                                      @"username": [self.username.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
                                      @"displayName": [self.displayName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
                                      @"email": [self.email.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
                                      @"phone": [self.phone.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
                                      @"password": [self.password.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
-                                     @"passwordconfirm": [self.passwordConfirm.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+                                     @"passwordconfirm": [self.passwordConfirm.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]],
+                                     @"captchaText": [self.captchaText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
                                      };
         
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users"]];
-        [self.delegate signUpWithParameters:parameters atURL:url];
+        __weak typeof(self) weakSelf = self;
+        [self.delegate signupWithParameters:parameters completion:^(NSHTTPURLResponse *response) {
+            if (response.statusCode == 401) {
+                [weakSelf getCaptcha];
+            } else if (response.statusCode == 409) {
+                weakSelf.captchaText.text = @"";
+                weakSelf.username.errorMessage = @"Username is not available";
+                [weakSelf setCaptcha:nil];
+                UIAlertController * alert = [UIAlertController
+                                             alertControllerWithTitle:[NSString stringWithFormat:@"Username is not availble"]
+                                             message:[NSString stringWithFormat:@"Please choose a different username and try again."]
+                                             preferredStyle:UIAlertControllerStyleAlert];
+                
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+                
+            }
+        }];
     }
+}
+
+- (IBAction) onRefreshCaptcha:(id)sender {
+    [self getCaptcha];
+}
+
+- (IBAction) onCancel:(id) sender {
+    [self.delegate signupCanceled];
 }
 
 - (IBAction)showPasswordChanged:(id)sender {
@@ -270,10 +319,6 @@
     self.passwordConfirm.font = [UIFont systemFontOfSize:14];
 }
 
-- (IBAction) onCancel:(id) sender {
-    [self.delegate signUpCanceled];
-}
-
 - (void) markFieldError: (SkyFloatingLabelTextFieldWithIcon *) field {
     field.errorMessage = field.placeholder;
 }
@@ -287,11 +332,5 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
-
-- (void) setupAuthentication {
-    BOOL localAuthentication = [self.server serverHasLocalAuthenticationStrategy];
-    self.signupView.hidden = !localAuthentication;
-}
-
 
 @end

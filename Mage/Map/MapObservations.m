@@ -98,7 +98,7 @@
     [self clearShapeAnnotation];
     if ([shapeAnnotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *annotation = (ObservationAnnotation *) shapeAnnotation;
-        annotation.selected = YES;
+        [_mapView selectAnnotation:annotation animated:YES];
     }
     _shapeAnnotation = shapeAnnotation;
     _shapeObservation = shapeObservation;

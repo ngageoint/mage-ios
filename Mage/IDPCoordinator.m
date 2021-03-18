@@ -50,7 +50,7 @@
 }
 
 - (void) cleanup {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mageAppLinkNotification:) name:@"MageAppLink" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MageAppLink" object:nil];
 }
 
 - (void) mageAppLinkNotification:(NSNotification *) notification {
@@ -91,7 +91,7 @@
                                  };
     
     [self.safariViewController dismissViewControllerAnimated:YES completion:nil];
-    [self.delegate loginWithParameters:parameters withAuthenticationType:IDP complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+    [self.delegate loginWithParameters:parameters withAuthenticationStrategy:[self.strategy objectForKey:@"identifier"] complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         NSLog(@"Authentication complete %ld", (long)authenticationStatus);
     }];
 }

@@ -210,8 +210,8 @@ static const NSInteger LEGAL_SECTION = 8;
     offlineLabel.clipsToBounds = true;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL isLocalLogin = [[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]];
-    NSArray *connectionRows = isLocalLogin ? @[
+    BOOL isOfflineLogin = [@"offline" isEqualToString:[defaults valueForKey:@"loginType"]];
+    NSArray *connectionRows = isOfflineLogin ? @[
                                                @{
                                                    @"type": [NSNumber numberWithInteger:kConnection],
                                                    @"style": [NSNumber numberWithInteger:UITableViewCellStyleDefault],

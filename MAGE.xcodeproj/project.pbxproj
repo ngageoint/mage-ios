@@ -54,7 +54,7 @@
 		2F3826B01D9C252D007E0D75 /* ObservationImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3826AF1D9C252D007E0D75 /* ObservationImportantTableViewCell.m */; };
 		2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38DF1622B942C800485DA4 /* LdapLoginView.m */; };
 		2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F38DF1D22B957C300485DA4 /* ldap-authView.xib */; };
-		2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */; };
+		2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B20CD25FA69950063A940 /* UIColor+Hex.m */; };
 		2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E1099220CA195001C9F12 /* AttributionCell.xib */; };
 		2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */; };
 		2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */; };
@@ -73,6 +73,7 @@
 		2F5F2E9B19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5F2E9A19DDE896005BA157 /* MapCalloutTappedDelegate_iPhone.m */; };
 		2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F763C8F1DD10D2900780250 /* SettingsViewController.m */; };
 		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
+		2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D5D8B26025A9800886844 /* SignUpViewController_Server5.m */; };
 		2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4231C692C30006897E7 /* AttributionsViewController.m */; };
 		2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */; };
 		2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C0B21FFA572007FE473 /* SettingsDataSource.m */; };
@@ -99,6 +100,7 @@
 		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
 		2FC590401DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC5903F1DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m */; };
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
+		2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */; };
 		2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC99DC41DDA30C5003C1D36 /* UserDataStore.m */; };
 		2FC99DC81DDA335A003C1D36 /* UserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC99DC71DDA335A003C1D36 /* UserTableViewController.m */; };
 		2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FCB1AC81DDA439700A63C71 /* Users.storyboard */; };
@@ -473,8 +475,8 @@
 		2F38DF1522B942C800485DA4 /* LdapLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LdapLoginView.h; sourceTree = "<group>"; };
 		2F38DF1622B942C800485DA4 /* LdapLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LdapLoginView.m; sourceTree = "<group>"; };
 		2F38DF1D22B957C300485DA4 /* ldap-authView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ldap-authView.xib"; sourceTree = "<group>"; };
-		2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
-		2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
+		2F3B20CC25FA69950063A940 /* UIColor+Hex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
+		2F3B20CD25FA69950063A940 /* UIColor+Hex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		2F4E1099220CA195001C9F12 /* AttributionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttributionCell.xib; sourceTree = "<group>"; };
 		2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Disclaimer.xib; sourceTree = "<group>"; };
 		2F4E10A2220CCF39001C9F12 /* UITableViewCell+Setting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Setting.h"; sourceTree = "<group>"; };
@@ -504,6 +506,9 @@
 		2F763C8E1DD10D2900780250 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2F763C8F1DD10D2900780250 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		2F7AB0C01D12EF91006F99FC /* set_build_number.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = set_build_number.sh; path = Scripts/set_build_number.sh; sourceTree = "<group>"; };
+		2F7D5D642602566B00886844 /* SignupDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignupDelegate.h; sourceTree = "<group>"; };
+		2F7D5D8A26025A9800886844 /* SignUpViewController_Server5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignUpViewController_Server5.h; sourceTree = "<group>"; };
+		2F7D5D8B26025A9800886844 /* SignUpViewController_Server5.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController_Server5.m; sourceTree = "<group>"; };
 		2F81C4221C692C30006897E7 /* AttributionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributionsViewController.h; sourceTree = "<group>"; };
 		2F81C4231C692C30006897E7 /* AttributionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributionsViewController.m; sourceTree = "<group>"; };
 		2F81C4251C692F86006897E7 /* AttributionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributionTableViewCell.h; sourceTree = "<group>"; };
@@ -552,6 +557,8 @@
 		2FC590411DC26D04003F60C7 /* ObservationImportantDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportantDelegate.h; sourceTree = "<group>"; };
 		2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+PersonIcon.h"; sourceTree = "<group>"; };
 		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
+		2FC8BB8C2602421400F73B0E /* AuthenticationCoordinator_Server5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator_Server5.h; sourceTree = "<group>"; };
+		2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCoordinator_Server5.m; sourceTree = "<group>"; };
 		2FC99DC31DDA30C5003C1D36 /* UserDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataStore.h; sourceTree = "<group>"; };
 		2FC99DC41DDA30C5003C1D36 /* UserDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataStore.m; sourceTree = "<group>"; };
 		2FC99DC61DDA335A003C1D36 /* UserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTableViewController.h; sourceTree = "<group>"; };
@@ -892,8 +899,6 @@
 		F7D6E2BF1980416B00A71FB0 /* ObservationDateTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationDateTableViewCell.h; sourceTree = "<group>"; };
 		F7D6E2C01980416B00A71FB0 /* ObservationDateTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationDateTableViewCell.m; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
-		F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpDelegate.h; sourceTree = "<group>"; };
-		F7D9B82A248E7FB4008DC568 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedWiFiTableViewController.h; sourceTree = "<group>"; };
@@ -1091,15 +1096,6 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
-		2F4551831BA33A7700EE3DA6 /* Date */ = {
-			isa = PBXGroup;
-			children = (
-				2F4551841BA33ABE00EE3DA6 /* NSDate+display.h */,
-				2F4551851BA33ABE00EE3DA6 /* NSDate+display.m */,
-			);
-			name = Date;
-			sourceTree = "<group>";
-		};
 		2F4E10BA220E388A001C9F12 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1139,6 +1135,25 @@
 			name = Filter;
 			sourceTree = "<group>";
 		};
+		2FC8BB932602428300F73B0E /* Server5 */ = {
+			isa = PBXGroup;
+			children = (
+				2FC8BB942602428C00F73B0E /* Authentication */,
+			);
+			name = Server5;
+			sourceTree = "<group>";
+		};
+		2FC8BB942602428C00F73B0E /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				2FC8BB8C2602421400F73B0E /* AuthenticationCoordinator_Server5.h */,
+				2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */,
+				2F7D5D8A26025A9800886844 /* SignUpViewController_Server5.h */,
+				2F7D5D8B26025A9800886844 /* SignUpViewController_Server5.m */,
+			);
+			name = Authentication;
+			sourceTree = "<group>";
+		};
 		2FD853701BDAAB2300602CEA /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
@@ -1159,12 +1174,12 @@
 				F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */,
 				F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
-				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 				2F2F58F41BFA504B00B78993 /* ServerURLController.h */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.m */,
-				F7D6EFB41F6AD7C5000D5BDA /* SignUpDelegate.h */,
+				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
+				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1211,6 +1226,8 @@
 				F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */,
 				2FCDC35122C27B9C004189AD /* UIColor+Adjust.h */,
 				2FCDC35222C27B9C004189AD /* UIColor+Adjust.m */,
+				2F3B20CC25FA69950063A940 /* UIColor+Hex.h */,
+				2F3B20CD25FA69950063A940 /* UIColor+Hex.m */,
 				2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */,
 				2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */,
 				F76A15D11A96536700F2BDF1 /* UIImageView+IB.h */,
@@ -1800,6 +1817,7 @@
 			isa = PBXGroup;
 			children = (
 				F7DB714B2486D79C00A7CD00 /* Feed */,
+				2FC8BB932602428300F73B0E /* Server5 */,
 				F77ECB6C242E53220030EE73 /* ImageUtilities */,
 				F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */,
 				F75A10DF204856C7002F9906 /* Theme */,
@@ -1807,7 +1825,6 @@
 				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
 				F7FC59281F3CEDEB0010351A /* Form */,
 				2FD853701BDAAB2300602CEA /* Authentication */,
-				2F4551831BA33A7700EE3DA6 /* Date */,
 				F76949131AA6434A00CB680B /* Event */,
 				2FF467091A12794000BA8357 /* Categories */,
 				F727516B19C888A3006C63CB /* Fetch */,
@@ -2355,23 +2372,23 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/mage-ios-sdk.momd",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model10To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model11To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model12To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model13To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model14To16.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model15To16.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model1To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model2To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model3To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model4To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model5To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model6To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model7To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model8To15.cdm",
+				"${BUILT_PRODUCTS_DIR}/mage-ios-sdk/mage_ios_sdk.framework/Model9To15.cdm",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -2439,6 +2456,7 @@
 			files = (
 				2FB4A0A31D999FEE00797C18 /* ObservationActionsTableViewCell.m in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
+				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
 				F7859743206BD50800C68A23 /* AutoSunriseSunsetTheme.m in Sources */,
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
@@ -2529,6 +2547,7 @@
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
 				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
+				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				2FC590401DC26C5F003F60C7 /* ObservationAddImportantTableViewCell.m in Sources */,
 				2FC99DC81DDA335A003C1D36 /* UserTableViewController.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
@@ -2574,6 +2593,7 @@
 				2F5F2E9419DDC7F5005BA157 /* MapCalloutTappedSegueDelegate.m in Sources */,
 				F70DA76619A3C16500D7A3B9 /* ObservationEditTableViewCell.m in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
+				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				F70DA76319A3BC7100D7A3B9 /* ObservationEditTableViewController.m in Sources */,
@@ -2594,7 +2614,6 @@
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				2FB46F9B1D02180200D1E5E7 /* ObservationMultiSelectTableViewCell.m in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
-				2F4551861BA33ABE00EE3DA6 /* NSDate+display.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F76A15CA1A962ED700F2BDF1 /* ObservationMapTableViewCell.m in Sources */,
