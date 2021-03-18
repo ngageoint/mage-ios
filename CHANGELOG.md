@@ -3,6 +3,34 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 2.1.3
+
+##### Release Notes
+
+##### Features
+* Local user signup captcha
+
+##### Bug Fixes
+
+## 2.1.2
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Pull in new mage-ios-sdk to fix crash when translating feed fields to strings.
+* Fix bug showing polygon/polyline map callout.
+
+## 2.1.1
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* Update mage-ios-sdk dependency fixing issues with third party login.
+
 ## 2.1.0
 
 ##### Release Notes
@@ -16,6 +44,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Bug Fixes
 * Fix GeoPackage layer selection on iOS 14.
+* Support for iOS 14 date picker.
 
 ## 2.0.19 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.19)
 

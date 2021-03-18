@@ -8,18 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import <MaterialComponents/MaterialContainerScheme.h>
+#import "MageServer.h"
 
 @protocol AuthenticationDelegate
 
 - (void) authenticationSuccessful;
 - (void) couldNotAuthenticate;
+- (void) changeServerUrl;
 
 @end
 
 @interface AuthenticationCoordinator : NSObject
 
 - (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
-- (void) start;
+- (void) start:(MageServer *) mageServer;
 - (void) startLoginOnly;
-
 @end

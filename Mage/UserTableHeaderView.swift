@@ -245,20 +245,20 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         mapDelegate.locations = Locations.init(for: user);
         
         if (currentUserIsMe) {
-            let locations: [GPSLocation] = GPSLocation.fetchLastXGPSLocations(1)
-            if locations.count != 0 {
-                let location: GPSLocation = locations[0]
-                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
-                let dictionary: [String : Any] = location.properties as! [String : Any];
-                userLastLocation = CLLocation(
-                    coordinate: CLLocationCoordinate2D(
-                        latitude: centroid.y as! CLLocationDegrees,
-                        longitude: centroid.x as! CLLocationDegrees),
-                    altitude: dictionary["altitude"] as! CLLocationDistance,
-                    horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
-                    verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
-                    timestamp: location.timestamp!);
-                self.mapDelegate.update(location, for: user);
+            if let locations: [GPSLocation]? = GPSLocation.fetchLastXGPSLocations(1) {
+                if locations?.count != 0, let location: GPSLocation = locations?[0] {
+                    let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
+                    let dictionary: [String : Any] = location.properties as! [String : Any];
+                    userLastLocation = CLLocation(
+                        coordinate: CLLocationCoordinate2D(
+                            latitude: centroid.y as! CLLocationDegrees,
+                            longitude: centroid.x as! CLLocationDegrees),
+                        altitude: dictionary["altitude"] as! CLLocationDistance,
+                        horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
+                        verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
+                        timestamp: location.timestamp!);
+                    self.mapDelegate.update(location, for: user);
+                }
             }
             
         }

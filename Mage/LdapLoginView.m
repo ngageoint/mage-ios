@@ -195,7 +195,7 @@
                                 nil];
     
     __weak __typeof__(self) weakSelf = self;
-    [self.delegate loginWithParameters:parameters withAuthenticationType:LDAP complete:^(AuthenticationStatus authenticationStatus, NSString *message) {
+    [self.delegate loginWithParameters:parameters withAuthenticationStrategy:[self.strategy objectForKey:@"identifier"] complete:^(AuthenticationStatus authenticationStatus, NSString *message) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf resetLogin:YES];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
