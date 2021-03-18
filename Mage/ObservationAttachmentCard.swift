@@ -57,10 +57,7 @@ class ObservationAttachmentCard: MDCCard {
     }
     
     func buildView() {
-        // for legacy servers add the attachment field to common
-        if (MageServer.isServerVersion5()) {
-            self.addSubview(attachmentView);
-        }
+        self.addSubview(attachmentView);
     }
 }
 
