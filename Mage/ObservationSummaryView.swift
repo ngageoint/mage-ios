@@ -164,7 +164,7 @@ class ObservationSummaryView: UIView {
         // we do not want the date to word break so we replace all spaces with a non word breaking spaces
         var timeText = "";
         if let itemDate: NSDate = observation.timestamp as NSDate? {
-            timeText = itemDate.formattedDisplayDate(withDateStyle: .medium, andTime: .short)?.uppercased().replacingOccurrences(of: " ", with: "\u{00a0}") ?? "";
+            timeText = itemDate.formattedDisplayDate(withDateStyle: .medium, andTime: .short).uppercased().replacingOccurrences(of: " ", with: "\u{00a0}") ;
         }
         timestamp.text = "\(observation.user?.name?.uppercased() ?? "") \u{2022} \(timeText)";
         

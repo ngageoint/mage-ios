@@ -15,11 +15,12 @@ PODS:
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - DateTools (2.0.0)
-  - geopackage-ios (4.0.1):
-    - ogc-api-features-json-ios (~> 1.0.0)
-    - sf-proj-ios (~> 2.0.3)
-    - sf-wkb-ios (~> 2.0.3)
-    - tiff-ios (~> 1.1.2)
+  - geopackage-ios (5.0.0):
+    - ogc-api-features-json-ios (~> 2.0.0)
+    - sf-proj-ios (~> 3.0.0)
+    - sf-wkb-ios (~> 3.0.0)
+    - sf-wkt-ios (~> 1.0.0)
+    - tiff-ios (~> 2.0.0)
   - HexColors (2.2.1)
   - iOSSnapshotTestCase (6.2.0):
     - iOSSnapshotTestCase/SwiftSupport (= 6.2.0)
@@ -33,10 +34,10 @@ PODS:
     - Kingfisher/Core (= 5.15.8)
   - Kingfisher/Core (5.15.8)
   - libPhoneNumber-iOS (0.9.15)
-  - mage-ios-sdk (3.1.0):
+  - mage-ios-sdk (3.1.2):
     - AFNetworking (~> 4.0.1)
     - DateTools (~> 2.0.0)
-    - geopackage-ios (~> 4.0.1)
+    - geopackage-ios (~> 5.0.0)
     - MagicalRecord (~> 2.3.2)
     - SSZipArchive (~> 2.2.2)
   - MagicalRecord (2.3.2):
@@ -690,8 +691,8 @@ PODS:
     - iOSSnapshotTestCase (~> 6.0)
     - Nimble
   - OCMock (3.8.1)
-  - ogc-api-features-json-ios (1.0.0):
-    - sf-geojson-ios (~> 1.0.0)
+  - ogc-api-features-json-ios (2.0.0):
+    - sf-geojson-ios (~> 2.0.0)
   - OHHTTPStubs (9.1.0):
     - OHHTTPStubs/Default (= 9.1.0)
   - OHHTTPStubs/Core (9.1.0)
@@ -710,16 +711,18 @@ PODS:
   - proj4-ios (4.9.3)
   - PureLayout (3.1.7)
   - Quick (3.1.2)
-  - sf-geojson-ios (1.0.0):
-    - sf-ios (~> 2.0.3)
-  - sf-ios (2.0.3)
-  - sf-proj-ios (2.0.3):
+  - sf-geojson-ios (2.0.0):
+    - sf-ios (~> 3.0.0)
+  - sf-ios (3.0.0)
+  - sf-proj-ios (3.0.0):
     - proj4-ios (~> 4.9.3)
-    - sf-ios (~> 2.0.3)
-  - sf-wkb-ios (2.0.3):
-    - sf-ios (~> 2.0.3)
+    - sf-ios (~> 3.0.0)
+  - sf-wkb-ios (3.0.0):
+    - sf-ios (~> 3.0.0)
+  - sf-wkt-ios (1.0.0):
+    - sf-ios (~> 3.0.0)
   - SSZipArchive (2.2.3)
-  - tiff-ios (1.1.2)
+  - tiff-ios (2.0.0)
   - UIImage-Categories (0.0.1)
   - zxcvbn-ios (1.0.4)
 
@@ -772,6 +775,7 @@ SPEC REPOS:
     - sf-ios
     - sf-proj-ios
     - sf-wkb-ios
+    - sf-wkt-ios
     - SSZipArchive
     - tiff-ios
     - UIImage-Categories
@@ -784,13 +788,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
-  geopackage-ios: 43f401e530b9db603f603c214ce3d1e5e005444c
+  geopackage-ios: 3400382233eb2f76620f9ee4dd2e7ab2c4b072cf
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   KIF: e4f9e59e48879e28e00883db063e47b40a9bb3a3
   Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
-  mage-ios-sdk: 4c23776e4893d486334be3e2345370bcf2c27111
+  mage-ios-sdk: 3b170c7dba736b892bf07e46c0bbb0dd3b87f1a1
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   MaterialComponents: bdbe76d0fad6669ebd581267bb42b758c9c95138
   MDFInternationalization: 010097556d6b09d2c4ea38e0820ea6d37be6a314
@@ -801,17 +805,18 @@ SPEC CHECKSUMS:
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
   OCMock: 29f6e52085b4e7d9b075cbf03ed7c3112f82f934
-  ogc-api-features-json-ios: 2f733b450d22a73517a5e86fd9241747e039ccb0
+  ogc-api-features-json-ios: d306af8b4400fda9dfd5132ae5046b668cec6aa4
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
   PureLayout: e9e5921347547e1068333f3149e737c972cb6037
   Quick: 60f0ea3b8e0cfc0df3259a5c06a238ad8b3c46e0
-  sf-geojson-ios: ef76082c7fac4e594b35e1016113d0dbe164b730
-  sf-ios: 4ca0618351be80afac4e0961860d632dd85ab739
-  sf-proj-ios: 9f33d6b85d63de2a7d7624cc41254e111ff6fb78
-  sf-wkb-ios: 083ded71420534d4fe0aef28060441b7bbf2e724
+  sf-geojson-ios: f51ebe88dec62f2795c73d919d14c03c02b70f8d
+  sf-ios: 03d349316c62d9602e354bde667427c640c5df7b
+  sf-proj-ios: 3beec338d06f06abebea3732db420f8b22c9a595
+  sf-wkb-ios: 36afa0b22985655bed6000182136a1adc760f8ea
+  sf-wkt-ios: 38ea73e64c36d2b31ee0d2fe5d0b5516b9e5e8bd
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
-  tiff-ios: f8a47e6aa20fc0d5833041ba5e39b1ab6e187f2e
+  tiff-ios: f6e34155f542cf83d9b817327e4a0a4ad0e1b4f8
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 

@@ -211,7 +211,7 @@ import Kingfisher
     }
     
     func setServerConnectionStatus() {
-        if ("offline" == UserDefaults.Authentication.string(forKey: .loginType)) {
+        if ("offline" == UserDefaults.standard.loginType) {
             moreTabBarItem?.badgeValue = "!";
             moreTabBarItem?.badgeColor = UIColor.systemOrange;
         } else {

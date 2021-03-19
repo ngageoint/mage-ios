@@ -22,7 +22,6 @@
 #import "DeviceUUID.h"
 #import "AppDelegate.h"
 #import "Authentication.h"
-#import "UIColor+Mage.h"
 #import "UIColor+Hex.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
@@ -69,7 +68,7 @@ BOOL signingIn = YES;
 }
 
 - (void) getCaptcha:(NSString *) username completion:(void (^)(NSString* captcha)) completion  {
-    NSString *background = [[UIColor background] hex];
+    NSString *background = [self.scheme.colorScheme.surfaceColor hex];
     
     self.signupUsername = username;
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups"]];

@@ -96,13 +96,13 @@
 
 - (void) changeServerUrl {
     [self.navigationController popToRootViewControllerAnimated:NO];
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self andScheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) setServerURLWithError: (NSString *) error {
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error andScheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }

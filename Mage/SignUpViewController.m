@@ -16,7 +16,6 @@
 #import "NBAsYouTypeFormatter.h"
 #import "ServerAuthentication.h"
 #import "DBZxcvbn.h"
-#import "UIColor+Mage.h"
 #import "UIColor+Hex.h"
 
 @interface SignUpViewController () <UITextFieldDelegate>
@@ -27,13 +26,14 @@
 @property (weak, nonatomic) IBOutlet MDCTextField *passwordConfirm;
 @property (weak, nonatomic) IBOutlet MDCTextField *email;
 @property (weak, nonatomic) IBOutlet MDCTextField *phone;
+@property (weak, nonatomic) IBOutlet MDCTextField *captchaText;
 @property (strong, nonatomic) MDCTextInputControllerUnderline *displayNameController;
 @property (strong, nonatomic) MDCTextInputControllerUnderline *usernameController;
 @property (strong, nonatomic) MDCTextInputControllerUnderline *passwordController;
 @property (strong, nonatomic) MDCTextInputControllerUnderline *passwordConfirmController;
 @property (strong, nonatomic) MDCTextInputControllerUnderline *emailController;
 @property (strong, nonatomic) MDCTextInputControllerUnderline *phoneController;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *captchaText;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *captchaController;
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
@@ -91,32 +91,26 @@
     [self themeTextField:self.passwordConfirm controller:self.passwordConfirmController];
     [self themeTextField:self.email controller:self.emailController];
     [self themeTextField:self.phone controller:self.phoneController];
+    [self themeTextField:self.captchaText controller:self.captchaController];
 
-    // update this to mdc text fields
-    self.captchaContainer.layer.borderColor = [UIColor inactiveIcon].CGColor;
-    self.captchaProgressView.backgroundColor = [UIColor background];
-    self.captchaProgressLabel.textColor = [UIColor secondaryText];
-    self.captchaProgess.color = [UIColor secondaryText];
+    self.captchaProgressView.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.captchaProgressLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.captchaProgess.color = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 
-    [self themeSkyTextField:self.captchaText];
-    self.captchaText.iconText = @"\U0000f00c";
-    
-    if ([self.server serverHasLocalAuthenticationStrategy]) {
-        self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
-        self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
-    }
+    self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
+    self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
+    [self updateCGColors];
 }
 
-- (void) themeSkyTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [UIColor primaryText];
-    field.selectedLineColor = [UIColor brand];
-    field.selectedTitleColor = [UIColor brand];
-    field.placeholderColor = [UIColor secondaryText];
-    field.lineColor = [UIColor secondaryText];
-    field.titleColor = [UIColor secondaryText];
-    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
-    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+// this method updates the CG colors in reaction to a trait collection change
+// CG Colors do not automtaically update themselves when the device changes from light to dark mode
+- (void) updateCGColors {
+    self.captchaContainer.layer.borderColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6].CGColor;
 }
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    [self updateCGColors];
 }
 
 - (void) themeTextField: (MDCTextField *) field controller: (MDCTextInputControllerUnderline *) controller {
@@ -194,8 +188,15 @@
     self.passwordConfirmController.placeholderText = @"Confirm Password *";
     self.passwordConfirmController.floatingEnabled = true;
     
+    self.captchaController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.captchaText];
+    UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"done"]];
+    [self addLeadingIconConstraints:captchaImage];
+    [self.captchaText setLeadingView:captchaImage];
+    self.captchaText.leadingViewMode = UITextFieldViewModeAlways;
+    self.captchaText.accessibilityLabel = @"Captcha";
+    self.captchaController.placeholderText = @"Captcha Text *";
+    self.captchaController.floatingEnabled = true;
     
-    [self setupAuthentication];
     self.zxcvbn = [[DBZxcvbn alloc] init];
     self.wandLabel.text = @"\U0000f0d0";
     self.password.delegate = self;
@@ -305,7 +306,7 @@
     self.captchaView.hidden = NO;
     self.refreshCaptchaButton.hidden = NO;
     NSString *htmlTemplate = @"<html style=\"overflow: hidden\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, shrink-to-fit=no\"></head><body style=\"background-color: %@\";><div style=\"width:100%%; height:100%%;\"><img style=\"width:100%%; height:100%%;\" alt=\"\" src=\"%@\"></img><div></body></html>";
-    NSString *htmlString = [NSString stringWithFormat:htmlTemplate, [[UIColor background] hex], captcha];
+    NSString *htmlString = [NSString stringWithFormat:htmlTemplate, [self.scheme.colorScheme.surfaceColor hex], captcha];
     [self.captchaView loadHTMLString:htmlString baseURL:nil];
 }
 
@@ -357,7 +358,7 @@
                 [weakSelf getCaptcha];
             } else if (response.statusCode == 409) {
                 weakSelf.captchaText.text = @"";
-                weakSelf.username.errorMessage = @"Username is not available";
+                [weakSelf markFieldError:self.captchaController errorText: @"Username is not available"];
                 [weakSelf setCaptcha:nil];
                 UIAlertController * alert = [UIAlertController
                                              alertControllerWithTitle:[NSString stringWithFormat:@"Username is not availble"]
@@ -395,7 +396,7 @@
 }
 
 - (IBAction) onCancel:(id) sender {
-    [self.delegate signUpCanceled];
+    [self.delegate signupCanceled];
 }
 
 - (void) clearFieldErrors {
@@ -405,6 +406,7 @@
     [self.passwordConfirmController setErrorText:nil errorAccessibilityValue:nil];
     [self.emailController setErrorText:nil errorAccessibilityValue:nil];
     [self.phoneController setErrorText:nil errorAccessibilityValue:nil];
+    [self.captchaController setErrorText:nil errorAccessibilityValue:nil];
 }
 
 - (void) markFieldError: (MDCTextInputControllerUnderline *) field errorText: (NSString *) errorText {
