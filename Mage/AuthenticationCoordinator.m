@@ -78,7 +78,7 @@ BOOL signingIn = YES;
                                  };
 
     __weak typeof(self) weakSelf = self;
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager POST_TASK:[url absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         weakSelf.captchaToken =  [response objectForKey:@"token"];
         completion([response objectForKey:@"captcha"]);

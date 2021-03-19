@@ -39,7 +39,7 @@
 - (void) signupWithParameters:(NSDictionary *) parameters completion:(void (^)(NSHTTPURLResponse *response)) completion  {
     __weak typeof(self) weakSelf = self;
     
-    MageSessionManager *manager = [MageSessionManager manager];
+    MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users"]];
     NSURLSessionDataTask *task = [manager POST_TASK:[url absoluteString] parameters:parameters progress:nil success:^(NSURLSessionTask *task, id response) {
         NSString *username = [response objectForKey:@"username"];
