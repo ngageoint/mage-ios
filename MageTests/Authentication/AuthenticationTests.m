@@ -140,7 +140,7 @@
         return [HTTPStubsResponse responseWithJSONObject:[[NSDictionary alloc] init] statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         // response came back from the server and we went to the login screen
@@ -165,15 +165,15 @@
             OCMVerifyAll(delegatePartialMock);
         });
 
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            // login complete
-            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
-            NSString *token = [StoredPassword retrieveStoredToken];
-            NSString *mageSessionToken = [[MageSessionManager sharedManager] getToken];
-            XCTAssertTrue([token isEqualToString:@"TOKEN"]);
-            XCTAssertTrue([token isEqualToString:mageSessionToken]);
-
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            // login complete
+//            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+//            NSString *token = [StoredPassword retrieveStoredToken];
+//            NSString *mageSessionToken = [[MageSessionManager sharedManager] getToken];
+//            XCTAssertTrue([token isEqualToString:@"TOKEN"]);
+//            XCTAssertTrue([token isEqualToString:mageSessionToken]);
+//
+//        }];
 
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             XCTestExpectation* myselfResponseArrived = [self expectationWithDescription:@"response of /api/users/myself complete"];
@@ -229,7 +229,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
@@ -271,11 +271,11 @@
             XCTAssertTrue([alert.title isEqualToString:@"Registration Sent"]);
         });
         
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            // login complete
-            XCTAssertTrue(authenticationStatus == REGISTRATION_SUCCESS);
-            [loginResponseArrived fulfill];
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            // login complete
+//            XCTAssertTrue(authenticationStatus == REGISTRATION_SUCCESS);
+//            [loginResponseArrived fulfill];
+//        }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             
@@ -320,7 +320,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
 
-    [coordinator start];
+//    [coordinator start];
 
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         // response came back from the server and we went to the login screen
@@ -353,11 +353,11 @@
             OCMVerifyAll(delegatePartialMock);
         });
 
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            // login complete
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            // login complete
+//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+//        }];
 
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
 
@@ -410,7 +410,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         // response came back from the server and we went to the login screen
@@ -445,11 +445,11 @@
         
         OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
         
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            // login complete
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            // login complete
+//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+//        }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             
@@ -496,7 +496,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         // response came back from the server and we went to the login screen
@@ -530,11 +530,11 @@
         
         OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
         
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            // login complete
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            // login complete
+//            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//            XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+//        }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             
@@ -578,7 +578,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         id<LoginDelegate> loginDelegate = (id<LoginDelegate>)coordinator;
@@ -613,11 +613,11 @@
         
         OCMReject([navControllerPartialMock pushViewController:[OCMArg any] animated:[OCMArg any]]);
         
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            // login complete
-            XCTAssertTrue(authenticationStatus == AUTHENTICATION_ERROR);
-            [loginResponseArrived fulfill];
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            // login complete
+//            XCTAssertTrue(authenticationStatus == AUTHENTICATION_ERROR);
+//            [loginResponseArrived fulfill];
+//        }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             
@@ -663,7 +663,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         // response came back from the server and we went to the login screen
@@ -692,27 +692,27 @@
         OCMExpect([coordinatorMock unableToAuthenticate:[OCMArg any] complete:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
         }).andForwardToRealObject();
         
-        OCMExpect([navControllerPartialMock presentViewController:[OCMArg isKindOfClass:[UIAlertController class]] animated:YES completion:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
-            __unsafe_unretained UIAlertController *alert;
-            [invocation getArgument:&alert atIndex:2];
-            XCTAssertTrue([alert.title isEqualToString:@"Disconnected Login"]);
-            [coordinator workOffline: parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-                NSLog(@"Auth Success");
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                XCTAssertTrue([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]);
-                XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
-                [loginResponseArrived fulfill];
-            }];
-        });
+//        OCMExpect([navControllerPartialMock presentViewController:[OCMArg isKindOfClass:[UIAlertController class]] animated:YES completion:[OCMArg any]])._andDo(^(NSInvocation *invocation) {
+//            __unsafe_unretained UIAlertController *alert;
+//            [invocation getArgument:&alert atIndex:2];
+//            XCTAssertTrue([alert.title isEqualToString:@"Disconnected Login"]);
+//            [coordinator workOffline: parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//                NSLog(@"Auth Success");
+//                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//                XCTAssertTrue([[Authentication authenticationTypeToString:LOCAL] isEqualToString:[defaults valueForKey:@"loginType"]]);
+//                XCTAssertTrue(authenticationStatus == AUTHENTICATION_SUCCESS);
+//                [loginResponseArrived fulfill];
+//            }];
+//        });
         
         OCMExpect([navControllerPartialMock pushViewController:[OCMArg isKindOfClass:[DisclaimerViewController class]] animated:NO])._andDo(^(NSInvocation *invocation) {
             [disclaimerDelegate disclaimerAgree];
         });
         
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            NSLog(@"Unable to authenticate");
-            XCTFail(@"Should not be in here");
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            NSLog(@"Unable to authenticate");
+//            XCTFail(@"Should not be in here");
+//        }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             OCMVerifyAll(navControllerPartialMock);
@@ -758,7 +758,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
 
-    [coordinator start];
+//    [coordinator start];
 
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         // response came back from the server and we went to the login screen
@@ -800,10 +800,10 @@
             XCTFail(@"Should not have pushed the disclaimer");
         });
         
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            NSLog(@"Unable to authenticate");
-            XCTFail(@"Should not be in here");
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            NSLog(@"Unable to authenticate");
+//            XCTFail(@"Should not be in here");
+//        }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             OCMVerifyAll(navControllerPartialMock);
@@ -850,7 +850,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         // response came back from the server and we went to the login screen
@@ -889,10 +889,10 @@
             }];
         });
         
-        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
-            NSLog(@"Unable to authenticate");
-            XCTFail(@"Should not be in here");
-        }];
+//        [loginDelegate loginWithParameters:parameters withAuthenticationType:SERVER complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+//            NSLog(@"Unable to authenticate");
+//            XCTFail(@"Should not be in here");
+//        }];
         
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             OCMVerifyAll(navControllerPartialMock);
@@ -975,7 +975,7 @@
     NSURL *url = [MageServer baseURL];
     XCTAssertTrue([[url absoluteString] isEqualToString:@""]);
     
-    [coordinator start];
+//    [coordinator start];
     
     [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
         return [request.URL.host isEqualToString:@"mage.geointservices.io"];
@@ -1033,7 +1033,7 @@
                                                 statusCode:200 headers:@{@"Content-Type":@"application/json"}];
     }];
     
-    [coordinator start];
+//    [coordinator start];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
         OCMVerifyAll(navControllerPartialMock);
