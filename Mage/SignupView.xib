@@ -91,7 +91,7 @@
                 </view>
                 <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYb-oq-i8M">
                     <rect key="frame" x="0.0" y="826" width="375" height="30"/>
-                    <accessibility key="accessibilityConfiguration">
+                    <accessibility key="accessibilityConfiguration" label="Server URL">
                         <accessibilityTraits key="traits" notEnabled="YES"/>
                     </accessibility>
                     <state key="normal" title="&lt;mage server url&gt;">
@@ -100,6 +100,7 @@
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jub-3d-HY1">
                     <rect key="frame" x="27.5" y="855" width="320" height="21"/>
+                    <accessibility key="accessibilityConfiguration" label="Version"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="Fd4-hg-Hc5"/>
                         <constraint firstAttribute="width" constant="320" id="Jgi-9a-cIq"/>
@@ -248,6 +249,7 @@
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uhq-eM-MfT">
                                                             <rect key="frame" x="121.5" y="8" width="0.0" height="0.0"/>
+                                                            <accessibility key="accessibilityConfiguration" label="Password Strength Label"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>

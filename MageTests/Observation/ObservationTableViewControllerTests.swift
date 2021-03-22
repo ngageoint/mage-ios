@@ -74,7 +74,8 @@ class ObservationTableViewControllerTests: KIFSpec {
                 view = ObservationTableViewController(scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 expect(UIApplication.getTopViewController()).to(beAnInstanceOf(ObservationTableViewController.self));
-                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).toEventually(equal(1));
+                tester().waitForCell(at: IndexPath(row: 0, section: 0), in: view?.tableView);
+                expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).to(equal(1));
                 expect(view?.tableView.numberOfRows(inSection: 0)).to(equal(1));
             }
             
@@ -91,7 +92,6 @@ class ObservationTableViewControllerTests: KIFSpec {
                 expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).toEventually(equal(0));
                 let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson);
-                
                 expect(view?.observationDataStore.numberOfSections(in: (view?.tableView)!)).toEventually(equal(1));
                 expect(view?.tableView.numberOfRows(inSection: 0)).to(equal(1));
             }

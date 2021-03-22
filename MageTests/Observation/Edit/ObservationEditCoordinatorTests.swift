@@ -136,7 +136,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, observation: observation);
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 coordinator.start();
-                                
+                tester().waitForView(withAccessibilityLabel: "timestamp");
                 tester().expect(viewTester().usingLabel("timestamp").view, toContainText: "April 26, 1970 at 5:46:40 PM GMT")
                 
                 tester().expect(viewTester().usingLabel("geometry").view, toContainText: "40.00850, -105.26780");

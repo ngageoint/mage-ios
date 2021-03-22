@@ -30,16 +30,18 @@ class MockMageServer: NSObject {
         };
     }
     
-    @discardableResult public static func stubJSONSuccessRequest(url: String, filePath: String, delegate: MockMageServerDelegate? = nil) -> HTTPStubsDescriptor {
-        let stub = HTTPStubs.stubRequests { (request) -> Bool in
-            return request.url == URL(string: url);
-        } withStubResponse: { (request) -> HTTPStubsResponse in
+    @discardableResult public static func stubJSONSuccessRequest(url: String, filePath: String, jsonBody: [AnyHashable: Any]? = nil, delegate: MockMageServerDelegate? = nil) -> HTTPStubsDescriptor {
+        var stubTest = isAbsoluteURLString(url);
+        if let safeBody = jsonBody {
+            stubTest = stubTest && hasJsonBody(safeBody);
+        }
+        let stubbed = stub(condition: stubTest) { (request) -> HTTPStubsResponse in
             if (delegate != nil) {
                 delegate?.urlCalled(request.url, method: request.httpMethod);
             }
             let stubPath = OHPathForFile(filePath, MockMageServer.self);
             return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
         }
-        return stub;
+        return stubbed;
     }
 }

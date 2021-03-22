@@ -40,6 +40,7 @@
 #import "DisclaimerViewController.h"
 #import "ServerURLController.h"
 #import "SignUpViewController.h"
+#import "SignUpViewController_Server5.h"
 #import "ChangePasswordViewController.h"
 #import "LocalLoginView.h"
 #import "DeviceUUID.h"

@@ -19,15 +19,20 @@ import MagicalRecord
 @available(iOS 13.0, *)
 
 class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
-    
     var authenticationSuccessfulCalled = false;
     var couldNotAuthenticateCalled = false;
+    var changeServerUrlCalled = false;
+    
     func authenticationSuccessful() {
         authenticationSuccessfulCalled = true;
     }
     
     func couldNotAuthenticate() {
         couldNotAuthenticateCalled = true;
+    }
+    
+    func changeServerUrl() {
+        changeServerUrlCalled = true;
     }
 }
 
@@ -86,9 +91,19 @@ class AuthenticationCoordinatorTests: KIFSpec {
 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess6.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "API request did not happened")
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
@@ -98,7 +113,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                                 
@@ -108,7 +123,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
                                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -129,7 +154,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -139,7 +164,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -160,7 +195,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccessNoDisclaimer.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6NoDisclaimer.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -170,7 +205,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccessNoDisclaimer.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -194,7 +239,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -204,7 +249,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -238,7 +293,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(1));
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -248,7 +303,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -276,7 +341,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -284,7 +349,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccessInactiveUser.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -310,7 +385,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -323,8 +398,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return HTTPStubsResponse(data: String("Failed to get a token").data(using: .utf8)!, statusCode: 401, headers: nil);
                 }
                 
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
                 
-                coordinator?.start();
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -352,7 +436,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -363,7 +447,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return HTTPStubsResponse(error: NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: nil));
                 }
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -394,7 +488,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -405,7 +499,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return HTTPStubsResponse(error: NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: nil));
                 }
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -429,7 +533,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             
             it("should log in offline again with stored password") {
                 MageCoreDataFixtures.addUser();
-                UserDefaults.standard.loginType = "local";
+                UserDefaults.standard.loginType = "offline";
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
                 UserDefaults.standard.loginParameters = [
@@ -441,7 +545,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -477,7 +581,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc";
                                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -497,7 +601,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             
             it("should login with an unregistered device") {
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -510,7 +614,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                     return HTTPStubsResponse(data: String("device was registered").data(using: .utf8)!, statusCode: 403, headers: nil);
                 }
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -534,7 +648,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 UserDefaults.standard.deviceRegistered = true;
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
@@ -544,7 +658,17 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign In")
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
@@ -564,30 +688,58 @@ class AuthenticationCoordinatorTests: KIFSpec {
             it("should create an account") {
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users", filePath: "signupSuccess.json", delegate: serverDelegate);
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users/signups", filePath: "signups.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                MockMageServer.stubJSONSuccessRequest(
+                    url: "https://magetest/api/users/signups/verifications",
+                    filePath: "signupSuccess.json",
+                    jsonBody: [
+                        "username" : "username",
+                        "password" : "password",
+                        "passwordconfirm": "password",
+                        "displayName" : "display",
+                        "phone": "",
+                        "email": "",
+                        "captchaText" : "captcha"
+                    ],
+                    delegate: serverDelegate);
+                
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
                 tester().tapView(withAccessibilityLabel: "Sign Up Here");
                 
                 tester().waitForView(withAccessibilityLabel: "Display Name");
-
-                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
-                tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
+                tester().enterText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().tapView(withAccessibilityLabel: "Display Name");
+                tester().waitForFirstResponder(withAccessibilityLabel: "Display Name");
+                tester().enterText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
-
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Captcha request made")
+                
+                tester().setText("captcha", intoViewWithAccessibilityLabel: "Captcha");
+                
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
                 tester().tapView(withAccessibilityLabel: "Sign Up");
-
-                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
+                
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signup request made")
 
                 tester().waitForTappableView(withAccessibilityLabel: "Account Created");
                 let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -601,30 +753,58 @@ class AuthenticationCoordinatorTests: KIFSpec {
             it("should create an inactive account") {
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users", filePath: "signupSuccessInactive.json", delegate: serverDelegate);
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api/users/signups", filePath: "signups.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                MockMageServer.stubJSONSuccessRequest(
+                    url: "https://magetest/api/users/signups/verifications",
+                    filePath: "signupSuccessInactive.json",
+                    jsonBody: [
+                        "username" : "username",
+                        "password" : "password",
+                        "passwordconfirm": "password",
+                        "displayName" : "display",
+                        "phone": "",
+                        "email": "",
+                        "captchaText" : "captcha"
+                    ],
+                    delegate: serverDelegate);
+                
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
                 tester().tapView(withAccessibilityLabel: "Sign Up Here");
                 
                 tester().waitForView(withAccessibilityLabel: "Display Name");
                 
-                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
-                tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
+                tester().enterText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().tapView(withAccessibilityLabel: "Display Name");
+                tester().enterText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Captcha request made")
+                
+                tester().setText("captcha", intoViewWithAccessibilityLabel: "Captcha");
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
                 tester().tapView(withAccessibilityLabel: "Sign Up");
                 
-                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signup request made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Account Created");
                 let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -638,18 +818,28 @@ class AuthenticationCoordinatorTests: KIFSpec {
             it("should fail to create an account") {
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
-                stub(condition: isHost("magetest") && isPath("/api/users") ) { request in
+                stub(condition: isHost("magetest") && isPath("/api/users/signups/verifications") ) { request in
                     serverDelegate.urlCalled(request.url, method: request.httpMethod);
                     return HTTPStubsResponse(data: String("error message").data(using: .utf8)!, statusCode: 503, headers: nil);
                 }
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
                 tester().tapView(withAccessibilityLabel: "Sign Up Here");
@@ -664,7 +854,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
                 tester().tapView(withAccessibilityLabel: "Sign Up");
                 
-                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
+                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Error Creating Account");
                 let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
@@ -678,11 +868,21 @@ class AuthenticationCoordinatorTests: KIFSpec {
             it("should cancel creating an account") {
                 
                 stub(condition: isHost("magetest") && isPath("/api") ) { _ in
-                    let stubPath = OHPathForFile("apiSuccess.json", type(of: self))
+                    let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
                     return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
                 }
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
+                
+                coordinator?.start(mageServer);
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Sign Up Here")
                 tester().tapView(withAccessibilityLabel: "Sign Up Here");
@@ -700,42 +900,27 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }
             
-            it("should show the change server url view") {
-                UserDefaults.standard.baseServerUrl = nil;
-                
+            it("should tell the delegate to show the change server url view") {
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
 
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
+                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess6.json", delegate: serverDelegate);
                 
-                coordinator?.start();
+                var mageServer: MageServer?;
+                waitUntil { done in
+                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                        mageServer = server;
+                        done();
+                    } failure: { _ in
+                        
+                    };
+                }
                 
-                tester().waitForView(withAccessibilityLabel: "ServerURLView")
-
-                tester().setText("https://magetest", intoViewWithAccessibilityLabel: "Server URL");
-                tester().tapView(withAccessibilityLabel: "OK");
+                coordinator?.start(mageServer);
+                
+                tester().tapView(withAccessibilityLabel: "Server URL")
 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "API request not made")
-                expect(UserDefaults.standard.baseServerUrl).toEventually(equal("https://magetest"));
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
-            }
-            
-            it("should show the change server url view and then cancel") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                coordinator?.start();
-                
-                tester().waitForView(withAccessibilityLabel: "Server URL");
-                tester().tapView(withAccessibilityLabel: "Server URL");
-                
-                tester().waitForView(withAccessibilityLabel: "ServerURLView")
-                
-                tester().setText("https://magetestcancel", intoViewWithAccessibilityLabel: "Server URL");
-                tester().tapView(withAccessibilityLabel: "Cancel");
-                
-                expect(UserDefaults.standard.baseServerUrl).to(equal("https://magetest"));
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
+                expect(delegate?.changeServerUrlCalled).to(beTrue());
             }
         }
     }

@@ -20,14 +20,14 @@ import OHHTTPStubs
 class MockLoginDelegate: LoginDelegate {
     var loginParameters: [AnyHashable : Any]?;
     var loginCalled = false;
-    var authenticationType: AuthenticationType?;
+    var authenticationStrategy: String?;
     var changeServerURLCalled = false;
     var createAccountCalled = false;
     
-    func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
+    func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
         loginCalled = true;
         loginParameters = parameters;
-        self.authenticationType = authenticationType;
+        self.authenticationStrategy = withAuthenticationStrategy;
     }
     
     func changeServerURL() {
@@ -40,22 +40,22 @@ class MockLoginDelegate: LoginDelegate {
 }
 
 class AuthenticationSuccessMockLoginDelegate: MockLoginDelegate {
-    override func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
-        super.login(withParameters: parameters, with: authenticationType, complete: nil);
+    override func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
+        super.login(withParameters: parameters, withAuthenticationStrategy: withAuthenticationStrategy, complete: nil);
         complete(AuthenticationStatus.AUTHENTICATION_SUCCESS, nil);
     }
 }
 
 class RegistrationSuccessMockLoginDelegate: MockLoginDelegate {
-    override func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
-        super.login(withParameters: parameters, with: authenticationType, complete: nil);
+    override func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
+        super.login(withParameters: parameters, withAuthenticationStrategy: withAuthenticationStrategy, complete: nil);
         complete(AuthenticationStatus.REGISTRATION_SUCCESS, nil);
     }
 }
 
 class AuthenticationFailMockLoginDelegate: MockLoginDelegate {
-    override func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
-        super.login(withParameters: parameters, with: authenticationType, complete: nil);
+    override func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
+        super.login(withParameters: parameters, withAuthenticationStrategy: withAuthenticationStrategy, complete: nil);
         complete(AuthenticationStatus.UNABLE_TO_AUTHENTICATE, nil);
     }
 }
