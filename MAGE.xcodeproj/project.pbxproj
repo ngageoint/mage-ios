@@ -139,6 +139,7 @@
 		F7154A8E2604F157002C8617 /* signups.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A8D2604F157002C8617 /* signups.json */; };
 		F7154A942605391D002C8617 /* apiSuccess6.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A932605391D002C8617 /* apiSuccess6.json */; };
 		F7154A982608D2A0002C8617 /* apiSuccess6NoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */; };
+		F7154AB7260BEAE3002C8617 /* observationsUpdate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154AB6260BEAE3002C8617 /* observationsUpdate.json */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
@@ -608,6 +609,7 @@
 		F7154A8D2604F157002C8617 /* signups.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signups.json; sourceTree = "<group>"; };
 		F7154A932605391D002C8617 /* apiSuccess6.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccess6.json; sourceTree = "<group>"; };
 		F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccess6NoDisclaimer.json; sourceTree = "<group>"; };
+		F7154AB6260BEAE3002C8617 /* observationsUpdate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = observationsUpdate.json; sourceTree = "<group>"; };
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
@@ -1559,6 +1561,7 @@
 				F7154A8D2604F157002C8617 /* signups.json */,
 				F7154A932605391D002C8617 /* apiSuccess6.json */,
 				F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */,
+				F7154AB6260BEAE3002C8617 /* observationsUpdate.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2162,6 +2165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7D9B822255D6D9500A76E2C /* attachmentForm.json in Resources */,
+				F7154AB7260BEAE3002C8617 /* observationsUpdate.json in Resources */,
 				F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */,
 				F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */,
 				F7C640FF257EB29100C02335 /* geometryField.json in Resources */,

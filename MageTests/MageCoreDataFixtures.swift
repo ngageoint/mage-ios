@@ -22,20 +22,7 @@ class MageCoreDataFixtures {
     }
     
     public static func addLocation(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "locationsabc", ofType: "json") else {
-            fatalError("locationsabc.json not found")
-        }
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert locationsabc.json to String")
-        }
-        
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert locationsabc.json to Data")
-        }
-        
-        guard let jsonDictionary: NSArray = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
-            fatalError("Unable to convert locationsabc.json to JSON dictionary")
-        }
+        let jsonDictionary: NSArray = parseJsonFile(jsonFile: "locationsabc") as! NSArray;
         
         if (completion == nil) {
             MagicalRecord.save(blockAndWait:{ (localContext: NSManagedObjectContext) in
@@ -85,20 +72,7 @@ class MageCoreDataFixtures {
     }
     
     public static func addUser(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "userabc", ofType: "json") else {
-            fatalError("userabc.json not found")
-        }
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert userabc.json to String")
-        }
-        
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert userabc.json to Data")
-        }
-        
-        guard var jsonDictionary: [AnyHashable : Any] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! [AnyHashable : Any] else {
-            fatalError("Unable to convert userabc.json to JSON dictionary")
-        }
+        var jsonDictionary: [AnyHashable : Any] = parseJsonFile(jsonFile: "userabc") as! [AnyHashable : Any];
         
         let stubPath: String! = OHPathForFile("icon27.png", self);
         
@@ -191,38 +165,13 @@ class MageCoreDataFixtures {
     }
     
     public static func loadObservationsJson(filename: String = "observations") -> [AnyHashable : Any] {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: filename, ofType: "json") else {
-            fatalError("\(filename).json not found")
-        }
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert \(filename).json to String")
-        }
-        
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert \(filename).json to Data")
-        }
-        
-        guard let jsonDictionary: [[AnyHashable : Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[AnyHashable : Any]] else {
-            fatalError("Unable to convert \(filename).json to JSON dictionary")
-        }
+        let jsonDictionary: [[AnyHashable : Any]] = parseJsonFile(jsonFile: filename) as! [[AnyHashable : Any]];
         return jsonDictionary[0];
     }
     
     public static func addObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler? = nil) {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "observations", ofType: "json") else {
-            fatalError("observations.json not found")
-        }
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert observations.json to String")
-        }
-        
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert observations.json to Data")
-        }
-        
-        guard let jsonDictionary: NSArray = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! NSArray else {
-            fatalError("Unable to convert observations.json to JSON dictionary")
-        }
+        let jsonDictionary : NSArray = parseJsonFile(jsonFile: "observations") as! NSArray;
+
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
@@ -243,20 +192,8 @@ class MageCoreDataFixtures {
     }
     
     public static func addUnsyncedObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler? = nil) {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "observations", ofType: "json") else {
-            fatalError("observations.json not found")
-        }
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert observations.json to String")
-        }
-        
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert observations.json to Data")
-        }
-        
-        guard let jsonDictionary: NSArray = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! NSArray else {
-            fatalError("Unable to convert observations.json to JSON dictionary")
-        }
+        let jsonDictionary : NSArray = parseJsonFile(jsonFile: "observations") as! NSArray;
+
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
@@ -286,37 +223,44 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
-        
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
-            fatalError("\(formsJsonFile).json not found")
+    public static func parseJsonFile(jsonFile: String) -> Any {
+        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: jsonFile, ofType: "json") else {
+            fatalError("\(jsonFile).json not found")
         }
-//        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-//            fatalError("Unable to convert \(formsJsonFile).json to String")
-//        }
         var jsonString: String = "";
         do {
             jsonString = try String(contentsOfFile: pathString, encoding: .utf8);
         } catch {
             print("error parsing \(error)")
-            fatalError("Unable to convert \(formsJsonFile).json to String")
+            fatalError("Unable to convert \(jsonFile).json to String")
         }
         
         guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert \(formsJsonFile).json to Data")
+            fatalError("Unable to convert \(jsonFile).json to Data")
         }
         
-        guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
-            fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
+        guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) else {
+            fatalError("Unable to convert \(jsonFile).json to JSON dictionary")
         }
         
+        return jsonDictionary;
+    }
+    
+    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
+        let jsonDictionary = parseJsonFile(jsonFile: formsJsonFile)
+        
+        MageCoreDataFixtures.addEventFromJson(remoteId: remoteId, name: name, formsJson: jsonDictionary as! [[AnyHashable : Any]], maxObservationForms: maxObservationForms, minObservationForms: minObservationForms, completion: completion);
+    }
+    
+    public static func addEventFromJson(remoteId: NSNumber = 1, name: String = "Test Event", formsJson: [[AnyHashable: Any]], maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
+
         if (completion == nil) {
             MagicalRecord.save(blockAndWait:{ (localContext: NSManagedObjectContext) in
                 if let e: Event = Event.mr_createEntity(in: localContext) {
                     e.name = name;
                     e.remoteId = remoteId;
                     e.eventDescription = "Test event description";
-                    e.forms = jsonDictionary;
+                    e.forms = formsJson;
                     e.maxObservationForms = maxObservationForms;
                     e.minObservationForms = minObservationForms;
                     let teamJson: [String: Any] = [
@@ -334,7 +278,7 @@ class MageCoreDataFixtures {
                     e.name = name;
                     e.remoteId = remoteId;
                     e.eventDescription = "Test event description";
-                    e.forms = jsonDictionary;
+                    e.forms = formsJson;
                     e.maxObservationForms = maxObservationForms;
                     e.minObservationForms = minObservationForms;
                     let teamJson: [String: Any] = [
@@ -468,20 +412,7 @@ class MageCoreDataFixtures {
     }
     
     public static func populateFeedsFromJson(eventId: NSNumber = 1, completion: MRSaveCompletionHandler? = nil) {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "feeds", ofType: "json") else {
-            fatalError("feeds.json not found")
-        }
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert feeds.json to String")
-        }
-
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert feeds.json to Data")
-        }
-
-        guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSArray else {
-            fatalError("Unable to convert feeds.json to JSON dictionary")
-        }
+        let jsonDictionary : NSArray = parseJsonFile(jsonFile: "feeds") as! NSArray;
 
         let feedIds: [String] = ["0","1","2","3"];
 
@@ -499,22 +430,7 @@ class MageCoreDataFixtures {
     }
     
     public static func populateFeedItemsFromJson(feedId: String = "1", completion: MRSaveCompletionHandler? = nil) {
-        guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: "feedContent", ofType: "json") else {
-            fatalError("feedContent.json not found")
-        }
-
-        guard let jsonString = try? String(contentsOfFile: pathString, encoding: .utf8) else {
-            fatalError("Unable to convert feedContent.json to String")
-        }
-
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            fatalError("Unable to convert feedContent.json to Data")
-        }
-
-        guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? NSDictionary else {
-            fatalError("Unable to convert feedContent.json to JSON dictionary")
-        }
-        
+        let jsonDictionary : NSDictionary = parseJsonFile(jsonFile: "feedContent") as! NSDictionary;
         guard let features = jsonDictionary.value(forKeyPath: "items.features") as? NSArray else {
             fatalError("Unable to retrieve feature array from feedContent.json")
         }
