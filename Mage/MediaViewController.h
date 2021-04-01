@@ -5,17 +5,21 @@
 //    
 //
 
+
 #import <UIKit/UIKit.h>
 #import "Recording.h"
-#import "AudioRecordingDelegate.h"
+#import "MAGE-Swift.h"
+
+
+@protocol AudioRecordingDelegate;
 
 @class MediaViewController;
 
 @interface MediaViewController :UIViewController
 
 @property(nonatomic, strong) Recording *recording;
-@property(nonatomic, strong) id<AudioRecordingDelegate> delegate;
+@property(nonatomic, strong) id<AudioRecordingDelegate> audioRecordingDelegate;
 
-- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) delegate;
+- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) audioRecordingDelegate;
 
 @end

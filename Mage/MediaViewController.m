@@ -36,11 +36,11 @@
 #pragma mark -
 #pragma mark View Life Cycle
 
-- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) delegate {
+- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) audioRecordingDelegate {
     self = [super init];
     if (!self) return nil;
     
-    _delegate = delegate;
+    _audioRecordingDelegate = audioRecordingDelegate;
     
     return self;
 }
@@ -296,8 +296,8 @@
 #pragma mark - Media methods
 
 - (IBAction) dismissAndSetObservationMedia:(id)sender{
-    if (self.delegate) {
-        [self.delegate recordingAvailable:self.recording];
+    if (self.audioRecordingDelegate) {
+        [self.audioRecordingDelegate recordingAvailableWithRecording:self.recording];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }

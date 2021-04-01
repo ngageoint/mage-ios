@@ -16,7 +16,14 @@
 #import "MapCalloutTapped.h"
 #import "FeedItem.h"
 
-@protocol FeedItemDelegate;
+@class StraightLineNavigation;
+
+@protocol FeedItemDelegate <NSObject>
+
+- (void) addFeedItem:(FeedItem *)feedItem;
+- (void) removeFeedItem:(FeedItem *)feedItem;
+    
+@end
 
 @protocol UserTrackingModeChanged <NSObject>
 
@@ -37,7 +44,10 @@
 - (void) onCacheOverlayTapped:(NSString *) message;
 @end
 
-@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, CacheOverlayListener, FeedItemDelegate>
+@interface MapDelegate : NSObject <MKMapViewDelegate, NSFetchedResultsControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate, UIGestureRecognizerDelegate,  CacheOverlayListener>
+@property (nonatomic, weak) IBOutlet MKMapView *mapView;
+@property (nonatomic, strong) StraightLineNavigation *straightLineNavigation;
+@property (nonatomic) CLLocationCoordinate2D navigationDestinationCoordinate;
 
 @property (nonatomic, weak) id<UserTrackingModeChanged> userTrackingModeDelegate;
 @property (nonatomic, weak) id<LocationAuthorizationStatusChanged> locationAuthorizationChangedDelegate;
@@ -69,5 +79,6 @@
 - (void) updateTheme;
 - (void) setupListeners;
 - (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
-
+- (void) startBearing;
+- (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination;
 @end

@@ -49,7 +49,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let mapView = MKMapView(forAutoLayout: ());
         mapView.autoSetDimension(.height, toSize: 150);
         mapView.delegate = mapDelegate;
-        mapDelegate.setMapView(mapView);
+        mapDelegate.mapView = mapView;
         return mapView;
     }()
     

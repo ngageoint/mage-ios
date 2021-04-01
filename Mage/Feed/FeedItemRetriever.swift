@@ -27,13 +27,6 @@ extension UIImage {
     }
 }
 
-@objc protocol FeedItemDelegate {
-
-    @objc func addFeedItem(feedItem: FeedItem);
-    @objc func removeFeedItem(feedItem: FeedItem);
-
-}
-
 @objc class FeedItemRetriever : NSObject {
     
     @objc public static func setAnnotationImage(feedItem: FeedItem, annotationView: MKAnnotationView) {
@@ -145,14 +138,14 @@ extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            delegate.addFeedItem(feedItem: anObject as! FeedItem);
+            delegate.add(anObject as? FeedItem);
         case .delete:
             print("delete item")
-            delegate.removeFeedItem(feedItem: anObject as! FeedItem)
+            delegate.remove(anObject as? FeedItem)
         case .update:
             print("Update item")
-            delegate.removeFeedItem(feedItem: anObject as! FeedItem)
-            delegate.addFeedItem(feedItem: anObject as! FeedItem);
+            delegate.remove(anObject as? FeedItem)
+            delegate.add(anObject as? FeedItem);
         case .move:
             print("...")
         @unknown default:

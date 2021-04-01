@@ -10,6 +10,21 @@ import Foundation
 
 extension UserDefaults {
     
+    var showBearingSet: Bool {
+        get {
+            return value(forKey: "showBearing") != nil;
+        }
+    }
+    
+    var showBearing: Bool {
+        get {
+            return bool(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
     var mapType: Int {
         get {
             return integer(forKey: #function)

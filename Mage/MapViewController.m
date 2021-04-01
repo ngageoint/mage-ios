@@ -36,18 +36,18 @@
 #import "FeatureDetailCoordinator.h"
 #import "FilterTableViewController.h"
 
-@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, UIViewControllerPreviewingDelegate, AttachmentViewDelegate, UIGestureRecognizerDelegate>
-    @property (weak, nonatomic) IBOutlet UIButton *trackingButton;
-    @property (weak, nonatomic) IBOutlet UIButton *reportLocationButton;
-    @property (weak, nonatomic) IBOutlet UIView *toastView;
-    @property (weak, nonatomic) IBOutlet UILabel *toastText;
-    @property (weak, nonatomic) IBOutlet UIButton *showPeopleButton;
-    @property (weak, nonatomic) IBOutlet UIButton *showObservationsButton;
-    @property (weak, nonatomic) IBOutlet UIButton *mapSettingsButton;
+@interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, AttachmentViewDelegate, UIGestureRecognizerDelegate>
+    @property (strong, nonatomic) IBOutlet UIButton *trackingButton;
+    @property (strong, nonatomic) IBOutlet UIButton *reportLocationButton;
+    @property (strong, nonatomic) IBOutlet UIView *toastView;
+    @property (strong, nonatomic) IBOutlet UILabel *toastText;
+    @property (strong, nonatomic) IBOutlet UIButton *showPeopleButton;
+    @property (strong, nonatomic) IBOutlet UIButton *showObservationsButton;
+    @property (strong, nonatomic) IBOutlet UIButton *mapSettingsButton;
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
-    @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
+    @property (strong, nonatomic) IBOutlet UILabel *eventNameLabel;
     @property (nonatomic) BOOL listenersSetUp;
     @property (weak, nonatomic) id<MKMapViewDelegate> mapEventDelegate;
 
@@ -173,7 +173,7 @@
     [super viewWillAppear:animated];
     
     [self.mapDelegate setupListeners];
-        
+    
     if (self.mapDelegate.locations != nil) {
         [self.mapDelegate updateLocationPredicates:[Locations getPredicatesForLocations]];
         NSError *error;
@@ -312,6 +312,8 @@
     buttonStack.distribution = UIStackViewDistributionFill;
     buttonStack.spacing = 10;
     buttonStack.axis = UILayoutConstraintAxisVertical;
+    buttonStack.translatesAutoresizingMaskIntoConstraints = false;
+    buttonStack.layoutMarginsRelativeArrangement = true;
     [self.view insertSubview:buttonStack aboveSubview:self.mapView];
     
     [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.view withOffset:25];
@@ -338,6 +340,7 @@
     self.trackingButton.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.87].CGColor;
     
     self.reportLocationButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.reportLocationButton configureForAutoLayout];
     [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_off"] forState:UIControlStateNormal];
     [self.reportLocationButton addTarget:self action:@selector(onReportLocationButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.reportLocationButton autoSetDimensionsToSize:CGSizeMake(35, 35)];
@@ -350,6 +353,7 @@
     [buttonStack addArrangedSubview:self.mapSettingsButton];
     [buttonStack addArrangedSubview:self.trackingButton];
     [buttonStack addArrangedSubview:self.reportLocationButton];
+    NSLog(@"Button stack superview %@", buttonStack.superview);
 }
 
 - (IBAction)filterTapped:(id)sender {
@@ -609,10 +613,12 @@
             break;
         };
         case MKUserTrackingModeFollow: {
+            [self.mapDelegate startBearing];
             [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_on.png"] forState:UIControlStateNormal];
             break;
         };
         case MKUserTrackingModeFollowWithHeading: {
+            [self.mapDelegate startBearing];
             [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_follow.png"] forState:UIControlStateNormal];
             break;
         }

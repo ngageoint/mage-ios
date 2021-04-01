@@ -39,7 +39,7 @@ class GeometryView : BaseFieldView {
         let mapView = MKMapView(forAutoLayout: ());
         mapView.mapType = .standard;
         mapView.autoSetDimension(.height, toSize: editMode ? 95 : 200);
-        mapDelegate?.setMapView(mapView);
+        mapDelegate?.mapView = mapView;
         mapView.delegate = mapDelegate;
         mapDelegate?.setupListeners();
         mapDelegate?.hideStaticLayers = true;

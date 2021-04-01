@@ -71,8 +71,7 @@ class MapViewControllerTests: KIFSpec {
             afterEach {
                 
                 waitUntil { done in
-                    mapViewController.dismiss(animated: false, completion: {
-                        controller.dismiss(animated: false, completion: {
+                    mapViewController.dismiss(animated: false, completion: {                        controller.dismiss(animated: false, completion: {
                             done();
                         });
                     });
@@ -84,6 +83,35 @@ class MapViewControllerTests: KIFSpec {
                 view = nil;
                 window = nil;
                 TestHelpers.cleanUpStack();
+                NSManagedObject.mr_setDefaultBatchSize(20);
+            }
+            
+            fdescribe("Feed item tests") {
+                it("should get one mappable feed item retriever and start it with no initial items add one") {
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm");
+                    MageCoreDataFixtures.addUser(userId: "user")
+                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                    UserDefaults.standard.currentUserId = "user";
+                    
+                    let feedIds: [String] = ["0","1","2","3"];
+                    let feeds = MageCoreDataFixtures.parseJsonFile(jsonFile: "feeds");
+                    MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                        let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
+                        expect(remoteIds) == feedIds;
+                    })
+
+                    mapViewController = MapViewController(scheme: MAGEScheme.scheme());
+                    controller.pushViewController(mapViewController, animated: true);
+                    
+                    view = window;
+                    
+                    tester().wait(forTimeInterval: 2);
+                    
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"])
+                    tester().wait(forTimeInterval: 2);
+                    TestHelpers.printAllAccessibilityLabelsInWindows();
+                    tester().waitForView(withAccessibilityLabel: "Feed 1 Item 4");
+                }
             }
             
             it("initialize the MapViewController") {

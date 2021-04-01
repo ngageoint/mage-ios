@@ -60,7 +60,6 @@
 #import "MAGE-Swift.h"
 
 @interface MapDelegate ()
-    @property (nonatomic, weak) IBOutlet MKMapView *mapView;
     @property (nonatomic, strong) LocationAccuracy *selectedUserAccuracy;
     @property (nonatomic, strong) ObservationAccuracy *selectedObservationAccuracy;
 
@@ -89,6 +88,7 @@
 @property (nonatomic) id<MKMapViewDelegate> mapEventDelegate;
 @property (strong, nonatomic) GPKGGeoPackage * countriesGeoPackage;
 @property (strong, nonatomic) GPKGGeoPackage * darkCountriesGeoPackage;
+@property (strong, nonatomic) NSMutableDictionary *feedItemRetrievers;
 @end
 
 @implementation MapDelegate
@@ -116,7 +116,11 @@
         self.locationManager.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
-        self.darkMode = false;
+        
+        // temporary for straight line for now
+//        if (self.straightLineNavigation == nil) {
+//            self.straightLineNavigation = [[StraightLineNavigation alloc] initWithMapView:self.mapView locationManager:self.locationManager];
+//        }
     }
     if (!self.mapCacheOverlays) {
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
@@ -342,11 +346,15 @@
 }
 
 - (void) addFeeds {
+    if (self.feedItemRetrievers == nil) {
+        self.feedItemRetrievers = [[NSMutableDictionary alloc] init];
+    }
     NSArray *feedIdsInEvent = [[NSUserDefaults standardUserDefaults] arrayForKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
     
     // remove any feeds that are no longer selected
     [self.currentFeeds filterUsingPredicate:[NSPredicate predicateWithFormat:@"NOT(self in %@)", feedIdsInEvent]];
     for (NSNumber *feedId in self.currentFeeds) {
+        [self.feedItemRetrievers removeObjectForKey:feedId];
         NSArray<FeedItem*> *items = [FeedItem getFeedItemsForFeed:feedId];
         for (FeedItem *item in items) {
             if (item.isMappable) {
@@ -356,11 +364,17 @@
     }
     
     for (NSString *feedId in feedIdsInEvent) {
-        FeedItemRetriever *retriever = [FeedItemRetriever getMappableFeedRetrieverWithFeedId:feedId delegate:self];
-        NSArray<FeedItem*> *items = [retriever startRetriever];
-        for (FeedItem *item in items) {
-            if (item.isMappable) {
-                [self.mapView addAnnotation:item];
+        FeedItemRetriever *retriever = [self.feedItemRetrievers objectForKey:feedId];
+        if (retriever == nil) {
+            retriever = [FeedItemRetriever getMappableFeedRetrieverWithFeedId:feedId delegate:self];
+        }
+        if (retriever != nil) {
+            [self.feedItemRetrievers setObject:retriever forKey:feedId];
+            NSArray<FeedItem*> *items = [retriever startRetriever];
+            for (FeedItem *item in items) {
+                if (item.isMappable) {
+                    [self.mapView addAnnotation:item];
+                }
             }
         }
     }
@@ -501,13 +515,6 @@
         [self removeLocationForUser:userRemoteId];
     }
     [self updateLocations:[self.locations.fetchedResultsController fetchedObjects]];
-}
-
-- (void) setMapView:(MKMapView *)mapView {
-    _mapView = mapView;
-}
-
-- (void) updateTheme {
 }
 
 - (void) ensureMapLayout {
@@ -1322,6 +1329,7 @@
         annotationView.rightCalloutAccessoryView = rightButton;
         [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
         annotationView.annotation = annotation;
+        annotationView.accessibilityLabel = [NSString stringWithFormat:@"Feed %@ Item %@", item.feed.remoteId, item.remoteId];
         return annotationView;
     }
     
@@ -1357,6 +1365,7 @@
             self.selectedObservationAccuracy = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
             [self.mapView addOverlay:self.selectedObservationAccuracy];
         }
+        [self startStraightLineNavigation:observation.location.coordinate];
     } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *annotation = view.annotation;
         NSString *clickMessage = [annotation detailTextForAnnotation];
@@ -1364,6 +1373,23 @@
     } else {
         NSLog(@"Annotation is a %@", [view class]);
     }
+}
+
+- (void) startBearing {
+//    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+//    [self.locationManager startUpdatingLocation];
+//    self.locationManager.headingFilter = 0.5;
+//    [self.locationManager startUpdatingHeading];
+//    [self.straightLineNavigation startBearingWithManager:self.locationManager];
+}
+
+- (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination {
+//    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+//    [self.locationManager startUpdatingLocation];
+//    self.locationManager.headingFilter = 0.5;
+//    [self.locationManager startUpdatingHeading];
+//    self.navigationDestinationCoordinate = destination;
+//    [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination];
 }
 
 - (void)mapView:(MKMapView *) mapView didDeselectAnnotationView:(MKAnnotationView *) view {
@@ -1439,6 +1465,9 @@
             renderer.lineWidth = 1;
         }
         return renderer;
+    } else if ([overlay isKindOfClass:[NavigationOverlay class]]) {
+        NavigationOverlay *nav = (NavigationOverlay *) overlay;
+        return nav.renderer;
     }
 
     return nil;
@@ -1638,12 +1667,6 @@
     [self selectedUser:user];
 }
 
-- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    if (self.locationAuthorizationChangedDelegate) {
-        [self.locationAuthorizationChangedDelegate locationManager:manager didChangeAuthorizationStatus:status];
-    }
-}
-
 - (void) mapClickAtPoint: (CGPoint) point{
     
     CLLocationCoordinate2D location = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
@@ -1661,12 +1684,16 @@
     }
 }
 
-- (void) addFeedItem:(FeedItem *)feedItem {
-    [self.mapView addAnnotation:feedItem];
-}
-
-- (void) removeFeedItem:(FeedItem *)feedItem {
-    [self.mapView removeAnnotation:feedItem];
-}
+//- (void) addFeedItem:(FeedItem *)feedItem {
+//    if (feedItem.isMappable) {
+//        [self.mapView addAnnotation:feedItem];
+//    }
+//}
+//
+//- (void) removeFeedItem:(FeedItem *)feedItem {
+//    if (feedItem.isMappable) {
+//        [self.mapView removeAnnotation:feedItem];
+//    }
+//}
 
 @end

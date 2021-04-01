@@ -140,6 +140,11 @@
 		F7154A942605391D002C8617 /* apiSuccess6.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A932605391D002C8617 /* apiSuccess6.json */; };
 		F7154A982608D2A0002C8617 /* apiSuccess6NoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */; };
 		F7154AB7260BEAE3002C8617 /* observationsUpdate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154AB6260BEAE3002C8617 /* observationsUpdate.json */; };
+		F7154AC1260CE154002C8617 /* NavigationRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AC0260CE154002C8617 /* NavigationRenderer.swift */; };
+		F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AC6260CE165002C8617 /* NavigationOverlay.swift */; };
+		F7154ACB260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154ACA260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift */; };
+		F7154AD0260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154ACF260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift */; };
+		F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
@@ -610,6 +615,11 @@
 		F7154A932605391D002C8617 /* apiSuccess6.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccess6.json; sourceTree = "<group>"; };
 		F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccess6NoDisclaimer.json; sourceTree = "<group>"; };
 		F7154AB6260BEAE3002C8617 /* observationsUpdate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = observationsUpdate.json; sourceTree = "<group>"; };
+		F7154AC0260CE154002C8617 /* NavigationRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRenderer.swift; sourceTree = "<group>"; };
+		F7154AC6260CE165002C8617 /* NavigationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlay.swift; sourceTree = "<group>"; };
+		F7154ACA260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateFeedItemDelegate.swift; sourceTree = "<group>"; };
+		F7154ACF260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateCLLocationManagerDelegate.swift; sourceTree = "<group>"; };
+		F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineNavigation.swift; sourceTree = "<group>"; };
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
@@ -1218,6 +1228,7 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				F7154ACE260D1369002C8617 /* MapDelegate */,
 				2F0323A5246364C500D2866B /* Overlays */,
 				2F2287D921F0EADE0058E527 /* Feature */,
 				043FF11D1C22F571000CA07F /* Cache */,
@@ -1230,8 +1241,6 @@
 				F725A9CB195CB819002A699C /* ObservationAnnotation.m */,
 				2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */,
 				2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */,
-				F727516819C87B27006C63CB /* MapDelegate.h */,
-				F727516919C87B27006C63CB /* MapDelegate.m */,
 				2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */,
 				2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */,
 				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
@@ -1394,6 +1403,27 @@
 				F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */,
 			);
 			name = AudioRecorder;
+			sourceTree = "<group>";
+		};
+		F7154ABF260CE136002C8617 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				F7154AC0260CE154002C8617 /* NavigationRenderer.swift */,
+				F7154AC6260CE165002C8617 /* NavigationOverlay.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		F7154ACE260D1369002C8617 /* MapDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				F7154ACA260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift */,
+				F727516819C87B27006C63CB /* MapDelegate.h */,
+				F727516919C87B27006C63CB /* MapDelegate.m */,
+				F7154ACF260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift */,
+				F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */,
+			);
+			path = MapDelegate;
 			sourceTree = "<group>";
 		};
 		F7232329251CE90C00AD168A /* Settings */ = {
@@ -1773,6 +1803,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F7154ABF260CE136002C8617 /* Navigation */,
 				F743008A2547759C00DCE050 /* Extensions */,
 				F739682F2460B0290017D481 /* MaterialComponents */,
 				F7DB714B2486D79C00A7CD00 /* Feed */,
@@ -2524,6 +2555,7 @@
 				F770854025927E1C008903BA /* ObservationSyncStatus.swift in Sources */,
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
+				F7154ACB260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift in Sources */,
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
@@ -2566,6 +2598,7 @@
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
 				F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
+				F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
@@ -2615,6 +2648,7 @@
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
+				F7154AC1260CE154002C8617 /* NavigationRenderer.swift in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */,
 				F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */,
@@ -2639,6 +2673,7 @@
 				F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
+				F7154AD0260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.m in Sources */,
 				F7C812DB25C08D3C00D4332B /* ObservationTableViewController.swift in Sources */,
@@ -2662,6 +2697,7 @@
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
+				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
 				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
@@ -2926,9 +2962,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 3.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
@@ -2961,9 +2997,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 3.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;

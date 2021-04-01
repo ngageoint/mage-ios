@@ -8,6 +8,10 @@
 
 import Foundation
 
+@objc public protocol AudioRecordingDelegate {
+    @objc func recordingAvailable(recording: Recording);
+}
+
 protocol AttachmentCreationCoordinatorDelegate {
     
     func attachmentCreated(attachment: Attachment);
@@ -266,7 +270,7 @@ extension AttachmentCreationCoordinator: UINavigationControllerDelegate {
 }
 
 extension AttachmentCreationCoordinator: AudioRecordingDelegate {
-    func recordingAvailable(_ recording: Recording!) {
+    func recordingAvailable(recording: Recording) {
         print("Recording available")
         let attachmentJson: [String: Any] = [
             "contentType": recording.mediaType!,
