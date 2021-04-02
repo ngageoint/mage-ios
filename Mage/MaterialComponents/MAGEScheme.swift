@@ -14,7 +14,7 @@ func globalContainerScheme() -> MDCContainerScheming {
     // this will be used for the navbar
     containerScheme.colorScheme.primaryColorVariant = UIColor(named: "primaryVariant") ?? MDCPalette.blue.tint600;
     containerScheme.colorScheme.primaryColor = UIColor(named: "primary") ?? MDCPalette.blue.tint600;
-    containerScheme.colorScheme.secondaryColor = UIColor(named: "secondary") ?? (MDCPalette.orange.accent400 ?? .systemFill);
+    containerScheme.colorScheme.secondaryColor = UIColor(named: "secondary") ?? (MDCPalette.orange.accent700 ?? .systemFill);
     containerScheme.colorScheme.onSecondaryColor = UIColor(named: "onSecondary") ?? .label;
     containerScheme.colorScheme.surfaceColor = UIColor(named: "surface") ?? UIColor.systemBackground;
     containerScheme.colorScheme.onSurfaceColor = UIColor.label;
