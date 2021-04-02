@@ -55,12 +55,12 @@ class ObservationFormReorder: UITableViewController {
         self.title = "Reorder Forms";
         tableView.register(cellClass: ObservationFormTableViewCell.self)
         if let safeProperties = self.observation.properties as? [String: Any] {
-            if (safeProperties.keys.contains("forms")) {
-                observationForms = safeProperties["forms"] as! [[String: Any]];
+            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
             }
             self.observationProperties = safeProperties;
         } else {
-            self.observationProperties = ["forms":[]];
+            self.observationProperties = [ObservationKey.forms.key:[]];
             observationForms = [];
         }
     }
@@ -122,7 +122,7 @@ class ObservationFormReorder: UITableViewController {
     }
     
     @objc func saveFormOrder(sender: UIBarButtonItem) {
-        observationProperties["forms"] = observationForms;
+        observationProperties[ObservationKey.forms.key] = observationForms;
         self.observation.properties = observationProperties;
         delegate.formsReordered(observation: self.observation);
     }
@@ -149,7 +149,7 @@ class ObservationFormReorder: UITableViewController {
         let formCell : ObservationFormTableViewCell = tableView.dequeue(cellClass: ObservationFormTableViewCell.self, forIndexPath: indexPath);
         let observationForm = observationForms[indexPath.row];
         if let eventForm: [String: Any] = self.eventForms.first(where: { (form) -> Bool in
-            return form["id"] as? Int == observationForm["formId"] as? Int
+            return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }) {
             formCell.configure(observationForm: observationForm, eventForm: eventForm, scheme: self.scheme);
         }

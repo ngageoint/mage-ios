@@ -130,6 +130,7 @@ class ObservationTableViewController: UITableViewController {
         self.startUpdateTimer();
         self.updateFilterButtonPosition();
         self.applyTheme(withContainerScheme: self.scheme);
+        self.tableView.reloadData();
     }
     
     // This is all here so that we will purge old results from the list

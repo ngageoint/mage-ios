@@ -61,10 +61,17 @@ class DateView : BaseFieldView {
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         textField.inputView = datePicker;
         textField.inputAccessoryView = dateAccessoryView;
+        textField.trailingView = UIImageView(image: UIImage(named: "date"));
+        textField.trailingViewMode = .always;
         
         controller.textInput = textField;
         return textField;
     }()
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")

@@ -226,6 +226,7 @@ class ObservationActionsView: UIView {
     
     public func populate(observation: Observation!) {
         self.observation = observation;
+        favoriteCountButton.isHidden = true;
         favoriteCountButton.setAttributedTitle(favoriteCountText, for: .normal);
         importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant() ?? false);
         
@@ -233,6 +234,7 @@ class ObservationActionsView: UIView {
         if let favorites = observation.favorites {
             let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
             currentUserFavorited = favorites.contains { (favorite) -> Bool in
+                favoriteCountButton.isHidden = !(!favoriteCountButton.isHidden || favorite.favorite);
                 return favorite.userId == user.remoteId && favorite.favorite;
             }
         }

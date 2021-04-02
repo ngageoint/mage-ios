@@ -109,14 +109,14 @@ class ObservationFormTableViewCell: UITableViewCell {
     
     func configure(observationForm: [String : Any], eventForm: [String: Any], scheme: MDCContainerScheming?) {
         var formPrimaryValue: String? = nil;
-        if let primaryField = eventForm["primaryField"] as! String? {
+        if let primaryField = eventForm[FormKey.primaryFeedField.key] as! String? {
             if let obsfield = observationForm[primaryField] as! String? {
                 formPrimaryValue = obsfield;
             }
         }
         
         var formSecondaryValue: String? = nil;
-        if let secondaryField = eventForm["variantField"] as! String? {
+        if let secondaryField = eventForm[FormKey.secondaryFeedField.key] as! String? {
             if let obsfield = observationForm[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
             }

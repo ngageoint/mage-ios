@@ -211,17 +211,17 @@ import MaterialComponents.MDCContainerScheme;
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
         let eventForm: [String: Any]? = self.eventForms.first { (form) -> Bool in
-            return form["id"] as? Int == observationForm["formId"] as? Int
+            return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?["primaryField"] as! String? {
+        if let primaryField = eventForm?[FormKey.primaryFeedField.key] as! String? {
             if let obsfield = observationForm[primaryField] as! String? {
                 formPrimaryValue = obsfield;
             }
         }
-        if let secondaryField = eventForm?["variantField"] as! String? {
+        if let secondaryField = eventForm?[FormKey.secondaryFeedField.key] as! String? {
             if let obsfield = observationForm[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
             }
@@ -237,12 +237,12 @@ import MaterialComponents.MDCContainerScheme;
             formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
         }
         var tintColor: UIColor? = nil;
-        if let safeColor = eventForm?["color"] as? String {
+        if let safeColor = eventForm?[FormKey.color.key] as? String {
             tintColor = UIColor(hex: safeColor);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?["name"] as? String, imageTint: tintColor, expandedView: formSpacerView);
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?[EventKey.name.key] as? String, imageTint: tintColor, expandedView: formSpacerView);
         if let safeScheme = self.scheme {
             card.applyTheme(withScheme: safeScheme);
         }

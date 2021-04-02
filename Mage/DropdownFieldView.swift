@@ -13,12 +13,19 @@ class DropdownFieldView : BaseFieldView {
     
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
+        textField.trailingView = UIImageView(image: UIImage(named: "arrow_drop_down"));
+        textField.trailingViewMode = .always;
         controller.textInput = textField;
         if (value != nil) {
             textField.text = getDisplayValue();
         }
         return textField;
     }()
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")

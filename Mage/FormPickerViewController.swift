@@ -69,12 +69,12 @@ import MaterialComponents.MDCButton;
         self.scheme = scheme;
         applyTheme(withScheme: scheme);
         if let safeObservation = self.observation, let safeProperties = safeObservation.properties {
-            if (safeProperties.keys.contains("forms")) {
-                let observationForms: [[String: Any]] = safeProperties["forms"] as! [[String: Any]];
+            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
+                let observationForms: [[String: Any]] = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
                 let formsToBeDeleted = observation?.getFormsToBeDeleted() ?? IndexSet();
                 for (index, form) in observationForms.enumerated() {
                     if (!formsToBeDeleted.contains(index)) {
-                        let formId = form["formId"] as! Int;
+                        let formId = form[EventKey.formId.key] as! Int;
                         formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
                     }
                 }
@@ -120,7 +120,7 @@ extension FormPickerViewController: UITableViewDataSource {
             cell.accessibilityLabel = safeForm["name"] as? String;
             cell.textLabel?.text = safeForm["name"] as? String;
             cell.detailTextLabel?.text = safeForm["description"] as? String;
-            cell.imageView?.image = UIImage(named: "form");
+            cell.imageView?.image = UIImage(named: "description")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             
             let formCount = formIdCount[safeForm["id"] as! Int] ?? 0;
             let safeFormMin: Int = (safeForm["min"] as? Int) ?? 0;

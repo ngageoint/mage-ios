@@ -13,6 +13,8 @@ class MultiDropdownFieldView : BaseFieldView {
     lazy var textField: MDCTextField = {
         let textField = MDCTextField(forAutoLayout: ());
         controller.textInput = textField;
+        textField.trailingView = UIImageView(image: UIImage(named: "expand"));
+        textField.trailingViewMode = .always;
         if (value != nil) {
             textField.text = getDisplayValue();
         }

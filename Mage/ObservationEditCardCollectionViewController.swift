@@ -184,8 +184,6 @@ import MaterialComponents.MDCCard
         super.viewWillDisappear(animated);
         self.commonFieldView = nil;
         self.keyboardHelper = nil;
-        self.formsHeader.reorderButton.removeTarget(self, action: #selector(reorderForms), for: .touchUpInside);
-        self.formsHeader.removeFromSuperview();
     }
     
     init(frame: CGRect) {
@@ -288,12 +286,12 @@ import MaterialComponents.MDCCard
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?[FormKey.primaryField.key] as! String? {
+        if let primaryField = eventForm?[FormKey.primaryFeedField.key] as! String? {
             if let obsfield = observationForm[primaryField] as! String? {
                 formPrimaryValue = obsfield;
             }
         }
-        if let secondaryField = eventForm?[FormKey.secondaryField.key] as! String? {
+        if let secondaryField = eventForm?[FormKey.secondaryFeedField.key] as! String? {
             if let obsfield = observationForm[secondaryField] as! String? {
                 formSecondaryValue = obsfield;
             }
