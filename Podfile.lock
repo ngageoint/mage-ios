@@ -22,9 +22,9 @@ PODS:
     - sf-wkb-ios (~> 2.0.3)
     - tiff-ios (~> 1.1.2)
   - HexColors (2.2.1)
-  - Kingfisher (5.14.0):
-    - Kingfisher/Core (= 5.14.0)
-  - Kingfisher/Core (5.14.0)
+  - Kingfisher (5.15.8):
+    - Kingfisher/Core (= 5.15.8)
+  - Kingfisher/Core (5.15.8)
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.15)
   - mage-ios-sdk (3.1.2):
@@ -37,22 +37,22 @@ PODS:
     - MagicalRecord/Core (= 2.3.2)
   - MagicalRecord/Core (2.3.2)
   - mgrs (0.1.0)
-  - OCMock (3.6)
+  - OCMock (3.8.1)
   - ogc-api-features-json-ios (1.0.0):
     - sf-geojson-ios (~> 1.0.0)
-  - OHHTTPStubs (9.0.0):
-    - OHHTTPStubs/Default (= 9.0.0)
-  - OHHTTPStubs/Core (9.0.0)
-  - OHHTTPStubs/Default (9.0.0):
+  - OHHTTPStubs (9.1.0):
+    - OHHTTPStubs/Default (= 9.1.0)
+  - OHHTTPStubs/Core (9.1.0)
+  - OHHTTPStubs/Default (9.1.0):
     - OHHTTPStubs/Core
     - OHHTTPStubs/JSON
     - OHHTTPStubs/NSURLSession
     - OHHTTPStubs/OHPathHelpers
-  - OHHTTPStubs/JSON (9.0.0):
+  - OHHTTPStubs/JSON (9.1.0):
     - OHHTTPStubs/Core
-  - OHHTTPStubs/NSURLSession (9.0.0):
+  - OHHTTPStubs/NSURLSession (9.1.0):
     - OHHTTPStubs/Core
-  - OHHTTPStubs/OHPathHelpers (9.0.0)
+  - OHHTTPStubs/OHPathHelpers (9.1.0)
   - proj4-ios (4.9.3)
   - sf-geojson-ios (1.0.0):
     - sf-ios (~> 2.0.3)
@@ -122,15 +122,15 @@ SPEC CHECKSUMS:
   EDSunriseSet: bdc4760f496c8e6f9b9a727ffa645b6048aa2a09
   geopackage-ios: 43f401e530b9db603f603c214ce3d1e5e005444c
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
-  Kingfisher: 7b64389a43139c903ec434788344c288217c792d
+  Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   mage-ios-sdk: c3e330b1d88f562ad3919955de330683000c7876
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
-  OCMock: 5ea90566be239f179ba766fd9fbae5885040b992
+  OCMock: 29f6e52085b4e7d9b075cbf03ed7c3112f82f934
   ogc-api-features-json-ios: 2f733b450d22a73517a5e86fd9241747e039ccb0
-  OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
+  OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
   sf-geojson-ios: ef76082c7fac4e594b35e1016113d0dbe164b730
   sf-ios: 4ca0618351be80afac4e0961860d632dd85ab739
@@ -145,4 +145,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9413f4f5ffda6cab0d93f4e5468a9272f7903a60
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.9.3
