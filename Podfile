@@ -9,7 +9,7 @@ use_frameworks!
 target 'MAGE' do
     pod 'UIImage-Categories', '~> 0.0.1'
     pod 'HexColors', '~> 2.2.1'
-    #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :tag=> '3.1.2'
+    #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :tag=> '3.1.3'
     #pod 'mage-ios-sdk', :git => 'https://github.com/ngageoint/mage-ios-sdk.git', :branch=> 'develop'
     pod 'mage-ios-sdk', :path => '../mage-ios-sdk'
     pod 'mgrs', '~>0.1.0'

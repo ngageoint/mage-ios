@@ -27,7 +27,7 @@ PODS:
   - Kingfisher/Core (5.15.8)
   - KTCenterFlowLayout (1.3.1)
   - libPhoneNumber-iOS (0.9.15)
-  - mage-ios-sdk (3.1.2):
+  - mage-ios-sdk (3.1.3):
     - AFNetworking (~> 4.0.1)
     - DateTools (~> 2.0.0)
     - geopackage-ios (~> 4.0.1)
@@ -125,7 +125,7 @@ SPEC CHECKSUMS:
   Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
   KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
-  mage-ios-sdk: c3e330b1d88f562ad3919955de330683000c7876
+  mage-ios-sdk: 40740207561b4d9b00c7e8d2f81c534cbe2a5f10
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
   OCMock: 29f6e52085b4e7d9b075cbf03ed7c3112f82f934
@@ -143,6 +143,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 9413f4f5ffda6cab0d93f4e5468a9272f7903a60
+PODFILE CHECKSUM: 6c209754c947af1b556cfb963ad1e4b9055018e3
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1
