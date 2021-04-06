@@ -18,6 +18,13 @@ class ObservationTableViewController: UITableViewController {
     var updateTimer: Timer?;
     var listenersSetUp = false;
     
+    private lazy var createFab : MDCFloatingButton = {
+        let fab = MDCFloatingButton(shape: .default);
+        fab.setImage(UIImage(named: "add"), for: .normal);
+        fab.addTarget(self, action: #selector(createNewObservation), for: .touchUpInside);
+        return fab;
+    }()
+    
     public lazy var observationDataStore: ObservationDataStore = {
         var dataStoreAttachmentDelegate = self.attachmentDelegate;
         
@@ -75,13 +82,14 @@ class ObservationTableViewController: UITableViewController {
         
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh observations", attributes: [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onBackgroundColor])
         refreshControl?.tintColor = containerScheme.colorScheme.onBackgroundColor;
+        
+        createFab.applySecondaryTheme(withScheme: containerScheme);
     }
     
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(filterButtonPressed));
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "New", style: .plain, target: self, action: #selector(createNewObservation));
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(filterButtonPressed));
         
         self.tableView.backgroundView = nil;
         self.tableView.register(cellClass: ObservationListCardCell.self);
@@ -95,6 +103,7 @@ class ObservationTableViewController: UITableViewController {
         self.tableView.refreshControl = self.refreshControl;
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 155;
+        self.tableView.contentInset.bottom = 100;
     }
     
     func setupFilterListeners() {
@@ -128,7 +137,9 @@ class ObservationTableViewController: UITableViewController {
         
         self.setNavBarTitle();
         self.startUpdateTimer();
-        self.updateFilterButtonPosition();
+        self.navigationController?.view.addSubview(createFab);
+        self.createFab.autoPinEdge(toSuperviewMargin: .right);
+        self.createFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
         self.applyTheme(withContainerScheme: self.scheme);
         self.tableView.reloadData();
     }
@@ -165,26 +176,6 @@ class ObservationTableViewController: UITableViewController {
     
     @objc func onUpdateTimerFire() {
         self.observationDataStore.updatePredicates();
-    }
-    
-    func updateFilterButtonPosition() {
-        // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
-        if (self != self.navigationController?.viewControllers[0]) {
-            if (self.navigationItem.rightBarButtonItems?.count != 2) {
-                var rightItems: [UIBarButtonItem] = self.navigationItem.rightBarButtonItems!;
-                rightItems.append(self.navigationItem.leftBarButtonItem!);
-                self.navigationItem.rightBarButtonItems = rightItems;
-                self.navigationItem.leftBarButtonItems = nil;
-            }
-        } else if (self.navigationItem.rightBarButtonItems?.count == 2) {
-            // if the view was in the more controller and is now it's own tab
-            let filterButton = self.navigationItem.rightBarButtonItems?.last
-            
-            var rightItems: [UIBarButtonItem] = self.navigationItem.rightBarButtonItems!;
-            rightItems.removeLast()
-            self.navigationItem.rightBarButtonItems = rightItems;
-            self.navigationItem.leftBarButtonItem = filterButton;
-        }
     }
     
     func setNavBarTitle() {

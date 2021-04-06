@@ -28,6 +28,7 @@
     self = [super init];
     self.scheme = containerScheme;
     self.rootViewController = rootViewController;
+    self.settingsNavController = self.rootViewController;
     return self;
 }
 
@@ -41,25 +42,33 @@
 
 - (void) start {
     MapSettings *settings = [[MapSettings alloc] initWithDelegate: self scheme: self.scheme];
-    self.settingsNavController = [[UINavigationController alloc] initWithRootViewController:settings];
-    self.settingsNavController.delegate = self;
-    
-    self.settingsNavController.modalPresentationStyle = UIModalPresentationFullScreen;
-    UIPopoverPresentationController *popoverPresentationController = self.settingsNavController.popoverPresentationController;
-    popoverPresentationController.sourceView = self.sourceView;
-    popoverPresentationController.sourceRect = CGRectMake(0, -5, self.sourceView.frame.size.width, self.sourceView.frame.size.height);
-    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
-    popoverPresentationController.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(settingsComplete)];
     [settings.navigationItem setLeftBarButtonItem:doneButton];
     settings.title = @"Map Settings";
     
-    [self.rootViewController presentViewController:self.settingsNavController animated:YES completion:nil];
+    if (self.sourceView) {
+        self.settingsNavController = [[UINavigationController alloc] initWithRootViewController:settings];
+        self.settingsNavController.delegate = self;
+        
+        self.settingsNavController.modalPresentationStyle = UIModalPresentationFullScreen;
+        UIPopoverPresentationController *popoverPresentationController = self.settingsNavController.popoverPresentationController;
+        popoverPresentationController.sourceView = self.sourceView;
+        popoverPresentationController.sourceRect = CGRectMake(0, -5, self.sourceView.frame.size.width, self.sourceView.frame.size.height);
+        popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+        popoverPresentationController.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        
+        [self.rootViewController presentViewController:self.settingsNavController animated:YES completion:nil];
+    } else {
+        [self.rootViewController pushViewController:settings animated:true];
+    }
 }
 
 - (void) settingsComplete {
-    [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    if (self.sourceView) {
+        [self.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [self.rootViewController popViewControllerAnimated:true];
+    }
     
     if (self.delegate) {
         [self.delegate mapSettingsComplete:self];

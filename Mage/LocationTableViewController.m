@@ -51,7 +51,7 @@
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
     self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.prefersLargeTitles = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone);
+    self.navigationController.navigationBar.prefersLargeTitles = false;
     [self setNavBarTitle];
 }
 
@@ -64,7 +64,7 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonPressed)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter"] style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonPressed)];
     
     if (!self.locationDataStore) {
         self.locationDataStore = [[LocationDataStore alloc] initWithScheme:self.scheme];
@@ -120,7 +120,6 @@
                   context:NULL];
     
     [self startUpdateTimer];
-    [self updateFilterButtonPosition];
 }
 
 - (void) filterButtonPressed {
@@ -128,19 +127,6 @@
     LocationFilterTableViewController *fvc = [iphoneStoryboard instantiateViewControllerWithIdentifier:@"locationFilter"];
     [fvc applyThemeWithContainerScheme:self.scheme];
     [self.navigationController pushViewController:fvc animated:YES];
-}
-
-- (void) updateFilterButtonPosition {
-    // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
-    if (self != self.navigationController.viewControllers[0]) {
-        if (self.navigationItem.rightBarButtonItem == nil) {
-            self.navigationItem.rightBarButtonItem = self.navigationItem.leftBarButtonItem;
-            self.navigationItem.leftBarButtonItem = nil;
-        }
-    } else if (self.navigationItem.rightBarButtonItem != nil) {
-        self.navigationItem.leftBarButtonItem = self.navigationItem.rightBarButtonItem;
-        self.navigationItem.rightBarButtonItem = nil;
-    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {

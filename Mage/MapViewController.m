@@ -37,13 +37,14 @@
 #import "FilterTableViewController.h"
 
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, AttachmentViewDelegate, UIGestureRecognizerDelegate>
-    @property (strong, nonatomic) IBOutlet UIButton *trackingButton;
-    @property (strong, nonatomic) IBOutlet UIButton *reportLocationButton;
+    @property (strong, nonatomic) IBOutlet MDCFloatingButton *trackingButton;
+    @property (strong, nonatomic) IBOutlet MDCFloatingButton *reportLocationButton;
+    @property (strong, nonatomic) IBOutlet MDCFloatingButton *createFab;
     @property (strong, nonatomic) IBOutlet UIView *toastView;
     @property (strong, nonatomic) IBOutlet UILabel *toastText;
     @property (strong, nonatomic) IBOutlet UIButton *showPeopleButton;
     @property (strong, nonatomic) IBOutlet UIButton *showObservationsButton;
-    @property (strong, nonatomic) IBOutlet UIButton *mapSettingsButton;
+    @property (strong, nonatomic) IBOutlet MDCFloatingButton *mapSettingsButton;
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
@@ -121,6 +122,7 @@
     self.reportLocationButton.tintColor = self.scheme.colorScheme.primaryColor;
     self.mapSettingsButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.mapSettingsButton.tintColor = self.scheme.colorScheme.primaryColor;
+    [self.createFab applySecondaryThemeWithScheme:self.scheme];
     [self setNavBarTitle];
 }
 
@@ -314,46 +316,37 @@
     buttonStack.axis = UILayoutConstraintAxisVertical;
     buttonStack.translatesAutoresizingMaskIntoConstraints = false;
     buttonStack.layoutMarginsRelativeArrangement = true;
-    [self.view insertSubview:buttonStack aboveSubview:self.mapView];
     
-    [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.view withOffset:25];
-    [buttonStack autoPinEdge:ALEdgeLeft toEdge:ALEdgeLeft ofView:self.view withOffset:10];
-    
-    self.mapSettingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.mapSettingsButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
     [self.mapSettingsButton setImage:[UIImage imageNamed:@"layers"] forState:UIControlStateNormal];
     [self.mapSettingsButton addTarget:self action:@selector(mapSettingsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.mapSettingsButton autoSetDimensionsToSize:CGSizeMake(35, 35)];
-    self.mapSettingsButton.layer.cornerRadius = 3;
-    self.mapSettingsButton.layer.shadowOpacity = 1;
-    self.mapSettingsButton.layer.shadowOffset = CGSizeMake(0, 1);
-    self.mapSettingsButton.layer.shadowRadius = 1;
-    self.mapSettingsButton.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.87].CGColor;
     
-    self.trackingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.trackingButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
     [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_off"] forState:UIControlStateNormal];
     [self.trackingButton addTarget:self action:@selector(onTrackingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.trackingButton autoSetDimensionsToSize:CGSizeMake(35, 35)];
-    self.trackingButton.layer.cornerRadius = 3;
-    self.trackingButton.layer.shadowOpacity = 1;
-    self.trackingButton.layer.shadowOffset = CGSizeMake(0, 1);
-    self.trackingButton.layer.shadowRadius = 1;
-    self.trackingButton.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.87].CGColor;
     
-    self.reportLocationButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.reportLocationButton configureForAutoLayout];
+    self.reportLocationButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
     [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_off"] forState:UIControlStateNormal];
     [self.reportLocationButton addTarget:self action:@selector(onReportLocationButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.reportLocationButton autoSetDimensionsToSize:CGSizeMake(35, 35)];
-    self.reportLocationButton.layer.cornerRadius = 3;
-    self.reportLocationButton.layer.shadowOpacity = 1;
-    self.reportLocationButton.layer.shadowOffset = CGSizeMake(0, 1);
-    self.reportLocationButton.layer.shadowRadius = 1;
-    self.reportLocationButton.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:.87].CGColor;
     
-    [buttonStack addArrangedSubview:self.mapSettingsButton];
+    self.createFab = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeDefault];
+    [self.createFab setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
+    [self.createFab addTarget:self action:@selector(createNewObservation:) forControlEvents:UIControlEventTouchUpInside];
+    
     [buttonStack addArrangedSubview:self.trackingButton];
     [buttonStack addArrangedSubview:self.reportLocationButton];
-    NSLog(@"Button stack superview %@", buttonStack.superview);
+    
+    [self.view insertSubview:self.mapSettingsButton aboveSubview:self.mapView];
+    [self.mapSettingsButton autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.mapView withOffset:25];
+    [self.mapSettingsButton autoPinEdgeToSuperviewMargin:ALEdgeLeft];
+    
+    [self.view insertSubview:buttonStack aboveSubview:self.mapView];
+    [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.mapSettingsButton withOffset:10];
+    [buttonStack autoPinEdgeToSuperviewMargin:ALEdgeLeft];
+    
+    [self.view insertSubview:self.createFab aboveSubview:self.mapView];
+    [self.createFab autoPinEdgeToSuperviewMargin:ALEdgeBottom withInset:25];
+    [self.createFab autoPinEdgeToSuperviewMargin:ALEdgeRight];
 }
 
 - (IBAction)filterTapped:(id)sender {
@@ -367,17 +360,8 @@
 }
 
 - (void) setupNavigationBar {
-    UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterTapped:)];
-    UIBarButtonItem *newButton = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
-    
-    // This moves the filter and new button around based on if the view came from the morenavigationcontroller or not
-    if (self != self.navigationController.viewControllers[0]) {
-        self.navigationItem.leftBarButtonItem = nil;
-        self.navigationItem.rightBarButtonItems = @[newButton, filterButton];
-    } else {
-        self.navigationItem.leftBarButtonItems = @[filterButton];
-        self.navigationItem.rightBarButtonItems = @[newButton];
-    }
+    UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter"] style:UIBarButtonItemStylePlain target:self action:@selector(filterTapped:)];
+    self.navigationItem.rightBarButtonItems = @[filterButton];
 }
 
 - (void) setNavBarTitle {
