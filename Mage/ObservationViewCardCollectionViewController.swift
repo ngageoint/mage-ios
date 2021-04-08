@@ -85,7 +85,6 @@ import MaterialComponents.MDCContainerScheme;
         view = UIView();
         
         view.addSubview(scrollView);
-        view.addSubview(syncStatusView);
         scrollView.addSubview(stackView);
         
         view.setNeedsUpdateConstraints();
@@ -93,13 +92,7 @@ import MaterialComponents.MDCContainerScheme;
     
     override func updateViewConstraints() {
         if (!didSetupConstraints) {
-            syncStatusView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-            if (syncStatusView.isHidden) {
-                scrollView.autoPinEdgesToSuperviewEdges(with: .zero);
-            } else {
-                scrollView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
-                scrollView.autoPinEdge(.top, to: .bottom, of: syncStatusView);
-            }
+            scrollView.autoPinEdgesToSuperviewEdges(with: .zero);
             stackView.autoPinEdgesToSuperviewEdges();
             stackView.autoMatch(.width, to: .width, of: view);
             didSetupConstraints = true;
@@ -153,7 +146,6 @@ import MaterialComponents.MDCContainerScheme;
                 v.removeFromSuperview()
             }
         }
-        stackView.removeFromSuperview();
         cards = [];
         ObservationPushService.singleton()?.remove(self);
     }
@@ -171,6 +163,7 @@ import MaterialComponents.MDCContainerScheme;
         for v in stackView.arrangedSubviews {
             v.removeFromSuperview();
         }
+        stackView.addArrangedSubview(syncStatusView);
         addHeaderCard(stackView: stackView);
         addLegacyAttachmentCard(stackView: stackView);
         addFormViews(stackView: stackView);
