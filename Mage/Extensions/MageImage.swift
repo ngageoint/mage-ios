@@ -16,7 +16,7 @@ extension UIImage {
         }
     }
     
-    func aspectResize(to size: CGSize) -> UIImage {
+    @objc func aspectResize(to size: CGSize) -> UIImage {
         let scaledRect = AVMakeRect(aspectRatio: self.size, insideRect: CGRect(x: 0, y: 0, width: size.width, height: size.height));
         return UIGraphicsImageRenderer(size: size).image { _ in
             draw(in: scaledRect)

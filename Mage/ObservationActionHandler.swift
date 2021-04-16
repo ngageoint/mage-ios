@@ -10,13 +10,13 @@ import Foundation
 
 class ObservationActionHandler {
     
-    static func getDirections(latitude: CLLocationDegrees, longitude: CLLocationDegrees, title: String, viewController: UIViewController) {
+    static func getDirections(latitude: CLLocationDegrees, longitude: CLLocationDegrees, title: String, viewController: UIViewController, extraActions: [UIAlertAction]? = nil) {
         let appleMapsQueryString = "daddr=\(latitude),\(longitude)&ll=\(latitude),\(longitude)&q=\(title)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
         let appleMapsUrl = URL(string: "https://maps.apple.com/?\(appleMapsQueryString ?? "")");
         
         let googleMapsUrl = URL(string: "https://maps.google.com/?\(appleMapsQueryString ?? "")");
         
-        let alert = UIAlertController(title: "Get Directions With...", message: nil, preferredStyle: .actionSheet);
+        let alert = UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
         alert.addAction(UIAlertAction(title: "Apple Maps", style: .default, handler: { (action) in
             UIApplication.shared.open(appleMapsUrl!, options: [:]) { (success) in
                 print("opened? \(success)")
@@ -27,6 +27,11 @@ class ObservationActionHandler {
                 print("opened? \(success)")
             }
         }))
+        if let safeExtraActions = extraActions {
+            for action in safeExtraActions {
+                alert.addAction(action);
+            }
+        }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
         viewController.present(alert, animated: true, completion: nil);

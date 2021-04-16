@@ -8,26 +8,39 @@
 
 import Foundation
 
+@objc protocol StraightLineNavigationDelegate {
+    @objc func cancelStraightLineNavigation();
+}
+
 @objc class StraightLineNavigation: NSObject {
-    
+    var delegate: StraightLineNavigationDelegate?;
     var bearingLine: NavigationOverlay!
     var navigationLine: NavigationOverlay!
     let mapView: MKMapView!;
+    let mapStack: UIStackView!;
     var navigationModeEnabled: Bool = false
     var bearingModeEnabled: Bool = false
+    var navView: StraightLineNavigationView?;
+    //TODO: pull these from preferences
+    var targetColor: UIColor = .systemGreen;
+    var bearingColor: UIColor = .systemRed;
     
-    @objc public init(mapView: MKMapView, locationManager: CLLocationManager?) {
+    @objc public init(mapView: MKMapView, locationManager: CLLocationManager?, mapStack: UIStackView) {
         self.mapView = mapView;
+        self.mapStack = mapStack;
         self.bearingLine = NavigationOverlay(start: MKMapPoint(x: 0.0, y: 0.0), end: MKMapPoint(x: 0.0, y: 0.0), boundingMapRect: self.mapView.visibleMapRect, color: UIColor.systemRed, lineWidth: 8.0)
         self.navigationLine = NavigationOverlay(start: MKMapPoint(x: 0.0, y: 0.0), end: MKMapPoint(x: 0.0, y: 0.0), boundingMapRect: self.mapView.visibleMapRect, color: UIColor.systemGreen, lineWidth: 16.0)
     }
     
-    @objc func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D) {
+    @objc func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, scheme: MDCContainerScheming? = nil) {
         self.navigationModeEnabled = true;
         self.bearingModeEnabled = true;
         self.updateNavigationLines(manager: manager, destinationCoordinate: destinationCoordinate);
         self.mapView.addOverlay(self.navigationLine);
         self.mapView.addOverlay(self.bearingLine);
+        self.navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: self.targetColor, bearingColor: self.bearingColor);
+        self.delegate = delegate;
+        self.mapStack.addArrangedSubview(self.navView!);
     }
     
     @objc func startBearing(manager: CLLocationManager) {
@@ -36,10 +49,11 @@ import Foundation
         self.mapView.addOverlay(self.bearingLine);
     }
     
-    func stopNavigation() {
+    @objc func stopNavigation() {
         self.navigationModeEnabled = false;
         self.mapView.removeOverlay(self.navigationLine);
         self.mapView.removeOverlay(self.bearingLine);
+        self.navView?.removeFromSuperview();
     }
     
     func calculateBearingPoint(startCoordinate: CLLocationCoordinate2D, bearing: CLLocationDirection) -> CLLocationCoordinate2D {
@@ -78,7 +92,7 @@ import Foundation
                 return;
             }
             
-            guard let bearing = manager.heading?.magneticHeading else {
+            guard let bearing = manager.heading?.trueHeading else {
                 return;
             }
             let bearingPoint = MKMapPoint(calculateBearingPoint(startCoordinate: userCoordinate, bearing: bearing));
@@ -87,6 +101,7 @@ import Foundation
             self.bearingLine.startPoint = userLocationPoint
             self.bearingLine.endPoint = bearingPoint;
             self.bearingLine.renderer.setNeedsDisplay();
+            self.navView?.populate();
             print("updating bearing line");
         }
     }
@@ -103,6 +118,7 @@ import Foundation
             self.navigationLine.startPoint = userLocationPoint
             self.navigationLine.endPoint = endCoordinate
             self.navigationLine.renderer.setNeedsDisplay();
+            self.navView?.populate();
         }
         
         updateBearingLine(manager: manager);

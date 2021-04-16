@@ -1,8 +1,8 @@
 //
-//  ObservationListActionsView.swift
+//  ObservationMapSummaryActionsView.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 1/22/21.
+//  Created by Daniel Barela on 4/9/21.
 //  Copyright © 2021 National Geospatial Intelligence Agency. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import PureLayout
 import MaterialComponents.MDCPalettes
 
-class ObservationListActionsView: UIView {
+class ObservationMapSummaryActionsView: UIView {
     var didSetupConstraints = false;
     var observation: Observation?;
     var observationActionsDelegate: ObservationActionsDelegate?;
@@ -39,16 +39,16 @@ class ObservationListActionsView: UIView {
     
     private lazy var favoriteButton: UIButton = {
         let favoriteButton = UIButton(type: .custom);
-        favoriteButton.accessibilityLabel = "favorite";
-        favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
+        favoriteButton.accessibilityLabel = "info";
+        favoriteButton.setImage(UIImage(named: "directions_large"), for: .normal);
         favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
         return favoriteButton;
     }()
     
     private lazy var directionsButton: UIButton = {
         let directionsButton = UIButton(type: .custom);
-        directionsButton.accessibilityLabel = "directions";
-        directionsButton.setImage(UIImage(named: "directions_large"), for: .normal);
+        directionsButton.accessibilityLabel = "info";
+        directionsButton.setImage(UIImage(named: "info_black"), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToObservation), for: .touchUpInside);
         return directionsButton;
     }()

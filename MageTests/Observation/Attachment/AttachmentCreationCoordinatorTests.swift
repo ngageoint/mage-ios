@@ -174,7 +174,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 recording.filePath = url.absoluteString;
                 recording.mediaType = "audio/mp4";
                 
-                attachmentCreationCoordinator.recordingAvailable(recording);
+                attachmentCreationCoordinator.recordingAvailable(recording: recording);
                 
                 expect(delegate.attachmentCreatedCalled).toEventually(beTrue());
                 expect(delegate.createdAttachment).toNot(beNil());

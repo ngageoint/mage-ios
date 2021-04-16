@@ -11,6 +11,7 @@ import Foundation
 class ObservationSummaryView: UIView {
     
     private weak var observation: Observation?;
+    private var imageOverride: UIImage?;
     private var didSetUpConstraints = false;
     
     private lazy var stack: UIStackView = {
@@ -19,8 +20,6 @@ class ObservationSummaryView: UIView {
         stack.alignment = .fill
         stack.spacing = 0;
         stack.distribution = .fillEqually
-        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 8)
-        stack.isLayoutMarginsRelativeArrangement = true;
         stack.translatesAutoresizingMaskIntoConstraints = false;
         stack.isUserInteractionEnabled = false;
         return stack;
@@ -95,13 +94,15 @@ class ObservationSummaryView: UIView {
     
     private lazy var primaryField: UILabel = {
         let primaryField = UILabel(forAutoLayout: ());
-        primaryField.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        primaryField.setContentHuggingPriority(.defaultLow, for: .vertical)
+        primaryField.numberOfLines = 0;
         return primaryField;
     }()
     
     private lazy var secondaryField: UILabel = {
         let secondaryField = UILabel(forAutoLayout: ());
         secondaryField.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        secondaryField.numberOfLines = 0;
         return secondaryField;
     }()
     
@@ -109,12 +110,12 @@ class ObservationSummaryView: UIView {
         fatalError("This class does not support NSCoding")
     }
     
-    init() {
+    init(imageOverride: UIImage? = nil) {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
-        
+        self.imageOverride = imageOverride;
         stack.addArrangedSubview(timestamp);
-        stack.setCustomSpacing(16, after: timestamp);
+        stack.setCustomSpacing(12, after: timestamp);
         stack.addArrangedSubview(primaryField);
         stack.addArrangedSubview(secondaryField);
         
@@ -126,11 +127,12 @@ class ObservationSummaryView: UIView {
     
     override func updateConstraints() {
         if (!didSetUpConstraints) {
-            stack.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
-            stack.autoPinEdge(.right, to: .left, of: itemImage, withOffset: 16);
+            stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
             itemImage.autoSetDimensions(to: CGSize(width: 48, height: 48));
+            itemImage.autoPinEdge(.left, to: .right, of: stack, withOffset: 8);
             itemImage.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-            itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 16);
+            itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 24);
+            itemImage.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16, relation: .greaterThanOrEqual);
             
             errorBadge.autoSetDimensions(to: CGSize(width: 25, height: 25));
             errorBadge.autoPinEdge(toSuperviewEdge: .top);
@@ -147,8 +149,8 @@ class ObservationSummaryView: UIView {
             sync.autoSetDimensions(to: CGSize(width: 14, height: 14));
             sync.autoPinEdge(toSuperviewEdge: .top, withInset: 1);
             sync.autoPinEdge(toSuperviewEdge: .left);
-            
-            self.autoSetDimension(.height, toSize: 80, relation: .greaterThanOrEqual)
+                        
+            self.autoSetDimension(.height, toSize: 102, relation: .greaterThanOrEqual)
             didSetUpConstraints = true;
         }
         super.updateConstraints();
@@ -157,7 +159,11 @@ class ObservationSummaryView: UIView {
     func populate(observation: Observation) {
         self.observation = observation;
         
-        itemImage.image = ObservationImage.image(for: self.observation!);
+        if (self.imageOverride != nil) {
+            itemImage.image = self.imageOverride;
+        } else {
+            itemImage.image = ObservationImage.image(for: self.observation!);
+        }
 
         primaryField.text = observation.primaryFeedFieldText();
         secondaryField.text = observation.secondaryFeedFieldText();
@@ -178,12 +184,15 @@ class ObservationSummaryView: UIView {
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
-        self.timestamp.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        self.timestamp.font = scheme.typographyScheme.overline;
-        self.primaryField.textColor = scheme.colorScheme.primaryColor;
-        self.primaryField.font = scheme.typographyScheme.headline6;
-        self.secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        self.secondaryField.font = scheme.typographyScheme.subtitle2;
+        timestamp.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        timestamp.font = scheme.typographyScheme.overline;
+        timestamp.autoSetDimension(.height, toSize: timestamp.font.pointSize);
+        primaryField.textColor = scheme.colorScheme.primaryColor;
+        primaryField.font = scheme.typographyScheme.headline6;
+        primaryField.autoSetDimension(.height, toSize: primaryField.font.pointSize);
+        secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        secondaryField.font = scheme.typographyScheme.subtitle2;
+        secondaryField.autoSetDimension(.height, toSize: secondaryField.font.pointSize);
         errorShapeLayer.fillColor = scheme.colorScheme.errorColor.cgColor
         exclamation.tintColor = UIColor.white;
         syncShapeLayer.fillColor = scheme.colorScheme.secondaryColor.cgColor;

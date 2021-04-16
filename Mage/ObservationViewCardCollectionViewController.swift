@@ -226,7 +226,12 @@ import MaterialComponents.MDCContainerScheme;
         var formSpacerView: UIView?;
         if (!formView.isEmpty()) {
             formSpacerView = UIView(forAutoLayout: ());
+            let divider = UIView(forAutoLayout: ());
+            divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
+            divider.autoSetDimension(.height, toSize: 1);
+            formSpacerView?.addSubview(divider);
             formSpacerView?.addSubview(formView);
+            divider.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
             formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
         }
         var tintColor: UIColor? = nil;
@@ -297,7 +302,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         }
     }
     
-    func favorite(_ observation: Observation) {
+    func favoriteObservation(_ observation: Observation) {
         observation.toggleFavorite() { success, error in
             observation.managedObjectContext?.refresh(observation, mergeChanges: false);
             self.headerCard?.populate(observation: observation);
@@ -310,7 +315,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     }
     
     
-    func getDirections(_ observation: Observation) {
+    func getDirectionsToObservation(_ observation: Observation) {
         ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
     }
     

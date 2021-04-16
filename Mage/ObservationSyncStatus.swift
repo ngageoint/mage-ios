@@ -49,7 +49,6 @@ class ObservationSyncStatus: UIView {
         self.init(frame: .zero);
         configureForAutoLayout();
         addSubview(syncStatusView);
-        syncStatusView.autoPinEdgesToSuperviewEdges();
         self.observation = observation;
         setupSyncStatusView();
         self.observation = observation;
@@ -65,9 +64,16 @@ class ObservationSyncStatus: UIView {
         setupSyncStatusView();
     }
     
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            syncStatusView.autoPinEdgesToSuperviewEdges();
+            didSetupConstraints = true;
+        }
+        super.updateConstraints();
+    }
+    
     func setupSyncStatusView() {
         self.isHidden = false;
-        
         // if the observation has an error
         if (observation?.hasValidationError() ?? false) {
             syncStatusView.textView.text = "Error Pushing Changes\n\(observation?.errorMessage() ?? "")";

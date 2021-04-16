@@ -94,7 +94,7 @@ class ObservationActionsView: UIView {
         let favoriteButton = UIButton(type: .custom);
         favoriteButton.accessibilityLabel = "favorite";
         favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
-        favoriteButton.addTarget(self, action: #selector(favorite), for: .touchUpInside);
+        favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
         return favoriteButton;
     }()
     
@@ -102,7 +102,7 @@ class ObservationActionsView: UIView {
         let directionsButton = UIButton(type: .custom);
         directionsButton.accessibilityLabel = "directions";
         directionsButton.setImage(UIImage(named: "directions_large"), for: .normal);
-        directionsButton.addTarget(self, action: #selector(getDirections), for: .touchUpInside);
+        directionsButton.addTarget(self, action: #selector(getDirectionsToObservation), for: .touchUpInside);
         return directionsButton;
     }()
     
@@ -264,12 +264,12 @@ class ObservationActionsView: UIView {
         observationActionsDelegate?.moreActionsTapped?(observation!);
     }
     
-    @objc func favorite() {
-        observationActionsDelegate?.favorite?(observation!);
+    @objc func favoriteObservation() {
+        observationActionsDelegate?.favoriteObservation?(observation!);
     }
     
-    @objc func getDirections() {
-        observationActionsDelegate?.getDirections?(observation!);
+    @objc func getDirectionsToObservation() {
+        observationActionsDelegate?.getDirectionsToObservation?(observation!);
     }
     
     @objc func toggleImportant() {

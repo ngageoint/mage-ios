@@ -59,7 +59,7 @@
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 
-@interface MapDelegate ()
+@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate>
     @property (nonatomic, strong) LocationAccuracy *selectedUserAccuracy;
     @property (nonatomic, strong) ObservationAccuracy *selectedObservationAccuracy;
 
@@ -82,13 +82,15 @@
 
     @property (nonatomic) BOOL darkMode;
 
-    @property (strong, nonatomic) CLLocationManager *locationManager;
     @property (strong, nonatomic) MapObservationManager *mapObservationManager;
 @property (strong, nonatomic) NSMutableArray *listenersRegistered;
 @property (nonatomic) id<MKMapViewDelegate> mapEventDelegate;
 @property (strong, nonatomic) GPKGGeoPackage * countriesGeoPackage;
 @property (strong, nonatomic) GPKGGeoPackage * darkCountriesGeoPackage;
 @property (strong, nonatomic) NSMutableDictionary *feedItemRetrievers;
+@property (strong, nonatomic) MDCBottomSheetController *bottomSheet;
+@property (strong, nonatomic) MKAnnotationView *enlargedPin;
+@property (nonatomic) CGRect initialPinFrame;
 @end
 
 @implementation MapDelegate
@@ -116,11 +118,6 @@
         self.locationManager.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
-        
-        // temporary for straight line for now
-//        if (self.straightLineNavigation == nil) {
-//            self.straightLineNavigation = [[StraightLineNavigation alloc] initWithMapView:self.mapView locationManager:self.locationManager];
-//        }
     }
     if (!self.mapCacheOverlays) {
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
@@ -1267,9 +1264,7 @@
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    if (self.mapView.userTrackingMode == MKUserTrackingModeFollow) {
-        self.isTrackingAnimation = NO;
-    }
+    self.isTrackingAnimation = NO;
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
@@ -1285,7 +1280,11 @@
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
         MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.mapView];
-        annotationView.canShowCallout = self.canShowObservationCallout;
+        // adjiust the center offset if this is the enlargedPin
+        if (annotationView == self.enlargedPin) {
+            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height));
+        }
+        annotationView.canShowCallout = false;// self.canShowObservationCallout;
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
         annotationView.enabled = !self.hideObservations;
@@ -1325,7 +1324,6 @@
             annotationView.canShowCallout = YES;
         }
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-//        rightButton.tintColor = [UIColor mageBlue];
         annotationView.rightCalloutAccessoryView = rightButton;
         [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
         annotationView.annotation = annotation;
@@ -1355,6 +1353,10 @@
         [self.mapView addOverlay:self.selectedUserAccuracy];
     } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *annotation = view.annotation;
+        self.initialPinFrame = view.frame;
+        [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, (view.image.size.width) * 2, (view.image.size.height) * 2)];
+        view.centerOffset = CGPointMake(0, -(view.image.size.height));
+        self.enlargedPin = view;
         Observation *observation = annotation.observation;
         
         [annotation setSubtitle:observation.timestamp.timeAgoSinceNow];
@@ -1365,7 +1367,13 @@
             self.selectedObservationAccuracy = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
             [self.mapView addOverlay:self.selectedObservationAccuracy];
         }
-        [self startStraightLineNavigation:observation.location.coordinate];
+        self.obsBottomSheet = [[ObservationBottomSheetController alloc] initWithObservation:observation actionsDelegate:self scheme:self.scheme];
+        self.obsBottomSheet.preferredContentSize = CGSizeMake(self.obsBottomSheet.preferredContentSize.width, 220);
+        
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.obsBottomSheet];
+        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+        self.bottomSheet.delegate = self;
+        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *annotation = view.annotation;
         NSString *clickMessage = [annotation detailTextForAnnotation];
@@ -1383,13 +1391,14 @@
 //    [self.straightLineNavigation startBearingWithManager:self.locationManager];
 }
 
-- (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination {
-//    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-//    [self.locationManager startUpdatingLocation];
-//    self.locationManager.headingFilter = 0.5;
-//    [self.locationManager startUpdatingHeading];
-//    self.navigationDestinationCoordinate = destination;
-//    [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination];
+- (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination image:(UIImage*) image {
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
+    self.locationManager.headingFilter = 0.5;
+    [self.locationManager startUpdatingHeading];
+    self.navigationDestinationCoordinate = destination;
+    [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+    [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination delegate:self image:image scheme:self.scheme];
 }
 
 - (void)mapView:(MKMapView *) mapView didDeselectAnnotationView:(MKAnnotationView *) view {
@@ -1684,16 +1693,22 @@
     }
 }
 
-//- (void) addFeedItem:(FeedItem *)feedItem {
-//    if (feedItem.isMappable) {
-//        [self.mapView addAnnotation:feedItem];
-//    }
-//}
-//
-//- (void) removeFeedItem:(FeedItem *)feedItem {
-//    if (feedItem.isMappable) {
-//        [self.mapView removeAnnotation:feedItem];
-//    }
-//}
+- (void)bottomSheetControllerDidDismissBottomSheet:(nonnull MDCBottomSheetController *)controller {
+    [self resetEnlargedPin];
+}
+
+- (void) resetEnlargedPin {
+    if (self.enlargedPin) {
+        self.enlargedPin.frame = self.initialPinFrame;
+        self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0));
+        self.enlargedPin = nil;
+    }
+}
+
+- (void) cancelStraightLineNavigation {
+    [self.straightLineNavigation stopNavigation];
+    [self.locationManager stopUpdatingLocation];
+    [self.locationManager stopUpdatingHeading];
+}
 
 @end

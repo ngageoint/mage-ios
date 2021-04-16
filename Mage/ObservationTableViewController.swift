@@ -153,6 +153,7 @@ class ObservationTableViewController: UITableViewController {
         self.stopUpdateTimer();
         self.observationDataStore.observations?.delegate = nil;
         removeFilterListeners();
+        createFab.removeFromSuperview();
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -281,7 +282,7 @@ extension ObservationTableViewController: ObservationActionsDelegate {
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
-    func favorite(_ observation: Observation) {
+    func favoriteObservation(_ observation: Observation) {
         observation.toggleFavorite { (_, _) in
             self.tableView.reloadData();
         }
@@ -292,7 +293,7 @@ extension ObservationTableViewController: ObservationActionsDelegate {
         MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
     }
     
-    func getDirections(_ observation: Observation) {
+    func getDirectionsToObservation(_ observation: Observation) {
         ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
     }
 }

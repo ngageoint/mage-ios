@@ -45,6 +45,7 @@
     @property (strong, nonatomic) IBOutlet UIButton *showPeopleButton;
     @property (strong, nonatomic) IBOutlet UIButton *showObservationsButton;
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *mapSettingsButton;
+@property (strong, nonatomic) UIStackView *stack;
 
     @property (strong, nonatomic) Observations *observationResultsController;
     @property (nonatomic, strong) NSTimer* mapAnnotationsUpdateTimer;
@@ -128,10 +129,20 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    self.stack = [UIStackView newAutoLayoutView];
+    self.stack.axis = UILayoutConstraintAxisVertical;
+    self.stack.alignment = UIStackViewAlignmentFill;
+    self.stack.spacing = 0;
+    self.stack.distribution = UIStackViewDistributionFill;
+    
+    [self.view addSubview:self.stack];
+    [self.stack autoPinEdgesToSuperviewSafeArea];
+    
     self.mapView = [[MKMapView alloc] initForAutoLayout];
     self.mapView.accessibilityLabel = @"map";
-    [self.view addSubview:self.mapView];
-    [self.mapView autoPinEdgesToSuperviewEdges];
+    [self.stack addArrangedSubview:self.mapView];
+//    [self.view addSubview:self.mapView];
+//    [self.mapView autoPinEdgesToSuperviewSafeArea];
     
     [self addMapButtons];
     [self setupToastView];
@@ -140,6 +151,9 @@
     
     self.childCoordinators = [[NSMutableArray alloc] init];
     self.mapDelegate = [[MapDelegate alloc] init];
+    self.mapDelegate.navigationController = [UIApplication getTopViewControllerWithBase:[UIApplication sharedApplication].keyWindow.rootViewController];
+    self.mapDelegate.scheme = self.scheme;
+    self.mapDelegate.mapStack = self.stack;
     [self.mapDelegate setMapEventDelegte:self.mapEventDelegate];
     self.mapDelegate.mapCalloutDelegate = self;
 
@@ -294,7 +308,7 @@
 
 - (void) setupToastView {
     self.toastView = [[UIView alloc] initForAutoLayout];
-    [self.view insertSubview:self.toastView aboveSubview:self.mapView];
+    [self.view insertSubview:self.toastView aboveSubview:self.stack];
 
     [self.toastView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(0, 0, 0, 0) excludingEdge:ALEdgeTop];
     
@@ -345,7 +359,7 @@
     [buttonStack autoPinEdgeToSuperviewMargin:ALEdgeLeft];
     
     [self.view insertSubview:self.createFab aboveSubview:self.mapView];
-    [self.createFab autoPinEdgeToSuperviewMargin:ALEdgeBottom withInset:25];
+    [self.createFab autoPinEdge:ALEdgeBottom toEdge:ALEdgeBottom ofView:self.mapView withOffset:-25];
     [self.createFab autoPinEdgeToSuperviewMargin:ALEdgeRight];
 }
 

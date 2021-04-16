@@ -9,15 +9,15 @@
 import Foundation
 
 @objc protocol ObservationActionsDelegate {
+    @objc optional func viewObservation(_ observation: Observation);
     @objc optional func moreActionsTapped(_ observation: Observation);
     @objc optional func showFavorites(_ observation: Observation);
-    @objc optional func favorite(_ observation: Observation);
-    @objc optional func getDirections(_ observation: Observation);
+    @objc optional func favoriteObservation(_ observation: Observation);
+    @objc optional func getDirectionsToObservation(_ observation: Observation);
     @objc optional func copyLocation(_ locationString: String);
     @objc optional func makeImportant(_ observation: Observation, reason: String);
     @objc optional func removeImportant(_ observation: Observation);
     @objc optional func editObservation(_ observation: Observation);
-    @objc optional func viewObservation(_ observation: Observation);
     @objc optional func deleteObservation(_ observation: Observation);
     @objc optional func cancelAction();
     @objc optional func reorderForms(_ observation: Observation);

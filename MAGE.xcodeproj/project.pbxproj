@@ -112,6 +112,9 @@
 		F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */; };
 		F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */; };
 		F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */; };
+		F7081DB02626348F004B89D4 /* MockCLLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081DAF2626348F004B89D4 /* MockCLLocationManager.swift */; };
+		F7081DB42627696F004B89D4 /* CompassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081DB32627696F004B89D4 /* CompassView.swift */; };
+		F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */; };
 		F7098F2224928E7700313703 /* FeedItemsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */; };
 		F7098F262492C36700313703 /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F27249401E500313703 /* FeedItemTableViewCell.swift */; };
@@ -209,6 +212,11 @@
 		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
+		F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */; };
+		F76FFC272620E4C200532330 /* ObservationMapSummaryActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC262620E4C200532330 /* ObservationMapSummaryActionsView.swift */; };
+		F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */; };
+		F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */; };
+		F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */; };
 		F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */; };
 		F770854025927E1C008903BA /* ObservationSyncStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770853F25927E1C008903BA /* ObservationSyncStatus.swift */; };
 		F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770854325929C9A008903BA /* ObservationSyncStatusTests.swift */; };
@@ -585,6 +593,9 @@
 		F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditCardDelegate.swift; sourceTree = "<group>"; };
 		F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentCreationDelegate.swift; sourceTree = "<group>"; };
 		F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerTests.swift; sourceTree = "<group>"; };
+		F7081DAF2626348F004B89D4 /* MockCLLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCLLocationManager.swift; sourceTree = "<group>"; };
+		F7081DB32627696F004B89D4 /* CompassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassView.swift; sourceTree = "<group>"; };
+		F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLCoordinate2DExtensions.swift; sourceTree = "<group>"; };
 		F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsViewControllerTests.swift; sourceTree = "<group>"; };
 		F7098F252492C36700313703 /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F7098F27249401E500313703 /* FeedItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -709,6 +720,10 @@
 		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldViewTests.swift; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetController.swift; sourceTree = "<group>"; };
+		F76FFC262620E4C200532330 /* ObservationMapSummaryActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapSummaryActionsView.swift; sourceTree = "<group>"; };
+		F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateObservationActionsDelegate.swift; sourceTree = "<group>"; };
+		F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineNavigationView.swift; sourceTree = "<group>"; };
 		F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAttachmentCard.swift; sourceTree = "<group>"; };
 		F770853F25927E1C008903BA /* ObservationSyncStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSyncStatus.swift; sourceTree = "<group>"; };
 		F770854325929C9A008903BA /* ObservationSyncStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSyncStatusTests.swift; sourceTree = "<group>"; };
@@ -847,6 +862,7 @@
 		F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingFisherUIImageView.swift; sourceTree = "<group>"; };
 		F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeometryEditCoordinator.h; sourceTree = "<group>"; };
 		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
+		F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineNavigationViewTests.swift; sourceTree = "<group>"; };
 		F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMSTileOverlay.h; sourceTree = "<group>"; };
 		F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMSTileOverlay.m; sourceTree = "<group>"; };
 		F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIImagePickerController.swift; sourceTree = "<group>"; };
@@ -1228,6 +1244,7 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				F76FFC2E2624FF3200532330 /* StraightLineNav */,
 				F7154ACE260D1369002C8617 /* MapDelegate */,
 				2F0323A5246364C500D2866B /* Overlays */,
 				2F2287D921F0EADE0058E527 /* Feature */,
@@ -1336,6 +1353,7 @@
 				F770854B2593FDD8008903BA /* MockObservationActionsDelegate.swift */,
 				F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */,
 				F7CDD71C260138E800F3294C /* MockMKMapViewDelegate.swift */,
+				F7081DAF2626348F004B89D4 /* MockCLLocationManager.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1379,6 +1397,7 @@
 				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
 				F7C812E825C1B37200D4332B /* ObservationDataStore.swift */,
 				F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */,
+				F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1421,7 +1440,7 @@
 				F727516819C87B27006C63CB /* MapDelegate.h */,
 				F727516919C87B27006C63CB /* MapDelegate.m */,
 				F7154ACF260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift */,
-				F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */,
+				F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */,
 			);
 			path = MapDelegate;
 			sourceTree = "<group>";
@@ -1485,6 +1504,7 @@
 				F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */,
 				F770853F25927E1C008903BA /* ObservationSyncStatus.swift */,
 				F7F4754C25BB2CF0006634F7 /* ObservationListActionsView.swift */,
+				F76FFC262620E4C200532330 /* ObservationMapSummaryActionsView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -1510,6 +1530,7 @@
 				F73886C625894CEA00EDA036 /* KeyboardHelper.swift */,
 				F738871C258BA22500EDA036 /* UIButtonInsets.swift */,
 				F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */,
+				F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1633,6 +1654,16 @@
 				F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */,
 			);
 			name = Constraints;
+			sourceTree = "<group>";
+		};
+		F76FFC2E2624FF3200532330 /* StraightLineNav */ = {
+			isa = PBXGroup;
+			children = (
+				F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */,
+				F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */,
+				F7081DB32627696F004B89D4 /* CompassView.swift */,
+			);
+			path = StraightLineNav;
 			sourceTree = "<group>";
 		};
 		F770852E25915D61008903BA /* Fields */ = {
@@ -1946,6 +1977,7 @@
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				F7D049A226262A8900BCFCC2 /* StraightLineNav */,
 				F7C641032581504F00C02335 /* MapViewControllerTests.swift */,
 			);
 			path = Map;
@@ -1962,6 +1994,14 @@
 				F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */,
 			);
 			name = Geometry;
+			sourceTree = "<group>";
+		};
+		F7D049A226262A8900BCFCC2 /* StraightLineNav */ = {
+			isa = PBXGroup;
+			children = (
+				F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */,
+			);
+			path = StraightLineNav;
 			sourceTree = "<group>";
 		};
 		F7D9B82D2562EFE900A76E2C /* Attachment */ = {
@@ -2600,6 +2640,7 @@
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
+				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
@@ -2632,6 +2673,7 @@
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
 				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
+				F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				2FC99DC81DDA335A003C1D36 /* UserTableViewController.m in Sources */,
@@ -2653,6 +2695,7 @@
 				F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */,
 				F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */,
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
+				F76FFC272620E4C200532330 /* ObservationMapSummaryActionsView.swift in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F7F4754925BA3C7D006634F7 /* ObservationSummaryView.swift in Sources */,
@@ -2733,6 +2776,7 @@
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
+				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
@@ -2741,6 +2785,7 @@
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
+				F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
@@ -2751,6 +2796,7 @@
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
 				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
+				F7081DB42627696F004B89D4 /* CompassView.swift in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
@@ -2772,6 +2818,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */,
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
 				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
 				F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */,
@@ -2798,6 +2845,7 @@
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
+				F7081DB02626348F004B89D4 /* MockCLLocationManager.swift in Sources */,
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
@@ -3070,7 +3118,7 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zxcvbn-ios/zxcvbn_ios.framework/Headers\"",
 				);
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
@@ -3203,7 +3251,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (

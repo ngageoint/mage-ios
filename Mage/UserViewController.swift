@@ -90,7 +90,7 @@ extension UserViewController : ObservationActionsDelegate {
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
-    func favorite(_ observation: Observation) {
+    func favoriteObservation(_ observation: Observation) {
         observation.toggleFavorite { (_, _) in
             self.tableView.reloadData();
         }
@@ -101,7 +101,7 @@ extension UserViewController : ObservationActionsDelegate {
         MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
     }
     
-    func getDirections(_ observation: Observation) {
+    func getDirectionsToObservation(_ observation: Observation) {
         ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
     }
 }

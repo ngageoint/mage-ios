@@ -86,7 +86,7 @@ class MapViewControllerTests: KIFSpec {
                 NSManagedObject.mr_setDefaultBatchSize(20);
             }
             
-            fdescribe("Feed item tests") {
+            describe("Feed item tests") {
                 it("should get one mappable feed item retriever and start it with no initial items add one") {
                     MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm");
                     MageCoreDataFixtures.addUser(userId: "user")

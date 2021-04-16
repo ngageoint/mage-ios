@@ -366,7 +366,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     }
     
     func presentMapsActionSheetForURLs(urlMap: [String: URL?]) {
-        let alert = UIAlertController(title: "Get Directions With...", message: nil, preferredStyle: .actionSheet);
+        let alert = UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
         alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
             if let coordinate = self.userLastLocation?.coordinate {
                 UIPasteboard.general.string = CoordinateDisplay.displayFromCoordinate(coordinate: coordinate);

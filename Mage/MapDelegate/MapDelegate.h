@@ -15,8 +15,10 @@
 #import "MapObservations.h"
 #import "MapCalloutTapped.h"
 #import "FeedItem.h"
+#import <MaterialComponents/MDCContainerScheme.h>
 
 @class StraightLineNavigation;
+@class ObservationBottomSheetController;
 
 @protocol FeedItemDelegate <NSObject>
 
@@ -64,6 +66,11 @@
 @property (nonatomic) BOOL canShowGpsLocationCallout;
 @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
 @property (nonatomic, strong) MapObservations *mapObservations;
+@property (nonatomic, weak) UIViewController *navigationController;
+@property (nonatomic, weak) UIStackView *mapStack;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) ObservationBottomSheetController *obsBottomSheet;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateLocationPredicates: (NSMutableArray *) predicates;
@@ -76,9 +83,9 @@
 - (void) mapClickAtPoint: (CGPoint) point;
 - (void) cleanup;
 - (void) ensureMapLayout;
-- (void) updateTheme;
 - (void) setupListeners;
 - (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
 - (void) startBearing;
-- (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination;
+- (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination image: (UIImage *) image;
+- (void) resetEnlargedPin;
 @end
