@@ -48,7 +48,7 @@ import MaterialComponents.MDCButton;
             self.scheme = safeScheme;
         }
         if let safeScheme = self.scheme {
-            self.tableView.backgroundColor = safeScheme.colorScheme.backgroundColor;
+            self.tableView.backgroundColor = safeScheme.colorScheme.surfaceColor;
             cancelButton.applyTextTheme(withScheme: safeScheme);
         }
     }
