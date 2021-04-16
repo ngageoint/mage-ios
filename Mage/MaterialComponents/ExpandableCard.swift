@@ -111,10 +111,10 @@ class ExpandableCard: MDCCard {
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
         thumbnail.tintColor = self.imageTint ?? scheme.colorScheme.primaryColor;
-        expandAction.tintColor = scheme.colorScheme.primaryColor;
+        expandAction.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         titleText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         titleText.font = scheme.typographyScheme.overline;
-        headerText.textColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
+        headerText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         headerText.font = scheme.typographyScheme.headline6;
         subhead.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         subhead.font = scheme.typographyScheme.subtitle2;
