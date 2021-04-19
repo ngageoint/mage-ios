@@ -4,7 +4,7 @@ platform :ios, '13.0'
 workspace 'MAGE'
 project 'MAGE.xcodeproj'
 
-use_frameworks!
+use_modular_headers!
 
 target 'MAGE' do
     pod 'UIImage-Categories', '~> 0.0.1'
