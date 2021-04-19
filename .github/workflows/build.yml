@@ -1,0 +1,66 @@
+name: Build
+
+on: 
+  workflow_dispatch:
+    inputs:
+      appBranch:
+        description: 'App GitHub branch to build'     
+        required: true
+        default: 'master'
+      sdkBranch:
+        description: 'SDK GitHub branch to build'     
+        required: true
+        default: 'master'
+jobs:
+  build:
+   runs-on: macos-latest
+
+   steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        path: mage-ios
+    - name: Clone MAGE SDK
+      uses: actions/checkout@master
+      with:
+        repository: ngageoint/mage-ios-sdk
+        path: 'mage-ios-sdk'
+        fetch-depth: 0
+    - name: Checkout SDK Branch
+      run: git checkout ${{ github.event.inputs.sdkBranch }}
+      working-directory: mage-ios-sdk
+    - name: Install Utilities
+      run: |
+        brew install automake
+        brew install libtool
+    - name: Install Dependencies
+      run: |
+        gem install xcodeproj
+      working-directory: mage-ios
+    - name: Install Pods
+      run: |
+        pod repo update
+        pod install
+      working-directory: mage-ios
+    - name: Configure Signing Certificate and Provisioning Profiles
+      run: |
+        gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.CERTIFICATE_PASSPHRASE }}" --output development.p12 ./.github/secrets/development.p12.gpg
+        gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.PROFILE_PASSPHRASE }}" --output MAGE.mobileprovision ./.github/secrets/MAGE.mobileprovision.gpg
+      working-directory: mage-ios
+    - name: Build
+      env: 
+        KEYCHAIN_NAME: "${{ secrets.KEYCHAIN_NAME }}"
+        KEYCHAIN_PASSWORD: "${{ secrets.KEYCHAIN_PASSWORD }}"
+        CERTIFICATE_PASSWORD: "${{ secrets.CERTIFICATE_PASSWORD }}"
+      run: |
+        fastlane build
+      working-directory: mage-ios
+    - name: Bundle Artifacts
+      run: |
+         tar -czvf MAGE.xcarchive.tar.gz *.xcarchive/
+      working-directory: mage-ios/build
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: MAGE.xcarchive.tar.gz
+        path: mage-ios/build/MAGE.xcarchive.tar.gz

@@ -1,0 +1,72 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    create_keychain(	
+      name: ENV["KEYCHAIN_NAME"],	
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: false
+    )	
+  end
+
+ desc "Build app"
+  lane :build do
+
+    import_certificate(
+      certificate_path: "development.p12",
+      certificate_password: ENV["CERTIFICATE_PASSWORD"],
+      keychain_password: ENV["KEYCHAIN_PASSWORD"]
+    )
+
+    install_provisioning_profile(path: "MAGE.mobileprovision")
+
+    update_project_provisioning(
+      xcodeproj: 'MAGE.xcodeproj',
+      profile: "MAGE.mobileprovision",
+      target_filter: "MAGE",
+      build_configuration: 'Release',
+      code_signing_identity: 'Apple Development'
+    )
+
+    gym(
+      scheme: "MAGE",
+      workspace: "MAGE.xcworkspace",
+      output_name: "MAGE",
+      output_directory: "build",
+      build_path: "build",
+      xcargs: "DEVELOPMENT_TEAM=ZL8G5D9G2H CODE_SIGN_STYLE=Manual",
+      export_method: "development",
+      export_team_id: "ZL8G5D9G2H",
+      export_options: {
+        provisioningProfiles: { 
+          "mil.nga.mage" => "MAGE Development"
+        }
+      }
+    )
+  end
+
+  after_all do |lane|
+    delete_keychain(name: ENV["KEYCHAIN_NAME"])	
+  end	
+
+  error do |lane, exception|
+    delete_keychain(name: ENV["KEYCHAIN_NAME"])	
+  end
+end
