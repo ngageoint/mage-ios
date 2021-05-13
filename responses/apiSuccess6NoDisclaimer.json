@@ -15,8 +15,5 @@
         "micro":0
     },
     "description":"Geospatial situation awareness application",
-    "name":"MAGE",
-    "disclaimer":{
-        "show":false
-    }
+    "name":"MAGE"
 }

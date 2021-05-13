@@ -133,6 +133,24 @@ extension UserDefaults {
         }
     }
     
+    var authenticationStrategies: [String: Any]? {
+        get {
+            return dictionary(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
+    var serverAuthenticationStrategies: [String: Any]? {
+        get {
+            return dictionary(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
     var observationTimeFilter: TimeFilterType {
         get {
             return TimeFilterType.init(rawValue: UInt(integer(forKey: "timeFilterKey"))) ?? TimeFilterType.all;
