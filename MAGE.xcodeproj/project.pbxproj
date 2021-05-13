@@ -213,7 +213,6 @@
 		F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
 		F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */; };
-		F76FFC272620E4C200532330 /* ObservationMapSummaryActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC262620E4C200532330 /* ObservationMapSummaryActionsView.swift */; };
 		F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */; };
 		F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */; };
 		F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */; };
@@ -293,6 +292,8 @@
 		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */; };
 		F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */; };
 		F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B5772B245CABE600879C9C /* ExpandableCard.swift */; };
+		F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */; };
+		F7BCAC272630B62E006BE2A9 /* testResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7BCAC262630B62E006BE2A9 /* testResponse.html */; };
 		F7BE036F24660A9D00D2F7C3 /* TextFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
 		F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */; };
@@ -721,7 +722,6 @@
 		F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldViewTests.swift; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetController.swift; sourceTree = "<group>"; };
-		F76FFC262620E4C200532330 /* ObservationMapSummaryActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapSummaryActionsView.swift; sourceTree = "<group>"; };
 		F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateObservationActionsDelegate.swift; sourceTree = "<group>"; };
 		F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineNavigationView.swift; sourceTree = "<group>"; };
 		F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAttachmentCard.swift; sourceTree = "<group>"; };
@@ -822,6 +822,8 @@
 		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerViewController.m; sourceTree = "<group>"; };
 		F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCardCollectionViewController.swift; sourceTree = "<group>"; };
 		F7B5772B245CABE600879C9C /* ExpandableCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCard.swift; sourceTree = "<group>"; };
+		F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageServerTests.swift; sourceTree = "<group>"; };
+		F7BCAC262630B62E006BE2A9 /* testResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = testResponse.html; sourceTree = "<group>"; };
 		F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldViewTests.swift; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
 		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
@@ -1504,7 +1506,6 @@
 				F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */,
 				F770853F25927E1C008903BA /* ObservationSyncStatus.swift */,
 				F7F4754C25BB2CF0006634F7 /* ObservationListActionsView.swift */,
-				F76FFC262620E4C200532330 /* ObservationMapSummaryActionsView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -1613,6 +1614,7 @@
 				F7154A932605391D002C8617 /* apiSuccess6.json */,
 				F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */,
 				F7154AB6260BEAE3002C8617 /* observationsUpdate.json */,
+				F7BCAC262630B62E006BE2A9 /* testResponse.html */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -1902,6 +1904,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F7BCAC1F263093E7006BE2A9 /* SDK */,
 				F7C641022581503B00C02335 /* Map */,
 				F706B2152554365900C19BA7 /* Mocks */,
 				F710D8AC2549B34E00798D56 /* MaterialComponents */,
@@ -1939,6 +1942,14 @@
 				F7A94D9018AD9CB000CB9EE0 /* MAGETests-Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F7BCAC1F263093E7006BE2A9 /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
+			);
+			path = SDK;
 			sourceTree = "<group>";
 		};
 		F7BE036A2466093700D2F7C3 /* Observation */ = {
@@ -2264,6 +2275,7 @@
 				F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */,
 				F76BB9F725ED8195004CFB97 /* oneFormRestricted.json in Resources */,
 				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
+				F7BCAC272630B62E006BE2A9 /* testResponse.html in Resources */,
 				F7CE2300254368B000D710DE /* allTheThings.json in Resources */,
 				F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */,
 				F71446F524A3FAF5005A5EC1 /* feedContent.json in Resources */,
@@ -2695,7 +2707,6 @@
 				F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */,
 				F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */,
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
-				F76FFC272620E4C200532330 /* ObservationMapSummaryActionsView.swift in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F7F4754925BA3C7D006634F7 /* ObservationSummaryView.swift in Sources */,
@@ -2876,6 +2887,7 @@
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
+				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F795ED0E24B8FDE20028FBFC /* MockMapViewDelegate.swift in Sources */,
 				F74020B92491904200B5A8BA /* TestHelpers.swift in Sources */,
 			);

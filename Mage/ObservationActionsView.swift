@@ -93,7 +93,7 @@ class ObservationActionsView: UIView {
     private lazy var favoriteButton: UIButton = {
         let favoriteButton = UIButton(type: .custom);
         favoriteButton.accessibilityLabel = "favorite";
-        favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
+        favoriteButton.setImage(UIImage(named: "favorite_border"), for: .normal);
         favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
         return favoriteButton;
     }()
@@ -109,7 +109,7 @@ class ObservationActionsView: UIView {
     private lazy var importantButton: UIButton = {
         let importantButton = UIButton(type: .custom);
         importantButton.accessibilityLabel = "important";
-        importantButton.setImage(UIImage(named: "flag"), for: .normal);
+        importantButton.setImage(UIImage(named: "flag_outline"), for: .normal);
         importantButton.addTarget(self, action: #selector(toggleImportant), for: .touchUpInside);
         return importantButton;
     }()
@@ -238,12 +238,19 @@ class ObservationActionsView: UIView {
                 return favorite.userId == user.remoteId && favorite.favorite;
             }
         }
+        if (currentUserFavorited) {
+            favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
+        } else {
+            favoriteButton.setImage(UIImage(named: "favorite_border"), for: .normal);
+        }
         
         isImportant = false;
         importantInputView.text = nil;
+        importantButton.setImage(UIImage(named: "flag_outline"), for: .normal);
         if let important = observation.observationImportant {
             if (important.important == NSNumber(booleanLiteral: true)) {
                 isImportant = true;
+                importantButton.setImage(UIImage(named: "flag"), for: .normal);
                 importantInputView.text = important.reason;
                 setImportantButton.accessibilityLabel = "Update Important";
                 setImportantButton.setTitle("Update", for: .normal);

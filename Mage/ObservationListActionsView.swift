@@ -25,6 +25,7 @@ class ObservationListActionsView: UIView {
         actionButtonView.addSubview(latitudeLongitudeButton);
         actionButtonView.addSubview(directionsButton);
         actionButtonView.addSubview(favoriteButton);
+        actionButtonView.addSubview(favoriteCount);
         return actionButtonView;
     }()
     
@@ -40,9 +41,14 @@ class ObservationListActionsView: UIView {
     private lazy var favoriteButton: UIButton = {
         let favoriteButton = UIButton(type: .custom);
         favoriteButton.accessibilityLabel = "favorite";
-        favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
+        favoriteButton.setImage(UIImage(named: "favorite_border"), for: .normal);
         favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
         return favoriteButton;
+    }()
+    
+    private lazy var favoriteCount: UILabel = {
+        let favoriteCount = UILabel(forAutoLayout: ());
+        return favoriteCount;
     }()
     
     private lazy var directionsButton: UIButton = {
@@ -55,6 +61,8 @@ class ObservationListActionsView: UIView {
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.scheme = scheme;
+        favoriteCount.textColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        favoriteCount.font = scheme.typographyScheme.overline;
         favoriteButton.tintColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
         directionsButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
@@ -86,6 +94,8 @@ class ObservationListActionsView: UIView {
             directionsButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 24), excludingEdge: .left);
             favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -32);
             favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
+            favoriteCount.autoPinEdge(.left, to: .right, of: favoriteButton);
+            favoriteCount.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
             
             directionsButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
             favoriteButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
@@ -115,11 +125,26 @@ class ObservationListActionsView: UIView {
         }
         
         currentUserFavorited = false;
+        var favoriteCounter = 0;
         if let favorites = observation.favorites {
             let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
             currentUserFavorited = favorites.contains { (favorite) -> Bool in
                 return favorite.userId == user.remoteId && favorite.favorite;
             }
+            if (currentUserFavorited) {
+                favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
+            } else {
+                favoriteButton.setImage(UIImage(named: "favorite_border"), for: .normal);
+            }
+            favorites.forEach { favorite in
+                if (favorite.favorite) {
+                    favoriteCounter = favoriteCounter + 1
+                }
+            }
+        }
+        
+        if (favoriteCounter != 0) {
+            favoriteCount.text = "\(favoriteCounter)"
         }
         
         isImportant = false;
