@@ -141,8 +141,6 @@
     self.mapView = [[MKMapView alloc] initForAutoLayout];
     self.mapView.accessibilityLabel = @"map";
     [self.stack addArrangedSubview:self.mapView];
-//    [self.view addSubview:self.mapView];
-//    [self.mapView autoPinEdgesToSuperviewSafeArea];
     
     [self addMapButtons];
     [self setupToastView];
@@ -352,10 +350,10 @@
     
     [self.view insertSubview:self.mapSettingsButton aboveSubview:self.mapView];
     [self.mapSettingsButton autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.mapView withOffset:25];
-    [self.mapSettingsButton autoPinEdgeToSuperviewMargin:ALEdgeLeft];
+    [self.mapSettingsButton autoPinEdgeToSuperviewMargin:ALEdgeRight];
     
     [self.view insertSubview:buttonStack aboveSubview:self.mapView];
-    [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.mapSettingsButton withOffset:10];
+    [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.mapView withOffset:25];
     [buttonStack autoPinEdgeToSuperviewMargin:ALEdgeLeft];
     
     [self.view insertSubview:self.createFab aboveSubview:self.mapView];
