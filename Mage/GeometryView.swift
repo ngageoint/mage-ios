@@ -170,10 +170,10 @@ class GeometryView : BaseFieldView {
         if (field[FieldKey.title.key] != nil) {
             if (editMode) {
                 viewStack.addArrangedSubview(fieldNameSpacerView);
-                viewStack.setCustomSpacing(0, after: fieldNameSpacerView);
-            } else {
-                viewStack.addArrangedSubview(fieldNameSpacerView);
                 viewStack.setCustomSpacing(4, after: fieldNameSpacerView);
+            } else {
+                viewStack.addArrangedSubview(fieldNameLabel);
+                viewStack.setCustomSpacing(4, after: fieldNameLabel);
             }
         }
         viewStack.addArrangedSubview(mapView);
