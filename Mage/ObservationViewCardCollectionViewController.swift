@@ -120,6 +120,8 @@ import MaterialComponents.MDCContainerScheme;
         
         self.view.accessibilityIdentifier = "ObservationViewCardCollection"
         self.view.accessibilityLabel = "ObservationViewCardCollection"
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.startObservationEditCoordinator));
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -248,6 +250,12 @@ import MaterialComponents.MDCContainerScheme;
         cards.append(card);
         return card;
     }
+    
+    @objc func startObservationEditCoordinator() {
+        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
+        observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
+        observationEditCoordinator!.start();
+    }
 }
 
 extension ObservationViewCardCollectionViewController: AttachmentSelectionDelegate {
@@ -337,9 +345,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func editObservation(_ observation: Observation) {
         bottomSheet?.dismiss(animated: true, completion: nil);
-        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
-        observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
-        observationEditCoordinator!.start();
+        startObservationEditCoordinator()
     }
     
     func reorderForms(_ observation: Observation) {
@@ -358,6 +364,12 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func cancelAction() {
         bottomSheet?.dismiss(animated: true, completion: nil);
+    }
+    
+    func viewUser(_ user: User) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        let uvc = UserViewController(user: user, scheme: self.scheme!);
+        self.navigationController?.pushViewController(uvc, animated: true);
     }
 }
 

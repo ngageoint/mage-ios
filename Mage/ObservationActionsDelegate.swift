@@ -21,4 +21,5 @@ import Foundation
     @objc optional func deleteObservation(_ observation: Observation);
     @objc optional func cancelAction();
     @objc optional func reorderForms(_ observation: Observation);
+    @objc optional func viewUser(_ user: User);
 }

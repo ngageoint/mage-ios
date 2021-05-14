@@ -10,6 +10,11 @@ import Foundation
 import MaterialComponents.MDCAppBar;
 
 class ObservationActionsSheetController: UITableViewController {
+    static let DELETE_CELL_TAG: Int = 1
+    static let EDIT_CELL_TAG: Int = 2
+    static let REORDER_CELL_TAG: Int = 3
+    static let USER_CELL_TAG: Int = 4
+    
     var observation: Observation!;
     weak var delegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
@@ -102,6 +107,7 @@ class ObservationActionsSheetController: UITableViewController {
             cell.textLabel?.text = "Delete Observation";
             cell.accessibilityLabel = "Delete Observation";
             cell.imageView?.image = UIImage(named: "trash")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
+            cell.tag = ObservationActionsSheetController.DELETE_CELL_TAG
             if let safeScheme = scheme {
                 cell.textLabel?.textColor = safeScheme.colorScheme.errorColor;
                 cell.imageView?.tintColor = safeScheme.colorScheme.errorColor;
@@ -112,6 +118,7 @@ class ObservationActionsSheetController: UITableViewController {
         if (correctedRow == 1) {
             cell.textLabel?.text = "Edit Observation";
             cell.accessibilityLabel = "Edit Observation";
+            cell.tag = ObservationActionsSheetController.EDIT_CELL_TAG
             cell.imageView?.image = UIImage(named: "edit")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             return cell;
         }
@@ -124,6 +131,7 @@ class ObservationActionsSheetController: UITableViewController {
         if (correctedRow == 2) {
             cell.textLabel?.text = "Reorder Forms";
             cell.accessibilityLabel = "Reorder Forms";
+            cell.tag = ObservationActionsSheetController.REORDER_CELL_TAG
             cell.imageView?.image = UIImage(named: "form")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.accessoryType = .disclosureIndicator;
             return cell;
@@ -132,6 +140,7 @@ class ObservationActionsSheetController: UITableViewController {
         if (correctedRow == 3) {
             cell.textLabel?.text = "View \(observation.user?.name ?? "")'s Observations";
             cell.accessibilityLabel = "View Other Observations";
+            cell.tag = ObservationActionsSheetController.USER_CELL_TAG
             cell.imageView?.image = UIImage(named: "observations")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.accessoryType = .disclosureIndicator;
             return cell;
@@ -145,27 +154,25 @@ class ObservationActionsSheetController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 2);
         tableView.deselectRow(at: indexPath, animated: true);
-        if (correctedRow == 0) {
+        let tag = tableView.cellForRow(at: indexPath)?.tag
+        
+        if (tag == ObservationActionsSheetController.DELETE_CELL_TAG) {
             delegate?.deleteObservation?(observation);
         }
-        if (correctedRow == 1) {
+        if (tag == ObservationActionsSheetController.EDIT_CELL_TAG) {
             delegate?.editObservation?(observation);
         }
         
-        if (((observation.properties?["forms"] as? [[AnyHashable : Any]])?.count ?? 0) <= 1) {
-            // if there is 1 form or less, don't show reorder
-            correctedRow = correctedRow + 1;
-        }
-        
-        if (correctedRow == 2) {
+        if (tag == ObservationActionsSheetController.REORDER_CELL_TAG) {
             delegate?.reorderForms?(observation);
         }
         
-        if (correctedRow == 3) {
+        if (tag == ObservationActionsSheetController.USER_CELL_TAG) {
             // show the user page
-            
+            if let safeUser = observation.user {
+                delegate?.viewUser?(safeUser)
+            }
         }
         
     }
