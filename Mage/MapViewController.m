@@ -40,8 +40,6 @@
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *trackingButton;
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *reportLocationButton;
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *createFab;
-    @property (strong, nonatomic) IBOutlet UIView *toastView;
-    @property (strong, nonatomic) IBOutlet UILabel *toastText;
     @property (strong, nonatomic) IBOutlet UIButton *showPeopleButton;
     @property (strong, nonatomic) IBOutlet UIButton *showObservationsButton;
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *mapSettingsButton;
@@ -143,7 +141,6 @@
     [self.stack addArrangedSubview:self.mapView];
     
     [self addMapButtons];
-    [self setupToastView];
 
     [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeNever];
     
@@ -302,22 +299,6 @@
                   context:NULL];
     
     self.listenersSetUp = true;
-}
-
-- (void) setupToastView {
-    self.toastView = [[UIView alloc] initForAutoLayout];
-    [self.view insertSubview:self.toastView aboveSubview:self.stack];
-
-    [self.toastView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(0, 0, 0, 0) excludingEdge:ALEdgeTop];
-    
-    self.toastText = [[UILabel alloc] initForAutoLayout];
-    self.toastText.font = [UIFont boldSystemFontOfSize:14];
-    self.toastText.textColor = [UIColor whiteColor];
-    self.toastText.textAlignment = NSTextAlignmentCenter;
-    [self.toastView addSubview:self.toastText];
-    
-    [self.toastText autoPinEdgesToSuperviewEdges];
-    [self.toastText autoSetDimension:ALDimensionHeight toSize:17];
 }
 
 - (void) addMapButtons {
@@ -524,31 +505,13 @@
         
         return;
     } else if (newState) {
-        self.toastText.text = @"You are now reporting your location.";
-        self.toastView.backgroundColor = [UIColor colorWithRed:76.0/255.0 green:175.0/255.0 blue:80.0/255.0 alpha:1.0];
+        [MDCSnackbarManager.defaultManager showMessage:[MDCSnackbarMessage messageWithText:@"You are now reporting your location"]];
     } else {
-        self.toastText.text = @"Location reporting has been disabled.";
-        self.toastView.backgroundColor = [UIColor colorWithRed:244.0/255.0 green:67.0/255.0 blue:54.0/255.0 alpha:1.0];
+        [MDCSnackbarManager.defaultManager showMessage:[MDCSnackbarMessage messageWithText:@"Location reporting has been disabled"]];
     }
     [self setupReportLocationButtonWithTrackingState:newState userInEvent:inEvent];
     [defaults setBool:newState forKey:kReportLocationKey];
     [defaults synchronize];
-    [self displayToast];
-}
-
-- (void) displayToast {
-    [self.toastView setHidden:NO];
-    self.toastView.alpha = 0.0f;
-    [UIView animateWithDuration:0.5f animations:^{
-        self.toastView.alpha = 1.0f;
-    } completion:^(BOOL finished) {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.5f];
-        [UIView setAnimationDelay:2];
-        self.toastView.alpha = 0.0f;
-        [UIView commitAnimations];
-    }];
-
 }
 
 - (void) setupReportLocationButtonWithTrackingState: (BOOL) trackingOn userInEvent: (BOOL) inEvent {
