@@ -20,7 +20,7 @@ class ObservationTableViewController: UITableViewController {
     
     private lazy var createFab : MDCFloatingButton = {
         let fab = MDCFloatingButton(shape: .default);
-        fab.setImage(UIImage(named: "add"), for: .normal);
+        fab.setImage(UIImage(named: "add_location"), for: .normal);
         fab.addTarget(self, action: #selector(createNewObservation), for: .touchUpInside);
         return fab;
     }()

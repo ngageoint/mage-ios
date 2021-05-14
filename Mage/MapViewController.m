@@ -344,7 +344,7 @@
     [self.reportLocationButton addTarget:self action:@selector(onReportLocationButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     self.createFab = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeDefault];
-    [self.createFab setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
+    [self.createFab setImage:[UIImage imageNamed:@"add_location"] forState:UIControlStateNormal];
     [self.createFab addTarget:self action:@selector(createNewObservation:) forControlEvents:UIControlEventTouchUpInside];
     
     [buttonStack addArrangedSubview:self.trackingButton];
