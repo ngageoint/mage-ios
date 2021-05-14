@@ -21,7 +21,31 @@ import MaterialComponents.MDCButton;
     weak var observation: Observation?;
     var formIdCount: [Int : Int] = [ : ];
     
-    var tableView: UITableView = {
+    private lazy var divider: UIView = {
+        let divider = UIView(forAutoLayout: ());
+        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
+        divider.autoSetDimension(.height, toSize: 1);
+        return divider;
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel(forAutoLayout: ());
+        titleLabel.text = "Add A Form To Your Observation";
+        return titleLabel;
+    }()
+    
+    private lazy var tableSectionHeaderView: UIView = {
+        let headerView = UIView(forAutoLayout: ());
+        headerView.addSubview(titleLabel)
+        headerView.addSubview(divider)
+        titleLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+        divider.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top)
+        headerView.autoSetDimension(.height, toSize: 50)
+        headerView.autoSetDimension(.width, toSize: max(UIScreen.main.bounds.height, UIScreen.main.bounds.width))
+        return headerView;
+    }()
+    
+    private lazy var tableView: UITableView = {
         let tableView = UITableView(forAutoLayout: ());
         tableView.accessibilityLabel = "Add A Form Table";
         tableView.estimatedRowHeight = 100;
@@ -50,6 +74,7 @@ import MaterialComponents.MDCButton;
         if let safeScheme = self.scheme {
             self.tableView.backgroundColor = safeScheme.colorScheme.surfaceColor;
             cancelButton.applyTextTheme(withScheme: safeScheme);
+            titleLabel.font = safeScheme.typographyScheme.body1
         }
     }
     
@@ -177,5 +202,13 @@ extension FormPickerViewController: UITableViewDelegate {
         footerView.addSubview(cancelButton);
         cancelButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 12, left: 32, bottom: 20, right: 32));
         return footerView;
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return tableSectionHeaderView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
 }
