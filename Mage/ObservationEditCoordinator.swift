@@ -46,6 +46,11 @@ import MaterialComponents.MaterialBottomSheet
         return Event.getCurrentEvent(in: self.managedObjectContext);
     } ()
     
+    private lazy var eventForms: [[String: AnyHashable]] = {
+        let eventForms = event.forms as? [[String: AnyHashable]] ?? [];
+        return eventForms;
+    }()
+    
     private lazy var user: User = {
         return User.fetchCurrentUser(in: self.managedObjectContext);
     }()
@@ -114,6 +119,7 @@ import MaterialComponents.MaterialBottomSheet
         newObservation = true;
         let observation = Observation(geometry: location, andAccuracy: accuracy, andProvider: provider, andDelta: delta, in: managedObjectContext);
         observation.dirty = 1;
+        addRequiredForms(observation: observation);
         return observation;
     }
     
@@ -121,6 +127,59 @@ import MaterialComponents.MaterialBottomSheet
         let observationInContext = observation.mr_(in: self.managedObjectContext);
         observationInContext?.dirty = 1;
         return observationInContext;
+    }
+    
+    func setupFormWithDefaults(observation: Observation, form: [String: Any]) -> [String: AnyHashable] {
+        var newForm: [String: AnyHashable] = [EventKey.formId.key: form[FieldKey.id.key] as! Int];
+        let defaults: FormDefaults = FormDefaults(eventId: observation.eventId as! Int, formId: form[FieldKey.id.key] as! Int);
+        let formDefaults: [String: AnyHashable] = defaults.getDefaults() as! [String: AnyHashable];
+        
+        let fields: [[String : AnyHashable]] = (form[FormKey.fields.key] as! [[String : AnyHashable]]).filter { (($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) };
+        if (formDefaults.count > 0) { // user defaults
+            for (_, field) in fields.enumerated() {
+                var value: AnyHashable? = nil;
+                if let defaultField: AnyHashable = formDefaults[field[FieldKey.name.key] as! String] {
+                    value = defaultField
+                }
+                
+                if (value != nil) {
+                    newForm[field[FieldKey.name.key] as! String] = value;
+                }
+            }
+        } else { // server defaults
+            for (_, field) in fields.enumerated() {
+                // grab the server default from the form fields value property
+                if let value: AnyHashable = field[FieldKey.value.key] {
+                    newForm[field[FieldKey.name.key] as! String] = value;
+                }
+            }
+        }
+        return newForm;
+    }
+    
+    func addFormToObservation(observation: Observation, form: [String: AnyHashable]) {
+        var observationProperties: [String: Any] = [ObservationKey.forms.key:[]];
+        var observationForms: [[String: Any]] = [];
+        if let safeProperties = observation.properties as? [String: Any] {
+            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
+            }
+            observationProperties = safeProperties;
+        }
+        observationForms.append(setupFormWithDefaults(observation: observation, form: form));
+        observationProperties[ObservationKey.forms.key] = observationForms;
+        observation.properties = observationProperties;
+    }
+    
+    func addRequiredForms(observation: Observation) {
+        for eventForm in eventForms {
+            let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
+            if (eventFormMin > 0) {
+                for _ in 1...eventFormMin {
+                    addFormToObservation(observation: observation, form: eventForm);
+                }
+            }
+        }
     }
 }
 
