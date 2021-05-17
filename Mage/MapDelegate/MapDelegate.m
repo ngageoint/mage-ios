@@ -90,7 +90,6 @@
 @property (strong, nonatomic) NSMutableDictionary *feedItemRetrievers;
 @property (strong, nonatomic) MDCBottomSheetController *bottomSheet;
 @property (strong, nonatomic) MKAnnotationView *enlargedPin;
-@property (nonatomic) CGRect initialPinFrame;
 @end
 
 @implementation MapDelegate
@@ -1353,10 +1352,12 @@
         [self.mapView addOverlay:self.selectedUserAccuracy];
     } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *annotation = view.annotation;
-        self.initialPinFrame = view.frame;
-        [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, (view.image.size.width) * 2, (view.image.size.height) * 2)];
-        view.centerOffset = CGPointMake(0, -(view.image.size.height));
-        self.enlargedPin = view;
+        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            view.transform = CGAffineTransformScale(view.transform, 2.0, 2.0);
+            view.centerOffset = CGPointMake(0, -(view.image.size.height));
+            self.enlargedPin = view;
+        } completion:nil];
+
         Observation *observation = annotation.observation;
         
         [annotation setSubtitle:observation.timestamp.timeAgoSinceNow];
@@ -1398,6 +1399,7 @@
     [self.locationManager startUpdatingHeading];
     self.navigationDestinationCoordinate = destination;
     [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+    [self.straightLineNavigation stopNavigation];
     [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination delegate:self image:image scheme:self.scheme];
 }
 
@@ -1699,9 +1701,12 @@
 
 - (void) resetEnlargedPin {
     if (self.enlargedPin) {
-        self.enlargedPin.frame = self.initialPinFrame;
-        self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0));
-        self.enlargedPin = nil;
+        [self.mapView deselectAnnotation:self.enlargedPin.annotation animated:true];
+        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.enlargedPin.transform = CGAffineTransformScale(self.enlargedPin.transform, 0.5, 0.5);
+            self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0));
+            self.enlargedPin = nil;
+        } completion:nil];
     }
 }
 
