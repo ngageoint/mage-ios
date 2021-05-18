@@ -96,7 +96,6 @@ class ObservationTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forCellReuseIdentifier: "TableSectionHeader");
         
         observationDataStore.startFetchController();
-        setupFilterListeners();
         
         self.refreshControl = UIRefreshControl();
         refreshControl?.addTarget(self, action: #selector(refreshObservations), for: .valueChanged);
@@ -141,6 +140,7 @@ class ObservationTableViewController: UITableViewController {
         self.createFab.autoPinEdge(toSuperviewMargin: .right);
         self.createFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
         self.applyTheme(withContainerScheme: self.scheme);
+        setupFilterListeners();
         self.tableView.reloadData();
     }
     
@@ -167,6 +167,7 @@ class ObservationTableViewController: UITableViewController {
         }
         self.updateTimer = Timer(timeInterval: 60, target: self, selector: #selector(onUpdateTimerFire), userInfo: nil, repeats: true);
         RunLoop.main.add(self.updateTimer!, forMode: .default);
+        self.observationDataStore.updatePredicates();
     }
     
     func stopUpdateTimer() {
