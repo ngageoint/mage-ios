@@ -217,7 +217,7 @@
     } else if (indexPath.section == 2) {
         event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     }
-    if (event.eventDescription) {
+    if (event.eventDescription && ![event.eventDescription isEqualToString:@""]) {
         return 72.0f;
     }
     return 48.0f;
