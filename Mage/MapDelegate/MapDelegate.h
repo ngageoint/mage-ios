@@ -85,7 +85,7 @@
 - (void) ensureMapLayout;
 - (void) setupListeners;
 - (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
-- (void) startBearing;
+- (void) startHeading;
 - (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination image: (UIImage *) image;
 - (void) resetEnlargedPin;
 @end

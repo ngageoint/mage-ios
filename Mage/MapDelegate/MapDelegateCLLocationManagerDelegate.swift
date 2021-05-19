@@ -20,7 +20,6 @@ extension MapDelegate : CLLocationManagerDelegate {
     }
 
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-//        print("New heading is %@", newHeading);
         straightLineNavigation.updateNavigationLines(manager: manager, destinationCoordinate: navigationDestinationCoordinate)
     }
 }

@@ -16,6 +16,7 @@
 #import "NSDate+display.h"
 #import "UITableViewCell+Setting.h"
 #import <CoreText/CoreText.h>
+#import "MAGE-Swift.h"
 
 @interface SettingsDataSource ()
 
@@ -115,9 +116,19 @@ static const NSInteger LEGAL_SECTION = 8;
         cell.textLabel.text = textLabel;
     }
     
-    NSString *detailTextLabel = [details objectForKey:@"detailTextLabel"];
-    if (detailTextLabel) {
-        cell.detailTextLabel.text = detailTextLabel;
+    cell.detailTextLabel.text = nil;
+    cell.detailTextLabel.attributedText = nil;
+    
+    if ([[details objectForKey:@"detailTextLabel"] isKindOfClass:[NSAttributedString class]]) {
+        NSAttributedString *detailTextLabel = [details objectForKey:@"detailTextLabel"];
+        if (detailTextLabel) {
+            cell.detailTextLabel.attributedText = detailTextLabel;
+        }
+    } else {
+        NSString *detailTextLabel = [details objectForKey:@"detailTextLabel"];
+        if (detailTextLabel) {
+            cell.detailTextLabel.text = detailTextLabel;
+        }
     }
     
     NSNumber *accessoryType = [details objectForKey:@"accessoryType"];
@@ -345,7 +356,14 @@ static const NSInteger LEGAL_SECTION = 8;
                        @"textLabel": @"Location",
                        @"detailTextLabel": [[defaults objectForKey:@"showMGRS"] boolValue] ? @"MGRS" : @"Latitude, Longitude",
                        @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
-                       }]
+                   },
+                   @{
+                       @"type": [NSNumber numberWithInteger:kNavigation],
+                       @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                       @"image": @"location_tracking_on",
+                       @"textLabel": @"Navigation",
+                       @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                   }]
         
         } mutableCopy];
 }

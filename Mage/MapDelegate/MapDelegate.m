@@ -90,6 +90,7 @@
 @property (strong, nonatomic) NSMutableDictionary *feedItemRetrievers;
 @property (strong, nonatomic) MDCBottomSheetController *bottomSheet;
 @property (strong, nonatomic) MKAnnotationView *enlargedPin;
+@property (nonatomic) BOOL headingActive;
 @end
 
 @implementation MapDelegate
@@ -117,6 +118,10 @@
         self.locationManager.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
+        if ([[NSUserDefaults standardUserDefaults] showHeading]) {
+            self.headingActive = true;
+            [self startHeading];
+        }
     }
     if (!self.mapCacheOverlays) {
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
@@ -1384,12 +1389,35 @@
     }
 }
 
-- (void) startBearing {
-//    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-//    [self.locationManager startUpdatingLocation];
-//    self.locationManager.headingFilter = 0.5;
-//    [self.locationManager startUpdatingHeading];
-//    [self.straightLineNavigation startBearingWithManager:self.locationManager];
+- (void) startHeading {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults showHeadingSet]) {
+        if ([defaults showHeading]) {
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+            [self.locationManager startUpdatingLocation];
+            self.locationManager.headingFilter = 0.5;
+            [self.locationManager startUpdatingHeading];
+            if (self.straightLineNavigation == nil) {
+                self.straightLineNavigation = [[StraightLineNavigation alloc] initWithMapView:self.mapView locationManager:self.locationManager mapStack:self.mapStack];
+            }
+            [self.straightLineNavigation startHeadingWithManager:self.locationManager];
+        }
+    } else {
+        // show dialog asking them what they want to do and set the preference
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Display Your Heading"
+                                                                        message:@"Would you like to display your heading on the map? This can be toggled in settings."
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        __weak typeof(self) weakSelf = self;
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [defaults setShowHeading:true];
+            [weakSelf startHeading];
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [defaults setShowHeading:false];
+        }]];
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 - (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination image:(UIImage*) image {
@@ -1399,6 +1427,10 @@
     [self.locationManager startUpdatingHeading];
     self.navigationDestinationCoordinate = destination;
     [self setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+    
+    if (self.straightLineNavigation == nil) {
+        self.straightLineNavigation = [[StraightLineNavigation alloc] initWithMapView:self.mapView locationManager:self.locationManager mapStack:self.mapStack];
+    }
     [self.straightLineNavigation stopNavigation];
     [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination delegate:self image:image scheme:self.scheme];
 }
@@ -1445,7 +1477,10 @@
 }
 
 - (MKOverlayRenderer *) mapView:(MKMapView *) mapView rendererForOverlay:(id < MKOverlay >) overlay {
-    if ([overlay isKindOfClass:[MKTileOverlay class]]) {
+    if ([overlay isKindOfClass:[NavigationOverlay class]]) {
+        NavigationOverlay *nav = (NavigationOverlay *) overlay;
+        return nav.renderer;
+    } else if ([overlay isKindOfClass:[MKTileOverlay class]]) {
         return [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
     } else if ([overlay isKindOfClass:[ObservationAccuracy class]]) {
         return [[ObservationAccuracyRenderer alloc] initWithOverlay:overlay];
@@ -1476,9 +1511,6 @@
             renderer.lineWidth = 1;
         }
         return renderer;
-    } else if ([overlay isKindOfClass:[NavigationOverlay class]]) {
-        NavigationOverlay *nav = (NavigationOverlay *) overlay;
-        return nav.renderer;
     }
 
     return nil;

@@ -15,13 +15,13 @@ import PureLayout
     var locationManager: CLLocationManager?;
     var destinationCoordinate: CLLocationCoordinate2D?;
     var destinationMarker: UIImage?;
-    var targetColor: UIColor = .systemGreen;
-    var bearingColor: UIColor = .systemRed;
+    var relativeBearingColor: UIColor = .systemGreen;
+    var headingColor: UIColor = .systemRed;
     
-    var bearingLabel: UILabel = UILabel(forAutoLayout: ());
+    var headingLabel: UILabel = UILabel(forAutoLayout: ());
     var speedLabel: UILabel = UILabel(forAutoLayout: ());
     var distanceToTargetLabel: UILabel = UILabel(forAutoLayout: ());
-    var bearingToTargetLabel: UILabel = UILabel(forAutoLayout: ());
+    var relativeBearingToTargetLabel: UILabel = UILabel(forAutoLayout: ());
     var compassView: CompassView?;
     
     private lazy var cancelButton: UIButton = {
@@ -32,25 +32,25 @@ import PureLayout
         return cancelButton;
     }();
     
-    private lazy var targetBearingContainer: UIView = {
+    private lazy var relativeBearingContainer: UIView = {
         let view = UIView(forAutoLayout: ());
-        view.addSubview(targetBearingMarkerView);
-        view.addSubview(bearingToTargetLabel);
-        targetBearingMarkerView.autoPinEdge(toSuperviewEdge: .left);
-        bearingToTargetLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left);
-        bearingToTargetLabel.autoPinEdge(.left, to: .right, of: targetBearingMarkerView, withOffset: 8);
-        targetBearingMarkerView.autoAlignAxis(.horizontal, toSameAxisOf: bearingToTargetLabel);
+        view.addSubview(targetMarkerView);
+        view.addSubview(relativeBearingToTargetLabel);
+        targetMarkerView.autoPinEdge(toSuperviewEdge: .left);
+        relativeBearingToTargetLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left);
+        relativeBearingToTargetLabel.autoPinEdge(.left, to: .right, of: targetMarkerView, withOffset: 8);
+        targetMarkerView.autoAlignAxis(.horizontal, toSameAxisOf: relativeBearingToTargetLabel);
         return view;
     }();
     
-    private lazy var bearingContainer: UIView = {
+    private lazy var headingContainer: UIView = {
         let view = UIView(forAutoLayout: ());
-        view.addSubview(bearingLabel);
-        view.addSubview(targetBearingContainer);
-        targetBearingContainer.autoAlignAxis(.vertical, toSameAxisOf: bearingLabel);
-        bearingLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-        targetBearingContainer.autoPinEdge(toSuperviewEdge: .bottom);
-        targetBearingContainer.autoPinEdge(.top, to: .bottom, of: bearingLabel, withOffset: 0);
+        view.addSubview(headingLabel);
+        view.addSubview(relativeBearingContainer);
+        relativeBearingContainer.autoAlignAxis(.vertical, toSameAxisOf: headingLabel);
+        headingLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+        relativeBearingContainer.autoPinEdge(toSuperviewEdge: .bottom);
+        relativeBearingContainer.autoPinEdge(.top, to: .bottom, of: headingLabel, withOffset: 0);
         return view;
     }();
     
@@ -67,7 +67,7 @@ import PureLayout
         return view;
     }();
     
-    private lazy var targetBearingMarkerView: UIImageView = {
+    private lazy var targetMarkerView: UIImageView = {
         let view = UIImageView(image: UIImage(named: "location_tracking_on"));
         view.contentMode = .scaleAspectFit;
         view.autoSetDimensions(to: CGSize(width: 16, height: 16));
@@ -103,18 +103,18 @@ import PureLayout
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.backgroundColor = scheme.colorScheme.surfaceColor;
-        bearingLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        headingLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         speedLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         speedMarkerView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        targetBearingMarkerView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        targetMarkerView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         distanceToTargetLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        bearingToTargetLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        relativeBearingToTargetLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         cancelButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         
-        bearingLabel.font = scheme.typographyScheme.headline3;
+        headingLabel.font = scheme.typographyScheme.headline3;
         speedLabel.font = scheme.typographyScheme.overline;
         distanceToTargetLabel.font = scheme.typographyScheme.overline;
-        bearingToTargetLabel.font = scheme.typographyScheme.overline;
+        relativeBearingToTargetLabel.font = scheme.typographyScheme.overline;
         
         compassView?.applyTheme(withScheme: scheme);
     }
@@ -125,8 +125,8 @@ import PureLayout
         self.destinationCoordinate = destinationCoordinate;
         self.destinationMarker = destinationMarker;
         self.scheme = scheme;
-        self.targetColor = targetColor;
-        self.bearingColor = bearingColor;
+        self.relativeBearingColor = targetColor;
+        self.headingColor = bearingColor;
         self.delegate = delegate;
         layoutView();
         
@@ -135,9 +135,9 @@ import PureLayout
         }
     }
     
-    @objc public func populate(targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
-        self.targetColor = targetColor;
-        self.bearingColor = bearingColor;
+    @objc public func populate(relativeBearingColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
+        self.relativeBearingColor = relativeBearingColor;
+        self.headingColor = headingColor;
         let measurementFormatter = MeasurementFormatter();
         measurementFormatter.unitOptions = .providedUnit;
         measurementFormatter.unitStyle = .short;
@@ -147,11 +147,11 @@ import PureLayout
         }
         if let heading = locationManager?.heading {
             let bearingTo = userLocation.coordinate.bearing(to: destinationCoordinate!);
-            compassView?.updateHeading(heading: heading, destinationBearing: bearingTo, targetColor: self.targetColor, bearingColor: self.bearingColor);
+            compassView?.updateHeading(heading: heading, destinationBearing: bearingTo, targetColor: self.relativeBearingColor, bearingColor: self.headingColor);
             let headingMeasurement = Measurement(value: heading.trueHeading, unit: UnitAngle.degrees);
             let bearingToMeasurement = Measurement(value: bearingTo, unit: UnitAngle.degrees);
-            bearingLabel.text = "\(measurementFormatter.string(from: headingMeasurement))";
-            bearingToTargetLabel.text = "\(measurementFormatter.string(from: bearingToMeasurement))";
+            headingLabel.text = "\(measurementFormatter.string(from: headingMeasurement))";
+            relativeBearingToTargetLabel.text = "\(measurementFormatter.string(from: bearingToMeasurement))";
         }
         
         if let speed = locationManager?.location?.speed {
@@ -166,12 +166,12 @@ import PureLayout
     }
     
     func layoutView() {
-        compassView = CompassView(scheme: self.scheme, targetColor: self.targetColor, bearingColor: self.bearingColor);
+        compassView = CompassView(scheme: self.scheme, targetColor: self.relativeBearingColor, headingColor: self.headingColor);
         compassView?.autoSetDimensions(to: CGSize(width: 250, height: 250))
         compassView?.clipsToBounds = true;
         compassView?.layer.cornerRadius = 125
         addSubview(compassView!);
-        addSubview(bearingContainer);
+        addSubview(headingContainer);
         addSubview(speedContainer);
         addSubview(destinationContainer);
         addSubview(cancelButton);
@@ -179,7 +179,7 @@ import PureLayout
         speedContainer.autoAlignAxis(toSuperviewAxis: .horizontal);
         destinationContainer.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
         destinationContainer.autoAlignAxis(toSuperviewAxis: .horizontal);
-        bearingContainer.autoCenterInSuperview();
+        headingContainer.autoCenterInSuperview();
         compassView?.autoCenterInSuperview();
         cancelButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 50);
         cancelButton.autoPinEdge(toSuperviewEdge: .right, withInset: 4);

@@ -143,7 +143,6 @@
 		F7154A942605391D002C8617 /* apiSuccess6.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A932605391D002C8617 /* apiSuccess6.json */; };
 		F7154A982608D2A0002C8617 /* apiSuccess6NoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */; };
 		F7154AB7260BEAE3002C8617 /* observationsUpdate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154AB6260BEAE3002C8617 /* observationsUpdate.json */; };
-		F7154AC1260CE154002C8617 /* NavigationRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AC0260CE154002C8617 /* NavigationRenderer.swift */; };
 		F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AC6260CE165002C8617 /* NavigationOverlay.swift */; };
 		F7154ACB260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154ACA260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift */; };
 		F7154AD0260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154ACF260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift */; };
@@ -171,6 +170,10 @@
 		F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D92034CC3700C2600D /* TestingAppDelegate.m */; };
 		F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */; };
 		F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
+		F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */; };
+		F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */; };
+		F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */; };
+		F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1226541C2300D645AC /* ColorPickerViewController.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
 		F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886C625894CEA00EDA036 /* KeyboardHelper.swift */; };
 		F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */; };
@@ -627,7 +630,6 @@
 		F7154A932605391D002C8617 /* apiSuccess6.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccess6.json; sourceTree = "<group>"; };
 		F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccess6NoDisclaimer.json; sourceTree = "<group>"; };
 		F7154AB6260BEAE3002C8617 /* observationsUpdate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = observationsUpdate.json; sourceTree = "<group>"; };
-		F7154AC0260CE154002C8617 /* NavigationRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRenderer.swift; sourceTree = "<group>"; };
 		F7154AC6260CE165002C8617 /* NavigationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationOverlay.swift; sourceTree = "<group>"; };
 		F7154ACA260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateFeedItemDelegate.swift; sourceTree = "<group>"; };
 		F7154ACF260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateCLLocationManagerDelegate.swift; sourceTree = "<group>"; };
@@ -665,6 +667,10 @@
 		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorTests.swift; sourceTree = "<group>"; };
 		F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageUserDefaultKeys.swift; sourceTree = "<group>"; };
+		F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSettingsViewController.swift; sourceTree = "<group>"; };
+		F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
+		F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCelliOS13.swift; sourceTree = "<group>"; };
+		F7331D1226541C2300D645AC /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
 		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
 		F73886C625894CEA00EDA036 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
@@ -1086,6 +1092,9 @@
 				F74F025E25DF0280006BCF23 /* DisplaySettingsHeader.m */,
 				2F4E10A2220CCF39001C9F12 /* UITableViewCell+Setting.h */,
 				2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */,
+				F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */,
+				F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */,
+				F7331D1226541C2300D645AC /* ColorPickerViewController.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1339,6 +1348,7 @@
 				F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */,
 				F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */,
 				F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */,
+				F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1429,7 +1439,6 @@
 		F7154ABF260CE136002C8617 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				F7154AC0260CE154002C8617 /* NavigationRenderer.swift */,
 				F7154AC6260CE165002C8617 /* NavigationOverlay.swift */,
 			);
 			path = Navigation;
@@ -2638,6 +2647,7 @@
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
+				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
 				F7C812E925C1B37200D4332B /* ObservationDataStore.swift in Sources */,
@@ -2702,7 +2712,7 @@
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
-				F7154AC1260CE154002C8617 /* NavigationRenderer.swift in Sources */,
+				F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */,
 				F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */,
@@ -2772,6 +2782,7 @@
 				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
+				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
@@ -2782,6 +2793,7 @@
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
+				F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */,
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,

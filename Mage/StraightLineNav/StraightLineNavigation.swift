@@ -14,50 +14,59 @@ import Foundation
 
 @objc class StraightLineNavigation: NSObject {
     var delegate: StraightLineNavigationDelegate?;
-    var bearingLine: NavigationOverlay!
-    var navigationLine: NavigationOverlay!
     let mapView: MKMapView!;
     let mapStack: UIStackView!;
     var navigationModeEnabled: Bool = false
-    var bearingModeEnabled: Bool = false
+    var headingModeEnabled: Bool = false
     var navView: StraightLineNavigationView?;
-    //TODO: pull these from preferences
-    var targetColor: UIColor = .systemGreen;
-    var bearingColor: UIColor = .systemRed;
+    
+    var headingPolyline: NavigationOverlay?;
+    var relativeBearingPolyline: NavigationOverlay?;
+    
+    var relativeBearingColor: UIColor {
+        get {
+            return UserDefaults.standard.bearingTargetColor;
+        }
+    }
+    var headingColor: UIColor {
+        get {
+            return UserDefaults.standard.headingColor;
+        }
+    }
     
     @objc public init(mapView: MKMapView, locationManager: CLLocationManager?, mapStack: UIStackView) {
         self.mapView = mapView;
         self.mapStack = mapStack;
-        self.bearingLine = NavigationOverlay(start: MKMapPoint(x: 0.0, y: 0.0), end: MKMapPoint(x: 0.0, y: 0.0), boundingMapRect: self.mapView.visibleMapRect, color: bearingColor, lineWidth: 8.0)
-        self.navigationLine = NavigationOverlay(start: MKMapPoint(x: 0.0, y: 0.0), end: MKMapPoint(x: 0.0, y: 0.0), boundingMapRect: self.mapView.visibleMapRect, color: targetColor, lineWidth: 16.0)
     }
     
     @objc func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, scheme: MDCContainerScheming? = nil) {
         navigationModeEnabled = true;
-        bearingModeEnabled = true;
+        headingModeEnabled = true;
+        
         updateNavigationLines(manager: manager, destinationCoordinate: destinationCoordinate);
-        mapView.addOverlay(navigationLine);
-        mapView.addOverlay(bearingLine);
-        navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: targetColor, bearingColor: bearingColor);
+        navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: relativeBearingColor, bearingColor: headingColor);
         self.delegate = delegate;
         mapStack.addArrangedSubview(navView!);
     }
     
-    @objc func startBearing(manager: CLLocationManager) {
-        bearingModeEnabled = true;
-        updateBearingLine(manager: manager);
-        mapView.addOverlay(bearingLine);
+    @objc func startHeading(manager: CLLocationManager) {
+        headingModeEnabled = true;
+        updateHeadingLine(manager: manager);
     }
     
     @objc func stopNavigation() {
         navigationModeEnabled = false;
-        mapView.removeOverlay(navigationLine);
-        mapView.removeOverlay(bearingLine);
+        if let safeRelativeBearingPolyline = relativeBearingPolyline {
+            mapView.removeOverlay(safeRelativeBearingPolyline);
+        }
+        if let safeHeadingPolyline = headingPolyline {
+            mapView.removeOverlay(safeHeadingPolyline);
+        }
         navView?.removeFromSuperview();
     }
     
     func calculateBearingPoint(startCoordinate: CLLocationCoordinate2D, bearing: CLLocationDirection) -> CLLocationCoordinate2D {
-        var metersDistanceForBearing = 5000.0;
+        var metersDistanceForBearing = 500000.0;
         
         let span = mapView.region.span
         let center = mapView.region.center
@@ -67,7 +76,7 @@ import Foundation
         let loc3 = CLLocation(latitude: center.latitude, longitude: center.longitude - span.longitudeDelta)
         let loc4 = CLLocation(latitude: center.latitude, longitude: center.longitude + span.longitudeDelta)
         
-        metersDistanceForBearing = max(loc1.distance(from: loc2), loc3.distance(from: loc4)) * 2.0
+        metersDistanceForBearing = min(metersDistanceForBearing, max(loc1.distance(from: loc2), loc3.distance(from: loc4)) * 2.0)
         
         let radDirection = bearing * (.pi / 180.0);
 
@@ -86,8 +95,8 @@ import Foundation
         return CLLocationCoordinate2D(latitude: lat2 * 180 / .pi, longitude: lon2 * 180 / .pi)
     }
     
-    @objc func updateBearingLine(manager: CLLocationManager) {
-        if (self.bearingModeEnabled) {
+    @objc func updateHeadingLine(manager: CLLocationManager) {
+        if (self.headingModeEnabled) {
             guard let userCoordinate = manager.location?.coordinate else {
                 return;
             }
@@ -98,16 +107,17 @@ import Foundation
             let bearingPoint = MKMapPoint(calculateBearingPoint(startCoordinate: userCoordinate, bearing: bearing));
             
             let userLocationPoint = MKMapPoint(userCoordinate)
-            bearingLine.startPoint = userLocationPoint
-            bearingLine.endPoint = bearingPoint;
-            bearingLine.renderer.setNeedsDisplay();
-            navView?.populate();
-            print("updating bearing line");
+            let coordinates: [MKMapPoint] = [userLocationPoint, bearingPoint]
+            if (headingPolyline != nil) {
+                mapView.removeOverlay(headingPolyline!);
+            }
+            headingPolyline = NavigationOverlay(points: coordinates, count: 2, color: headingColor)
+            mapView.addOverlay(headingPolyline!, level: .aboveLabels);
+            navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor);
         }
     }
     
     @objc func updateNavigationLines(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D) {
-        print("update navigation lines")
         guard let userCoordinate = manager.location?.coordinate else {
             return;
         }
@@ -115,12 +125,13 @@ import Foundation
             let userLocationPoint = MKMapPoint(userCoordinate)
             let endCoordinate = MKMapPoint(destinationCoordinate)
             
-            navigationLine.startPoint = userLocationPoint
-            navigationLine.endPoint = endCoordinate
-            navigationLine.renderer.setNeedsDisplay();
-            navView?.populate();
+            let coordinates: [MKMapPoint] = [userLocationPoint, endCoordinate]
+            if (relativeBearingPolyline != nil) {
+                mapView.removeOverlay(relativeBearingPolyline!);
+            }
+            relativeBearingPolyline = NavigationOverlay(points: coordinates, count: 2, color: relativeBearingColor)
         }
         
-        updateBearingLine(manager: manager);
+        updateHeadingLine(manager: manager);
     }
 }

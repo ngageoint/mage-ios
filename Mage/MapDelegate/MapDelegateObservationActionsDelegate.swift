@@ -27,9 +27,6 @@ extension MapDelegate : ObservationActionsDelegate {
         self.obsBottomSheet.dismiss(animated: true, completion: {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-                if (self.straightLineNavigation == nil) {
-                    self.straightLineNavigation = StraightLineNavigation(mapView: self.mapView, locationManager: self.locationManager, mapStack: self.mapStack);
-                }
                 self.startStraightLineNavigation(observation.location().coordinate, image: ObservationImage.image(for: observation));
             }));
             ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self.navigationController, extraActions: extraActions);

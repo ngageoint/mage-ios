@@ -184,14 +184,9 @@
             [self onLogout];
             break;
         }
-        case kTheme: {
-            // prefs:root=DISPLAY this does not seem to work
-//            [UIApplication.sharedApplication openURL:[NSURL URLWithString:@"prefs:root=DISPLAY"] options:@{} completionHandler:nil];
-//            UIApplication.shared.open(appleMapsUrl!, options: [:]) { (success) in
-//                print("opened? \(success)")
-//            }
-//            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
-//            [self showSetting:viewController];
+        case kNavigation: {
+            NavigationSettingsViewController *viewController = [[NavigationSettingsViewController alloc] initWithScheme:self.scheme];
+            [self showSetting:viewController];
             break;
         }
         case kDisclaimer: {

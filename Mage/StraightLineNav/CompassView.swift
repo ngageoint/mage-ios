@@ -202,7 +202,7 @@ class CompassMarkerView: UIView {
 class CompassView: UIView {
     var scheme: MDCContainerScheming?;
     var targetColor: UIColor = .systemGreen;
-    var bearingColor: UIColor = .systemRed;
+    var headingColor: UIColor = .systemRed;
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView(forAutoLayout: ());
@@ -215,11 +215,11 @@ class CompassView: UIView {
         return stack;
     }()
     
-    public convenience init(scheme: MDCContainerScheming? = nil, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
+    public convenience init(scheme: MDCContainerScheming? = nil, targetColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
         self.init(frame: .zero);
         self.scheme = scheme;
         self.targetColor = targetColor;
-        self.bearingColor = bearingColor;
+        self.headingColor = headingColor;
         
         layoutView(heading: 0.0);
         
@@ -245,7 +245,7 @@ class CompassView: UIView {
         let rotationalHeading = 360.0 - heading;
         let capsule = UIView(forAutoLayout: ());
         capsule.autoSetDimensions(to: CGSize(width: 5, height: 50));
-        capsule.backgroundColor = self.bearingColor;
+        capsule.backgroundColor = self.headingColor;
         
         let markerContainer = UIView(forAutoLayout: ());
         for marker in Marker.markers() {
@@ -289,9 +289,9 @@ class CompassView: UIView {
         return markerContainer;
     }
     
-    func updateHeading(heading: CLHeading, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
+    func updateHeading(heading: CLHeading, targetColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
         self.targetColor = targetColor;
-        self.bearingColor = bearingColor;
+        self.headingColor = headingColor;
         for v in subviews {
             v.removeFromSuperview();
         }
@@ -300,7 +300,7 @@ class CompassView: UIView {
     
     func updateHeading(heading: CLHeading, destinationBearing: Double, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
         self.targetColor = targetColor;
-        self.bearingColor = bearingColor;
+        self.headingColor = bearingColor;
         for v in subviews {
             v.removeFromSuperview();
         }

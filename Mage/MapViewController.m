@@ -572,12 +572,12 @@
             break;
         };
         case MKUserTrackingModeFollow: {
-            [self.mapDelegate startBearing];
+            [self.mapDelegate startHeading];
             [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_on.png"] forState:UIControlStateNormal];
             break;
         };
         case MKUserTrackingModeFollowWithHeading: {
-            [self.mapDelegate startBearing];
+            [self.mapDelegate startHeading];
             [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_follow.png"] forState:UIControlStateNormal];
             break;
         }

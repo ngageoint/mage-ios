@@ -8,20 +8,58 @@
 
 import Foundation
 
-extension UserDefaults {
+@objc extension UserDefaults {
     
-    var showBearingSet: Bool {
+    @objc func color(forKey key: String) -> UIColor? {
+        var color: UIColor?
+        if let colorData = data(forKey: key) {
+            do {
+                try color = NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: colorData)
+            } catch {}
+        }
+        return color
+    }
+    
+    @objc func set(_ value: UIColor?, forKey key: String) {
+        var colorData: Data?
+        if let color = value {
+            do {
+                try colorData = NSKeyedArchiver.archivedData(withRootObject: color, requiringSecureCoding: true)
+            } catch {}
+        }
+        set(colorData, forKey: key)
+    }
+    
+    var showHeadingSet: Bool {
         get {
-            return value(forKey: "showBearing") != nil;
+            return value(forKey: #keyPath(UserDefaults.showHeading)) != nil;
         }
     }
     
-    var showBearing: Bool {
+    var showHeading: Bool {
         get {
             return bool(forKey: #function);
         }
         set {
             set(newValue, forKey: #function);
+        }
+    }
+    
+    var bearingTargetColor: UIColor {
+        get {
+            return color(forKey: #function) ?? .systemGreen
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var headingColor: UIColor {
+        get {
+            return color(forKey: #function) ?? .systemRed
+        }
+        set {
+            set(newValue, forKey: #function)
         }
     }
     
