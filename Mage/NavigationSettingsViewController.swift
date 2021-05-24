@@ -107,7 +107,7 @@ import Foundation
                 colorCell.colorPreference = #keyPath(UserDefaults.headingColor)
             }
             cell = colorCell
-        };
+        }
         
         if (indexPath.row == 0) {
             cell.textLabel?.text = "Relative Bearing Line Color";

@@ -47,4 +47,19 @@ extension UIColor {
         
         return nil
     }
+    
+    public func hex() -> String {
+        let components = self.cgColor.components
+        if (self.cgColor.numberOfComponents == 4) {
+            let r: CGFloat = components?[0] ?? 0.0
+            let g: CGFloat = components?[1] ?? 0.0
+            let b: CGFloat = components?[2] ?? 0.0
+            return String(format: "#%02lX%02lX%02lX", lroundf(Float(r * 255)), lroundf(Float(g * 255)), lroundf(Float(b * 255)))
+        }
+        if (self.cgColor.numberOfComponents == 2) {
+            let g: CGFloat = components?[0] ?? 0.0
+            return String(format: "#%02lX%02lX%02lX", lroundf(Float(g * 255)), lroundf(Float(g * 255)), lroundf(Float(g * 255)))
+        }
+        return "#000000";
+    }
 }

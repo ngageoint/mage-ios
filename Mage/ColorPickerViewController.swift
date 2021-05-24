@@ -11,7 +11,18 @@ import Foundation
 
 @objc class ColorPickerViewController: UIViewController {
     var scheme: MDCContainerScheming?;
-    var colorPreference: String?;
+    var colorPreference: String? {
+        didSet {
+            if let color = UserDefaults.standard.color(forKey: colorPreference!) {
+                textField.text = color.hex()
+                textFieldPreviewTile.backgroundColor = color;
+            } else {
+                textField.text = nil;
+                textFieldPreviewTile.backgroundColor = .clear;
+            }
+        }
+    };
+    var tempColor: UIColor?;
     
     var preferenceTitle: String? {
         didSet {
@@ -19,12 +30,50 @@ import Foundation
         }
     }
     
-    private lazy var cancelButton: UIButton = {
-        let cancelButton = UIButton(type: .custom);
-        cancelButton.accessibilityLabel = "cancel";
-        cancelButton.setImage(UIImage(named: "cancel" )?.withRenderingMode(.alwaysTemplate), for: .normal);
-        cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
-        return cancelButton;
+    lazy var textFieldPreviewTile: UIView = {
+        let textFieldPreviewTile = UIView(forAutoLayout: ());
+        textFieldPreviewTile.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        textFieldPreviewTile.backgroundColor = UIColor(red: 0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+        textFieldPreviewTile.layer.cornerRadius = 2;
+        return textFieldPreviewTile
+    }()
+        
+    lazy var textField: MDCFilledTextField = {
+        let textField = MDCFilledTextField(forAutoLayout: ());
+        textField.delegate = self;
+        textField.autocapitalizationType = .none;
+        textField.accessibilityLabel = "hex color";
+        textField.label.text = "Hex Color";
+        textField.returnKeyType = .done
+        textField.addTarget(self, action: #selector(textFieldDidEndEditing(_:)), for: .editingChanged)
+        return textField;
+    }()
+    
+    private lazy var actionButtonView: UIView = {
+        let actionButtonView = UIView.newAutoLayout();
+        actionButtonView.addSubview(cancelButton);
+        actionButtonView.addSubview(doneButton);
+        
+        doneButton.autoPinEdge(toSuperviewEdge: .right, withInset: 32);
+        doneButton.autoPinEdge(.left, to: .right, of: cancelButton, withOffset: 16);
+        cancelButton.autoAlignAxis(.horizontal, toSameAxisOf: doneButton);
+        return actionButtonView;
+    }()
+    
+    private lazy var doneButton: MDCButton = {
+        let button = MDCButton(forAutoLayout: ());
+        button.accessibilityLabel = "done";
+        button.setTitle("Done", for: .normal);
+        button.addTarget(self, action: #selector(colorSet), for: .touchUpInside);
+        return button;
+    }()
+    
+    private lazy var cancelButton: MDCButton = {
+        let button = MDCButton(forAutoLayout: ());
+        button.accessibilityLabel = "cancel";
+        button.setTitle("Cancel", for: .normal);
+        button.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside);
+        return button;
     }();
     
     func createTapGestureRecognizer() -> UITapGestureRecognizer {
@@ -38,7 +87,9 @@ import Foundation
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
         self.scheme = containerScheme;
         view.backgroundColor = self.scheme?.colorScheme.surfaceColor;
-        cancelButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        doneButton.applyTextTheme(withScheme: containerScheme);
+        cancelButton.applyTextTheme(withScheme: containerScheme);
+        textField.applyTheme(withScheme: containerScheme);
     }
     
     override func viewDidLoad() {
@@ -51,14 +102,18 @@ import Foundation
         titleLabel.autoAlignAxis(toSuperviewAxis: .vertical);
         titleLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 16);
         
-        view.addSubview(cancelButton);
-        cancelButton.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-        cancelButton.autoPinEdge(toSuperviewEdge: .top, withInset: 16);
+        view.addSubview(textFieldPreviewTile);
+        textFieldPreviewTile.autoPinEdge(toSuperviewEdge: .left, withInset: 32);
+        view.addSubview(textField);
+        textField.autoPinEdge(.left, to: .right, of: textFieldPreviewTile, withOffset: 16);
+        textField.autoPinEdge(toSuperviewEdge: .right, withInset: 32);
+        textField.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 32);
+        textFieldPreviewTile.autoAlignAxis(.horizontal, toSameAxisOf: textField)
         
         let colorsView = UIView(forAutoLayout: ());
         view.addSubview(colorsView);
         colorsView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 32, bottom: 32, right: 32), excludingEdge: .top);
-        colorsView.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 16);
+        colorsView.autoPinEdge(.top, to: .bottom, of: textField, withOffset: 32);
         
         let colorRow1 = UIView(forAutoLayout: ());
         colorsView.addSubview(colorRow1);
@@ -165,19 +220,19 @@ import Foundation
         
         let lightGrayView = UIView(forAutoLayout: ());
         lightGrayView.autoSetDimensions(to: CGSize(width: 75, height: 75));
-        lightGrayView.backgroundColor = .lightGray
+        lightGrayView.backgroundColor = UIColor(red: 224.0/255.0, green: 224.0/255.0, blue: 224.0/255.0, alpha: 1.0)
         lightGrayView.layer.cornerRadius = 10;
         lightGrayView.addGestureRecognizer(createTapGestureRecognizer());
         
         let darkGrayView = UIView(forAutoLayout: ());
         darkGrayView.autoSetDimensions(to: CGSize(width: 75, height: 75));
-        darkGrayView.backgroundColor = .darkGray
+        darkGrayView.backgroundColor = UIColor(red: 97.0/255.0, green: 97.0/255.0, blue: 97.0/255.0, alpha: 1.0)
         darkGrayView.layer.cornerRadius = 10;
         darkGrayView.addGestureRecognizer(createTapGestureRecognizer());
         
         let blackView = UIView(forAutoLayout: ());
         blackView.autoSetDimensions(to: CGSize(width: 75, height: 75));
-        blackView.backgroundColor = .black
+        blackView.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         blackView.layer.cornerRadius = 10;
         blackView.addGestureRecognizer(createTapGestureRecognizer());
         
@@ -189,6 +244,10 @@ import Foundation
         darkGrayView.autoPinEdge(toSuperviewEdge: .top);
         darkGrayView.autoAlignAxis(toSuperviewAxis: .vertical);
         blackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .left);
+        
+        view.addSubview(actionButtonView);
+        actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.zero, excludingEdge: .top);
+        actionButtonView.autoPinEdge(.top, to: .bottom, of: blackView, withOffset: 32);
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -215,10 +274,32 @@ import Foundation
         self.presentingViewController?.dismiss(animated: true, completion: nil);
     }
     
-    @objc func colorPicked(_ sender:UITapGestureRecognizer) {
+    @objc func colorSet() {
         if let safeColorPreference = colorPreference {
-            UserDefaults.standard.set(sender.view?.backgroundColor, forKey: safeColorPreference)
+            UserDefaults.standard.set(tempColor, forKey: safeColorPreference)
         }
         self.presentingViewController?.dismiss(animated: true, completion: nil);
+    }
+    
+    @objc func colorPicked(_ sender:UITapGestureRecognizer) {
+        tempColor = sender.view?.backgroundColor;
+        textFieldPreviewTile.backgroundColor = tempColor;
+        textField.text = tempColor?.hex()
+    }
+}
+
+extension ColorPickerViewController: UITextFieldDelegate {
+
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let color: UIColor = UIColor(hex: textField.text ?? "") {
+            textFieldPreviewTile.backgroundColor = color;
+            tempColor = color;
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder();
+        return true;
     }
 }
