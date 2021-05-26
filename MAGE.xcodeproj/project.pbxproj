@@ -247,6 +247,8 @@
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
 		F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */; };
 		F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */; };
+		F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */; };
+		F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */; };
 		F7911623249125230043A529 /* MageRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911622249125230043A529 /* MageRootViewTests.swift */; };
 		F79116262491414B0043A529 /* MageInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F79116252491414B0043A529 /* MageInitializer.m */; };
 		F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911627249154130043A529 /* MageCoreDataFixtures.swift */; };
@@ -767,6 +769,8 @@
 		F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentCollectionDataStore.h; sourceTree = "<group>"; };
 		F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentCollectionDataStore.m; sourceTree = "<group>"; };
 		F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttachmentSelectionDelegate.h; sourceTree = "<group>"; };
+		F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldView.swift; sourceTree = "<group>"; };
+		F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldViewTests.swift; sourceTree = "<group>"; };
 		F7911622249125230043A529 /* MageRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageRootViewTests.swift; sourceTree = "<group>"; };
 		F79116242491414B0043A529 /* MageInitializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MageInitializer.h; sourceTree = "<group>"; };
 		F79116252491414B0043A529 /* MageInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageInitializer.m; sourceTree = "<group>"; };
@@ -1689,6 +1693,7 @@
 				F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */,
 				F7CE23092544676800D710DE /* AttachmentFieldView.swift */,
 				F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */,
+				F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */,
 			);
 			name = Fields;
 			sourceTree = "<group>";
@@ -1793,6 +1798,7 @@
 				F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */,
 				F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */,
 				F76BB96725E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift */,
+				F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */,
 			);
 			path = Fields;
 			sourceTree = "<group>";
@@ -2797,6 +2803,7 @@
 				F7A94D7818AD9CB000CB9EE0 /* main.m in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
+				F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
@@ -2886,6 +2893,7 @@
 				F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
+				F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */,
 				F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */,
 				F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */,
 				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,

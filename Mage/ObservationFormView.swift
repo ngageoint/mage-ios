@@ -96,10 +96,7 @@ class ObservationFormView: UIStackView {
                 continue;
             }
             
-            var type = fieldDictionary[FieldKey.type.key] as! String;
-            if (type == FieldType.radio.key) {
-                type = FieldType.dropdown.key;
-            }
+            let type = fieldDictionary[FieldKey.type.key] as! String;
             var fieldView: UIView?;
             switch type {
             case FieldType.attachment.key:
@@ -123,6 +120,8 @@ class ObservationFormView: UIStackView {
                 fieldView = DropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case FieldType.multiselectdropdown.key:
                     fieldView = MultiDropdownFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? [String])
+            case FieldType.radio.key:
+                fieldView = RadioFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: value as? String);
             case FieldType.geometry.key:
                 fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self, observationActionsDelegate: observationActionsDelegate);
                 (fieldView as! GeometryView).setValue(value as? SFGeometry)
