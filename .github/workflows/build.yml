@@ -20,7 +20,6 @@ jobs:
       with:
         fetch-depth: 0
         path: mage-ios
-        ref: ${{ github.event.inputs.appBranch }}
     - name: Clone MAGE SDK
       uses: actions/checkout@master
       with:
@@ -54,6 +53,7 @@ jobs:
         KEYCHAIN_PASSWORD: "${{ secrets.KEYCHAIN_PASSWORD }}"
         CERTIFICATE_PASSWORD: "${{ secrets.CERTIFICATE_PASSWORD }}"
       run: |
+        git checkout ${{ github.event.inputs.appBranch }}
         fastlane build
       working-directory: mage-ios
     - name: Bundle Artifacts
