@@ -20,6 +20,7 @@ jobs:
       with:
         fetch-depth: 0
         path: mage-ios
+        ref: ${{ github.event.inputs.appBranch }}
     - name: Clone MAGE SDK
       uses: actions/checkout@master
       with:
