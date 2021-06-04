@@ -242,6 +242,8 @@
         XCTFail(@"Should not have a success");
     } failure:^(NSError *error) {
         // failure
+        NSLog(@"Exepected Error %@", error);
+        XCTAssertTrue([error.localizedDescription containsString:@"Failed to connect to server.  Received error Request failed: service unavailable (503)"]);
         [responseArrived fulfill];
         NSLog(@"Failure");
     }];
@@ -290,6 +292,61 @@
     }];
 }
 
+- (void) testAPIReturnNonMageAPIJson {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:nil forKey:@"baseServerUrl"];
+    
+    XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
+    
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"magetest"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
+        // just something that does not have the correct api properties
+        NSString* fixture = OHPathForFile(@"registrationSuccess.json", self.class);
+        return [HTTPStubsResponse responseWithFileAtPath:fixture
+                                              statusCode:200 headers:@{@"Content-Type":@"application/json"}];
+    }];
+    
+    [MageServer serverWithURL:[NSURL URLWithString:@"https://magetest"] success:^(MageServer *mageServer) {
+        XCTFail(@"Should have had a failure");
+    } failure:^(NSError *error) {
+        NSLog(@"Exepected Error %@", error);
+        XCTAssertTrue([error.localizedDescription containsString:@"Invalid server response {"]);
+        [responseArrived fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        
+    }];
+}
+
+- (void) testAPIReturnSomethingCrazy {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:nil forKey:@"baseServerUrl"];
+    
+    XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
+    
+    [HTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"magetest"] && [request.URL.path isEqualToString:@"/api"];
+    } withStubResponse:^HTTPStubsResponse*(NSURLRequest *request) {
+        // just some nonsense
+        NSString* fixture = OHPathForFile(@"test_marker.png", self.class);
+        return [HTTPStubsResponse responseWithFileAtPath:fixture statusCode:200 headers:@{@"Content-Type":@"image/png"}];
+    }];
+    
+    [MageServer serverWithURL:[NSURL URLWithString:@"https://magetest"] success:^(MageServer *mageServer) {
+        XCTFail(@"Should have had a failure");
+    } failure:^(NSError *error) {
+        NSLog(@"Exepected Error %@", error);
+        XCTAssertTrue([error.localizedDescription containsString:@"Unknown API response received from server."]);
+        [responseArrived fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
+        
+    }];
+}
+
 - (void) testAPIReturnNoData {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:nil forKey:@"baseServerUrl"];
@@ -310,6 +367,7 @@
     [MageServer serverWithURL:[NSURL URLWithString:@"https://magetest"] success:^(MageServer *mageServer) {
         XCTFail(@"Should have had a failure");
     } failure:^(NSError *error) {
+        NSLog(@"Exepected Error %@", error);
         XCTAssertEqualObjects(@"Empty API response received from server.", error.localizedDescription);
         [responseArrived fulfill];
     }];

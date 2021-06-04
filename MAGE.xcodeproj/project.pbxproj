@@ -141,6 +141,7 @@
 		F70E6EEA197815B4002D66F6 /* ObservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
+		F7103F05266A9D7F000832CD /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7103F03266A9CD7000832CD /* test_marker.png */; };
 		F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */; };
 		F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7148D3824003C6B00F9F879 /* ImageCacheTests.m */; };
 		F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F714D5EF1A5C832F00B096A7 /* MediaViewController.m */; };
@@ -598,6 +599,7 @@
 		F70E6EE9197815B4002D66F6 /* ObservationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationTableViewCell.m; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
+		F7103F03266A9CD7000832CD /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheProvider.swift; sourceTree = "<group>"; };
 		F7148D3824003C6B00F9F879 /* ImageCacheTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageCacheTests.m; sourceTree = "<group>"; };
 		F714D5EE1A5C832F00B096A7 /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
@@ -1546,6 +1548,7 @@
 		F7614DA820068FF300676366 /* responses */ = {
 			isa = PBXGroup;
 			children = (
+				F7103F03266A9CD7000832CD /* test_marker.png */,
 				F7614DA92006902000676366 /* apiSuccess.json */,
 				F70039452006CB0700E6E660 /* apiFail.json */,
 				F7003947200D3FFA00E6E660 /* loginSuccess.json */,
@@ -2112,6 +2115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7103F05266A9D7F000832CD /* test_marker.png in Resources */,
 				F7103F02266A5D7D000832CD /* noResponse.html in Resources */,
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */,
