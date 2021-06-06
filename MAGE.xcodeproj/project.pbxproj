@@ -1960,7 +1960,7 @@
 					F7A94D6518AD9CB000CB9EE0 = {
 						DevelopmentTeam = ZL8G5D9G2H;
 						LastSwiftMigration = 1130;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 1;
@@ -2188,23 +2188,23 @@
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
+				"${PODS_ROOT}/mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs/mgrs.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/sf-proj-ios/sf-proj-ios.bundle",
@@ -2640,9 +2640,9 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: National Geospatial-Intelligence Agency (ZL8G5D9G2H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: National Geospatial-Intelligence Agency (ZL8G5D9G2H)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2654,7 +2654,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "MAGE (Distribution)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2674,9 +2674,9 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: National Geospatial-Intelligence Agency (ZL8G5D9G2H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: National Geospatial-Intelligence Agency (ZL8G5D9G2H)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2688,7 +2688,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "MAGE (Distribution)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
