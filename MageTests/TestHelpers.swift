@@ -10,8 +10,25 @@ import Foundation
 import MagicalRecord
 import Nimble
 import Nimble_Snapshots
+import Kingfisher
+
+@testable import MAGE
 
 class TestHelpers {
+    
+    public static func createGradientImage(startColor: UIColor, endColor: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        let rect = CGRect(origin: .zero, size: size)
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = rect
+        gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
+        
+        UIGraphicsBeginImageContext(gradientLayer.bounds.size)
+        gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        guard let cgImage = image?.cgImage else { return UIImage() }
+        return UIImage(cgImage: cgImage)
+    }
 
     public static func getAllAccessibilityLabels(_ viewRoot: UIView) -> [String]! {
         var array = [String]()
@@ -29,6 +46,7 @@ class TestHelpers {
     public static func getAllAccessibilityLabelsInWindows() -> [String]! {
         var labelArray = [String]()
         for  window in UIApplication.shared.windowsWithKeyWindow() {
+            print("window \(window)")
             labelArray += getAllAccessibilityLabels(window as! UIWindow )
         }
         
@@ -38,6 +56,10 @@ class TestHelpers {
     public static func printAllAccessibilityLabelsInWindows() {
         let labelArray = TestHelpers.getAllAccessibilityLabelsInWindows();
         print("labelArray = \(labelArray)")
+    }
+    
+    public static func clearImageCache() {
+        ImageCache.default.clearCache();
     }
     
     public static func clearAndSetUpStack() {

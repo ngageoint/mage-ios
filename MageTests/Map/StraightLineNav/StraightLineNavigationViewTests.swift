@@ -21,9 +21,9 @@ class StraightLineNavigationViewTests: KIFSpec {
     
     override func spec() {
         
-        let recordSnapshots = true;
+        let recordSnapshots = false;
         
-        fdescribe("StraightLineNavigationViewTests") {
+        describe("StraightLineNavigationViewTests") {
             
             var straightLineNavigationView: StraightLineNavigationView!
             

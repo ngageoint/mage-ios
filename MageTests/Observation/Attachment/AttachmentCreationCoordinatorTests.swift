@@ -32,7 +32,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
     
     override func spec() {
         
-        describe("AttachmentCreationCoordinatorTests") {
+        xdescribe("AttachmentCreationCoordinatorTests") {
             let recordSnapshots = false;
             
             var attachmentCreationCoordinator: AttachmentCreationCoordinator!

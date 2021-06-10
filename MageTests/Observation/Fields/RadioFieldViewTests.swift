@@ -16,7 +16,7 @@ import Nimble_Snapshots
 class RadioFieldViewTests: KIFSpec {
     
     override func spec() {
-        fdescribe("RadioFieldView") {
+        describe("RadioFieldView") {
             let recordSnapshots = false;
             var completeTest = false;
             

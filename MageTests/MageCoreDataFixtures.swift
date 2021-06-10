@@ -21,6 +21,23 @@ class MageCoreDataFixtures {
         MagicalRecord.setLoggingLevel(.warn);
     }
     
+    public static func clearAllData() {
+        Attachment.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Event.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Feed.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        FeedItem.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        GPSLocation.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Layer.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Location.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Observation.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        ObservationFavorite.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        ObservationImportant.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Role.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Server.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        Team.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+        User.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+    }
+    
     public static func addLocation(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
         let jsonDictionary: NSArray = parseJsonFile(jsonFile: "locationsabc") as! NSArray;
         

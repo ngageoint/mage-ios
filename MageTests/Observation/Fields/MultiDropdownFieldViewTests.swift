@@ -18,41 +18,25 @@ class MultiDropdownFieldViewTests: KIFSpec {
     override func spec() {
         
         describe("MultiDropdownFieldView") {
-            let recordSnapshots = false;
-            var completeTest = false;
-            
             var controller: UIViewController!
-            var window: UIWindow!;
             
             var multidropdownFieldView: MultiDropdownFieldView!
             var view: UIView!
             var field: [String: Any]!
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 0.1);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
+            var window: UIWindow!;
+            window = UIWindow(forAutoLayout: ());
+            window.autoSetDimension(.width, toSize: 300);
+            controller = UIViewController();
+            view = UIView(forAutoLayout: ());
+            view.autoSetDimension(.width, toSize: 300);
+            controller.view.addSubview(view);
+
+            window.rootViewController = controller;
+            
+            window.makeKeyAndVisible();
             
             beforeEach {
-                completeTest = false;
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                window.backgroundColor = .systemBackground;
-                
-                controller = UIViewController();
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
-                window.makeKeyAndVisible();
-                
                 field = [
                     "title": "Field Title",
                     "name": "field8",
@@ -60,13 +44,14 @@ class MultiDropdownFieldViewTests: KIFSpec {
                     "id": 8
                 ];
                 
-                window.rootViewController = controller;
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
-                controller.dismiss(animated: false, completion: nil);
-                window.rootViewController = nil;
-                controller = nil;
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
             }
             
             it("initial value set with multiple values") {
@@ -76,17 +61,8 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 view.addSubview(multidropdownFieldView)
                 multidropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(multidropdownFieldView.isEmpty()) == false;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("non edit mode multiple values") {
@@ -96,17 +72,9 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 view.addSubview(multidropdownFieldView)
                 multidropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(multidropdownFieldView.isEmpty()) == false;
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later") {
@@ -116,18 +84,10 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 view.addSubview(multidropdownFieldView)
                 multidropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(multidropdownFieldView.isEmpty()) == true;
                 multidropdownFieldView.setValue(["green", "purple"]);
                 expect(multidropdownFieldView.isEmpty()) == false;
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("multi required field should show status") {
@@ -138,17 +98,9 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 view.addSubview(multidropdownFieldView)
                 multidropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(multidropdownFieldView.isEmpty()) == true;
                 multidropdownFieldView.setValid(multidropdownFieldView.isValid());
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
         }
     }

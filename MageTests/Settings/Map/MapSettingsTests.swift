@@ -23,10 +23,10 @@ class MapSettingsTests: KIFSpec {
             
             var mapSettings: MapSettings!
             var window: UIWindow!;
+            MageInitializer.clearAndSetupCoreData();
             
             func clearAndSetUpStack() {
                 MageInitializer.initializePreferences();
-                MageInitializer.clearAndSetupCoreData();
             }
             
             beforeEach {
@@ -53,6 +53,7 @@ class MapSettingsTests: KIFSpec {
                 FeedService.shared.stop();
                 HTTPStubs.removeAllStubs();
                 clearAndSetUpStack();
+                MageCoreDataFixtures.clearAllData();
             }
             
             it("should unselect a feed") {
@@ -66,6 +67,7 @@ class MapSettingsTests: KIFSpec {
                 mapSettings = MapSettings();
                 mapSettings.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 window.rootViewController = mapSettings;
+                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: "feed-switch-1");
                 tester().setOn(false, forSwitchWithAccessibilityLabel: "feed-switch-1");
                 let selected = UserDefaults.standard.array(forKey: "selectedFeeds-1");

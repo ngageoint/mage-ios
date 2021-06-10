@@ -71,6 +71,7 @@
 #import "Observation.h"
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"
+#import "Layer.h"
 
 #import "Form.h"
 #import "Location.h"

@@ -49,6 +49,10 @@ import Kingfisher
         return Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale)
     }
     
+    public func cancel() {
+        self.kf.cancelDownloadTask();
+    }
+    
     public func showThumbnail(indicator: Indicator? = nil,
                               progressBlock: DownloadProgressBlock? = nil,
                               completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {

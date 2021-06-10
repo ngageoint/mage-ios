@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import Nimble_Snapshots
 import OHHTTPStubs
+import Kingfisher
 
 @testable import MAGE
 
@@ -27,15 +28,15 @@ class MockAttachmentSelectionDelegate: AttachmentSelectionDelegate {
 class AttachmentFieldViewTests: KIFSpec {
     
     override func spec() {
-        
+
         describe("AttachmentFieldViewTests") {
             var field: [String: Any]!
-            let recordSnapshots = false;
             
             var attachmentFieldView: AttachmentFieldView!
             var view: UIView!
             var controller: ContainingUIViewController!
             var window: UIWindow!;
+            var stackSetup = false;
             
             func createGradientImage(startColor: UIColor, endColor: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
                 let rect = CGRect(origin: .zero, size: size)
@@ -51,28 +52,23 @@ class AttachmentFieldViewTests: KIFSpec {
                 return UIImage(cgImage: cgImage)
             }
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 0.5);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot(usesDrawRect: true);
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
-            
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
-                
-                window = UIWindow(forAutoLayout: ());
+                if (!stackSetup) {
+                    TestHelpers.clearAndSetUpStack();
+                    stackSetup = true;
+                }
+                Observation.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+                Attachment.mr_truncateAll(in: NSManagedObjectContext.mr_default());
+                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
+                TestHelpers.clearImageCache();
+                if (UIApplication.shared.windows.count == 0) {
+                    window = UIWindow(forAutoLayout: ());
+                } else {
+                    window = UIApplication.shared.windows[0];
+                }
                 window.autoSetDimension(.width, toSize: 300);
                 
-                controller = ContainingUIViewController();
+                controller = ContainingUIViewController(nibName: nil, bundle: nil);
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .systemBackground;
@@ -83,350 +79,355 @@ class AttachmentFieldViewTests: KIFSpec {
                     "type": "attachment",
                     "name": "field0"
                 ];
+                
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
+//                window.resignKey()
+
                 controller.dismiss(animated: false, completion: nil);
-                window.rootViewController = nil;
+                attachmentFieldView.removeFromSuperview();
+                attachmentFieldView = nil;
                 controller = nil;
+                window.rootViewController = nil;
+//                window = nil;
                 HTTPStubs.removeAllStubs();
+//                TestHelpers.cleanUpStack();
             }
             
             it("non edit mode with no field title") {
                 field["title"] = nil;
-                var completeTest = false;
-                
+                var attachmentLoaded = false;
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                }
+                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+//                tester().waitForAnimationsToFinish();
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("non edit mode with field title") {
-                var completeTest = false;
-                
+                var attachmentLoaded = false;
+
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
-                }
-                
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 }
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("no initial value") {
-                var completeTest = false;
-
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, value: nil);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                }
+                attachmentFieldView = AttachmentFieldView(field: field, value: nil);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("one attachment set from observation") {
-                var completeTest = false;
-                
+                var attachmentLoaded = false;
+
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                }
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("3 attachments set from observation") {
-                var completeTest = false;
-                
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
+                
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
+                var attachmentLoaded3 = false;
+
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL2: URL = URL(string: attachment2.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded2 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment3 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL3: URL = URL(string: attachment3.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL3.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded3 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                }
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded3).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+//                tester().waitForAnimationsToFinish()
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+                
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment2.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment3.name ?? "") loaded")
+                
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("4 attachments set from observation") {
-                var completeTest = false;
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
+                var attachmentLoaded3 = false;
+                var attachmentLoaded4 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL2: URL = URL(string: attachment2.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded2 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment3 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL3: URL = URL(string: attachment3.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL3.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded3 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment4 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL4: URL = URL(string: attachment4.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL4.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .black, endColor: .white, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .black, endColor: .white, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded4 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                }
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded3).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded4).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment2.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment3.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment4.name ?? "") loaded")
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("5 attachments set from observation") {
-                var completeTest = false;
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
+                var attachmentLoaded3 = false;
+                var attachmentLoaded4 = false;
+                var attachmentLoaded5 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL2: URL = URL(string: attachment2.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded2 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment3 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL3: URL = URL(string: attachment3.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL3.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded3 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment4 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL4: URL = URL(string: attachment4.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL4.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .black, endColor: .white, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .black, endColor: .white, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded4 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment5 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL5: URL = URL(string: attachment5.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL5.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .magenta, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .magenta, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded5 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                }
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded3).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded4).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded5).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment2.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment3.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment4.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment5.name ?? "") loaded")
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("one attachment set later") {
-                var completeTest = false;
-                
+                var attachmentLoaded = false;
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
                     let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                    
-                    attachmentFieldView.setValue(observation.attachments as Any?);
-                }
+                attachmentFieldView = AttachmentFieldView(field: field);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                
+                attachmentFieldView.setValue(observation.attachments as Any?);
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("two attachments set together later") {
-                var completeTest = false;
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL2: URL = URL(string: attachment2.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded2 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
@@ -442,63 +443,58 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment2.name ?? "") loaded")
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment later") {
-                var completeTest = false;
+                var attachmentLoaded = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                    
-                    attachmentFieldView.addAttachment(attachment);
-                }
+                attachmentFieldView = AttachmentFieldView(field: field);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                
+                attachmentFieldView.addAttachment(attachment);
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment with observation and one later") {
-                var completeTest = false;
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                            
@@ -514,7 +510,8 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                        attachmentLoaded2 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment2);
@@ -522,27 +519,28 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().waitForCell(at: IndexPath(row: 1, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection")
+                tester().waitForView(withAccessibilityLabel: "attachment name1 loaded")
             }
             
             it("set one attachment with observation and two later") {
-                var completeTest = false;
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
+                var attachmentLoaded3 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
@@ -559,6 +557,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
                         let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                        attachmentLoaded2 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment2);
@@ -567,6 +566,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachmentURL3: URL = URL(string: attachment3.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL3.path)) { (request) -> HTTPStubsResponse in
                         let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 500, height: 500))
+                        attachmentLoaded3 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment3);
@@ -574,27 +574,33 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded3).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().waitForCell(at: IndexPath(row: 1, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection")
+                tester().waitForCell(at: IndexPath(row: 2, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection")
+                tester().waitForView(withAccessibilityLabel: "attachment name1 loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment name2 loaded")
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment with observation and two later then remove first") {
-                var completeTest = false;
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
+                var attachmentLoaded3 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
@@ -610,7 +616,8 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                        attachmentLoaded2 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment2);
@@ -618,7 +625,8 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachment3 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL3: URL = URL(string: attachment3.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL3.path)) { (request) -> HTTPStubsResponse in
-                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 500, height: 500))
+                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 50, height: 50))
+                        attachmentLoaded3 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment3);
@@ -628,27 +636,34 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded3).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().waitForCell(at: IndexPath(row: 0, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection")
+                tester().waitForCell(at: IndexPath(row: 1, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection")
+                tester().waitForView(withAccessibilityLabel: "attachment name1 loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment name2 loaded")
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment with observation and two later then remove second") {
-                var completeTest = false;
+                TestHelpers.printAllAccessibilityLabelsInWindows()
+                
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
+                var attachmentLoaded3 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
@@ -664,7 +679,8 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                        attachmentLoaded2 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment2);
@@ -672,7 +688,8 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachment3 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL3: URL = URL(string: attachment3.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL3.path)) { (request) -> HTTPStubsResponse in
-                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 500, height: 500))
+                        let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 50, height: 50))
+                        attachmentLoaded3 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment3);
@@ -682,107 +699,101 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded3).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
+                tester().waitForCell(at: IndexPath(row: 0, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection")
+                tester().waitForCell(at: IndexPath(row: 1, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection")
+                TestHelpers.printAllAccessibilityLabelsInWindows()
+//                there is a leftover window which is causing this to not work
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "attachment name1 loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment name2 loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("required field is invalid if empty") {
-                var completeTest = false;
-                
                 field[FieldKey.required.key] = true;
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                    
-                    expect(attachmentFieldView.isEmpty()).to(beTrue());
-                    expect(attachmentFieldView.isValid(enforceRequired: true)).to(beFalse());
-                    attachmentFieldView.setValid(attachmentFieldView.isValid());
-                }
+                attachmentFieldView = AttachmentFieldView(field: field);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                
+                expect(attachmentFieldView.isEmpty()).to(beTrue());
+                expect(attachmentFieldView.isValid(enforceRequired: true)).to(beFalse());
+                attachmentFieldView.setValid(attachmentFieldView.isValid());
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("required field is valid if attachment exists") {
                 field[FieldKey.required.key] = true;
-                
-                var completeTest = false;
-                
+                var attachmentLoaded = false;
+                                
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                controller.viewDidLoadClosure = {
-                    attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
-                    attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                    
-                    view.addSubview(attachmentFieldView)
-                    attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                    
-                    expect(attachmentFieldView.isEmpty()).to(beFalse());
-                    expect(attachmentFieldView.isValid(enforceRequired: true)).to(beTrue());
-                    attachmentFieldView.setValid(attachmentFieldView.isValid());
-                }
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(attachmentFieldView)
+                attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                
+                expect(attachmentFieldView.isEmpty()).to(beFalse());
+                expect(attachmentFieldView.isValid(enforceRequired: true)).to(beTrue());
+                attachmentFieldView.setValid(attachmentFieldView.isValid());
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("should call the attachment selection delegate on tap") {
+                var attachmentLoaded = false;
+                var attachmentLoaded2 = false;
+                var attachmentLoaded3 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL2: URL = URL(string: attachment2.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded2 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 let attachment3 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL3: URL = URL(string: attachment3.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL3.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .orange, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded3 = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
@@ -795,6 +806,12 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded2).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                expect(attachmentLoaded3).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+                
                 tester().waitForView(withAccessibilityLabel: "Attachment Collection");
                 viewTester().usingLabel("Attachment Collection").tapCollectionViewItem(at: IndexPath(row: 0, section: 0));
                 
@@ -871,8 +888,6 @@ class AttachmentFieldViewTests: KIFSpec {
                     }
                 }
                 
-                var completeTest = false;
-
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
                 let coordinator = MockAttachmentCreationCoordinator(rootViewController: controller, observation: Observation())
@@ -905,30 +920,27 @@ class AttachmentFieldViewTests: KIFSpec {
                                 
                 let attachment = Attachment(forJson: attachmentJson, in: NSManagedObjectContext.mr_default());
                 coordinator.delegate?.attachmentCreated(attachment: attachment);
-                                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
+                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment that is synced and one that is not") {
+                var attachmentLoaded = false;
+                
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
                 let attachment2 = ObservationBuilder.createAttachment(eventId: observation.eventId!, name: "notsynced", observationRemoteId: observation.remoteId);
                 attachment2.localPath = NSTemporaryDirectory() + "testimage.png"
-                let image: UIImage = createGradientImage(startColor: .magenta, endColor: .gray, size: CGSize(width: 500, height: 500));
+                let image: UIImage = createGradientImage(startColor: .magenta, endColor: .gray, size: CGSize(width: 50, height: 50));
                 FileManager.default.createFile(atPath: attachment2.localPath!, contents: image.pngData()!, attributes: nil);
                 let attachmentSelectionDelegate = MockAttachmentSelectionDelegate();
 
@@ -942,6 +954,8 @@ class AttachmentFieldViewTests: KIFSpec {
                 // not synced attachments should be ordered last so row 0 should be attachment and row 1 should be attachment 2
                 attachmentFieldView.setValue(Set(arrayLiteral: attachment2, attachment));
                 tester().waitForView(withAccessibilityLabel: "Attachment Collection");
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+
                 viewTester().usingLabel("Attachment Collection").tapCollectionViewItem(at: IndexPath(row: 0, section: 0));
                 
                 expect(attachmentSelectionDelegate.selectedAttachmentCalled).to(beTrue());
@@ -970,18 +984,20 @@ class AttachmentFieldViewTests: KIFSpec {
             }
             
             it("set one attachment that is synced and one that is not different order") {
+                var attachmentLoaded = false;
                 let observation = ObservationBuilder.createBlankObservation();
                 observation.remoteId = "remoteobservationid";
                 let attachment = ObservationBuilder.addAttachmentToObservation(observation: observation);
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
-                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 500, height: 500))
+                    let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
+                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
                 let attachment2 = ObservationBuilder.createAttachment(eventId: observation.eventId!, name: "notsynced", observationRemoteId: observation.remoteId);
                 attachment2.localPath = NSTemporaryDirectory() + "testimage.png"
-                let image: UIImage = createGradientImage(startColor: .magenta, endColor: .gray, size: CGSize(width: 500, height: 500));
+                let image: UIImage = createGradientImage(startColor: .magenta, endColor: .gray, size: CGSize(width: 50, height: 50));
                 FileManager.default.createFile(atPath: attachment2.localPath!, contents: image.pngData()!, attributes: nil);
                 let attachmentSelectionDelegate = MockAttachmentSelectionDelegate();
                 
@@ -995,6 +1011,8 @@ class AttachmentFieldViewTests: KIFSpec {
                 // not synced attachments should be ordered last so row 0 should be attachment and row 1 should be attachment 2
                 attachmentFieldView.setValue(Set(arrayLiteral: attachment, attachment2));
                 tester().waitForView(withAccessibilityLabel: "Attachment Collection");
+                expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
+
                 viewTester().usingLabel("Attachment Collection").tapCollectionViewItem(at: IndexPath(row: 0, section: 0));
                 
                 expect(attachmentSelectionDelegate.selectedAttachmentCalled).to(beTrue());

@@ -97,19 +97,21 @@
 
 - (void) setupListeners {
     if (self.mapView) {
-        @synchronized (self) {
-            if (!self.listenersRegistered) {
-                self.listenersRegistered = [NSMutableArray arrayWithObjects:@"mapType", kCurrentEventIdKey, @"selectedOnlineLayers", [NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]], nil];
-                if (!self.hideStaticLayers) {
-                    [self.listenersRegistered addObject:@"selectedStaticLayers"];
-                }
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                
-                for (NSString *keyPath in self.listenersRegistered) {
-                    [defaults addObserver:self
-                               forKeyPath:keyPath
-                                  options:NSKeyValueObservingOptionNew
-                                  context:NULL];
+        if (!self.listenersRegistered) {
+            @synchronized (self) {
+                if (!self.listenersRegistered) {
+                    self.listenersRegistered = [NSMutableArray arrayWithObjects:@"mapType", kCurrentEventIdKey, @"selectedOnlineLayers", [NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]], nil];
+                    if (!self.hideStaticLayers) {
+                        [self.listenersRegistered addObject:@"selectedStaticLayers"];
+                    }
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    
+                    for (NSString *keyPath in self.listenersRegistered) {
+                        [defaults addObserver:self
+                                   forKeyPath:keyPath
+                                      options:NSKeyValueObservingOptionNew
+                                      context:NULL];
+                    }
                 }
             }
         }
@@ -145,7 +147,10 @@
 }
 
 - (void) mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered: (BOOL) fullyRendered {
-    if (self.mapEventDelegate) [self.mapEventDelegate mapViewDidFinishRenderingMap:mapView fullyRendered:fullyRendered];
+    if (self.mapEventDelegate) {
+        NSLog(@"FINISHED RENDERING");
+        [self.mapEventDelegate mapViewDidFinishRenderingMap:mapView fullyRendered:fullyRendered];
+    }
 }
 
 - (void) mapViewWillStartLoadingMap:(MKMapView *)mapView {
@@ -519,6 +524,7 @@
 }
 
 - (void) ensureMapLayout {
+    NSLog(@"Ensure map layout");
     if (!self.mapCacheOverlays) {
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
     }
@@ -534,6 +540,7 @@
     
     [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
     [self updateOnlineLayers:[defaults objectForKey:@"selectedOnlineLayers"]];
+    NSLog(@"Ensure map layout finished");
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath
@@ -596,6 +603,10 @@
  *  @param cacheOverlays cache overlays
  */
 - (void) updateCacheOverlaysSynchronized:(NSArray<CacheOverlay *> *) cacheOverlays {
+    if (cacheOverlays.count == 0) {
+        NSLog(@"No Cache Overlays to update");
+        return;
+    }
     NSLog(@"Update Cache Overlays Synchronized %@", cacheOverlays);
     @synchronized(self.cacheOverlayUpdateLock){
         
@@ -1158,6 +1169,8 @@
         [self.mapView removeOverlay:[self.onlineLayers objectForKey:unselectedOnlineLayerId]];
         [self.onlineLayers removeObjectForKey:unselectedOnlineLayerId];
     }
+    
+    NSLog(@"Done updating online layers");
 }
 
 - (void) updateStaticLayers: (NSDictionary *) staticLayersPerEvent {
@@ -1374,7 +1387,8 @@
             [self.mapView addOverlay:self.selectedObservationAccuracy];
         }
         self.obsBottomSheet = [[ObservationBottomSheetController alloc] initWithObservation:observation actionsDelegate:self scheme:self.scheme];
-        self.obsBottomSheet.preferredContentSize = CGSizeMake(self.obsBottomSheet.preferredContentSize.width, 220);
+        self.obsBottomSheet.preferredContentSize = CGSizeMake(self.obsBottomSheet.preferredContentSize.width,
+                                                              observation.isImportant ? 260 : 220);
         
         self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.obsBottomSheet];
         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];

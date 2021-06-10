@@ -22,7 +22,6 @@ class ObservationImportantView: UIView {
     }()
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
-        self.backgroundColor = MDCPalette.orange.accent400;
         reasonLabel.textColor = UIColor.black.withAlphaComponent(0.87);
         reasonLabel.font = scheme.typographyScheme.body2;
         flaggedByLabel.textColor = UIColor.black.withAlphaComponent(0.6);
@@ -38,6 +37,7 @@ class ObservationImportantView: UIView {
         self.scheme = scheme;
         self.configureForAutoLayout();
         layoutView();
+        self.backgroundColor = MDCPalette.orange.accent400;
         if let safeObservation = observation {
             populate(observation: safeObservation);
         }

@@ -18,9 +18,6 @@ class CheckboxFieldViewTests: KIFSpec {
     override func spec() {
         
         describe("CheckboxFieldView") {
-            let recordSnapshots = false;
-            var completeTest = false;
-            
             var controller: UIViewController!
             var window: UIWindow!;
             
@@ -28,22 +25,7 @@ class CheckboxFieldViewTests: KIFSpec {
             var view: UIView!
             var field: [String: Any]!
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 0.1);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot(usesDrawRect: true);
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
-            
             beforeEach {
-                completeTest = false;
                 window = UIWindow(forAutoLayout: ());
                 window.autoSetDimension(.width, toSize: 300);
                 
@@ -59,6 +41,8 @@ class CheckboxFieldViewTests: KIFSpec {
                     "name": "field8",
                     "id": 8
                 ];
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
@@ -80,14 +64,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 expect((viewTester().usingLabel(field["name"] as? String)?.view as! UISwitch).isUserInteractionEnabled).to(beFalse());
                 expect((viewTester().usingLabel(field["name"] as? String)?.view as! UISwitch).isEnabled).to(beTrue());
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {
@@ -98,14 +75,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value true") {
@@ -116,14 +86,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value false") {
@@ -134,14 +97,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later") {
@@ -153,14 +109,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 
                 controller.view.addSubview(view);
                 checkboxFieldView.setValue(true);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value simulated touch") {
@@ -175,14 +124,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().setOn(true, forSwitchWithAccessibilityLabel: field["name"] as? String);
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("required") {
@@ -195,14 +137,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 
                 controller.view.addSubview(view);
                 checkboxFieldView.setValue(true);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid false") {
@@ -215,14 +150,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 
                 checkboxFieldView.setValid(false);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid true after being invalid") {
@@ -236,14 +164,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 
                 checkboxFieldView.setValid(false);
                 checkboxFieldView.setValid(true);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("required field is invalid if false") {
@@ -260,14 +181,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 expect(checkboxFieldView.isEmpty()) == true;
                 expect(checkboxFieldView.isValid(enforceRequired: true)) == false;
                 checkboxFieldView.setValid(checkboxFieldView.isValid());
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("required field is valid if true") {
@@ -285,14 +199,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 expect(checkboxFieldView.isEmpty()) == false;
                 expect(checkboxFieldView.isValid(enforceRequired: true)) == true;
                 checkboxFieldView.setValid(checkboxFieldView.isValid());
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("test delegate false value") {

@@ -20,41 +20,31 @@ class ObservationEditCoordinatorTests: KIFSpec {
         
         describe("ObservationEditCoordinator") {
             var controller: UINavigationController!
-            var window: UIWindow!;
+            var window: UIWindow!
+            var stackSetup = false;
             
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
-                window = UIWindow(frame: UIScreen.main.bounds);
+                if (!stackSetup) {
+                    window = UIWindow(frame: UIScreen.main.bounds);
+                    controller = UINavigationController();
+                    window.rootViewController = controller;
+                    TestHelpers.clearAndSetUpStack();
+                    stackSetup = true;
+                }
+                MageCoreDataFixtures.clearAllData();
                 window.makeKeyAndVisible();
                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
                 
-                controller = UINavigationController();
-                window.rootViewController = controller;
                 NSDate.setDisplayGMT(true);
             }
             
             afterEach {
-                
-                waitUntil { done in
-                    if let safePresented = controller.presentedViewController {
-                        safePresented.dismiss(animated: false, completion: {
-                            controller.dismiss(animated: false, completion: {
-                                done();
-                            })
-                        })
-                    } else {
-                        controller.dismiss(animated: false, completion: {
-                            done();
-                        })
-                    }
+                if let safePresented = controller.presentedViewController {
+                    safePresented.dismiss(animated: false, completion: nil);
                 }
-                window?.resignKey();
-                window.rootViewController = nil;
-                controller = nil;
-                window = nil;
-                TestHelpers.cleanUpStack();
+                MageCoreDataFixtures.clearAllData();
             }
             
             it("initialize the coordinator with a geometry") {
@@ -196,19 +186,25 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 
                 coordinator.start();
+                NSLog("started coordinator")
+                tester().waitForAnimationsToFinish();
                 
                 tester().waitForView(withAccessibilityLabel: "Test");
+                NSLog("found view with label test")
                 tester().tapView(withAccessibilityLabel: "Test");
-                
-                
+                NSLog("Tapped view with test");
+                tester().waitForAnimationsToFinish();
+                NSLog("wait for field 1");
                 tester().waitForView(withAccessibilityLabel: "field1");
+                NSLog("found field 1");
                 tester().tapView(withAccessibilityLabel: "field1");
+                NSLog("Tapped view with field 1");
                 
-                
+                tester().waitForAnimationsToFinish();
+                NSLog("waiting for view with choices");
+                tester().waitForView(withAccessibilityLabel: "choices");
+                NSLog("found view with choices");
                 tester().tapRow(at: IndexPath(row: 1, section: 0), inTableViewWithAccessibilityIdentifier: "choices")
-                
-                tester().tapView(withAccessibilityLabel: "Done");
-                
                 
                 tester().expect(viewTester().usingLabel("field1")?.view, toContainText: "Low")
             }
@@ -387,11 +383,16 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, observation: observation);
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 coordinator.start();
+                
+                tester().waitForAnimationsToFinish();
                                 
                 tester().waitForView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 
-                tester().waitForView(withAccessibilityLabel: "Discard Changes");
+                tester().waitForAnimationsToFinish();
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Yes, Discard");
+                tester().tapView(withAccessibilityLabel: "Yes, Discard");
             }
         }
     }

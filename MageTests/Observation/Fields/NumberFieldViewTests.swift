@@ -33,20 +33,22 @@ class NumberFieldViewTests: KIFSpec {
             
             var numberFieldView: NumberFieldView!
             var field: [String: Any]!
-            
-            let recordSnapshots = false;
-            
+                        
             var view: UIView!
             var controller: UIViewController!
             var window: UIWindow!;
             
-            func maybeSnapshot() -> Snapshot {
-                if (recordSnapshots) {
-                    return recordSnapshot(usesDrawRect: true)
-                } else {
-                    return snapshot(usesDrawRect: true)
-                }
-            }
+            window = UIWindow(forAutoLayout: ());
+            window.autoSetDimension(.width, toSize: 300);
+            
+            controller = UIViewController();
+            view = UIView(forAutoLayout: ());
+            view.autoSetDimension(.width, toSize: 300);
+            view.backgroundColor = .white;
+            window.makeKeyAndVisible();
+            
+            window.rootViewController = controller;
+            controller.view.addSubview(view);
             
             beforeEach {
                 window = UIWindow(forAutoLayout: ());
@@ -66,12 +68,14 @@ class NumberFieldViewTests: KIFSpec {
                     "name": "field8",
                     "id": 8
                 ];
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
-                controller.dismiss(animated: false, completion: nil);
-                window.rootViewController = nil;
-                controller = nil;
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
             }
             
             it("edit mode reference image") {
@@ -88,7 +92,7 @@ class NumberFieldViewTests: KIFSpec {
                 expect(numberFieldView.controller.helperText) == "Must be greater than 2 "
                 expect(numberFieldView.titleLabel.text) == "Must be greater than 2 "
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("non edit mode reference image") {
@@ -103,7 +107,7 @@ class NumberFieldViewTests: KIFSpec {
                 expect(numberFieldView.fieldValue.text) == "2";
                 expect(numberFieldView.fieldNameLabel.text) == "Number Field"
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("non edit mode") {
@@ -231,7 +235,7 @@ class NumberFieldViewTests: KIFSpec {
                 expect(numberFieldView.textField.text) == "";
                 expect(numberFieldView.textField.placeholder) == "Number Field"
                 expect(numberFieldView.controller.errorText) == "Must be a number"
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid true after being invalid") {

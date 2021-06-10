@@ -91,7 +91,7 @@ class ObservationListActionsView: UIView {
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-            directionsButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 24), excludingEdge: .left);
+            directionsButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left);
             favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -32);
             favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
             favoriteCount.autoPinEdge(.left, to: .right, of: favoriteButton);

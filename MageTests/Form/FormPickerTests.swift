@@ -35,34 +35,17 @@ class FormPickerTests: KIFSpec {
     override func spec() {
         
         describe("FormPickerTests") {
-            let recordSnapshots = false;
             
             var formPicker: FormPickerViewController!
             var window: UIWindow!;
+            window = UIWindow(forAutoLayout: ());
+            window.autoSetDimension(.width, toSize: 300);
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 0.5);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
+            window.makeKeyAndVisible();
             
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
-                
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                
-                window.makeKeyAndVisible();
-                
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
@@ -72,26 +55,14 @@ class FormPickerTests: KIFSpec {
             }
             
             it("initialized") {
-                var completeTest = false;
-                
                 formPicker = FormPickerViewController(scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
                 
-                maybeRecordSnapshot(formPicker.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(formPicker.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(formPicker.view).to(haveValidSnapshot());
             }
             
             it("one form") {
-                var completeTest = false;
-                
                 let forms: [[String: AnyHashable]] = [[
                     "name": "Suspect",
                     "description": "Information about a suspect",
@@ -103,20 +74,10 @@ class FormPickerTests: KIFSpec {
                 
                 window.rootViewController = formPicker;
                 
-                maybeRecordSnapshot(formPicker.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(formPicker.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(formPicker.view).to(haveValidSnapshot());
             }
             
             it("multiple forms") {
-                var completeTest = false;
-                
                 let forms: [[String: AnyHashable]] = [[
                     "name": "Suspect",
                     "description": "Information about a suspect",
@@ -147,20 +108,10 @@ class FormPickerTests: KIFSpec {
                 
                 window.rootViewController = formPicker;
                 
-                maybeRecordSnapshot(formPicker.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(formPicker.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(formPicker.view).to(haveValidSnapshot());
             }
             
             it("as a sheet") {
-                var completeTest = false;
-                
                 let forms: [[String: AnyHashable]] = [[
                     "name": "Vehicle",
                     "description": "Information about a vehicle",
@@ -230,17 +181,9 @@ class FormPickerTests: KIFSpec {
                 expect(delegate.formPickedCalled).to(beTrue());
                 expect(delegate.pickedForm).to(equal(forms[9]));
 
-                maybeRecordSnapshot(formPicker.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(formPicker.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(formPicker.view).to(haveValidSnapshot());
             }
-            
+            // check constraints here
             it("should trigger the delegate") {
                 
                 let forms: [[String: AnyHashable]] = [[
@@ -283,8 +226,6 @@ class FormPickerTests: KIFSpec {
             }
             
             it("cancel button cancels") {
-                var completeTest = false;
-                
                 let forms: [[String: AnyHashable]] = [[
                     "name": "Suspect",
                     "description": "Information about a suspect",
@@ -296,15 +237,7 @@ class FormPickerTests: KIFSpec {
                 
                 window.rootViewController = formPicker;
                 
-                maybeRecordSnapshot(formPicker.view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(formPicker.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(formPicker.view).to(haveValidSnapshot());
             }
         }
     }

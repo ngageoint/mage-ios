@@ -325,6 +325,7 @@
     self.createFab = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeDefault];
     [self.createFab setImage:[UIImage imageNamed:@"add_location"] forState:UIControlStateNormal];
     [self.createFab addTarget:self action:@selector(createNewObservation:) forControlEvents:UIControlEventTouchUpInside];
+    self.createFab.accessibilityLabel = @"New";
     
     [buttonStack addArrangedSubview:self.trackingButton];
     [buttonStack addArrangedSubview:self.reportLocationButton];

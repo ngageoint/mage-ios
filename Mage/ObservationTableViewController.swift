@@ -94,9 +94,7 @@ class ObservationTableViewController: UITableViewController {
         self.tableView.backgroundView = nil;
         self.tableView.register(cellClass: ObservationListCardCell.self);
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forCellReuseIdentifier: "TableSectionHeader");
-        
-        observationDataStore.startFetchController();
-        
+                
         self.refreshControl = UIRefreshControl();
         refreshControl?.addTarget(self, action: #selector(refreshObservations), for: .valueChanged);
         self.tableView.refreshControl = self.refreshControl;
@@ -141,6 +139,8 @@ class ObservationTableViewController: UITableViewController {
         self.createFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
         self.applyTheme(withContainerScheme: self.scheme);
         setupFilterListeners();
+        
+        observationDataStore.startFetchController();
         self.tableView.reloadData();
     }
     

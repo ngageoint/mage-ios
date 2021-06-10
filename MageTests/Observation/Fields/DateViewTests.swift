@@ -28,8 +28,6 @@ class DateViewTests: KIFSpec {
             var dateFieldView: DateView!
             var field: [String: Any]!
 
-            let recordSnapshots = false;
-
             var view: UIView!
             var controller: UIViewController!
             var window: UIWindow!;
@@ -38,28 +36,20 @@ class DateViewTests: KIFSpec {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
             formatter.locale = Locale(identifier: "en_US_POSIX");
             
-            func maybeSnapshot() -> Snapshot {
-                if (recordSnapshots) {
-                    return recordSnapshot()
-                } else {
-                    return snapshot()
-                }
-            }
+            window = UIWindow(forAutoLayout: ());
+            window.autoSetDimension(.width, toSize: 375);
+            window.backgroundColor = .systemBackground;
+            
+            controller = UIViewController();
+            view = UIView(forAutoLayout: ());
+            view.autoSetDimension(.width, toSize: 375);
+            view.backgroundColor = .white;
+            window.makeKeyAndVisible();
+            
+            window.rootViewController = controller;
+            controller.view.addSubview(view);
             
             beforeEach {
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                window.backgroundColor = .systemBackground;
-                
-                controller = UIViewController();
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
-                view.backgroundColor = .white;
-                window.makeKeyAndVisible();
-                
-                window.rootViewController = controller;
-                controller.view.addSubview(view);
-                
                 NSDate.setDisplayGMT(false);
                 
                 field = [
@@ -67,39 +57,41 @@ class DateViewTests: KIFSpec {
                     "id": 8,
                     "name": "field8"
                 ];
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
-                controller.dismiss(animated: false, completion: nil);
-                window.rootViewController = nil;
-                controller = nil;
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
             }
             
             it("non edit mode") {
                 dateFieldView = DateView(field: field, editMode: false, value: "2013-06-22T08:18:20.000Z");
-                
+                dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: "\(field["name"] as? String ?? "") Label");
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {
                 dateFieldView = DateView(field: field);
-                
+                dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value set") {
                 dateFieldView = DateView(field: field, value: "2013-06-22T08:18:20.000Z");
-
+                dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 expect(dateFieldView.textField.text).to(equal("June 22, 2013 at 2:18:20 AM MDT"));
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later") {
@@ -111,7 +103,7 @@ class DateViewTests: KIFSpec {
 
                 dateFieldView.setValue( "2013-06-22T08:18:20.000Z")
                 expect(dateFieldView.textField.text).to(equal("June 22, 2013 at 2:18:20 AM MDT"));
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later as Any") {
@@ -149,7 +141,7 @@ class DateViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == formatter.string(from: date);
                 expect(dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value with touch inputs in GMT") {
@@ -161,6 +153,8 @@ class DateViewTests: KIFSpec {
                 
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
+                
+                tester().waitForAnimationsToFinish();
                 
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().tapView(withAccessibilityLabel: field["name"] as? String);
@@ -177,8 +171,8 @@ class DateViewTests: KIFSpec {
                 // IMPORTANT: THIS IS TO CORRECT FOR A BUG IN KIF, YOU MUST COMPARE AGAINST THE DATE YOU SET
                 // PLUS THE OFFSET FROM GMT OR IT WILL NOT WORK
                 // IF THIS BUG IS CLOSED YOU CAN REMOVE THIS LINE: https://github.com/kif-framework/KIF/issues/1214
-                print("how many seconds from gmt are we \(TimeZone.current.secondsFromGMT())")
-                date.addTimeInterval(TimeInterval(-TimeZone.current.secondsFromGMT()));
+//                print("how many seconds from gmt are we \(TimeZone.current.secondsFromGMT())")
+                date.addTimeInterval(TimeInterval(-TimeZone.current.secondsFromGMT(for: date)));
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == formatter.string(from: date);
                 expect(dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));
@@ -211,6 +205,7 @@ class DateViewTests: KIFSpec {
                 expect(dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));
             }
             
+            // this test is finicky
             it("set clear the text field via touch") {
                 let delegate = MockFieldDelegate()
                 
@@ -222,8 +217,18 @@ class DateViewTests: KIFSpec {
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
+                print("found it")
+                tester().waitForTappableView(withAccessibilityLabel: field["name"] as? String);
+                print("found tappable view")
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
                 tester().tapView(withAccessibilityLabel: field["name"] as? String);
+                print("tapped it")
+                tester().waitForAnimationsToFinish(withTimeout: 0.01);
+
                 tester().waitForView(withAccessibilityLabel: (field["name"] as? String ?? "") + " Date Picker");
                 TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().clearTextFromFirstResponder();
@@ -246,7 +251,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.autoPinEdgesToSuperviewEdges();
 
                 dateFieldView.setValid(false);
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
 
             it("set valid true after being invalid") {
@@ -258,13 +263,16 @@ class DateViewTests: KIFSpec {
 
                 dateFieldView.setValid(false);
                 dateFieldView.setValid(true);
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
 
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
                 dateFieldView = DateView(field: field);
                 dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(dateFieldView)
+                dateFieldView.autoPinEdgesToSuperviewEdges();
 
                 expect(dateFieldView.isEmpty()) == true;
                 expect(dateFieldView.isValid(enforceRequired: true)) == false;
@@ -274,6 +282,9 @@ class DateViewTests: KIFSpec {
                 field[FieldKey.required.key] = true;
                 dateFieldView = DateView(field: field, value: "2013-06-22T08:18:20.000Z");
                 dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(dateFieldView)
+                dateFieldView.autoPinEdgesToSuperviewEdges();
 
                 expect(dateFieldView.isEmpty()) == false;
                 expect(dateFieldView.isValid(enforceRequired: true)) == true;
@@ -287,7 +298,7 @@ class DateViewTests: KIFSpec {
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
 
             it("test delegate") {
@@ -307,7 +318,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.textFieldDidEndEditing(dateFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == formatter.string(from: newDate);
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("done button should send nil as new value") {

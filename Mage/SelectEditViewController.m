@@ -211,7 +211,6 @@
             value = [self.selectedChoices objectAtIndex:0];
         }
     }
-    
     [self.delegate setValue:value forFieldDefinition:self.fieldDefinition];
 }
 

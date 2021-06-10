@@ -47,6 +47,10 @@ import Kingfisher
         }
     }
     
+    override func removeFromSuperview() {
+        self.imageView.cancel();
+    }
+    
     @objc public func setImage(attachment: Attachment, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
         self.button = button;
@@ -54,11 +58,14 @@ import Kingfisher
         let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
             self.imageView.setAttachment(attachment: attachment);
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading";
+            NSLog("Loading the image \(attachment.name ?? "")")
             self.imageView.showThumbnail(completionHandler:
                                             { result in
                                                 switch result {
                                                 case .success(let success):
-                                                    print("got it", success.image)
+                                                    self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+                                                    NSLog("Loaded the image \(self.imageView.accessibilityLabel ?? "")")
                                                 case .failure(let error):
                                                     print(error);
                                                 }
@@ -82,6 +89,7 @@ import Kingfisher
                     switch result {
                     case .success(_):
                         self.imageView.contentMode = .scaleAspectFill;
+                        self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
                         let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
                         overlay.contentMode = .scaleAspectFit;
                         self.imageView.addSubview(overlay);
@@ -97,10 +105,12 @@ import Kingfisher
             
         } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
             self.imageView.image = UIImage(named: "audio_thumbnail");
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
             self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
             self.imageView.contentMode = .scaleAspectFit;
         } else {
             self.imageView.image = UIImage(named: "paperclip_thumbnail");
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
             self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
             self.imageView.contentMode = .scaleAspectFit;
         }

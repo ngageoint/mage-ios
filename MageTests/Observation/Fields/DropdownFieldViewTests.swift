@@ -16,10 +16,7 @@ import Nimble_Snapshots
 class DropdownFieldViewTests: KIFSpec {
     
     override func spec() {
-        describe("DropdownFieldView") {
-            let recordSnapshots = false;
-            var completeTest = false;
-            
+        describe("DropdownFieldView") {            
             var controller: UIViewController!
             var window: UIWindow!;
             
@@ -27,45 +24,36 @@ class DropdownFieldViewTests: KIFSpec {
             var view: UIView!
             var field: [String: Any]!
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 0.1);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
+            window = UIWindow(forAutoLayout: ());
+            window.autoSetDimension(.width, toSize: 300);
+            window.backgroundColor = .systemBackground;
+            
+            controller = UIViewController();
+            view = UIView(forAutoLayout: ());
+            view.autoSetDimension(.width, toSize: 300);
+            window.makeKeyAndVisible();
+            
+            controller.view.addSubview(view);
+            
+            field = [
+                "title": "Field Title",
+                "name": "field8",
+                "type": "dropdown",
+                "id": 8
+            ];
+            
+            window.rootViewController = controller;
             
             beforeEach {
-                completeTest = false;
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                window.backgroundColor = .systemBackground;
-                
-                controller = UIViewController();
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
-                window.makeKeyAndVisible();
-                
-                field = [
-                    "title": "Field Title",
-                    "name": "field8",
-                    "type": "dropdown",
-                    "id": 8
-                ];
-                
-                window.rootViewController = controller;
+
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
-                controller.dismiss(animated: false, completion: nil);
-                window.rootViewController = nil;
-                controller = nil;
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
             }
             
             it("non edit mode") {
@@ -75,15 +63,7 @@ class DropdownFieldViewTests: KIFSpec {
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {
@@ -93,16 +73,8 @@ class DropdownFieldViewTests: KIFSpec {
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(dropdownFieldView.isEmpty()) == true;
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value set") {
@@ -112,17 +84,9 @@ class DropdownFieldViewTests: KIFSpec {
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(dropdownFieldView.isEmpty()) == false;
 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value via input") {
@@ -133,7 +97,6 @@ class DropdownFieldViewTests: KIFSpec {
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view = view;
                 tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
                 dropdownFieldView.handleTap();
                 expect(delegate.launchFieldSelectionViewControllerCalled).to(beTrue());
@@ -148,17 +111,9 @@ class DropdownFieldViewTests: KIFSpec {
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(dropdownFieldView.isEmpty()) == true;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("required field should show status after value has been added") {
@@ -169,21 +124,13 @@ class DropdownFieldViewTests: KIFSpec {
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                controller.view.addSubview(view);
                 expect(dropdownFieldView.isEmpty()) == true;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
                 dropdownFieldView.setValue("purple");
                 expect(dropdownFieldView.getValue()) == "purple";
                 expect(dropdownFieldView.isEmpty()) == false;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
         }
     }

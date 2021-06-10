@@ -19,11 +19,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
         
         describe("ObservationEditCardCollectionViewController") {
             let recordSnapshots = false;
-            Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var observationEditController: ObservationEditCardCollectionViewController!
             var view: UIView!
             var window: UIWindow!;
+            var stackSetup = false;
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
                 print("Record snapshot?", recordSnapshots);
@@ -41,9 +41,15 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
+                if (!stackSetup) {
+                    window = UIWindow(forAutoLayout: ());
+                    window.autoSetDimension(.width, toSize: 300);
+                    TestHelpers.clearAndSetUpStack();
+                    stackSetup = true;
+                }
+                Nimble_Snapshots.setNimbleTolerance(0.1);
+
+                MageCoreDataFixtures.clearAllData();
                 window.makeKeyAndVisible();
                                 
                 UserDefaults.standard.mapType = 0;
@@ -54,12 +60,9 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             
             afterEach {
                 observationEditController.dismiss(animated: false);
-                window?.resignKey();
                 window.rootViewController = nil;
                 observationEditController = nil;
                 view = nil;
-                window = nil;
-                TestHelpers.cleanUpStack();
             }
             
             describe("Legacy") {

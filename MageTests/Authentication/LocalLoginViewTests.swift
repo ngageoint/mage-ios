@@ -69,7 +69,7 @@ class LocalLoginViewTests: KIFSpec {
             var window: UIWindow?;
             var view: UIView!;
             var localLoginView: LocalLoginView!;
-            var controller: ContainingUIViewController?;
+            var controller: UIViewController?;
             var delegate: MockLoginDelegate!;
             
             beforeEach {
@@ -85,7 +85,7 @@ class LocalLoginViewTests: KIFSpec {
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .white;
                 
-                controller = ContainingUIViewController();
+                controller = UIViewController();
                 window?.rootViewController = controller;
                 controller?.view.addSubview(view);
                 

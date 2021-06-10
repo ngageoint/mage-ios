@@ -33,7 +33,7 @@ import Foundation
         let drag = UIView(forAutoLayout: ());
         drag.autoSetDimensions(to: CGSize(width: 50, height: 7));
         drag.clipsToBounds = true;
-        drag.backgroundColor = .lightGray;
+        drag.backgroundColor = .black.withAlphaComponent(0.37);
         drag.layer.cornerRadius = 3.5;
         
         let view = UIView(forAutoLayout: ());
@@ -44,21 +44,10 @@ import Foundation
         return view;
     }()
     
-    private lazy var importantView: ObservationImportantView = {
-        let importantView = ObservationImportantView(observation: self.observation, cornerRadius: 0);
-        return importantView;
+    private lazy var compactView: ObservationCompactView = {
+        let view = ObservationCompactView(cornerRadius: 0.0, includeAttachments: false);
+        return view;
     }()
-    
-    private lazy var observationSummaryView: ObservationSummaryView = {
-        let summary = ObservationSummaryView();//imageOverride: UIImage(named: "navigate_next_large"));
-        summary.isUserInteractionEnabled = false;
-        return summary;
-    }()
-    
-    private lazy var observationActionsView: ObservationListActionsView = {
-        let actions = ObservationListActionsView(observation: self.observation, observationActionsDelegate: self.actionsDelegate, scheme: self.scheme);
-        return actions;
-    }();
     
     private lazy var detailsButton: MDCButton = {
         let detailsButton = MDCButton(forAutoLayout: ());
@@ -103,34 +92,27 @@ import Foundation
             return;
         }
         self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
-        importantView.applyTheme(withScheme: safeScheme);
-        observationSummaryView.applyTheme(withScheme: safeScheme);
-        observationActionsView.applyTheme(withScheme: safeScheme);
+        compactView.applyTheme(withScheme: safeScheme);
         detailsButton.applyContainedTheme(withScheme: safeScheme);
     }
     
     override func viewDidLoad() {
         stackView.addArrangedSubview(dragHandleView);
-        stackView.addArrangedSubview(observationSummaryView);
-        stackView.addArrangedSubview(observationActionsView);
+        stackView.addArrangedSubview(compactView);
         stackView.addArrangedSubview(viewObservationButtonView);
-        let container = UIView(forAutoLayout: ());
-        container.addSubview(stackView);
-        container.addSubview(expandView);
-        self.view.addSubview(container);
-        container.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
+        self.view.addSubview(stackView);
+        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
         guard let safeObservation = self.observation else {
             return
         }
+        
+        compactView.configure(observation: safeObservation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
 
         if (safeObservation.isImportant()) {
-            importantView.populate(observation: safeObservation);
-            importantView.isHidden = false;
+            dragHandleView.backgroundColor = compactView.importantView.backgroundColor;
         } else {
-            importantView.isHidden = true;
+            dragHandleView.backgroundColor = .clear;
         }
-        observationSummaryView.populate(observation: safeObservation);
-        observationActionsView.populate(observation: safeObservation, delegate: actionsDelegate);
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
@@ -140,9 +122,7 @@ import Foundation
     
     override func updateViewConstraints() {
         if (!didSetUpConstraints) {
-            stackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-            expandView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
-            expandView.autoPinEdge(.top, to: .bottom, of: stackView);
+            stackView.autoPinEdgesToSuperviewEdges(with: .zero);
             didSetUpConstraints = true;
         }
         
@@ -153,8 +133,7 @@ import Foundation
         guard let safeObservation = self.observation else {
             return
         }
-        observationSummaryView.populate(observation: safeObservation);
-        observationActionsView.populate(observation: safeObservation, delegate: actionsDelegate);
+        compactView.configure(observation: safeObservation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
     }
     
     @objc func tap(_ card: MDCCard) {

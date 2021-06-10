@@ -96,6 +96,7 @@ class AttachmentSlideShow: UIView {
                                                 { result in
                                                     switch result {
                                                     case .success(_):
+                                                        imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
                                                         if (attachmentSelectionDelegate != nil) {
                                                             imageView.isUserInteractionEnabled = true;
                                                             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))

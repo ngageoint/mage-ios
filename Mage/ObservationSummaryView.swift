@@ -19,7 +19,7 @@ class ObservationSummaryView: UIView {
         stack.axis = .vertical
         stack.alignment = .fill
         stack.spacing = 0;
-        stack.distribution = .fillEqually
+        stack.distribution = .fillProportionally
         stack.translatesAutoresizingMaskIntoConstraints = false;
         stack.isUserInteractionEnabled = false;
         return stack;
@@ -150,7 +150,7 @@ class ObservationSummaryView: UIView {
             sync.autoPinEdge(toSuperviewEdge: .top, withInset: 1);
             sync.autoPinEdge(toSuperviewEdge: .left);
                         
-            self.autoSetDimension(.height, toSize: 102, relation: .greaterThanOrEqual)
+            self.autoSetDimension(.height, toSize: 90, relation: .greaterThanOrEqual)
             didSetUpConstraints = true;
         }
         super.updateConstraints();
