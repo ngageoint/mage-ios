@@ -53,7 +53,7 @@ import Kingfisher
         allTabs.append(createLocationsTab());
         allTabs.append(createObservationsTab());
         
-        for feed in Feed.mr_findAll()! as! [Feed] {
+        for feed in Feed.getEventFeeds(Server.currentEventId()) {
             allTabs.append(createFeedViewController(feed: feed));
         }
         
