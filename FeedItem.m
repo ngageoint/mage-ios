@@ -68,7 +68,7 @@
     if (epochTime == nil) {
         return nil;
     }
-    return [NSDate dateWithTimeIntervalSince1970: epochTime.doubleValue];
+    return [NSDate dateWithTimeIntervalSince1970: epochTime.doubleValue / 1000.0];
 }
 
 - (NSString *) title {
