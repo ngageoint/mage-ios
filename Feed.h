@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Feed : NSManagedObject
 
 + (NSArray <Feed *>*) getMappableFeeds: (NSNumber *) eventId;
++ (NSArray <Feed *>*) getEventFeeds: (NSNumber *) eventId;
 + (NSMutableArray <NSString *>*) populateFeedsFromJson: (NSArray *) feeds inEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
 + (NSString *) addFeedFromJson: (NSDictionary *) feed inEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
 + (NSMutableArray <NSNumber *>*) populateFeedItemsFromJson: (NSArray *) feedItems inFeedId: (NSString *) feedId inContext: (NSManagedObjectContext *) context;

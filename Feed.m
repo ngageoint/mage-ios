@@ -50,6 +50,10 @@
     return [Feed MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"(itemsHaveSpatialDimension == 1 AND eventId == %@)", eventId]];
 }
 
++ (NSArray <Feed *>*) getEventFeeds: (NSNumber *) eventId {
+    return [Feed MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"(eventId == %@)", eventId]];
+}
+
 + (NSString *) addFeedFromJson: (NSDictionary *) feed inEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context {
     NSMutableArray *selectedFeedsForEvent = [[NSUserDefaults.standardUserDefaults objectForKey:[NSString stringWithFormat:@"selectedFeeds-%@", eventId]] mutableCopy];
     if (selectedFeedsForEvent == nil) {
