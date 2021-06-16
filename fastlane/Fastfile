@@ -51,6 +51,7 @@ platform :ios do
       output_name: "MAGE",
       output_directory: "build",
       build_path: "build",
+      archive_path: "build/MAGE.xcarchive",
       xcargs: "DEVELOPMENT_TEAM=ZL8G5D9G2H CODE_SIGN_STYLE=Manual",
       export_method: "development",
       export_team_id: "ZL8G5D9G2H",
