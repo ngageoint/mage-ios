@@ -10,6 +10,7 @@
 #import "GeometryEditViewController.h"
 #import "LocationService.h"
 #import "SFPoint.h"
+#import "MAGE-Swift.h"
 
 @interface GeometryEditCoordinator()
 
@@ -42,27 +43,22 @@
             self.valueChanged = true;
             if (location) {
                 self.currentGeometry = [[SFPoint alloc] initWithXValue:location.coordinate.longitude andYValue:location.coordinate.latitude];
-            } else {
-                // TODO fixme, bug fix for iOS 10, creating coordinate at 0,0 does not work, create at 1,1
-                self.currentGeometry = [[SFPoint alloc] initWithXValue:1.0 andYValue:1.0];
             }
-            
+
             NSLog(@"Location %@", self.currentGeometry);
         }
+        self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self scheme:self.scheme];
     }
     
     return self;
 }
 
 - (UIViewController *) createViewController {
-    self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self scheme:self.scheme];
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
-    doneButton.accessibilityLabel = @"Done";
-    [self.geometryEditViewController.navigationItem setLeftBarButtonItem:backButton];
-    [self.geometryEditViewController.navigationItem setRightBarButtonItem:doneButton];
     return self.geometryEditViewController;
+}
+
+- (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate {
+    [self.geometryEditViewController.mapDelegate setMapEventDelegte:mapEventDelegate];
 }
 
 - (void) start {
@@ -75,22 +71,6 @@
 }
 
 - (void) fieldEditDone {
-    NSLog(@"Done geometry coordinator");
-    // Validate the geometry
-    NSError *error;
-    if (![self.geometryEditViewController validate:&error]) {
-        NSString *message = [[error userInfo] valueForKey:NSLocalizedDescriptionKey];
-        
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Geometry"
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
-        
-        return;
-    }
     [self.delegate geometryEditComplete:self.currentGeometry fieldDefintion:self.fieldDefinition coordinator:self wasValueChanged:self.valueChanged];
 }
 

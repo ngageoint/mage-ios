@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <MaterialComponents/MaterialContainerScheme.h>
 #import "SFGeometry.h"
+#import <MapKit/MapKit.h>
 
 @protocol GeometryEditDelegate
 
@@ -32,5 +33,8 @@
 - (void) start;
 - (void) updateGeometry: (SFGeometry *) geometry;
 - (NSString *) fieldName;
+- (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
+- (void) fieldEditCanceled;
+- (void) fieldEditDone;
 
 @end

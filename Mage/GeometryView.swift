@@ -178,6 +178,7 @@ class GeometryView : BaseFieldView {
     
     func buildView() {
         if (editMode) {
+            viewStack.spacing = 0;
             viewStack.addArrangedSubview(textField);
             viewStack.addArrangedSubview(mapView);
             
@@ -237,7 +238,6 @@ class GeometryView : BaseFieldView {
     }
     
     func setValue(_ value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil) {
-        print("value is now \(value)")
         self.value = value;
         if (value != nil) {
             latitudeLongitudeButton.isEnabled = true;
@@ -245,6 +245,7 @@ class GeometryView : BaseFieldView {
             if (self.observation == nil) {
                 addToMap();
             } else {
+                self.observation?.setGeometry(value!);
                 addToMapAsObservation();
             }
             

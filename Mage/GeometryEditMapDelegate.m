@@ -16,6 +16,7 @@
 @property (strong, nonatomic) id<AnnotationDragCallback> dragCallback;
 @property (nonatomic, strong) ObservationShapeStyle *editStyle;
 @property (strong, nonatomic) id<EditableMapAnnotationDelegate> editDelegate;
+@property (nonatomic) id<MKMapViewDelegate> mapEventDelegate;
 
 @end
 
@@ -56,7 +57,7 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
             }
             mapPointImageView.image = mapPoint.options.image;
             mapPointImageView.centerOffset = mapPoint.options.imageCenterOffset;
-            
+            mapPointImageView.accessibilityLabel = mapPoint.accessibilityLabel;
             view = mapPointImageView;
         }
     }
@@ -95,6 +96,28 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *) annotationView didChangeDragState:(MKAnnotationViewDragState) newState fromOldState:(MKAnnotationViewDragState) oldState {
     [self.editDelegate mapView:mapView annotationView:annotationView didChangeDragState:newState fromOldState:oldState];
+}
+
+- (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate {
+    self.mapEventDelegate = mapEventDelegate;
+}
+
+- (void) mapViewDidFinishLoadingMap:(MKMapView *)mapView {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapViewDidFinishLoadingMap:mapView];
+}
+
+- (void) mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered: (BOOL) fullyRendered {
+    if (self.mapEventDelegate) {
+        [self.mapEventDelegate mapViewDidFinishRenderingMap:mapView fullyRendered:fullyRendered];
+    }
+}
+
+- (void) mapViewWillStartLoadingMap:(MKMapView *)mapView {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapViewWillStartLoadingMap:mapView];
+}
+
+- (void) mapView:(MKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapView:mapView didAddOverlayViews:overlayViews];
 }
 
 @end

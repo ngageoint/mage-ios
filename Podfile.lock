@@ -30,9 +30,7 @@ PODS:
   - KIF (3.8.2):
     - KIF/Core (= 3.8.2)
   - KIF/Core (3.8.2)
-  - Kingfisher (5.15.8):
-    - Kingfisher/Core (= 5.15.8)
-  - Kingfisher/Core (5.15.8)
+  - Kingfisher (6.3.0)
   - libPhoneNumber-iOS (0.9.15)
   - mage-ios-sdk (3.1.2):
     - AFNetworking (~> 4.0.1)
@@ -735,7 +733,7 @@ DEPENDENCIES:
   - DateTools (~> 2.0.0)
   - HexColors (~> 2.2.1)
   - KIF
-  - Kingfisher (~> 5)
+  - Kingfisher (~> 6)
   - libPhoneNumber-iOS (~> 0.8)
   - mage-ios-sdk (from `../mage-ios-sdk`)
   - MaterialComponents
@@ -797,7 +795,7 @@ SPEC CHECKSUMS:
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   KIF: 046e792c00c407316df8a70941851decc877b124
-  Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
+  Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   mage-ios-sdk: 3b170c7dba736b892bf07e46c0bbb0dd3b87f1a1
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
@@ -825,6 +823,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 25c19fb68635c035e00cb7ede1e76cf949d3636b
+PODFILE CHECKSUM: ce780f91b85c726ebb2e256285bd8ecebf4cbf06
 
 COCOAPODS: 1.9.3

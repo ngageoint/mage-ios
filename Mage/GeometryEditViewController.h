@@ -9,16 +9,15 @@
 #import <MapKit/MapKit.h>
 #import "AnnotationDragCallback.h"
 #import "GeometryEditCoordinator.h"
+#import "GeometryEditMapDelegate.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
+
 
 @interface GeometryEditViewController : UIViewController <AnnotationDragCallback>
 
-@property (weak, nonatomic) IBOutlet MKMapView *map;
-@property (weak, nonatomic) IBOutlet UIButton *pointButton;
-@property (weak, nonatomic) IBOutlet UIButton *lineButton;
-@property (weak, nonatomic) IBOutlet UIButton *rectangleButton;
-@property (weak, nonatomic) IBOutlet UIButton *polygonButton;
+@property (strong, nonatomic) IBOutlet MKMapView *map;
 @property (nonatomic) BOOL allowsPolygonIntersections;
+@property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
 
 - (instancetype) initWithCoordinator: (GeometryEditCoordinator *) coordinator scheme: (id<MDCContainerScheming>) containerScheme;
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;

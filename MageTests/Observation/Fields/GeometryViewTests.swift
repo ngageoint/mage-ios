@@ -21,7 +21,7 @@ class GeometryViewTests: KIFSpec {
             var stackSetup = false;
             var field: [String: Any]!
                         
-            var geometryFieldView: GeometryView!
+            var geometryFieldView: GeometryView?
             var view: UIView!
             var controller: UIViewController!
             var window: UIWindow!;
@@ -38,9 +38,17 @@ class GeometryViewTests: KIFSpec {
                     view.backgroundColor = .systemBackground;
                     
                     window.rootViewController = controller;
-                    controller.view.addSubview(view);
+                    controller?.view.addSubview(view);
                     stackSetup = true;
                 }
+                
+                geometryFieldView?.removeFromSuperview();
+                geometryFieldView = nil;
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
+                MageCoreDataFixtures.clearAllData();
+                
                 window.makeKeyAndVisible();
 
                 field = [
@@ -57,7 +65,7 @@ class GeometryViewTests: KIFSpec {
             }
             
             afterEach {
-                geometryFieldView.removeFromSuperview();
+                geometryFieldView?.removeFromSuperview();
                 geometryFieldView = nil;
                 for subview in view.subviews {
                     subview.removeFromSuperview();
@@ -79,19 +87,19 @@ class GeometryViewTests: KIFSpec {
                 plainDelegate.mockMapViewDelegate = mockMapDelegate;
                 
                 geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);//, mkmapDelegate: plainDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView!.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 NSLog("waiting for complete to be true");
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 GPS ± 100.49m"
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m"
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
                 
                 expect(view).to(haveValidSnapshot(usesDrawRect: true));
                 
@@ -101,14 +109,14 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate: MockMapViewDelegate = MockMapViewDelegate()
 
                 geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
-                expect(geometryFieldView.mapView.isHidden).to(beTrue());
-                expect(geometryFieldView.textField.text) == "";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beTrue());
+                expect(geometryFieldView?.textField.text) == "";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("non edit mode reference image") {
@@ -118,23 +126,23 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, editMode: false, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
-                expect(geometryFieldView.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
-                expect(geometryFieldView.latitudeLongitudeButton.isEnabled).to(beTrue());
-                expect(geometryFieldView.accuracyLabel.text) == "GPS ± 100.49m";
-                expect(geometryFieldView.fieldNameLabel.text) == "Field Title"
-                expect(geometryFieldView.fieldNameLabel.superview).toNot(beNil());
-                expect(geometryFieldView.editFab.superview).to(beNil());
+                expect(geometryFieldView?.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
+                expect(geometryFieldView?.latitudeLongitudeButton.isEnabled).to(beTrue());
+                expect(geometryFieldView?.accuracyLabel.text) == "GPS ± 100.49m";
+                expect(geometryFieldView?.fieldNameLabel.text) == "Field Title"
+                expect(geometryFieldView?.fieldNameLabel.superview).toNot(beNil());
+                expect(geometryFieldView?.editFab.superview).to(beNil());
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
@@ -148,26 +156,26 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, editMode: false, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
-                expect(geometryFieldView.latitudeLongitudeButton.isEnabled).to(beTrue());
-                expect(geometryFieldView.accuracyLabel.text) == "GPS ± 100.49m";
-                expect(geometryFieldView.fieldNameLabel.text) == "Field Title"
-                expect(geometryFieldView.fieldNameLabel.superview).toNot(beNil());
-                expect(geometryFieldView.editFab.superview).to(beNil());
+                expect(geometryFieldView?.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
+                expect(geometryFieldView?.latitudeLongitudeButton.isEnabled).to(beTrue());
+                expect(geometryFieldView?.accuracyLabel.text) == "GPS ± 100.49m";
+                expect(geometryFieldView?.fieldNameLabel.text) == "Field Title"
+                expect(geometryFieldView?.fieldNameLabel.superview).toNot(beNil())
+                expect(geometryFieldView?.editFab.superview).to(beNil());
             }
 
             it("initial value set as a point") {
@@ -177,23 +185,23 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
                 
                 geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("initial value set as a point no title") {
@@ -204,23 +212,23 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == ""
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == ""
             }
             
             it("initial value set as a point MGRS") {
@@ -231,23 +239,23 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "13TDE7714328735 GPS ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "13TDE7714328735 GPS ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("initial value set wtih observation without geometry") {
@@ -257,14 +265,14 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
-                expect(geometryFieldView.mapView.isHidden).to(beTrue());
-                expect(geometryFieldView.textField.text) == "";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beTrue());
+                expect(geometryFieldView?.textField.text) == "";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("initial value set wtih observation") {
@@ -276,24 +284,24 @@ class GeometryViewTests: KIFSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     let point: SFPoint = observation.getGeometry().centroid();
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 ";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 ";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("initial value set wtih observation with accuracy") {
@@ -306,24 +314,24 @@ class GeometryViewTests: KIFSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     let point: SFPoint = observation.getGeometry().centroid();
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780  ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780  ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("initial value set wtih observation with accuracy and provider") {
@@ -337,24 +345,24 @@ class GeometryViewTests: KIFSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     let point: SFPoint = observation.getGeometry().centroid();
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("initial value set wtih observation line") {
@@ -370,10 +378,10 @@ class GeometryViewTests: KIFSpec {
                 }
                                 
                 geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 tester().waitForAnimationsToFinish();
                 
@@ -381,11 +389,11 @@ class GeometryViewTests: KIFSpec {
                 XCTAssertEqual(result, .completed)
                 
                 let point: SFPoint = observation.getGeometry().centroid();
-                expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26655 ";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26655 ";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("initial value set wtih observation polygon") {
@@ -398,23 +406,23 @@ class GeometryViewTests: KIFSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     let point: SFPoint = observation.getGeometry().centroid();
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
-                                
-                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
+                
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00935, -105.26655 ";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00935, -105.26655 ";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("set value later wtih observation with accuracy and provider") {
@@ -428,26 +436,26 @@ class GeometryViewTests: KIFSpec {
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     let point: SFPoint = observation.getGeometry().centroid();
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
                     expectation.fulfill()
                 }
                                 
                 geometryFieldView = GeometryView(field: field, observation: nil, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                                 
-                geometryFieldView.setObservation(observation: observation);
+                geometryFieldView?.setObservation(observation: observation);
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
 
             it("set value later") {
@@ -457,25 +465,25 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
 
                 geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
 
-                geometryFieldView.setValue(point);
+                geometryFieldView?.setValue(point);
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 ";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 ";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("set value later with accuracy") {
@@ -485,24 +493,24 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
                 
                 geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                geometryFieldView.setValue(point, accuracy: 100.487235, provider: "gps");
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.setValue(point, accuracy: 100.487235, provider: "gps");
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
             it("set value later with accuracy and no provider") {
@@ -512,72 +520,72 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                    expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                    expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
                 }
                 
                 geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                geometryFieldView.setValue(point, accuracy: 100.487235);
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.setValue(point, accuracy: 100.487235);
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780  ± 100.49m";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780  ± 100.49m";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
 
             it("set valid false") {
                 let mockMapDelegate = MockMapViewDelegate()
                                 
                 geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
-                geometryFieldView.setValid(false);
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
+                geometryFieldView?.setValid(false);
                 
                 expect(view).to(haveValidSnapshot());
 
-                expect(geometryFieldView.mapView.isHidden).to(beTrue());
-                expect(geometryFieldView.textField.text) == "";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.mapView.isHidden).to(beTrue());
+                expect(geometryFieldView?.textField.text) == "";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
 
             it("set valid true after being invalid") {
                 let mockMapDelegate = MockMapViewDelegate()
                                 
                 geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
-                geometryFieldView.setValid(false);
-                geometryFieldView.setValid(true);
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
+                geometryFieldView?.setValid(false)
+                geometryFieldView?.setValid(true);
                                 
-                expect(geometryFieldView.mapView.isHidden).to(beTrue());
-                expect(geometryFieldView.textField.text) == "";
-                expect(geometryFieldView.textField.label.text) == "Field Title"
-                expect(geometryFieldView.textField.textColor) != MAGEScheme.scheme().colorScheme.errorColor;
+                expect(geometryFieldView?.mapView.isHidden).to(beTrue());
+                expect(geometryFieldView?.textField.text) == "";
+                expect(geometryFieldView?.textField.label.text) == "Field Title"
+                expect(geometryFieldView?.textField.textColor) != MAGEScheme.scheme().colorScheme.errorColor;
             }
 
             it("required field is invalid if empty") {
                 field[FieldKey.required.key] = true;
                 
                 geometryFieldView = GeometryView(field: field);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
 
-                expect(geometryFieldView.isEmpty()) == true;
-                expect(geometryFieldView.isValid(enforceRequired: true)) == false;
+                expect(geometryFieldView?.isEmpty()) == true;
+                expect(geometryFieldView?.isValid(enforceRequired: true)) == false;
                 
-                expect(geometryFieldView.mapView.isHidden).to(beTrue());
-                expect(geometryFieldView.textField.text) == "";
-                expect(geometryFieldView.textField.label.text) == "Field Title *"
+                expect(geometryFieldView?.mapView.isHidden).to(beTrue());
+                expect(geometryFieldView?.textField.text) == "";
+                expect(geometryFieldView?.textField.label.text) == "Field Title *"
             }
 
             it("required field is valid if not empty") {
@@ -585,14 +593,14 @@ class GeometryViewTests: KIFSpec {
                 field[FieldKey.required.key] = true;
                 
                 geometryFieldView = GeometryView(field: field, value: point);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                expect(geometryFieldView.isEmpty()) == false;
-                expect(geometryFieldView.isValid(enforceRequired: true)) == true;
+                expect(geometryFieldView?.isEmpty()) == false;
+                expect(geometryFieldView?.isValid(enforceRequired: true)) == true;
                 
-                expect(geometryFieldView.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView.textField.text) == "40.00850, -105.26780 ";
-                expect(geometryFieldView.textField.label.text) == "Field Title *"
+                expect(geometryFieldView?.mapView.isHidden).to(beFalse());
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 ";
+                expect(geometryFieldView?.textField.label.text) == "Field Title *"
             }
             
             it("set value via input") {
@@ -605,18 +613,18 @@ class GeometryViewTests: KIFSpec {
                 nc.pushViewController(controller, animated: false);
                 
                 geometryFieldView = GeometryView(field: field, delegate: delegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
                 tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
-                geometryFieldView.handleTap();
+                geometryFieldView?.handleTap();
                 expect(delegate.launchFieldSelectionViewControllerCalled).to(beTrue());
                 expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(GeometryEditViewController.self));
                 
                 nc.pushViewController(delegate.viewControllerToLaunch!, animated: false);
-                tester().tapView(withAccessibilityLabel: "Done");
+                tester().tapView(withAccessibilityLabel: "Apply");
                 
                 expect((viewTester().usingLabel("\(field[FieldKey.name.key] as? String ?? "") value")!.view as! MDCFilledTextField).text) == "1.00000, 1.00000 "
                 
@@ -632,27 +640,27 @@ class GeometryViewTests: KIFSpec {
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let mockMapDelegate = MockMapViewDelegate()
                 
-                mockMapDelegate.regionDidChangeAnimatedClosure = { _ in
+                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
                     expectation.fulfill()
                 }
                                 
                 let mockActionsDelegate: MockObservationActionsDelegate = MockObservationActionsDelegate();
                 
                 geometryFieldView = GeometryView(field: field, editMode: false, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate, observationActionsDelegate: mockActionsDelegate);
-                geometryFieldView.applyTheme(withScheme: MAGEScheme.scheme());
+                geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
-                view.addSubview(geometryFieldView)
-                geometryFieldView.autoPinEdgesToSuperviewEdges();
+                view.addSubview(geometryFieldView!)
+                geometryFieldView?.autoPinEdgesToSuperviewEdges();
                                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                expect(geometryFieldView.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                expect(geometryFieldView.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
-                expect(geometryFieldView.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
-                expect(geometryFieldView.latitudeLongitudeButton.isEnabled).to(beTrue());
-                expect(geometryFieldView.accuracyLabel.text) == "GPS ± 100.49m";
-                expect(geometryFieldView.fieldNameLabel.text) == "Field Title"
+                expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
+                expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
+                expect(geometryFieldView?.latitudeLongitudeButton.currentTitle) == "40.00850, -105.26780";
+                expect(geometryFieldView?.latitudeLongitudeButton.isEnabled).to(beTrue());
+                expect(geometryFieldView?.accuracyLabel.text) == "GPS ± 100.49m";
+                expect(geometryFieldView?.fieldNameLabel.text) == "Field Title"
                 
                 tester().tapView(withAccessibilityLabel: "location field8");
                 expect(mockActionsDelegate.copyLocationCalled).to(beTrue());

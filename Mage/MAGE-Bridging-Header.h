@@ -53,6 +53,7 @@
 #import "SelectEditViewController.h"
 #import "GeometryEditCoordinator.h"
 #import "GeometryEditViewController.h"
+#import "GeometryEditMapDelegate.h"
 #import "MapViewController.h"
 #import "TimeFilter.h"
 #import "ObservationImage.h"

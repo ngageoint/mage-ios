@@ -18,7 +18,7 @@ def common_pods
   pod 'DateTools', '~> 2.0.0'
   pod 'MaterialComponents'
   pod 'MDFInternationalization'
-  pod 'Kingfisher', '~> 5'
+  pod 'Kingfisher', '~> 6'
   pod 'PureLayout'
 end
 
