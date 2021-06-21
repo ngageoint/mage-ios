@@ -160,7 +160,7 @@ import Kingfisher
         allTabs.append(locationsTab);
         allTabs.append(observationsTab);
         
-        for feed in Feed.mr_findAll()! as! [Feed] {
+        for feed in Feed.getEventFeeds(Server.currentEventId()) {
             let nc = createFeedViewController(feed: feed);
             allTabs.append(nc);
             feedViewControllers.append(nc);
