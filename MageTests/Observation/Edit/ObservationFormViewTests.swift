@@ -18,9 +18,6 @@ class ObservationFormViewTests: KIFSpec {
     override func spec() {
         
         describe("ObservationFormView") {
-            let recordSnapshots = false;
-            var completeTest = false;
-
             var controller: UIViewController!
             var window: UIWindow!;
             
@@ -29,24 +26,9 @@ class ObservationFormViewTests: KIFSpec {
             var view: UIView!
             var eventForm: [String:Any]!
             var form: [String : Any]!
-            
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 5.0);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
-            
+
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                completeTest = false;
                 
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
@@ -59,6 +41,8 @@ class ObservationFormViewTests: KIFSpec {
                 eventForm = FormBuilder.createFormWithAllFieldTypes();
                 
                 form = [ : ];
+                Nimble_Snapshots.setNimbleTolerance(0.1);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
@@ -78,14 +62,8 @@ class ObservationFormViewTests: KIFSpec {
 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                
+                expect(view).to(haveValidSnapshot());
             }
 
             it("observation filled in completely") {
@@ -116,15 +94,9 @@ class ObservationFormViewTests: KIFSpec {
                         }
                     }
                 }
-
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().waitForAnimationsToFinish();
+                tester().wait(forTimeInterval: 7.0);
+                expect(view).to(haveValidSnapshot());
             }
 
             it("delegate called when field changes and new value is sent") {
