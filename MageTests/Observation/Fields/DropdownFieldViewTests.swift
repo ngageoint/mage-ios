@@ -36,7 +36,7 @@ class DropdownFieldViewTests: KIFSpec {
                 "type": "dropdown",
                 "id": 8
             ];
-                        
+            
             beforeEach {
                 window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;

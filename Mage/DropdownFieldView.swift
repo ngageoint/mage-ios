@@ -26,6 +26,7 @@ class DropdownFieldView : BaseFieldView {
     
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
+        textField.applyTheme(withScheme: scheme);
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
