@@ -66,11 +66,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 
                 clearAndSetUpStack();
                 
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 414);
-                window.autoSetDimension(.height, toSize: 896);
-                
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
@@ -481,11 +477,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 
                 clearAndSetUpStack();
                 
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 414);
-                window.autoSetDimension(.height, toSize: 896);
-                
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;

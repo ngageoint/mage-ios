@@ -26,14 +26,11 @@ class CheckboxFieldViewTests: KIFSpec {
             var field: [String: Any]!
             
             beforeEach {
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
-                window.makeKeyAndVisible();
                 
+                window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
                 
                 field = [

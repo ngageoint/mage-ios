@@ -46,13 +46,12 @@ class ObservationHeaderViewTests: KIFSpec {
                     controller.dismiss(animated: false);
                 }
                 TestHelpers.clearAndSetUpStack();
-                window = UIWindow(frame: UIScreen.main.bounds);
-                window.makeKeyAndVisible();
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
                 Server.setCurrentEventId(1);
                 
                 controller = UINavigationController();
+                window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
                 view = UIView(forAutoLayout: ());
                 view.backgroundColor = .systemBackground;

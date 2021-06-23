@@ -22,58 +22,34 @@ class CommonFieldsViewTests: KIFSpec {
         formatter.locale = Locale(identifier: "en_US_POSIX");
         
         describe("CommonFieldsView") {
-            let recordSnapshots = false;
-            Nimble_Snapshots.setNimbleTolerance(0.1);
-            
             var commonFieldsView: CommonFieldsView!
             var controller: UIViewController!
             var window: UIWindow!;
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 5.0);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot(usesDrawRect: true);
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
-            
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                window = UIWindow(frame: UIScreen.main.bounds);
-                window.makeKeyAndVisible();
                 
                 controller = UIViewController();
+                window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
                                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
+                
+                Nimble_Snapshots.setNimbleTolerance(0.1);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
                 commonFieldsView.removeFromSuperview();
                 commonFieldsView = nil;
-                waitUntil { done in
-                    controller.dismiss(animated: false, completion: {
-                        done();
-                    });
-                }
+                controller.dismiss(animated: false, completion: nil);
                 controller = nil;
-                window.resignKey();
                 window.rootViewController = nil;
-                window = nil;
                 TestHelpers.cleanUpStack();
             }
             
             it("empty observation") {
-                var completeTest = false;
-
                 let observation = ObservationBuilder.createBlankObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
 
@@ -83,20 +59,11 @@ class CommonFieldsViewTests: KIFSpec {
                 controller.view.addSubview(commonFieldsView)
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
                 
-                maybeRecordSnapshot(commonFieldsView, doneClosure: {
-                    completeTest = true;
-                })
-
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().wait(forTimeInterval: 5.0);
+                expect(commonFieldsView).to(haveValidSnapshot());
             }
 
             it("point observation") {
-                var completeTest = false;
-
                 let observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
 
@@ -105,20 +72,11 @@ class CommonFieldsViewTests: KIFSpec {
                 
                 controller.view.addSubview(commonFieldsView)
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                maybeRecordSnapshot(commonFieldsView, doneClosure: {
-                    completeTest = true;
-                })
-
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().wait(forTimeInterval: 5.0);
+                expect(commonFieldsView).to(haveValidSnapshot());
             }
 
             it("line observation") {
-                var completeTest = false;
-
                 let observation = ObservationBuilder.createLineObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
 
@@ -127,20 +85,11 @@ class CommonFieldsViewTests: KIFSpec {
                 
                 controller.view.addSubview(commonFieldsView)
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                maybeRecordSnapshot(commonFieldsView, doneClosure: {
-                    completeTest = true;
-                })
-
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().wait(forTimeInterval: 5.0);
+                expect(commonFieldsView).to(haveValidSnapshot());
             }
 
             it("polygon observation") {
-                var completeTest = false;
-
                 let observation = ObservationBuilder.createPolygonObservation();
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
 
@@ -149,15 +98,8 @@ class CommonFieldsViewTests: KIFSpec {
                 
                 controller.view.addSubview(commonFieldsView)
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                maybeRecordSnapshot(commonFieldsView, doneClosure: {
-                    completeTest = true;
-                })
-
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(commonFieldsView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                tester().wait(forTimeInterval: 5.0);
+                expect(commonFieldsView).to(haveValidSnapshot());
             }
             
             describe("CommonFieldTests No UI") {
@@ -170,11 +112,12 @@ class CommonFieldsViewTests: KIFSpec {
 
                     controller.view.addSubview(commonFieldsView)
                     commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                    expect(viewTester().usingLabel("geometry")?.view).toEventuallyNot(beNil());
-                    expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
+                    
+                    expect(viewTester().usingLabel("geometry")?.view).toNot(beNil());
+                    expect(viewTester().usingLabel("timestamp")?.view).toNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
+                    expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == ""
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
                 }
@@ -193,11 +136,11 @@ class CommonFieldsViewTests: KIFSpec {
                     
                     controller.view.addSubview(commonFieldsView)
                     commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                    expect(viewTester().usingLabel("geometry")?.view).toEventuallyNot(beNil());
-                    expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
+                    expect(viewTester().usingLabel("geometry")?.view).toNot(beNil());
+                    expect(viewTester().usingLabel("timestamp")?.view).toNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
+                    expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == ""
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
                     
@@ -206,8 +149,9 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(mockFieldSelectionDelegate.viewControllerToLaunch).toNot(beNil());
                     
                     nc.pushViewController(mockFieldSelectionDelegate.viewControllerToLaunch!, animated: false);
-                    tester().tapView(withAccessibilityLabel: "Done");
-                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "1.00000, 1.00000"
+                    viewTester().usingLabel("Geometry Edit Map").longPress();
+                    tester().tapView(withAccessibilityLabel: "Apply");
+                    expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) != ""
                     
                     expect(UIApplication.getTopViewController()).toNot(beAnInstanceOf(mockFieldSelectionDelegate.viewControllerToLaunch!.classForCoder));
                     
@@ -225,11 +169,11 @@ class CommonFieldsViewTests: KIFSpec {
                     
                     controller.view.addSubview(commonFieldsView)
                     commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                    expect(viewTester().usingLabel("geometry")?.view).toEventuallyNot(beNil());
-                    expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
+                    expect(viewTester().usingLabel("geometry")?.view).toNot(beNil());
+                    expect(viewTester().usingLabel("timestamp")?.view).toNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: initialTime)! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "NO LOCATION SET"
+                    expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == ""
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
                     
@@ -257,7 +201,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780"
+                    expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == "40.00850, -105.26780 "
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
                 }
@@ -275,7 +219,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26655"
+                    expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == "40.00850, -105.26655 "
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
@@ -290,12 +234,11 @@ class CommonFieldsViewTests: KIFSpec {
 
                     controller.view.addSubview(commonFieldsView)
                     commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-                    expect(viewTester().usingLabel("geometry")?.view).toEventuallyNot(beNil());
-                    expect(viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
+                    expect(viewTester().usingLabel("geometry")?.view).toNot(beNil());
+                    expect(viewTester().usingLabel("timestamp")?.view).toNot(beNil());
                     
                     viewTester().usingLabel("timestamp")?.expect(toContainText: (formatter.date(from: (observation.properties?["timestamp"] as! String) )! as NSDate).formattedDisplay());
-                    expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00935, -105.26655"
-                    expect(commonFieldsView.checkValidity()).to(beTrue());
+                    expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == "40.00935, -105.26655 "
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beTrue());
                 }

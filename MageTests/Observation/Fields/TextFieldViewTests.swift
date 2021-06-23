@@ -16,9 +16,7 @@ import Nimble_Snapshots
 class TextFieldViewTests: KIFSpec {
     
     override func spec() {
-        
-        let recordSnapshots = false;
-        
+                
         describe("TextFieldView Single Line") {
             
             var textFieldView: TextFieldView!
@@ -28,23 +26,13 @@ class TextFieldViewTests: KIFSpec {
             var controller: UIViewController!
             var window: UIWindow!;
             
-            func maybeSnapshot() -> Snapshot {
-                if (recordSnapshots) {
-                    return recordSnapshot(usesDrawRect: true)
-                } else {
-                    return snapshot(usesDrawRect: true)
-                }
-            }
-            
             beforeEach {
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
+                window = TestHelpers.getKeyWindowVisible();
                 
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .white;
-                window.makeKeyAndVisible();
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
@@ -54,6 +42,8 @@ class TextFieldViewTests: KIFSpec {
                     FieldKey.name.key: "field8",
                     FieldKey.id.key: 8
                 ];
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
@@ -73,7 +63,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.fieldValue.text) == "Hello";
                 expect(textFieldView.fieldNameLabel.text) == "Field Title"
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("edit mode reference image") {
@@ -85,9 +75,9 @@ class TextFieldViewTests: KIFSpec {
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
                 expect(textFieldView.textField.text) == "Hello";
-                expect(textFieldView.controller.placeholderText) == "Field Title *"
+                expect(textFieldView.textField.placeholder) == "Field Title *"
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid false") {
@@ -100,10 +90,10 @@ class TextFieldViewTests: KIFSpec {
                 
                 textFieldView.setValid(false);
                 
-                expect(textFieldView.controller.placeholderText) == "Field Title *"
-                expect(textFieldView.controller.errorText) == "Field Title is required"
+                expect(textFieldView.textField.placeholder) == "Field Title *"
+                expect(textFieldView.textField.leadingAssistiveLabel.text) == "Field Title is required"
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("email field") {
@@ -111,7 +101,7 @@ class TextFieldViewTests: KIFSpec {
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 expect(textFieldView.textField.keyboardType) == .emailAddress;
                 
-                expect(textFieldView.controller.placeholderText) == "Field Title"
+                expect(textFieldView.textField.placeholder) == "Field Title"
             }
             
             it("no initial value") {
@@ -123,7 +113,7 @@ class TextFieldViewTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
                 
-                expect(textFieldView.controller.placeholderText) == "Field Title"
+                expect(textFieldView.textField.placeholder) == "Field Title"
                 expect(textFieldView.textField.text) == ""
             }
             
@@ -134,7 +124,7 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.controller.placeholderText) == "Field Title"
+                expect(textFieldView.textField.placeholder) == "Field Title"
                 expect(textFieldView.textField.text) == "Hello";
             }
             
@@ -147,7 +137,7 @@ class TextFieldViewTests: KIFSpec {
                 
                 textFieldView.setValue("Hi")
                 
-                expect(textFieldView.controller.placeholderText) == "Field Title"
+                expect(textFieldView.textField.placeholder) == "Field Title"
                 expect(textFieldView.textField.text) == "Hi";
             }
             
@@ -166,7 +156,7 @@ class TextFieldViewTests: KIFSpec {
                 
                 expect(delegate.fieldChangedCalled).to(beTrue());
                 
-                expect(textFieldView.controller.placeholderText) == "Field Title"
+                expect(textFieldView.textField.placeholder) == "Field Title"
                 expect(textFieldView.textField.text) == "new text";
             }
             
@@ -179,11 +169,11 @@ class TextFieldViewTests: KIFSpec {
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
                 textFieldView.setValid(false);
-                expect(textFieldView.controller.placeholderText) == "Field Title *"
-                expect(textFieldView.controller.errorText) == "Field Title is required"
+                expect(textFieldView.textField.placeholder) == "Field Title *"
+                expect(textFieldView.textField.leadingAssistiveLabel.text) == "Field Title is required"
                 textFieldView.setValid(true);
-                expect(textFieldView.controller.placeholderText) == "Field Title *"
-                expect(textFieldView.controller.errorText).to(beNil());
+                expect(textFieldView.textField.placeholder) == "Field Title *"
+                expect(textFieldView.textField.leadingAssistiveLabel.text) == " ";
             }
             
             it("required field is invalid if empty") {
@@ -212,7 +202,7 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.controller.placeholderText) == "Field Title *"
+                expect(textFieldView.textField.placeholder) == "Field Title *"
             }
             
             it("test delegate") {
@@ -280,31 +270,23 @@ class TextFieldViewTests: KIFSpec {
             var controller: UIViewController!
             var window: UIWindow!;
             
-            func maybeSnapshot() -> Snapshot {
-                if (recordSnapshots) {
-                    return recordSnapshot(usesDrawRect: true)
-                } else {
-                    return snapshot(usesDrawRect: true)
-                }
-            }
-            
             beforeEach {
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .white;
-                window.makeKeyAndVisible();
                 
+                window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
+                
                 controller.view.addSubview(view);
 
                 field = ["title": "Multi Line Field Title",
                          "name": "field8",
                          "id": 8
                 ];
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             it("non edit mode reference image") {
@@ -318,7 +300,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.fieldValue.text) == "Hi\nHello";
                 expect(textFieldView.fieldNameLabel.text) == "Multi Line Field Title"
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("edit mode reference image") {
@@ -329,10 +311,10 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges()
                 
-                expect(textFieldView.multilineTextField.text) == "Hi\nHello";
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title *"
+                expect(textFieldView.multilineTextField.textView.text) == "Hi\nHello";
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title *"
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid false") {
@@ -344,10 +326,10 @@ class TextFieldViewTests: KIFSpec {
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
                 textFieldView.setValid(false);
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title *"
-                expect(textFieldView.controller.errorText) == "Multi Line Field Title is required"
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title *"
+                expect(textFieldView.multilineTextField.leadingAssistiveLabel.text) == "Multi Line Field Title is required"
                 
-                expect(view) == maybeSnapshot();
+                expect(view).to(haveValidSnapshot());
             }
             
             it("non edit mode") {
@@ -368,8 +350,8 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.multilineTextField.text) == "";
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title"
+                expect(textFieldView.multilineTextField.textView.text) == "";
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title"
             }
             
             it("initial value set") {
@@ -379,8 +361,8 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.multilineTextField.text) == "Hello";
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title"
+                expect(textFieldView.multilineTextField.textView.text) == "Hello";
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title"
             }
             
             it("set value later") {
@@ -390,12 +372,12 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.multilineTextField.text) == "";
+                expect(textFieldView.multilineTextField.textView.text) == "";
                 
                 textFieldView.setValue("Hi")
                 
-                expect(textFieldView.multilineTextField.text) == "Hi";
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title"
+                expect(textFieldView.multilineTextField.textView.text) == "Hi";
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title"
             }
             
             it("set multi line value later") {
@@ -405,12 +387,12 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.multilineTextField.text) == "";
+                expect(textFieldView.multilineTextField.textView.text) == "";
                 
                 textFieldView.setValue("Hi\nHello")
                 
-                expect(textFieldView.multilineTextField.text) == "Hi\nHello";
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title"
+                expect(textFieldView.multilineTextField.textView.text) == "Hi\nHello";
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title"
             }
             
             it("set value via input") {
@@ -421,7 +403,7 @@ class TextFieldViewTests: KIFSpec {
                 
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                expect(textFieldView.multilineTextField.text) == "";
+                expect(textFieldView.multilineTextField.textView.text) == "";
                 
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().enterText("new\ntext", intoViewWithAccessibilityLabel: field["name"] as? String);
@@ -429,8 +411,8 @@ class TextFieldViewTests: KIFSpec {
                 
                 expect(delegate.fieldChangedCalled).to(beTrue());
                 
-                expect(textFieldView.multilineTextField.text) == "new\ntext";
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title"
+                expect(textFieldView.multilineTextField.textView.text) == "new\ntext";
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title"
             }
             
             it("set valid true after being invalid") {
@@ -440,13 +422,13 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.multilineTextField.text) == "";
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title"
-                expect(textFieldView.controller.errorText).to(beNil());
+                expect(textFieldView.multilineTextField.textView.text) == "";
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title"
+                expect(textFieldView.multilineTextField.leadingAssistiveLabel.text) == " ";
                 textFieldView.setValid(false);
-                expect(textFieldView.controller.errorText) == "Multi Line Field Title is required"
+                expect(textFieldView.multilineTextField.leadingAssistiveLabel.text) == "Multi Line Field Title is required"
                 textFieldView.setValid(true);
-                expect(textFieldView.controller.errorText).to(beNil());
+                expect(textFieldView.multilineTextField.leadingAssistiveLabel.text) == " ";
             }
             
             it("required field is invalid if empty") {
@@ -475,7 +457,7 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(textFieldView.controller.placeholderText) == "Multi Line Field Title *"
+                expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title *"
             }
             
             it("test delegate") {
@@ -484,8 +466,8 @@ class TextFieldViewTests: KIFSpec {
                 textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
-                textFieldView.multilineTextField.text = "this is a new value";
-                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
+                textFieldView.multilineTextField.textView.text = "this is a new value";
+                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == "this is a new value";
             }
@@ -498,12 +480,12 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                textFieldView.multilineTextField.text = nil;
+                textFieldView.multilineTextField.textView.text = nil;
                 textFieldView.doneButtonPressed();
-                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
+                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView);
                 expect(delegate.fieldChangedCalled).to(beTrue());
                 expect(delegate.newValue).to(beNil());
-                expect(textFieldView.multilineTextField.text).to(equal(""));
+                expect(textFieldView.multilineTextField.textView.text).to(equal(""));
                 expect(textFieldView.value as? String).to(beNil());
             }
             
@@ -513,10 +495,10 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                textFieldView.multilineTextField.text = "new value";
+                textFieldView.multilineTextField.textView.text = "new value";
                 textFieldView.doneButtonPressed();
-                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView!);
-                expect(textFieldView.multilineTextField.text) == "new value";
+                textFieldView.textViewDidEndEditing(textFieldView.multilineTextField.textView);
+                expect(textFieldView.multilineTextField.textView.text) == "new value";
                 expect(textFieldView.value as? String) == "new value";
             }
             
@@ -526,9 +508,9 @@ class TextFieldViewTests: KIFSpec {
                 view.addSubview(textFieldView)
                 textFieldView.autoPinEdgesToSuperviewEdges();
                 
-                textFieldView.multilineTextField.text = "new value";
+                textFieldView.multilineTextField.textView.text = "new value";
                 textFieldView.cancelButtonPressed();
-                expect(textFieldView.multilineTextField.text) == "old value";
+                expect(textFieldView.multilineTextField.textView.text) == "old value";
                 expect(textFieldView.value as? String) == "old value";
             }
         }

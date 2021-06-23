@@ -75,10 +75,6 @@ class LocalLoginViewTests: KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-                window = UIWindow(forAutoLayout: ());
-                window?.autoSetDimension(.width, toSize: 414);
-                window?.makeKeyAndVisible();
-                
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                                 
                 view = UIView(forAutoLayout: ());
@@ -86,7 +82,8 @@ class LocalLoginViewTests: KIFSpec {
                 view.backgroundColor = .white;
                 
                 controller = UIViewController();
-                window?.rootViewController = controller;
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = controller;
                 controller?.view.addSubview(view);
                 
                 delegate = MockLoginDelegate();
@@ -97,8 +94,6 @@ class LocalLoginViewTests: KIFSpec {
                 window?.rootViewController = nil;
                 controller = nil;
                 view = nil;
-                window?.resignKey();
-                window = nil;
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }

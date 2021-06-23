@@ -23,15 +23,10 @@ class DropdownFieldViewTests: KIFSpec {
             var dropdownFieldView: DropdownFieldView!
             var view: UIView!
             var field: [String: Any]!
-            
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimension(.width, toSize: 300);
-            window.backgroundColor = .systemBackground;
-            
+
             controller = UIViewController();
             view = UIView(forAutoLayout: ());
             view.autoSetDimension(.width, toSize: 300);
-            window.makeKeyAndVisible();
             
             controller.view.addSubview(view);
             
@@ -41,11 +36,15 @@ class DropdownFieldViewTests: KIFSpec {
                 "type": "dropdown",
                 "id": 8
             ];
-            
-            window.rootViewController = controller;
-            
+                        
             beforeEach {
-
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
+                
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
+                
                 Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }

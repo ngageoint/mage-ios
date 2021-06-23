@@ -24,19 +24,17 @@ class ExpandableCardTests: KIFSpec {
             var controller: UIViewController!
             var window: UIWindow!;
             
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimension(.width, toSize: 300);
-            
             controller = UIViewController();
             view = UIView(forAutoLayout: ());
             view.autoSetDimension(.width, toSize: 300);
             view.backgroundColor = .systemBackground;
-            window.makeKeyAndVisible();
             
-            window.rootViewController = controller;
             controller.view.addSubview(view);
            
             beforeEach {
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
+                
                 Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }

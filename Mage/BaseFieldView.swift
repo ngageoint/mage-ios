@@ -10,7 +10,6 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class BaseFieldView : UIView {
-    internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
     internal var field: [String: Any]!;
     internal weak var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?;
     internal var fieldValueValid: Bool! = false;
@@ -82,18 +81,24 @@ class BaseFieldView : UIView {
         fieldValue.font = scheme.typographyScheme.body1;
         fieldNameLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         var font = scheme.typographyScheme.body1;
-        font = font.withSize(font.pointSize * MDCTextInputControllerBase.floatingPlaceholderScaleDefault);
+        font = font.withSize(font.pointSize * 0.8);
         fieldNameLabel.font = font;
-        if (controller.textInput != nil) {
-            controller.applyTheme(withScheme: scheme);
-        }
     }
     
-    func setupController() {
-        controller.placeholderText = field[FieldKey.title.key] as? String
+    func setPlaceholder(textField: MDCFilledTextField) {
+        textField.placeholder = field[FieldKey.title.key] as? String
         if ((field[FieldKey.required.key] as? Bool) == true) {
-            controller.placeholderText = (controller.placeholderText ?? "") + " *"
+            textField.placeholder = (textField.placeholder ?? "") + " *"
         }
+        textField.label.text = textField.placeholder;
+    }
+    
+    func setPlaceholder(textArea: MDCFilledTextArea) {
+        textArea.placeholder = field[FieldKey.title.key] as? String
+        if ((field[FieldKey.required.key] as? Bool) == true) {
+            textArea.placeholder = (textArea.placeholder ?? "") + " *"
+        }
+        textArea.label.text = textArea.placeholder;
     }
     
     func setValue(_ value: Any?) {
@@ -114,11 +119,6 @@ class BaseFieldView : UIView {
 
     func setValid(_ valid: Bool) {
         fieldValueValid = valid;
-        if (valid) {
-            controller.setErrorText(nil, errorAccessibilityValue: nil);
-        } else {
-            controller.setErrorText(getErrorMessage(), errorAccessibilityValue: nil);
-        }
     }
 
     func isValid() -> Bool {

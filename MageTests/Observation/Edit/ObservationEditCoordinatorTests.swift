@@ -25,14 +25,13 @@ class ObservationEditCoordinatorTests: KIFSpec {
             
             beforeEach {
                 if (!stackSetup) {
-                    window = UIWindow(frame: UIScreen.main.bounds);
                     controller = UINavigationController();
-                    window.rootViewController = controller;
                     TestHelpers.clearAndSetUpStack();
                     stackSetup = true;
                 }
                 MageCoreDataFixtures.clearAllData();
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;

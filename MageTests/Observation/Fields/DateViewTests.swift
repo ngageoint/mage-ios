@@ -36,20 +36,17 @@ class DateViewTests: KIFSpec {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
             formatter.locale = Locale(identifier: "en_US_POSIX");
             
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimension(.width, toSize: 375);
-            window.backgroundColor = .systemBackground;
-            
             controller = UIViewController();
             view = UIView(forAutoLayout: ());
             view.autoSetDimension(.width, toSize: 375);
             view.backgroundColor = .white;
-            window.makeKeyAndVisible();
-            
-            window.rootViewController = controller;
+
             controller.view.addSubview(view);
             
             beforeEach {
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
+                
                 NSDate.setDisplayGMT(false);
                 
                 field = [
@@ -57,6 +54,9 @@ class DateViewTests: KIFSpec {
                     "id": 8,
                     "name": "field8"
                 ];
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
                 Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
@@ -90,7 +90,7 @@ class DateViewTests: KIFSpec {
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
-                expect(dateFieldView.textField.text).to(equal("June 22, 2013 at 2:18:20 AM MDT"));
+                expect(dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
                 expect(view).to(haveValidSnapshot());
             }
             
@@ -102,7 +102,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.autoPinEdgesToSuperviewEdges();
 
                 dateFieldView.setValue( "2013-06-22T08:18:20.000Z")
-                expect(dateFieldView.textField.text).to(equal("June 22, 2013 at 2:18:20 AM MDT"));
+                expect(dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
                 expect(view).to(haveValidSnapshot());
             }
             
@@ -114,7 +114,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 
                 dateFieldView.setValue("2013-06-22T08:18:20.000Z" as Any?)
-                expect(dateFieldView.textField.text).to(equal("June 22, 2013 at 2:18:20 AM MDT"));
+                expect(dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
             }
             
             it("set value with touch inputs") {
@@ -217,20 +217,11 @@ class DateViewTests: KIFSpec {
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 
-                TestHelpers.printAllAccessibilityLabelsInWindows();
 
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
-                print("found it")
                 tester().waitForTappableView(withAccessibilityLabel: field["name"] as? String);
-                print("found tappable view")
-                tester().waitForAnimationsToFinish(withTimeout: 0.01);
-
                 tester().tapView(withAccessibilityLabel: field["name"] as? String);
-                print("tapped it")
-                tester().waitForAnimationsToFinish(withTimeout: 0.01);
-
                 tester().waitForView(withAccessibilityLabel: (field["name"] as? String ?? "") + " Date Picker");
-                TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().clearTextFromFirstResponder();
                 tester().tapView(withAccessibilityLabel: "Done");
                 

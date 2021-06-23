@@ -51,11 +51,15 @@ class NumberFieldView : BaseFieldView {
         return toolbar;
     }()
     
-    lazy var textField: MDCTextField = {
-        let textField = MDCTextField(forAutoLayout: ());
+    lazy var textField: MDCFilledTextField = {
+        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
-        controller.textInput = textField;
+        textField.leadingAssistiveLabel.text = helperText ?? " ";
+        textField.inputAccessoryView = accessoryView;
+        textField.keyboardType = .decimalPad;
+        setPlaceholder(textField: textField);
+        textField.sizeToFit();
         return textField;
     }()
     
@@ -77,13 +81,15 @@ class NumberFieldView : BaseFieldView {
         setValue(value);
     }
     
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        textField.applyTheme(withScheme: scheme);
+    }
+    
     func setupInputView() {
         if (editMode) {
             viewStack.addArrangedSubview(textField);
-            setupController();
-            controller.helperText = helperText;
-            textField.inputAccessoryView = accessoryView;
-            textField.keyboardType = .decimalPad;
+            setPlaceholder(textField: textField);
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
             viewStack.addArrangedSubview(fieldValue);
@@ -165,6 +171,19 @@ class NumberFieldView : BaseFieldView {
             }
         }
         return true;
+    }
+    
+    override func setValid(_ valid: Bool) {
+        super.setValid(valid);
+        if (valid) {
+            textField.leadingAssistiveLabel.text = helperText;
+            if let safeScheme = scheme {
+                textField.applyTheme(withScheme: safeScheme);
+            }
+        } else {
+            textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
+            textField.leadingAssistiveLabel.text = getErrorMessage();
+        }
     }
 }
 

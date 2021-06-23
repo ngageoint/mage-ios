@@ -13,31 +13,36 @@ class TextFieldView : BaseFieldView {
     private var multiline: Bool = false;
     private var keyboardType: UIKeyboardType = .default;
     
-    lazy var multilineTextField: MDCMultilineTextField = {
-        let multilineTextField = MDCMultilineTextField(forAutoLayout: ());
-        multilineTextField.textView?.delegate = self;
-        multilineTextField.textView?.inputAccessoryView = accessoryView;
-        multilineTextField.textView?.keyboardType = keyboardType;
-        multilineTextField.textView?.autocapitalizationType = .none;
-        multilineTextField.textView?.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
-        controller.textInput = multilineTextField;
+    lazy var multilineTextField: MDCFilledTextArea  = {
+        let multilineTextField = MDCFilledTextArea(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
+        multilineTextField.textView.delegate = self;
+        multilineTextField.textView.inputAccessoryView = accessoryView;
+        multilineTextField.textView.keyboardType = keyboardType;
+        multilineTextField.textView.autocapitalizationType = .none;
+        multilineTextField.textView.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
+        multilineTextField.placeholder = field[FieldKey.title.key] as? String
+        multilineTextField.leadingAssistiveLabel.text = " ";
+        setPlaceholder(textArea: multilineTextField);
         if (value != nil) {
-            multilineTextField.text = value as? String;
+            multilineTextField.textView.text = value as? String;
         }
+        multilineTextField.sizeToFit();
         return multilineTextField;
     }()
     
-    lazy var textField: MDCTextField = {
-        let textField = MDCTextField(forAutoLayout: ());
+    lazy var textField: MDCFilledTextField = {
+        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
         textField.inputAccessoryView = accessoryView;
         textField.keyboardType = keyboardType;
         textField.autocapitalizationType = .none;
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
-        controller.textInput = textField;
+        textField.leadingAssistiveLabel.text = " ";
+        setPlaceholder(textField: textField);
         if (value != nil) {
             textField.text = value as? String;
         }
+        textField.sizeToFit();
         return textField;
     }()
     
@@ -74,6 +79,15 @@ class TextFieldView : BaseFieldView {
         self.addFieldView();
     }
     
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
+        if (multiline) {
+            multilineTextField.applyTheme(withScheme: scheme);
+        } else {
+            textField.applyTheme(withScheme: scheme);
+        }
+    }
+    
     func addFieldView() {
         if (editMode) {
             if (multiline) {
@@ -83,7 +97,6 @@ class TextFieldView : BaseFieldView {
                 self.addSubview(textField);
                 textField.autoPinEdgesToSuperviewEdges();
             }
-            setupController();
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
             viewStack.addArrangedSubview(fieldValue);
@@ -98,7 +111,7 @@ class TextFieldView : BaseFieldView {
     func setValue(_ value: String?) {
         self.value = value;
         if (self.multiline) {
-            self.editMode ? (multilineTextField.text = value) : (fieldValue.text = value);
+            self.editMode ? (multilineTextField.textView.text = value) : (fieldValue.text = value);
         } else {
             self.editMode ? (textField.text = value) : (fieldValue.text = value);
         }
@@ -110,7 +123,7 @@ class TextFieldView : BaseFieldView {
     
     override func isEmpty() -> Bool {
         if (self.multiline) {
-            return (multilineTextField.text ?? "").count == 0;
+            return (multilineTextField.textView.text ?? "").count == 0;
         } else {
             return (textField.text ?? "").count == 0;
         }
@@ -119,12 +132,37 @@ class TextFieldView : BaseFieldView {
     override func getErrorMessage() -> String {
         return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
     }
+    
+    override func setValid(_ valid: Bool) {
+        super.setValid(valid);
+        if (valid) {
+            if (multiline) {
+                multilineTextField.leadingAssistiveLabel.text = " ";
+                if let safeScheme = scheme {
+                    multilineTextField.applyTheme(withScheme: safeScheme);
+                }
+            } else {
+                textField.leadingAssistiveLabel.text = " ";
+                if let safeScheme = scheme {
+                    textField.applyTheme(withScheme: safeScheme);
+                }
+            }
+        } else {
+            if (multiline) {
+                multilineTextField.applyErrorTheme(withScheme: globalErrorContainerScheme());
+                multilineTextField.leadingAssistiveLabel.text = getErrorMessage();
+            } else {
+                textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
+                textField.leadingAssistiveLabel.text = getErrorMessage();
+            }
+        }
+    }
 }
 
 extension TextFieldView {
     func resignFieldFirstResponder() {
         if (self.multiline) {
-            multilineTextField.resignFirstResponder();
+            multilineTextField.textView.resignFirstResponder();
         } else {
             textField.resignFirstResponder();
         }

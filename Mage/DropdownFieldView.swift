@@ -11,14 +11,16 @@ import MaterialComponents.MDCTextField;
 
 class DropdownFieldView : BaseFieldView {
     
-    lazy var textField: MDCTextField = {
-        let textField = MDCTextField(forAutoLayout: ());
+    lazy var textField: MDCFilledTextField = {
+        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.trailingView = UIImageView(image: UIImage(named: "arrow_drop_down"));
+        textField.accessibilityLabel = "\(field[FieldKey.name.key] as? String ?? "") value"
         textField.trailingViewMode = .always;
-        controller.textInput = textField;
+        textField.leadingAssistiveLabel.text = " ";
         if (value != nil) {
             textField.text = getDisplayValue();
         }
+        textField.sizeToFit();
         return textField;
     }()
     
@@ -45,8 +47,7 @@ class DropdownFieldView : BaseFieldView {
             viewStack.addArrangedSubview(textField);
             let tapView = addTapRecognizer();
             tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
-            textField.accessibilityLabel = "\(field[FieldKey.name.key] as? String ?? "") value"
-            setupController();
+            setPlaceholder(textField: textField);
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
             viewStack.addArrangedSubview(fieldValue);
@@ -73,5 +74,18 @@ class DropdownFieldView : BaseFieldView {
     
     override func getErrorMessage() -> String {
         return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
+    }
+    
+    override func setValid(_ valid: Bool) {
+        super.setValid(valid);
+        if (valid) {
+            textField.leadingAssistiveLabel.text = " ";
+            if let safeScheme = scheme {
+                textField.applyTheme(withScheme: safeScheme);
+            }
+        } else {
+            textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
+            textField.leadingAssistiveLabel.text = getErrorMessage();
+        }
     }
 }

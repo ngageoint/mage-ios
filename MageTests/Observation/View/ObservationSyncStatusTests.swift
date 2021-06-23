@@ -36,14 +36,12 @@ class ObservationSyncStatusTests: KIFSpec {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                window = UIWindow(frame: UIScreen.main.bounds);
 
                 controller = UIViewController();
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
                 view = UIView(forAutoLayout: ());
                 view.backgroundColor = .systemBackground;
-                window.makeKeyAndVisible();
                 controller.view.addSubview(view);
                 view.autoPinEdgesToSuperviewEdges();
             }

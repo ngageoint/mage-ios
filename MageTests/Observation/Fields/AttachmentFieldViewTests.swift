@@ -61,19 +61,17 @@ class AttachmentFieldViewTests: KIFSpec {
                 Attachment.mr_truncateAll(in: NSManagedObjectContext.mr_default());
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 TestHelpers.clearImageCache();
-                if (UIApplication.shared.windows.count == 0) {
-                    window = UIWindow(forAutoLayout: ());
-                } else {
-                    window = UIApplication.shared.windows[0];
-                }
-                window.autoSetDimension(.width, toSize: 300);
+                window = TestHelpers.getKeyWindowVisible();
                 
                 controller = ContainingUIViewController(nibName: nil, bundle: nil);
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .systemBackground;
-                window.makeKeyAndVisible();
                 
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
+                                
                 field = [
                     "title": "Field Title",
                     "type": "attachment",

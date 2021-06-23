@@ -38,27 +38,20 @@ class NumberFieldViewTests: KIFSpec {
             var controller: UIViewController!
             var window: UIWindow!;
             
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimension(.width, toSize: 300);
-            
             controller = UIViewController();
             view = UIView(forAutoLayout: ());
             view.autoSetDimension(.width, toSize: 300);
             view.backgroundColor = .white;
-            window.makeKeyAndVisible();
-            
-            window.rootViewController = controller;
+
             controller.view.addSubview(view);
             
             beforeEach {
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                
+                window = TestHelpers.getKeyWindowVisible();
+
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .white;
-                window.makeKeyAndVisible();
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
@@ -89,7 +82,7 @@ class NumberFieldViewTests: KIFSpec {
                 
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.textField.placeholder) == "Number Field *"
-                expect(numberFieldView.controller.helperText) == "Must be greater than 2 "
+                expect(numberFieldView.textField.leadingAssistiveLabel.text) == "Must be greater than 2 "
                 expect(numberFieldView.titleLabel.text) == "Must be greater than 2 "
                 
                 expect(view).to(haveValidSnapshot());
@@ -175,7 +168,7 @@ class NumberFieldViewTests: KIFSpec {
                 
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.textField.placeholder) == "Number Field"
-                expect(numberFieldView.controller.helperText) == "Must be greater than 2 "
+                expect(numberFieldView.textField.leadingAssistiveLabel.text) == "Must be greater than 2 "
                 expect(numberFieldView.titleLabel.text) == "Must be greater than 2 "
             }
             
@@ -189,7 +182,7 @@ class NumberFieldViewTests: KIFSpec {
                 
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.textField.placeholder) == "Number Field"
-                expect(numberFieldView.controller.helperText) == "Must be less than 8"
+                expect(numberFieldView.textField.leadingAssistiveLabel.text) == "Must be less than 8"
                 expect(numberFieldView.titleLabel.text) == "Must be less than 8"
             }
             
@@ -204,7 +197,7 @@ class NumberFieldViewTests: KIFSpec {
                 
                 expect(numberFieldView.textField.text) == "2";
                 expect(numberFieldView.textField.placeholder) == "Number Field"
-                expect(numberFieldView.controller.helperText) == "Must be between 2 and 8"
+                expect(numberFieldView.textField.leadingAssistiveLabel.text) == "Must be between 2 and 8"
                 expect(numberFieldView.titleLabel.text) == "Must be between 2 and 8"
             }
             
@@ -234,7 +227,7 @@ class NumberFieldViewTests: KIFSpec {
                 
                 expect(numberFieldView.textField.text) == "";
                 expect(numberFieldView.textField.placeholder) == "Number Field"
-                expect(numberFieldView.controller.errorText) == "Must be a number"
+                expect(numberFieldView.textField.leadingAssistiveLabel.text) == "Must be a number"
                 expect(view).to(haveValidSnapshot());
             }
             
@@ -247,11 +240,11 @@ class NumberFieldViewTests: KIFSpec {
                 
                 expect(numberFieldView.textField.text) == "";
                 expect(numberFieldView.textField.placeholder) == "Number Field"
-                expect(numberFieldView.controller.errorText).to(beNil());
+                expect(numberFieldView.textField.leadingAssistiveLabel.text) == " ";
                 numberFieldView.setValid(false);
-                expect(numberFieldView.controller.errorText) == "Must be a number"
+                expect(numberFieldView.textField.leadingAssistiveLabel.text) == "Must be a number"
                 numberFieldView.setValid(true);
-                expect(numberFieldView.controller.errorText).to(beNil());
+                expect(numberFieldView.textField.leadingAssistiveLabel.text).to(beNil());
             }
             
             it("required field is invalid if empty") {

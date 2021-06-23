@@ -42,15 +42,14 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             
             beforeEach {
                 if (!stackSetup) {
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: 300);
                     TestHelpers.clearAndSetUpStack();
                     stackSetup = true;
                 }
+                window = TestHelpers.getKeyWindowVisible();
+                
                 Nimble_Snapshots.setNimbleTolerance(0.1);
 
                 MageCoreDataFixtures.clearAllData();
-                window.makeKeyAndVisible();
                                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;

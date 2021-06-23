@@ -28,14 +28,12 @@ class ObservationTableViewControllerTests: KIFSpec {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                
-                window = UIWindow(frame: UIScreen.main.bounds);
-                
+                                
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 navigationController = UINavigationController();
-                window?.rootViewController = navigationController;
-                window?.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = navigationController;
                 
                 MageCoreDataFixtures.addEvent();
                 Server.setCurrentEventId(1);

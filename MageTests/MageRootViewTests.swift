@@ -92,11 +92,7 @@ class MageRootViewTests: KIFSpec {
                 };
                 
                 MockMageServer.initializeHttpStubs();
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 414);
-                window.autoSetDimension(.height, toSize: 896);
-                
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 
                 let domain = Bundle.main.bundleIdentifier!
                 UserDefaults.standard.removePersistentDomain(forName: domain)

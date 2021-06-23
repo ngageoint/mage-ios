@@ -72,11 +72,9 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-                window = UIWindow(frame: UIScreen.main.bounds);
-                
                 controller = UIViewController();
+                window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
-                window.makeKeyAndVisible();
                 
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: window.bounds.size.width);

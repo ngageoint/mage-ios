@@ -66,8 +66,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                     }
                 }
                 TestHelpers.clearAndSetUpStack();
-                window = UIWindow(frame: UIScreen.main.bounds);
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 UserDefaults.standard.serverMajorVersion = 5;
                 UserDefaults.standard.serverMinorVersion = 4;
                 UserDefaults.standard.mapType = 0;

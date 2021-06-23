@@ -38,12 +38,10 @@ class FormPickerTests: KIFSpec {
             
             var formPicker: FormPickerViewController!
             var window: UIWindow!;
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimension(.width, toSize: 300);
-            
-            window.makeKeyAndVisible();
-            
+
             beforeEach {
+                window = TestHelpers.getKeyWindowVisible();
+                
                 Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }

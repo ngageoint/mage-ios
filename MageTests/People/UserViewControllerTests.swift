@@ -67,8 +67,8 @@ class UserViewControllerTests: KIFSpec {
                 
                 clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
-                window = UIWindow(frame: UIScreen.main.bounds);
-                window.makeKeyAndVisible();
+                
+                window = TestHelpers.getKeyWindowVisible();
                 
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.mapType = 0;

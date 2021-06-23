@@ -29,18 +29,18 @@ class GeometryViewTests: KIFSpec {
             beforeEach {
                 if (!stackSetup) {
                     TestHelpers.clearAndSetUpStack();
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: UIScreen.main.bounds.width);
                     
                     controller = UIViewController();
                     view = UIView(forAutoLayout: ());
                     view.autoSetDimension(.width, toSize: UIScreen.main.bounds.width);
                     view.backgroundColor = .systemBackground;
                     
-                    window.rootViewController = controller;
                     controller?.view.addSubview(view);
                     stackSetup = true;
                 }
+                
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
                 
                 geometryFieldView?.removeFromSuperview();
                 geometryFieldView = nil;
@@ -49,8 +49,6 @@ class GeometryViewTests: KIFSpec {
                 }
                 MageCoreDataFixtures.clearAllData();
                 
-                window.makeKeyAndVisible();
-
                 field = [
                     "title": "Field Title",
                     "name": "field8",

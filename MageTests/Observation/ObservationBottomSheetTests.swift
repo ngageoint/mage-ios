@@ -28,15 +28,16 @@ class ObservationBottomSheetTests: KIFSpec {
             var stackSetup = false;
             beforeEach {
                 if (!stackSetup) {
-                    window = UIWindow(frame: UIScreen.main.bounds);
-                    
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
                     navigationController = UINavigationController();
-                    window?.rootViewController = navigationController;
                     TestHelpers.clearAndSetUpStack();
                     stackSetup = true;
                 }
+                
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = navigationController;
+                
                 Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
                 
@@ -51,7 +52,6 @@ class ObservationBottomSheetTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                window?.makeKeyAndVisible();
             }
             
             afterEach {

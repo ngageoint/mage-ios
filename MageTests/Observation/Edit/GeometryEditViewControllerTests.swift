@@ -25,14 +25,12 @@ class GeometryEditViewControllerTests: KIFSpec {
 
             beforeEach {
                 if (!stackSetup) {
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: 300);
                     TestHelpers.clearAndSetUpStack();
                     stackSetup = true;
                 }
                 
                 MageCoreDataFixtures.clearAllData();
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;

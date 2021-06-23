@@ -17,8 +17,6 @@ class RadioFieldViewTests: KIFSpec {
     
     override func spec() {
         describe("RadioFieldView") {
-            let recordSnapshots = false;
-            var completeTest = false;
             
             var controller: UIViewController!
             var window: UIWindow!;
@@ -27,30 +25,13 @@ class RadioFieldViewTests: KIFSpec {
             var view: UIView!
             var field: [String: Any]!
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 0.1);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
-            
             beforeEach {
-                completeTest = false;
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
-                window.backgroundColor = .systemBackground;
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
                 
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
-                window.makeKeyAndVisible();
                 
                 field = [
                     "title": "Field Title",
@@ -77,6 +58,9 @@ class RadioFieldViewTests: KIFSpec {
                 ];
                 
                 window.rootViewController = controller;
+                
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots()
             }
             
             afterEach {
@@ -93,14 +77,7 @@ class RadioFieldViewTests: KIFSpec {
                 radioFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {
@@ -112,14 +89,7 @@ class RadioFieldViewTests: KIFSpec {
                 
                 controller.view.addSubview(view);
                 expect(radioFieldView.isEmpty()) == true;
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value set") {
@@ -131,15 +101,7 @@ class RadioFieldViewTests: KIFSpec {
                 
                 controller.view.addSubview(view);
                 expect(radioFieldView.isEmpty()) == false;
-                
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("set value via input") {
@@ -167,14 +129,7 @@ class RadioFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 expect(radioFieldView.isEmpty()) == true;
                 radioFieldView.setValid(radioFieldView.isValid());
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
             
             it("required field should show status after value has been added") {
@@ -192,14 +147,7 @@ class RadioFieldViewTests: KIFSpec {
                 expect(radioFieldView.getValue()) == "Purple";
                 expect(radioFieldView.isEmpty()) == false;
                 radioFieldView.setValid(radioFieldView.isValid());
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+                expect(view).to(haveValidSnapshot());
             }
         }
     }

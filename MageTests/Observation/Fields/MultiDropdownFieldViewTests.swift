@@ -25,24 +25,25 @@ class MultiDropdownFieldViewTests: KIFSpec {
             var field: [String: Any]!
             
             var window: UIWindow!;
-            window = UIWindow(forAutoLayout: ());
-            window.autoSetDimension(.width, toSize: 300);
             controller = UIViewController();
             view = UIView(forAutoLayout: ());
             view.autoSetDimension(.width, toSize: 300);
             controller.view.addSubview(view);
-
-            window.rootViewController = controller;
-            
-            window.makeKeyAndVisible();
             
             beforeEach {
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
+                                
                 field = [
                     "title": "Field Title",
                     "name": "field8",
                     "type": "dropdown",
                     "id": 8
                 ];
+                
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
                 
                 Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()

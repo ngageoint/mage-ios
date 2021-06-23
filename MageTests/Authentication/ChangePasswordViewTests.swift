@@ -28,16 +28,12 @@ class ChangePasswordViewControllerTests: KIFSpec {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                
-                window = UIWindow(forAutoLayout: ());
-                window?.autoSetDimension(.width, toSize: 414);
-                window?.autoSetDimension(.height, toSize: 896);
-                
+
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 navigationController = UINavigationController();
-                window?.rootViewController = navigationController;
-                window?.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = navigationController;
             }
             
             afterEach {

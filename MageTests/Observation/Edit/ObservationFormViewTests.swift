@@ -47,14 +47,14 @@ class ObservationFormViewTests: KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 completeTest = false;
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
                 
                 controller = UIViewController();
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .white;
-                window.makeKeyAndVisible();
+                
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
                 
                 eventForm = FormBuilder.createFormWithAllFieldTypes();
                 
@@ -65,8 +65,6 @@ class ObservationFormViewTests: KIFSpec {
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
-                window?.resignKey();
-                window = nil;
                 TestHelpers.clearAndSetUpStack();
             }
             

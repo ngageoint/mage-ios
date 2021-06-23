@@ -16,6 +16,23 @@ import Kingfisher
 
 class TestHelpers {
     
+    public static func getKeyWindowVisible() -> UIWindow {
+        var window: UIWindow;
+        if (UIApplication.shared.windows.count == 0) {
+            window = UIWindow(forAutoLayout: ());
+            window.autoSetDimensions(to: UIScreen.main.bounds.size);
+        } else {
+            NSLog("There are \(UIApplication.shared.windows.count) windows");
+            if (UIApplication.shared.windows.count != 1) {
+                NSLog("Windows are \(UIApplication.shared.windows)")
+            }
+            window = UIApplication.shared.windows[0];
+        }
+        window.backgroundColor = .systemBackground;
+        window.makeKeyAndVisible();
+        return window;
+    }
+    
     public static func createGradientImage(startColor: UIColor, endColor: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
         let rect = CGRect(origin: .zero, size: size)
         let gradientLayer = CAGradientLayer()

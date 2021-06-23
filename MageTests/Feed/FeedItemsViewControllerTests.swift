@@ -67,11 +67,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                         return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     };
                     
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: 414);
-                    window.autoSetDimension(.height, toSize: 896);
-                    
-                    window.makeKeyAndVisible();
+                    window = TestHelpers.getKeyWindowVisible();
                     
                     clearAndSetUpStack();
                     
@@ -240,11 +236,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 };
                 
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 414);
-                window.autoSetDimension(.height, toSize: 896);
-                
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 
                 clearAndSetUpStack();
                 

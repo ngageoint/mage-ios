@@ -55,10 +55,6 @@ class SignUpViewControllerTests: KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-                window = UIWindow(forAutoLayout: ());
-                window?.autoSetDimension(.width, toSize: 414);
-                window?.autoSetDimension(.height, toSize: 896);
-                
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 MageCoreDataFixtures.addEvent();
@@ -67,8 +63,8 @@ class SignUpViewControllerTests: KIFSpec {
                 
                 delegate = MockSignUpDelegate();
                 navigationController = UINavigationController();
-                window?.rootViewController = navigationController;
-                window?.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = navigationController;
             }
             
             afterEach {
@@ -78,8 +74,6 @@ class SignUpViewControllerTests: KIFSpec {
                 navigationController = nil;
                 view = nil;
                 delegate = nil;
-                window?.resignKey();
-                window = nil;
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
                 

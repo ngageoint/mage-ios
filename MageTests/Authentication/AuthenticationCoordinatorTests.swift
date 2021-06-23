@@ -50,10 +50,6 @@ class AuthenticationCoordinatorTests: KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-                window = UIWindow(forAutoLayout: ());
-                window?.autoSetDimension(.width, toSize: 414);
-                window?.autoSetDimension(.height, toSize: 896);
-                
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
@@ -64,8 +60,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 delegate = MockAuthenticationCoordinatorDelegate();
                 navigationController = UINavigationController();
-                window?.rootViewController = navigationController;
-                window?.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = navigationController;
                 
                 coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme());
             }
@@ -77,8 +73,6 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 navigationController = nil;
                 coordinator = nil;
                 delegate = nil;
-                window?.resignKey();
-                window = nil;
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
                 

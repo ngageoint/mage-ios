@@ -66,15 +66,12 @@ class UserTableHeaderViewTests: KIFSpec {
                     let stubPath = OHPathForFile("test_marker.png", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 };
-                
-                window = UIWindow(frame: UIScreen.main.bounds);
-                
+                                
                 controller = UIViewController();
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
                 view = UIView(forAutoLayout: ());
                 view.backgroundColor = .systemBackground;
-                window.makeKeyAndVisible();
                 controller.view.addSubview(view);
                 view.autoPinEdgesToSuperviewEdges();
                 
