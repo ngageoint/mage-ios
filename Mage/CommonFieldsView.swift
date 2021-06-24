@@ -126,7 +126,12 @@ extension CommonFieldsView: ObservationFormFieldListener {
                 safeObservation.timestamp = dateView.value as? Date;
             }
         } else if (field[FieldKey.name.key] as! String == locationField[FieldKey.name.key] as! String) {
-            safeObservation.setGeometry(value as! SFGeometry);
+            if let safeGeometry: SFGeometry = value as? SFGeometry {
+                safeObservation.setGeometry(safeGeometry);
+            } else {
+                safeObservation.setGeometry(nil);
+            }
+            
         }
         safeObservation.properties = newProperties;
     }
