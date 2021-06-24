@@ -159,18 +159,22 @@ static float paddingPercentage = .1;
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
         doneButton.accessibilityLabel = @"Apply";
         
-        UIAction *clearAction = [UIAction actionWithTitle:@"Clear" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-            [self clearLocation];
-        }];
-        
-        UIMenu *clearMenu = [UIMenu menuWithTitle:@"" children:@[clearAction]];
         UIBarButtonItem *clearButton;
         if (@available(iOS 14.0, *)) {
+            UIAction *clearAction = [UIAction actionWithTitle:@"Clear" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+                [self clearLocation];
+            }];
+            clearAction.accessibilityLabel = @"clear";
+            
+            UIMenu *clearMenu = [UIMenu menuWithTitle:@"" children:@[clearAction]];
             clearButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_small"] menu:clearMenu];
+            clearButton.isAccessibilityElement = true;
+            clearButton.accessibilityLabel = @"more_menu";
         } else {
             // Fallback on earlier versions
             // just stick the clear button in there for now
             clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(clearLocation)];
+            clearButton.accessibilityLabel = @"clear";
         }
         [self.navigationItem setLeftBarButtonItem:backButton];
         [self.navigationItem setRightBarButtonItems:@[clearButton, doneButton]];
@@ -179,7 +183,13 @@ static float paddingPercentage = .1;
 }
 
 - (void) clearLocation {
-    
+    self.geometry = nil;
+    [self updateGeometry];
+    [self updateLocationTextWithLatitudeString:nil andLongitudeString:nil];
+    if(self.mapObservation != nil){
+        [self.mapObservation removeFromMapView:self.map];
+        self.mapObservation = nil;
+    }
 }
 
 - (void) fieldEditCanceled {
@@ -1467,7 +1477,7 @@ static float paddingPercentage = .1;
     [self updateAcceptState];
 }
 
-- (BOOL) validate:(NSError **) error {    
+- (BOOL) validate:(NSError **) error {
     if (self.shapeType == SF_LINESTRING) {
         if ([[self shapePoints] count] < 2) {
             NSString *domain = @"mil.nga.MAGE.Error";

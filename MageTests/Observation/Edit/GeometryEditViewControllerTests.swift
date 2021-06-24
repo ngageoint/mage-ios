@@ -30,6 +30,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 }
                 
                 MageCoreDataFixtures.clearAllData();
+                TestHelpers.resetUserDefaults();
                 window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
@@ -46,7 +47,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 geometryEditViewController?.dismiss(animated: false);
 
                 Nimble_Snapshots.setNimbleTolerance(0.1);
-                Nimble_Snapshots.recordAllSnapshots();
+//                Nimble_Snapshots.recordAllSnapshots();
             }
             
             afterEach {
@@ -130,6 +131,34 @@ class GeometryEditViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "MGRS");
                 tester().waitForTappableView(withAccessibilityLabel: "MGRS Value")
                 expect(window.rootViewController?.view).to(haveValidSnapshot());
+            }
+            
+            fit("clear a geometry") {
+                let navController = UINavigationController();
+                window.rootViewController = navController;
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let mockGeometryEditDelegate = MockGeometryEditDelegate();
+                
+                let coordinator: GeometryEditCoordinator = GeometryEditCoordinator(fieldDefinition: field, andGeometry: point, andPinImage: UIImage(named: "observations"), andDelegate: mockGeometryEditDelegate, andNavigationController: navController, scheme: MAGEScheme.scheme());
+                coordinator.start();
+                
+                tester().waitForView(withAccessibilityLabel: "Latitude Value");
+                let latTextField = viewTester().usingLabel("Latitude Value").view as? UITextField;
+                expect(latTextField?.text).toNot(beNil());
+                let lonTextField = viewTester().usingLabel("Longitude Value").view as? UITextField;
+                expect(lonTextField?.text).toNot(beNil());
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForTappableView(withAccessibilityLabel: "more_menu");
+                tester().tapView(withAccessibilityLabel: "more_menu");
+                tester().waitForTappableView(withAccessibilityLabel: "clear");
+                tester().tapView(withAccessibilityLabel: "clear");
+                expect(lonTextField?.text).toNot(beNil());
+                expect(latTextField?.text).toNot(beNil());
+                tester().tapView(withAccessibilityLabel: "Apply");
+                expect(mockGeometryEditDelegate.geometryEditCompleteCalled).to(beTrue());
+                let geometry: SFGeometry? = mockGeometryEditDelegate.geometryEditCompleteGeometry;
+                expect(geometry).to(beNil());
             }
             
             it("create a point with long press") {
