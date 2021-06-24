@@ -170,6 +170,7 @@
 		F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D92034CC3700C2600D /* TestingAppDelegate.m */; };
 		F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */; };
 		F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
+		F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* AttachmentHeader.swift */; };
 		F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */; };
 		F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */; };
 		F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */; };
@@ -677,6 +678,7 @@
 		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorTests.swift; sourceTree = "<group>"; };
 		F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageUserDefaultKeys.swift; sourceTree = "<group>"; };
+		F730B94A2683D273004AD64A /* AttachmentHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeader.swift; sourceTree = "<group>"; };
 		F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSettingsViewController.swift; sourceTree = "<group>"; };
 		F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCelliOS13.swift; sourceTree = "<group>"; };
@@ -1580,6 +1582,7 @@
 				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
 				F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */,
 				F7F4753025B73C3E006634F7 /* FormsHeader.swift */,
+				F730B94A2683D273004AD64A /* AttachmentHeader.swift */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -2821,6 +2824,7 @@
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
+				F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,

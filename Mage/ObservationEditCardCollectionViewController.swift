@@ -180,12 +180,6 @@ import MaterialComponents.MDCCard
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated);
-        self.commonFieldView = nil;
-        self.keyboardHelper = nil;
-    }
-    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }
@@ -261,9 +255,12 @@ import MaterialComponents.MDCCard
         if (MageServer.isServerVersion5()) {
             if let safeObservation = observation {
                 let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
+                let attachmentHeader: AttachmentHeader = AttachmentHeader();
                 if let safeScheme = self.scheme {
                     attachmentCard.applyTheme(withScheme: safeScheme);
+                    attachmentHeader.applyTheme(withScheme: safeScheme);
                 }
+                stackView.addArrangedSubview(attachmentHeader);
                 stackView.addArrangedSubview(attachmentCard);
             }
         }
@@ -386,6 +383,7 @@ import MaterialComponents.MDCCard
     }
     
     @objc func reorderForms() {
+        print("Reorder forms pressed")
         removeDeletedForms();
         guard let safeObservation = self.observation else {
             return
@@ -421,7 +419,12 @@ import MaterialComponents.MDCCard
     }
     
     func checkObservationValidity() -> Bool {
-        var valid: Bool = commonFieldView?.checkValidity(enforceRequired: true) ?? true;
+        var valid: Bool = false;
+        if let safeCommonFieldView = commonFieldView {
+            valid = safeCommonFieldView.checkValidity(enforceRequired: true)
+        } else {
+            valid = true;
+        }
         for formView in formViews {
             let formValid = formView.checkValidity(enforceRequired: true);
             valid = valid && formValid;

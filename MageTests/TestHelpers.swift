@@ -79,6 +79,12 @@ class TestHelpers {
         ImageCache.default.clearCache();
     }
     
+    public static func resetUserDefaults() {
+        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
+        UserDefaults.standard.synchronize();
+        MageInitializer.initializePreferences();
+    }
+    
     public static func clearAndSetUpStack() {
         if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
@@ -96,9 +102,7 @@ class TestHelpers {
             }
         }
         
-        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
-        UserDefaults.standard.synchronize();
-        MageInitializer.initializePreferences();
+        TestHelpers.resetUserDefaults();
         MagicalRecord.cleanUp();
         
 //        MagicalRecord.deleteAndSetupMageCoreDataStack();
