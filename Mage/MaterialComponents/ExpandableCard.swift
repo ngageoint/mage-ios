@@ -92,11 +92,16 @@ class ExpandableCard: MDCCard {
         return label
     }()
     
-    private lazy var expandAction: UIButton = {
-        let expandAction = UIButton(type: .custom);
+    private lazy var expandAction: MDCButton = {
+        let expandAction = MDCButton();
         expandAction.accessibilityLabel = "expand";
-        expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" )?.withRenderingMode(.alwaysTemplate), for: .normal);
+        expandAction.setImage(UIImage(named: "collapse")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        expandAction.setImage(UIImage(named: "expand")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .selected);
         expandAction.addTarget(self, action: #selector(expandButtonPressed), for: .touchUpInside)
+        expandAction.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        expandAction.inkMaxRippleRadius = 30;
+        expandAction.inkStyle = .unbounded;
+        expandAction.autoSetDimensions(to: CGSize(width: 36, height: 36))
         return expandAction;
     }()
     
@@ -111,7 +116,9 @@ class ExpandableCard: MDCCard {
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
         thumbnail.tintColor = self.imageTint ?? scheme.colorScheme.primaryColor;
-        expandAction.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        expandAction.applyTextTheme(withScheme: scheme);
+        expandAction.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        expandAction.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .selected);
         titleText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         titleText.font = scheme.typographyScheme.overline;
         headerText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
@@ -164,7 +171,7 @@ class ExpandableCard: MDCCard {
         set(expanded) {
             self.showExpanded = expanded;
             self.expandableView.isHidden = !self.showExpanded;
-            expandAction.setImage(UIImage(named: self.showExpanded ? "collapse" : "expand" )?.withRenderingMode(.alwaysTemplate), for: .normal);
+            expandAction.isSelected = expanded;
         }
     }
     
@@ -210,8 +217,8 @@ class ExpandableCard: MDCCard {
             
             if expandedView != nil {
                 expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
-                expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-                expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
+                expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 8);
+//                expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
                 expandedView?.autoPinEdgesToSuperviewEdges();
             }
         }
