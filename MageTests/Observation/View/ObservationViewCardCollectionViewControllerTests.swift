@@ -66,6 +66,11 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                     }
                 }
                 TestHelpers.clearAndSetUpStack();
+                if (view != nil) {
+                    for subview in view.subviews {
+                        subview.removeFromSuperview();
+                    }
+                }
                 window = TestHelpers.getKeyWindowVisible();
                 UserDefaults.standard.serverMajorVersion = 5;
                 UserDefaults.standard.serverMinorVersion = 4;
@@ -86,7 +91,9 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
             }
             
             afterEach {
-                
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
                 waitUntil { done in
                     controller.dismiss(animated: false, completion: {
                         done();
@@ -297,7 +304,6 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 expect(UIApplication.getTopViewController()).toEventuallyNot(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
                 
                 observationViewController = nil;
-                print("popped")
             }
             
             it("delete observation") {
@@ -566,16 +572,14 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 
                 
                 tester().tapView(withAccessibilityLabel: "more");
-                
+                tester().waitForTappableView(withAccessibilityLabel: "Edit Observation");
                 tester().tapView(withAccessibilityLabel: "Edit Observation");
-                
+                tester().waitForAnimationsToFinish()
                 tester().clearText(fromAndThenEnterText: "the description", intoViewWithAccessibilityLabel: "field2");
                 tester().tapView(withAccessibilityLabel: "Done");
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Yes, Discard");
-                
-                
-                
+
                 expect(controller.topViewController).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
                 tester().expect(viewTester().usingLabel("field2 Value").view, toContainText: "Test");
                 waitUntil { done in

@@ -383,7 +383,6 @@ import MaterialComponents.MDCCard
     }
     
     @objc func reorderForms() {
-        print("Reorder forms pressed")
         removeDeletedForms();
         guard let safeObservation = self.observation else {
             return

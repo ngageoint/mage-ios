@@ -14,7 +14,7 @@ class FormsHeader: UIView {
     
     private lazy var headerLabel: UILabel = {
         let label: UILabel = UILabel(forAutoLayout: ());
-        label.text = "OBSERVATION FORMS";
+        label.text = "FORMS";
         return label;
     }()
     

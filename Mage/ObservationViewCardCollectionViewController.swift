@@ -25,6 +25,8 @@ import MaterialComponents.MDCContainerScheme;
     var bottomSheet: MDCBottomSheetController?;
     var scheme: MDCContainerScheming?;
     var attachmentCard: ObservationAttachmentCard?;
+    let attachmentHeader: AttachmentHeader = AttachmentHeader();
+    let formsHeader = FormsHeader(forAutoLayout: ());
     
     private lazy var eventForms: [[String: Any]] = {
         let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
@@ -79,6 +81,8 @@ import MaterialComponents.MDCContainerScheme;
         self.syncStatusView.applyTheme(withScheme: containerScheme);
         headerCard?.applyTheme(withScheme: containerScheme);
         attachmentCard?.applyTheme(withScheme: containerScheme);
+        formsHeader.applyTheme(withScheme: containerScheme);
+        attachmentHeader.applyTheme(withScheme: containerScheme);
     }
     
     override func loadView() {
@@ -188,9 +192,12 @@ import MaterialComponents.MDCContainerScheme;
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
                     attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self);
+                    
                     if let safeScheme = self.scheme {
                         attachmentCard!.applyTheme(withScheme: safeScheme);
+                        attachmentHeader.applyTheme(withScheme: safeScheme);
                     }
+                    stackView.addArrangedSubview(attachmentHeader);
                     stackView.addArrangedSubview(attachmentCard!);
                 }
             }
@@ -198,6 +205,8 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     func addFormViews(stackView: UIStackView) {
+        formsHeader.reorderButton.isHidden = true;
+        stackView.addArrangedSubview(formsHeader);
         for (index, form) in self.observationForms.enumerated() {
             let card: ExpandableCard = addObservationFormView(observationForm: form, index: index);
             card.expanded = index == 0;

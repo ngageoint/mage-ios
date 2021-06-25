@@ -30,7 +30,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 window = TestHelpers.getKeyWindowVisible();
                 
-                Nimble_Snapshots.setNimbleTolerance(0.1);
+                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
                 
                 TestHelpers.resetUserDefaults();
