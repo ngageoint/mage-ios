@@ -19,35 +19,36 @@ class ObservationSyncStatusTests: KIFSpec {
     override func spec() {
         
         describe("ObservationSyncStatusTests") {
-            let recordSnapshots = false;
-            
             var view: UIView!
             var controller: UIViewController!
             var window: UIWindow!;
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    expect(view) == recordSnapshot(usesDrawRect: true);
-                } else {
-                    expect(view).to(haveValidSnapshot(usesDrawRect: true));
-                }
-            }
-            
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-
+                TestHelpers.resetUserDefaults();
                 controller = UIViewController();
                 window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
+                if (view != nil) {
+                    for subview in view.subviews {
+                        subview.removeFromSuperview();
+                    }
+                }
                 view = UIView(forAutoLayout: ());
                 view.backgroundColor = .systemBackground;
                 controller.view.addSubview(view);
                 view.autoPinEdgesToSuperviewEdges();
+                Server.setCurrentEventId(1);
+
+                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.recordAllSnapshots();
             }
             
             afterEach {
                 TestHelpers.cleanUpStack();
+                for subview in view.subviews {
+                    subview.removeFromSuperview();
+                }
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
@@ -99,9 +100,9 @@ class ObservationSyncStatusTests: KIFSpec {
                 syncStatus.autoPinEdge(toSuperviewEdge: .right);
                 syncStatus.autoAlignAxis(toSuperviewAxis: .horizontal);
                 
-                tester().waitForView(withAccessibilityLabel: "Pushed on June 5, 2020 at 11:21:54 AM MDT");
+                tester().waitForView(withAccessibilityLabel: "Pushed on 2020-06-05 11:21 MDT");
                 
-                maybeRecordSnapshot(syncStatus);
+                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("dirty") {
@@ -129,7 +130,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Changes Queued");
                 tester().waitForView(withAccessibilityLabel: "Sync Now");
                 
-                maybeRecordSnapshot(syncStatus);
+                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("error") {
@@ -160,7 +161,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Error Pushing Changes\nSomething Bad");
                 
-                maybeRecordSnapshot(syncStatus);
+                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("tap sync now") {
@@ -197,7 +198,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Sync Now");
                 tester().tapView(withAccessibilityLabel: "Sync Now");
                 expect(stubCalled).toEventually(beTrue());
-                maybeRecordSnapshot(syncStatus);
+                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("dirty and then pushed") {
@@ -224,7 +225,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 tester().wait(forTimeInterval: 0.5);
                 observation.dirty = false;
                 syncStatus.updateObservationStatus();
-                maybeRecordSnapshot(syncStatus);
+                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
         }
     }

@@ -66,6 +66,7 @@ class ObservationSyncStatus: UIView {
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
+            syncStatusView.autoSetDimension(.height, toSize: 36);
             syncStatusView.autoPinEdgesToSuperviewEdges();
             didSetupConstraints = true;
         }
@@ -83,14 +84,15 @@ class ObservationSyncStatus: UIView {
             if let safeScheme = scheme {
                 applyTheme(withScheme: safeScheme);
             }
+            syncStatusView.sizeToFit();
             return;
         }
         
         // if the observation is not dirty and has no error, show the push date
         if (!(observation?.isDirty() ?? false) && observation?.error == nil) {
             if let pushedDate: NSDate = observation?.lastModified as NSDate? {
-                syncStatusView.textView.text = "Pushed on \(pushedDate.formattedDisplay() ?? "")";
-                syncStatusView.accessibilityLabel = "Pushed on \(pushedDate.formattedDisplay() ?? "")";
+                syncStatusView.textView.text = "Pushed on \(pushedDate.formattedDisplay())";
+                syncStatusView.accessibilityLabel = "Pushed on \(pushedDate.formattedDisplay())";
             }
             syncStatusView.textView.textColor = MDCPalette.green.accent700;
             syncStatusView.imageView.image = UIImage(named: "done");
@@ -99,6 +101,7 @@ class ObservationSyncStatus: UIView {
             if let safeScheme = scheme {
                 applyTheme(withScheme: safeScheme);
             }
+            syncStatusView.sizeToFit();
             return;
         }
         
@@ -111,6 +114,7 @@ class ObservationSyncStatus: UIView {
             if let safeScheme = scheme {
                 applyTheme(withScheme: safeScheme);
             }
+            syncStatusView.sizeToFit();
             return;
         }
         
@@ -124,6 +128,7 @@ class ObservationSyncStatus: UIView {
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
+        syncStatusView.sizeToFit();
     }
     
 }
