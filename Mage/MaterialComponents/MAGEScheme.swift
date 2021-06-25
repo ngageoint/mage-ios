@@ -32,10 +32,10 @@ func globalErrorContainerScheme() -> MDCContainerScheming {
     containerScheme.colorScheme.primaryColor = .systemRed;
     containerScheme.colorScheme.secondaryColor = .systemRed;
     containerScheme.colorScheme.onSecondaryColor = .white;
-    containerScheme.colorScheme.surfaceColor = MDCPalette.grey.tint300;
-    containerScheme.colorScheme.onSurfaceColor = MDCPalette.grey.tint500;
-    containerScheme.colorScheme.backgroundColor = MDCPalette.grey.tint300;
-    containerScheme.colorScheme.onBackgroundColor = MDCPalette.grey.tint500;
+    containerScheme.colorScheme.surfaceColor = UIColor(named: "surface") ?? UIColor.systemBackground;
+    containerScheme.colorScheme.onSurfaceColor = UIColor.label;
+    containerScheme.colorScheme.backgroundColor = UIColor.systemGroupedBackground;
+    containerScheme.colorScheme.onBackgroundColor = UIColor.label;
     containerScheme.colorScheme.errorColor = .systemRed;
     containerScheme.colorScheme.onPrimaryColor = .white;
     return containerScheme;
