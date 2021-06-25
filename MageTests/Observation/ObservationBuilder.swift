@@ -119,7 +119,7 @@ class ObservationBuilder {
         return attachment;
     }
     
-    static func addFormToObservation(observation: Observation, form: [String : Any], values: [String: Any]? = nil) {
+    static func addFormToObservation(observation: Observation, form: [String : Any], values: [String: Any?]? = nil) {
         var newProperties: [String: Any] = observation.properties as? [String: Any] ?? [:];
         var observationForms: [Any] = newProperties["forms"] as? [Any] ?? [];
         
@@ -137,13 +137,17 @@ class ObservationBuilder {
                 // override with the values set
                 if let safeValues = values {
                     if ((safeValues.keys.contains(field["name"] as! Dictionary<String, Any>.Keys.Element))) {
-                        value = safeValues[field["name"] as! String];
+                        if let safeValue: String = safeValues[field["name"] as! String] as? String {
+                            value = safeValue;
+                        } else {
+                            value = nil;
+                        }
                     }
                 }
                 
-                if (value != nil) {
+//                if (value != nil) {
                     newForm[field["name"] as! String] = value;
-                }
+//                }
             }
         } else { // server defaults
             for (_, field) in fields.enumerated() {

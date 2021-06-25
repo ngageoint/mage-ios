@@ -1,10 +1,10 @@
 {
-    "secondaryFeedField": "field7",
+    "secondaryFeedField": "field9",
     "primaryFeedField": "type",
     "primaryField": "type",
     "color": "#5278A2",
     "name": "All Field Types",
-    "variantField": "field7",
+    "variantField": "field9",
     "description": "Form Description",
     "fields": [
         {

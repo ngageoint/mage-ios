@@ -171,6 +171,8 @@
 		F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */; };
 		F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
 		F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* AttachmentHeader.swift */; };
+		F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */; };
+		F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */; };
 		F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */; };
 		F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */; };
 		F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */; };
@@ -679,6 +681,8 @@
 		F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorTests.swift; sourceTree = "<group>"; };
 		F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageUserDefaultKeys.swift; sourceTree = "<group>"; };
 		F730B94A2683D273004AD64A /* AttachmentHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeader.swift; sourceTree = "<group>"; };
+		F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormReorderTests.swift; sourceTree = "<group>"; };
+		F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormReorderDelegate.swift; sourceTree = "<group>"; };
 		F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSettingsViewController.swift; sourceTree = "<group>"; };
 		F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCelliOS13.swift; sourceTree = "<group>"; };
@@ -1390,6 +1394,7 @@
 				F7081DAF2626348F004B89D4 /* MockCLLocationManager.swift */,
 				F7521DE92672336800C52318 /* MockGeometryEditCoordinator.swift */,
 				F7BD2D7B267A468900A2B1D7 /* MockGeometryEditDelegate.swift */,
+				F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1727,6 +1732,7 @@
 				F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */,
 				F7F9122824819D5D00C068B6 /* emptyForm.json */,
 				F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */,
+				F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */,
 			);
 			path = Form;
 			sourceTree = "<group>";
@@ -2907,6 +2913,7 @@
 				F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */,
 				F7BE036F24660A9D00D2F7C3 /* TextFieldViewTests.swift in Sources */,
 				F7521DEA2672336800C52318 /* MockGeometryEditCoordinator.swift in Sources */,
+				F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */,
 				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
@@ -2952,6 +2959,7 @@
 				F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */,
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
+				F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F795ED0E24B8FDE20028FBFC /* MockMapViewDelegate.swift in Sources */,

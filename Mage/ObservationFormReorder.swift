@@ -53,6 +53,7 @@ class ObservationFormReorder: UITableViewController {
         self.scheme = containerScheme;
         super.init(style: .plain)
         self.title = "Reorder Forms";
+        self.view.accessibilityLabel = "Reorder Forms";
         tableView.register(cellClass: ObservationFormTableViewCell.self)
         if let safeProperties = self.observation.properties as? [String: Any] {
             if (safeProperties.keys.contains(ObservationKey.forms.key)) {
@@ -67,6 +68,7 @@ class ObservationFormReorder: UITableViewController {
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
         self.scheme = containerScheme;
+        self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         
         self.navigationController?.navigationBar.isTranslucent = false;
@@ -95,17 +97,21 @@ class ObservationFormReorder: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveFormOrder(sender:)));
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(self.saveFormOrder(sender:)));
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancel(sender:)));
         
         self.tableView.isEditing = true;
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 60;
+        self.tableView.tableFooterView = UIView();
         self.view.addSubview(headerView);
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        if let safeScheme = self.scheme {
+            applyTheme(withContainerScheme: safeScheme);
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -156,5 +162,4 @@ class ObservationFormReorder: UITableViewController {
         
         return formCell
     }
-    
 }

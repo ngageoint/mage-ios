@@ -240,7 +240,7 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func parseJsonFile(jsonFile: String) -> Any {
+    public static func parseJsonFile(jsonFile: String, forceArray: Bool = false) -> Any {
         guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: jsonFile, ofType: "json") else {
             fatalError("\(jsonFile).json not found")
         }
@@ -259,12 +259,20 @@ class MageCoreDataFixtures {
         guard let jsonDictionary = try? JSONSerialization.jsonObject(with: jsonData, options: []) else {
             fatalError("Unable to convert \(jsonFile).json to JSON dictionary")
         }
-        
-        return jsonDictionary;
+        if (forceArray) {
+            if jsonDictionary is NSArray {
+                return jsonDictionary;
+            }
+            else {
+                return [jsonDictionary];
+            }
+        } else {
+            return jsonDictionary;
+        }
     }
     
     public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
-        let jsonDictionary = parseJsonFile(jsonFile: formsJsonFile)
+        let jsonDictionary = parseJsonFile(jsonFile: formsJsonFile, forceArray: true)
         
         MageCoreDataFixtures.addEventFromJson(remoteId: remoteId, name: name, formsJson: jsonDictionary as! [[AnyHashable : Any]], maxObservationForms: maxObservationForms, minObservationForms: minObservationForms, completion: completion);
     }

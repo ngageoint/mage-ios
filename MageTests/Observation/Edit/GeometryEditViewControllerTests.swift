@@ -133,7 +133,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 expect(window.rootViewController?.view).to(haveValidSnapshot());
             }
             
-            fit("clear a geometry") {
+            it("clear a geometry") {
                 let navController = UINavigationController();
                 window.rootViewController = navController;
                 

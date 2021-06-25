@@ -110,14 +110,14 @@ class ObservationFormTableViewCell: UITableViewCell {
     func configure(observationForm: [String : Any], eventForm: [String: Any], scheme: MDCContainerScheming?) {
         var formPrimaryValue: String? = nil;
         if let primaryField = eventForm[FormKey.primaryFeedField.key] as! String? {
-            if let obsfield = observationForm[primaryField] as! String? {
+            if let obsfield = observationForm[primaryField] as? String? {
                 formPrimaryValue = obsfield;
             }
         }
         
         var formSecondaryValue: String? = nil;
         if let secondaryField = eventForm[FormKey.secondaryFeedField.key] as! String? {
-            if let obsfield = observationForm[secondaryField] as! String? {
+            if let obsfield = observationForm[secondaryField] as? String? {
                 formSecondaryValue = obsfield;
             }
         }
@@ -142,6 +142,7 @@ class ObservationFormTableViewCell: UITableViewCell {
     override func updateConstraints() {
         if (!didSetUpConstraints) {
             stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 56, bottom: 8, right: 0))
+            stackView.autoSetDimension(.height, toSize: 48, relation: .greaterThanOrEqual)
             if (thumbnail.superview != nil) {
                 thumbnail.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
                 thumbnail.autoSetDimensions(to: CGSize(width: 24, height: 24));
