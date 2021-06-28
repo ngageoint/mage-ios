@@ -227,12 +227,14 @@
     NSURL *url = [NSURL fileURLWithPath:self.recording.filePath];
     
     NSError *error;
-    if (self.audioPlayer == nil) {
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        self.audioPlayer.delegate = self;
-        [self.audioPlayer setVolume:1.0];
-        self.audioPlayer.numberOfLoops = 0;
+    if (self.audioPlayer != nil) {
+        [self.audioPlayer stop];
     }
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    self.audioPlayer.delegate = self;
+    [self.audioPlayer setVolume:1.0];
+    self.audioPlayer.numberOfLoops = 0;
+    
     if (_audioPlayer.playing) {
         [self stopAudio];
     } else {

@@ -20,6 +20,7 @@ class AttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
+    private var heightConstraint: NSLayoutConstraint?;
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
         let ads: AttachmentCollectionDataStore = self.editMode ? AttachmentCollectionDataStore(buttonImage: "trash", useErrorColor: true) : AttachmentCollectionDataStore();
@@ -72,48 +73,64 @@ class AttachmentFieldView : BaseFieldView {
         return stackView;
     }()
     
-    private lazy var audioButton: UIButton = {
-        let button = UIButton(forAutoLayout: ());
+    private lazy var audioButton: MDCButton = {
+        let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Audio";
-        button.setImage(UIImage(named: "voice")?.withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        button.setImage(UIImage(named: "voice")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addAudioAttachment), for: .touchUpInside);
+        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        button.inkMaxRippleRadius = 30;
+        button.inkStyle = .unbounded;
         return button;
     }()
     
-    private lazy var cameraButton: UIButton = {
-        let button = UIButton(forAutoLayout: ());
+    private lazy var cameraButton: MDCButton = {
+        let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Camera";
-        button.setImage(UIImage(named: "camera")?.withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        button.setImage(UIImage(named: "camera")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addCameraAttachment), for: .touchUpInside);
+        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        button.inkMaxRippleRadius = 30;
+        button.inkStyle = .unbounded;
         return button;
     }()
     
-    private lazy var galleryButton: UIButton = {
-        let button = UIButton(forAutoLayout: ());
+    private lazy var galleryButton: MDCButton = {
+        let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Gallery";
-        button.setImage(UIImage(named: "gallery")?.withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        button.setImage(UIImage(named: "gallery")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addGalleryAttachment), for: .touchUpInside);
+        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        button.inkMaxRippleRadius = 30;
+        button.inkStyle = .unbounded;
         return button;
     }()
     
-    private lazy var videoButton: UIButton = {
-        let button = UIButton(forAutoLayout: ());
+    private lazy var videoButton: MDCButton = {
+        let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Video";
-        button.setImage(UIImage(named: "video")?.withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 24, height: 24));
+        button.setImage(UIImage(named: "video")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addVideoAttachment), for: .touchUpInside);
+        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        button.inkMaxRippleRadius = 30;
+        button.inkStyle = .unbounded;
         return button;
     }()
     
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
-        audioButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        videoButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        galleryButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        cameraButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        audioButton.applyTextTheme(withScheme: scheme);
+        audioButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        videoButton.applyTextTheme(withScheme: scheme);
+        videoButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        galleryButton.applyTextTheme(withScheme: scheme);
+        galleryButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        cameraButton.applyTextTheme(withScheme: scheme);
+        cameraButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         errorLabel.font = scheme.typographyScheme.caption;
         errorLabel.textColor = scheme.colorScheme.errorColor;
         attachmentHolderView.backgroundColor = scheme.colorScheme.backgroundColor;
@@ -167,7 +184,11 @@ class AttachmentFieldView : BaseFieldView {
                 attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * 100.0
             }
         }
-        attachmentHolderView.autoSetDimension(.height, toSize: attachmentHolderHeight);
+        if (heightConstraint != nil) {
+            heightConstraint?.constant = attachmentHolderHeight;
+        } else {
+            heightConstraint = attachmentHolderView.autoSetDimension(.height, toSize: attachmentHolderHeight);
+        }
     }
     
     override func isEmpty() -> Bool {
@@ -221,19 +242,28 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     @objc func addCameraAttachment() {
-        attachmentCreationCoordinator?.addCameraAttachment();
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+            attachmentCreationCoordinator?.addCameraAttachment();
+        }
     }
     
     @objc func addGalleryAttachment() {
-        attachmentCreationCoordinator?.addGalleryAttachment();
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+            attachmentCreationCoordinator?.addGalleryAttachment();
+        }
     }
     
     @objc func addVideoAttachment() {
-        attachmentCreationCoordinator?.addVideoAttachment();
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+            attachmentCreationCoordinator?.addVideoAttachment();
+        }
     }
     
     @objc func addAudioAttachment() {
-        attachmentCreationCoordinator?.addVoiceAttachment();
+        // let the button press be shown before moving
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+            attachmentCreationCoordinator?.addVoiceAttachment();
+        }
     }
 }
 

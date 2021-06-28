@@ -21,6 +21,7 @@ class EditAttachmentCardView: MDCCard {
     weak var viewController: UIViewController?;
     weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     var scheme: MDCContainerScheming?;
+    var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     
     lazy var attachmentField: [String: Any] = {
         let attachmentField: [String: Any] =
@@ -31,7 +32,7 @@ class EditAttachmentCardView: MDCCard {
     }()
     
     lazy var attachmentView: AttachmentFieldView = {
-        let attachmentCreationCoordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
+        attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
         let attachmentView = AttachmentFieldView(field: attachmentField, delegate: self, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
         return attachmentView;
     }()
