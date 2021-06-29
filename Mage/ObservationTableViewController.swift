@@ -111,6 +111,7 @@ class ObservationTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 155;
         self.tableView.contentInset.bottom = 100;
         self.tableView.tableFooterView = allReturned;
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
     func setupFilterListeners() {
