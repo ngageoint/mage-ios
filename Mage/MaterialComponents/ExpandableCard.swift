@@ -171,7 +171,7 @@ class ExpandableCard: MDCCard {
         set(expanded) {
             self.showExpanded = expanded;
             self.expandableView.isHidden = !self.showExpanded;
-            expandAction.isSelected = expanded;
+            expandAction.isSelected = !expanded;
         }
     }
     
@@ -237,6 +237,7 @@ class ExpandableCard: MDCCard {
         
         stackView.addArrangedSubview(titleArea);
         stackView.addArrangedSubview(headerText)
+        stackView.setCustomSpacing(4, after: headerText)
         stackView.addArrangedSubview(subhead);
 
         let spacerView = UIView(forAutoLayout: ());
