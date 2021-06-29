@@ -14,7 +14,6 @@ class ObservationActionsView: UIView {
     var didSetupConstraints = false;
     weak var observation: Observation?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
-    internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
     internal var currentUserFavorited: Bool = false;
     internal var isImportant: Bool = false;
     var bottomSheet: MDCBottomSheetController?;
@@ -114,12 +113,13 @@ class ObservationActionsView: UIView {
         return importantButton;
     }()
     
-    private lazy var importantInputView: MDCTextField = {
-        let textField = MDCTextField(forAutoLayout: ());
+    private lazy var importantInputView: MDCFilledTextField = {
+        let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.autocapitalizationType = .none;
-        controller.textInput = textField;
-        controller.placeholderText = "Important Description"
         textField.accessibilityLabel = "Important Description";
+        textField.label.text = "Important Description"
+        textField.placeholder = "Important Description"
+        textField.sizeToFit();
         return textField;
     }()
     
@@ -158,7 +158,7 @@ class ObservationActionsView: UIView {
         importantInputView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom);
 
         importantWrapperView.addSubview(buttonView);
-        buttonView.autoPinEdge(.top, to: .bottom, of: importantInputView, withOffset: -12);
+        buttonView.autoPinEdge(.top, to: .bottom, of: importantInputView, withOffset: 12);
         buttonView.autoPinEdge(toSuperviewEdge: .left, withInset: 8);
         buttonView.autoPinEdge(toSuperviewEdge: .right, withInset: 8);
         
