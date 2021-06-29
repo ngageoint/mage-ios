@@ -70,7 +70,11 @@ class BaseFieldView : UIView {
         self.field = field;
         self.delegate = delegate;
         self.value = value;
+        self.accessibilityLabel = "Field View \((field[FieldKey.name.key] as? String ?? ""))"
         self.addSubview(viewStack);
+        if (!editMode) {
+            viewStack.spacing = 0;
+        }
         viewStack.autoPinEdgesToSuperviewEdges();
     }
     
