@@ -33,9 +33,17 @@ import MaterialComponents.MDCContainerScheme;
         return eventForms;
     }()
     
+    private lazy var editFab : MDCFloatingButton = {
+        let fab = MDCFloatingButton(shape: .default);
+        fab.setImage(UIImage(named: "edit"), for: .normal);
+        fab.addTarget(self, action: #selector(startObservationEditCoordinator), for: .touchUpInside);
+        return fab;
+    }()
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
         scrollView.accessibilityIdentifier = "card scroll";
+        scrollView.contentInset.bottom = 100;
         return scrollView;
     }()
     
@@ -83,6 +91,7 @@ import MaterialComponents.MDCContainerScheme;
         attachmentCard?.applyTheme(withScheme: containerScheme);
         formsHeader.applyTheme(withScheme: containerScheme);
         attachmentHeader.applyTheme(withScheme: containerScheme);
+        editFab.applySecondaryTheme(withScheme: containerScheme);
     }
     
     override func loadView() {
@@ -90,6 +99,7 @@ import MaterialComponents.MDCContainerScheme;
         
         view.addSubview(scrollView);
         scrollView.addSubview(stackView);
+        view.addSubview(editFab);
         
         view.setNeedsUpdateConstraints();
     }
@@ -99,6 +109,8 @@ import MaterialComponents.MDCContainerScheme;
             scrollView.autoPinEdgesToSuperviewEdges(with: .zero);
             stackView.autoPinEdgesToSuperviewEdges();
             stackView.autoMatch(.width, to: .width, of: view);
+            editFab.autoPinEdge(toSuperviewMargin: .right);
+            editFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
             didSetupConstraints = true;
         }
         
@@ -124,8 +136,6 @@ import MaterialComponents.MDCContainerScheme;
         
         self.view.accessibilityIdentifier = "ObservationViewCardCollection"
         self.view.accessibilityLabel = "ObservationViewCardCollection"
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.startObservationEditCoordinator));
     }
     
     override func viewWillAppear(_ animated: Bool) {
