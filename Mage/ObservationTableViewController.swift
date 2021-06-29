@@ -25,6 +25,13 @@ class ObservationTableViewController: UITableViewController {
         return fab;
     }()
     
+    private lazy var allReturned : UILabel = {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 30));
+        label.textAlignment = .center;
+        label.text = "All observations have been returned."
+        return label;
+    }()
+    
     public lazy var observationDataStore: ObservationDataStore = {
         var dataStoreAttachmentDelegate = self.attachmentDelegate;
         
@@ -84,6 +91,8 @@ class ObservationTableViewController: UITableViewController {
         refreshControl?.tintColor = containerScheme.colorScheme.onBackgroundColor;
         
         createFab.applySecondaryTheme(withScheme: containerScheme);
+        allReturned.font = containerScheme.typographyScheme.caption;
+        allReturned.textColor = containerScheme.colorScheme.onBackgroundColor;
     }
     
     override func viewDidLoad() {
@@ -101,6 +110,7 @@ class ObservationTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 155;
         self.tableView.contentInset.bottom = 100;
+        self.tableView.tableFooterView = allReturned;
     }
     
     func setupFilterListeners() {
