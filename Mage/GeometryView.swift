@@ -257,6 +257,9 @@ class GeometryView : BaseFieldView {
             }
             mapDelegate?.ensureMapLayout();
         } else {
+            if (editMode) {
+                textField.text = ""
+            }
             latitudeLongitudeButton.setTitle("No Location Set", for: .normal);
             latitudeLongitudeButton.isEnabled = false;
             mapView.isHidden = true;
