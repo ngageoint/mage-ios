@@ -16,9 +16,7 @@ class DateView : BaseFieldView {
         let datePicker = UIDatePicker();
         datePicker.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Date Picker";
         datePicker.datePickerMode = .dateAndTime;
-        if #available(iOS 13.4, *) {
-            datePicker.preferredDatePickerStyle = .wheels
-        }
+        datePicker.preferredDatePickerStyle = .wheels
         if (NSDate.isDisplayGMT()) {
             datePicker.timeZone = TimeZone(secondsFromGMT: 0);
         } else {
@@ -61,8 +59,6 @@ class DateView : BaseFieldView {
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         textField.inputView = datePicker;
         textField.inputAccessoryView = dateAccessoryView;
-        textField.leadingView = UIImageView(image: UIImage(named: "date"));
-        textField.leadingViewMode = .always;
         textField.leadingAssistiveLabel.text = " ";
         textField.clearButtonMode = .always;
         textField.sizeToFit();
