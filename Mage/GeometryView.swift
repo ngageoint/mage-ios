@@ -55,14 +55,6 @@ class GeometryView : BaseFieldView {
         return mapView;
     }()
     
-    lazy var editFab: MDCFloatingButton = {
-        let fab = MDCFloatingButton(shape: .mini);
-        fab.accessibilityLabel = field[FieldKey.name.key] as? String;
-        fab.setImage(UIImage(named: "edit")?.withRenderingMode(.alwaysTemplate), for: .normal);
-        fab.addTarget(self, action: #selector(handleTap), for: .touchUpInside);
-        return fab;
-    }()
-    
     lazy var observationManager: MapObservationManager = {
         let observationManager: MapObservationManager = MapObservationManager(mapView: self.mapView, andEventForms: eventForms);
         return observationManager;
@@ -72,7 +64,6 @@ class GeometryView : BaseFieldView {
         super.applyTheme(withScheme: scheme);
         accuracyLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         accuracyLabel.font = scheme.typographyScheme.caption;
-        editFab.applySecondaryTheme(withScheme: scheme);
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
     }
@@ -192,7 +183,7 @@ class GeometryView : BaseFieldView {
                 viewStack.setCustomSpacing(4, after: fieldNameLabel);
             }
             viewStack.addArrangedSubview(mapView);
-            
+
             let wrapper = UIView(forAutoLayout: ());
             wrapper.addSubview(latitudeLongitudeButton);
             latitudeLongitudeButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), excludingEdge: .right);
@@ -204,8 +195,6 @@ class GeometryView : BaseFieldView {
             
             viewStack.addArrangedSubview(wrapper);
         }
-        
-        mapDelegate?.ensureMapLayout();
     }
     
     override func isEmpty() -> Bool{
@@ -260,6 +249,7 @@ class GeometryView : BaseFieldView {
                 }
                 mapView.isHidden = false;
             }
+            mapDelegate?.ensureMapLayout();
         } else {
             latitudeLongitudeButton.setTitle("No Location Set", for: .normal);
             latitudeLongitudeButton.isEnabled = false;
