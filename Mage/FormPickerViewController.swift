@@ -45,7 +45,7 @@ import MaterialComponents.MDCButton;
         return headerView;
     }()
     
-    private lazy var tableView: UITableView = {
+    lazy var tableView: UITableView = {
         let tableView = UITableView(forAutoLayout: ());
         tableView.accessibilityLabel = "Add A Form Table";
         tableView.estimatedRowHeight = 100;
