@@ -175,6 +175,9 @@ class GeometryView : BaseFieldView {
             viewStack.spacing = 0;
             viewStack.addArrangedSubview(textField);
             viewStack.addArrangedSubview(mapView);
+            let spacer = UIView(forAutoLayout: ());
+            spacer.autoSetDimension(.height, toSize: 24);
+            viewStack.addArrangedSubview(spacer);
             
             let tapView = addTapRecognizer();
             tapView.accessibilityLabel = field[FieldKey.name.key] as? String;
