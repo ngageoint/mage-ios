@@ -103,9 +103,9 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "location geometry")
                 expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
                 tester().waitForView(withAccessibilityLabel: "1 FAVORITE");
-                expect((viewTester().usingLabel("favorite").view as! UIButton).tintColor).to(be(MDCPalette.green.accent700));
-                let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! UIButton
-                expect(importantButton.tintColor).to(be(MDCPalette.orange.accent400));
+                expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor).to(be(MDCPalette.green.accent700));
+                let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! MDCButton
+                expect(importantButton.imageTintColor).to(be(MDCPalette.orange.accent400));
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;

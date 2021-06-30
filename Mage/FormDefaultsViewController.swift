@@ -174,8 +174,8 @@ class FormDefaultsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad();
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveDefaults));
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancel));
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(self.saveDefaults));
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.cancel));
         
         view.addSubview(scrollView);
         scrollView.addSubview(card);

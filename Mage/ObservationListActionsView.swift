@@ -37,11 +37,15 @@ class ObservationListActionsView: UIView {
         return button;
     }()
     
-    private lazy var favoriteButton: UIButton = {
-        let favoriteButton = UIButton(type: .custom);
+    private lazy var favoriteButton: MDCButton = {
+        let favoriteButton = MDCButton();
         favoriteButton.accessibilityLabel = "favorite";
-        favoriteButton.setImage(UIImage(named: "favorite_border"), for: .normal);
+        favoriteButton.setImage(UIImage(named: "favorite_border")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
+        favoriteButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        favoriteButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        favoriteButton.inkMaxRippleRadius = 30;
+        favoriteButton.inkStyle = .unbounded;
         return favoriteButton;
     }()
     
@@ -50,11 +54,15 @@ class ObservationListActionsView: UIView {
         return favoriteCount;
     }()
     
-    private lazy var directionsButton: UIButton = {
-        let directionsButton = UIButton(type: .custom);
+    private lazy var directionsButton: MDCButton = {
+        let directionsButton = MDCButton();
         directionsButton.accessibilityLabel = "directions";
-        directionsButton.setImage(UIImage(named: "directions_large"), for: .normal);
+        directionsButton.setImage(UIImage(named: "directions_large")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToObservation), for: .touchUpInside);
+        directionsButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        directionsButton.inkMaxRippleRadius = 30;
+        directionsButton.inkStyle = .unbounded;
         return directionsButton;
     }()
     
@@ -62,9 +70,13 @@ class ObservationListActionsView: UIView {
         self.scheme = scheme;
         favoriteCount.textColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         favoriteCount.font = scheme.typographyScheme.overline;
-        favoriteButton.tintColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        favoriteButton.applyTextTheme(withScheme: scheme);
+        favoriteButton.setImageTintColor(currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        favoriteButton.inkColor = MDCPalette.green.accent700?.withAlphaComponent(0.2);
+        directionsButton.applyTextTheme(withScheme: scheme);
+        directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
-        directionsButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {

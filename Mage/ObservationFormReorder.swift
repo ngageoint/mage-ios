@@ -98,7 +98,7 @@ class ObservationFormReorder: UITableViewController {
         super.viewDidLoad();
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(self.saveFormOrder(sender:)));
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.cancel(sender:)));
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.cancel(sender:)));
         
         self.tableView.isEditing = true;
         self.tableView.rowHeight = UITableView.automaticDimension;
