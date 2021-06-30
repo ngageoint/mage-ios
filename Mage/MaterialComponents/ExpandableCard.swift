@@ -170,7 +170,12 @@ class ExpandableCard: MDCCard {
         }
         set(expanded) {
             self.showExpanded = expanded;
-            self.expandableView.isHidden = !self.showExpanded;
+            if (self.expandableView.isHidden == self.showExpanded) {
+                UIView.animate(withDuration: 0.2) { [self] in
+                    self.expandedView?.isHidden = !self.showExpanded;
+                    self.expandableView.isHidden = !self.showExpanded;
+                }
+            }
             expandAction.isSelected = !expanded;
         }
     }
@@ -218,7 +223,6 @@ class ExpandableCard: MDCCard {
             if expandedView != nil {
                 expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
                 expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 8);
-//                expandAction.autoSetDimensions(to: CGSize(width: 24, height: 24));
                 expandedView?.autoPinEdgesToSuperviewEdges();
             }
         }
@@ -245,7 +249,6 @@ class ExpandableCard: MDCCard {
         stackView.addArrangedSubview(spacerView);
         if expandedView != nil {
             self.addSubview(expandAction);
-            
             expandableView.addSubview(expandedView!);
             stackView.addArrangedSubview(expandableView);
         }
