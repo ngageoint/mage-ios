@@ -68,7 +68,6 @@ class DateView : BaseFieldView {
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
-        textField.leadingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     required init(coder aDecoder: NSCoder) {
