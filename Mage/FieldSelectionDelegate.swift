@@ -41,7 +41,7 @@ class FieldSelectionCoordinator {
             editSelect = SelectEditViewController(fieldDefinition: field, andValue: formField?.value, andDelegate: self, scheme: self.scheme);
             editSelect?.title = field[FieldKey.title.key] as? String;
             if (field[FieldKey.type.key] as? String == FieldType.multiselectdropdown.key) {
-                editSelect?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.editDone));
+                editSelect?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(self.editDone));
             }
             editSelect?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.editCanceled));
             delegate?.launchFieldSelectionViewController(viewController: editSelect!);
