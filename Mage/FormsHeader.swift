@@ -56,7 +56,6 @@ class FormsHeader: UIView {
             headerLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
             headerLabel.autoAlignAxis(toSuperviewAxis: .horizontal);
             reorderButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 16), excludingEdge: .left);
-            reorderButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
         }
         super.updateConstraints();
     }

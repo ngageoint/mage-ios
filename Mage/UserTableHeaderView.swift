@@ -10,7 +10,8 @@ import Foundation
 import PureLayout
 
 class UserTableHeaderView : UIView, UINavigationControllerDelegate {
-    
+    var didSetupConstraints = false;
+
     var viewWasInitialized = false;
     var userLastLocation: CLLocation?;
     var user: User?;
@@ -18,6 +19,31 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var childCoordinators: [Any] = [];
     weak var navigationController: UINavigationController?;
     var scheme: MDCContainerScheming!;
+    
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            avatarImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5));
+            locationIcon.autoPinEdge(toSuperviewEdge: .leading);
+            locationIcon.autoAlignAxis(.horizontal, toSameAxisOf: locationLabel);
+            locationLabel.autoPinEdge(.leading, to: .trailing, of: locationIcon, withOffset: 0);
+            locationLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+            phoneIcon.autoPinEdge(toSuperviewEdge: .leading);
+            phoneIcon.autoAlignAxis(.horizontal, toSameAxisOf: phoneLabel);
+            phoneLabel.autoPinEdge(.leading, to: .trailing, of: phoneIcon, withOffset: 0);
+            phoneLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+            emailIcon.autoPinEdge(toSuperviewEdge: .leading);
+            emailIcon.autoAlignAxis(.horizontal, toSameAxisOf: emailLabel);
+            emailLabel.autoPinEdge(.leading, to: .trailing, of: emailIcon, withOffset: 0);
+            emailLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+            
+            mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+            avatarBorder.autoPinEdge(toSuperviewEdge: .leading, withInset: 8);
+            avatarBorder.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: -32);
+            stack.autoPinEdge(.top, to: .bottom, of: avatarBorder, withOffset: 4);
+            stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8), excludingEdge: .top);
+        }
+        super.updateConstraints();
+    }
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
         self.scheme = containerScheme;
@@ -57,7 +83,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let border = UIView(forAutoLayout: ());
         border.autoSetDimensions(to: CGSize(width: 80, height: 80));
         border.addSubview(avatarImage);
-        avatarImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5));
         border.layer.cornerRadius = 4.0;
         
         let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(portraitClick));
@@ -112,10 +137,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         locationView.backgroundColor = UIColor.clear;
         locationView.addSubview(locationIcon);
         locationView.addSubview(locationLabel);
-        locationIcon.autoPinEdge(toSuperviewEdge: .leading);
-        locationIcon.autoAlignAxis(.horizontal, toSameAxisOf: locationLabel);
-        locationLabel.autoPinEdge(.leading, to: .trailing, of: locationIcon, withOffset: 0);
-        locationLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
         
         let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(launchMapApp));
         singleTap.numberOfTapsRequired = 1;
@@ -154,10 +175,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
        
         phoneView.addSubview(phoneIcon);
         phoneView.addSubview(phoneLabel);
-        phoneIcon.autoPinEdge(toSuperviewEdge: .leading);
-        phoneIcon.autoAlignAxis(.horizontal, toSameAxisOf: phoneLabel);
-        phoneLabel.autoPinEdge(.leading, to: .trailing, of: phoneIcon, withOffset: 0);
-        phoneLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+
         return phoneView;
     }()
     
@@ -188,10 +206,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         
         emailView.addSubview(emailIcon);
         emailView.addSubview(emailLabel);
-        emailIcon.autoPinEdge(toSuperviewEdge: .leading);
-        emailIcon.autoAlignAxis(.horizontal, toSameAxisOf: emailLabel);
-        emailLabel.autoPinEdge(.leading, to: .trailing, of: emailIcon, withOffset: 0);
-        emailLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
         return emailView;
     }()
     
@@ -230,11 +244,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         self.addSubview(mapView);
         self.addSubview(avatarBorder);
         self.addSubview(stack);
-        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
-        avatarBorder.autoPinEdge(toSuperviewEdge: .leading, withInset: 8);
-        avatarBorder.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: -32);
-        stack.autoPinEdge(.top, to: .bottom, of: avatarBorder, withOffset: 4);
-        stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8), excludingEdge: .top);
         
         viewWasInitialized = true;
     }

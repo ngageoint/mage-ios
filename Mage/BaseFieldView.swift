@@ -10,6 +10,7 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class BaseFieldView : UIView {
+    var didSetupConstraints = false;
     internal var field: [String: Any]!;
     internal weak var delegate: (ObservationFormFieldListener & FieldSelectionDelegate)?;
     internal var fieldValueValid: Bool! = false;
@@ -75,7 +76,6 @@ class BaseFieldView : UIView {
         if (!editMode) {
             viewStack.spacing = 0;
         }
-        viewStack.autoPinEdgesToSuperviewEdges();
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
@@ -87,6 +87,13 @@ class BaseFieldView : UIView {
         var font = scheme.typographyScheme.body1;
         font = font.withSize(font.pointSize * 0.8);
         fieldNameLabel.font = font;
+    }
+    
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            viewStack.autoPinEdgesToSuperviewEdges();
+        }
+        super.updateConstraints();
     }
     
     func setPlaceholder(textField: MDCFilledTextField) {

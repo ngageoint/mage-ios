@@ -120,6 +120,20 @@ class GeometryView : BaseFieldView {
         self.mapDelegate = nil;
     }
     
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            if (editMode) {
+                
+            } else {
+                latitudeLongitudeButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), excludingEdge: .right);
+                accuracyLabel.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton);
+                accuracyLabel.autoPinEdge(.top, to: .top, of: latitudeLongitudeButton);
+                accuracyLabel.autoMatch(.height, to: .height, of: latitudeLongitudeButton);
+            }
+        }
+        super.updateConstraints();
+    }
+    
     @objc func locationTapped() {
         observationActionsDelegate?.copyLocation?(latitudeLongitudeButton.currentTitle ?? "");
     }
@@ -192,13 +206,7 @@ class GeometryView : BaseFieldView {
 
             let wrapper = UIView(forAutoLayout: ());
             wrapper.addSubview(latitudeLongitudeButton);
-            latitudeLongitudeButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0), excludingEdge: .right);
-            
             wrapper.addSubview(accuracyLabel);
-            accuracyLabel.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton);
-            accuracyLabel.autoPinEdge(.top, to: .top, of: latitudeLongitudeButton);
-            accuracyLabel.autoMatch(.height, to: .height, of: latitudeLongitudeButton);
-            
             viewStack.addArrangedSubview(wrapper);
         }
     }
