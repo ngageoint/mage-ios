@@ -145,7 +145,7 @@ extension FormPickerViewController: UITableViewDataSource {
             cell.accessibilityLabel = safeForm["name"] as? String;
             cell.textLabel?.text = safeForm["name"] as? String;
             cell.detailTextLabel?.text = safeForm["description"] as? String;
-            cell.imageView?.image = UIImage(named: "description")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
+            cell.imageView?.image = UIImage(named: "description")?.aspectResize(to: CGSize(width: 40, height: 40)).withRenderingMode(.alwaysTemplate);
             
             let formCount = formIdCount[safeForm["id"] as! Int] ?? 0;
             let safeFormMin: Int = (safeForm["min"] as? Int) ?? 0;
@@ -177,6 +177,16 @@ extension FormPickerViewController: UITableViewDataSource {
 }
 
 extension FormPickerViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let safeForm = self.forms?[indexPath.row] {
+            if (safeForm["description"] != nil) {
+                return 72.0
+            } else {
+                return 56.0
+            }
+        }
+        return UITableView.automaticDimension;
+    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let safeForm = self.forms?[indexPath.row] {
