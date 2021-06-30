@@ -26,6 +26,8 @@ class GeometryView : BaseFieldView {
         // this is just an estimated size
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 300, height: 100));
         textField.label.text = fieldNameLabel.text
+        textField.trailingView = UIImageView(image: UIImage(named: "observations")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate));
+        textField.trailingViewMode = .always;
         textField.sizeToFit()
         return textField;
     }()
@@ -66,6 +68,7 @@ class GeometryView : BaseFieldView {
         accuracyLabel.font = scheme.typographyScheme.caption;
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
+        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     required init(coder aDecoder: NSCoder) {
