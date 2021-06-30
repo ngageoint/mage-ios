@@ -10,8 +10,7 @@ import Foundation
 
 class RadioFieldView: BaseFieldView {
     
-    var choiceButtons: [String: MDCButton] = [:];
-    var labels: [UILabel] = [];
+    var choiceButtons: [String: (button: MDCButton, label: UILabel)] = [:];
     
     lazy var errorLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
@@ -33,6 +32,23 @@ class RadioFieldView: BaseFieldView {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.addFieldView();
         setValue(value);
+    }
+    
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            if (editMode) {
+                for value in choiceButtons.values {
+                    value.button.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4), excludingEdge: .right);
+                    value.button.autoSetDimensions(to: CGSize(width: 30, height: 30))
+                    value.label.autoPinEdge(toSuperviewEdge: .right);
+                    value.label.autoAlignAxis(.horizontal, toSameAxisOf: value.button);
+                    value.label.autoPinEdge(.left, to: .right, of: value.button, withOffset: 8);
+                }
+            } else {
+                
+            }
+        }
+        super.updateConstraints();
     }
     
     func addFieldView() {
@@ -60,44 +76,36 @@ class RadioFieldView: BaseFieldView {
             
             view.addSubview(button);
             let label = UILabel(forAutoLayout: ());
-            labels.append(label);
             label.text = choice[FieldKey.title.key] as? String;
             view.addSubview(label);
             
             button.accessibilityLabel = "\(field[FieldKey.name.key] as? String ?? "") \(label.text ?? "") radio";
-            choiceButtons[label.text ?? ""] = button;
+            choiceButtons[label.text ?? ""] = (button:button, label:label);
             
-            button.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4), excludingEdge: .right);
             button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
             button.inkMaxRippleRadius = 30;
             button.inkStyle = .unbounded;
-            button.autoSetDimensions(to: CGSize(width: 30, height: 30))
-            label.autoPinEdge(toSuperviewEdge: .right);
-            label.autoAlignAxis(.horizontal, toSameAxisOf: button);
-            label.autoPinEdge(.left, to: .right, of: button, withOffset: 8);
             viewStack.addArrangedSubview(view);
         }
     }
     
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
-        for button in choiceButtons.values {
-            button.applyTextTheme(withScheme: scheme);
-            button.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-            button.setImageTintColor(scheme.colorScheme.primaryColor, for: .selected)
-        }
-        for label in labels {
-            label.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+        for value in choiceButtons.values {
+            value.button.applyTextTheme(withScheme: scheme);
+            value.button.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+            value.button.setImageTintColor(scheme.colorScheme.primaryColor, for: .selected)
+            value.label.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
         }
     }
     
     @objc func handleRadioTap(_ button: MDCButton) {
         for cb in choiceButtons {
-            if (cb.value == button) {
+            if (cb.value.button == button) {
                 value = cb.key;
-                cb.value.isSelected = true;
+                cb.value.button.isSelected = true;
             } else {
-                cb.value.isSelected = false;
+                cb.value.button.isSelected = false;
             }
         }
     }
@@ -107,9 +115,9 @@ class RadioFieldView: BaseFieldView {
         if (editMode) {
             for cb in choiceButtons {
                 if (cb.key == value as? String) {
-                    cb.value.isSelected = true;
+                    cb.value.button.isSelected = true;
                 } else {
-                    cb.value.isSelected = false;
+                    cb.value.button.isSelected = false;
                 }
             }
         } else {

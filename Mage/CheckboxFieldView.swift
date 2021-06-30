@@ -32,7 +32,6 @@ class CheckboxFieldView : BaseFieldView {
         let label = UILabel(forAutoLayout: ());
         label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
         label.text = "";
-        label.autoSetDimension(.height, toSize: 14.5);
         return label;
     }()
     
@@ -40,10 +39,6 @@ class CheckboxFieldView : BaseFieldView {
         let containerView: UIView = UIView(forAutoLayout: ());
         containerView.addSubview(checkboxSwitch);
         containerView.addSubview(label);
-        checkboxSwitch.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
-        label.autoPinEdge(.leading, to: .trailing, of: checkboxSwitch, withOffset: 16);
-        label.autoPinEdge(toSuperviewEdge: .trailing);
-        label.autoAlignAxis(.horizontal, toSameAxisOf: checkboxSwitch);
         return containerView;
     }()
     
@@ -66,6 +61,18 @@ class CheckboxFieldView : BaseFieldView {
     init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Bool) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.addFieldView();
+    }
+    
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            checkboxSwitch.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
+            label.autoPinEdge(.leading, to: .trailing, of: checkboxSwitch, withOffset: 16);
+            label.autoPinEdge(toSuperviewEdge: .trailing);
+            label.autoAlignAxis(.horizontal, toSameAxisOf: checkboxSwitch);
+            errorLabel.autoSetDimension(.height, toSize: 14.5);
+
+        }
+        super.updateConstraints();
     }
     
     func addFieldView() {

@@ -79,6 +79,21 @@ class TextFieldView : BaseFieldView {
         self.addFieldView();
     }
     
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            if (editMode) {
+                if (multiline) {
+                    multilineTextField.autoPinEdgesToSuperviewEdges();
+                } else {
+                    textField.autoPinEdgesToSuperviewEdges();
+                }
+            } else {
+                
+            }
+        }
+        super.updateConstraints();
+    }
+    
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
         if (multiline) {
@@ -92,10 +107,8 @@ class TextFieldView : BaseFieldView {
         if (editMode) {
             if (multiline) {
                 self.addSubview(multilineTextField);
-                multilineTextField.autoPinEdgesToSuperviewEdges();
             } else {
                 self.addSubview(textField);
-                textField.autoPinEdgesToSuperviewEdges();
             }
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
