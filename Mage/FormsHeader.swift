@@ -18,11 +18,15 @@ class FormsHeader: UIView {
         return label;
     }()
     
-    lazy var reorderButton: UIButton = {
-        let reorderButton = UIButton(type: .custom);
-        reorderButton.accessibilityLabel = "reorder";
-        reorderButton.setImage(UIImage(named: "reorder"), for: .normal);
-        return reorderButton;
+    lazy var reorderButton: MDCButton = {
+        let button = MDCButton();
+        button.accessibilityLabel = "reorder";
+        button.setImage(UIImage(named: "reorder")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        button.inkMaxRippleRadius = 30;
+        button.inkStyle = .unbounded;
+        return button;
     }()
     
     override init(frame: CGRect) {
@@ -38,6 +42,7 @@ class FormsHeader: UIView {
         self.scheme = scheme;
         headerLabel.font = scheme.typographyScheme.overline;
         headerLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        reorderButton.applyTextTheme(withScheme: scheme);
         reorderButton.tintColor = scheme.colorScheme.primaryColor;
     }
     

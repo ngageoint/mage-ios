@@ -383,11 +383,14 @@ import MaterialComponents.MDCCard
     }
     
     @objc func reorderForms() {
-        removeDeletedForms();
-        guard let safeObservation = self.observation else {
-            return
+        // allow MDCButton ink ripple
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+            removeDeletedForms();
+            guard let safeObservation = self.observation else {
+                return
+            }
+            self.delegate?.reorderForms(observation: safeObservation);
         }
-        self.delegate?.reorderForms(observation: safeObservation);
     }
     
     @objc func addForm(sender: UIButton) {
