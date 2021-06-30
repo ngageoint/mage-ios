@@ -569,6 +569,7 @@ import MaterialComponents.MDCCard
         observationForms.append(newForm);
         observationProperties[ObservationKey.forms.key] = observationForms;
         self.observation?.properties = observationProperties;
+        let previousStackViewHeight = stackView.bounds.size.height;
         let card:ExpandableCard = addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
         if let safeScheme = scheme {
             card.applyTheme(withScheme: safeScheme);
@@ -576,7 +577,10 @@ import MaterialComponents.MDCCard
         card.expanded = true;
         // scroll the view down to the form they just added but not quite all the way down because then it looks like you
         // transitioned to a new view
-        scrollView.setContentOffset(CGPoint(x: 0, y: stackView.bounds.size.height - 75), animated: true);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+            let targetRect = CGRect(x: 0, y: previousStackViewHeight + min(UIScreen.main.bounds.size.height - 300, card.bounds.size.height + 75), width: 1, height: 1)
+            scrollView.scrollRectToVisible(targetRect, animated: true)
+        }
         setupFormDependentButtons();
     }
     
