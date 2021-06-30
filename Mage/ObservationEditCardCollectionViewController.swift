@@ -272,7 +272,7 @@ import MaterialComponents.MDCCard
             if let safeScheme = scheme {
                 card.applyTheme(withScheme: safeScheme);
             }
-            card.expanded = newObservation || self.observationForms.count == 1;
+            card.expanded = newObservation || index == 0;
         }
     }
     
