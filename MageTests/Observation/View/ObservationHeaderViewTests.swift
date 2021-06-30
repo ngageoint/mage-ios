@@ -144,7 +144,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "directions");
                 tester().tapView(withAccessibilityLabel: "directions");
                 
-                expect(delegate.getDirectionsCalled).to(beTrue());
+                expect(delegate.getDirectionsToObservationsCalled).to(beTrue());
             }
             
             it("tap important button") {

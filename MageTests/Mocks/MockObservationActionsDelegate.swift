@@ -14,6 +14,7 @@ class MockObservationActionsDelegate: ObservationActionsDelegate {
     var showFavoritesCalled = false;
     var favoriteCalled = false;
     var getDirectionsCalled = false;
+    var getDirectionsToObservationsCalled = false;
     var makeImportantCalled = false;
     var makeImportantReason: String?;
     var removeImportantCalled = false;
@@ -34,6 +35,11 @@ class MockObservationActionsDelegate: ObservationActionsDelegate {
     
     func getDirections(_ observation: Observation) {
         getDirectionsCalled = true;
+        observationSent = observation;
+    }
+    
+    func getDirectionsToObservation(_ observation: Observation) {
+        getDirectionsToObservationsCalled = true;
         observationSent = observation;
     }
     

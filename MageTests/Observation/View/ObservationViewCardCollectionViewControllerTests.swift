@@ -128,8 +128,6 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 
                 view = window;
                 
-                
-                
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
                 })

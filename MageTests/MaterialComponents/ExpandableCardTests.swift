@@ -35,6 +35,12 @@ class ExpandableCardTests: KIFSpec {
                 window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = controller;
                 
+                if (view != nil) {
+                    for subview in view.subviews {
+                        subview.removeFromSuperview();
+                    }
+                }
+                
                 Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }

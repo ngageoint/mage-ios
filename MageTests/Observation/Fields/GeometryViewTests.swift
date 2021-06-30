@@ -622,8 +622,14 @@ class GeometryViewTests: KIFSpec {
                 expect(delegate.viewControllerToLaunch).to(beAnInstanceOf(GeometryEditViewController.self));
                 
                 nc.pushViewController(delegate.viewControllerToLaunch!, animated: false);
+                
+                tester().waitForView(withAccessibilityLabel: "Latitude Value")
+                tester().clearText(fromAndThenEnterText: "1.00000", intoViewWithAccessibilityLabel: "Latitude Value")
+                tester().clearText(fromAndThenEnterText: "1.00000", intoViewWithAccessibilityLabel: "Longitude Value")
+                viewTester().usingFirstResponder().view.resignFirstResponder();
                 tester().tapView(withAccessibilityLabel: "Apply");
                 
+                tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
                 expect((viewTester().usingLabel("\(field[FieldKey.name.key] as? String ?? "") value")!.view as! MDCFilledTextField).text) == "1.00000, 1.00000 "
                 
                 expect(UIApplication.getTopViewController()).toNot(beAnInstanceOf(delegate.viewControllerToLaunch!.classForCoder));

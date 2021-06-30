@@ -31,7 +31,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 window = TestHelpers.getKeyWindowVisible();
                 
                 Nimble_Snapshots.setNimbleTolerance(0.0);
-//                Nimble_Snapshots.recordAllSnapshots()
+                Nimble_Snapshots.recordAllSnapshots()
                 
                 TestHelpers.resetUserDefaults();
 
@@ -823,11 +823,10 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
-                
-                tester().enterText("The Title", intoViewWithAccessibilityLabel: "field0");
-                tester().tapView(withAccessibilityLabel: "Done");
-                tester().clearTextFromView(withAccessibilityLabel: "field1")
-                tester().tapView(withAccessibilityLabel: "Done");
+                tester().setText("The Title", intoViewWithAccessibilityLabel: "field0")
+                tester().setText("", intoViewWithAccessibilityLabel: "field1");
+                (viewTester().usingLabel("Field View field0").view as? TextFieldView)?.textFieldDidEndEditing(viewTester().usingLabel("field0").view as! UITextField)
+                (viewTester().usingLabel("Field View field1").view as? TextFieldView)?.textFieldDidEndEditing(viewTester().usingLabel("field1").view as! UITextField)
                 expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
         }

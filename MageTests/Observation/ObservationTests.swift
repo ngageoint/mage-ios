@@ -198,7 +198,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("February 10, 2017 at 3:20:30 AM MST"))
+                expect(observation.primaryFieldText()).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for email field") {
@@ -426,7 +426,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("February 10, 2017 at 3:20:30 AM MST"))
+                expect(observation.secondaryFieldText()).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for email secondary field") {
@@ -654,7 +654,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("February 10, 2017 at 3:20:30 AM MST"))
+                expect(observation.primaryFeedFieldText()).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for email feed field") {
@@ -1080,7 +1080,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("February 10, 2017 at 3:20:30 AM MST"))
+                expect(observation.secondaryFeedFieldText()).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for secondary email feed field") {

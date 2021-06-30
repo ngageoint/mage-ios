@@ -22,7 +22,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("FeedItemViewController no timestamp") {
-            let recordSnapshots = false;
+            let recordSnapshots = true;
             Nimble_Snapshots.setNimbleTolerance(0.1);
 
             var controller: FeedItemViewController!
@@ -409,7 +409,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            it("feed item with primary and long secondary value and icon mappable") {
+            fit("feed item with primary and long secondary value and icon mappable") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae neque et felis mattis congue ut in nisl. Phasellus a massa ipsum. In tempor nisi sit amet erat dignissim blandit. Aenean euismod non urna vel lobortis. Nulla interdum ipsum vel rhoncus efficitur. Aliquam suscipit viverra dui eu facilisis. Pellentesque iaculis, arcu nec porttitor tincidunt, urna ligula auctor nulla, sit amet egestas tortor mi in leo."])
                 var completeTest = false;
