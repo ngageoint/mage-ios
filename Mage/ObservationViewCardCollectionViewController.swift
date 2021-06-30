@@ -357,7 +357,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     func removeImportant(_ observation: Observation) {
         observation.removeImportant() { success, error in
             // update the view
-            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+            observation.managedObjectContext?.refresh(observation, mergeChanges: true);
             self.headerCard?.populate(observation: observation);
         }
     }

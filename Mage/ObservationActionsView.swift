@@ -74,42 +74,59 @@ class ObservationActionsView: UIView {
         return actionButtonView;
     }()
     
-    private lazy var favoriteCountButton: UIButton = {
-        let button = UIButton(type: .custom);
+    private lazy var favoriteCountButton: MDCButton = {
+        let button = MDCButton();
         button.accessibilityLabel = "show favorites";
         button.addTarget(self, action: #selector(showFavorites), for: .touchUpInside);
+        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         return button;
     }()
     
-    private lazy var moreButton: UIButton = {
-        let moreButton = UIButton(type: .custom);
+    private lazy var moreButton: MDCButton = {
+        let moreButton = MDCButton();
         moreButton.accessibilityLabel = "more";
-        moreButton.setImage(UIImage(named: "more"), for: .normal);
+        moreButton.setImage(UIImage(named: "more")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         moreButton.addTarget(self, action: #selector(moreTapped), for: .touchUpInside);
+        moreButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        moreButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        moreButton.inkMaxRippleRadius = 30;
+        moreButton.inkStyle = .unbounded;
         return moreButton;
     }()
     
-    private lazy var favoriteButton: UIButton = {
-        let favoriteButton = UIButton(type: .custom);
+    private lazy var favoriteButton: MDCButton = {
+        let favoriteButton = MDCButton();
         favoriteButton.accessibilityLabel = "favorite";
-        favoriteButton.setImage(UIImage(named: "favorite_border"), for: .normal);
+        favoriteButton.setImage(UIImage(named: "favorite_border")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
+        favoriteButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        favoriteButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        favoriteButton.inkMaxRippleRadius = 30;
+        favoriteButton.inkStyle = .unbounded;
         return favoriteButton;
     }()
     
-    private lazy var directionsButton: UIButton = {
-        let directionsButton = UIButton(type: .custom);
+    private lazy var directionsButton: MDCButton = {
+        let directionsButton = MDCButton();
         directionsButton.accessibilityLabel = "directions";
-        directionsButton.setImage(UIImage(named: "directions_large"), for: .normal);
+        directionsButton.setImage(UIImage(named: "directions_large")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToObservation), for: .touchUpInside);
+        directionsButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        directionsButton.inkMaxRippleRadius = 30;
+        directionsButton.inkStyle = .unbounded;
         return directionsButton;
     }()
     
-    private lazy var importantButton: UIButton = {
-        let importantButton = UIButton(type: .custom);
+    private lazy var importantButton: MDCButton = {
+        let importantButton = MDCButton();
         importantButton.accessibilityLabel = "important";
-        importantButton.setImage(UIImage(named: "flag_outline"), for: .normal);
+        importantButton.setImage(UIImage(named: "flag_outline")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         importantButton.addTarget(self, action: #selector(toggleImportant), for: .touchUpInside);
+        importantButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+        importantButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        importantButton.inkMaxRippleRadius = 30;
+        importantButton.inkStyle = .unbounded;
         return importantButton;
     }()
     
@@ -119,8 +136,23 @@ class ObservationActionsView: UIView {
         textField.accessibilityLabel = "Important Description";
         textField.label.text = "Important Description"
         textField.placeholder = "Important Description"
+        textField.inputAccessoryView = accessoryView;
         textField.sizeToFit();
         return textField;
+    }()
+    
+    private lazy var accessoryView: UIToolbar = {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44));
+        toolbar.autoSetDimension(.height, toSize: 44);
+        
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed));
+        doneBarButton.accessibilityLabel = "Done";
+        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed));
+        cancelBarButton.accessibilityLabel = "Cancel";
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil);
+        
+        toolbar.items = [cancelBarButton, flexSpace, doneBarButton];
+        return toolbar;
     }()
     
     private lazy var setImportantButton: MDCButton = {
@@ -171,12 +203,21 @@ class ObservationActionsView: UIView {
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.scheme = scheme;
-        favoriteButton.tintColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        importantButton.tintColor = isImportant ? MDCPalette.orange.accent400 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        favoriteButton.applyTextTheme(withScheme: scheme);
+        importantButton.applyTextTheme(withScheme: scheme);
+        directionsButton.applyTextTheme(withScheme: scheme);
+        moreButton.applyTextTheme(withScheme: scheme);
+        favoriteCountButton.applyTextTheme(withScheme: scheme);
+        
+        favoriteButton.setImageTintColor(currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        favoriteButton.inkColor = MDCPalette.green.accent700?.withAlphaComponent(0.2);
+        importantButton.setImageTintColor(isImportant ? MDCPalette.orange.accent400 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        importantButton.inkColor = MDCPalette.orange.accent400?.withAlphaComponent(0.2);
+        directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+        moreButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+
         cancelOrRemoveButton.applyTextTheme(withScheme: scheme);
         setImportantButton.applyContainedTheme(withScheme: scheme);
-        directionsButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        moreButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -205,17 +246,12 @@ class ObservationActionsView: UIView {
     override func updateConstraints() {
         if (!didSetupConstraints) {
             moreButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left);
-            directionsButton.autoPinEdge(.right, to: .left, of: moreButton, withOffset: -32);
+            directionsButton.autoPinEdge(.right, to: .left, of: moreButton, withOffset: -16);
             directionsButton.autoAlignAxis(.horizontal, toSameAxisOf: moreButton);
-            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -32);
+            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -16);
             favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
-            importantButton.autoPinEdge(.right, to: .left, of: favoriteButton, withOffset: -32);
+            importantButton.autoPinEdge(.right, to: .left, of: favoriteButton, withOffset: -16);
             importantButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
-            
-            moreButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
-            directionsButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
-            favoriteButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
-            importantButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
             
             favoriteCountButton.autoAlignAxis(toSuperviewAxis: .horizontal);
             favoriteCountButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
@@ -286,15 +322,25 @@ class ObservationActionsView: UIView {
     }
     
     @objc func makeImportant() {
+        importantInputView.resignFirstResponder();
         observationActionsDelegate?.makeImportant?(observation!, reason: self.importantInputView.text ?? "");
         toggleImportant();
     }
     
     @objc func removeImportant() {
+        importantInputView.resignFirstResponder();
         if (observation?.isImportant() == true) {
             observationActionsDelegate?.removeImportant?(observation!);
         }
         
         toggleImportant();
+    }
+    
+    @objc func doneButtonPressed() {
+        importantInputView.resignFirstResponder();
+    }
+    
+    @objc func cancelButtonPressed() {
+        importantInputView.resignFirstResponder();
     }
 }
