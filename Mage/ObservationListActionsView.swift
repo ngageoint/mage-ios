@@ -14,7 +14,6 @@ class ObservationListActionsView: UIView {
     var didSetupConstraints = false;
     var observation: Observation?;
     var observationActionsDelegate: ObservationActionsDelegate?;
-    internal var controller: MDCTextInputControllerFilled = MDCTextInputControllerFilled();
     internal var currentUserFavorited: Bool = false;
     internal var isImportant: Bool = false;
     var bottomSheet: MDCBottomSheetController?;
