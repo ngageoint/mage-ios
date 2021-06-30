@@ -30,7 +30,7 @@ class ObservationFormReorder: UITableViewController {
     
     private lazy var descriptionHeaderView: UILabel = {
         let label = UILabel(forAutoLayout: ());
-        label.text = "The first form in this list is the primary form, which determines how MAGE displays the observation on the map and in the feed. The forms will be displayed, as ordered, in all other views. Drag rows to reorder the forms.";
+        label.text = "The first form in this list is the primary form, which determines how MAGE displays the observation on the map and in the feed. The forms will be displayed, as ordered, in all other views.";
         label.numberOfLines = 0;
         label.lineBreakMode = .byWordWrapping;
         return label;
@@ -51,7 +51,7 @@ class ObservationFormReorder: UITableViewController {
         self.observation = observation
         self.delegate = delegate;
         self.scheme = containerScheme;
-        super.init(style: .plain)
+        super.init(style: .grouped)
         self.title = "Reorder Forms";
         self.view.accessibilityLabel = "Reorder Forms";
         tableView.register(cellClass: ObservationFormTableViewCell.self)
@@ -131,6 +131,10 @@ class ObservationFormReorder: UITableViewController {
         observationProperties[ObservationKey.forms.key] = observationForms;
         self.observation.properties = observationProperties;
         delegate.formsReordered(observation: self.observation);
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Drag to reorder forms";
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
