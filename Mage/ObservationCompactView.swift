@@ -56,6 +56,12 @@ class ObservationCompactView: UIView {
         fatalError("This class does not support NSCoding")
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let result = super.hitTest(point, with: event)
+        if result == self { return nil }
+        return result
+    }
+    
     init(cornerRadius: CGFloat, includeAttachments: Bool = false, actionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming? = nil) {
         super.init(frame: CGRect.zero);
         translatesAutoresizingMaskIntoConstraints = false;

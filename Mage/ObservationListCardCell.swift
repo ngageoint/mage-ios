@@ -25,7 +25,6 @@ import MaterialComponents.MDCCard;
     
     private lazy var compactView: ObservationCompactView = {
         let view = ObservationCompactView(cornerRadius: self.card.cornerRadius, includeAttachments: true);
-        view.isUserInteractionEnabled = false;
         return view;
     }()
     
