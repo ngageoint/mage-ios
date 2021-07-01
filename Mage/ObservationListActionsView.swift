@@ -156,6 +156,8 @@ class ObservationListActionsView: UIView {
         
         if (favoriteCounter != 0) {
             favoriteCount.text = "\(favoriteCounter)"
+        } else {
+            favoriteCount.text = nil;
         }
         
         isImportant = false;
