@@ -42,7 +42,6 @@ class ObservationListActionsView: UIView {
         favoriteButton.accessibilityLabel = "favorite";
         favoriteButton.setImage(UIImage(named: "favorite_border")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
-        favoriteButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
         favoriteButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         favoriteButton.inkMaxRippleRadius = 30;
         favoriteButton.inkStyle = .unbounded;
@@ -59,7 +58,6 @@ class ObservationListActionsView: UIView {
         directionsButton.accessibilityLabel = "directions";
         directionsButton.setImage(UIImage(named: "directions_large")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToObservation), for: .touchUpInside);
-        directionsButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
         directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         directionsButton.inkMaxRippleRadius = 30;
         directionsButton.inkStyle = .unbounded;
@@ -96,21 +94,22 @@ class ObservationListActionsView: UIView {
     
     func layoutView() {
         self.addSubview(actionButtonView);
-        actionButtonView.autoSetDimension(.height, toSize: 56);
-        actionButtonView.autoPinEdgesToSuperviewEdges();
     }
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-            directionsButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 24), excludingEdge: .left);
-            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -32);
+            actionButtonView.autoSetDimension(.height, toSize: 56);
+            actionButtonView.autoPinEdgesToSuperviewEdges();
+            
+            directionsButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 24), excludingEdge: .left);
+            favoriteButton.autoPinEdge(.right, to: .left, of: directionsButton, withOffset: -16);
             favoriteButton.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
             favoriteCount.autoPinEdge(.left, to: .right, of: favoriteButton);
             favoriteCount.autoAlignAxis(.horizontal, toSameAxisOf: directionsButton);
             
-            directionsButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
-            favoriteButton.autoSetDimensions(to: CGSize(width: 24, height: 24));
-            
+            directionsButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+            favoriteButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+
             latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
             latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
             didSetupConstraints = true;
