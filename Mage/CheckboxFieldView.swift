@@ -65,11 +65,13 @@ class CheckboxFieldView : BaseFieldView {
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-            checkboxSwitch.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
-            label.autoPinEdge(.leading, to: .trailing, of: checkboxSwitch, withOffset: 16);
-            label.autoPinEdge(toSuperviewEdge: .trailing);
-            label.autoAlignAxis(.horizontal, toSameAxisOf: checkboxSwitch);
-            errorLabel.autoSetDimension(.height, toSize: 14.5);
+            if (editMode) {
+                checkboxSwitch.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
+                label.autoPinEdge(.leading, to: .trailing, of: checkboxSwitch, withOffset: 16);
+                label.autoPinEdge(toSuperviewEdge: .trailing);
+                label.autoAlignAxis(.horizontal, toSameAxisOf: checkboxSwitch);
+                errorLabel.autoSetDimension(.height, toSize: 14.5);
+            }
 
         }
         super.updateConstraints();

@@ -44,7 +44,7 @@ class ObservationFormTableViewCell: UITableViewCell {
     }()
     
     private lazy var primaryLabel: UILabel = {
-        let label = UILabel(forAutoLayout: ());//UILabelPadding(padding: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+        let label = UILabel(forAutoLayout: ());
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
@@ -52,7 +52,7 @@ class ObservationFormTableViewCell: UITableViewCell {
     }()
     
     private lazy var secondaryLabel: UILabel = {
-        let label = UILabel(forAutoLayout: ());//UILabelPadding(padding: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+        let label = UILabel(forAutoLayout: ());
         label.numberOfLines = 1
         label.textAlignment = .left
         label.lineBreakMode = .byTruncatingTail
@@ -141,6 +141,7 @@ class ObservationFormTableViewCell: UITableViewCell {
     
     override func updateConstraints() {
         if (!didSetUpConstraints) {
+            self.contentView.bounds = CGRect(x: 0.0, y: 0.0, width: 99999.0, height: 99999.0);
             stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 56, bottom: 8, right: 0))
             stackView.autoSetDimension(.height, toSize: 48, relation: .greaterThanOrEqual)
             if (thumbnail.superview != nil) {

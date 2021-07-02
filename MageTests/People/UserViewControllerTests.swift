@@ -110,7 +110,8 @@ class UserViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Location copied to clipboard");
 
                 tester().tapView(withAccessibilityLabel: "favorite", traits: UIAccessibilityTraits(arrayLiteral: .button));
-                expect((viewTester().usingLabel("favorite").view as! UIButton).tintColor).to(be(MDCPalette.green.accent700));
+                tester().wait(forTimeInterval: 0.5);
+                expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for:.normal)).to(be(MDCPalette.green.accent700));
 
                 tester().tapView(withAccessibilityLabel: "directions", traits: UIAccessibilityTraits(arrayLiteral: .button));
                 tester().waitForView(withAccessibilityLabel: "Apple Maps");
@@ -120,8 +121,9 @@ class UserViewControllerTests: KIFSpec {
 
                 let observation: Observation = (user.observations?.first!)!;
                 let attachment: Attachment = (observation.attachments?.first!)!;
-                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "")")
-                tester().tapView(withAccessibilityLabel: "attachment \(attachment.name ?? "")");
+                TestHelpers.printAllAccessibilityLabelsInWindows()
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
+                tester().tapView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded");
                 expect(nc.topViewController).toEventually(beAnInstanceOf(ImageAttachmentViewController.self));
                 tester().tapView(withAccessibilityLabel: "User ABC");
                 expect(nc.topViewController).toEventually(beAnInstanceOf(UserViewController.self));

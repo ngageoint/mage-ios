@@ -22,7 +22,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("FeedItemViewController no timestamp") {
-            let recordSnapshots = true;
+            let recordSnapshots = false;
             Nimble_Snapshots.setNimbleTolerance(0.1);
 
             var controller: FeedItemViewController!
@@ -32,7 +32,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 print("Record snapshot?", recordSnapshots);
                 if (recordSnapshots || recordThisSnapshot) {
                     DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 1.0);
+                        Thread.sleep(forTimeInterval: 5.0);
                         DispatchQueue.main.async {
                             expect(view) == recordSnapshot();
                             doneClosure?();
@@ -54,11 +54,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
-                UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
-                
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-                    return request.url == URL(string: "https://magetest/icon.png");
+                    return request.url == URL(string: "https://magetest/api/icons/abcdefg/content");
                 }) { (request) -> HTTPStubsResponse in
                     let stubPath = OHPathForFile("icon27.png", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
@@ -70,6 +67,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 Server.setCurrentEventId(1);
                 
@@ -342,7 +340,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon non mappable") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
                 
                 var completeTest = false;
@@ -365,7 +363,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon mappable") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
                 var completeTest = false;
                 
@@ -388,7 +386,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
                 UserDefaults.standard.showMGRS = true;
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
                 var completeTest = false;
                 
@@ -409,8 +407,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 }
             }
             
-            fit("feed item with primary and long secondary value and icon mappable") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+            it("feed item with primary and long secondary value and icon mappable") {
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae neque et felis mattis congue ut in nisl. Phasellus a massa ipsum. In tempor nisi sit amet erat dignissim blandit. Aenean euismod non urna vel lobortis. Nulla interdum ipsum vel rhoncus efficitur. Aliquam suscipit viverra dui eu facilisis. Pellentesque iaculis, arcu nec porttitor tincidunt, urna ligula auctor nulla, sit amet egestas tortor mi in leo."])
                 var completeTest = false;
                 
@@ -750,7 +748,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon non mappable") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -772,7 +770,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon mappable") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style:["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -795,7 +793,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
                 UserDefaults.standard.showMGRS = true;
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -817,7 +815,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon without timestamp") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
                 var completeTest = false;
                 
@@ -839,7 +837,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and long secondary value and icon mappable") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae neque et felis mattis congue ut in nisl. Phasellus a massa ipsum. In tempor nisi sit amet erat dignissim blandit. Aenean euismod non urna vel lobortis. Nulla interdum ipsum vel rhoncus efficitur. Aliquam suscipit viverra dui eu facilisis. Pellentesque iaculis, arcu nec porttitor tincidunt, urna ligula auctor nulla, sit amet egestas tortor mi in leo.", "timestamp": 1593440445])
                 var completeTest = false;
                 

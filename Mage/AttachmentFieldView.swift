@@ -47,9 +47,7 @@ class AttachmentFieldView : BaseFieldView {
     
     lazy var attachmentHolderView: UIView = {
         let holder = UIView(forAutoLayout: ());
-        holder.autoSetDimension(.height, toSize: 100, relation: .greaterThanOrEqual);
         holder.addSubview(attachmentCollectionView);
-        attachmentCollectionView.autoPinEdgesToSuperviewEdges();
         return holder;
     }()
     
@@ -66,7 +64,6 @@ class AttachmentFieldView : BaseFieldView {
         stackView.distribution = .fill;
         stackView.axis = .horizontal;
         stackView.spacing = 16;
-        stackView.autoSetDimension(.height, toSize: 40);
         let fillerView = UIView();
         fillerView.setContentHuggingPriority(.defaultHigh, for: .horizontal);
         stackView.addArrangedSubview(fillerView);
@@ -77,7 +74,6 @@ class AttachmentFieldView : BaseFieldView {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Audio";
         button.setImage(UIImage(named: "voice")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addAudioAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;
@@ -89,7 +85,6 @@ class AttachmentFieldView : BaseFieldView {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Camera";
         button.setImage(UIImage(named: "camera")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addCameraAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;
@@ -101,7 +96,6 @@ class AttachmentFieldView : BaseFieldView {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Gallery";
         button.setImage(UIImage(named: "gallery")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addGalleryAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;
@@ -113,7 +107,6 @@ class AttachmentFieldView : BaseFieldView {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Video";
         button.setImage(UIImage(named: "video")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.addTarget(self, action: #selector(addVideoAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;
@@ -165,10 +158,7 @@ class AttachmentFieldView : BaseFieldView {
             viewStack.addArrangedSubview(errorLabel);
             viewStack.setCustomSpacing(0, after: errorLabel);
             
-            let actionSpacerView = UIView(forAutoLayout: ());
-            actionSpacerView.addSubview(actionsHolderView);
-            viewStack.addArrangedSubview(actionSpacerView);
-            actionsHolderView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16));
+            viewStack.addArrangedSubview(actionsHolderView);
             
             actionsHolderView.addArrangedSubview(audioButton);
             actionsHolderView.addArrangedSubview(cameraButton);
@@ -226,7 +216,19 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     override func updateConstraints() {
+        if (!didSetupConstraints) {
+            attachmentCollectionView.autoPinEdgesToSuperviewEdges();
+
+            if (editMode) {
+                actionsHolderView.autoSetDimension(.height, toSize: 40);
+                audioButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+                cameraButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+                videoButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+                galleryButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+            }
+        }
         setAttachmentHolderHeight();
+
         super.updateConstraints();
     }
 

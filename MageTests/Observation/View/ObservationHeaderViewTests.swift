@@ -97,15 +97,16 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "important reason");
                 tester().expect(viewTester().usingLabel("important reason").view, toContainText: "This is important")
                 tester().waitForView(withAccessibilityLabel: "FLAGGED BY USER ABC");
-                tester().waitForView(withAccessibilityLabel: "USER ABC • JUN 5, 2020 AT 11:21 AM");
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "USER ABC • 2020-06-05 11:21 MDT");
                 tester().waitForView(withAccessibilityLabel: "At Venue");
                 tester().waitForView(withAccessibilityLabel: "None");
                 tester().waitForView(withAccessibilityLabel: "location geometry")
                 expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
                 tester().waitForView(withAccessibilityLabel: "1 FAVORITE");
-                expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor).to(be(MDCPalette.green.accent700));
+                expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for: .normal)).to(be(MDCPalette.green.accent700));
                 let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! MDCButton
-                expect(importantButton.imageTintColor).to(be(MDCPalette.orange.accent400));
+                expect(importantButton.imageTintColor(for: .normal)).to(be(MDCPalette.orange.accent400));
                 
                 maybeRecordSnapshot(view, doneClosure: {
                     completeTest = true;
@@ -175,15 +176,15 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "important reason");
                 tester().expect(viewTester().usingLabel("important reason").view, toContainText: "This is important")
                 tester().waitForView(withAccessibilityLabel: "FLAGGED BY USER ABC");
-                tester().waitForView(withAccessibilityLabel: "USER ABC • JUN 5, 2020 AT 11:21 AM");
+                tester().waitForView(withAccessibilityLabel: "USER ABC • 2020-06-05 11:21 MDT");
                 tester().waitForView(withAccessibilityLabel: "At Venue");
                 tester().waitForView(withAccessibilityLabel: "None");
                 tester().waitForView(withAccessibilityLabel: "location geometry")
                 expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
                 tester().waitForView(withAccessibilityLabel: "1 FAVORITE");
-                expect((viewTester().usingLabel("favorite").view as! UIButton).tintColor).to(be(MDCPalette.green.accent700));
-                let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! UIButton
-                expect(importantButton.tintColor).to(be(MDCPalette.orange.accent400));
+                expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for:.normal)).to(be(MDCPalette.green.accent700));
+                let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! MDCButton
+                expect(importantButton.imageTintColor(for:.normal)).to(be(MDCPalette.orange.accent400));
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "edit important");
                 
                 tester().waitForView(withAccessibilityLabel: "important");
@@ -199,15 +200,6 @@ class ObservationHeaderViewTests: KIFSpec {
                 headerView.populate(observation: observation);
                 tester().expect(viewTester().usingLabel("important reason").view, toContainText: "New important!")
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "edit important");
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
             }
             
             it("tap favorite button") {

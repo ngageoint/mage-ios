@@ -210,7 +210,9 @@ extension FormPickerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView(frame: .zero);
         footerView.addSubview(cancelButton);
-        cancelButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 12, left: 32, bottom: 20, right: 32));
+        cancelButton.autoAlignAxis(toSuperviewAxis: .vertical);
+        cancelButton.autoPinEdge(toSuperviewEdge: .top, withInset: 12);
+        cancelButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20);
         return footerView;
     }
     

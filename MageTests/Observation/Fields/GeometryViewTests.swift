@@ -140,7 +140,6 @@ class GeometryViewTests: KIFSpec {
                 expect(geometryFieldView?.accuracyLabel.text) == "GPS ± 100.49m";
                 expect(geometryFieldView?.fieldNameLabel.text) == "Field Title"
                 expect(geometryFieldView?.fieldNameLabel.superview).toNot(beNil());
-                expect(geometryFieldView?.editFab.superview).to(beNil());
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
@@ -173,7 +172,6 @@ class GeometryViewTests: KIFSpec {
                 expect(geometryFieldView?.accuracyLabel.text) == "GPS ± 100.49m";
                 expect(geometryFieldView?.fieldNameLabel.text) == "Field Title"
                 expect(geometryFieldView?.fieldNameLabel.superview).toNot(beNil())
-                expect(geometryFieldView?.editFab.superview).to(beNil());
             }
 
             it("initial value set as a point") {

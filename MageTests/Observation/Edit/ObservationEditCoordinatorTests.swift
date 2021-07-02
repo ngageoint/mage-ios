@@ -128,9 +128,10 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, observation: observation);
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
+                tester().wait(forTimeInterval: 0.5);
                 coordinator.start();
                 tester().waitForView(withAccessibilityLabel: "timestamp");
-                tester().expect(viewTester().usingLabel("timestamp").view, toContainText: "1970-04-26 17:46 GMTT")
+                tester().expect(viewTester().usingLabel("timestamp").view, toContainText: "1970-04-26 17:46 GMT")
                 
                 tester().expect(viewTester().usingLabel("geometry").view, toContainText: "40.00850, -105.26780 ");
             }
@@ -147,10 +148,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
+                tester().wait(forTimeInterval: 0.5);
 
                 coordinator.start();
-                tester().wait(forTimeInterval: 0.5);
-                TestHelpers.printAllAccessibilityLabelsInWindows();
 
                 tester().waitForView(withAccessibilityLabel: "Add A Form To Your Observation");
                 tester().waitForView(withAccessibilityLabel: "Test");
@@ -169,6 +169,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
+                tester().wait(forTimeInterval: 0.5);
                 
                 coordinator.start();
                 TestHelpers.printAllAccessibilityLabelsInWindows();
@@ -365,7 +366,8 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
-                
+                tester().wait(forTimeInterval: 0.5);
+
                 coordinator.start();
                                 
                 tester().waitForView(withAccessibilityLabel: "Cancel");
@@ -389,15 +391,14 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, observation: observation);
                 coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
+                tester().wait(forTimeInterval: 0.5);
+
                 coordinator.start();
                 
                 tester().waitForAnimationsToFinish();
-                                
                 tester().waitForView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
-                
-                tester().waitForAnimationsToFinish();
-                
+                                
                 tester().waitForTappableView(withAccessibilityLabel: "Yes, Discard");
                 tester().tapView(withAccessibilityLabel: "Yes, Discard");
             }

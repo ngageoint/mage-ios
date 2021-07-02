@@ -164,7 +164,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 }
                 
                 it("one feed item with primary and secondary value and icon") {
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
                     
                     var completeTest = false;
@@ -333,7 +333,7 @@ class FeedItemsViewControllerTests: KIFSpec {
             }
             
             it("one feed item with primary and secondary value and icon") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -355,7 +355,7 @@ class FeedItemsViewControllerTests: KIFSpec {
             }
             
             it("one feed item with primary and secondary value and icon without timestamp") {
-                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
                 var completeTest = false;
                 

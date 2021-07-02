@@ -136,6 +136,7 @@ import MaterialComponents.MDCCard
     
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveObservation(sender:)));
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.cancel(sender:)));
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = "Cancel";
         if (self.newObservation) {
             self.title = "Create Observation";
         } else {

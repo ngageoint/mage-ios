@@ -102,7 +102,7 @@ class ObservationFormReorder: UITableViewController {
         
         self.tableView.isEditing = true;
         self.tableView.rowHeight = UITableView.automaticDimension;
-        self.tableView.estimatedRowHeight = 60;
+        self.tableView.estimatedRowHeight = 64;
         self.tableView.tableFooterView = UIView();
         self.view.addSubview(headerView);
     }

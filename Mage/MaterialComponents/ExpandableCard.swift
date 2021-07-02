@@ -101,7 +101,6 @@ class ExpandableCard: MDCCard {
         expandAction.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         expandAction.inkMaxRippleRadius = 30;
         expandAction.inkStyle = .unbounded;
-        expandAction.autoSetDimensions(to: CGSize(width: 36, height: 36))
         return expandAction;
     }()
     
@@ -221,10 +220,12 @@ class ExpandableCard: MDCCard {
             exclamation.autoPinEdge(toSuperviewEdge: .left);
             
             if expandedView != nil {
+                expandAction.autoSetDimensions(to: CGSize(width: 36, height: 36))
                 expandAction.autoPinEdge(toSuperviewEdge: .top, withInset: 8);
                 expandAction.autoPinEdge(toSuperviewEdge: .right, withInset: 8);
                 expandedView?.autoPinEdgesToSuperviewEdges();
             }
+            didSetUpConstraints = true;
         }
         super.updateConstraints();
     }

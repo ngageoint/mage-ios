@@ -40,18 +40,12 @@ class StraightLineNavigationViewTests: KIFSpec {
             }
             
             beforeEach {
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 374);
-                
+                window = TestHelpers.getKeyWindowVisible()
                 controller = UIViewController();
-                view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 374);
-                view.autoSetDimension(.height, toSize: 400);
+                view = controller.view;
                 view.backgroundColor = .systemGray;
-                window.makeKeyAndVisible();
                 
                 window.rootViewController = controller;
-                controller.view.addSubview(view);
             }
             
             afterEach {
@@ -72,7 +66,7 @@ class StraightLineNavigationViewTests: KIFSpec {
                 straightLineNavigationView.populate();
                 
                 view.addSubview(straightLineNavigationView)
-                straightLineNavigationView.autoPinEdgesToSuperviewEdges();
+                straightLineNavigationView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
                 
                 expect(view) == maybeSnapshot();
             }

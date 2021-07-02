@@ -417,11 +417,11 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 
                 view = window;
                 
-                expect(viewTester().usingLabel("favorite").view.tintColor).to(equal(MDCPalette.green.accent700));
+                expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for: .normal)).to(equal(MDCPalette.green.accent700));
                 
                 tester().tapView(withAccessibilityLabel: "favorite");
                 
-                expect(viewTester().usingLabel("favorite").view.tintColor).toEventually(equal(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)));
+                expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for: .normal)).toEventually(equal(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)));
             }
             
             it("get directions") {
@@ -476,7 +476,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 view = window;
                 
                 
-                expect(viewTester().usingLabel("important").view.tintColor).to(equal(MDCPalette.orange.accent400));
+                expect((viewTester().usingLabel("important").view as! MDCButton).imageTintColor(for: .normal)).to(equal(MDCPalette.orange.accent400));
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Update Important");
                 tester().tapView(withAccessibilityLabel: "important");

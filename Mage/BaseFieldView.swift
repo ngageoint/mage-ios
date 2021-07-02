@@ -35,7 +35,6 @@ class BaseFieldView : UIView {
     
     lazy var fieldNameLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
-        label.autoSetDimension(.height, toSize: 16);
         label.text = "\(field[FieldKey.title.key] as? String ?? "")\((editMode && (field[FieldKey.required.key] as? Bool ?? false)) ? " *" : "")";
         label.accessibilityLabel = "\((field[FieldKey.name.key] as? String ?? "")) Label";
         return label;
@@ -56,7 +55,7 @@ class BaseFieldView : UIView {
         stackView.distribution = .fill
         stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8)
         stackView.isLayoutMarginsRelativeArrangement = false;
-        stackView.translatesAutoresizingMaskIntoConstraints = true;
+//        stackView.translatesAutoresizingMaskIntoConstraints = true;
         return stackView;
     }()
     
@@ -92,6 +91,10 @@ class BaseFieldView : UIView {
     override func updateConstraints() {
         if (!didSetupConstraints) {
             viewStack.autoPinEdgesToSuperviewEdges();
+            if (!editMode) {
+                fieldNameLabel.autoSetDimension(.height, toSize: 16);
+            }
+            didSetupConstraints = true;
         }
         super.updateConstraints();
     }
