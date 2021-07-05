@@ -118,6 +118,9 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
 }
 
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api {
+    if (!api || ![api valueForKey:@"version"]) {
+        return [[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Invalid server response %@", api] forKey:NSLocalizedDescriptionKey]];
+    }
     return [[NSError alloc] initWithDomain:@"MAGE" code:1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This version of the app is not compatible with version %@.%@.%@ of the server.  Please contact your MAGE administrator for more information.", [api valueForKeyPath:@"version.major"], [api valueForKeyPath:@"version.minor"], [api valueForKeyPath:@"version.micro"]]  forKey:NSLocalizedDescriptionKey]];
 }
 
@@ -143,9 +146,43 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     NSURLSessionDataTask *task = [manager GET_TASK:apiURL parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
-        [defaults setObject:[response valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
-        [defaults setObject:[response valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
-        [defaults setObject:[response valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
+        if ([response isKindOfClass:[NSData class]]) {
+            if (((NSData *)response).length == 0) {
+                failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:@"Empty API response received from server." forKey:NSLocalizedDescriptionKey]]);
+                return;
+            }
+            // try to turn it into a string in case it was HTML
+            NSString *responseString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+            if (responseString) {
+                failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat: @"Invalid API response received from server. %@", responseString] forKey:NSLocalizedDescriptionKey]]);
+                return;
+            }
+        }
+        
+        if (![response isKindOfClass:[NSDictionary class]]) {
+            failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat: @"Unknown API response received from server. %@", task.response.MIMEType] forKey:NSLocalizedDescriptionKey]]);
+            return;
+        }
+        
+        if ([MageServer checkServerCompatibility:response]) {
+            [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
+            [defaults synchronize];
+        } else {
+            failure([MageServer generateServerCompatibilityError:response]);
+            return;
+        }
+        
+        NSDictionary *disclaimer = [response valueForKey:@"disclaimer"];
+        if (disclaimer) {
+            [defaults setObject:[disclaimer valueForKeyPath:@"show"] forKey:@"showDisclaimer"];
+            [defaults setObject:[disclaimer valueForKeyPath:@"text"] forKey:@"disclaimerText"];
+            [defaults setObject:[disclaimer valueForKeyPath:@"title"] forKey:@"disclaimerTitle"];
+        }
+        
+        if (![response valueForKeyPath:@"authenticationStrategies"]) {
+            failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat: @"Invalid response from the MAGE server. %@", response] forKey:NSLocalizedDescriptionKey]]);
+            return;
+        }
         [defaults setObject:[response valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
         
         NSMutableDictionary *authenticationModules = [[NSMutableDictionary alloc] init];
@@ -170,15 +207,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         
         [defaults synchronize];
         
-        if ([MageServer checkServerCompatibility:response]) {
-            [defaults setObject:[url absoluteString] forKey:kBaseServerUrlKey];
-            [defaults synchronize];
-            success(server);
-            return;
-        } else {
-            failure([MageServer generateServerCompatibilityError:response]);
-            return;
-        }
+        success(server);
+        return;
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         // check if the error indicates that the network is unavailable and return the offline authentication module
         if ([error.domain isEqualToString:NSURLErrorDomain]
@@ -193,7 +223,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
                 }
                 success(server);
             } else {
-                failure(error);
+                failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat: @"Failed to connect to server.  Received error %@", error.localizedDescription] forKey:NSLocalizedDescriptionKey]]);
             }
     }];
     
