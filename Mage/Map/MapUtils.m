@@ -97,7 +97,7 @@
 }
 
 + (StyledPolyline *) generatePolyline:(NSMutableArray *) path {
-    NSInteger numberOfSteps = path.count;
+    NSUInteger numberOfSteps = path.count;
     
     CLLocationCoordinate2D coordinates[numberOfSteps];
     

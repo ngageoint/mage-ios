@@ -203,13 +203,13 @@
         canary.launchDate = [NSDate date];
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         // error should be null and contextDidSave should be true
-        if (contextDidSave && error == NULL) {
+        if (error == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
             [self.appCoordinator start];
         } else {
-            NSLog(@"Could not read or write from the database");
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS Data Unavailable"
-                                                                           message:@"It appears the app data is unavailable at this time.  If this continues, please notify your administrator."
+            NSLog(@"Could not read or write from the database %@", error);
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
+                                                                           message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
@@ -285,7 +285,7 @@
             canary.launchDate = [NSDate date];
         } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
             // error should be null and contextDidSave should be true
-            if (contextDidSave && error == NULL) {
+            if (error == NULL) {
                 if(self.splashView != nil) {
                     [self.splashView.view removeFromSuperview];
                     self.splashView = nil;
@@ -293,9 +293,9 @@
                 
                 [self processOfflineMapArchives];
             } else {
-                NSLog(@"Could not read or write from the database");
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS Data Unavailable"
-                                                                               message:@"It appears the app data was unavailable when the app became active.  If this continues, please notify your administrator."
+                NSLog(@"Could not read or write from the database %@", error);
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
+                                                                               message:[NSString stringWithFormat:@"An error has occurred on your device that is preventing MAGE from operating correctly. %@", error.localizedDescription]
                                                                         preferredStyle:UIAlertControllerStyleAlert];
                 
                 [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
