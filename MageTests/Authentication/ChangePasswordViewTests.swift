@@ -28,27 +28,23 @@ class ChangePasswordViewControllerTests: KIFSpec {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
-                
-                window = UIWindow(forAutoLayout: ());
-                window?.autoSetDimension(.width, toSize: 414);
-                window?.autoSetDimension(.height, toSize: 896);
-                
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 navigationController = UINavigationController();
-                window?.rootViewController = navigationController;
-                window?.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = navigationController;
             }
             
             afterEach {
                 navigationController?.viewControllers = [];
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
+                window?.rootViewController = nil;
                 navigationController = nil;
                 view = nil;
                 window?.resignKey();
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
                 HTTPStubs.removeAllStubs();
             }
             
@@ -57,7 +53,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ChangePasswordViewController.self));
@@ -68,9 +64,10 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 expect(viewTester().usingLabel("Confirm New Password")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Change")?.view).toEventuallyNot(beNil());
-                
-                let newPasswordField: UITextField = viewTester().usingLabel("New Password")?.view as! UITextField;
-                expect(newPasswordField.placeholder).toEventually(equal("New Password (minimum 14 characters)"))
+                let newPasswordField: UITextField = viewTester().usingLabel("New Password, minimum 14 characters")?.view as! UITextField;
+                expect(newPasswordField.placeholder).toEventually(equal("New Password"))
+                let confirmNewPasswordField: UITextField = viewTester().usingLabel("Confirm New Password, minimum 14 characters")?.view as! UITextField;
+                expect(confirmNewPasswordField.placeholder).toEventually(equal("Confirm New Password"))
             }
             
             it("should alert if it could not contact the server") {
@@ -81,18 +78,19 @@ class ChangePasswordViewControllerTests: KIFSpec {
                     return HTTPStubsResponse(data: "error response".data(using: .utf8)!, statusCode: 404, headers: nil);
                 }
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ChangePasswordViewController.self));
                 tester().waitForTappableView(withAccessibilityLabel: "Unable to contact the MAGE server");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Unable to contact the MAGE server"));
                 expect(alert.message).to(contain("error response"));
                 tester().tapView(withAccessibilityLabel: "OK");
             }
             
-            it("should proceed to each view in order") {
+            // Skipping this test due to not being able to turn off auto suggest password
+            xit("should proceed to each view in order") {
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
@@ -109,7 +107,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                         return HTTPStubsResponse(jsonObject: ["username": "username"], statusCode: 200, headers: ["Content-Type": "application/json"])
                 }
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Username");
@@ -124,16 +122,16 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 tester().waitForFirstResponder(withAccessibilityLabel: "Current Password");
                 tester().clearTextFromView(withAccessibilityLabel: "Current Password");
                 tester().enterText("password\n", intoViewWithAccessibilityLabel: "Current Password");
-                tester().waitForFirstResponder(withAccessibilityLabel: "New Password");
-                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "New Password");
-                tester().waitForFirstResponder(withAccessibilityLabel: "Confirm New Password");
-                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().waitForFirstResponder(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().waitForFirstResponder(withAccessibilityLabel: "Confirm New Password, minimum 14 characters");
+                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/myself/password")));
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Password Has Been Changed");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Password Has Been Changed"));
                 expect(alert.message).to(contain("Your password has successfully been changed.  For security purposes you will now be redirected to the login page to log back in with your new password."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -157,31 +155,28 @@ class ChangePasswordViewControllerTests: KIFSpec {
                     return HTTPStubsResponse(data: "error response".data(using: .utf8)!, statusCode: 404, headers: nil)
                 }
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Username");
                 expect(viewTester().usingLabel("Username")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Current Password")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("New Password")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Confirm New Password")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("New Password, minimum 14 characters")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Confirm New Password, minimum 14 characters")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
                 expect(viewTester().usingLabel("Change")?.view).toEventuallyNot(beNil());
                 
-                tester().enterText("username\n", intoViewWithAccessibilityLabel: "Username");
-                tester().waitForFirstResponder(withAccessibilityLabel: "Current Password");
-                tester().clearTextFromView(withAccessibilityLabel: "Current Password");
-                tester().enterText("password\n", intoViewWithAccessibilityLabel: "Current Password");
-                tester().waitForFirstResponder(withAccessibilityLabel: "New Password");
-                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "New Password");
-                tester().waitForFirstResponder(withAccessibilityLabel: "Confirm New Password");
-                tester().enterText("newpassword\n", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Current Password");
+                tester().setText("newpassword", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("newpassword", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
+                tester().tapView(withAccessibilityLabel: "Change");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/myself/password")));
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Error Changing Password");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Error Changing Password"));
                 expect(alert.message).to(contain("error response"));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -192,14 +187,14 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Change");
                 tester().tapView(withAccessibilityLabel: "Change");
 
                 tester().waitForTappableView(withAccessibilityLabel: "Missing Required Fields");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Missing Required Fields"));
                 expect(alert.message).to(contain("New Password"));
                 expect(alert.message).to(contain("Confirm New Password"));
@@ -213,21 +208,21 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Change");
                 
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Current Password");
-                tester().setText("newpassword", intoViewWithAccessibilityLabel: "New Password");
-                tester().setText("newpasswordnomatch", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().setText("newpassword", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("newpasswordnomatch", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 tester().tapView(withAccessibilityLabel: "Change");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Passwords Do Not Match");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Passwords Do Not Match"));
                 expect(alert.message).to(equal("Please update password fields to match."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -238,21 +233,20 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Change");
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Current Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "New Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password");
-                tester().waitForAnimationsToFinish();
+                tester().setText("password", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 tester().tapView(withAccessibilityLabel: "Change");
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")));
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Password cannot be the same as the current password");
-                let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
+                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
                 expect(alert.title).to(equal("Password cannot be the same as the current password"));
                 expect(alert.message).to(equal("Please choose a new password."));
                 tester().tapView(withAccessibilityLabel: "OK");
@@ -263,20 +257,19 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Show Password");
-                let passwordField: UITextField = viewTester().usingLabel("New Password").view as! UITextField;
-                let passwordConfirmField: UITextField = viewTester().usingLabel("Confirm New Password").view as! UITextField;
+                let passwordField: UITextField = viewTester().usingLabel("New Password, minimum 14 characters").view as! UITextField;
+                let passwordConfirmField: UITextField = viewTester().usingLabel("Confirm New Password, minimum 14 characters").view as! UITextField;
                 
-                tester().setText("password", intoViewWithAccessibilityLabel: "New Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm New Password, minimum 14 characters");
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 expect(passwordConfirmField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Password");
-                tester().waitForAnimationsToFinish();
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
                 expect(passwordConfirmField.isSecureTextEntry).to(beFalse());
@@ -287,7 +280,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Show Current Password");
@@ -297,7 +290,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Current Password");
-                tester().waitForAnimationsToFinish();
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
             }
@@ -307,29 +299,28 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "New Password");
-                tester().waitForAnimationsToFinish();
                 
-                tester().enterText("turtle", intoViewWithAccessibilityLabel: "New Password");
+                tester().enterText("turtle", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Weak");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Fair");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt3", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt3", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Good");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt3!", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt3!", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Strong");
                 
-                tester().clearTextFromView(withAccessibilityLabel: "New Password");
-                tester().enterText("Turt3!@@", intoViewWithAccessibilityLabel: "New Password");
+                tester().clearTextFromView(withAccessibilityLabel: "New Password, minimum 14 characters");
+                tester().enterText("Turt3!@@", intoViewWithAccessibilityLabel: "New Password, minimum 14 characters");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Excellent");
             }
             
@@ -338,7 +329,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 let firstView: UIViewController = UIViewController();
                 navigationController?.pushViewController(firstView, animated: false);
                 firstView.present(view!, animated: false, completion: nil);
@@ -350,21 +341,16 @@ class ChangePasswordViewControllerTests: KIFSpec {
             }
             
             it("should set the currently logged in user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        UserDefaults.MageServerDefaults.set("userabc", forKey: .currentUserId);
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addUser();
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false);
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 tester().waitForView(withAccessibilityLabel: "Change");
-                tester().waitForAnimationsToFinish();
                 tester().expect(viewTester().usingLabel("Username")?.view, toContainText: "userabc");
             }
         }

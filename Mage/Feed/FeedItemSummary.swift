@@ -80,12 +80,11 @@ class FeedItemSummary : UIView {
         layoutView();
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.timestamp.textColor = UIColor.primaryText();
-        self.primaryField.textColor = UIColor.primaryText();
-        self.secondaryField.textColor = UIColor.secondaryText();
-
-        self.backgroundColor = UIColor.background();
+    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.backgroundColor = containerScheme.colorScheme.surfaceColor;
+        self.timestamp.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        self.primaryField.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        self.secondaryField.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     @objc public func populate(feedItem: FeedItem) {
@@ -133,8 +132,6 @@ class FeedItemSummary : UIView {
             timestamp.isHidden = false;
             itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 32, right: 0), excludingEdge: .right);
         }
-        
-        self.registerForThemeChanges()
     }
     
     func layoutView() {

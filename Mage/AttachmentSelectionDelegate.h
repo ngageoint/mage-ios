@@ -8,10 +8,13 @@
 #import <MapKit/MapKit.h>
 #import "Attachment.h"
 
-@protocol AttachmentSelectionDelegate <NSObject>
+@protocol AttachmentSelectionDelegate
 
 @required
 
 - (void) selectedAttachment:(Attachment *) attachment;
+
+@optional
+- (void) attachmentFabTapped:(Attachment *) attachment completionHandler: (void(^)(BOOL))handler;
 
 @end

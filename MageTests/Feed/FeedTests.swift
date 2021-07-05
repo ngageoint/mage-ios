@@ -28,19 +28,15 @@ class FeedTests: KIFSpec {
             
             beforeEach {
                 
-                waitUntil { done in
-                    clearAndSetUpStack();
-                    MageCoreDataFixtures.quietLogging();
-                    UserDefaults.standard.set(nil, forKey: "selectedFeeds-1");
-                    UserDefaults.standard.set("https://magetest", forKey: "baseServerUrl");
-                    UserDefaults.standard.synchronize();
+                clearAndSetUpStack();
+                MageCoreDataFixtures.quietLogging();
+                let emptyFeeds: [String]? = nil
+                UserDefaults.standard.set(emptyFeeds, forKey: "selectedFeeds-1");
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                
+                Server.setCurrentEventId(1);
                     
-                    Server.setCurrentEventId(1);
-                    
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent();
             }
             
             afterEach {
@@ -88,100 +84,65 @@ class FeedTests: KIFSpec {
             }
             
             it("should populate feeds from json all new") {
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
-                        expect(remoteIds) == ["0","1","2","3"];
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    expect(remoteIds) == ["0","1","2","3"];
+                })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
                 expect(selectedFeeds) == ["0","1","2","3"];
             }
             
             it("should populate feeds from json removing old feeds") {
                 UserDefaults.standard.set(["6","7"], forKey: "selectedFeeds");
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
-                        expect(remoteIds) == ["0","1","2","3"];
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    expect(remoteIds) == ["0","1","2","3"];
+                })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
                 expect(selectedFeeds) == ["0","1","2","3"];
             }
             
             it("should populate feeds from json adding new feeds") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Feed2", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Feed2", primaryProperty: "primary", secondaryProperty: "secondary")
                 
                 UserDefaults.standard.set(["1","2"], forKey: "selectedFeeds-1");
-                waitUntil(timeout: 100000) { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
-                        expect(remoteIds) == ["0","1","2","3"];
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    expect(remoteIds) == ["0","1","2","3"];
+                })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
                 expect(selectedFeeds) == ["1","2","0","3"];
             }
             
             it("should populate feeds from json adding new feeds with old feeds not selected") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Feed2", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Feed2", primaryProperty: "primary", secondaryProperty: "secondary")
                 
                 UserDefaults.standard.setValue([], forKey: "selectedFeeds-1");
 
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
-                        expect(remoteIds) == ["0","1","2","3"];
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    expect(remoteIds) == ["0","1","2","3"];
+                })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
                 expect(selectedFeeds) == ["0","3"];
             }
             
             it("should populate feeds from json adding new feeds with some old feeds not selected") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Feed2", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Feed2", primaryProperty: "primary", secondaryProperty: "secondary")
 
                 UserDefaults.standard.set(["2"], forKey: "selectedFeeds-1");
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
-                        expect(remoteIds) == ["0","1","2","3"];
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    expect(remoteIds) == ["0","1","2","3"];
+                })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
                 expect(selectedFeeds) == ["2","0","3"];
             }
@@ -189,15 +150,11 @@ class FeedTests: KIFSpec {
             it("should populate feed items from json all new") {
                 var feedItemIds: [String] = ["0","2","3","4","5","6","7","8"];
 
-                waitUntil { done in
-                    let feedItems = loadFeedItemsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", in: localContext)
-                        expect(remoteIds as? [String]) == feedItemIds;
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feedItems = loadFeedItemsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", in: localContext)
+                    expect(remoteIds as? [String]) == feedItemIds;
+                })
 
                 for feedItem: FeedItem in FeedItem.mr_findAll()! as! [FeedItem] {
                     expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
@@ -209,23 +166,15 @@ class FeedTests: KIFSpec {
             
             it("should populate feed items from json removing old") {
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
 
                 var feedItemIds: [String] = ["0","2","3","4","5","6","7","8"];
 
-                waitUntil { done in
-                    let feedItems = loadFeedItemsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", in: localContext)
-                        expect(remoteIds as? [String]) == feedItemIds;
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feedItems = loadFeedItemsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", in: localContext)
+                    expect(remoteIds as? [String]) == feedItemIds;
+                })
 
                 for feedItem: FeedItem in FeedItem.mr_findAll()! as! [FeedItem] {
                     expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
@@ -237,13 +186,8 @@ class FeedTests: KIFSpec {
             
             it("should get feed items for feed") {
 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "2", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593441445]) { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "2", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593441445])
 
                 var feedItemIds: [String] = ["1","2"];
 

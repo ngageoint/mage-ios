@@ -15,14 +15,10 @@ import Kingfisher
     
     private override init() {
         super.init()
-        // XXXX TODO temporary for testing
-        ImageCache.default.clearMemoryCache();
-        ImageCache.default.clearDiskCache();
         
         self.accessTokenModifier = AnyModifier { request in
             var r = request
-            print("request", r);
-            r.setValue(String(format: "Bearer %@", StoredPassword.retrieveStoredToken()), forHTTPHeaderField: "Authorization")
+            r.setValue("Bearer \(StoredPassword.retrieveStoredToken() ?? "")", forHTTPHeaderField: "Authorization")
             return r
         }
     }

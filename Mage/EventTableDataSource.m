@@ -10,15 +10,21 @@
 #import "EventChooserController.h"
 #import "Observation.h"
 #import "EventTableViewCell.h"
-#import "Theme+UIResponder.h"
 #import "EventTableHeaderView.h"
 
 @interface EventTableDataSource()
 @property (strong, nonatomic) NSDictionary *eventIdToOfflineObservationCount;
 @property (strong, nonatomic) NSString *currentFilter;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventTableDataSource
+
+- (id) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    self = [self init];
+    self.scheme = containerScheme;
+    return self;
+}
 
 - (void) updateOtherFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
     if (!self.otherFetchedResultsController) {
@@ -185,6 +191,8 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
+    cell.eventName.textColor = self.scheme.colorScheme.onSurfaceColor;
+    cell.eventDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.60];
     Event *event = nil;
     
     if (self.filteredFetchedResultsController != nil) {
@@ -209,7 +217,7 @@
     } else if (indexPath.section == 2) {
         event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
     }
-    if (event.eventDescription) {
+    if (event.eventDescription && ![event.eventDescription isEqualToString:@""]) {
         return 72.0f;
     }
     return 48.0f;
@@ -262,7 +270,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (self.filteredFetchedResultsController != nil) {
         NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-        return [[EventTableHeaderView alloc] initWithName:name];
+        return [[EventTableHeaderView alloc] initWithName:name containerScheme:self.scheme];
     }
         
     if (section == 0) return [[UIView alloc] initWithFrame:CGRectZero];
@@ -270,7 +278,7 @@
     if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
     
     NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-    return [[EventTableHeaderView alloc] initWithName:name];
+    return [[EventTableHeaderView alloc] initWithName:name containerScheme:self.scheme];
 }
 
 @end

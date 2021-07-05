@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 #import "MageServer.h"
 
 @protocol AuthenticationDelegate
@@ -19,7 +20,7 @@
 
 @interface AuthenticationCoordinator : NSObject
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate;
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
 - (void) start:(MageServer *) mageServer;
 - (void) startLoginOnly;
 @end

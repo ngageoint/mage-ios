@@ -10,31 +10,60 @@ import Foundation
 import PureLayout
 
 class UserTableHeaderView : UIView, UINavigationControllerDelegate {
-    
+    var didSetupConstraints = false;
+
+    var viewWasInitialized = false;
     var userLastLocation: CLLocation?;
     var user: User?;
     var currentUserIsMe: Bool = false;
     var childCoordinators: [Any] = [];
-    var navigationController: UINavigationController?;
+    weak var navigationController: UINavigationController?;
+    var scheme: MDCContainerScheming!;
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.backgroundColor = UIColor.background();
+    override func updateConstraints() {
+        if (!didSetupConstraints) {
+            avatarImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5));
+            locationIcon.autoPinEdge(toSuperviewEdge: .leading);
+            locationIcon.autoAlignAxis(.horizontal, toSameAxisOf: locationLabel);
+            locationLabel.autoPinEdge(.leading, to: .trailing, of: locationIcon, withOffset: 0);
+            locationLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+            phoneIcon.autoPinEdge(toSuperviewEdge: .leading);
+            phoneIcon.autoAlignAxis(.horizontal, toSameAxisOf: phoneLabel);
+            phoneLabel.autoPinEdge(.leading, to: .trailing, of: phoneIcon, withOffset: 0);
+            phoneLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+            emailIcon.autoPinEdge(toSuperviewEdge: .leading);
+            emailIcon.autoAlignAxis(.horizontal, toSameAxisOf: emailLabel);
+            emailLabel.autoPinEdge(.leading, to: .trailing, of: emailIcon, withOffset: 0);
+            emailLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+            
+            mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
+            avatarBorder.autoPinEdge(toSuperviewEdge: .leading, withInset: 8);
+            avatarBorder.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: -32);
+            stack.autoPinEdge(.top, to: .bottom, of: avatarBorder, withOffset: 4);
+            stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8), excludingEdge: .top);
+        }
+        super.updateConstraints();
+    }
+    
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
+        self.backgroundColor = self.scheme.colorScheme.backgroundColor;
         
-        avatarBorder.backgroundColor = UIColor.background();
-        avatarImage.tintColor = UIColor.inactiveIcon();
-        nameField.textColor = UIColor.primaryText();
+        avatarBorder.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        avatarImage.tintColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        nameField.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         
-        locationIcon.textColor = UIColor.secondaryText();
-        locationLabel.textColor = UIColor.flatButton();
-        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.flatButton()];
-
-        emailIcon.textColor = UIColor.secondaryText();
-        emailLabel.textColor = UIColor.flatButton();
-        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.flatButton()];
-
-        phoneIcon.textColor = UIColor.secondaryText();
-        phoneLabel.textColor = UIColor.flatButton();
-        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.flatButton()];
+        locationIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        locationLabel.textColor = self.scheme.colorScheme.primaryColor;
+        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        
+        emailIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        emailLabel.textColor = self.scheme.colorScheme.primaryColor;
+        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        
+        phoneIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        phoneLabel.textColor = self.scheme.colorScheme.primaryColor;
+        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
     }
     
     private lazy var mapDelegate: MapDelegate = {
@@ -46,7 +75,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let mapView = MKMapView(forAutoLayout: ());
         mapView.autoSetDimension(.height, toSize: 150);
         mapView.delegate = mapDelegate;
-        mapDelegate.setMapView(mapView);
+        mapDelegate.mapView = mapView;
         return mapView;
     }()
     
@@ -54,7 +83,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let border = UIView(forAutoLayout: ());
         border.autoSetDimensions(to: CGSize(width: 80, height: 80));
         border.addSubview(avatarImage);
-        avatarImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5));
         border.layer.cornerRadius = 4.0;
         
         let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(portraitClick));
@@ -88,8 +116,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
     private lazy var nameField: UILabel = {
         let nameField = UILabel(forAutoLayout: ());
+        nameField.accessibilityLabel = "name";
         nameField.font = UIFont.systemFont(ofSize: 18.0, weight: .bold);
-        nameField.textColor = UIColor.black.withAlphaComponent(0.87);
+        nameField.textColor = UIColor.label.withAlphaComponent(0.87);
         nameField.autoSetDimension(.height, toSize: 24);
         return nameField;
     }()
@@ -108,9 +137,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         locationView.backgroundColor = UIColor.clear;
         locationView.addSubview(locationIcon);
         locationView.addSubview(locationLabel);
-        locationIcon.autoPinEdge(toSuperviewEdge: .leading);
-        locationLabel.autoPinEdge(.leading, to: .trailing, of: locationIcon, withOffset: 0);
-        locationLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
         
         let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(launchMapApp));
         singleTap.numberOfTapsRequired = 1;
@@ -127,10 +153,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         locationLabel.autoSetDimension(.height, toSize: 30);
         locationLabel.backgroundColor = UIColor.clear;
         locationLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular);
-        locationLabel.textColor = UIColor.flatButton();
         locationLabel.isEditable = false;
         locationLabel.dataDetectorTypes = .all;
         locationLabel.textContentType = .location;
+        locationLabel.accessibilityLabel = "location";
         return locationLabel;
     }()
     
@@ -149,9 +175,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
        
         phoneView.addSubview(phoneIcon);
         phoneView.addSubview(phoneLabel);
-        phoneIcon.autoPinEdge(toSuperviewEdge: .leading);
-        phoneLabel.autoPinEdge(.leading, to: .trailing, of: phoneIcon, withOffset: 0);
-        phoneLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
+
         return phoneView;
     }()
     
@@ -160,10 +184,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         phoneLabel.autoSetDimension(.height, toSize: 30);
         phoneLabel.backgroundColor = UIColor.clear;
         phoneLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular);
-        phoneLabel.textColor = UIColor.flatButton();
         phoneLabel.dataDetectorTypes = .phoneNumber;
         phoneLabel.textContentType = .telephoneNumber;
         phoneLabel.isEditable = false;
+        phoneLabel.accessibilityLabel = "phone";
         return phoneLabel;
     }()
     
@@ -182,9 +206,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         
         emailView.addSubview(emailIcon);
         emailView.addSubview(emailLabel);
-        emailIcon.autoPinEdge(toSuperviewEdge: .leading);
-        emailLabel.autoPinEdge(.leading, to: .trailing, of: emailIcon, withOffset: 0);
-        emailLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .leading);
         return emailView;
     }()
     
@@ -193,60 +214,44 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         emailLabel.autoSetDimension(.height, toSize: 30);
         emailLabel.backgroundColor = UIColor.clear;
         emailLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular);
-        emailLabel.textColor = UIColor.flatButton();
         emailLabel.dataDetectorTypes = .all;
         emailLabel.textContentType = .emailAddress;
         emailLabel.isEditable = false;
+        emailLabel.accessibilityLabel = "email";
         return emailLabel;
     }()
     
-    @objc public convenience init() {
+    @objc public convenience init(user: User, scheme: MDCContainerScheming) {
         self.init(frame: CGRect.zero);
+        self.scheme = scheme;
         self.configureForAutoLayout();
         layoutView();
-        registerForThemeChanges();
+        applyTheme(withContainerScheme: self.scheme);
+        populate(user: user);
         NotificationCenter.default.addObserver(self, selector: #selector(updateUserDefaults(notification:)), name: UserDefaults.didChangeNotification, object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self);
+        self.mapDelegate.cleanup();
+        self.mapView.delegate = nil;
     }
     
     func layoutView() {
+        if (viewWasInitialized) {
+            return;
+        }
         self.addSubview(mapView);
         self.addSubview(avatarBorder);
         self.addSubview(stack);
-        mapView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .bottom);
-        avatarBorder.autoPinEdge(toSuperviewEdge: .leading, withInset: 8);
-        avatarBorder.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: -32);
-        stack.autoPinEdge(.top, to: .bottom, of: avatarBorder, withOffset: 4);
-        stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8), excludingEdge: .top);
+        
+        viewWasInitialized = true;
     }
     
-    
-    @objc public func populate(user: User) {
-        self.user = user;
-        currentUserIsMe = UserDefaults.MageServerDefaults.string(forKey: .currentUserId) == user.remoteId;
-        
-        nameField.text = user.name;
-        
-        phoneLabel.text = user.phone;
-        phoneView.isHidden = user.phone == nil ? true : false;
-        
-        emailLabel.text = user.email;
-        emailView.isHidden = user.email == nil ? true : false;
-        
+    func start() {
         mapDelegate.setupListeners();
         mapDelegate.observations = Observations.init(for: user);
         mapDelegate.locations = Locations.init(for: user);
-        
-        if let avatarUrl = user.avatarUrl {
-            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
-                let avatarFile: String = (documentsDirectories[0] as NSString).appendingPathComponent(avatarUrl);
-                avatarImage.image = UIImage(contentsOfFile: avatarFile);
-            }
-        }
         
         if (currentUserIsMe) {
             if let locations: [GPSLocation]? = GPSLocation.fetchLastXGPSLocations(1) {
@@ -264,6 +269,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                     self.mapDelegate.update(location, for: user);
                 }
             }
+            
         }
         if (userLastLocation == nil) {
             if let locations = mapDelegate.locations.fetchedResultsController.fetchedObjects {
@@ -289,6 +295,32 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         }
     }
     
+    func stop() {
+        mapDelegate.cleanup();
+    }
+    
+    @objc public func populate(user: User) {
+        layoutView();
+        self.user = user;
+        currentUserIsMe = UserDefaults.standard.currentUserId == user.remoteId;
+        
+        nameField.text = user.name;
+        
+        phoneLabel.text = user.phone;
+        phoneView.isHidden = user.phone == nil ? true : false;
+        
+        emailLabel.text = user.email;
+        emailView.isHidden = user.email == nil ? true : false;
+        
+        if let avatarUrl = user.avatarUrl {
+            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
+                let avatarFile: String = (documentsDirectories[0] as NSString).appendingPathComponent(avatarUrl);
+                avatarImage.image = UIImage(contentsOfFile: avatarFile);
+            }
+        }
+    }
+    
     func zoomAndCenterMap(location: CLLocation) {
         let latitudeMeters: CLLocationDistance = location.horizontalAccuracy * 2.5;
         let longitudeMeters: CLLocationDistance = location.horizontalAccuracy * 2.5;
@@ -309,8 +341,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let accuracyFont = UIFont.systemFont(ofSize: 11);
         
         let locationText = NSMutableAttributedString();
-        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: UIColor.mageBlue()]));
-        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: UIColor.secondaryText()]));
+        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.primaryColor]));
+        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]));
         
         self.locationLabel.attributedText = locationText;
     }
@@ -343,7 +375,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     }
     
     func presentMapsActionSheetForURLs(urlMap: [String: URL?]) {
-        let alert = UIAlertController(title: "Get Directions With...", message: nil, preferredStyle: .actionSheet);
+        let alert = UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
         alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
             if let coordinate = self.userLastLocation?.coordinate {
                 UIPasteboard.general.string = CoordinateDisplay.displayFromCoordinate(coordinate: coordinate);

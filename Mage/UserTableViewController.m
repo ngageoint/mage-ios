@@ -11,14 +11,29 @@
 
 @interface UserTableViewController () <UserSelectionDelegate>
 
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
 @end
 
 @implementation UserTableViewController
 
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
+    if (containerScheme) {
+        self.scheme = containerScheme;
+    }
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+}
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    self = [super initWithStyle:UITableViewStylePlain];
+    self.scheme = containerScheme;
+    return self;
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (!self.userDataStore) {
-        self.userDataStore = [[UserDataStore alloc] init];
+        self.userDataStore = [[UserDataStore alloc] initWithScheme: self.scheme];
         self.userDataStore.tableView = self.tableView;
         self.tableView.dataSource = self.userDataStore;
         self.tableView.delegate = self.userDataStore;
@@ -32,17 +47,17 @@
 }
 
 - (void) userDetailSelected:(User *)user {
-    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uvc animated:YES];
 }
 
 - (void) selectedUser:(User *)user {
-    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uvc animated:YES];
 }
 
 - (void) selectedUser:(User *)user region:(MKCoordinateRegion)region {
-    UserViewController *uvc = [[UserViewController alloc] initWithUser:user];
+    UserViewController *uvc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uvc animated:YES];
 }
 

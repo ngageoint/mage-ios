@@ -257,13 +257,7 @@
     NSLog(@"finished loading the media file");
     [self processPendingRequests];
     
-    if(!error){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([[NSFileManager defaultManager] fileExistsAtPath:self.finalFile]){
-                if (self.delegate) [self.delegate mediaLoadComplete:self.finalFile withNewFile:!self.localFile];
-            }
-        });
-    } else {
+    if(error){
         NSLog(@"Error: %@", error);
         //delete the file
         NSError *deleteError;

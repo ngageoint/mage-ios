@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@import MaterialComponents;
 
 @protocol IDPButtonDelegate <NSObject>
 
@@ -18,5 +19,7 @@
 
 @property (strong, nonatomic) NSDictionary *strategy;
 @property (strong, nonatomic) id<IDPButtonDelegate> delegate;
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme ;
 
 @end

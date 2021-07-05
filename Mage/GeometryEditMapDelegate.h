@@ -22,4 +22,5 @@
 
 - (instancetype) initWithDragCallback: (id<AnnotationDragCallback>) dragCallback andEditDelegate: (id<EditableMapAnnotationDelegate>) editDelegate ;
 
+- (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
 @end

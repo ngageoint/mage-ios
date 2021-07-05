@@ -7,19 +7,20 @@
 //
 
 #import "IDPLoginView.h"
-#import "Theme+UIResponder.h"
 #import "AuthenticationButton.h"
-
-@import HexColors;
 
 @interface IDPLoginView()<AuthenticationButtonDelegate>
 @property (weak, nonatomic) IBOutlet AuthenticationButton *authenticationButton;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation IDPLoginView
 
-- (void) themeDidChange:(MageTheme)theme {
-    
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    [self.authenticationButton applyThemeWithContainerScheme:containerScheme];
 }
 
 - (void) onAuthenticationButtonTapped:(id) sender {
@@ -29,8 +30,6 @@
 - (void) didMoveToSuperview {
     self.authenticationButton.strategy = self.strategy;
     self.authenticationButton.delegate = self;
-    
-    [self registerForThemeChanges];
 }
 
 @end

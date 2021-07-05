@@ -9,12 +9,14 @@
 #import "TimeSettingsTableViewController.h"
 #import "SettingsTableViewController.h"
 #import "NSDate+display.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "DisplaySettingsHeader.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface TimeSettingsTableViewController ()
 @property (assign, nonatomic) BOOL gmtTime;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) DisplaySettingsHeader *header;
 @end
 
 @implementation TimeSettingsTableViewController
@@ -24,17 +26,24 @@ static NSString *TIME_DISPLAY_USER_DEFAULTS_KEY = @"gmtTimeZome";
 static NSInteger LOCAL_TIME_CELL_ROW = 0;
 static NSInteger GMT_TIME_CELL_ROW = 1;
 
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.header.label.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.87];
+    [self.tableView reloadData];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
         
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.gmtTime = [defaults boolForKey:TIME_DISPLAY_USER_DEFAULTS_KEY];
     
-    DisplaySettingsHeader *header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
-    header.label.text = [@"All times in the app will be entered and displayed in either the local time zone or GMT." uppercaseString];
-    self.tableView.tableHeaderView = header;
-    
-    [self registerForThemeChanges];
+    self.header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
+    self.header.label.text = [@"All times in the app will be entered and displayed in either the local time zone or GMT." uppercaseString];
+    self.tableView.tableHeaderView = self.header;
 }
 
 - (void) viewDidLayoutSubviews {
@@ -49,11 +58,6 @@ static NSInteger GMT_TIME_CELL_ROW = 1;
         self.tableView.tableHeaderView = header;
         [self.tableView layoutIfNeeded];
     }
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -82,10 +86,10 @@ static NSInteger GMT_TIME_CELL_ROW = 1;
         cell.accessoryType = self.gmtTime ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     
-    cell.backgroundColor = [UIColor background];
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.tintColor = [UIColor flatButton];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.87];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.6];
+    cell.tintColor = self.scheme.colorScheme.primaryColor;
     
     return cell;
 }

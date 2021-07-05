@@ -20,14 +20,14 @@ import OHHTTPStubs
 class MockLoginDelegate: LoginDelegate {
     var loginParameters: [AnyHashable : Any]?;
     var loginCalled = false;
-    var authenticationType: AuthenticationType?;
+    var authenticationStrategy: String?;
     var changeServerURLCalled = false;
     var createAccountCalled = false;
     
-    func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
+    func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
         loginCalled = true;
         loginParameters = parameters;
-        self.authenticationType = authenticationType;
+        self.authenticationStrategy = withAuthenticationStrategy;
     }
     
     func changeServerURL() {
@@ -40,22 +40,22 @@ class MockLoginDelegate: LoginDelegate {
 }
 
 class AuthenticationSuccessMockLoginDelegate: MockLoginDelegate {
-    override func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
-        super.login(withParameters: parameters, with: authenticationType, complete: nil);
+    override func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
+        super.login(withParameters: parameters, withAuthenticationStrategy: withAuthenticationStrategy, complete: nil);
         complete(AuthenticationStatus.AUTHENTICATION_SUCCESS, nil);
     }
 }
 
 class RegistrationSuccessMockLoginDelegate: MockLoginDelegate {
-    override func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
-        super.login(withParameters: parameters, with: authenticationType, complete: nil);
+    override func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
+        super.login(withParameters: parameters, withAuthenticationStrategy: withAuthenticationStrategy, complete: nil);
         complete(AuthenticationStatus.REGISTRATION_SUCCESS, nil);
     }
 }
 
 class AuthenticationFailMockLoginDelegate: MockLoginDelegate {
-    override func login(withParameters parameters: [AnyHashable : Any]!, with authenticationType: AuthenticationType, complete: ((AuthenticationStatus, String?) -> Void)!) {
-        super.login(withParameters: parameters, with: authenticationType, complete: nil);
+    override func login(withParameters parameters: [AnyHashable : Any]!, withAuthenticationStrategy: String, complete: ((AuthenticationStatus, String?) -> Void)!) {
+        super.login(withParameters: parameters, withAuthenticationStrategy: withAuthenticationStrategy, complete: nil);
         complete(AuthenticationStatus.UNABLE_TO_AUTHENTICATE, nil);
     }
 }
@@ -69,24 +69,21 @@ class LocalLoginViewTests: KIFSpec {
             var window: UIWindow?;
             var view: UIView!;
             var localLoginView: LocalLoginView!;
-            var controller: ContainingUIViewController?;
+            var controller: UIViewController?;
             var delegate: MockLoginDelegate!;
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-                window = UIWindow(forAutoLayout: ());
-                window?.autoSetDimension(.width, toSize: 414);
-                window?.makeKeyAndVisible();
-                
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                                 
                 view = UIView(forAutoLayout: ());
                 view.autoSetDimension(.width, toSize: 300);
                 view.backgroundColor = .white;
                 
-                controller = ContainingUIViewController();
-                window?.rootViewController = controller;
+                controller = UIViewController();
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = controller;
                 controller?.view.addSubview(view);
                 
                 delegate = MockLoginDelegate();
@@ -94,16 +91,16 @@ class LocalLoginViewTests: KIFSpec {
             
             afterEach {
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
+                window?.rootViewController = nil;
+                controller = nil;
                 view = nil;
-                window?.resignKey();
-                window = nil;
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
                 HTTPStubs.removeAllStubs();
             }
             
             it("should load the Local Login View as a nib") {
-                localLoginView = UINib(nibName: "local-authView", bundle: nil).instantiate(withOwner: self, options: nil)[0] as! LocalLoginView;
+                localLoginView = UINib(nibName: "local-authView", bundle: nil).instantiate(withOwner: self, options: nil)[0] as? LocalLoginView;
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 view.addSubview(localLoginView);
                 localLoginView?.autoPinEdgesToSuperviewEdges();
                 
@@ -116,6 +113,7 @@ class LocalLoginViewTests: KIFSpec {
             it("should load the Local Login View") {
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 view.addSubview(localLoginView);
                 localLoginView?.autoPinEdgesToSuperviewEdges();
                 
@@ -140,6 +138,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -183,6 +182,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -196,7 +196,6 @@ class LocalLoginViewTests: KIFSpec {
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Password");
-                tester().waitForAnimationsToFinish();
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
             }
@@ -213,6 +212,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -226,13 +226,8 @@ class LocalLoginViewTests: KIFSpec {
             }
             
             it("should fill in username for passed in user") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser { (_, _) in
-                        MageCoreDataFixtures.addUnsyncedObservationToEvent { (_, _) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 let strategy: [AnyHashable : Any?] = [
                     "identifier": "local",
@@ -245,6 +240,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 localLoginView.user = User.mr_findFirst();
@@ -272,6 +268,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -303,6 +300,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -339,6 +337,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -375,6 +374,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -412,6 +412,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 
@@ -449,6 +450,7 @@ class LocalLoginViewTests: KIFSpec {
                 
                 localLoginView = LocalLoginView();
                 localLoginView.configureForAutoLayout();
+                localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 localLoginView.delegate = delegate;
                 localLoginView.strategy = strategy as [AnyHashable : Any];
                 

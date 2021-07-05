@@ -7,12 +7,8 @@
 //
 
 #import "EventTableViewCell.h"
-#import "Theme+UIResponder.h"
 
 @interface EventTableViewCell()
-@property (weak, nonatomic) IBOutlet UILabel *eventName;
-@property (weak, nonatomic) IBOutlet UILabel *eventDescription;
-@property (weak, nonatomic) IBOutlet UILabel *eventBadgeLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *eventBadgeLabelHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *eventBadgeLabelWidth;
 @property (weak, nonatomic) IBOutlet UIStackView *cellView;
@@ -20,19 +16,12 @@
 
 @implementation EventTableViewCell
 
-- (void) registerForThemeChanges {
-    self.eventName.textColor = [UIColor primaryText];
-    self.eventDescription.textColor = [UIColor secondaryText];
-    self.backgroundColor = [UIColor background];
-}
-
 - (void) prepareForReuse {
     [super prepareForReuse];
     [self.eventName setText:nil];
 }
 
 - (void) populateCellWithEvent:(Event *) event offlineObservationCount:(NSUInteger) count {
-    [self registerForThemeChanges];
     [self.eventName setText:event.name];
     self.eventDescription.text = event.eventDescription;
     

@@ -7,16 +7,17 @@
 //
 
 #import "FeatureDetailViewController.h"
-#import "UIColor+Mage.h"
 
 @interface FeatureDetailViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *detailTextView;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation FeatureDetailViewController
 
-- (instancetype) init {
+- (instancetype) initWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     if (self = [super initWithNibName:@"FeatureDetail" bundle:nil]) {
+        self.scheme = containerScheme;
     }
     
     return self;
@@ -31,8 +32,8 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.view.backgroundColor = [UIColor background];
-    self.detailTextView.textColor = [UIColor secondaryText];
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.detailTextView.textColor = self.scheme.colorScheme.onBackgroundColor;
 
     // If scrolling is enabled 'systemLayoutSizeFittingSize' will not calulate the correct height
     self.detailTextView.scrollEnabled = NO;

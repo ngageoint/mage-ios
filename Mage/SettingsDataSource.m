@@ -14,9 +14,9 @@
 #import "MageServer.h"
 #import "ObservationTableHeaderView.h"
 #import "NSDate+display.h"
-#import "Theme+UIResponder.h"
 #import "UITableViewCell+Setting.h"
 #import <CoreText/CoreText.h>
+#import "MAGE-Swift.h"
 
 @interface SettingsDataSource ()
 
@@ -24,7 +24,7 @@
 @property (strong, nonatomic) Event* event;
 @property (strong, nonatomic) NSArray<Event *>* recentEvents;
 @property (strong, nonatomic) NSMutableArray* sections;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation SettingsDataSource
@@ -39,10 +39,11 @@ static const NSInteger SETTINGS_SECTION = 6;
 static const NSInteger ABOUT_SECTION = 7;
 static const NSInteger LEGAL_SECTION = 8;
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super init];
     
     if (self) {
+        self.scheme = containerScheme;
         self.event = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
         
         User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
@@ -89,6 +90,7 @@ static const NSInteger LEGAL_SECTION = 8;
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.type) {
         [self.delegate settingTapped:[cell.type integerValue] info:cell.info];
+        [tableView deselectRowAtIndexPath:indexPath animated:true];
     }
 }
 
@@ -96,10 +98,10 @@ static const NSInteger LEGAL_SECTION = 8;
     
     NSDictionary *details = [[[self.sections objectAtIndex:indexPath.section] objectForKey:@"rows"] objectAtIndex:indexPath.row];
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:[[details objectForKey:@"style"] integerValue] reuseIdentifier:nil];
-    cell.backgroundColor = [UIColor background];
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.imageView.tintColor = [UIColor activeIcon];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    cell.imageView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
     cell.type = [details objectForKey:@"type"];
     cell.info = [details objectForKey:@"info"];
@@ -114,9 +116,19 @@ static const NSInteger LEGAL_SECTION = 8;
         cell.textLabel.text = textLabel;
     }
     
-    NSString *detailTextLabel = [details objectForKey:@"detailTextLabel"];
-    if (detailTextLabel) {
-        cell.detailTextLabel.text = detailTextLabel;
+    cell.detailTextLabel.text = nil;
+    cell.detailTextLabel.attributedText = nil;
+    
+    if ([[details objectForKey:@"detailTextLabel"] isKindOfClass:[NSAttributedString class]]) {
+        NSAttributedString *detailTextLabel = [details objectForKey:@"detailTextLabel"];
+        if (detailTextLabel) {
+            cell.detailTextLabel.attributedText = detailTextLabel;
+        }
+    } else {
+        NSString *detailTextLabel = [details objectForKey:@"detailTextLabel"];
+        if (detailTextLabel) {
+            cell.detailTextLabel.text = detailTextLabel;
+        }
     }
     
     NSNumber *accessoryType = [details objectForKey:@"accessoryType"];
@@ -148,7 +160,7 @@ static const NSInteger LEGAL_SECTION = 8;
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor brand];
+        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.87];
     }
 }
 
@@ -166,7 +178,7 @@ static const NSInteger LEGAL_SECTION = 8;
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *) view;
-        footer.textLabel.textColor = [UIColor brand];
+        footer.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.87];
     }
 }
 
@@ -195,7 +207,7 @@ static const NSInteger LEGAL_SECTION = 8;
     offlineLabel.font = [UIFont systemFontOfSize:14];
     offlineLabel.textAlignment = NSTextAlignmentCenter;
     offlineLabel.textColor = [UIColor whiteColor];
-    offlineLabel.backgroundColor = [UIColor orangeColor];
+    offlineLabel.backgroundColor = [UIColor systemOrangeColor];
     offlineLabel.text = @"!";
     [offlineLabel sizeToFit];
     
@@ -344,7 +356,14 @@ static const NSInteger LEGAL_SECTION = 8;
                        @"textLabel": @"Location",
                        @"detailTextLabel": [[defaults objectForKey:@"showMGRS"] boolValue] ? @"MGRS" : @"Latitude, Longitude",
                        @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
-                       }]
+                   },
+                   @{
+                       @"type": [NSNumber numberWithInteger:kNavigation],
+                       @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                       @"image": @"location_tracking_on",
+                       @"textLabel": @"Navigation",
+                       @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                   }]
         
         } mutableCopy];
 }
@@ -388,14 +407,15 @@ static const NSInteger LEGAL_SECTION = 8;
 - (NSDictionary *) setttingsSection {
     return [@{
       @"header": @"Settings",
-      @"rows": @[@{
-                     @"type": [NSNumber numberWithInteger:kTheme],
-                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                     @"image": @"brightness_medium",
-                     @"textLabel": @"Theme",
-                     @"detailTextLabel": [[[ThemeManager sharedManager] curentThemeDefinition] displayName],
-                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
-                     },
+      @"rows": @[
+//            @{
+//                     @"type": [NSNumber numberWithInteger:kTheme],
+//                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+//                     @"image": @"brightness_medium",
+//                     @"textLabel": @"Theme",
+//                     @"detailTextLabel": [[[ThemeManager sharedManager] curentThemeDefinition] displayName],
+//                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+//                     },
                  @{
                      @"type": [NSNumber numberWithInteger:kChangePassword],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],

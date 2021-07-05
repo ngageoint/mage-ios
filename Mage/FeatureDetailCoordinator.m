@@ -13,15 +13,18 @@
 @property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) FeatureDetailViewController *detailController;
 @property (strong, nonatomic) UIView *maskView;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
 @end
 
 @implementation FeatureDetailCoordinator
 
-- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSAttributedString *) detail {
+- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSAttributedString *) detail  containerScheme:(id<MDCContainerScheming>)containerScheme {
     if (self = [super init]) {
+        self.scheme = containerScheme;
         _viewController = viewController;
     
-        _detailController = [[FeatureDetailViewController alloc] init];
+        _detailController = [[FeatureDetailViewController alloc] initWithContainerScheme:self.scheme];
         _detailController.delegate = self;
         _detailController.detail = detail;
         _detailController.modalPresentationStyle = UIModalPresentationPopover;

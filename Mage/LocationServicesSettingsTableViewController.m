@@ -7,8 +7,6 @@
 #import "LocationServicesSettingsTableViewController.h"
 #import "LocationService.h"
 #import "ObservationTableHeaderView.h"
-#import "Theme+UIResponder.h"
-#import "LocationServicesHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
 
 @interface LocationServicesSettingsTableViewController ()<LocationServicesDelegate>
@@ -24,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *gpsDistanceDescription;
 
 @property (assign, nonatomic) BOOL locationServicesEnabled;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation LocationServicesSettingsTableViewController
@@ -36,9 +34,10 @@ static NSInteger REPORT_LOCATION_CELL = 0;
 static NSInteger TIME_INTERVAL_CELL_ROW = 1;
 static NSInteger GPS_DISTANCE_CELL_ROW = 2;
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.title = @"Location Sync";
+    self.scheme = containerScheme;
     return self;
 }
 
@@ -57,18 +56,20 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
         object:nil];
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self applyThemeWithContainerScheme:self.scheme];
+}
+
 - (void)applicationIsActive:(NSNotification *)notification {
     [self.tableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self registerForThemeChanges];
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     
     [self.tableView reloadData];
 }
@@ -138,8 +139,8 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
         if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
             cell.textLabel.text =  @"Open Settings Application";
-            cell.textLabel.textColor = [UIColor primaryText];
-            cell.backgroundColor = [UIColor background];
+            cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             return cell;
@@ -154,11 +155,11 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
         } else if (indexPath.row == REPORT_LOCATION_CELL) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
             cell.textLabel.text =  @"Report Your Location";
-            cell.textLabel.textColor = [UIColor primaryText];
-            cell.backgroundColor = [UIColor background];
+            cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *toggle = [[UISwitch alloc] init];
-            toggle.onTintColor = [UIColor themedButton];
+            toggle.onTintColor = self.scheme.colorScheme.primaryColorVariant;
             cell.accessoryView = toggle;
     
             [toggle setOn:self.locationServicesEnabled animated:NO];
@@ -167,10 +168,10 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
             return cell;
         }
         
-        cell.title.textColor = [UIColor primaryText];
-        cell.subtitle.textColor = [UIColor secondaryText];
-        cell.detail.textColor = [UIColor primaryText];
-        cell.backgroundColor = [UIColor background];
+        cell.title.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+        cell.subtitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        cell.detail.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
         
         return cell;
     }
@@ -178,13 +179,13 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
         RightDetailSubtitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"rightDetailSubtitleCell"];
         
         cell.title.text = @"Time Interval";
-        cell.subtitle.text = @"User pull";
+        cell.subtitle.text = @"Updates to users will be fetched at this interval.  Smaller intervals will fetch users more often at the cost of battery drain.";
         [self setPreferenceDisplayLabel:cell.detail forPreference:@"userReporting"];
         
-        cell.title.textColor = [UIColor primaryText];
-        cell.subtitle.textColor = [UIColor secondaryText];
-        cell.detail.textColor = [UIColor primaryText];
-        cell.backgroundColor = [UIColor background];
+        cell.title.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+        cell.subtitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        cell.detail.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
         
         return cell;
     }
@@ -206,8 +207,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
 
-        ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
-
+        ValuePickerTableViewController *viewController = [[ValuePickerTableViewController alloc] initWithScheme: self.scheme];
         viewController.title = [fetchPreferences valueForKey:@"title"];
         viewController.section = [fetchPreferences valueForKey:@"section"];
         viewController.labels = [fetchPreferences valueForKey:@"labels"];
@@ -224,8 +224,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];
 
-        ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
-
+        ValuePickerTableViewController *viewController = [[ValuePickerTableViewController alloc] initWithScheme: self.scheme];
         viewController.title = [fetchPreferences valueForKey:@"title"];
         viewController.section = [fetchPreferences valueForKey:@"section"];
         viewController.labels = [fetchPreferences valueForKey:@"labels"];
@@ -255,7 +254,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor brand];
+        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.87];
     }
 }
 
@@ -271,7 +270,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
 - (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor brand];
+        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.6];
     }
 }
 

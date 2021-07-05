@@ -23,41 +23,33 @@ class MapSettingsTests: KIFSpec {
             
             var mapSettings: MapSettings!
             var window: UIWindow!;
+            MageInitializer.clearAndSetupCoreData();
             
             func clearAndSetUpStack() {
                 MageInitializer.initializePreferences();
-                MageInitializer.clearAndSetupCoreData();
             }
             
             beforeEach {
                 
-                waitUntil { done in
-                    clearAndSetUpStack();
-                    MageCoreDataFixtures.quietLogging();
+                clearAndSetUpStack();
+                MageCoreDataFixtures.quietLogging();
+                
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
+                
+                Server.setCurrentEventId(1);
+                
+                window = TestHelpers.getKeyWindowVisible();
                     
-                    UserDefaults.standard.set("https://magetest", forKey: "baseServerUrl");
-                    UserDefaults.standard.set(0, forKey: "mapType");
-                    UserDefaults.standard.set(false, forKey: "showMGRS");
-                    UserDefaults.standard.synchronize();
-                    
-                    Server.setCurrentEventId(1);
-                    
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: 414);
-                    window.autoSetDimension(.height, toSize: 896);
-                    
-                    window.makeKeyAndVisible();
-                    
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent();
             }
             
             afterEach {
                 FeedService.shared.stop();
                 HTTPStubs.removeAllStubs();
                 clearAndSetUpStack();
+                MageCoreDataFixtures.clearAllData();
             }
             
             it("should unselect a feed") {
@@ -69,10 +61,11 @@ class MapSettingsTests: KIFSpec {
                 
                 UserDefaults.standard.set(["1"], forKey: "selectedFeeds-1");
                 mapSettings = MapSettings();
+                mapSettings.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 window.rootViewController = mapSettings;
+                tester().waitForAnimationsToFinish();
                 tester().waitForView(withAccessibilityLabel: "feed-switch-1");
                 tester().setOn(false, forSwitchWithAccessibilityLabel: "feed-switch-1");
-                tester().waitForAnimationsToFinish();
                 let selected = UserDefaults.standard.array(forKey: "selectedFeeds-1");
                 expect(selected).to(beEmpty());
             }

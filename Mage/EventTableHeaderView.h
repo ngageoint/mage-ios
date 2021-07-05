@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@import MaterialComponents;
 
 @interface EventTableHeaderView : UIView
 
-- (instancetype) initWithName: (NSString *) name;
+- (instancetype) initWithName:(NSString *)name containerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end

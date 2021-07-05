@@ -8,15 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "Recording.h"
-#import "AudioRecordingDelegate.h"
+
+@protocol AudioRecordingDelegate;
 
 @class AudioRecorderViewController;
 
 @interface AudioRecorderViewController :UIViewController
 
 @property(nonatomic, strong) Recording *recording;
-@property(nonatomic, strong) id<AudioRecordingDelegate> delegate;
+@property(nonatomic, strong) id<AudioRecordingDelegate> audioRecordingDelegate;
 
-- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) delegate;
+- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) audioRecordingDelegate;
 
 @end

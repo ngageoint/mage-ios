@@ -7,18 +7,7 @@
 //
 
 #import "DisplaySettingsHeader.h"
-#import "Theme+UIResponder.h"
-#import "UIColor+Mage.h"
 
 @implementation DisplaySettingsHeader
-
-- (void) didMoveToSuperview {
-    [self registerForThemeChanges];
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.label.textColor = [UIColor brand];
-    self.backgroundColor = [UIColor tableBackground];
-}
 
 @end

@@ -3,6 +3,7 @@
 #import <CoreAudio/CoreAudioTypes.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "MobileCoreServices/UTCoreTypes.h"
+#import "MAGE-Swift.h"
 
 @interface AudioRecorderViewController ()<AVAudioRecorderDelegate,AVAudioPlayerDelegate>{
     BOOL isRecording;
@@ -36,11 +37,11 @@
 #pragma mark -
 #pragma mark View Life Cycle
 
-- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) delegate {
+- (instancetype) initWithDelegate: (id<AudioRecordingDelegate>) audioRecordingDelegate {
     self = [super init];
     if (!self) return nil;
     
-    _delegate = delegate;
+    _audioRecordingDelegate = audioRecordingDelegate;
     
     return self;
 }
@@ -226,12 +227,14 @@
     NSURL *url = [NSURL fileURLWithPath:self.recording.filePath];
     
     NSError *error;
-    if (self.audioPlayer == nil) {
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        self.audioPlayer.delegate = self;
-        [self.audioPlayer setVolume:1.0];
-        self.audioPlayer.numberOfLoops = 0;
+    if (self.audioPlayer != nil) {
+        [self.audioPlayer stop];
     }
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    self.audioPlayer.delegate = self;
+    [self.audioPlayer setVolume:1.0];
+    self.audioPlayer.numberOfLoops = 0;
+    
     if (_audioPlayer.playing) {
         [self stopAudio];
     } else {
@@ -301,8 +304,8 @@
 #pragma mark - Media methods
 
 - (IBAction) dismissAndSetObservationMedia:(id)sender{
-    if (self.delegate) {
-        [self.delegate recordingAvailable:self.recording];
+    if (self.audioRecordingDelegate) {
+        [self.audioRecordingDelegate recordingAvailableWithRecording:self.recording];
     }
 //    [self dismissViewControllerAnimated:YES completion:^{
 //        

@@ -7,38 +7,45 @@
 //
 
 #import "EventInformationCoordinator.h"
-#import "FormDefaultsCoordinator.h"
+#import "MAGE-Swift.h"
 
 @interface EventInformationCoordinator()<UINavigationControllerDelegate, FormDefaultsDelegate>
 
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (weak, nonatomic) UINavigationController *viewController;
 @property (strong, nonatomic) EventInformationController *eventInfomationController;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventInformationCoordinator
 
-- (instancetype) initWithViewController: (UINavigationController *) viewController event:(Event *) event {
+- (instancetype) initWithViewController: (UINavigationController *) viewController event:(Event *) event scheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
+        self.scheme = containerScheme;
         self.childCoordinators = [[NSMutableArray alloc] init];
         self.viewController = viewController;
         self.viewController.delegate = self;
-        self.eventInfomationController = [[EventInformationController alloc] init];
-        self.eventInfomationController.delegate = self;
+        self.eventInfomationController = [[EventInformationController alloc] initWithScheme: self.scheme];
         self.eventInfomationController.event = event;
     }
     return self;
 }
 
 -(void) start {
-    [self.viewController showDetailViewController:self.eventInfomationController sender:self];
+    self.eventInfomationController.delegate = self;
+    self.eventInfomationController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self.viewController pushViewController:self.eventInfomationController animated:true];
+}
+
+- (void) startIpad {
+    self.eventInfomationController.delegate = self;
+    self.eventInfomationController.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self.viewController showDetailViewController:self.eventInfomationController sender:self];
 }
 
 - (void)formSelected:(nonnull NSDictionary *)form {
-    FormDefaultsCoordinator* coordinator = [[FormDefaultsCoordinator alloc] initWithViewController:self.viewController event:self.eventInfomationController.event form:form];
+    FormDefaultsCoordinator* coordinator = [[FormDefaultsCoordinator alloc] initWithNavController:self.eventInfomationController.navigationController event:self.eventInfomationController.event form:form scheme: self.scheme delegate:self];
     [self.childCoordinators addObject:coordinator];
-    coordinator.delegate = self;
     [coordinator start];
 }
 
@@ -60,7 +67,7 @@
 
 # pragma mark - FormDefaultsCoordinator Delegate
 
-- (void) formDefaultsComplete:(id)coordinator {
+- (void) formDefaultsCompleteWithCoordinator:(NSObject *)coordinator {
     [self.childCoordinators removeObject:coordinator];
 }
 

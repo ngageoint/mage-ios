@@ -16,18 +16,27 @@ import Kingfisher
 
 @available(iOS 13.0, *)
 
-class MockSignUpDelegate: NSObject, SignUpDelegate {
+class MockSignUpDelegate: NSObject, SignupDelegate {
+
+    
     var signupParameters: [AnyHashable : Any]?;
     var url: URL?;
     var signUpCalled = false;
     var signupCanceledCalled = false;
+    var getCaptchaCalled = false;
+    var captchaUsername: String?;
     
-    func signUp(withParameters parameters: [AnyHashable : Any]!, at url: URL!) {
+    func getCaptcha(_ username: String, completion: @escaping (String) -> Void) {
+        getCaptchaCalled = true;
+        captchaUsername = username;
+    }
+    
+    func signup(withParameters parameters: [AnyHashable : Any], completion: @escaping (HTTPURLResponse) -> Void) {
         signUpCalled = true;
         signupParameters = parameters;
     }
     
-    func signUpCanceled() {
+    func signupCanceled() {
         signupCanceledCalled = true;
     }
 }
@@ -46,67 +55,63 @@ class SignUpViewControllerTests: KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-                window = UIWindow(forAutoLayout: ());
-                window?.autoSetDimension(.width, toSize: 414);
-                window?.autoSetDimension(.height, toSize: 896);
+                UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
-                
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent { (_, _) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addEvent();
                 
                 Server.setCurrentEventId(1);
                 
                 delegate = MockSignUpDelegate();
                 navigationController = UINavigationController();
-                window?.rootViewController = navigationController;
-                window?.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
+                window!.rootViewController = navigationController;
             }
             
             afterEach {
                 navigationController?.viewControllers = [];
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
+                window?.rootViewController = nil;
                 navigationController = nil;
                 view = nil;
                 delegate = nil;
-                window?.resignKey();
-                window = nil;
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
-                tester().waitForAnimationsToFinish();
+                
+            }
+            
+            it("should load the SignUpViewCOntroller server version 5") {
+                view = SignUpViewController_Server5(delegate: delegate, andScheme: MAGEScheme.scheme());
+                navigationController?.pushViewController(view!, animated: false);
+                
+                expect(navigationController?.topViewController).to(beAnInstanceOf(SignUpViewController_Server5.self));
+                expect(viewTester().usingLabel("Username")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Display Name")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Email")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Phone")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Password")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Confirm Password")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Cancel")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Sign Up")?.view).toNot(beNil());
+                tester().waitForView(withAccessibilityLabel: "Version");
+                let versionString: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String;
+                tester().expect(viewTester().usingLabel("Version").view, toContainText: "v\(versionString)");
+                tester().expect(viewTester().usingLabel("Server URL").view, toContainText: "https://magetest");
             }
             
             it("should load the SignUpViewController") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: 10, pollInterval: 1, description: "API request did not happened")
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(SignUpViewController.self));
-                expect(viewTester().usingLabel("Username")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Display Name")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Email")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Phone")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Password")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Password Confirm")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("Sign Up")?.view).toEventuallyNot(beNil());
+                expect(navigationController?.topViewController).to(beAnInstanceOf(SignUpViewController.self));
+                expect(viewTester().usingLabel("Username")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Display Name")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Email")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Phone")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Password")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Confirm Password")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Cancel")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Sign Up")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("Captcha")?.view).toNot(beNil());
                 tester().waitForView(withAccessibilityLabel: "Version");
                 let versionString: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String;
                 tester().expect(viewTester().usingLabel("Version").view, toContainText: "v\(versionString)");
@@ -114,21 +119,7 @@ class SignUpViewControllerTests: KIFSpec {
             }
             
             it("should not allow signup without required fields") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
@@ -138,28 +129,15 @@ class SignUpViewControllerTests: KIFSpec {
                 let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
                 expect(alert.title).to(equal("Missing Required Fields"));
                 expect(alert.message).to(contain("Password"));
-                expect(alert.message).to(contain("Password Confirm"));
+                expect(alert.message).to(contain("Confirm Password"));
                 expect(alert.message).to(contain("Username"));
                 expect(alert.message).to(contain("Display Name"));
                 tester().tapView(withAccessibilityLabel: "OK");
             }
             
             it("should not allow signup with passwords that do not match") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
                 
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
@@ -167,7 +145,7 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().setText("username", intoViewWithAccessibilityLabel: "Username");
                 tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("passwordsthatdonotmatch", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("passwordsthatdonotmatch", intoViewWithAccessibilityLabel: "Confirm Password");
                 
                 tester().tapView(withAccessibilityLabel: "Sign Up");
                 
@@ -179,122 +157,70 @@ class SignUpViewControllerTests: KIFSpec {
             }
             
             it("should signup") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
                 
-                tester().enterText("username", intoViewWithAccessibilityLabel: "Username");
-                tester().enterText("display", intoViewWithAccessibilityLabel: "Display Name");
-                tester().enterText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().enterText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("username", intoViewWithAccessibilityLabel: "Username");
+                tester().setText("display", intoViewWithAccessibilityLabel: "Display Name");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 tester().enterText("5555555555", intoViewWithAccessibilityLabel: "Phone", traits: .none, expectedResult: "(555) 555-5555");
-                tester().enterText("email@email.com", intoViewWithAccessibilityLabel: "Email");
+                tester().setText("email@email.com", intoViewWithAccessibilityLabel: "Email");
+                tester().setText("captcha", intoViewWithAccessibilityLabel: "Captcha");
                 
                 tester().tapView(withAccessibilityLabel: "Sign Up");
                 
-                expect(delegate?.signUpCalled).toEventually(beTrue());
-                expect(delegate?.signupParameters as! [String: String]).toEventually(equal([
+                expect(delegate?.signUpCalled).to(beTrue());
+                expect(delegate?.signupParameters as! [String: String]).to(equal([
                     "username": "username",
                     "password": "password",
                     "passwordconfirm": "password",
                     "phone": "(555) 555-5555",
                     "email": "email@email.com",
-                    "displayName": "display"
+                    "displayName": "display",
+                    "captchaText": "captcha"
                 ]))
             }
             
             it("should cancel") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 
-                expect(delegate?.signupCanceledCalled).toEventually(beTrue());
+                expect(delegate?.signupCanceledCalled).to(beTrue());
             }
             
             it("should show the password") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Show Password");
                 let passwordField: UITextField = viewTester().usingLabel("Password").view as! UITextField;
-                let passwordConfirmField: UITextField = viewTester().usingLabel("Password Confirm").view as! UITextField;
+                let passwordConfirmField: UITextField = viewTester().usingLabel("Confirm Password").view as! UITextField;
 
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
-                tester().setText("password", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 
                 expect(passwordField.isSecureTextEntry).to(beTrue());
                 expect(passwordConfirmField.isSecureTextEntry).to(beTrue());
                 tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Password");
-                tester().waitForAnimationsToFinish();
+                
                 
                 expect(passwordField.isSecureTextEntry).to(beFalse());
                 expect(passwordConfirmField.isSecureTextEntry).to(beFalse());
             }
             
             it("should update the password strength meter") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Password");
+                // this is entirely to stop iOS from suggesting a password
+                tester().setOn(true, forSwitchWithAccessibilityLabel: "Show Password");
                 
                 tester().enterText("turtle", intoViewWithAccessibilityLabel: "Password");
                 tester().expect(viewTester().usingLabel("Password Strength Label")?.view, toContainText: "Weak");
@@ -317,21 +243,7 @@ class SignUpViewControllerTests: KIFSpec {
             }
             
             it("should update the phone number field as it is typed") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Phone");
@@ -339,22 +251,9 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().expect(viewTester().usingLabel("Phone")?.view, toContainText: "(555) 555-5555");
             }
             
+            // cannot fully test this due to being unable to disable the password auto-suggest
             it("should proceed to each field in order") {
-                let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
-                
-                MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
-                
-                var mageServer: MageServer?;
-                waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
-                        mageServer = server;
-                        done();
-                    } failure: { _ in
-                        
-                    };
-                }
-                
-                view = SignUpViewController(server: mageServer, andDelegate: delegate);
+                view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Sign Up");
@@ -365,20 +264,21 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().waitForFirstResponder(withAccessibilityLabel: "Email");
                 tester().enterText("email@email.com\n", intoViewWithAccessibilityLabel: "Email");
                 tester().waitForFirstResponder(withAccessibilityLabel: "Phone");
-                tester().enterText("5555555555\n", intoViewWithAccessibilityLabel: "Phone", traits: .none, expectedResult: "(555) 555-5555");
-                tester().waitForFirstResponder(withAccessibilityLabel: "Password");
-                tester().enterText("password\n", intoViewWithAccessibilityLabel: "Password");
-                tester().waitForFirstResponder(withAccessibilityLabel: "Password Confirm");
-                tester().enterText("password\n", intoViewWithAccessibilityLabel: "Password Confirm");
+                tester().enterText("5555555555", intoViewWithAccessibilityLabel: "Phone", traits: .none, expectedResult: "(555) 555-5555");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Password");
+                tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
+                tester().setText("captcha", intoViewWithAccessibilityLabel: "Captcha");
+                tester().tapView(withAccessibilityLabel: "Sign Up")
                 
-                expect(delegate?.signUpCalled).toEventually(beTrue());
+                expect(delegate?.signUpCalled).to(beTrue());
                 expect(delegate?.signupParameters as! [String: String]).toEventually(equal([
                     "username": "username",
                     "password": "password",
                     "passwordconfirm": "password",
                     "phone": "(555) 555-5555",
                     "email": "email@email.com",
-                    "displayName": "display"
+                    "displayName": "display",
+                    "captchaText": "captcha"
                 ]))
             }
         }

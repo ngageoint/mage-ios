@@ -11,7 +11,7 @@ import mgrs
 
 class CoordinateDisplay: NSObject {
     @objc public static func displayFromCoordinate(coordinate: CLLocationCoordinate2D) -> String {
-        if (UserDefaults.standard.bool(forKey: "showMGRS")) {
+        if (UserDefaults.standard.showMGRS) {
             return MGRS.mgrSfromCoordinate(coordinate);
         } else {
             return String(format: "%.05f, %.05f", coordinate.latitude, coordinate.longitude);

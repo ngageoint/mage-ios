@@ -1,0 +1,213 @@
+{
+    "secondaryFeedField": "field9",
+    "primaryFeedField": "type",
+    "primaryField": "type",
+    "color": "#5278A2",
+    "name": "All Field Types",
+    "variantField": "field9",
+    "description": "Form Description",
+    "fields": [
+        {
+            "id": 3,
+            "title": "Incident Type",
+            "type": "dropdown",
+            "required": true,
+            "name": "type",
+            "value": "At Venue",
+            "choices": [
+                {
+                    "id": 0,
+                    "value": 0,
+                    "title": "At Venue"
+                },
+                {
+                    "id": 1,
+                    "value": 1,
+                    "title": "Parade Event"
+                },
+                {
+                    "id": 2,
+                    "value": 2,
+                    "title": "Crowd"
+                }
+            ]
+        },
+        {
+            "title": "Archived Field",
+            "type": "textfield",
+            "value": "",
+            "required": true,
+            "id": 4,
+            "name": "field4",
+            "archived": true,
+            "choices": []
+        },
+        {
+            "title": "Description",
+            "type": "textarea",
+            "value": "",
+            "required": true,
+            "id": 8,
+            "name": "field8",
+            "choices": []
+        },
+        {
+            "archived": true,
+            "title": "Text Field",
+            "type": "textfield",
+            "required": true,
+            "id": 9,
+            "name": "field9",
+            "choices": []
+        },
+        {
+            "archived": true,
+            "title": "Checkbox",
+            "type": "checkbox",
+            "required": true,
+            "id": 10,
+            "name": "field10",
+            "choices": []
+        },
+        {
+            "value": "2017-02-10T10:20:30.111Z",
+            "title": "Date Field",
+            "type": "date",
+            "required": true,
+            "id": 11,
+            "name": "field11",
+            "choices": []
+        },
+        {
+            "title": "Attachment Field",
+            "type": "attachment",
+            "required": false,
+            "id": 12,
+            "name": "field12",
+            "choices": []
+        },
+        {
+            "archived": true,
+            "title": "Email Field",
+            "type": "email",
+            "required": true,
+            "id": 23,
+            "name": "field23",
+            "choices": []
+        },
+        {
+            "title": "Number Field",
+            "type": "numberfield",
+            "required": true,
+            "min": 2,
+            "max": 8,
+            "id": 15,
+            "name": "field13",
+            "choices": []
+        },
+        {
+            "archived": true,
+            "title": "Password field",
+            "type": "password",
+            "required": true,
+            "id": 14,
+            "name": "field14",
+            "choices": []
+        },
+        {
+            "title": "Radio Buttons",
+            "type": "radio",
+            "required": true,
+            "id": 17,
+            "name": "field15",
+            "choices": [
+                {
+                    "id": 0,
+                    "value": 0,
+                    "title": "red"
+                },
+                {
+                    "id": 1,
+                    "value": 1,
+                    "title": "green"
+                },
+                {
+                    "id": 2,
+                    "value": 2,
+                    "title": "blue"
+                }
+            ]
+        },
+        {
+            "title": "Password field",
+            "type": "password",
+            "required": true,
+            "id": 18,
+            "name": "field17",
+            "choices": []
+        },
+        {
+            "title": "Text field",
+            "type": "textfield",
+            "required": true,
+            "id": 19,
+            "name": "field18",
+            "choices": []
+        },
+        {
+            "name": "field19",
+            "id": 20,
+            "required": true,
+            "type": "checkbox",
+            "title": "Checkbox field",
+            "choices": []
+        },
+        {
+            "title": "Email field",
+            "type": "email",
+            "required": true,
+            "id": 21,
+            "name": "field20",
+            "choices": []
+        },
+        {
+            "name": "field21",
+            "id": 22,
+            "required": true,
+            "type": "multiselectdropdown",
+            "title": "Multi field",
+            "value": [
+                "Gold",
+                "Silver"
+            ],
+            "choices": [
+                {
+                    "value": 0,
+                    "id": 0,
+                    "title": "Black"
+                },
+                {
+                    "value": 1,
+                    "id": 1,
+                    "title": "Gold"
+                },
+                {
+                    "id": 2,
+                    "value": 2,
+                    "title": "Silver"
+                }
+            ]
+        },
+        {
+            "title": "Other Location Field",
+            "type": "geometry",
+            "required": false,
+            "id": 13,
+            "name": "field22",
+            "choices": []
+        }
+    ],
+    "userFields": [],
+    "archived": false,
+    "id": 26
+}

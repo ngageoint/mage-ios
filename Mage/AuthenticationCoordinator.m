@@ -22,7 +22,6 @@
 #import "DeviceUUID.h"
 #import "AppDelegate.h"
 #import "Authentication.h"
-#import "UIColor+Mage.h"
 #import "UIColor+Hex.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
@@ -35,6 +34,7 @@
 @property (strong, nonatomic) id<AuthenticationDelegate> delegate;
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
@@ -42,10 +42,11 @@
 
 BOOL signingIn = YES;
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
     self = [super init];
     if (!self) return nil;
     
+    _scheme = containerScheme;
     _navigationController = navigationController;
     _delegate = delegate;
     
@@ -58,16 +59,16 @@ BOOL signingIn = YES;
     
     SignUpViewController *signupView;
     if ([MageServer isServerVersion5]) {
-        signupView = [[SignUpViewController_Server5 alloc] initWithDelegate:self];
+        signupView = [[SignUpViewController_Server5 alloc] initWithDelegate:self andScheme:self.scheme];
     } else {
-        signupView = [[SignUpViewController alloc] initWithDelegate:self];
+        signupView = [[SignUpViewController alloc] initWithDelegate:self andScheme:self.scheme];
     }
     
     [self.navigationController pushViewController:signupView animated:NO];
 }
 
 - (void) getCaptcha:(NSString *) username completion:(void (^)(NSString* captcha)) completion  {
-    NSString *background = [[UIColor background] hex];
+    NSString *background = [self.scheme.colorScheme.surfaceColor hex];
     
     self.signupUsername = username;
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups"]];
@@ -101,6 +102,8 @@ BOOL signingIn = YES;
     __weak typeof(self) weakSelf = self;
     
     NSString *url = [NSString stringWithFormat:@"%@/%@", [MageServer baseURL], @"api/users/signups/verifications"];
+    
+    NSLog(@"Parameters to sign up with %@", parameters);
 
     MageSessionManager *manager = [MageSessionManager sharedManager];
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
@@ -185,7 +188,7 @@ BOOL signingIn = YES;
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
     self.server = mageServer;
     User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.loginView animated:NO];
 }
@@ -199,7 +202,7 @@ BOOL signingIn = YES;
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
-    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self];
+    self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self andScheme:_scheme];
     [self.navigationController pushViewController:self.loginView animated:NO];
 }
 
@@ -365,6 +368,7 @@ BOOL signingIn = YES;
                 NSLog(@"Segue to the disclaimer screen");
                 DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"DisclaimerConsent" bundle:nil];
                 viewController.delegate = self;
+                [viewController applyThemeWithContainerScheme:self.scheme];
                 [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
                 
                 [self.navigationController popToRootViewControllerAnimated:NO];

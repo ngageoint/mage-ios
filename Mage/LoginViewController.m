@@ -6,15 +6,11 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-@import SkyFloatingLabelTextField;
-@import HexColors;
-
 #import "LoginViewController.h"
 #import "UserUtility.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
-#import "Theme+UIResponder.h"
 #import "IDPLoginView.h"
 #import "LocalLoginView.h"
 #import "LdapLoginView.h"
@@ -32,26 +28,28 @@
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (strong, nonatomic) MageServer *server;
 @property (nonatomic) BOOL loginFailure;
-@property (strong, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
+@property (weak, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
 @property (strong, nonatomic) User *user;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation LoginViewController
 
-- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, IDPButtonDelegate>) delegate {
+- (instancetype) initWithMageServer: (MageServer *) server andDelegate:(id<LoginDelegate, IDPButtonDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithNibName:@"LoginView" bundle:nil];
     if (!self) return nil;
     
     self.delegate = delegate;
     self.server = server;
+    self.scheme = containerScheme;
     
     return self;
 }
 
-- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate {
-    if (self = [self initWithMageServer:server andDelegate:delegate]) {
+- (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme {
+    if (self = [self initWithMageServer:server andDelegate:delegate andScheme:containerScheme]) {
         self.user = user;
     }
     return self;
@@ -62,29 +60,28 @@
 }
 
 #pragma mark - Theme Changes
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-
-    self.mageLabel.textColor = [UIColor brand];
-    self.wandLabel.textColor = [UIColor brand];
-    self.loginStatus.textColor = [UIColor secondaryText];
-    self.versionLabel.textColor = [UIColor secondaryText];
-    
-    if (self.user) {
-        [self.serverURL setTitleColor:[UIColor secondaryText] forState:UIControlStateNormal];
-    } else {
-        [self.serverURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
     }
+    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.loginStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    if (self.user) {
+        [self.serverURL setTitleColor:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+    } else {
+        [self.serverURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+    }
+    
+    self.versionLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
 #pragma mark -
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    [self registerForThemeChanges];
-    
+        
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
@@ -92,6 +89,8 @@
     
     [self.view addGestureRecognizer:tap];
     self.wandLabel.text = @"\U0000f0d0";
+    
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -138,22 +137,26 @@
             view.strategy = strategy;
             view.delegate = self.delegate;
             view.user = self.user;
+            [view applyThemeWithContainerScheme:_scheme];
             [self.loginsStackView addArrangedSubview:view];
         } else if ([[strategy valueForKey:@"identifier"] isEqualToString:@"ldap"]) {
             LdapLoginView *view = [[[UINib nibWithNibName:@"ldap-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
             view.delegate = self.delegate;
+            [view applyThemeWithContainerScheme:_scheme];
             [self.loginsStackView addArrangedSubview:view];
         } else {
             IDPLoginView *view = [[[UINib nibWithNibName:@"idp-authView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
             view.strategy = strategy;
             view.delegate = self.delegate;
+            [view applyThemeWithContainerScheme:self.scheme];
             [self.loginsStackView addArrangedSubview:view];
         }
     }
     
     if (strategies.count > 1 && localAuth) {
         OrView *view = [[[UINib nibWithNibName:@"orView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [view applyThemeWithContainerScheme:_scheme];
         [self.loginsStackView insertArrangedSubview:view atIndex:self.loginsStackView.arrangedSubviews.count-1];
     }
     

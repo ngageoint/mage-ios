@@ -61,6 +61,11 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     return predicates;
 }
 
+// Purely for swift because calling Observations.observations() is impossible
++ (Observations *) list {
+    return [Observations observations];
+}
+
 + (Observations *) observations {
     NSMutableArray *predicates = [Observations getPredicatesForObservations];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];

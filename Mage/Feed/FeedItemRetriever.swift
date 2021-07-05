@@ -27,13 +27,6 @@ extension UIImage {
     }
 }
 
-@objc protocol FeedItemDelegate {
-
-    @objc func addFeedItem(feedItem: FeedItem);
-    @objc func removeFeedItem(feedItem: FeedItem);
-
-}
-
 @objc class FeedItemRetriever : NSObject {
     
     @objc public static func setAnnotationImage(feedItem: FeedItem, annotationView: MKAnnotationView) {
@@ -54,11 +47,11 @@ extension UIImage {
                     let image: UIImage = value.image.resized(to: CGSize(width: size, height: size));
                     annotationView.image = image;
                 case .failure(_):
-                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: UIColor.mageBlue());
+                    annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
                 }
             }
         } else {
-            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: UIColor.mageBlue());
+            annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
         }
     }
     
@@ -146,12 +139,14 @@ extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            delegate.addFeedItem(feedItem: anObject as! FeedItem);
+            delegate.add(anObject as? FeedItem);
         case .delete:
-            delegate.removeFeedItem(feedItem: anObject as! FeedItem)
+            print("delete item")
+            delegate.remove(anObject as? FeedItem)
         case .update:
-            delegate.removeFeedItem(feedItem: anObject as! FeedItem)
-            delegate.addFeedItem(feedItem: anObject as! FeedItem);
+            print("Update item")
+            delegate.remove(anObject as? FeedItem)
+            delegate.add(anObject as? FeedItem);
         case .move:
             print("...")
         @unknown default:

@@ -45,13 +45,16 @@ class FeedItemsViewControllerTests: KIFSpec {
                     MageInitializer.clearAndSetupCoreData();
                 }
                 
+                var controller: FeedItemsViewController!
+                var window: UIWindow!;
+            
                 afterEach {
+                    controller.dismiss(animated: false, completion: nil);
+                    window.rootViewController = nil;
+                    controller = nil;
                     HTTPStubs.removeAllStubs();
                     clearAndSetUpStack();
                 }
-                
-                var controller: FeedItemsViewController!
-                var window: UIWindow!;
             
                 beforeEach {
                     ImageCache.default.clearMemoryCache();
@@ -64,59 +67,45 @@ class FeedItemsViewControllerTests: KIFSpec {
                         return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     };
                     
-                    window = UIWindow(forAutoLayout: ());
-                    window.autoSetDimension(.width, toSize: 414);
-                    window.autoSetDimension(.height, toSize: 896);
-                    
-                    window.makeKeyAndVisible();
+                    window = TestHelpers.getKeyWindowVisible();
                     
                     clearAndSetUpStack();
                     
-                    UserDefaults.standard.set(0, forKey: "mapType");
-                    UserDefaults.standard.set(false, forKey: "showMGRS");
-                    UserDefaults.standard.synchronize();
+                    UserDefaults.standard.mapType = 0;
+                    UserDefaults.standard.showMGRS = false;
                     Server.setCurrentEventId(1);
                     
-                    waitUntil { done in
-                        MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
+                    MageCoreDataFixtures.addEvent();
+                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary");
                 }
                 
                 it("empty feed") {
                     
                     var completeTest = false;
                     
-                    if let feed: Feed = Feed.mr_findFirst() {
-                        controller = FeedItemsViewController(feed: feed);
-                        window.rootViewController = controller;
-                    }
+                    let feed: Feed = Feed.mr_findFirst()!
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
+                    window.rootViewController = controller;
                     
                     self.maybeRecordSnapshot(controller.view, doneClosure: {
                         completeTest = true;
                     })
 
                     if (self.recordSnapshots) {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                     } else {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                     }
                 }
                 
                 it("one feed item with primary value") {
-                    waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"])
+                    
                     var completeTest = false;
                     
                     if let feed: Feed = Feed.mr_findFirst() {
-                        controller = FeedItemsViewController(feed: feed);
+                        controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                         window.rootViewController = controller;
                     }
                     
@@ -125,23 +114,19 @@ class FeedItemsViewControllerTests: KIFSpec {
                     })
                     
                     if (self.recordSnapshots) {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                     } else {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                     }
                 }
                 
                 it("one feed item with secondary value") {
-                    waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item"]) { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item"])
                     var completeTest = false;
                     
                     if let feed: Feed = Feed.mr_findFirst() {
-                        controller = FeedItemsViewController(feed: feed);
+                        controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                         window.rootViewController = controller;
                     }
                     
@@ -150,23 +135,19 @@ class FeedItemsViewControllerTests: KIFSpec {
                     })
                     
                     if (self.recordSnapshots) {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                     } else {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                     }
                 }
                 
                 it("one feed item with primary and secondary value") {
-                    waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
                     var completeTest = false;
                     
                     if let feed: Feed = Feed.mr_findFirst() {
-                        controller = FeedItemsViewController(feed: feed);
+                        controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                         window.rootViewController = controller;
                     }
                     
@@ -175,25 +156,21 @@ class FeedItemsViewControllerTests: KIFSpec {
                     })
                     
                     if (self.recordSnapshots) {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                     } else {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                     }
                 }
                 
                 it("one feed item with primary and secondary value and icon") {
-                    waitUntil { done in
-                        MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                            MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
-                                done();
-                            }
-                        }
-                    }
+                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
+                    
                     var completeTest = false;
                     
                     if let feed: Feed = Feed.mr_findFirst() {
-                        controller = FeedItemsViewController(feed: feed);
+                        controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                         window.rootViewController = controller;
                     }
                     
@@ -202,23 +179,19 @@ class FeedItemsViewControllerTests: KIFSpec {
                     })
                     
                     if (self.recordSnapshots) {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                     } else {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                     }
                 }
                 
                 it("one feed item no content") {
-                    waitUntil { done in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
+                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item"])
                     var completeTest = false;
                     
                     if let feed: Feed = Feed.mr_findFirst() {
-                        controller = FeedItemsViewController(feed: feed);
+                        controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                         window.rootViewController = controller;
                     }
                     
@@ -227,10 +200,10 @@ class FeedItemsViewControllerTests: KIFSpec {
                     })
                     
                     if (self.recordSnapshots) {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                     } else {
-                        expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                        expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                        expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                     }
                 }
             
@@ -263,26 +236,16 @@ class FeedItemsViewControllerTests: KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 };
                 
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 414);
-                window.autoSetDimension(.height, toSize: 896);
-                
-                window.makeKeyAndVisible();
+                window = TestHelpers.getKeyWindowVisible();
                 
                 clearAndSetUpStack();
                 
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
                 Server.setCurrentEventId(1);
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp") { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp")
             }
             
             it("empty feed") {
@@ -290,7 +253,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 var completeTest = false;
                 
                 if let feed: Feed = Feed.mr_findFirst() {
-                    controller = FeedItemsViewController(feed: feed);
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                     window.rootViewController = controller;
                 }
                 
@@ -299,23 +262,19 @@ class FeedItemsViewControllerTests: KIFSpec {
                 })
                 
                 if (self.recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
             it("one feed item with primary value") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
                 if let feed: Feed = Feed.mr_findFirst() {
-                    controller = FeedItemsViewController(feed: feed);
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                     window.rootViewController = controller;
                 }
                 
@@ -324,23 +283,19 @@ class FeedItemsViewControllerTests: KIFSpec {
                 })
                 
                 if (self.recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
             it("one feed item with secondary value") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
                 if let feed: Feed = Feed.mr_findFirst() {
-                    controller = FeedItemsViewController(feed: feed);
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                     window.rootViewController = controller;
                 }
                 
@@ -349,23 +304,19 @@ class FeedItemsViewControllerTests: KIFSpec {
                 })
                 
                 if (self.recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
             it("one feed item with primary and secondary value") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
                 var completeTest = false;
                 
                 if let feed: Feed = Feed.mr_findFirst() {
-                    controller = FeedItemsViewController(feed: feed);
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                     window.rootViewController = controller;
                 }
                 
@@ -374,25 +325,20 @@ class FeedItemsViewControllerTests: KIFSpec {
                 })
                 
                 if (self.recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
             it("one feed item with primary and secondary value and icon") {
-                waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
                 var completeTest = false;
                 
                 if let feed: Feed = Feed.mr_findFirst() {
-                    controller = FeedItemsViewController(feed: feed);
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                     window.rootViewController = controller;
                 }
                 
@@ -401,25 +347,20 @@ class FeedItemsViewControllerTests: KIFSpec {
                 })
                 
                 if (self.recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
             it("one feed item with primary and secondary value and icon without timestamp") {
-                waitUntil { done in
-                    MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["iconUrl": "https://magetest/icon.png"])  { (success: Bool, error: Error?) in
-                        MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"]) { (success: Bool, error: Error?) in
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
                 var completeTest = false;
                 
                 if let feed: Feed = Feed.mr_findFirst() {
-                    controller = FeedItemsViewController(feed: feed);
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                     window.rootViewController = controller;
                 }
                 
@@ -428,23 +369,20 @@ class FeedItemsViewControllerTests: KIFSpec {
                 })
                 
                 if (self.recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
             it("one feed item no content") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item", "timestamp": 1593440445]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item", "timestamp": 1593440445])
+                
                 var completeTest = false;
                 
                 if let feed: Feed = Feed.mr_findFirst() {
-                    controller = FeedItemsViewController(feed: feed);
+                    controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
                     window.rootViewController = controller;
                 }
                 
@@ -453,10 +391,10 @@ class FeedItemsViewControllerTests: KIFSpec {
                 })
                 
                 if (self.recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
         }

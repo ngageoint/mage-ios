@@ -7,7 +7,6 @@
 //
 
 #import "AuthenticationButton.h"
-#import "Theme+UIResponder.h"
 #import "UIColor+Adjust.h"
 
 @import HexColors;
@@ -20,7 +19,7 @@
 @property (weak, nonatomic) UIStackView *authenticationButton;
 @property (strong, nonatomic) UIColor *buttonColor;
 @property (strong, nonatomic) UIColor *buttonColorHighlighted;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation AuthenticationButton
@@ -56,7 +55,7 @@
     if ([strategy objectForKey:@"buttonColor"] != NULL) {
         self.buttonColor = [UIColor colorWithHexString:[strategy valueForKey:@"buttonColor"] alpha:1.0];
     } else {
-        self.buttonColor = [UIColor dialog];
+        self.buttonColor = self.scheme ? self.scheme.colorScheme.surfaceColor : UIColor.whiteColor;
     }
 
     self.buttonColorHighlighted = [self.buttonColor brightness:15];
@@ -65,16 +64,19 @@
     if ([strategy objectForKey:@"textColor"] != NULL) {
         self.loginButtonLabel.textColor = [UIColor colorWithHexString:[strategy valueForKey:@"textColor"] alpha:1.0];
     } else {
-        self.loginButtonLabel.textColor = [UIColor primaryText];
+        self.loginButtonLabel.textColor = self.scheme ? self.scheme.colorScheme.onSurfaceColor : [UIColor labelColor];
     }
 }
 
-- (void) themeDidChange:(MageTheme)theme {
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    self.scheme = containerScheme;
     [self.layer setShadowOffset:CGSizeMake(0, 1)];
-    [self.layer setShadowColor:[UIColor secondaryText].CGColor];
+    [self.layer setShadowColor:containerScheme.colorScheme.onSurfaceColor.CGColor];
     [self.layer setShadowOpacity:.7];
     [self.layer setShadowRadius:2];
+    [self setStrategy:self.strategy];
 }
+
 
 - (IBAction)onAuthenticationButtonTapped:(id)sender {
     [self.delegate onAuthenticationButtonTapped:sender];
@@ -97,10 +99,6 @@
 
 -(void) setButtonBackgroundColor:(UIColor *) color {
     self.authenticationButton.backgroundColor = color;
-}
-
-- (void) didMoveToSuperview {    
-    [self registerForThemeChanges];
 }
 
 @end

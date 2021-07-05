@@ -14,21 +14,23 @@
 #import "AppDelegate.h"
 #import "User.h"
 #import "DBZxcvbn.h"
-#import "Theme+UIResponder.h"
 
-@import SkyFloatingLabelTextField;
-@import HexColors;
+@import MaterialComponents;
 
 @interface ChangePasswordViewController () <ChangePasswordDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *currentPasswordView;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *usernameField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *currentPasswordField;
+@property (weak, nonatomic) IBOutlet MDCTextField *usernameField;
+@property (weak, nonatomic) IBOutlet MDCTextField *currentPasswordField;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *usernameController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *currentPasswordController;
 @property (weak, nonatomic) IBOutlet UISwitch *showCurrentPasswordSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *showCurrentPasswordLabel;
 @property (weak, nonatomic) IBOutlet UILabel *showNewPasswordLabel;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *confirmPasswordField;
+@property (weak, nonatomic) IBOutlet MDCTextField *passwordField;
+@property (weak, nonatomic) IBOutlet MDCTextField *confirmPasswordField;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *passwordController;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *confirmPasswordController;
 @property (weak, nonatomic) IBOutlet UISwitch *showPasswordSwitch;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
@@ -47,65 +49,113 @@
 @property (nonatomic) BOOL loggedIn;
 @property (strong, nonatomic) id<ChangePasswordDelegate> delegate;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation ChangePasswordViewController
 
-#pragma mark - Theme Changes
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
 
-- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [UIColor primaryText];
-    field.selectedLineColor = [UIColor brand];
-    field.selectedTitleColor = [UIColor brand];
-    field.placeholderColor = [UIColor secondaryText];
-    field.lineColor = [UIColor secondaryText];
-    field.titleColor = [UIColor secondaryText];
-    field.disabledColor = [UIColor secondaryText];
-    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
-    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    
+    [self.usernameController applyThemeWithScheme:containerScheme];
+    [self.currentPasswordController applyThemeWithScheme:containerScheme];
+    [self.passwordController applyThemeWithScheme:containerScheme];
+    [self.confirmPasswordController applyThemeWithScheme:containerScheme];
+    
+    // these appear to be deficiencies in the underline controller and these colors are not set
+    self.usernameController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.passwordController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.confirmPasswordController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.currentPasswordController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.usernameController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.passwordController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.confirmPasswordController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.currentPasswordController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    
+    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.confirmPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.currentPasswordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+
+    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.cancelButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.changeButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.changeButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.showCurrentPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
+    self.showNewPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
+    self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [self.mageServerURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+    self.mageVersion.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.showPasswordSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.showCurrentPasswordSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    
-    [self themeTextField:self.usernameField];
-    [self themeTextField:self.currentPasswordField];
-    [self themeTextField:self.passwordField];
-    [self themeTextField:self.confirmPasswordField];
-    
-    self.usernameField.iconText = @"\U0000f007";
-    self.currentPasswordField.iconText = @"\U0000f084";
-    self.passwordField.iconText = @"\U0000f084";
-    self.confirmPasswordField.iconText = @"\U0000f084";
-
-    self.mageLabel.textColor = [UIColor brand];
-    self.wandLabel.textColor = [UIColor brand];
-    self.cancelButton.backgroundColor = [UIColor themedButton];
-    self.showCurrentPasswordLabel.textColor = [UIColor secondaryText];
-    self.showNewPasswordLabel.textColor = [UIColor secondaryText];
-    self.passwordStrengthNameLabel.textColor = [UIColor secondaryText];
-    [self.mageServerURL setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
-    self.mageVersion.textColor = [UIColor secondaryText];
-    self.showPasswordSwitch.onTintColor = [UIColor themedButton];
-    self.showCurrentPasswordSwitch.onTintColor = [UIColor themedButton];
+- (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
+    NSLayoutConstraint *constraint0 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0f constant: 30];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant: 20];
+    [leadingIcon addConstraint:constraint0];
+    [leadingIcon addConstraint:constraint1];
+    leadingIcon.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 #pragma mark -
 
-- (instancetype) initWithLoggedIn: (BOOL) loggedIn {
+- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<MDCContainerScheming>)containerScheme {
     if (self = [super initWithNibName:@"ChangePasswordView" bundle:nil]) {
         self.loggedIn = loggedIn;
         // modify this and the init method when coordinator pattern is implmeented
         self.delegate = self;
+        self.scheme = containerScheme;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.usernameController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.usernameField];
+    UIImageView *meImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"me"]];
+    [self addLeadingIconConstraints:meImage];
+    [self.usernameField setLeadingView:meImage];
+    self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
+    self.usernameField.accessibilityLabel = @"Username";
+    self.usernameController.placeholderText = @"Username";
+    self.usernameController.floatingEnabled = true;
+    
+    self.passwordField.accessibilityLabel = @"New Password";
+    self.passwordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.passwordField];
+    UIImageView *keyImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
+    [self addLeadingIconConstraints:keyImage];
+    [self.passwordField setLeadingView:keyImage];
+    self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.passwordController.placeholderText = @"New Password";
+    self.passwordController.textInput = self.passwordField;
+    
+    self.confirmPasswordField.accessibilityLabel = @"Confirm New Password";
+    self.confirmPasswordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.confirmPasswordField];
+    UIImageView *keyImage2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
+    [self addLeadingIconConstraints:keyImage2];
+    [self.confirmPasswordField setLeadingView:keyImage2];
+    self.confirmPasswordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.confirmPasswordController.placeholderText = @"Confirm New Password";
+    self.confirmPasswordController.textInput = self.confirmPasswordField;
+    
+    self.currentPasswordField.accessibilityLabel = @"Current Password";
+    self.currentPasswordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.currentPasswordField];
+    UIImageView *keyImage3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
+    [self addLeadingIconConstraints:keyImage3];
+    [self.currentPasswordField setLeadingView:keyImage3];
+    self.currentPasswordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.currentPasswordController.placeholderText = @"Current Password";
+    self.currentPasswordController.textInput = self.currentPasswordField;
         
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 
     self.zxcvbn = [[DBZxcvbn alloc] init];
     
@@ -188,9 +238,15 @@
         weakSelf.informationView.hidden = YES;
         
         if ([mageServer serverHasLocalAuthenticationStrategy]) {
-            ServerAuthentication *server = [mageServer.authenticationModules objectForKey:@"server"];
-            weakSelf.passwordField.placeholder = [NSString stringWithFormat:@"New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
-            weakSelf.confirmPasswordField.placeholder = [NSString stringWithFormat:@"Confirm New Password (minimum %@ characters)", [server.parameters valueForKey:@"passwordMinLength"]];
+            ServerAuthentication *server = [mageServer.authenticationModules objectForKey:@"local"];
+
+            weakSelf.passwordController.placeholderText = @"New Password";
+            weakSelf.confirmPasswordController.placeholderText = @"Confirm New Password";
+            
+            if ([server.parameters valueForKey:@"passwordMinLength"] != nil) {
+                weakSelf.passwordController.helperText = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
+                weakSelf.confirmPasswordController.helperText = [NSString stringWithFormat:@"minimum %@ characters", [server.parameters valueForKey:@"passwordMinLength"]];
+            }
         }
     } failure:^(NSError *error) {
         NSString* errResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
@@ -257,27 +313,37 @@
     [self.delegate changePasswordCanceled];
 }
 
+- (void) clearErrors {
+    [self.usernameController setErrorText:nil errorAccessibilityValue:nil];
+    [self.currentPasswordController setErrorText:nil errorAccessibilityValue:nil];
+    [self.passwordController setErrorText:nil errorAccessibilityValue:nil];
+    [self.confirmPasswordController setErrorText:nil errorAccessibilityValue:nil];
+}
+
 - (IBAction)changeButtonTapped:(id)sender {
+    [self clearErrors];
     NSMutableArray *requiredFields = [[NSMutableArray alloc] init];
     if ([self.usernameField.text length] == 0) {
-        [self markFieldError:self.usernameField];
+        [self.usernameController setErrorText:@"Required" errorAccessibilityValue:nil];
         [requiredFields addObject:@"Username"];
     }
     if ([self.currentPasswordField.text length] == 0) {
-        [self markFieldError:self.currentPasswordField];
+        [self.currentPasswordController setErrorText:@"Required" errorAccessibilityValue:nil];
         [requiredFields addObject:@"Current Password"];
     }
     if ([self.passwordField.text length] == 0) {
-        [self markFieldError:self.passwordField];
+        [self.passwordController setErrorText:@"Required" errorAccessibilityValue:nil];
         [requiredFields addObject:@"New Password"];
     }
     if ([self.confirmPasswordField.text length] == 0) {
-        [self markFieldError:self.confirmPasswordField];
+        [self.confirmPasswordController setErrorText:@"Required" errorAccessibilityValue:nil];
         [requiredFields addObject:@"Confirm New Password"];
     }
     if ([requiredFields count] != 0) {
         [self showDialogForRequiredFields:requiredFields];
     } else if (![self.passwordField.text isEqualToString:self.confirmPasswordField.text]) {
+        [self.passwordController setErrorText:@"Passwords Do Not Match" errorAccessibilityValue:nil];
+        [self.confirmPasswordController setErrorText:@"Passwords Do Not Match" errorAccessibilityValue:nil];
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
@@ -286,6 +352,7 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }  else if ([self.passwordField.text isEqualToString:self.currentPasswordField.text]) {
+        [self.passwordController setErrorText:@"Password cannot be the same as the current password" errorAccessibilityValue:nil];
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Password cannot be the same as the current password"
                                      message:@"Please choose a new password."

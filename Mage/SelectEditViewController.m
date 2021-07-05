@@ -7,7 +7,6 @@
 //
 
 #import "SelectEditViewController.h"
-#import "Theme+UIResponder.h"
 
 @interface SelectEditViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -22,40 +21,43 @@
 @property (assign, nonatomic) BOOL multiselect;
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 @property (strong, nonatomic) id value;
-@property (strong, nonatomic) id<PropertyEditDelegate> delegate;
+@property (weak, nonatomic) id<PropertyEditDelegate> delegate;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectedChoicesConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UILabel *selectedTextLabel;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation SelectEditViewController
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    self.view.backgroundColor = [UIColor background];
-    self.selectedChoicesView.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
-    self.searchController.searchBar.tintColor = [UIColor navBarPrimaryText];
-    self.searchController.searchBar.backgroundColor = [UIColor primary];
-    self.selectedTextLabel.textColor = [UIColor secondaryText];
-    self.selectedLabel.textColor = [UIColor primaryText];
-    self.clearButton.tintColor = [UIColor flatButton];
-    
-    if (@available(iOS 13.0, *)) {
-        self.searchController.searchBar.searchTextField.backgroundColor = [[UIColor background] colorWithAlphaComponent:.87];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
     }
+
+    self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
+    self.view.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.selectedChoicesView.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.searchController.searchBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.searchController.searchBar.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.selectedTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.60];
+    self.selectedLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.clearButton.tintColor = self.scheme.colorScheme.onSurfaceColor;
+    
+    self.searchController.searchBar.searchTextField.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     [self.tableView reloadData];
 }
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate:(id<PropertyEditDelegate>) delegate {
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate:(id<PropertyEditDelegate>) delegate scheme: (id<MDCContainerScheming>) containerScheme  {
     self = [super initWithNibName:@"ObservationEditSelectPickerView" bundle:nil];
     if (self == nil) return nil;
     
     _fieldDefinition = fieldDefinition;
     _delegate = delegate;
     _value = value;
-    
+    _scheme = containerScheme;
     self.choices = [NSMutableArray array];
     for (id choice in [self.fieldDefinition objectForKey:@"choices"]) {
         NSString *title = [choice objectForKey:@"title"];
@@ -74,6 +76,10 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    self.tableView.accessibilityLabel = @"choices";
+    self.tableView.accessibilityIdentifier = @"choices";
+    self.tableView.isAccessibilityElement = true;
+    
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 50;
 
@@ -82,7 +88,7 @@
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.obscuresBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
@@ -94,8 +100,7 @@
     }
 
     self.navigationItem.searchController = self.searchController;
-    
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) viewWillAppear:(BOOL) animated {
@@ -145,9 +150,9 @@
     cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.textLabel.numberOfLines = 0;
     
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.backgroundColor = [UIColor background];
-    cell.tintColor = [UIColor flatButton];
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    cell.tintColor = self.scheme.colorScheme.primaryColor;
     
     if ([self.selectedChoices containsObject:choice]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -206,7 +211,6 @@
             value = [self.selectedChoices objectAtIndex:0];
         }
     }
-    
     [self.delegate setValue:value forFieldDefinition:self.fieldDefinition];
 }
 

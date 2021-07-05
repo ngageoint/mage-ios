@@ -36,10 +36,10 @@
 #import "Server.h"
 #import "MageAppCoordinator.h"
 #import "TransitionViewController.h"
-#import "Theme+UIResponder.h"
 #import "Layer.h"
 #import "MageConstants.h"
 #import "MageInitializer.h"
+#import "MAGE-Swift.h"
 #import <SSZipArchive/SSZipArchive.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate, SSZipArchiveDelegate>
@@ -76,7 +76,7 @@
     
     [self createLoadingView];
     
-    NSLog(@"Protected data is available? %d", protectedDataAvailable);
+    NSLog(@"Finish Launching Protected data is available? %d", protectedDataAvailable);
     
     if (protectedDataAvailable) {
         [self setupMageApplication:application];
@@ -88,16 +88,7 @@
         [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[UIColor whiteColor]];
     }
 
-    [self registerForThemeChanges];
 	return YES;
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    [self.window setTintColor:[UIColor primary]];
-    [[UINavigationBar appearance] setTintColor:[UIColor navBarPrimaryText]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor primary]];
-    [[UINavigationBar appearance] setOpaque:YES];
-    [[UINavigationBar appearance] setTranslucent:NO];
 }
 
 - (void) setupMageApplication: (UIApplication *) application {
@@ -189,6 +180,7 @@
     self.rootViewController.navigationBarHidden = YES;
     [self.window setRootViewController:self.rootViewController];
     TransitionViewController *transitionView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    [transitionView applyThemeWithContainerScheme:[MAGEScheme scheme]];
     transitionView.modalPresentationStyle = UIModalPresentationFullScreen;
     [self.rootViewController pushViewController:transitionView animated:NO];
 }
@@ -201,10 +193,12 @@
             canary = [Canary MR_createEntityInContext:localContext];
         }
         canary.launchDate = [NSDate date];
+        NSLog(@"startMageApp Canary launch date %@", canary.launchDate);
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
         // error should be null and contextDidSave should be true
-        if (error == NULL) {
-            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application];
+        if (contextDidSave && error == NULL) {
+            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
             [self.appCoordinator start];
         } else {
             NSLog(@"Could not read or write from the database %@", error);
@@ -249,6 +243,7 @@
     NSLog(@"applicationDidEnterBackground");
 
     self.splashView = [[TransitionViewController alloc] initWithNibName:@"TransitionScreen" bundle:nil];
+    [self.splashView applyThemeWithContainerScheme:[MAGEScheme scheme]];
     self.splashView.view.frame = [self.window frame];
     [self.window addSubview:self.splashView.view];
     
@@ -270,10 +265,19 @@
 - (void) applicationDidBecomeActive:(UIApplication *) application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
+    if (_applicationStarted) {
+        NSLog(@"Already checking if DB can be saved to");
+        // the app was already started and is checking if it can save to the database, do not check again
+        if(self.splashView != nil) {
+            [self.splashView.view removeFromSuperview];
+            self.splashView = nil;
+        }
+        return;
+    }
     
     BOOL protectedDataAvailable = _applicationStarted = [application isProtectedDataAvailable];
     
-    NSLog(@"Protected data is available? %d", protectedDataAvailable);
+    NSLog(@"Did Become Active Protected data is available? %d", protectedDataAvailable);
     
     if (protectedDataAvailable) {
         // do a canary save
@@ -283,7 +287,9 @@
                 canary = [Canary MR_createEntityInContext:localContext];
             }
             canary.launchDate = [NSDate date];
+            NSLog(@"applicationDidBecomeActive Canary launch date %@", canary.launchDate);
         } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+            NSLog(@"applicationDidBecomeActive canary save success? %d with error %@", contextDidSave, error);
             // error should be null and contextDidSave should be true
             if (error == NULL) {
                 if(self.splashView != nil) {

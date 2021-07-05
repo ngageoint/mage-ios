@@ -10,6 +10,10 @@
 
 @protocol ObservationSelectionDelegate <NSObject>
 
+@optional
+- (void) getDirections:(Observation *) observation;
+- (void) favorite: (Observation *) observation;
+
 @required
     - (void) selectedObservation:(Observation *) observation;
     - (void) selectedObservation:(Observation *) observation region:(MKCoordinateRegion) region;

@@ -10,9 +10,8 @@
 #import "Event.h"
 #import "NSDate+display.h"
 #import "MapDelegate.h"
-#import "ObservationDataStore.h"
 #import "AttachmentCollectionDataStore.h"
-#import "Theme+UIResponder.h"
+#import "MAGE-Swift.h"
 #import <mgrs/MGRS.h>
 
 @interface ObservationCommonHeaderTableViewCell ()
@@ -91,13 +90,13 @@
         return;
     }
     
-    [self.attachmentCollection registerNib:[UINib nibWithNibName:@"AttachmentCell" bundle:nil] forCellWithReuseIdentifier:@"AttachmentCell"];
+    [self.attachmentCollection registerClass:[AttachmentCell class] forCellWithReuseIdentifier:@"AttachmentCell"];
 
     self.ads = [[AttachmentCollectionDataStore alloc] init];
     self.ads.attachmentCollection = self.attachmentCollection;
     self.attachmentCollection.delegate = self.ads;
     self.attachmentCollection.dataSource = self.ads;
-    self.ads.observation = observation;
+    self.ads.attachments = [observation.attachments setByAddingObjectsFromArray: observation.transientAttachments];
 }
 
 - (void) setAttachmentSelectionDelegate:(NSObject<AttachmentSelectionDelegate> *)attachmentSelectionDelegate {

@@ -14,22 +14,26 @@
 #import "AttributionsViewController.h"
 #import "ChangePasswordViewController.h"
 #import "DisclaimerViewController.h"
-#import "ThemeSettingsTableViewController.h"
 #import "LocationDisplayTableViewController.h"
 #import "TimeSettingsTableViewController.h"
-#import "DataFetchSettingsTableViewController.h"
 #import "DataSynchronizationSettingsTableViewController.h"
 #import "LocationServicesSettingsTableViewController.h"
 #import "ObservationServicesSettingsTableViewController.h"
 #import "Server.h"
 #import "AppDelegate.h"
-#import "Theme+UIResponder.h"
-#import "MAGE-swift.h"
+#import "MAGE-Swift.h"
+#import <PureLayout/PureLayout.h>
 
 @interface SettingsViewController ()<AuthenticationDelegate, SettingsDelegate, EventInformationDelegate, UISplitViewControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) SettingsTableViewController *settingsTableViewController;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
+@property (strong, nonatomic) UINavigationController *masterViewController;
+@property (strong, nonatomic) UIView *settingsDetailView;
+@property (strong, nonatomic) UIImageView *settingsDetailImageView;
+@property (strong, nonatomic) UILabel *settingsDetailLabel;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
 @end
 
 @implementation SettingsViewController
@@ -42,23 +46,65 @@
     return self;
 }
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
+        self.scheme = containerScheme;
         [self initialize];
     }
     return self;
 }
 
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.masterViewController.navigationBar.translucent = NO;
+    self.masterViewController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.masterViewController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.masterViewController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
+    self.masterViewController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.titleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    
+    self.masterViewController.navigationBar.standardAppearance = appearance;
+    self.masterViewController.navigationBar.scrollEdgeAppearance = appearance;
+    self.masterViewController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.masterViewController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.settingsDetailView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.settingsDetailImageView.tintColor = [self.scheme.colorScheme.primaryColor colorWithAlphaComponent:0.87];
+    self.settingsDetailLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.87];
+}
+
 - (void) initialize {
     self.childCoordinators = [NSMutableArray array];
     
-    self.settingsTableViewController = [[SettingsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-//    [[NSBundle mainBundle] loadNibNamed:@"SettingsMasterView" owner:self options:nil][0];
-    self.settingsTableViewController.dataSource.delegate = self;
-    UINavigationController *masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
+    self.settingsTableViewController = [[SettingsTableViewController alloc] initWithScheme:self.scheme delegate:self];
+    self.masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
     
-    UIViewController *detailViewController = [[UIViewController alloc] initWithNibName:@"SettingsDetailView" bundle:nil];
-    self.viewControllers = [NSArray arrayWithObjects:masterViewController, detailViewController, nil];
+    self.settingsDetailView = [[UIView alloc] initForAutoLayout];
+
+    UIViewController *detailViewController = [[UIViewController alloc] init];
+    [detailViewController.view addSubview:self.settingsDetailView];
+    [self.settingsDetailView autoPinEdgesToSuperviewEdges];
+    self.settingsDetailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"settings"]];
+    [self.settingsDetailImageView autoSetDimensionsToSize:CGSizeMake(48, 48)];
+    [self.settingsDetailView addSubview:self.settingsDetailImageView];
+    [self.settingsDetailImageView autoCenterInSuperview];
+    self.settingsDetailLabel = [[UILabel alloc] initForAutoLayout];
+    [self.settingsDetailView addSubview:self.settingsDetailLabel];
+    self.settingsDetailLabel.text = @"Settings";
+    [self.settingsDetailLabel autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.settingsDetailImageView withOffset:8];
+    [self.settingsDetailLabel autoAlignAxisToSuperviewAxis:ALAxisVertical];
+    self.viewControllers = [NSArray arrayWithObjects:self.masterViewController, detailViewController, nil];
 }
 
 -(void) viewDidLoad {
@@ -81,13 +127,7 @@
                                                  name:NSUserDefaultsDidChangeNotification
                                                object:nil];
     
-    [self registerForThemeChanges];
-}
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.navigationController.view.backgroundColor = [UIColor tableBackground];
-    self.view.backgroundColor = [UIColor tableBackground];
-    
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {
@@ -98,11 +138,30 @@
             [navigationController setViewControllers:@[vc]];
         } else {
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+            navigationController.navigationBar.translucent = NO;
+            navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+            navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+            navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
+            navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+            UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+            [appearance configureWithOpaqueBackground];
+            appearance.titleTextAttributes = @{
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+                NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+            };
+            appearance.largeTitleTextAttributes = @{
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+                NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+            };
+            
+            navigationController.navigationBar.standardAppearance = appearance;
+            navigationController.navigationBar.scrollEdgeAppearance = appearance;
+            navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+            navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
             splitViewController.viewControllers = @[[splitViewController.viewControllers firstObject], navigationController];
         }
     } else {
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-        vc.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
         [navigationController pushViewController:vc animated:YES];
     }
     
@@ -146,27 +205,29 @@
             break;
         }
         case kLocationServices: {
-            LocationServicesSettingsTableViewController *viewController = [[LocationServicesSettingsTableViewController alloc] init];
+            LocationServicesSettingsTableViewController *viewController = [[LocationServicesSettingsTableViewController alloc] initWithScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
         case kObservationServices: {
-            ObservationServicesSettingsTableViewController *viewController = [[ObservationServicesSettingsTableViewController alloc] init];
+            ObservationServicesSettingsTableViewController *viewController = [[ObservationServicesSettingsTableViewController alloc] initWithScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
         case kDataSynchronization: {
-            DataSynchronizationSettingsTableViewController *viewController = [[DataSynchronizationSettingsTableViewController alloc] init];
+            DataSynchronizationSettingsTableViewController *viewController = [[DataSynchronizationSettingsTableViewController alloc] initWithScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
         case kLocationDisplay: {
             LocationDisplayTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"LocationDisplay" owner:self options:nil][0];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
         case kTimeDisplay: {
             TimeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"TimeDisplay" owner:self options:nil][0];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
@@ -176,7 +237,7 @@
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSDictionary *fetchPreferences = [defaults dictionaryForKey:preferenceKey];
             
-            ValuePickerTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"ValuePicker" owner:self options:nil][0];
+            ValuePickerTableViewController *viewController = [[ValuePickerTableViewController alloc] initWithScheme: self.scheme];
             viewController.title = [fetchPreferences valueForKey:@"title"];
             viewController.section = [fetchPreferences valueForKey:@"section"];
             viewController.labels = [fetchPreferences valueForKey:@"labels"];
@@ -199,7 +260,7 @@
             break;
         }
         case kChangePassword: {
-            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES];
+            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme];
             [self presentViewController:viewController animated:YES completion:nil];
             break;
         }
@@ -207,18 +268,20 @@
             [self onLogout];
             break;
         }
-        case kTheme: {
-            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
-            [self showDetailViewController:viewController sender:nil];
-            break;
-        }
+//        case kTheme: {
+//            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
+//            [self showDetailViewController:viewController sender:nil];
+//            break;
+//        }
         case kDisclaimer: {
             DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"Disclaimer" bundle:nil];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
         case kAttributions: {
             AttributionsViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Attributions" owner:self options:nil][0];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
@@ -232,27 +295,25 @@
 
     [self presentViewController:navigationController animated:YES completion:nil];
     
-    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self];
+    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme];
     [self.childCoordinators addObject:coord];
     [coord startLoginOnly];
     navigationController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLogin:)];
 }
 
 - (void) onEventInfo:(Event *)event {
-    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:[self.viewControllers firstObject] event:event];
+    EventInformationCoordinator *coordinator = [[EventInformationCoordinator alloc] initWithViewController:[self.viewControllers firstObject] event:event scheme:self.scheme];
     [self.childCoordinators addObject:coordinator];
     coordinator.delegate = self;
-    [coordinator start];
+    [coordinator startIpad];
 }
 
 - (void) onChangeEvent:(Event *) event {
     [Event sendRecentEvent];
     [Server setCurrentEventId:event.remoteId];
     
-    MageRootViewController *vc = [[MageRootViewController alloc] init];
-    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    vc.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:vc animated:YES completion:NULL];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate createRootView];
 }
 
 - (void) onLogout {

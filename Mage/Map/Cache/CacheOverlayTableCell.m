@@ -7,16 +7,16 @@
 //
 
 #import "CacheOverlayTableCell.h"
-#import "UIColor+Mage.h"
 #import "CacheOverlays.h"
 #import "MageConstants.h"
 
 @interface CacheOverlayTableCell()<UITableViewDelegate, UITableViewDataSource>
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation CacheOverlayTableCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier scheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -24,6 +24,7 @@
         self.tableView.tag = 100;
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
+        self.scheme = containerScheme;
         [self addSubview:self.tableView];
     }
     return self;
@@ -73,19 +74,19 @@
     if(cell == nil) {
        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cacheOverlayCell"];
     }
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.backgroundColor = [UIColor dialog];
-    cell.imageView.tintColor = [UIColor brand];
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    cell.imageView.tintColor = self.scheme.colorScheme.primaryColor;
     
     if ([self.overlay getChildren].count != 1  && indexPath.row == 0) {
-        cell.textLabel.textColor = [UIColor primaryText];
-        cell.detailTextLabel.textColor = [UIColor secondaryText];
+        cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+        cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 
         CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
         cacheSwitch.on = self.overlay.enabled;
         cacheSwitch.overlay = self.overlay;
-        cacheSwitch.onTintColor = [UIColor themedButton];
+        cacheSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
         [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = cacheSwitch;
         cell.textLabel.text = self.mageLayer ? self.mageLayer.name : [self.overlay getName];
@@ -109,7 +110,7 @@
         CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
         cacheSwitch.on = cacheOverlay.enabled;
         cacheSwitch.overlay = cacheOverlay;
-        cacheSwitch.onTintColor = [UIColor themedButton];
+        cacheSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
         [cacheSwitch addTarget:self action:@selector(childActiveChanged:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = cacheSwitch;
     }

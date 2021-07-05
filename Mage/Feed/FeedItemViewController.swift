@@ -25,13 +25,16 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
     let temporalCellReuseIdentifer = "temporalCell";
     let headerCellIdentifier = "headerCell"
     
+    var scheme: MDCContainerScheming?;
+    
     let feedItem : FeedItem
     let properties: [String: Any]?
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(feedItem:FeedItem) {
+    @objc public init(feedItem:FeedItem, scheme: MDCContainerScheming?) {
+        self.scheme = scheme;
         self.feedItem = feedItem
         self.properties = feedItem.properties as? [String: Any];
         super.init(style: .grouped)
@@ -42,10 +45,12 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
         tableView.register(FeedItemPropertyCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
     
-    public override func themeDidChange(_ theme: MageTheme) {
-        self.view.backgroundColor = UIColor.background()
-        self.tableView.backgroundColor = UIColor.tableBackground()
-        self.tableView.separatorColor = UIColor.tableSeparator()
+    public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        if (scheme != nil) {
+            self.scheme = scheme!;
+        }
+        self.view.backgroundColor = scheme?.colorScheme.backgroundColor;
+        self.tableView.backgroundColor = scheme?.colorScheme.backgroundColor;
     }
     
     override func viewDidLoad() {
@@ -53,8 +58,6 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 72
-        
-        self.registerForThemeChanges()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,11 +89,13 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if (indexPath.section == HEADER_SECTION) {
             let cell: FeedItemCard = tableView.dequeueReusableCell(withIdentifier: headerCellIdentifier, for: indexPath) as! FeedItemCard;
+            cell.applyTheme(withScheme: self.scheme);
             cell.bind(feedItem: feedItem);
             return cell;
         }
         
         let cell: FeedItemPropertyCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemPropertyCell;
+        cell.applyTheme(withScheme: self.scheme);
         
         let key = properties?.keys.sorted()[indexPath.row] ?? ""
         let value = properties?[key];

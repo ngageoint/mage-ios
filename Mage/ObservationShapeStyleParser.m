@@ -23,7 +23,7 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
     
     ObservationShapeStyle *style = [[ObservationShapeStyle alloc] init];
     
-    NSDictionary *form = [observation getPrimaryForm];
+    NSDictionary *form = [observation getPrimaryEventForm];
     
     // Check for a style
     NSDictionary *styleField = [form objectForKey: STYLE_ELEMENT];

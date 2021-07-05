@@ -24,7 +24,8 @@
                    @"password",
                    @"radio",
                    @"textarea",
-                   @"textfield"];
+                   @"textfield",
+                   @"attachment"];
     });
     
     return fields;

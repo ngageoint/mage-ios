@@ -4,8 +4,6 @@
 //
 //
 
-@import HexColors;
-
 #import "GeometryEditViewController.h"
 #import "ObservationAnnotation.h"
 #import "ObservationAnnotationView.h"
@@ -24,25 +22,22 @@
 #import "Observation.h"
 #import "ObservationShapeStyle.h"
 #import "Event.h"
-#import "GeometryEditMapDelegate.h"
-#import "UIColor+Mage.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
-#import "Theme+UIResponder.h"
 #import "BaseMapOverlay.h"
 #import "GPKGGeoPackageFactory.h"
 #import <mgrs/MGRS.h>
 #import <mgrs/mgrs-umbrella.h>
+#import <PureLayout/PureLayout.h>
 
-@import SkyFloatingLabelTextField;
+@import MaterialComponents;
 
 static float paddingPercentage = .1;
 
 
-@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate>
+@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate>
 
 @property (strong, nonatomic) GeometryEditCoordinator *coordinator;
-@property (strong, nonatomic) GeometryEditMapDelegate* mapDelegate;
 @property (strong, nonatomic) SFGeometry *geometry;
 
 @property (strong, nonatomic) MapObservation *mapObservation;
@@ -55,22 +50,29 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
 @property (nonatomic) BOOL rectangleSameXSide1;
 @property (nonatomic) BOOL validLocation;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *latitudeField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *longitudeField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *mgrsField;
+@property (strong, nonatomic) MDCFilledTextField *latitudeField;
+@property (strong, nonatomic) MDCFilledTextField *longitudeField;
+@property (strong, nonatomic) MDCFilledTextField *mgrsField;
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (strong, nonatomic) NSTimer *textFieldChangedTimer;
 @property (nonatomic) double lastAnnotationSelectedTime;
 @property (nonatomic, strong) Observation *observation;
 @property (strong, nonatomic) id fieldDefinition;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 @property (nonatomic) BOOL isObservationGeometry;
-@property (weak, nonatomic) IBOutlet UIView *fieldEntryBackground;
-@property (weak, nonatomic) IBOutlet UIStackView *fieldStackView;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *locationEntryMethod;
 @property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
 @property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
+@property (strong, nonatomic) MDCFloatingButton *pointButton;
+@property (strong, nonatomic) MDCFloatingButton *lineButton;
+@property (strong, nonatomic) MDCFloatingButton *rectangleButton;
+@property (strong, nonatomic) MDCFloatingButton *polygonButton;
+
+@property (strong, nonatomic) UIScrollView *slidescroll;
+@property (strong, nonatomic) MDCTabBarView *fieldTypeTabs;
+@property (strong, nonatomic) UIView *hintView;
+@property (strong, nonatomic) UILabel *hintLabel;
 @end
 
 @implementation GeometryEditViewController
@@ -78,29 +80,56 @@ static float paddingPercentage = .1;
 #define degreesToRadians(x) (M_PI * x / 180.0)
 #define radiansToDegrees(x) (x * 180.0 / M_PI)
 
-- (void) themeTextField: (SkyFloatingLabelTextFieldWithIcon *) field {
-    field.textColor = [UIColor primaryText];
-    field.selectedLineColor = [UIColor brand];
-    field.selectedTitleColor = [UIColor brand];
-    field.placeholderColor = [UIColor secondaryText];
-    field.lineColor = [UIColor secondaryText];
-    field.titleColor = [UIColor secondaryText];
-    field.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
-    field.iconText = @"\U0000f0ac";
-    field.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
+- (void) themeTextField: (MDCFilledTextField *) field withScheme: (id<MDCContainerScheming>)containerScheme {
+    [field applyThemeWithScheme:containerScheme];
+    [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateNormal];
+    [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateEditing];
 }
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.fieldEntryBackground.backgroundColor = [UIColor dialog];
-    [UIColor themeMap:self.map];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    self.scheme = containerScheme;
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.titleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    
+    self.slidescroll.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+    [self.fieldTypeTabs applyPrimaryThemeWithScheme:containerScheme];
+    self.fieldTypeTabs.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+    [self themeTextField:self.latitudeField withScheme:containerScheme];
+    [self themeTextField:self.longitudeField withScheme:containerScheme];
+    [self themeTextField:self.mgrsField withScheme:containerScheme];
+    self.hintView.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+    self.hintLabel.textColor = containerScheme.colorScheme.onPrimaryColor;
+    
     [self setShapeTypeSelection];
-    [self themeTextField:self.latitudeField];
-    [self themeTextField:self.longitudeField];
-    [self themeTextField:self.mgrsField];
-    [self.locationEntryMethod setTintColor:[UIColor brand]];
     [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self setupMapType:defaults];
+}
+
+- (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
+    NSLayoutConstraint *constraint0 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0f constant: 30];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant: 20];
+    [leadingIcon addConstraint:constraint0];
+    [leadingIcon addConstraint:constraint1];
+    leadingIcon.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 -(void) setShapeTypeSelection {
@@ -112,32 +141,77 @@ static float paddingPercentage = .1;
 
 - (void) updateButton: (UIButton *) button toSelected: (BOOL) selected {
     if (selected) {
-        [button setTintColor:[UIColor activeTabIcon]];
-        [button setBackgroundColor:[UIColor dialog]];
+        [button setTintColor:self.scheme.colorScheme.primaryColor];
+        [button setBackgroundColor:self.scheme.colorScheme.surfaceColor];
     } else {
-        [button setTintColor:[UIColor inactiveTabIcon]];
-        [button setBackgroundColor:[UIColor dialog]];
+        [button setTintColor:[UIColor.systemGrayColor colorWithAlphaComponent:0.6]];
+        [button setBackgroundColor:self.scheme.colorScheme.surfaceColor];
     }
 }
 
-- (instancetype) initWithCoordinator:(GeometryEditCoordinator *) coordinator {
-    if (self = [super init]) {
+- (instancetype) initWithCoordinator:(GeometryEditCoordinator *) coordinator scheme: (id<MDCContainerScheming>) containerScheme {
+    if (self = [super initWithNibName:nil bundle:nil]) {
         _mapDelegate = [[GeometryEditMapDelegate alloc] initWithDragCallback:self andEditDelegate:self];
         _coordinator = coordinator;
+        _scheme = containerScheme;
+        
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"close"] style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
+        doneButton.accessibilityLabel = @"Apply";
+        
+        UIBarButtonItem *clearButton;
+        if (@available(iOS 14.0, *)) {
+            UIAction *clearAction = [UIAction actionWithTitle:@"Clear" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+                [self clearLocation];
+            }];
+            clearAction.accessibilityLabel = @"clear";
+            
+            UIMenu *clearMenu = [UIMenu menuWithTitle:@"" children:@[clearAction]];
+            clearButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_small"] menu:clearMenu];
+            clearButton.isAccessibilityElement = true;
+            clearButton.accessibilityLabel = @"more_menu";
+        } else {
+            // Fallback on earlier versions
+            // just stick the clear button in there for now
+            clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(clearLocation)];
+            clearButton.accessibilityLabel = @"clear";
+        }
+        [self.navigationItem setLeftBarButtonItem:backButton];
+        [self.navigationItem setRightBarButtonItems:@[clearButton, doneButton]];
     }
     return self;
 }
 
-- (IBAction)locationEntryMethodChanged:(id)sender {
-    if (self.locationEntryMethod.selectedSegmentIndex == 0) {
-        self.mgrsField.hidden = YES;
-        self.latitudeField.hidden = NO;
-        self.longitudeField.hidden = NO;
-    } else {
-        self.mgrsField.hidden = NO;
-        self.latitudeField.hidden = YES;
-        self.longitudeField.hidden = YES;
+- (void) clearLocation {
+    self.geometry = nil;
+    [self updateGeometry];
+    [self updateLocationTextWithLatitudeString:nil andLongitudeString:nil];
+    if(self.mapObservation != nil){
+        [self.mapObservation removeFromMapView:self.map];
+        self.mapObservation = nil;
     }
+}
+
+- (void) fieldEditCanceled {
+    [self.coordinator fieldEditCanceled];
+}
+
+- (void) fieldEditDone {
+    // Validate the geometry
+    NSError *error;
+    if (![self validate:&error]) {
+        NSString *message = [[error userInfo] valueForKey:NSLocalizedDescriptionKey];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Geometry"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        
+        return;
+    }
+    [self.coordinator fieldEditDone];
 }
 
 - (void) setupMapType: (id) object {
@@ -151,54 +225,197 @@ static float paddingPercentage = .1;
 }
 
 - (void) addBackgroundMap {
-    if ([UIColor darkMap]) {
-        [self.map removeOverlay:self.backgroundOverlay];
-        [self.map addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
+    if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+        if (self.backgroundOverlay) {
+            [self.map removeOverlay:self.backgroundOverlay];
+        }
+        if (self.darkBackgroundOverlay) {
+            [self.map addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
+        }
     } else {
-        [self.map removeOverlay:self.darkBackgroundOverlay];
-        [self.map addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
+        if (self.darkBackgroundOverlay) {
+            [self.map removeOverlay:self.darkBackgroundOverlay];
+        }
+        if (self.backgroundOverlay) {
+            [self.map addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
+        }
     }
 }
 
 - (void) removeBackgroundMap {
-    [self.map removeOverlay: self.backgroundOverlay];
-    [self.map removeOverlay: self.darkBackgroundOverlay];
+    if (self.backgroundOverlay) {
+        [self.map removeOverlay: self.backgroundOverlay];
+    }
+    if (self.darkBackgroundOverlay) {
+        [self.map removeOverlay: self.darkBackgroundOverlay];
+    }
 }
 
 - (void) createBackgroundOverlay {
     if (self.backgroundOverlay) return;
     GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
     GPKGGeoPackage * geoPackage = [manager open:@"countries"];
+    if (geoPackage) {
+        GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
+        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
+        
+        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+        [self.backgroundOverlay setMinZoom:0];
+        self.backgroundOverlay.darkTheme = NO;
 
-    GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
-    
-    // If indexed, add as a tile overlay
-    GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
-    [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
-    
-    self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
-    [self.backgroundOverlay setMinZoom:0];
-    self.backgroundOverlay.darkTheme = NO;
-
-    self.backgroundOverlay.canReplaceMapContent = true;
+        self.backgroundOverlay.canReplaceMapContent = true;
+    }
     
     GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
+    if (darkGeoPackage) {
+        GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
+        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
+        
+        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+        [self.darkBackgroundOverlay setMinZoom:0];
+        self.darkBackgroundOverlay.darkTheme = YES;
 
-    GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
-    
-    // If indexed, add as a tile overlay
-    GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
-    [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
-    
-    self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
-    [self.darkBackgroundOverlay setMinZoom:0];
-    self.darkBackgroundOverlay.darkTheme = YES;
+        self.darkBackgroundOverlay.canReplaceMapContent = true;
+    }
+}
 
-    self.darkBackgroundOverlay.canReplaceMapContent = true;
+- (void) buildView {
+    self.map = [[MKMapView alloc] initForAutoLayout];
+    self.map.accessibilityLabel = @"Geometry Edit Map";
+    [self.view addSubview:self.map];
+    [self.map autoPinEdgesToSuperviewEdges];
+    
+    // field type tabs
+    self.fieldTypeTabs = [[MDCTabBarView alloc] init];
+    UITabBarItem *latlngTab = [[UITabBarItem alloc] initWithTitle:@"Lat / Lng" image:nil tag:0];
+    latlngTab.accessibilityLabel = @"Latitude Longitude";
+    UITabBarItem *mgrsTab = [[UITabBarItem alloc] initWithTitle:@"MGRS" image:nil tag:1];
+    mgrsTab.accessibilityLabel = @"MGRS";
+    self.fieldTypeTabs.items = @[latlngTab, mgrsTab];
+    self.fieldTypeTabs.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed;
+    [self.fieldTypeTabs setSelectedItem:latlngTab animated:false];
+    self.fieldTypeTabs.tabBarDelegate = self;
+    [self.view addSubview:self.fieldTypeTabs];
+    [self.fieldTypeTabs autoPinEdgesToSuperviewSafeAreaWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
+    
+    // tab content
+    self.slidescroll = [[UIScrollView alloc] initForAutoLayout];
+    [self.slidescroll setScrollEnabled:false];
+    self.slidescroll.contentSize = CGSizeMake(2.0 * self.view.bounds.size.width, 150);
+    [self.slidescroll setUserInteractionEnabled:true];
+    UIStackView *tabStack = [[UIStackView alloc] initForAutoLayout];
+    tabStack.axis = UILayoutConstraintAxisHorizontal;
+    tabStack.spacing = 0.0;
+    tabStack.distribution = UIStackViewDistributionFill;
+    tabStack.directionalLayoutMargins = NSDirectionalEdgeInsetsZero;
+    tabStack.clipsToBounds = true;
+    [tabStack setUserInteractionEnabled:true];
+    [self.slidescroll addSubview:tabStack];
+    [self.view addSubview:self.slidescroll];
+    [self.slidescroll autoPinEdgeToSuperviewEdge:ALEdgeLeft];
+    [self.slidescroll autoPinEdgeToSuperviewEdge:ALEdgeRight];
+    [self.slidescroll autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.fieldTypeTabs];
+    [tabStack autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self.slidescroll];
+    
+    self.latitudeField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+    self.latitudeField.placeholder = @"Latitude";
+    self.latitudeField.label.text = @"Latitude";
+    self.latitudeField.accessibilityLabel = @"Latitude Value";
+    [self.latitudeField sizeToFit];
+    
+    self.longitudeField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+    self.longitudeField.placeholder = @"Longitude";
+    self.longitudeField.label.text = @"Longitude";
+    self.longitudeField.accessibilityLabel = @"Longitude Value";
+    [self.longitudeField sizeToFit];
+    
+    self.mgrsField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+    self.mgrsField.placeholder = @"MGRS";
+    self.mgrsField.label.text = @"MGRS";
+    self.mgrsField.accessibilityLabel = @"MGRS Value";
+    [self.mgrsField sizeToFit];
+    
+    UIView *latlngContainer = [[UIView alloc] initForAutoLayout];
+    [latlngContainer addSubview:_latitudeField];
+    [latlngContainer addSubview:_longitudeField];
+    
+    UIView *mgrsContainer = [[UIView alloc] initForAutoLayout];
+    [mgrsContainer addSubview:self.mgrsField];
+    
+    [tabStack addArrangedSubview:latlngContainer];
+    [tabStack addArrangedSubview:mgrsContainer];
+    
+    [latlngContainer autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.slidescroll];
+    [mgrsContainer autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.slidescroll];
+    
+    [self.latitudeField autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(8, 8, 8, 8) excludingEdge:ALEdgeRight];
+    [self.longitudeField autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(8, 8, 8, 8) excludingEdge:ALEdgeLeft];
+    [self.longitudeField autoPinEdge:ALEdgeLeft toEdge:ALEdgeRight ofView:self.latitudeField withOffset:8];
+    [self.latitudeField autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.longitudeField];
+    [self.mgrsField autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(8, 8, 8, 8)];
+    
+    self.hintView = [[UIView alloc] initForAutoLayout];
+    [self.hintView autoSetDimension:ALDimensionHeight toSize:16];
+    self.hintLabel = [[UILabel alloc] initForAutoLayout];
+    [self.hintView addSubview:self.hintLabel];
+    [self.hintLabel autoCenterInSuperview];
+    [self.hintLabel autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.hintView];
+    self.hintLabel.textAlignment = NSTextAlignmentCenter;
+    self.hintLabel.font = [UIFont systemFontOfSize:10];
+    
+    [self.view addSubview:self.hintView];
+    [self.hintView autoPinEdgeToSuperviewEdge:ALEdgeLeft];
+    [self.hintView autoPinEdgeToSuperviewEdge:ALEdgeRight];
+    [self.hintView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.slidescroll];
+    
+    UIStackView *buttonStack = [[UIStackView alloc] initForAutoLayout];
+    buttonStack.axis = UILayoutConstraintAxisHorizontal;
+    buttonStack.spacing = 16.0;
+    buttonStack.distribution = UIStackViewDistributionFill;
+    buttonStack.directionalLayoutMargins = NSDirectionalEdgeInsetsZero;
+    [buttonStack setUserInteractionEnabled:true];
+    
+    self.pointButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
+    self.pointButton.accessibilityLabel = @"point";
+    [self.pointButton setImage:[UIImage imageNamed:@"observations"] forState:UIControlStateNormal];
+    [self.pointButton addTarget:self action:@selector(pointButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.lineButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
+    self.lineButton.accessibilityLabel = @"line";
+    [self.lineButton setImage:[UIImage imageNamed:@"line_string"] forState:UIControlStateNormal];
+    [self.lineButton addTarget:self action:@selector(lineButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.rectangleButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
+    self.rectangleButton.accessibilityLabel = @"rectangle";
+    [self.rectangleButton setImage:[UIImage imageNamed:@"rectangle"] forState:UIControlStateNormal];
+    [self.rectangleButton addTarget:self action:@selector(rectangleButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.polygonButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
+    self.polygonButton.accessibilityLabel = @"polygon";
+    [self.polygonButton setImage:[UIImage imageNamed:@"polygon"] forState:UIControlStateNormal];
+    [self.polygonButton addTarget:self action:@selector(polygonButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [buttonStack addArrangedSubview:self.pointButton];
+    [buttonStack addArrangedSubview:self.lineButton];
+    [buttonStack addArrangedSubview:self.rectangleButton];
+    [buttonStack addArrangedSubview:self.polygonButton];
+    
+    [self.view addSubview:buttonStack];
+    [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.hintView withOffset:16];
+    [buttonStack autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:16];
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self buildView];
+    
     self.map.delegate = _mapDelegate;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -219,30 +436,35 @@ static float paddingPercentage = .1;
     [self.mgrsField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     if ([defaults boolForKey:@"showMGRS"]) {
-        [self.locationEntryMethod setSelectedSegmentIndex:1];
-        self.mgrsField.hidden = NO;
-        self.latitudeField.hidden = YES;
-        self.longitudeField.hidden = YES;
+        [self.fieldTypeTabs setSelectedItem:[self.fieldTypeTabs.items objectAtIndex:1]];
     } else {
-        [self.locationEntryMethod setSelectedSegmentIndex:0];
-        self.mgrsField.hidden = YES;
-        self.latitudeField.hidden = NO;
-        self.longitudeField.hidden = NO;
+        [self.fieldTypeTabs setSelectedItem:[self.fieldTypeTabs.items objectAtIndex:0]];
     }
     
     SFGeometry *geometry = [self.coordinator currentGeometry];
     
-    [self setShapeTypeFromGeometry:geometry];
-    [self addMapShape:geometry];
+    if (geometry != nil) {
+        [self setShapeTypeFromGeometry:geometry];
+        [self addMapShape:geometry];
     
-    if (self.shapeType == SF_POINT) {
-        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
-        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
-        MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-        [self.map setRegion:viewRegion animated:NO];
+        if (self.shapeType == SF_POINT) {
+            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
+            MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
+            MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+            [self.map setRegion:viewRegion animated:NO];
+        } else {
+            MKCoordinateRegion viewRegion = [self viewRegionOfMapView:self.map forGeometry:geometry];
+            [self.map setRegion:viewRegion];
+        }
     } else {
-        MKCoordinateRegion viewRegion = [self viewRegionOfMapView:self.map forGeometry:geometry];
-        [self.map setRegion:viewRegion];
+        self.shapeType = SF_POINT;
+        [self setShapeTypeSelection];
+        CLLocation *location = [[LocationService singleton] location];
+        if (location) {
+            MKCoordinateRegion region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(.03125, .03125));
+            MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+            [self.map setRegion:viewRegion animated:NO];
+        }
     }
 
     UITapGestureRecognizer * singleTapGesture = [[UITapGestureRecognizer alloc]
@@ -257,7 +479,7 @@ static float paddingPercentage = .1;
                                     initWithTarget:self action:@selector(longPressGesture:)]];
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
     
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 -(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (SFGeometry *) geometry {
@@ -280,42 +502,8 @@ static float paddingPercentage = .1;
 }
 
 - (void) setNavBarSubtitle: (NSString *) subtitle {
-    [self.navigationItem setTitle:[self.coordinator fieldName] subtitle:subtitle];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-}
-
-- (void) keyboardWillShow: (NSNotification *) notification {
-    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect keyboardFrameInViewCoordinates = [self.view convertRect:keyboardFrame fromView:nil];
-    self.bottomConstraint.constant = CGRectGetHeight(self.view.bounds) - keyboardFrameInViewCoordinates.origin.y;
-    
-    [self.view layoutIfNeeded];
-    
-    [self updateHint];
-}
-
-- (void) keyboardWillHide: (NSNotification *) notification {
-    self.bottomConstraint.constant = 0;
+    [self.hintLabel setText:subtitle];
+    [self.navigationItem setTitle:[self.coordinator fieldName]];
 }
 
 - (void) clearLatitudeAndLongitudeFocus{
@@ -349,7 +537,11 @@ static float paddingPercentage = .1;
             if (locationEdit) {
                 hint = @"Manually modify point coordinates";
             } else {
-                hint = @"Long press point to modify location";
+                if (self.geometry == nil) {
+                    hint = @"Long press to set location";
+                } else {
+                    hint = @"Long press point to modify location";
+                }
             }
         }
             break;
@@ -472,8 +664,8 @@ static float paddingPercentage = .1;
     if (self.textFieldChangedTimer.isValid) {
         [self.textFieldChangedTimer invalidate];
     }
-    
-    self.textFieldChangedTimer = [NSTimer scheduledTimerWithTimeInterval:.5 target:self selector:@selector(onLatLonTextChanged) userInfo:textField repeats:NO];
+    // TODO: fix this to not require a half second wait
+    self.textFieldChangedTimer = [NSTimer scheduledTimerWithTimeInterval:.01 target:self selector:@selector(onLatLonTextChanged) userInfo:textField repeats:NO];
 }
 
 - (void) onLatLonTextChanged {
@@ -484,7 +676,7 @@ static float paddingPercentage = .1;
     NSDecimalNumber *latitude = nil;
     NSDecimalNumber *longitude = nil;
 
-    if (self.locationEntryMethod.selectedSegmentIndex == 0) {
+    if (self.fieldTypeTabs.selectedItem.tag == 0) {
         if(latitudeString.length > 0){
             @try {
                 latitude = [[NSDecimalNumber alloc] initWithDouble:[latitudeString doubleValue]];
@@ -553,7 +745,8 @@ static float paddingPercentage = .1;
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
         
         GPKGMapPoint *mapPoint = (GPKGMapPoint *) view.annotation;
-        
+        view.accessibilityLabel = @"shape_edit";
+
         if (self.selectedMapPoint == nil || self.selectedMapPoint.id != mapPoint.id) {
             self.lastAnnotationSelectedTime = [NSDate timeIntervalSinceReferenceDate];
             [self selectShapePoint:mapPoint];
@@ -562,7 +755,11 @@ static float paddingPercentage = .1;
 }
 
 - (void) mapView: (MKMapView *) mapView didDeselectAnnotationView: (MKAnnotationView *) view {
+    if (_shapeType == SF_POINT) {
+        return;
+    }
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
+        view.accessibilityLabel = @"shape_point";
 
         [self locationEnabled:NO];
 
@@ -629,16 +826,18 @@ static float paddingPercentage = .1;
 
 - (void) updateGeometry {    
     SFGeometry *geometry = nil;
-    if (self.shapeType == SF_POINT && self.isObservationGeometry) {
-        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-        geometry = [[SFPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
-    } else {
-        @try {
-            geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
-        }
-        @catch (NSException* e) {
-            NSLog(@"Invalid Geometry");
+    if (self.geometry != nil) {
+        if (self.shapeType == SF_POINT && self.isObservationGeometry) {
+            MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+            ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
+            geometry = [[SFPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+        } else {
+            @try {
+                geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
+            }
+            @catch (NSException* e) {
+                NSLog(@"Invalid Geometry");
+            }
         }
     }
     
@@ -653,14 +852,6 @@ static float paddingPercentage = .1;
     self.latitudeField.enabled = enabled;
     self.longitudeField.enabled = enabled;
     self.mgrsField.enabled = enabled;
-    self.locationEntryMethod.enabled = enabled;
-    UIColor *backgroundColor = nil;
-    if(!enabled){
-        backgroundColor = [UIColor colorWithHexString:@"DDDDDD"];
-    }
-    self.latitudeField.backgroundColor = backgroundColor;
-    self.longitudeField.backgroundColor = backgroundColor;
-    self.mgrsField.backgroundColor = backgroundColor;
 }
 
 - (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{
@@ -802,53 +993,52 @@ static float paddingPercentage = .1;
     // Changing from point to a shape
     if (self.shapeType == SF_POINT) {
         
-        SFPoint *firstPoint = (SFPoint *)self.coordinator.currentGeometry;
-        
-//        MapShapePointsObservation *mapAnnotationObservation = (MapShapePointsObservation *)self.mapObservation;
-//
-//        MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-//        ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-//        SFPoint *firstPoint = [[SFPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
         SFLineString *lineString = [[SFLineString alloc] init];
-        [lineString addPoint:firstPoint];
-        // Changing to a rectangle
-        if (selectedRectangle) {
-            // Closed rectangle polygon all at the same point
+        if (self.geometry != nil) {
+            SFPoint *firstPoint = (SFPoint *)self.geometry;
             [lineString addPoint:firstPoint];
-            [lineString addPoint:firstPoint];
-            [lineString addPoint:firstPoint];
-            [lineString addPoint:firstPoint];
-        }
-        // Changing to a line or polygon
-        else {
-            self.newDrawing = true;
-        }
-        switch (selectedType) {
-            case SF_LINESTRING:
-                geometry = lineString;
-                break;
-            case SF_POLYGON:
-                {
-                    SFPolygon *polygon = [[SFPolygon alloc] init];
-                    [polygon addRing:lineString];
-                    geometry = polygon;
-                }
-                break;
-            default:
-                [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+            // Changing to a rectangle
+            if (selectedRectangle) {
+                // Closed rectangle polygon all at the same point
+                [lineString addPoint:firstPoint];
+                [lineString addPoint:firstPoint];
+                [lineString addPoint:firstPoint];
+                [lineString addPoint:firstPoint];
+            }
+        
+            // Changing to a line or polygon
+            else {
+                self.newDrawing = true;
+            }
+            switch (selectedType) {
+                case SF_LINESTRING:
+                    geometry = lineString;
+                    break;
+                case SF_POLYGON:
+                    {
+                        SFPolygon *polygon = [[SFPolygon alloc] init];
+                        [polygon addRing:lineString];
+                        geometry = polygon;
+                    }
+                    break;
+                default:
+                    [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+            }
         }
     }
     // Changing from line or polygon to a point
     else if (selectedType == SF_POINT) {
-        CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
-        geometry = [[SFPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
+        if (self.geometry != nil) {
+            CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
+            geometry = [[SFPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
+        }
         self.newDrawing = NO;
     }
     // Changing from between a line, polygon, and rectangle
     else {
         
         SFLineString *lineString = nil;
-        if (self.mapObservation != nil) {
+        if (self.geometry != nil) {
             
             NSArray *points = [self shapePoints];
             
@@ -883,61 +1073,61 @@ static float paddingPercentage = .1;
             }
             
             lineString = [self.shapeConverter toLineStringWithMapPoints:mapPoints];
-        } else {
-            CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
-            lineString = [[SFLineString alloc] init];
-            [lineString addPoint:[[SFPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude]];
         }
         
-        switch (selectedType) {
-                
-            case SF_LINESTRING:
-                {
-                    self.newDrawing = [lineString numPoints] <= 1;
-                    geometry = lineString;
-                }
-                break;
-                
-            case SF_POLYGON:
-                {
-                    // If converting to a rectangle, use the current shape bounds
-                    if (selectedRectangle) {
-                        SFLineString *lineStringCopy = [lineString mutableCopy];
-                        [SFGeometryUtils minimizeGeometry:lineStringCopy withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
-                        SFGeometryEnvelope *envelope = [SFGeometryEnvelopeBuilder buildEnvelopeWithGeometry:lineStringCopy];
-                        lineString = [[SFLineString alloc] init];
-                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
-                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
-                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
-                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
-                        [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
-                        [self updateIfRectangle:lineString.points];
-                    }
+        if (lineString != nil) {
+            switch (selectedType) {
                     
-                    SFPolygon *polygon = [[SFPolygon alloc] init];
-                    [polygon addRing:lineString];
-                    self.newDrawing = [lineString numPoints] <= 2;
-                    geometry = polygon;
-                }
-                break;
-                
-            default:
-                [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+                case SF_LINESTRING:
+                    {
+                        self.newDrawing = [lineString numPoints] <= 1;
+                        geometry = lineString;
+                    }
+                    break;
+                    
+                case SF_POLYGON:
+                    {
+                        // If converting to a rectangle, use the current shape bounds
+                        if (selectedRectangle) {
+                            SFLineString *lineStringCopy = [lineString mutableCopy];
+                            [SFGeometryUtils minimizeGeometry:lineStringCopy withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
+                            SFGeometryEnvelope *envelope = [SFGeometryEnvelopeBuilder buildEnvelopeWithGeometry:lineStringCopy];
+                            lineString = [[SFLineString alloc] init];
+                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
+                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
+                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
+                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
+                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
+                            [self updateIfRectangle:lineString.points];
+                        }
+                        
+                        SFPolygon *polygon = [[SFPolygon alloc] init];
+                        [polygon addRing:lineString];
+                        self.newDrawing = [lineString numPoints] <= 2;
+                        geometry = polygon;
+                    }
+                    break;
+                    
+                default:
+                    [NSException raise:@"Unsupported Geometry" format:@"Unsupported Geometry Type: %u", selectedType];
+            }
         }
     }
     
     self.shapeType = selectedType;
-    [self addMapShape:geometry];
     [self setShapeTypeSelection];
-    [self updateAcceptState];
-    
-    if (selectedType == SF_POINT) {
-        SFPoint *centroidPoint = [SFGeometryUtils centroidOfGeometry:geometry];
-        CLLocationCoordinate2D centroidLocation = CLLocationCoordinate2DMake([centroidPoint.y doubleValue], [centroidPoint.x doubleValue]);
-        [self.map setCenterCoordinate:centroidLocation animated:YES];
+    if (geometry != nil) {
+        [self addMapShape:geometry];
+        [self updateAcceptState];
+        
+        if (selectedType == SF_POINT) {
+            SFPoint *centroidPoint = [SFGeometryUtils centroidOfGeometry:geometry];
+            CLLocationCoordinate2D centroidLocation = CLLocationCoordinate2DMake([centroidPoint.y doubleValue], [centroidPoint.x doubleValue]);
+            [self.map setCenterCoordinate:centroidLocation animated:YES];
+        }
+        
+        [self updateGeometry];
     }
-    
-    [self updateGeometry];
 }
 
 -(CLLocationCoordinate2D) shapeToPointLocation{
@@ -976,6 +1166,7 @@ static float paddingPercentage = .1;
         if (self.isObservationGeometry) {
             self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:geometry];
             MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
+            mapAnnotationObservation.annotation.accessibilityLabel = @"point edit annotation";
             [self updateLocationTextWithAnnotationObservation:mapAnnotationObservation];
             [self selectAnnotation:mapAnnotationObservation.annotation];
             
@@ -985,10 +1176,11 @@ static float paddingPercentage = .1;
             GPKGMapPointOptions *options = [[GPKGMapPointOptions alloc] init];
             options.image = self.coordinator.pinImage;
             GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:options andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil andPolylineOptions:nil andPolygonOptions:nil];
-//            GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:options andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil andPolylineOptions:nil andPolygonOptions:nil];
             self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
             SFPoint *point = (SFPoint *)geometry;
             [self updateLocationTextWithLatitude:[point.y doubleValue] andLongitude:[point.x doubleValue]];
+            shapePoints.shape.shape.accessibilityLabel = @"point edit annotation";
+            [self selectAnnotation:shapePoints.shape.shape];
         }
         
     } else {
@@ -998,16 +1190,18 @@ static float paddingPercentage = .1;
         GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:options andPolylinePointOptions:[self editPointOptions] andPolygonPointOptions:[self editPointOptions] andPolygonPointHoleOptions:nil andPolylineOptions:nil andPolygonOptions:nil];
         self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
         NSArray *points = [self shapePoints];
-        GPKGMapPoint *selectPoint = [points objectAtIndex:0];
-        if(CLLocationCoordinate2DIsValid(previousSelectedPointLocation)){
-            for(GPKGMapPoint *point in points){
-                if(point.coordinate.latitude == previousSelectedPointLocation.latitude && point.coordinate.longitude == previousSelectedPointLocation.longitude){
-                    selectPoint = point;
-                    break;
+        if (points.count != 0) {
+            GPKGMapPoint *selectPoint = [points objectAtIndex:0];
+            if(CLLocationCoordinate2DIsValid(previousSelectedPointLocation)){
+                for(GPKGMapPoint *point in points){
+                    if(point.coordinate.latitude == previousSelectedPointLocation.latitude && point.coordinate.longitude == previousSelectedPointLocation.longitude){
+                        selectPoint = point;
+                        break;
+                    }
                 }
             }
+            [self selectAnnotation:selectPoint];
         }
-        [self selectAnnotation:selectPoint];
     }
     
     [self updateHint];
@@ -1135,16 +1329,49 @@ static float paddingPercentage = .1;
 }
 
 -(void) longPressGesture:(UILongPressGestureRecognizer *) longPressGestureRecognizer{
-    
     if(longPressGestureRecognizer.state == UIGestureRecognizerStateBegan){
     
         CGPoint cgPoint = [longPressGestureRecognizer locationInView:self.map];
         CLLocationCoordinate2D point = [self.map convertPoint:cgPoint toCoordinateFromView:self.map];
         
+        if (self.shapeType == SF_POINT) {
+            SFPoint *geometry = [[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
+            [self addMapShape:geometry];
+            [self updateGeometry];
+        }
         // Add a new point to a line or polygon
-        if (self.shapeType != SF_POINT) {
-            
-            if (!self.isRectangle) {
+        else {
+            if (self.isRectangle) {
+                if (self.mapObservation == nil) {
+                    // brand new rectangle
+                    SFGeometry *geometry = nil;
+                    
+                    SFLineString *lineString = [[SFLineString alloc] init];
+                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
+                    [self updateIfRectangle:lineString.points];
+                    
+                    SFPolygon *polygon = [[SFPolygon alloc] init];
+                    [polygon addRing:lineString];
+                    self.newDrawing = [lineString numPoints] <= 2;
+                    geometry = polygon;
+                    
+                    [self addMapShape:geometry];
+                    [self setShapeTypeSelection];
+                    [self updateAcceptState];
+                    [self updateGeometry];
+                } else if (![self shapePointsValid] && self.selectedMapPoint != nil) {
+                    // Allow long click to expand a zero area rectangle
+                    [self.selectedMapPoint setCoordinate:point];
+                    [self updateShape:point];
+                    [self updateHint];
+                    [self updateGeometry];
+                }
+            }
+            else {
                 
                 if (self.mapObservation == nil) {
                     SFGeometry *geometry = nil;
@@ -1170,6 +1397,8 @@ static float paddingPercentage = .1;
                             [NSException raise:@"Unsupported Geometry Type" format:@"Unsupported Geometry Type: %u", self.shapeType];
                     }
                     [self addMapShape:geometry];
+                    [self updateGeometry];
+
                 } else {
                     GPKGMapPoint *mapPoint = [[GPKGMapPoint alloc] initWithLocation:point];
                     mapPoint.options = [self editPointOptions];
@@ -1206,12 +1435,9 @@ static float paddingPercentage = .1;
                     [mapShapePoints addPoint:mapPoint withShape:shape];
                     [self selectAnnotation:mapPoint];
                     [self updateShape:mapPoint.coordinate];
+                    [self updateGeometry];
+
                 }
-            } else if (![self shapePointsValid] && self.selectedMapPoint != nil) {
-                // Allow long click to expand a zero area rectangle
-                [self.selectedMapPoint setCoordinate:point];
-                [self updateShape:point];
-                [self updateHint];
             }
         }
     }
@@ -1251,7 +1477,7 @@ static float paddingPercentage = .1;
     [self updateAcceptState];
 }
 
-- (BOOL) validate:(NSError **) error {    
+- (BOOL) validate:(NSError **) error {
     if (self.shapeType == SF_LINESTRING) {
         if ([[self shapePoints] count] < 2) {
             NSString *domain = @"mil.nga.MAGE.Error";
@@ -1369,9 +1595,11 @@ static float paddingPercentage = .1;
  */
 -(NSArray *) shapePoints{
     GPKGMapShapePoints * mapShapePoints = [self mapShapePoints];
-    NSObject<GPKGShapePoints> *shapePoints = [mapShapePoints.shapePoints.allValues objectAtIndex:0];
-    if (shapePoints != nil && shapePoints != NULL && ![shapePoints isEqual:[NSNull null]]) {
-        return [shapePoints points];
+    if (mapShapePoints.shapePoints.allValues.count != 0) {
+        NSObject<GPKGShapePoints> *shapePoints = [mapShapePoints.shapePoints.allValues objectAtIndex:0];
+        if (shapePoints != nil && shapePoints != NULL && ![shapePoints isEqual:[NSNull null]]) {
+            return [shapePoints points];
+        }
     }
     return [[NSArray alloc] init];
 }
@@ -1396,6 +1624,15 @@ static float paddingPercentage = .1;
     MapShapePointsObservation *shapePointsObservation = (MapShapePointsObservation *)self.mapObservation;
     GPKGMapShapePoints * mapShapePoints = [shapePointsObservation shapePoints];
     return mapShapePoints;
+}
+
+- (void)tabBarView:(MDCTabBarView *)tabBarView didSelectItem:(UITabBarItem *)item {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [weakSelf.slidescroll setContentOffset:CGPointMake(item.tag * self.slidescroll.frame.size.width, self.slidescroll.contentOffset.y)];
+        } completion:nil];
+    });
 }
 
 @end

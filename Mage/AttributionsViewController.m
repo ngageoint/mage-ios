@@ -8,24 +8,31 @@
 
 #import "AttributionsViewController.h"
 #import "AttributionTableViewCell.h"
-#import "Theme+UIResponder.h"
 
 @interface AttributionsViewController ()
 @property (weak, nonatomic) NSArray *attributions;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation AttributionsViewController
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
+- (instancetype) initWithScheme: (id<MDCContainerScheming>)containerScheme {
+    self = [super initWithStyle:UITableViewStylePlain];
+    self.scheme = containerScheme;
+    return self;
+}
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     [self.tableView reloadData];
 }
 
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
-    [self registerForThemeChanges];
-    
+        
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 120.0;
     self.tableView.tableFooterView = [UIView new];
@@ -82,9 +89,9 @@
            @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://raw.githubusercontent.com/iziz/libPhoneNumber-iOS/master/LICENSE" forText:@"Apache License 2.0"]
            },
          @{
-           @"title": @"SkyFloatingLabelTextField",
-           @"copyright": @"2016 Skyscanner Ltd",
-           @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://raw.githubusercontent.com/Skyscanner/SkyFloatingLabelTextField/master/LICENSE" forText:@"Apache License 2.0"]
+           @"title": @"Material Components for iOS",
+           @"copyright": @"Google Inc.",
+           @"text": [self string:@"This product includes software licensed under the Apache License 2.0." withLink:@"https://github.com/material-components/material-components-ios/blob/develop/LICENSE" forText:@"Apache License 2.0"]
            },
                          
          nil];
@@ -103,22 +110,22 @@
     
     NSDictionary *attribution = [self.attributions objectAtIndex:[indexPath row]];
     
-    cell.backgroundColor = [UIColor background];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     cell.attribution.text = [attribution objectForKey:@"title"];
     cell.copyright.text = [attribution objectForKey:@"copyright"];
     cell.text.attributedText = [attribution objectForKey:@"text"];
     
-    cell.attribution.textColor = [UIColor primaryText];
-    cell.copyright.textColor = [UIColor secondaryText];
-    cell.text.textColor = [UIColor secondaryText];
+    cell.attribution.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.87];
+    cell.copyright.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.6];
+    cell.text.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.6];
     
     return cell;
 }
 
 - (NSAttributedString *) string:(NSString *) string withLink:(NSString *) link forText:(NSString *) text {
     NSMutableAttributedString * attributedString = [[NSMutableAttributedString alloc] initWithString:string];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor darkGrayColor] range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent: 0.6] range:NSMakeRange(0, attributedString.length)];
     [attributedString addAttribute: NSLinkAttributeName value:link range: [attributedString.mutableString rangeOfString:text options:NSCaseInsensitiveSearch]];
     
     return attributedString;

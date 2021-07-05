@@ -6,18 +6,16 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-@import SkyFloatingLabelTextField;
-@import HexColors;
+@import MaterialComponents;
 
 #import "ServerURLController.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
-#import "Theme+UIResponder.h"
 
 @interface ServerURLController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *setServerUrlText;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *serverURL;
+@property (weak, nonatomic) IBOutlet MDCTextField *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *errorButton;
 @property (weak, nonatomic) IBOutlet UIButton *okButton;
@@ -26,20 +24,24 @@
 @property (strong, nonatomic) NSString *error;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) MDCTextInputControllerUnderline *serverUrlController;
+
 @end
 
 @implementation ServerURLController
 
-- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate {
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme {
     if (self = [self initWithNibName:@"ServerURLView" bundle:nil]) {
         self.delegate = delegate;
+        self.scheme = containerScheme;
     }
     
     return self;
 }
 
-- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError:(NSString *)error {
-    if (self = [self initWithDelegate:delegate]) {
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError:(NSString *)error andScheme: (id<MDCContainerScheming>) containerScheme {
+    if (self = [self initWithDelegate:delegate andScheme:containerScheme]) {
         self.error = error;
     }
     
@@ -48,31 +50,47 @@
 
 #pragma mark - Theme Changes
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    self.mageLabel.textColor = [UIColor brand];
-    self.wandLabel.textColor = [UIColor brand];
-    self.cancelButton.backgroundColor = [UIColor themedButton];
-    self.okButton.backgroundColor = [UIColor themedButton];
-    self.errorStatus.textColor = [UIColor secondaryText];
-    self.setServerUrlText.textColor = [UIColor primaryText];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>) containerScheme {
+    if (containerScheme != nil) {
+        _scheme = containerScheme;
+    }
+    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor; // [UIColor background];
+    self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
+    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.okButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.errorStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.setServerUrlText.textColor = self.scheme.colorScheme.primaryColor;
     
-    self.serverURL.textColor = [UIColor primaryText];
-    self.serverURL.selectedLineColor = [UIColor brand];
-    self.serverURL.selectedTitleColor = [UIColor brand];
-    self.serverURL.placeholderColor = [UIColor secondaryText];
-    self.serverURL.lineColor = [UIColor secondaryText];
-    self.serverURL.titleColor = [UIColor secondaryText];
-    self.serverURL.errorColor = [UIColor secondaryText];
-    self.serverURL.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
-    self.serverURL.iconText = @"\U0000f0ac";
+    [self.serverUrlController applyThemeWithScheme:containerScheme];
+    // these appear to be deficiencies in the underline controller and these colors are not set
+    self.serverUrlController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.serverUrlController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.serverURL.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
 #pragma mark -
 
+- (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
+    NSLayoutConstraint *constraint0 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0f constant: 30];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: leadingIcon attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant: 20];
+    [leadingIcon addConstraint:constraint0];
+    [leadingIcon addConstraint:constraint1];
+    leadingIcon.contentMode = UIViewContentModeScaleAspectFit;
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self registerForThemeChanges];
+    self.serverUrlController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.serverURL];
+    UIImageView *worldImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"world"]];
+    [self addLeadingIconConstraints:worldImage];
+    [self.serverURL setLeadingView:worldImage];
+    self.serverURL.leadingViewMode = UITextFieldViewModeAlways;
+    self.serverURL.accessibilityLabel = @"Server URL";
+    self.serverUrlController.placeholderText = @"Server URL";
+    self.serverUrlController.floatingEnabled = true;
+    
+    [self applyThemeWithContainerScheme:self.scheme];
     
     self.wandLabel.text = @"\U0000f0d0";
 }
@@ -117,7 +135,7 @@
     self.errorStatus.hidden = NO;
     self.errorButton.hidden = NO;
     self.errorStatus.text = error;
-    [self.serverURL setErrorMessage:@"Server URL"];
+    [self.serverUrlController setErrorText:error errorAccessibilityValue:nil];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {

@@ -7,26 +7,24 @@
 //
 
 #import "OrView.h"
-#import "Theme+UIResponder.h"
 
 @interface OrView()
 
 @property (weak, nonatomic) IBOutlet UILabel *orLabel;
 @property (weak, nonatomic) IBOutlet UIView *rightLine;
 @property (weak, nonatomic) IBOutlet UIView *leftLine;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @end
 
 @implementation OrView
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.orLabel.textColor = [UIColor secondaryText];
-    self.rightLine.backgroundColor = [UIColor secondaryText];
-    self.leftLine.backgroundColor = [UIColor secondaryText];
-}
-
-- (void) didMoveToSuperview {
-    [self registerForThemeChanges];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.orLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        self.rightLine.backgroundColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        self.leftLine.backgroundColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    }
 }
 
 @end

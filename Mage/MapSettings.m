@@ -6,14 +6,15 @@
 
 #import "MapSettings.h"
 #import "MapTypeTableViewCell.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "Feed.h"
 #import "Server.h"
+#import "MAGE-Swift.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate>
     @property (strong) id<MapSettingsDelegate> delegate;
 @property (strong) NSArray *feeds;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation MapSettings
@@ -36,17 +37,40 @@ static NSString *LAYERS_SECTION_NAME = @"Layers";
 static NSString *MAGE_SECTION_NAME = @"MAGE";
 static NSString *FEED_SECTION_NAME = @"Feeds";
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.navigationController.navigationBar.barTintColor = [UIColor primary];
-    self.navigationController.navigationBar.tintColor = [UIColor navBarPrimaryText];
-    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor navBarPrimaryText] forKey:NSForegroundColorAttributeName];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    
     self.navigationController.navigationBar.translucent = NO;
-    self.tableView.backgroundColor = [UIColor tableBackground];
+    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.titleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
+    };
+    
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    
     [self.tableView reloadData];
 }
 
-- (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate {
+- (instancetype) initWithDelegate: (id<MapSettingsDelegate>) delegate scheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
+    self.scheme = containerScheme;
     self.delegate = delegate;
     return self;
 }
@@ -54,8 +78,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 - (void) viewDidLoad {
     [super viewDidLoad];
     self.tableView.accessibilityIdentifier = @"settings";
-    [self registerForThemeChanges];
-    
+    [self applyThemeWithContainerScheme:self.scheme];
     [self.tableView registerNib:[UINib nibWithNibName:@"MapTypeCell" bundle:nil] forCellReuseIdentifier:@"MapTypeCell"];
 }
 
@@ -98,16 +121,17 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         if (indexPath.row == LAYERS_ROW_MAP_TYPE) {
             MapTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTypeCell"];
             cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
-            cell.mapTypeSegmentedControl.tintColor = [UIColor brand];
+            cell.mapTypeSegmentedControl.tintColor = self.scheme.colorScheme.primaryColorVariant;
             [cell.mapTypeSegmentedControl setTitleTextAttributes:@{
-                NSForegroundColorAttributeName: [UIColor primaryText]
+                NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
             } forState:UIControlStateNormal];
             [cell.mapTypeSegmentedControl setTitleTextAttributes:@{
-                NSForegroundColorAttributeName: [UIColor darkTextColor]
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
             } forState:UIControlStateSelected];
-            cell.cellTitle.textColor = [UIColor primaryText];
+            cell.mapTypeSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColorVariant;
+            cell.cellTitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
             cell.delegate = self;
-            
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             return cell;
         }
         NSInteger row = indexPath.row;
@@ -125,10 +149,10 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.detailTextLabel.text = @"Show Apple Maps Traffic";
             UISwitch *trafficSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             trafficSwitch.on = [defaults boolForKey:@"mapShowTraffic"];
-            trafficSwitch.onTintColor = [UIColor themedButton];
+            trafficSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
             [trafficSwitch addTarget:self action:@selector(trafficSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = trafficSwitch;
-            
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             return cell;
         } else if (row == LAYERS_ROW_DOWNLOADABLE) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OfflineMapsCell"];
@@ -139,12 +163,15 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             
             if (self.mapsToDownloadCount > 0) {
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
-                [imageView setTintColor:[UIColor brand]];
+                [imageView setTintColor:self.scheme.colorScheme.primaryColor];
                 cell.accessoryView = imageView;
             } else {
                 cell.accessoryView = nil;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
+            cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColor;
             return cell;
         } else if (row == LAYERS_ROW_ONLINE) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StaticLayerCell"];
@@ -153,6 +180,9 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             }
             cell.textLabel.text = @"Online Layers";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColor;
             return cell;
         }
     } else if (indexPath.section == MAGE_SECTION) {
@@ -165,10 +195,12 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.detailTextLabel.text = @"Show observations on map";
             UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             observationSwitch.on = ![defaults boolForKey:@"hideObservations"];
-            observationSwitch.onTintColor = [UIColor themedButton];
+            observationSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
             [observationSwitch addTarget:self action:@selector(observationSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = observationSwitch;
-            
+            cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColor;
             return cell;
         } else if (indexPath.row == MAGE_ROW_PEOPLE) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellWithSwitch"];
@@ -179,10 +211,12 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.detailTextLabel.text = @"Show people on map";
             UISwitch *peopleSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             peopleSwitch.on = ![defaults boolForKey:@"hidePeople"];
-            peopleSwitch.onTintColor = [UIColor themedButton];
+            peopleSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
             [peopleSwitch addTarget:self action:@selector(peopleSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = peopleSwitch;
-            
+            cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColor;
             return cell;
         }
     } else if (indexPath.section == FEED_SECTION) {
@@ -199,10 +233,12 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         observationSwitch.tag = feed.tag.integerValue;
         observationSwitch.accessibilityLabel = [NSString stringWithFormat:@"feed-switch-%@", feed.remoteId];
         NSLog(@"added switch called feed-switch-%@", feed.remoteId);
-        observationSwitch.onTintColor = [UIColor themedButton];
+        observationSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
         [observationSwitch addTarget:self action:@selector(feedSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         cell.accessoryView = observationSwitch;
-        
+        cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+        cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+        cell.tintColor = self.scheme.colorScheme.primaryColor;
         return cell;
     }
 
@@ -214,7 +250,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         return LAYERS_SECTION_NAME;
     } else if (section == MAGE_SECTION) {
         return MAGE_SECTION_NAME;
-    } else if (section == FEED_SECTION) {
+    } else if (section == FEED_SECTION && [_feeds count] != 0) {
         return FEED_SECTION_NAME;
     }
     
@@ -247,13 +283,13 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor dialog];
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.textLabel.textColor = [UIColor primaryText];
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
 - (UIView *) tableView:(UITableView*) tableView viewForHeaderInSection:(NSInteger)section {
-    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section] andScheme:self.scheme];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

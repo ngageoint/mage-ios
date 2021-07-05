@@ -7,13 +7,35 @@ import UIKit
 import Kingfisher
 
 @objc class AttachmentCell: UICollectionViewCell {
-
-    @IBOutlet weak var imageView: AttachmentUIImageView?;
+    
+    private var button: MDCFloatingButton?;
+    
+    private lazy var imageView: AttachmentUIImageView = {
+        let imageView: AttachmentUIImageView = AttachmentUIImageView(image: nil);
+        imageView.configureForAutoLayout();
+        return imageView;
+    }();
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame);
+        self.configureForAutoLayout();
+        self.addSubview(imageView);
+        imageView.autoPinEdgesToSuperviewEdges();
+        setNeedsLayout();
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func prepareForReuse() {
-        self.imageView?.kf.cancelDownloadTask();
-        for view in (self.imageView)!.subviews{
+        self.imageView.kf.cancelDownloadTask();
+        self.imageView.image = nil;
+        for view in self.imageView.subviews{
             view.removeFromSuperview()
+        }
+        if let safeButton = button {
+            safeButton.removeFromSuperview();
         }
     }
 
@@ -25,20 +47,29 @@ import Kingfisher
         }
     }
     
-    @objc public func setImage(attachment: Attachment, formatName:NSString) {
-        self.imageView?.kf.indicatorType = .activity;
+    override func removeFromSuperview() {
+        self.imageView.cancel();
+    }
+    
+    @objc public func setImage(attachment: Attachment, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
+        layoutSubviews();
+        self.button = button;
+        self.imageView.kf.indicatorType = .activity;
         let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
-            self.imageView?.setAttachment(attachment: attachment);
-            self.imageView?.showThumbnail()
-            { result in
-                switch result {
-                case .success(let success):
-                    print("got it", success.image)
-                case .failure(let error):
-                    print(error);
-                }
-            };
+            self.imageView.setAttachment(attachment: attachment);
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading";
+            NSLog("Loading the image \(attachment.name ?? "")")
+            self.imageView.showThumbnail(completionHandler:
+                                            { result in
+                                                switch result {
+                                                case .success(let success):
+                                                    self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+                                                    NSLog("Loaded the image \(self.imageView.accessibilityLabel ?? "")")
+                                                case .failure(let error):
+                                                    print(error);
+                                                }
+                                            });
         } else if (attachment.contentType?.hasPrefix("video") ?? false) {
             let url = self.getAttachmentUrl(size: imageSize, attachment: attachment);
             var localPath: String? = nil;
@@ -46,39 +77,48 @@ import Kingfisher
                 localPath = attachment.localPath;
             }
             let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
-            self.imageView?.kf.setImage(with: provider, placeholder: UIImage.init(named: "play_overlay"), options: [
+            self.imageView.contentMode = .scaleAspectFit;
+            self.imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                 .transition(.fade(0.2)),
                 .scaleFactor(UIScreen.main.scale),
-                .processor(DownsamplingImageProcessor(size: (self.imageView?.frame.size)!)),
+                .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
                 .cacheOriginalImage
-            ])
-            { result in
-                switch result {
-                case .success(_):
-                    let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
-                    overlay.contentMode = .scaleAspectFit;
-                    self.imageView?.addSubview(overlay);
-                case .failure(let error):
-                    print(error);
-                    self.imageView?.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
-//                    let rect = CGRect(origin: .zero, size: CGSize(width:150, height:150))
-//                    UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
-//                    UIColor.init(white: 0, alpha: 0.06).setFill();
-//                    UIRectFill(rect)
-//                    let image = UIGraphicsGetImageFromCurrentImageContext()
-//                    UIGraphicsEndImageContext()
-//                    return handler(.success(Data.init((image?.cgImage?.png)!)));
-                    let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
-                    overlay.contentMode = .scaleAspectFit;
-                    self.imageView?.addSubview(overlay);
-                }
-            };
+            ], completionHandler:
+                { result in
+                    switch result {
+                    case .success(_):
+                        self.imageView.contentMode = .scaleAspectFill;
+                        self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+                        let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
+                        overlay.contentMode = .scaleAspectFit;
+                        self.imageView.addSubview(overlay);
+                        overlay.autoCenterInSuperview();
+                    case .failure(let error):
+                        print(error);
+                        self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
+                        let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
+                        overlay.contentMode = .scaleAspectFit;
+                        self.imageView.addSubview(overlay);
+                    }
+                });
             
         } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
-            self.imageView?.image = UIImage.init(named: "audio_thumbnail");
+            self.imageView.image = UIImage(named: "audio_thumbnail");
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+            self.imageView.contentMode = .scaleAspectFit;
         } else {
-            self.imageView?.image = UIImage.init(named: "paperclip_thumbnail");
+            self.imageView.image = UIImage(named: "paperclip_thumbnail");
+            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+            self.imageView.contentMode = .scaleAspectFit;
+        }
+        
+        if let safeButton = button {
+            self.addSubview(safeButton);
+            safeButton.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
+            safeButton.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
         }
     }
 }

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FeatureDetailCoordinator.h"
+@import MaterialComponents;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSAttributedString *detail;
 @property (weak, nonatomic) id<FeatureDetailControllerDelegate> delegate;
+
+- (instancetype) initWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end
 

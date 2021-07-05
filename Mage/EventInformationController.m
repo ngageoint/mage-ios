@@ -8,20 +8,30 @@
 
 #import "EventInformationController.h"
 #import "EventInformationView.h"
-#import "UIColor+Mage.h"
-#import "Theme+UIResponder.h"
+#import <HexColor.h>
 
 @interface EventInformationController ()
 @property (strong, nonatomic) NSArray* forms;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventInformationController
 
 static const NSInteger FORMS_SECTION = 0;
 
-- (instancetype) init {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
     self = [super initWithStyle:UITableViewStyleGrouped];
+    self.scheme = containerScheme;
     return self;
+}
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    
+    [self.tableView reloadData];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -30,10 +40,9 @@ static const NSInteger FORMS_SECTION = 0;
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
     self.title = @"Event Information";
-    
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    
+        
     EventInformationView *header = [[NSBundle mainBundle] loadNibNamed:@"EventInformationView" owner:self options:nil][0];
+    [header applyThemeWithContainerScheme:self.scheme];
     header.nameLabel.text = self.event.name;
     header.descriptionLabel.hidden = [self.event.eventDescription length] == 0 ? YES : NO;
     header.descriptionLabel.text = self.event.eventDescription;
@@ -41,7 +50,7 @@ static const NSInteger FORMS_SECTION = 0;
     
     self.forms = self.event.nonArchivedForms;
     
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) willMoveToParentViewController:(UIViewController *)parent {
@@ -61,9 +70,6 @@ static const NSInteger FORMS_SECTION = 0;
         [self.tableView layoutIfNeeded];
     }
 }
-- (void) themeDidChange:(MageTheme)theme {    
-    [self.tableView reloadData];
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -74,20 +80,27 @@ static const NSInteger FORMS_SECTION = 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     NSDictionary* form = [self.forms objectAtIndex:indexPath.row];
     cell.textLabel.text = [form valueForKey:@"name"];
-    cell.tintColor = [UIColor brand];
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.backgroundColor = [UIColor background];
+    cell.detailTextLabel.text = [form valueForKey:@"description"];
+    cell.imageView.image = [UIImage imageNamed:@"form"];
+    if ([form valueForKey:@"color"] != nil) {
+        cell.imageView.tintColor = [UIColor colorWithHexString:[form valueForKey:@"color"]];
+    } else {
+        cell.imageView.tintColor = self.scheme.colorScheme.primaryColor;
+    }
+    cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
     
     return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == FORMS_SECTION) {
-        return @"Form Defaults";
+        return @"Forms";
     }
     
     return nil;
@@ -103,7 +116,7 @@ static const NSInteger FORMS_SECTION = 0;
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor secondaryText];
+        header.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     }
 }
 

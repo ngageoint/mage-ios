@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import Nimble_Snapshots
 import MagicalRecord
+import OHHTTPStubs
 
 @testable import MAGE
 
@@ -22,7 +23,7 @@ class ContainingUIViewController: UIViewController {
     }
 }
 
-class UserTableHeaderViewTests: QuickSpec {
+class UserTableHeaderViewTests: KIFSpec {
     
     override func spec() {
         
@@ -34,11 +35,10 @@ class UserTableHeaderViewTests: QuickSpec {
             }
             
             let recordSnapshots = false;
-            Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var userTableHeaderView: UserTableHeaderView!
             var view: UIView!
-            var controller: ContainingUIViewController!
+            var controller: UIViewController!
             var window: UIWindow!;
             
             func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
@@ -47,7 +47,7 @@ class UserTableHeaderViewTests: QuickSpec {
                     DispatchQueue.global(qos: .userInitiated).async {
                         Thread.sleep(forTimeInterval: 5.0);
                         DispatchQueue.main.async {
-                            expect(view) == recordSnapshot();
+                            expect(view) == recordSnapshot(usesDrawRect: true);
                             doneClosure?();
                         }
                     }
@@ -57,92 +57,116 @@ class UserTableHeaderViewTests: QuickSpec {
             }
 
             beforeEach {
-                
                 clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
-                window = UIWindow(forAutoLayout: ());
-                window.autoSetDimension(.width, toSize: 300);
                 
-                controller = ContainingUIViewController();
+                HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
+                    return request.url == URL(string: "https://magetest/api/users/userabc/icon");
+                }) { (request) -> HTTPStubsResponse in
+                    let stubPath = OHPathForFile("test_marker.png", type(of: self))
+                    return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
+                };
+                                
+                controller = UIViewController();
+                window = TestHelpers.getKeyWindowVisible();
+                window.rootViewController = controller;
                 view = UIView(forAutoLayout: ());
-                view.autoSetDimension(.width, toSize: 300);
-                window.makeKeyAndVisible();
+                view.backgroundColor = .systemBackground;
+                controller.view.addSubview(view);
+                view.autoPinEdgesToSuperviewEdges();
                 
                 Server.setCurrentEventId(1);
-                UserDefaults.standard.set(0, forKey: "mapType");
-                UserDefaults.standard.set(false, forKey: "showMGRS");
-                UserDefaults.standard.set(nil, forKey: "currentUserId");
-                UserDefaults.standard.synchronize();
+                UserDefaults.standard.mapType = 0;
+                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.currentUserId = nil;
             }
             
             afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
+                HTTPStubs.removeAllStubs();
                 clearAndSetUpStack();
             }
             
             it("user view") {
                 var completeTest = false;
-            
-                window.rootViewController = controller;
-                controller.view.addSubview(view);
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser() { (_, error: Error?) in
-                        MageCoreDataFixtures.addLocation() { (_, error: Error?) in
-                            print("error", error);
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addLocation()
                 
                 let user: User = User.mr_findFirst()!;
                 userTableHeaderView = UserTableHeaderView(forAutoLayout: ());
+                userTableHeaderView.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 userTableHeaderView.populate(user: user);
+                userTableHeaderView.start();
                 view.addSubview(userTableHeaderView);
-                userTableHeaderView.autoPinEdgesToSuperviewEdges();
-                
-                maybeRecordSnapshot(controller.view, doneClosure: {
+                userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+
+                maybeRecordSnapshot(userTableHeaderView, doneClosure: {
                     completeTest = true;
                 })
+                tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
+                tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 266.16m");
+                tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
+                tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
                 
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(userTableHeaderView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
             }
             
             it("current user view") {
                 var completeTest = false;
                 
-                UserDefaults.standard.set("userabc", forKey: "currentUserId");
+                UserDefaults.standard.currentUserId = "userabc";
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                waitUntil { done in
-                    MageCoreDataFixtures.addUser() { (_, error: Error?) in
-                        MageCoreDataFixtures.addGPSLocation() { (_, error: Error?) in
-                            print("error", error);
-                            done();
-                        }
-                    }
-                }
+                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addGPSLocation()
                 
                 let user: User = User.mr_findFirst()!;
                 userTableHeaderView = UserTableHeaderView(forAutoLayout: ());
+                userTableHeaderView.applyTheme(withContainerScheme: MAGEScheme.scheme());
                 userTableHeaderView.populate(user: user);
+                userTableHeaderView.start();
                 view.addSubview(userTableHeaderView);
-                userTableHeaderView.autoPinEdgesToSuperviewEdges();
+                userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                                
+                tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
+                tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 4.20m");
+                tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
+                tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
                 
-                maybeRecordSnapshot(controller.view, doneClosure: {
+                maybeRecordSnapshot(userTableHeaderView, doneClosure: {
                     completeTest = true;
                 })
                 
                 if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
                 } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: 10, pollInterval: 1, description: "Test Complete");
-                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: 10, pollInterval: 1, description: "Map loaded")
+                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+                    expect(userTableHeaderView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
                 }
+            }
+            
+            it("init with constructor") {
+                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addLocation()
+                
+                let user: User = User.mr_findFirst()!;
+                userTableHeaderView = UserTableHeaderView(user: user, scheme: MAGEScheme.scheme());
+                userTableHeaderView.start();
+                view.addSubview(userTableHeaderView);
+                userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+
+                tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
+                tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 266.16m");
+                tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
+                tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
             }
         }
         

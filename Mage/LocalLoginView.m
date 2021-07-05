@@ -7,16 +7,15 @@
 //
 
 #import "LocalLoginView.h"
-#import "Theme+UIResponder.h"
 #import "DeviceUUID.h"
-
-@import SkyFloatingLabelTextField;
-@import HexColors;
+#import <PureLayout/PureLayout.h>
+#import "MAGE-Swift.h"
+@import MaterialComponents;
 
 @interface LocalLoginView() <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *usernameField;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *passwordField;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *usernameField;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *passwordField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
 @property (weak, nonatomic) IBOutlet UILabel *signupDescription;
@@ -25,40 +24,25 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
 @property (weak, nonatomic) IBOutlet UITextView *loginStatus;
-@property (strong, nonatomic) UIFont *passwordFont;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation LocalLoginView
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.usernameField.textColor = [UIColor primaryText];
-    self.usernameField.selectedLineColor = [UIColor brand];
-    self.usernameField.selectedTitleColor = [UIColor brand];
-    self.usernameField.placeholderColor = [UIColor secondaryText];
-    self.usernameField.disabledColor = [UIColor secondaryText];
-    self.usernameField.lineColor = [UIColor secondaryText];
-    self.usernameField.titleColor = [UIColor secondaryText];
-    self.usernameField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
-    self.usernameField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
-    self.usernameField.iconText = @"\U0000f007";
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme == nil) return;
+    self.scheme = containerScheme;
+    [self.usernameField applyThemeWithScheme:containerScheme];
+    [self.passwordField applyThemeWithScheme:containerScheme];
     
-    self.passwordField.textColor = [UIColor primaryText];
-    self.passwordField.selectedLineColor = [UIColor brand];
-    self.passwordField.selectedTitleColor = [UIColor brand];
-    self.passwordField.placeholderColor = [UIColor secondaryText];
-    self.passwordField.disabledColor = [UIColor secondaryText];
-    self.passwordField.lineColor = [UIColor secondaryText];
-    self.passwordField.titleColor = [UIColor secondaryText];
-    self.passwordField.errorColor = [UIColor colorWithHexString:@"F44336" alpha:.87];
-    self.passwordField.iconFont = [UIFont fontWithName:@"FontAwesome" size:15];
-    self.passwordField.iconText = @"\U0000f084";
+    self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    self.loginButton.backgroundColor = [UIColor themedButton];
-    self.showPasswordLabel.textColor = [UIColor secondaryText];
-    self.signupDescription.textColor = [UIColor secondaryText];
-    [self.signupButton setTitleColor:[UIColor flatButton] forState:UIControlStateNormal];
-    self.showPassword.onTintColor = [UIColor themedButton];
+    self.loginButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.signupDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [self.signupButton setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+    self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
 }
 
 - (id) init {
@@ -73,7 +57,20 @@
 }
 
 - (void) didMoveToSuperview {
-    self.passwordFont = self.passwordField.font;
+    UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"me"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    [self.usernameField setLeadingView:meImage];
+    self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
+    self.usernameField.accessibilityLabel = @"Username";
+    self.usernameField.placeholder = @"Username";
+    self.usernameField.label.text = @"Username";
+    [self.usernameField sizeToFit];
+    self.passwordField.accessibilityLabel = @"Password";
+    UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    [self.passwordField setLeadingView:keyImage];
+    self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
+    self.passwordField.placeholder = @"Password";
+    self.passwordField.label.text = @"Password";
+    [self.passwordField sizeToFit];
     [self.usernameField setEnabled:YES];
     [self.passwordField setEnabled:YES];
     [self.passwordField setDelegate:self];
@@ -83,7 +80,7 @@
         self.signupContainerView.hidden = YES;
     }
 
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (BOOL) changeTextViewFocus: (id)sender {
@@ -115,19 +112,12 @@
         textField.text = updatedString;
     }
     
-    self.usernameField.textColor = self.passwordField.textColor = [UIColor primaryText];
-    
     return NO;
 }
 
 - (IBAction)showPasswordSwitchAction:(id)sender {
     [self.passwordField setSecureTextEntry:!self.passwordField.secureTextEntry];
     self.passwordField.clearsOnBeginEditing = NO;
-    
-    // This is a hack to fix the fact that ios changes the font when you
-    // enable/disable the secure text field
-    self.passwordField.font = nil;
-    self.passwordField.font = [UIFont systemFontOfSize:14];
 }
 
 //  When we are done editing on the keyboard
@@ -199,8 +189,6 @@
 }
 
 - (void) resetLogin: (BOOL) clear {
-    self.usernameField.errorMessage = nil;
-    self.passwordField.errorMessage = nil;
     
     if (clear) {
         [self.usernameField setText:@""];

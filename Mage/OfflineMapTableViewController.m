@@ -13,12 +13,12 @@
 #import "XYZDirectoryCacheOverlay.h"
 #import "GeoPackageCacheOverlay.h"
 #import "GPKGGeoPackageFactory.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
 #import "StaticLayer.h"
 #import "Layer.h"
 #import "Server.h"
 #import "Event.h"
+#import "MAGE-Swift.h"
 
 @interface OfflineMapTableViewController () <NSFetchedResultsControllerDelegate>
 
@@ -26,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshLayersButton;
 @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
 @property (nonatomic, strong) NSFetchedResultsController *mapsFetchedResultsController;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation OfflineMapTableViewController
@@ -40,14 +41,21 @@ static NSString *MY_MAPS_SECTION_NAME = @"My Layers";
 static NSString *AVAILABLE_SECTION_NAME = @"Available Layers";
 static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.tableView.backgroundColor = [UIColor tableBackground];
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    self.scheme = containerScheme;
+    return self;
+}
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    
     [self.tableView reloadData];
 }
 
-- (instancetype) init {
-    return [super initWithStyle:UITableViewStyleGrouped];
-}
 
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
@@ -67,7 +75,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     self.cacheOverlays = [CacheOverlays getInstance];
     [self.cacheOverlays registerListener:self];
     
-    [self registerForThemeChanges];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 - (void) geoPackageImported: (NSNotification *) notification {
@@ -266,7 +274,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section]];
+    return [[ObservationTableHeaderView alloc] initWithName:[self tableView:tableView titleForHeaderInSection:section] andScheme:self.scheme];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -303,10 +311,10 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"onlineLayerCell"];
     }
     
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.backgroundColor = [UIColor dialog];
-    cell.imageView.tintColor = [UIColor brand];
+    cell.textLabel.textColor =  [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    cell.imageView.tintColor = self.scheme.colorScheme.primaryColor;
     [cell.imageView setImage:nil];
     cell.accessoryView = nil;
 
@@ -324,7 +332,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             }
 
             UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
-            [imageView setTintColor:[UIColor brand]];
+            [imageView setTintColor:self.scheme.colorScheme.primaryColor];
             cell.accessoryView = imageView;
         } else {
             if (layer.file) {
@@ -337,10 +345,10 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"Loading static feature data, Please wait"];
             }
            
-            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
             [activityIndicator setFrame:CGRectMake(0, 0, 24, 24)];
             [activityIndicator startAnimating];
-            activityIndicator.color = [UIColor secondaryText];
+            activityIndicator.color = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
             cell.accessoryView = activityIndicator;
         }
     } else if (section == DOWNLOADED_SECTION) {
@@ -350,21 +358,19 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu features", (unsigned long)[(NSArray *)[staticLayer.data objectForKey:@"features"] count]];
             
             [cell.imageView setImage:[UIImage imageNamed:@"marker_outline"]];
-            
-            cell.backgroundColor = [UIColor dialog];
-            
+                        
             UISwitch *cacheSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             cacheSwitch.on = [self.selectedStaticLayers containsObject:layer.remoteId];
-            cacheSwitch.onTintColor = [UIColor themedButton];
+            cacheSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
             cacheSwitch.tag = indexPath.row;
             [cacheSwitch addTarget:self action:@selector(staticLayerToggled:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = cacheSwitch;
         } else {
             CacheOverlayTableCell *gpCell = [tableView dequeueReusableCellWithIdentifier:@"geoPackageLayerCell"];
             if (!gpCell) {
-                gpCell = [[CacheOverlayTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"geoPackageLayerCell"];
+                gpCell = [[CacheOverlayTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"geoPackageLayerCell" scheme: self.scheme];
             }
-            gpCell.backgroundColor = [UIColor dialog];
+            gpCell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             
             CacheOverlay * cacheOverlay = [self findOverlayByRemoteId:layer.remoteId];
             gpCell.overlay = cacheOverlay;
@@ -380,8 +386,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         if ([localOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
             CacheOverlayTableCell *gpCell = [tableView dequeueReusableCellWithIdentifier:@"geoPackageLayerCell"];
             if (!gpCell) {
-                gpCell = [[CacheOverlayTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"geoPackageLayerCell"];
+                gpCell = [[CacheOverlayTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"geoPackageLayerCell" scheme: self.scheme];
             }
+            gpCell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             gpCell.overlay = localOverlay;
             gpCell.mainTable = self.tableView;
             [gpCell configure];
@@ -395,7 +402,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             CacheActiveSwitch *cacheSwitch = [[CacheActiveSwitch alloc] initWithFrame:CGRectZero];
             cacheSwitch.on = localOverlay.enabled;
             cacheSwitch.overlay = localOverlay;
-            cacheSwitch.onTintColor = [UIColor themedButton];
+            cacheSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
             [cacheSwitch addTarget:self action:@selector(activeChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = cacheSwitch;
         }
@@ -407,9 +414,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[documentsDirectory stringByAppendingPathComponent: processingOverlay] error:nil];
         cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:(unsigned long long)attrs.fileSize countStyle:NSByteCountFormatterCountStyleFile];
         [cell.imageView setImage:nil];
-        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
         [activityIndicator startAnimating];
-        activityIndicator.color = [UIColor secondaryText];
+        activityIndicator.color = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         cell.accessoryView = activityIndicator;
     } else {
         cell.textLabel.text = layer.name;

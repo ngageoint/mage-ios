@@ -23,8 +23,9 @@ class FeedItemTableViewCell : UITableViewCell {
         feedItemView.autoPinEdgesToSuperviewEdges();
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.backgroundColor = UIColor.background()
+    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.backgroundColor = containerScheme.colorScheme.surfaceColor;
+        feedItemView.applyTheme(withContainerScheme: containerScheme);
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -33,7 +34,5 @@ class FeedItemTableViewCell : UITableViewCell {
     
     func populate(feedItem: FeedItem) {
         feedItemView.populate(feedItem: feedItem);
-        
-        self.registerForThemeChanges()
     }
 }

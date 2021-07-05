@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Event+CoreDataProperties.h"
+#import <MaterialComponents/MDCContainerScheme.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,8 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EventInformationController : UITableViewController
 
-@property (weak, nonatomic) id<EventInformationControllerDelegate> delegate;
+@property (strong, nonatomic) id<EventInformationControllerDelegate> delegate;
 @property (strong, nonatomic) Event* event;
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
 
 @end
 

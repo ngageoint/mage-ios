@@ -6,14 +6,14 @@
 //  Copyright © 2021 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-@import SkyFloatingLabelTextField;
-
 #import "SignUpViewController_Server5.h"
+
+@import MaterialComponents;
 
 @interface SignUpViewController_Server5 ()
 
 @property (weak, nonatomic) UIView *captchaContainer;
-@property (weak, nonatomic) IBOutlet SkyFloatingLabelTextFieldWithIcon *captchaText;
+@property (weak, nonatomic) IBOutlet MDCTextField *captchaText;
 
 @end
 

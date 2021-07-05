@@ -18,10 +18,11 @@ class MockFeedItemDelegate: NSObject, FeedItemDelegate {
     var lastFeedItemAdded: FeedItem?;
     var lastFeedItemRemoved: FeedItem?;
     
-    func addFeedItem(feedItem: FeedItem) {
+    func add(_ feedItem: FeedItem!) {
         lastFeedItemAdded = feedItem;
     }
-    func removeFeedItem(feedItem: FeedItem) {
+    
+    func remove(_ feedItem: FeedItem!) {
         lastFeedItemRemoved = feedItem;
     }
 }
@@ -40,19 +41,15 @@ class FeedItemRetrieverTests: KIFSpec {
             
             beforeEach {
                 
-                waitUntil { done in
-                    TestHelpers.clearAndSetUpStack();
-                    MageCoreDataFixtures.quietLogging();
-                    UserDefaults.standard.set(nil, forKey: "selectedFeeds");
-                    UserDefaults.MageServerDefaults.set("https://magetest", forKey: .baseServerUrl);
-                    UserDefaults.standard.synchronize();
-                    
-                    Server.setCurrentEventId(1);
-                    
-                    MageCoreDataFixtures.addEvent { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                TestHelpers.clearAndSetUpStack();
+                MageCoreDataFixtures.quietLogging();
+                let emptyFeeds: [String]? = nil
+                UserDefaults.standard.set(emptyFeeds, forKey: "selectedFeeds");
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                
+                Server.setCurrentEventId(1);
+                
+                MageCoreDataFixtures.addEvent();
             }
             
             afterEach {
@@ -81,15 +78,11 @@ class FeedItemRetrieverTests: KIFSpec {
             
             it("should get feed item retrievers") {
                 var feedIds: [String] = ["0","1","2","3"];
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
-                        expect(remoteIds) == feedIds;
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
+                    expect(remoteIds) == feedIds;
+                })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
                 let feedItemRetrievers: [FeedItemRetriever] = FeedItemRetriever.createFeedItemRetrievers(delegate: feedItemDelegate);
@@ -102,15 +95,11 @@ class FeedItemRetrieverTests: KIFSpec {
             
             it("should get mappable feed item retrievers") {
                 var feedIds: [String] = ["0","1","2","3"];
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
-                        expect(remoteIds) == feedIds;
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
+                    expect(remoteIds) == feedIds;
+                })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
                 let feedItemRetrievers: [FeedItemRetriever] = FeedItemRetriever.createFeedItemRetrievers(delegate: feedItemDelegate);
@@ -131,15 +120,11 @@ class FeedItemRetrieverTests: KIFSpec {
             
             it("should get one mappable feed item retriever") {
                 let feedIds: [String] = ["0","1","2","3"];
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
-                        expect(remoteIds) == feedIds;
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
+                    expect(remoteIds) == feedIds;
+                })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
                 let feedItemRetriever: FeedItemRetriever = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate)!;
@@ -155,15 +140,11 @@ class FeedItemRetrieverTests: KIFSpec {
             
             it("should get one mappable feed item retriever and start it with no initial items add one") {
                 let feedIds: [String] = ["0","1","2","3"];
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
-                        expect(remoteIds) == feedIds;
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
+                    expect(remoteIds) == feedIds;
+                })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
                 let feedItemRetriever: FeedItemRetriever = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate)!;
@@ -172,26 +153,18 @@ class FeedItemRetrieverTests: KIFSpec {
                 let firstFeedItems: [FeedItem]? = feedItemRetriever.startRetriever();
                 expect(firstFeedItems).to(beEmpty());
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"])
                 expect(feedItemDelegate.lastFeedItemAdded?.remoteId) == "4";
                 expect(feedItemDelegate.lastFeedItemRemoved).to(beNil());
             }
             
             it("should get one mappable feed item retriever and start it with no initial items add one remove one") {
                 let feedIds: [String] = ["0","1","2","3"];
-                waitUntil { done in
-                    let feeds = loadFeedsJson();
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
-                        expect(remoteIds) == feedIds;
-                    }) { (success, error) in
-                        done();
-                    }
-                }
+                let feeds = loadFeedsJson();
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
+                    expect(remoteIds) == feedIds;
+                })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
                 let feedItemRetriever: FeedItemRetriever = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate)!;
@@ -200,24 +173,16 @@ class FeedItemRetrieverTests: KIFSpec {
                 let firstFeedItems: [FeedItem]? = feedItemRetriever.startRetriever();
                 expect(firstFeedItems).to(beEmpty());
                 
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"]) { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"])
                 expect(feedItemDelegate.lastFeedItemAdded?.remoteId) == "4";
                 expect(feedItemDelegate.lastFeedItemRemoved).to(beNil());
-                waitUntil { done in
-                MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     let deleted = feedItemDelegate.lastFeedItemAdded!.mr_deleteEntity();
                     expect(deleted) == true;
-                }, completion: { (success: Bool, error: Error?) in
-                    done();
                 });
-                }
                 
-                expect(feedItemDelegate.lastFeedItemAdded?.remoteId) == "4";
-                expect(feedItemDelegate.lastFeedItemRemoved?.remoteId) == "4";
+                expect(feedItemDelegate.lastFeedItemAdded?.remoteId).toEventually(equal("4"));
+                expect(feedItemDelegate.lastFeedItemRemoved?.remoteId).toEventually(equal("4"));
             }
             
             it("should get one mappable feed item retriever and start it with no initial items add one then update it") {
@@ -246,16 +211,12 @@ class FeedItemRetrieverTests: KIFSpec {
                 }
                 expect(feedItemDelegate.lastFeedItemAdded?.remoteId) == "4";
                 expect(feedItemDelegate.lastFeedItemRemoved).to(beNil());
-                waitUntil { done in
-                    MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        feedItemDelegate.lastFeedItemAdded!.geometry = nil;
-                    }, completion: { (success: Bool, error: Error?) in
-                        done();
-                    });
-                }
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    feedItemDelegate.lastFeedItemAdded!.geometry = nil;
+                })
                 
-                expect(feedItemDelegate.lastFeedItemAdded?.remoteId) == "4";
-                expect(feedItemDelegate.lastFeedItemRemoved?.remoteId) == "4";
+                expect(feedItemDelegate.lastFeedItemAdded?.remoteId).toEventually(equal("4"));
+                expect(feedItemDelegate.lastFeedItemRemoved?.remoteId).toEventually(equal("4"));
             }
         }
     }

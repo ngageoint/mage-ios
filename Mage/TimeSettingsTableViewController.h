@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @interface TimeSettingsTableViewController : UITableViewController
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end

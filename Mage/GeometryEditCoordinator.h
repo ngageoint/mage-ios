@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 #import "SFGeometry.h"
+#import <MapKit/MapKit.h>
 
 @protocol GeometryEditDelegate
 
-- (void) geometryEditComplete:(SFGeometry *) geometry fieldDefintion:(NSDictionary *) field coordinator:(id) coordinator;
+- (void) geometryEditComplete:(SFGeometry *) geometry fieldDefintion:(NSDictionary *) field coordinator:(id) coordinator wasValueChanged: (BOOL) changed;
 - (void) geometryEditCancel:(id) coordinator;
 
 @end
@@ -25,9 +27,14 @@
 @property (strong, nonatomic) UIImage *pinImage;
 @property (strong, nonatomic) NSDictionary *fieldDefinition;
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController;
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andGeometry: (SFGeometry *) geometry andPinImage: (UIImage *) pinImage andDelegate: (id<GeometryEditDelegate>) delegate andNavigationController: (UINavigationController *) navigationController scheme: (id<MDCContainerScheming>) containerScheme;
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
+- (UIViewController *) createViewController;
 - (void) start;
 - (void) updateGeometry: (SFGeometry *) geometry;
 - (NSString *) fieldName;
+- (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
+- (void) fieldEditCanceled;
+- (void) fieldEditDone;
 
 @end

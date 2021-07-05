@@ -5,7 +5,7 @@
 #  MAGE
 #
 
-BRANCH=${1:-'feeds'}
+BRANCH=${1:-'multi-form'}
 APP_BUILD_NUMBER=$(expr $(git rev-list $BRANCH --count) - $(git rev-list HEAD..$BRANCH --count))
 
 rm -rf .mage-sdk && mkdir .mage-sdk

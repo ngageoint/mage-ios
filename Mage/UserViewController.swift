@@ -8,42 +8,20 @@
 
 import Foundation
 
-extension UITableView {
-
-    func setAndLayoutTableHeaderView(header: UIView) {
-        self.tableHeaderView = header
-        header.setNeedsLayout()
-        header.layoutIfNeeded()
-        let height = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-        var frame = header.frame
-        frame.size.height = height
-        header.frame = frame
-        self.tableHeaderView = header
-        if #available(iOS 14, *) {
-            self.tableHeaderView?.autoMatch(.width, to: .width, of: self);
-        } else {
-            header.autoSetDimension(.width, toSize: bounds.size.width)
-        }
-    }
-}
-
 @objc class UserViewController : UITableViewController {
     let user : User
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
+    var scheme : MDCContainerScheming!;
     
     private lazy var observationDataStore: ObservationDataStore = {
-        let observationDataStore: ObservationDataStore = ObservationDataStore();
-        observationDataStore.tableView = self.tableView;
-        observationDataStore.observationSelectionDelegate = self;
-        observationDataStore.attachmentSelectionDelegate = self;
+        let observationDataStore: ObservationDataStore = ObservationDataStore(tableView: self.tableView, observationActionsDelegate: self, attachmentSelectionDelegate: self, scheme: self.scheme);
         return observationDataStore;
     }();
     
     private lazy var userTableHeaderView: UserTableHeaderView = {
-        let userTableHeaderView: UserTableHeaderView = UserTableHeaderView();
+        let userTableHeaderView: UserTableHeaderView = UserTableHeaderView(user: user, scheme: self.scheme);
         userTableHeaderView.navigationController = self.navigationController;
-        userTableHeaderView.populate(user: user);
         return userTableHeaderView;
     }()
     
@@ -51,17 +29,37 @@ extension UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(user:User) {
+    @objc public init(user:User, scheme: MDCContainerScheming) {
         self.user = user
+        self.scheme = scheme;
         super.init(style: .grouped)
         self.title = user.name;
-        tableView.register(UINib(nibName: "ObservationCell", bundle: nil), forCellReuseIdentifier: "obsCell");
+        self.tableView.register(cellClass: ObservationListCardCell.self);
+        self.tableView.accessibilityIdentifier = "user observations";
     }
     
-    override func themeDidChange(_ theme: MageTheme) {
-        self.navigationController?.navigationBar.barTintColor = UIColor.primary();
-        self.navigationController?.navigationBar.tintColor = UIColor.navBarPrimaryText();
-        self.view.backgroundColor = UIColor.tableBackground()
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
+        self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
+        
+        self.navigationController?.navigationBar.isTranslucent = false;
+        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        let appearance = UINavigationBarAppearance();
+        appearance.configureWithOpaqueBackground();
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
+        ];
+        appearance.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
+        ];
+        
+        self.navigationController?.navigationBar.standardAppearance = appearance;
+        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
     }
     
     override func viewDidLoad() {
@@ -69,34 +67,42 @@ extension UITableView {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 160;
         tableView.setAndLayoutTableHeaderView(header: userTableHeaderView);
-        
-        self.registerForThemeChanges();
+        applyTheme(withContainerScheme: self.scheme);
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         userTableHeaderView.navigationController = self.navigationController;
-        observationDataStore.startFetchController(with: Observations.init(for: user));
+        userTableHeaderView.start();
+        observationDataStore.startFetchController(observations: Observations(for: user));
+        applyTheme(withContainerScheme: self.scheme);
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
+        userTableHeaderView.stop();
     }
 }
 
-extension UserViewController : ObservationSelectionDelegate {
-    func selectedObservation(_ observation: Observation!) {
-        let ovc: ObservationViewController = ObservationViewController();
-        ovc.observation = observation;
+extension UserViewController : ObservationActionsDelegate {
+    func viewObservation(_ observation: Observation) {
+        let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme);
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
-    func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
-        let ovc: ObservationViewController = ObservationViewController();
-        ovc.observation = observation;
-        self.navigationController?.pushViewController(ovc, animated: true);
+    func favoriteObservation(_ observation: Observation) {
+        observation.toggleFavorite { (_, _) in
+            self.tableView.reloadData();
+        }
     }
     
-    func observationDetailSelected(_ observation: Observation!) {
-        let ovc: ObservationViewController = ObservationViewController();
-        ovc.observation = observation;
-        self.navigationController?.pushViewController(ovc, animated: true);
+    func copyLocation(_ locationString: String) {
+        UIPasteboard.general.string = locationString;
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
+    }
+    
+    func getDirectionsToObservation(_ observation: Observation) {
+        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
     }
 }
 

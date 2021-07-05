@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 @protocol ServerURLDelegate
 
@@ -17,8 +18,8 @@
 
 @interface ServerURLController : UIViewController
 
-- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate;
-- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError: (NSString *) error;
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithDelegate: (id<ServerURLDelegate>) delegate andError: (NSString *) error andScheme: (id<MDCContainerScheming>) containerScheme;
 - (void) showError: (NSString *) error;
 
 @end

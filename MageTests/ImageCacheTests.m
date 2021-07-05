@@ -23,23 +23,23 @@
 
 @implementation ImageCacheTests
 
-//- (void)setUp {
+- (void)setUp {
 //    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
 //    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
 //    [MagicalRecord setupCoreDataStackWithInMemoryStore];
 //    [[MageSessionManager manager] setToken:@"oldtoken"];
 //    [StoredPassword persistTokenToKeyChain:@"oldtoken"];
 //    self.imageProvider = ImageCacheProvider.shared;
-//}
-//
-//- (void)tearDown {
+}
+
+- (void)tearDown {
 //    self.imageProvider = NULL;
 //    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
 //    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
 //    [OHHTTPStubs removeAllStubs];
-//}
-//
-//- (void)testLoadAnImage {
+}
+
+- (void)testLoadAnImage {
 //    CGSize size = CGSizeMake(75, 75);
 //    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
 //    [[UIColor whiteColor] setFill];
@@ -50,12 +50,12 @@
 //    id imageCacheMock = OCMPartialMock(self.imageProvider);
 //
 //    [OCMStub([imageCacheMock createUIImageFromURL:[OCMArg any]]) andReturn:UIImagePNGRepresentation(image)];
-//
-////    id nsdataMock = OCMClassMock([NSData class]);
-////    [OCMStub([nsdataMock dataWithContentsOfURL:[OCMArg any]]) andReturn:UIImagePNGRepresentation(image)];
-//
-////    [OCMStub([nsdataMock dataWithContentsOfURL:[NSURL URLWithString: @"https://mage.geointservices.io/testimage?access_token=oldtoken&size=75"]]) andReturn:UIImagePNGRepresentation(image)];
-//
+    
+//    id nsdataMock = OCMClassMock([NSData class]);
+//    [OCMStub([nsdataMock dataWithContentsOfURL:[OCMArg any]]) andReturn:UIImagePNGRepresentation(image)];
+
+//    [OCMStub([nsdataMock dataWithContentsOfURL:[NSURL URLWithString: @"https://mage.geointservices.io/testimage?access_token=oldtoken&size=75"]]) andReturn:UIImagePNGRepresentation(image)];
+    
 //    XCTestExpectation* apiResponseArrived = [self expectationWithDescription:@"response of /api complete"];
 //
 //
@@ -73,6 +73,6 @@
 //    [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
 //        NSLog(@"did it");
 //    }];
-//}
+}
 
 @end

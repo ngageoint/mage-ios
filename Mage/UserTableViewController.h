@@ -12,4 +12,7 @@
 @interface UserTableViewController : UITableViewController
 @property (strong, nonatomic) NSArray *userIds;
 @property (strong, nonatomic) IBOutlet UserDataStore *userDataStore;
+
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+
 @end

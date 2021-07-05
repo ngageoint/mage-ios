@@ -9,44 +9,24 @@
 import Foundation
 import Kingfisher
 
-extension UIImage {
-    func resized(to size: CGSize) -> UIImage {
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            draw(in: CGRect(origin: .zero, size: size))
-        }
-    }
-    
-    func aspectResize(to size: CGSize) -> UIImage {
-        let scaledRect = AVMakeRect(aspectRatio: self.size, insideRect: CGRect(x: 0, y: 0, width: size.width, height: size.height));
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            draw(in: scaledRect)
-        }
-        
-    }
-}
-
 @objc class AttachmentUIImageView: UIImageView {
 
     public var attachment: Attachment? = nil;
     var url: URL? = nil;
-    var imageSize: Int!
     var largeSizeCached: Bool = false;
     public var placeholderIsRealImage: Bool = false;
     public var useDownloadPlaceholder: Bool = true;
     
     override init(image: UIImage?) {
         super.init(image: image)
-        self.imageSize = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.imageSize = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.imageSize = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
     }
     
     public func isFullSizeCached() -> Bool {
@@ -54,7 +34,7 @@ extension UIImage {
     }
     
     public func isLargeSizeCached() -> Bool {
-        return self.attachment != nil && (self.isFullSizeCached() || ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: self.imageSize).absoluteString));
+        return self.attachment != nil && (self.isFullSizeCached() || ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: getImageSize()).absoluteString));
     }
     
     public func isThumbnailCached() -> Bool {
@@ -65,10 +45,18 @@ extension UIImage {
         return isThumbnailCached() || isLargeSizeCached();
     }
     
+    func getImageSize() -> Int {
+        return Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale)
+    }
+    
+    public func cancel() {
+        self.kf.cancelDownloadTask();
+    }
+    
     public func showThumbnail(indicator: Indicator? = nil,
                               progressBlock: DownloadProgressBlock? = nil,
                               completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        self.setImage(url: self.getAttachmentUrl(size: self.imageSize), thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
+        self.setImage(url: self.getAttachmentUrl(size: getImageSize()), thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
     public func setAttachment(attachment: Attachment) {
@@ -87,7 +75,7 @@ extension UIImage {
                           indicator: Indicator? = nil,
                           progressBlock: DownloadProgressBlock? = nil,
                           completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        let url = self.url != nil ? self.url! : self.getAttachmentUrl(size: self.imageSize);
+        let url = self.url != nil ? self.url! : self.getAttachmentUrl(size: getImageSize());
         self.setImage(url: url, cacheOnly: cacheOnly, fullSize: fullSize, thumbnail: thumbnail, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
@@ -106,6 +94,7 @@ extension UIImage {
                   indicator: Indicator? = nil,
                   progressBlock: DownloadProgressBlock? = nil,
                   completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+        self.contentMode = .scaleAspectFill;
         
         if (url.isFileURL) {
             let provider = LocalFileImageDataProvider(fileURL: url)
@@ -122,7 +111,6 @@ extension UIImage {
         if (indicator != nil) {
             self.kf.indicatorType = .custom(indicator: indicator!);
         }
-        
         var options: KingfisherOptionsInfo = [
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
             .transition(.fade(0.3)),
@@ -135,6 +123,8 @@ extension UIImage {
                 
         let placeholder = PlaceholderImage();
         placeholder.contentMode = .scaleAspectFit;
+        
+        self.clipsToBounds = true;
         
         if (self.useDownloadPlaceholder && thumbnail) {
             placeholder.image = UIImage.init(named: "download_thumbnail");
@@ -160,7 +150,7 @@ extension UIImage {
         // else if they had a large sized image downloaded
         else if (self.isLargeSizeCached()) {
             self.placeholderIsRealImage = true;
-            placeholder.kf.setImage(with: self.getAttachmentUrl(size: self.imageSize), options: options)
+            placeholder.kf.setImage(with: self.getAttachmentUrl(size: getImageSize()), options: options)
         }
         // if they had the thumbnail already downloaded for some reason, show that while we go get the bigger one
         else if (ImageCache.default.isCached(forKey: thumbUrl.absoluteString)) {
@@ -169,8 +159,7 @@ extension UIImage {
         }
         // Have to do this so that the placeholder image shows up behind the activity indicator
         DispatchQueue.main.async {
-            self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock,
-                                        completionHandler: completionHandler);
+            self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
         }
     }
 }

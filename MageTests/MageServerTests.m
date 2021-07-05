@@ -48,7 +48,6 @@
 
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
         // success
-        NSLog(@"Success");
         id<Authentication> localAuthenticationModule = [mageServer.authenticationModules objectForKey:@"offline"];
         id<Authentication> serverAuthModule = [mageServer.authenticationModules objectForKey:@"local"];
         XCTAssertNil(localAuthenticationModule);
@@ -86,7 +85,6 @@
     
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
         // success
-        NSLog(@"Success");
         id<Authentication> localAuthenticationModule = [mageServer.authenticationModules objectForKey:@"offline"];
         id<Authentication> serverAuthModule = [mageServer.authenticationModules objectForKey:@"local"];
         XCTAssertNil(localAuthenticationModule);
@@ -125,7 +123,6 @@
     
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
         // success
-        NSLog(@"Success");
         id<Authentication> localAuthenticationModule = [mageServer.authenticationModules objectForKey:@"offline"];
         id<Authentication> serverAuthModule = [mageServer.authenticationModules objectForKey:@"local"];
         XCTAssertNil(localAuthenticationModule);
@@ -169,7 +166,6 @@
     
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
         // success
-        NSLog(@"Success");
         id<Authentication> localAuthenticationModule = [mageServer.authenticationModules objectForKey:@"offline"];
         id<Authentication> serverAuthModule = [mageServer.authenticationModules objectForKey:@"local"];
         XCTAssertNotNil(localAuthenticationModule);
@@ -190,6 +186,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:@"https://mage.geointservices.io" forKey:@"baseServerUrl"];
     [defaults setBool:YES forKey:@"deviceRegistered"];
+    [defaults setObject:@[@{@"serverMajorVersion" : @5}, @{@"serverMinorVersion" : @4}] forKey:@"serverCompatibilities"];
     
     XCTestExpectation* responseArrived = [self expectationWithDescription:@"Server URL Set"];
     
@@ -203,7 +200,6 @@
     
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
         // success
-        NSLog(@"Success");
         id<Authentication> localAuthenticationModule = [mageServer.authenticationModules objectForKey:@"offline"];
         id<Authentication> serverAuthModule = [mageServer.authenticationModules objectForKey:@"local"];
         XCTAssertNil(localAuthenticationModule);
@@ -211,6 +207,7 @@
         [responseArrived fulfill];
     } failure:^(NSError *error) {
         // failure
+        NSLog(@"Error was %@", error);
         XCTFail(@"Should not have a failure");
         NSLog(@"Failure %@", error);
     }];
@@ -257,6 +254,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:@"https://mage.geointservices.io" forKey:@"baseServerUrl"];
     [defaults setBool:YES forKey:@"deviceRegistered"];
+    [defaults setObject:@[@{@"serverMajorVersion" : @5}, @{@"serverMinorVersion" : @4}] forKey:@"serverCompatibilities"];
     
     [defaults setObject:[NSDictionary dictionaryWithObjectsAndKeys:@"https://mage.geointservices.io", @"serverUrl", nil] forKey:@"loginParameters"];
     
@@ -275,7 +273,6 @@
     
     [MageServer serverWithURL:[NSURL URLWithString:@"https://mage.geointservices.io"] success:^(MageServer *mageServer) {
         // success
-        NSLog(@"Success");
         id<Authentication> localAuthenticationModule = [mageServer.authenticationModules objectForKey:@"offline"];
         id<Authentication> serverAuthModule = [mageServer.authenticationModules objectForKey:@"local"];
         XCTAssertNotNil(localAuthenticationModule);

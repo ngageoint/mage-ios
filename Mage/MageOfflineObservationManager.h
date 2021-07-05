@@ -17,7 +17,7 @@
 
 @interface MageOfflineObservationManager : NSObject
 
-@property (strong, nonatomic) id<OfflineObservationDelegate> delegate;
+@property (weak, nonatomic) id<OfflineObservationDelegate> delegate;
 
 - (instancetype) initWithDelegate:(id<OfflineObservationDelegate>) delegate;
 - (void) start;

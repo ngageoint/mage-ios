@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Event.h"
+#import <MaterialComponents/MDCContainerScheme.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +20,7 @@ typedef NS_ENUM(NSUInteger, SettingType) {
     kDataFetching,
     kDataPushing,
     kLocationDisplay,
+    kNavigation,
     kTimeDisplay,
     kMediaPhoto,
     kMediaVideo,
@@ -41,6 +43,7 @@ typedef NS_ENUM(NSUInteger, SettingType) {
 @property (weak, nonatomic) id<SettingsDelegate> delegate;
 @property (assign, nonatomic) BOOL showDisclosureIndicator;
 
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
 - (void) reloadData;
 
 @end

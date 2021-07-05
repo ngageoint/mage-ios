@@ -10,7 +10,6 @@
 #import "User.h"
 #import "MKAnnotationView+PersonIcon.h"
 #import "SFGeometryUtils.h"
-#import "Theme+UIResponder.h"
 
 @implementation LocationAnnotation
 
@@ -66,7 +65,7 @@
         annotationView.enabled = YES;
         
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-        rightButton.tintColor = [UIColor mageBlue];
+//        rightButton.tintColor = [UIColor mageBlue];
         annotationView.rightCalloutAccessoryView = rightButton;
     } else {
         annotationView.annotation = self;

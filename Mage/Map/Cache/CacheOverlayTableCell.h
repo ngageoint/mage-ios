@@ -10,6 +10,7 @@
 #import "CacheActiveSwitch.h"
 #import "CacheOverlay.h"
 #import "Layer.h"
+#import <MaterialComponents/MDCContainerScheme.h>
 
 @interface CacheOverlayTableCell : UITableViewCell
 
@@ -21,6 +22,7 @@
 @property (strong, nonatomic) UITableView *mainTable;
 @property (strong, nonatomic) UITableView *tableView;
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier scheme: (id<MDCContainerScheming>) containerScheme;
 - (void) configure;
 
 @end

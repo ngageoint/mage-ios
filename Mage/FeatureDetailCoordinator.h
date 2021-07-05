@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@import MaterialComponents;
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol FeatureDetailDelegate
@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface FeatureDetailCoordinator : NSObject
-- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSAttributedString *) detail;
+- (instancetype) initWithViewController: (UIViewController *) viewController detail:(NSAttributedString *) detail  containerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @property (weak, nonatomic) id<FeatureDetailDelegate> delegate;
 

@@ -8,8 +8,8 @@
 
 #import "LocationFilterTableViewController.h"
 #import "TimeFilter.h"
-#import "Theme+UIResponder.h"
 #import "ObservationTableHeaderView.h"
+#import "MAGE-Swift.h"
 
 @interface LocationFilterTableViewController ()
 @property (assign, nonatomic) TimeFilterType timeFilter;
@@ -21,29 +21,32 @@
 @property (weak, nonatomic) IBOutlet UILabel *lastLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *periodSegmentedControl;
 @property (weak, nonatomic) IBOutlet UITextField *timeNumberTextField;
-
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation LocationFilterTableViewController
 
-- (void) themeDidChange:(MageTheme)theme {
-    self.view.backgroundColor = [UIColor background];
-    self.tableView.backgroundColor = [UIColor tableBackground];
-    self.navigationController.navigationBar.barTintColor = [UIColor primary];
-    self.customLabel.textColor = [UIColor primaryText];
-    self.customDescription.textColor = [UIColor secondaryText];
-    self.lastLabel.textColor = [UIColor primaryText];
-    self.timeNumberTextField.textColor = [UIColor primaryText];
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        self.scheme = containerScheme;
+    }
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
+    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.customLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.customDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.lastLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.timeNumberTextField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.timeNumberTextField.layer.borderWidth = .5f;
-    self.timeNumberTextField.layer.borderColor = [[UIColor secondaryText] CGColor];
-    self.periodSegmentedControl.tintColor = [UIColor brand];
-    
+    self.timeNumberTextField.layer.borderColor = [[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] CGColor];
+    self.periodSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColorVariant;
+    [self.periodSegmentedControl setTitleTextAttributes:@{
+        NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
+    } forState:UIControlStateNormal];
+    [self.periodSegmentedControl setTitleTextAttributes:@{
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
+    } forState:UIControlStateSelected];
     [self.tableView reloadData];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self registerForThemeChanges];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -52,6 +55,7 @@
     self.timeFilter = [TimeFilter getLocationTimeFilter];
     self.customTimeUnit = [TimeFilter getLocationCustomTimeFilterUnit];
     self.customTimeNumber = [TimeFilter getLocationCustomTimeFilterNumber];
+    [self applyThemeWithContainerScheme:self.scheme];
 }
 
 #pragma mark - Table view data source
@@ -60,9 +64,12 @@
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = self.timeFilter == [indexPath row] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
-    cell.textLabel.textColor = [UIColor primaryText];
-    cell.detailTextLabel.textColor = [UIColor secondaryText];
-    cell.backgroundColor = [UIColor background];
+    if (self.scheme) {
+        cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+        cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+        cell.tintColor = self.scheme.colorScheme.primaryColor;
+    }
     
     if ([indexPath row] == 5) {
         UISegmentedControl *timeUnitControl = (UISegmentedControl *) [cell viewWithTag:300];
@@ -91,7 +98,7 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *name = [self tableView:tableView titleForHeaderInSection:section];
     
-    return [[ObservationTableHeaderView alloc] initWithName:name];
+    return [[ObservationTableHeaderView alloc] initWithName:name andScheme:self.scheme];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

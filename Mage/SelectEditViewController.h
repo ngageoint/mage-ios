@@ -7,10 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ObservationEditTableViewController.h"
+#import <MaterialComponents/MaterialContainerScheme.h>
+
+@protocol PropertyEditDelegate
+- (void) setValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
+- (void) invalidValue:(id) value forFieldDefinition:(NSDictionary *) fieldDefinition;
+@end
 
 @interface SelectEditViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
 
-- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate: (id<PropertyEditDelegate>) delegate;
+- (instancetype) initWithFieldDefinition: (NSDictionary *) fieldDefinition andValue: value andDelegate: (id<PropertyEditDelegate>) delegate scheme: (id<MDCContainerScheming>) containerScheme;
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end

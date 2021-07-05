@@ -1,0 +1,25 @@
+
+[
+    {
+        "variantField": "field1",
+        "name": "Test",
+        "color": "#355332",
+        "primaryField": "field0",
+        "variantField": "field1",
+        "fields": [
+            {
+                "name": "field0",
+                "required": true,
+                "type": "checkbox",
+                "title": "Yes or no",
+                "id": 0,
+                "choices": [
+                    
+                ]
+            }
+        ],
+        "userFields": [],
+        "archived": false,
+        "id": 1
+    }
+]

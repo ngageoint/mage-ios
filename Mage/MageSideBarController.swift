@@ -21,12 +21,11 @@ class SidebarUIButton: UIButton {
 }
 
 @objc class MageSideBarController : UIViewController {
-    @IBOutlet var userMapCalloutTappedDelegate: MapCalloutTappedSegueDelegate!
-    @IBOutlet var observationMapCalloutTappedDelegate: MapCalloutTappedSegueDelegate!
     
     var activeButton: SidebarUIButton?;
+    var scheme: MDCContainerScheming?;
     
-    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate & FeedItemSelectionDelegate
+    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
     @objc public var delegate: Delegate?;
     
     private lazy var railScroll : UIScrollView = {
@@ -34,7 +33,6 @@ class SidebarUIButton: UIButton {
         scroll.addSubview(navigationRail);
         navigationRail.autoPinEdge(toSuperviewEdge: .left);
         navigationRail.autoPinEdge(toSuperviewEdge: .right);
-        scroll.backgroundColor = .white;
         return scroll;
     }()
     
@@ -47,7 +45,6 @@ class SidebarUIButton: UIButton {
     
     private lazy var dataContainer : UIView = {
         let container : UIView = UIView(forAutoLayout: ());
-        container.backgroundColor = .red;
         return container;
     }()
     
@@ -60,13 +57,32 @@ class SidebarUIButton: UIButton {
         rail.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         rail.isLayoutMarginsRelativeArrangement = true;
         rail.translatesAutoresizingMaskIntoConstraints = false;
-        rail.backgroundColor = .white;
+        
         return rail;
     }()
     
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
+        navigationRail.backgroundColor = containerScheme.colorScheme.surfaceColor;
+        view.backgroundColor = containerScheme.colorScheme.backgroundColor;
+        railScroll.backgroundColor = containerScheme.colorScheme.surfaceColor;
+    }
+    
+    init(frame: CGRect) {
+        super.init(nibName: nil, bundle: nil);
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
+    }
+    
+    @objc convenience public init(containerScheme: MDCContainerScheming) {
+        self.init(frame: CGRect.zero);
+        self.scheme = containerScheme;
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
-        view.backgroundColor = .white;
         view.addSubview(railScroll);
         railScroll.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0), excludingEdge: .right);
         railScroll.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0);
@@ -85,6 +101,7 @@ class SidebarUIButton: UIButton {
         dataContainer.autoPinEdge(.left, to: .right, of: border);
         
         createRailItems();
+        applyTheme(withContainerScheme: self.scheme);
     }
     
     func activateSidebarDataController(viewController: UIViewController?, title: String?) {
@@ -107,7 +124,7 @@ class SidebarUIButton: UIButton {
         let size = 24;
         let button : SidebarUIButton = SidebarUIButton(forAutoLayout: ());
         button.autoSetDimensions(to: CGSize(width: 56, height: 56));
-        button.tintColor = .inactiveTabIcon();
+        button.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         button.sidebarType = sidebarType;
         button.title = title;
         
@@ -160,7 +177,7 @@ class SidebarUIButton: UIButton {
     func createLocationsRailView() -> SidebarUIButton {
         let locationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.locations, title: "People", imageName: "people");
         locationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let locationViewController : LocationTableViewController = LocationTableViewController();
+        let locationViewController : LocationTableViewController = LocationTableViewController(scheme: self.scheme);
         locationViewController.delegate = delegate;
         locationButton.viewController = locationViewController;
         return locationButton;
@@ -169,10 +186,8 @@ class SidebarUIButton: UIButton {
     func createObservationsRailView() -> SidebarUIButton {
         let observationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.observations, title: "Observations", imageName: "observations");
         observationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let observationViewController : ObservationTableViewController = ObservationTableViewController();
+        let observationViewController : ObservationTableViewController = ObservationTableViewController(attachmentDelegate: delegate, observationActionsDelegate: delegate, scheme: self.scheme);
         observationButton.viewController = observationViewController;
-        observationViewController.observationSelectionDelegate = delegate;
-        observationViewController.attachmentDelegate = delegate;
         return observationButton;
     }
     
@@ -180,16 +195,16 @@ class SidebarUIButton: UIButton {
         let feedButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.feed, title: feed.title, iconUrl: feed.iconURL(), imageName: "rss");
         feedButton.feed = feed;
         feedButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let feedItemsViewController: FeedItemsViewController = FeedItemsViewController(feed: feed, selectionDelegate: delegate);
+        let feedItemsViewController: FeedItemsViewController = FeedItemsViewController(feed: feed, selectionDelegate: delegate, scheme: self.scheme);
         feedButton.viewController = feedItemsViewController;
         return feedButton;
     }
     
     @objc func activateButton(button: SidebarUIButton) {
         if let safeButton = activeButton {
-            safeButton.tintColor = UIColor.inactiveTabIcon();
+            safeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         }
-        button.tintColor = UIColor.activeTabIcon();
+        button.tintColor = self.scheme?.colorScheme.primaryColor;
         activeButton = button;
         activateSidebarDataController(viewController: button.viewController, title: button.title);
     }

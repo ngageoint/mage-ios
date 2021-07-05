@@ -28,18 +28,20 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (strong, nonatomic) ImageCacheProvider *imageCacheProvider;
+@property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (strong, nonatomic) ServerURLController *urlController;
 
 @end
 
 @implementation MageAppCoordinator
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController forApplication: (UIApplication *) application andScheme:(id<MDCContainerScheming>) containerScheme {
     self = [super init];
     if (!self) return nil;
     
     _childCoordinators = [[NSMutableArray alloc] init];
     _navigationController = navigationController;
+    _scheme = containerScheme;
 
     [self setupPushNotificationsForApplication:application];
     self.imageCacheProvider = ImageCacheProvider.shared;
@@ -74,9 +76,9 @@
     [defaults synchronize];
     AuthenticationCoordinator *authCoordinator;
     if ([MageServer isServerVersion5]) {
-        authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self];
+        authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
     } else {
-        authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self];
+        authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
     }
     
     [_childCoordinators addObject:authCoordinator];
@@ -94,13 +96,13 @@
 
 - (void) changeServerUrl {
     [self.navigationController popToRootViewControllerAnimated:NO];
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self andScheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) setServerURLWithError: (NSString *) error {
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error andScheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }
@@ -127,7 +129,7 @@
 
 
 - (void) startEventChooser {
-    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController andDelegate:self];
+    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController andDelegate:self andScheme:_scheme];
     [_childCoordinators addObject:eventChooser];
     [eventChooser start];
 }
@@ -137,12 +139,12 @@
     [Event sendRecentEvent];
     [FeedService.shared restart];
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        MageSplitViewController *svc = [[MageSplitViewController alloc] init];
+        MageSplitViewController *svc = [[MageSplitViewController alloc] initWithScheme:_scheme];
         svc.modalPresentationStyle = UIModalPresentationFullScreen;
         svc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:svc animated:YES completion:NULL];
     } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        MageRootViewController *vc = [[MageRootViewController alloc] init];
+        MageRootViewController *vc = [[MageRootViewController alloc] initWithContainerScheme:_scheme];
         vc.modalPresentationStyle = UIModalPresentationFullScreen;
         vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:vc animated:NO completion:^{

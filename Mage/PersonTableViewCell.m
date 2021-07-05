@@ -10,16 +10,8 @@
 #import "User.h"
 #import "Location.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "Theme+UIResponder.h"
 
 @implementation PersonTableViewCell
-
-- (void) themeDidChange:(MageTheme)theme {
-    self.name.textColor = [UIColor primaryText];
-    self.backgroundColor = [UIColor background];
-    self.timestamp.textColor = [UIColor secondaryText];
-    self.icon.tintColor = [UIColor secondaryText];
-}
 
 - (id) populateCellWithUser:(User *) user {
     self.user = user;
@@ -32,10 +24,10 @@
     }
     
     self.name.text = user.name;
-    self.timestamp.text = user.location.timestamp.timeAgoSinceNow;
-    
-    [self registerForThemeChanges];
-    
+    if (user.location) {
+        self.timestamp.text = user.location.timestamp.timeAgoSinceNow;
+    }
+        
     return self;
 }
 
