@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSNumber *recentSortOrder;
 @property (nullable, nonatomic, retain) NSNumber *remoteId;
+@property (nullable, nonatomic, retain) NSNumber *maxObservationForms;
+@property (nullable, nonatomic, retain) NSNumber *minObservationForms;
 @property (nullable, nonatomic, retain) NSSet<Team *> *teams;
 @property (nullable, nonatomic, retain) NSSet<Feed *> *feeds;
 @property (nullable, nonatomic, retain) NSDictionary *acl;

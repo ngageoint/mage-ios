@@ -38,7 +38,6 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     return pushService;
 }
 
-
 - (id) init {
     if (self = [super init]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -46,10 +45,23 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         _interval = [[defaults valueForKey:kObservationPushFrequencyKey] doubleValue];
         _pushingObservations = [[NSMutableDictionary alloc] init];
         _pushingFavorites = [[NSMutableDictionary alloc] init];
+        _pushingImportant = [[NSMutableDictionary alloc] init];
         _delegates = [NSMutableSet set];
     }
     
     return self;
+}
+
+- (BOOL) isPushingFavorites {
+    return _pushingFavorites.allKeys.count != 0;
+}
+
+- (BOOL) isPushingObservations {
+    return _pushingObservations.allKeys.count != 0;
+}
+
+- (BOOL) isPushingImportant {
+    return _pushingImportant.allKeys.count != 0;
 }
 
 - (void) addObservationPushDelegate:(id<ObservationPushDelegate>) delegate {
@@ -149,17 +161,15 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     } else if ([anObject isKindOfClass:[ObservationImportant class]]) {
         switch(type) {
             case NSFetchedResultsChangeInsert: {
-                NSLog(@"important inserted, push em");
+                NSLog(@"important inserted, push em %@", anObject);
                 [self pushImportant:@[anObject]];
                 break;
             }
             case NSFetchedResultsChangeDelete: {
-                NSLog(@"important deleted, push em");
-                if ([[anObject observation] remoteId]) [self pushImportant:@[anObject]];
                 break;
             }
             case NSFetchedResultsChangeUpdate: {
-                NSLog(@"important updated, push em");
+                NSLog(@"important updated, push em %@", anObject);
                 if ([[anObject observation] remoteId]) [self pushImportant:@[anObject]];
                 break;
             }
@@ -189,7 +199,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     __weak typeof(self) weakSelf = self;
     MageSessionManager *manager = [MageSessionManager sharedManager];
     for (Observation *observation in [observationsToPush allValues]) {
-        NSLog(@"submitting observation %@", observation.remoteId);
+        NSManagedObjectID *observationID = observation.objectID;
         NSURLSessionDataTask *observationPushTask = [Observation operationToPushObservation:observation success:^(id response) {
             NSLog(@"Successfully submitted observation");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
@@ -202,7 +212,8 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                     attachment.observationRemoteId = localObservation.remoteId;
                 }
             } completion:^(BOOL success, NSError *error) {
-                [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
+
+                [weakSelf.pushingObservations removeObjectForKey:observationID];
                 
                 for (id<ObservationPushDelegate> delegate in self.delegates) {
                     [delegate didPushObservation:observation success:success error:error];
@@ -213,10 +224,9 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             // TODO check for 400
             if (error == nil) {
                 NSLog(@"Error submitting observation, no error returned");
-                
-                [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
-                
-                for (id<ObservationPushDelegate> delegate in self.delegates) {
+
+                [weakSelf.pushingObservations removeObjectForKey:observationID];
+                for (id<ObservationPushDelegate> delegate in weakSelf.delegates) {
                     [delegate didPushObservation:observation success:NO error:error];
                 }
                 
@@ -238,9 +248,9 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                 
                 localObservation.error = localError;
             } completion:^(BOOL success, NSError *coreDataError) {
-                [weakSelf.pushingObservations removeObjectForKey:observation.objectID];
+                [weakSelf.pushingObservations removeObjectForKey:observationID];
                 
-                for (id<ObservationPushDelegate> delegate in self.delegates) {
+                for (id<ObservationPushDelegate> delegate in weakSelf.delegates) {
                     [delegate didPushObservation:observation success:NO error:error];
                 }
             }];
@@ -292,6 +302,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     NSMutableDictionary *importantsToPush = [[NSMutableDictionary alloc] init];
     for (ObservationImportant *important in importants) {
         if ([self.pushingImportant objectForKey:important.objectID] == nil) {
+            NSLog(@"adding important to push %@", important.objectID);
             [self.pushingImportant setObject:important forKey:important.objectID];
             [importantsToPush setObject:important forKey:important.objectID];
         }
@@ -301,17 +312,18 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     __weak typeof(self) weakSelf = self;
     MageSessionManager *manager = [MageSessionManager sharedManager];
     for (ObservationImportant *important in [importantsToPush allValues]) {
+        NSManagedObjectID *importantIDtoPush = important.objectID;
         NSURLSessionDataTask *importantPushTask = [Observation operationToPushImportant:important success:^(id response) {
             NSLog(@"Successfully submitted important");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationImportant *localImportant = [important MR_inContext:localContext];
                 localImportant.dirty = [NSNumber numberWithBool:NO];
             } completion:^(BOOL success, NSError *error) {
-                [weakSelf.pushingImportant removeObjectForKey:important.objectID];
+                [weakSelf.pushingImportant removeObjectForKey:importantIDtoPush];
             }];
         } failure:^(NSError* error) {
             NSLog(@"Error submitting important");
-            [weakSelf.pushingFavorites removeObjectForKey:important.objectID];
+            [weakSelf.pushingImportant removeObjectForKey:importantIDtoPush];
         }];
         
         [manager addTask:importantPushTask];
@@ -329,6 +341,8 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     });
 
     self.fetchedResultsController = nil;
+    self.importantFetchedResultsController = nil;
+    self.favoritesFetchedResultsController = nil;
 }
 
 

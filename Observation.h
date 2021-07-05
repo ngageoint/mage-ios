@@ -27,8 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSURLSessionDataTask *) operationToPushObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPushFavorite:(ObservationFavorite *) favorite success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPushImportant:(ObservationImportant *) important success:(void (^)(id)) success failure: (void (^)(NSError *)) failure;
++ (NSDate *) fetchLastObservationDateInContext:(NSManagedObjectContext *) context;
 
-+ (Observation *) observationWithGeometry:(SFGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
++ (Observation *) observationWithGeometry:(nullable SFGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext;
++ (Observation *) createObservation:(NSDictionary *) feature inContext:(NSManagedObjectContext *) localContext;
 + (BOOL) checkIfRectangle: (NSArray<SFPoint *> *) points;
 
 - (id) populateObjectFromJson: (NSDictionary *) json;
@@ -40,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CLLocation *) location;
 
 - (SFGeometry *) getGeometry;
-- (void) setGeometry: (SFGeometry *) geometry;
+- (void) setGeometry: (nullable SFGeometry *) geometry;
 
 - (Boolean) isDirty;
 - (Boolean) isImportant;
@@ -49,13 +51,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (Boolean) hasValidationError;
 - (NSString *) errorMessage;
 
-- (NSDictionary *) getPrimaryForm;
+- (NSIndexSet *) getFormsToBeDeleted;
+- (void) clearFormsToBeDeleted;
+- (void) addFormToBeDeleted: (NSInteger) formIndex;
+- (void) removeFormToBeDeleted: (NSInteger) formIndex;
+
+- (nullable NSDictionary *) getPrimaryObservationForm;
+- (NSDictionary *) getPrimaryEventForm;
 - (NSString *) getPrimaryField;
 - (NSString *) getSecondaryField;
 - (NSString *) primaryFieldText;
 - (NSString *) secondaryFieldText;
-- (NSString *) getPrimaryFeedField;
-- (NSString *) getSecondaryFeedField;
 - (NSString *) primaryFeedFieldText;
 - (NSString *) secondaryFeedFieldText;
 

@@ -109,6 +109,7 @@
     NSMutableArray *parameters = [[NSMutableArray alloc] init];
     for (GPSLocation *location in locations) {
         SFGeometry *point = [location getGeometry];
+        @try {
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:point];
         [parameters addObject:@{
                                 @"geometry": @{
@@ -117,6 +118,10 @@
                                         },
                                 @"properties": [NSDictionary dictionaryWithDictionary:location.properties]
                                 }];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception trying to push geometry %@ : %@", point, exception);
+        }
     }
     
     NSURLSessionDataTask *task = [manager POST_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {

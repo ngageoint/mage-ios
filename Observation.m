@@ -26,29 +26,49 @@
 #import "SFLineString.h"
 #import "SFGeometryUtils.h"
 #import "NotificationRequester.h"
+#import "MAGERoutes.h"
 
 NSString * const kObservationErrorStatusCode = @"errorStatusCode";
 NSString * const kObservationErrorDescription = @"errorDescription";
 NSString * const kObservationErrorMessage = @"errorMessage";
 
+@interface Observation ()
+
+@property (nonatomic, retain) NSMutableArray *_transientAttachments;
+@property (nonatomic, retain) NSMutableIndexSet *_formsToBeDeleted;
+
+@property (nonatomic, retain) NSDictionary *_fieldNameToField;
+@property (nonatomic, retain) Event *_event;
+
+@end
+
 @implementation Observation
 
-NSMutableArray *_transientAttachments;
-
-NSDictionary *_fieldNameToField;
-Event *_event;
+@synthesize _transientAttachments;
+@synthesize _formsToBeDeleted;
+@synthesize _fieldNameToField;
+@synthesize _event;
 
 //NSNumber *_currentEventId;
-+ (Observation *) observationWithGeometry:(SFGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
++ (Observation *) observationWithGeometry:(nullable SFGeometry *) geometry andAccuracy: (CLLocationAccuracy) accuracy andProvider: (NSString *) provider andDelta: (double) delta inManagedObjectContext:(NSManagedObjectContext *) mangedObjectContext {
     Observation *observation = [Observation MR_createEntityInContext:mangedObjectContext];
+    
+    NSDate *observationDate = [NSDate date];
+    NSDateComponents *startSeconds = [[NSCalendar currentCalendar] components: NSCalendarUnitSecond | NSCalendarUnitNanosecond fromDate: observationDate];
+    [startSeconds setSecond: -[startSeconds second]];
+    [startSeconds setNanosecond: -[startSeconds nanosecond]];
+    
+    observationDate = [[NSCalendar currentCalendar] dateByAddingComponents: startSeconds toDate: observationDate options: 0];
 
-    [observation setTimestamp:[NSDate date]];
+    [observation setTimestamp:observationDate];
     NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
 
     [properties setObject:[observation.timestamp iso8601String] forKey:@"timestamp"];
-    [properties setObject:provider forKey:@"provider"];
-    [properties setObject:[NSNumber numberWithDouble:accuracy] forKey:@"accuracy"];
-    [properties setObject:[NSNumber numberWithInt:(int)delta] forKey:@"delta"];
+    if (geometry != nil) {
+        [properties setObject:provider forKey:@"provider"];
+        [properties setObject:[NSNumber numberWithDouble:accuracy] forKey:@"accuracy"];
+        [properties setObject:[NSNumber numberWithInt:(int)delta] forKey:@"delta"];
+    }
     [properties setObject:[[NSMutableArray alloc] init] forKey:@"forms"];
 
     [observation setProperties:properties];
@@ -71,16 +91,30 @@ Event *_event;
 }
 
 - (Event *) event {
-    _event = [Event getEventById:self.eventId inContext:self.managedObjectContext];
-    return _event;
+    self._event = [Event getEventById:self.eventId inContext:self.managedObjectContext];
+    return self._event;
 }
 
-- (NSDictionary *) getPrimaryForm {
+- (nullable NSDictionary *) getPrimaryObservationForm {
+    NSArray *observationForms = [self.properties objectForKey:@"forms"];
+    
+    if (observationForms != nil) {
+        for (int i = 0; i < [observationForms count]; i++) {
+            // here we can ignore forms which will be deleted
+            if (![[self getFormsToBeDeleted] containsIndex:i]) {
+                return observationForms[i];
+            }
+        }
+    }
+    return nil;
+}
+
+- (NSDictionary *) getPrimaryEventForm {
     Event *event = [self event];
     NSArray *forms = event.forms;
-    NSArray *observationForms = [self.properties objectForKey:@"forms"];
-    if (forms != nil && [forms count] > 0 && observationForms != nil && [observationForms count] > 0) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [[observationForms objectAtIndex:0] objectForKey:@"formId"]];
+    NSDictionary *primaryObservationForm = [self getPrimaryObservationForm];
+    if (forms != nil && [forms count] > 0 && primaryObservationForm != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.id = %@", [primaryObservationForm objectForKey:@"formId"]];
         NSArray *filteredArray = [forms filteredArrayUsingPredicate:predicate];
         
         return [filteredArray firstObject];
@@ -89,7 +123,7 @@ Event *_event;
 }
 
 - (NSString *) getPrimaryField {
-    NSDictionary *form = [self getPrimaryForm];
+    NSDictionary *form = [self getPrimaryEventForm];
     if (form != nil) {
         return [form objectForKey:@"primaryField"];
     }
@@ -97,17 +131,19 @@ Event *_event;
 }
 
 - (NSString *) primaryFieldText {
-    NSString *primaryField = [self getPrimaryField];
+    NSDictionary *primaryFeedField = [self getField:@"primaryField"];
     NSArray *observationForms = [self.properties objectForKey:@"forms"];
-
-    if (primaryField != nil && [observationForms count] > 0) {
-        return [[observationForms objectAtIndex:0] objectForKey:primaryField];
+    
+    if (primaryFeedField != nil && [observationForms count] > 0) {
+        id value = [[self getPrimaryObservationForm] objectForKey:[primaryFeedField objectForKey:@"name"]];
+        return [self fieldValueText:value field:primaryFeedField];
     }
+    
     return nil;
 }
 
 - (NSString *) getSecondaryField {
-    NSDictionary *form = [self getPrimaryForm];
+    NSDictionary *form = [self getPrimaryEventForm];
     if (form != nil) {
         return [form objectForKey:@"variantField"];
     }
@@ -115,23 +151,24 @@ Event *_event;
 }
 
 - (NSString *) secondaryFieldText {
-    
-    NSString *secondaryField = [self getSecondaryField];
+    NSDictionary *variantFeedField = [self getField:@"variantField"];
     NSArray *observationForms = [self.properties objectForKey:@"forms"];
-
-    if (secondaryField != nil && [observationForms count] > 0) {
-        return [[observationForms objectAtIndex:0] objectForKey:secondaryField];
+    
+    if (variantFeedField != nil && [observationForms count] > 0) {
+        id value = [[self getPrimaryObservationForm] objectForKey:[variantFeedField objectForKey:@"name"]];
+        return [self fieldValueText:value field:variantFeedField];
     }
+    
     return nil;
 }
 
 - (NSString *) primaryFeedFieldText {
-    NSDictionary *secondaryFeedField = [self getField:@"primaryFeedField"];
+    NSDictionary *primaryFeedField = [self getField:@"primaryFeedField"];
     NSArray *observationForms = [self.properties objectForKey:@"forms"];
     
-    if (secondaryFeedField != nil && [observationForms count] > 0) {
-        id value = [[observationForms objectAtIndex:0] objectForKey:[secondaryFeedField objectForKey:@"name"]];
-        return [self fieldValueText:value field:secondaryFeedField];
+    if (primaryFeedField != nil && [observationForms count] > 0) {
+        id value = [[self getPrimaryObservationForm] objectForKey:[primaryFeedField objectForKey:@"name"]];
+        return [self fieldValueText:value field:primaryFeedField];
     }
     
     return nil;
@@ -142,7 +179,7 @@ Event *_event;
     NSArray *observationForms = [self.properties objectForKey:@"forms"];
     
     if (secondaryFeedField != nil && [observationForms count] > 0) {
-        id value = [[observationForms objectAtIndex:0] objectForKey:[secondaryFeedField objectForKey:@"name"]];
+        id value = [[self getPrimaryObservationForm] objectForKey:[secondaryFeedField objectForKey:@"name"]];
         return [self fieldValueText:value field:secondaryFeedField];
     }
     
@@ -150,7 +187,7 @@ Event *_event;
 }
 
 - (NSDictionary *) getField:(NSString *) name {
-    NSDictionary *form = [self getPrimaryForm];
+    NSDictionary *form = [self getPrimaryEventForm];
     if (form != nil) {
         NSString *fieldName = [form objectForKey:name];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name==%@", fieldName];
@@ -168,7 +205,12 @@ Event *_event;
     
     NSString *type = [field valueForKey:@"type"];
     if ([@"geometry" isEqualToString:type]) {
-        SFGeometry *geometry = value;
+        SFGeometry *geometry = nil;
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            geometry = [GeometryDeserializer parseGeometry:value];
+        } else {
+            geometry = value;
+        }
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         return [NSString stringWithFormat:@"%.6f, %.6f", [centroid.y doubleValue], [centroid.x doubleValue]];
     } else if ([@"date" isEqualToString:type]) {
@@ -180,7 +222,7 @@ Event *_event;
         return [value stringValue];
     } else if ([@"multiselectdropdown" isEqualToString:type]) {
         NSArray *array = (NSArray *) value;
-        return [array componentsJoinedByString:@","];
+        return [array componentsJoinedByString:@", "];
     } else if ([@"textfield" isEqualToString:type] ||
                [@"textarea" isEqualToString:type] ||
                [@"email" isEqualToString:type] ||
@@ -194,19 +236,19 @@ Event *_event;
 }
 
 - (NSMutableArray *)transientAttachments {
-    if (_transientAttachments != nil) {
-        return _transientAttachments;
+    if (self.transientAttachments != nil) {
+        return self.transientAttachments;
     }
-    _transientAttachments = [NSMutableArray array];
-    return _transientAttachments;
+    self._transientAttachments = [NSMutableArray array];
+    return self._transientAttachments;
 }
 
 - (NSDictionary *)fieldNameToFieldForEvent:(Event *) event andFormId: (id) formId {
     if (event == nil) {
         NSLog(@"Nil event");
     }
-    if (_fieldNameToField != nil) {//} && [_currentEventId isEqualToNumber:event.remoteId]) {
-        return [_fieldNameToField objectForKey:[NSString stringWithFormat:@"%@",formId]];
+    if (self._fieldNameToField != nil) {//} && [_currentEventId isEqualToNumber:event.remoteId]) {
+        return [self._fieldNameToField objectForKey:[NSString stringWithFormat:@"%@",formId]];
     }
 
     NSArray *forms = event.forms;
@@ -222,9 +264,9 @@ Event *_event;
         [formFieldMap setObject:fieldNameToFieldMap forKey:[NSString stringWithFormat:@"%@",[form objectForKey:@"id"]]];
     }
     
-    _fieldNameToField = formFieldMap;
+    self._fieldNameToField = formFieldMap;
 
-    return [_fieldNameToField objectForKey:[NSString stringWithFormat:@"%@",formId]];
+    return [self._fieldNameToField objectForKey:[NSString stringWithFormat:@"%@",formId]];
 }
 
 - (NSDictionary *) createJsonToSubmitForEvent:(Event *) event {
@@ -257,10 +299,14 @@ Event *_event;
     [observationJson setObject:@{
                                  @"name": stringState
                                  } forKey:@"state"];
-
-    SFGeometry *geometry = [self getGeometry];
-    [observationJson setObject:[GeometrySerializer serializeGeometry:geometry] forKey:@"geometry"];
-
+    @try {
+        SFGeometry *geometry = [self getGeometry];
+        [observationJson setObject:[GeometrySerializer serializeGeometry:geometry] forKey:@"geometry"];
+    }
+    @catch (NSException *e){
+        NSLog(@"Problem parsing geometry %@", e);
+    }
+    
     [observationJson setObject: [dateFormat stringFromDate:self.timestamp] forKey:@"timestamp"];
 
     NSMutableDictionary *jsonProperties = [[NSMutableDictionary alloc] initWithDictionary:self.properties];
@@ -273,6 +319,7 @@ Event *_event;
             for (id key in form) {
                 id value = [form objectForKey:key];
                 id field = [[self fieldNameToFieldForEvent:event andFormId:[form objectForKey:@"formId"]] objectForKey:key];
+                // TODO: serialize attachment field types properly
                 if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
                     @try {
                         SFGeometry *fieldGeometry = value;
@@ -342,6 +389,7 @@ Event *_event;
                 for (id formKey in formProperties) {
                     id value = [formProperties objectForKey:formKey];
                     id field = [fields objectForKey:formKey];
+                    // TODO: deserialize attachments properly
                     if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
                         @try {
                             SFGeometry * geometry = [GeometryDeserializer parseGeometry:value];
@@ -379,12 +427,37 @@ Event *_event;
     return geometry;
 }
 
-- (void) setGeometry: (SFGeometry *) geometry{
+- (void) setGeometry: (nullable SFGeometry *) geometry{
     NSData *data = nil;
     if(geometry != nil){
         data = [SFGeometryUtils encodeGeometry:geometry];
     }
     [self setGeometryData:data];
+}
+
+- (NSIndexSet *) getFormsToBeDeleted {
+    if (self._formsToBeDeleted == nil) {
+        self._formsToBeDeleted = [[NSMutableIndexSet alloc] init];
+    }
+    return self._formsToBeDeleted;
+}
+
+- (void) clearFormsToBeDeleted {
+    self._formsToBeDeleted = [[NSMutableIndexSet alloc] init];
+}
+
+- (void) addFormToBeDeleted:(NSInteger)formIndex {
+    if (self._formsToBeDeleted == nil) {
+        self._formsToBeDeleted = [[NSMutableIndexSet alloc] init];
+    }
+    [self._formsToBeDeleted addIndex:formIndex];
+}
+
+- (void) removeFormToBeDeleted:(NSInteger)formIndex {
+    if (self._formsToBeDeleted == nil) {
+        self._formsToBeDeleted = [[NSMutableIndexSet alloc] init];
+    }
+    [self._formsToBeDeleted removeIndex:formIndex];
 }
 
 +(BOOL) checkIfRectangle: (NSArray<SFPoint *> *) points{
@@ -427,15 +500,20 @@ Event *_event;
 
 + (NSURLSessionDataTask *) operationToDeleteObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSLog(@"Trying to delete observation %@", observation.url);
-    NSURLSessionDataTask *task = [[MageSessionManager sharedManager] POST_TASK:[NSString stringWithFormat:@"%@/states", observation.url] parameters: @{@"name":@"archive"} progress:^(NSProgress * _Nonnull uploadProgress) {
+    RouteMethod *deleteMethod = [[MAGERoutes observation] deleteRoute:observation];
+    NSLog(@"Delete method parameters %@", deleteMethod.parameters);
+    NSLog(@"route %@", deleteMethod.route);
+    NSURLSessionDataTask *task = [[MageSessionManager sharedManager] POST_TASK:deleteMethod.route parameters: deleteMethod.parameters progress:^(NSProgress * _Nonnull uploadProgress) {
         NSLog(@"progress");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"success");
         // if the delete worked, remove the observation from the database on the phone
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             [observation MR_deleteEntityInContext:localContext];
+            failure(nil);
         }];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"failure to delete");
         NSString *errorString = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
         NSLog(@"Error deleting observation %@", errorString);
         if ([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -444,8 +522,13 @@ Event *_event;
                 // Observation does not exist on the server, delete it
                 [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                     [observation MR_deleteEntityInContext:localContext];
+                    failure(nil);
                 }];
+            } else {
+                failure(nil);
             }
+        } else {
+            failure(error);
         }
     }];
     
@@ -453,11 +536,11 @@ Event *_event;
 }
 
 + (NSURLSessionDataTask *) operationToCreateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
-    NSString *url = [NSString stringWithFormat:@"%@/api/events/%@/observations/id", [MageServer baseURL], observation.eventId];
-    NSLog(@"Trying to create observation %@", url);
+    RouteMethod *create = [[MAGERoutes observation] createId:observation];
+    NSLog(@"Trying to create observation %@", create.route);
 
     MageSessionManager *manager = [MageSessionManager sharedManager];
-    NSURLSessionDataTask *task = [manager POST_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
+    NSURLSessionDataTask *task = [manager POST_TASK:create.route parameters:nil progress:nil success:^(NSURLSessionTask *task, id response) {
         NSLog(@"Successfully created location for observation resource");
 
         NSString *observationUrl = [response objectForKey:@"url"];
@@ -496,6 +579,7 @@ Event *_event;
 + (NSURLSessionDataTask *) operationToUpdateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSLog(@"Trying to update observation %@", observation.url);
     Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+
     NSURLSessionDataTask *task = [[MageSessionManager sharedManager] PUT_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
         if (success) {
             success(response);
@@ -601,6 +685,15 @@ Event *_event;
     
     __block BOOL sendBulkNotification = initialPull;
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable features) {
+        if ([features isKindOfClass:[NSData class]]) {
+            if (((NSData *)features).length == 0) {
+                NSLog(@"Observations is empty");
+                if (success) {
+                    success();
+                }
+                return;
+            }
+        }
         NSManagedObjectContext *rootSavingContext = [NSManagedObjectContext MR_rootSavingContext];
         NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:rootSavingContext];
         [localContext performBlock:^{
@@ -687,7 +780,7 @@ Event *_event;
     return chunks;
 }
 
-+ (Observation *) createObservation:(id) feature inContext:(NSManagedObjectContext *) localContext {
++ (Observation *) createObservation:(NSDictionary *) feature inContext:(NSManagedObjectContext *) localContext {
     Observation *newObservation = nil;
     
     NSNumber *eventId = [Server currentEventId];
@@ -1055,29 +1148,30 @@ Event *_event;
 }
 
 - (void) toggleFavoriteWithCompletion:(nullable void (^)(BOOL contextDidSave, NSError * _Nullable error)) completion {
-    NSManagedObjectContext *context = self.managedObjectContext;
-    User *user = [User fetchCurrentUserInManagedObjectContext:context];
-    ObservationFavorite *favorite = [[self getFavoritesMap] objectForKey:user.remoteId];
+    __weak typeof(self) weakSelf = self;
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        Observation *localObservation = [weakSelf MR_inContext:localContext];
 
-    NSLog(@"toggle favorite %@", favorite);
-    if (favorite && favorite.favorite) {
-        // toggle off
-        favorite.dirty = YES;
-        favorite.favorite = NO;
-    } else {
-        // toggle on
-        if (!favorite) {
-            favorite = [ObservationFavorite MR_createEntityInContext:context];
-            [self addFavoritesObject:favorite];
-            favorite.observation = self;
+        User *user = [User fetchCurrentUserInManagedObjectContext:localContext];
+        ObservationFavorite *favorite = [[localObservation getFavoritesMap] objectForKey:user.remoteId];
+
+        if (favorite && favorite.favorite) {
+            // toggle off
+            favorite.dirty = YES;
+            favorite.favorite = NO;
+        } else {
+            // toggle on
+            if (!favorite) {
+                favorite = [ObservationFavorite MR_createEntityInContext:localContext];
+                [localObservation addFavoritesObject:favorite];
+                favorite.observation = localObservation;
+            }
+
+            favorite.dirty = YES;
+            favorite.favorite = YES;
+            favorite.userId = user.remoteId;
         }
-
-        favorite.dirty = YES;
-        favorite.favorite = YES;
-        favorite.userId = user.remoteId;
-    }
-
-    [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         if (completion) {
             completion(contextDidSave, error);
         };
@@ -1100,26 +1194,27 @@ Event *_event;
         };
         return;
     }
-    NSManagedObjectContext *context = self.managedObjectContext;
-    User *currentUser = [User fetchCurrentUserInManagedObjectContext:context];
+    __weak typeof(self) weakSelf = self;
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        Observation *localObservation = [weakSelf MR_inContext:localContext];
+        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
 
-    ObservationImportant *important = self.observationImportant;
-    if (!important) {
-        important = [ObservationImportant MR_createEntityInContext:context];
-        important.observation = self;
-        self.observationImportant = important;
-    }
+        ObservationImportant *important = weakSelf.observationImportant;
+        if (!important) {
+            important = [ObservationImportant MR_createEntityInContext:localContext];
+            important.observation = localObservation;
+            localObservation.observationImportant = important;
+        }
 
-    important.dirty = [NSNumber numberWithBool:YES];
-    important.important = [NSNumber numberWithBool:YES];
-    important.userId = currentUser.remoteId;
-    important.reason = description;
+        important.dirty = [NSNumber numberWithBool:YES];
+        important.important = [NSNumber numberWithBool:YES];
+        important.userId = currentUser.remoteId;
+        important.reason = description;
 
-    // This will get overriden by the server, but lets set an inital value
-    // so the UI has something to display
-    important.timestamp = [NSDate date];
-
-    [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        // This will get overriden by the server, but lets set an inital value
+        // so the UI has something to display
+        important.timestamp = [NSDate date];
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         if (completion) {
             completion(contextDidSave, error);
         };
@@ -1133,15 +1228,15 @@ Event *_event;
         };
         return;
     }
-    NSManagedObjectContext *context = self.managedObjectContext;
+    __weak typeof(self) weakSelf = self;
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        ObservationImportant *important = [weakSelf.observationImportant MR_inContext:localContext];
+        if (important) {
+            important.dirty = [NSNumber numberWithBool:YES];
 
-    ObservationImportant *important = self.observationImportant;
-    if (important) {
-        important.dirty = [NSNumber numberWithBool:YES];
-        important.important = [NSNumber numberWithBool:NO];
-    }
-
-    [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+            important.important = [NSNumber numberWithBool:NO];
+        }
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         if (completion) {
             completion(contextDidSave, error);
         };

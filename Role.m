@@ -32,6 +32,15 @@
     
     MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id roles) {
+        if ([roles isKindOfClass:[NSData class]]) {
+            if (((NSData *)roles).length == 0) {
+                NSLog(@"Roles is empty");
+                if (success) {
+                    success();
+                }
+                return;
+            }
+        }
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             // Get the user ids to query
             NSMutableArray *roleIds = [[NSMutableArray alloc] init];

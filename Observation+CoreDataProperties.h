@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSDictionary* error;
 @property (nullable, nonatomic, retain) NSData *geometryData;
 @property (nullable, nonatomic, copy) NSDate *lastModified;
-@property (nullable, nonatomic, retain) id properties;
+@property (nullable, nonatomic, copy) NSDictionary* properties;
 @property (nullable, nonatomic, copy) NSString *remoteId;
 @property (nullable, nonatomic, copy) NSNumber *state;
 @property (nullable, nonatomic, copy) NSDate *timestamp;

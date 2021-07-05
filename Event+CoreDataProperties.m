@@ -18,6 +18,8 @@
 @dynamic name;
 @dynamic recentSortOrder;
 @dynamic remoteId;
+@dynamic maxObservationForms;
+@dynamic minObservationForms;
 @dynamic teams;
 @dynamic feeds;
 @dynamic acl;

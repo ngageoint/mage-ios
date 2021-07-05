@@ -18,8 +18,7 @@ static NSDateFormatter *dateDisplayFormatter;
     
     if (dateDisplayFormatter == nil) {
         dateDisplayFormatter = [[NSDateFormatter alloc] init];
-        dateDisplayFormatter.dateStyle = NSDateFormatterLongStyle;
-        dateDisplayFormatter.timeStyle = NSDateFormatterLongStyle;
+        dateDisplayFormatter.dateFormat = @"yyyy-MM-dd HH:mm zzz";
     }
     [self setTimeZoneForDateFormatter:dateDisplayFormatter];
     

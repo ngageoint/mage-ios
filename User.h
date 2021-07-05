@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSURLSessionDataTask *) operationToFetchUsersWithSuccess: (void(^)(void)) success failure: (void(^)(NSError *)) failure;
 
 - (void) updateUserForJson: (NSDictionary *) json;
+- (BOOL) hasEditPermission;
 @end
 
 NS_ASSUME_NONNULL_END

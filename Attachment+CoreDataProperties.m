@@ -26,5 +26,6 @@
 @dynamic url;
 @dynamic observation;
 @dynamic taskIdentifier;
+@dynamic markedForDeletion;
 
 @end

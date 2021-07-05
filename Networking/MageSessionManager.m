@@ -117,7 +117,8 @@ static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
         if ([[request.URL path] safeContainsString:@"signin"] ||
             [[request.URL path] safeContainsString:@"authorize"] ||
             [[request.URL path] safeContainsString:@"devices"] ||
-            [[request.URL path] safeContainsString:@"password"]) {
+            [[request.URL path] safeContainsString:@"password"] ||
+            [[request.URL path] safeContainsString:@"auth/token"]) {
             return;
         }
         

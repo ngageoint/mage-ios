@@ -6,6 +6,7 @@
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="markedForDeletion" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="observationRemoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
@@ -19,9 +20,11 @@
         <attribute name="launchDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="Event" representedClassName="Event" syncable="YES">
-        <attribute name="acl" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="acl" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="eventDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="forms" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="forms" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
+        <attribute name="maxObservationForms" optional="YES" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="minObservationForms" optional="YES" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recentSortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -29,21 +32,21 @@
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Feed" representedClassName="Feed" syncable="YES">
-        <attribute name="constantParams" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="constantParams" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="itemPrimaryProperty" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="itemSecondaryProperty" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="itemsHaveIdentity" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="itemsHaveSpatialDimension" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="itemTemporalProperty" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mapStyle" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFormDataTransformerName" syncable="YES"/>
+        <attribute name="mapStyle" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="pullFrequency" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="remoteId" attributeType="String" syncable="YES"/>
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tag" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updateFrequency" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="variableParams" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="variableParams" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FeedItem" inverseName="feed" inverseEntity="FeedItem" syncable="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -53,26 +56,26 @@
     </entity>
     <entity name="FeedItem" representedClassName="FeedItem" syncable="YES">
         <attribute name="geometry" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="feed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Feed" inverseName="items" inverseEntity="Feed" syncable="YES"/>
     </entity>
     <entity name="GPSLocation" representedClassName="GPSLocation" syncable="YES">
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="geometryData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="ImageryLayer" representedClassName="ImageryLayer" parentEntity="Layer" syncable="YES">
         <attribute name="format" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isSecure" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="options" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="options" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
     </entity>
     <entity name="Layer" representedClassName="Layer" syncable="YES">
         <attribute name="downloadedBytes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="downloading" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="file" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="file" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="formId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="loaded" optional="YES" attributeType="Float" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -83,7 +86,7 @@
     <entity name="Location" representedClassName="Location" syncable="YES">
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="geometryData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -92,11 +95,11 @@
     <entity name="Observation" representedClassName="Observation" syncable="YES">
         <attribute name="deviceId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dirty" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="error" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="error" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="geometryData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="lastModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="syncing" optional="YES" transient="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -128,15 +131,15 @@
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" inverseName="observationImportant" inverseEntity="Observation" syncable="YES"/>
     </entity>
     <entity name="Role" representedClassName="Role" syncable="YES">
-        <attribute name="permissions" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="permissions" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="role" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Server" representedClassName="Server" syncable="YES">
-        <attribute name="properties" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
     </entity>
     <entity name="StaticLayer" representedClassName="StaticLayer" parentEntity="Layer" syncable="YES">
-        <attribute name="data" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="data" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -153,7 +156,7 @@
         <attribute name="iconUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phone" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="recentEventIds" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="recentEventIds" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="user" inverseEntity="Location" syncable="YES"/>
@@ -162,22 +165,22 @@
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="users" inverseEntity="Team" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="30"/>
+        <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="239"/>
         <element name="Canary" positionX="-2322" positionY="-1008" width="128" height="60"/>
-        <element name="Event" positionX="-2466" positionY="-973" width="128" height="163"/>
+        <element name="Event" positionX="-2466" positionY="-973" width="128" height="179"/>
         <element name="Feed" positionX="-2322" positionY="-1008" width="128" height="269"/>
-        <element name="FeedItem" positionX="-2313" positionY="-999" width="128" height="103"/>
-        <element name="GPSLocation" positionX="-1989" positionY="-1161" width="128" height="105"/>
-        <element name="ImageryLayer" positionX="-2322" positionY="-1008" width="128" height="88"/>
-        <element name="Layer" positionX="-2243" positionY="-1035" width="128" height="193"/>
-        <element name="Location" positionX="-2108" positionY="-612" width="128" height="150"/>
-        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="300"/>
+        <element name="FeedItem" positionX="-2313" positionY="-999" width="128" height="89"/>
+        <element name="GPSLocation" positionX="-1989" positionY="-1161" width="128" height="89"/>
+        <element name="ImageryLayer" positionX="-2322" positionY="-1008" width="128" height="74"/>
+        <element name="Layer" positionX="-2243" positionY="-1035" width="128" height="179"/>
+        <element name="Location" positionX="-2108" positionY="-612" width="128" height="134"/>
+        <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="284"/>
         <element name="ObservationFavorite" positionX="-2313" positionY="-999" width="128" height="105"/>
         <element name="ObservationImportant" positionX="-2124" positionY="-792" width="128" height="135"/>
-        <element name="Role" positionX="-2268" positionY="-486" width="128" height="90"/>
-        <element name="Server" positionX="-2493" positionY="-1143" width="128" height="60"/>
-        <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="58"/>
+        <element name="Role" positionX="-2268" positionY="-486" width="128" height="74"/>
+        <element name="Server" positionX="-2493" positionY="-1143" width="128" height="44"/>
+        <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="44"/>
         <element name="Team" positionX="-2529" positionY="-441" width="128" height="120"/>
-        <element name="User" positionX="-1622" positionY="-516" width="128" height="255"/>
+        <element name="User" positionX="-1622" positionY="-516" width="128" height="239"/>
     </elements>
 </model>

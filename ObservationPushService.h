@@ -25,5 +25,7 @@
 - (void) removeObservationPushDelegate:(id<ObservationPushDelegate>) delegate;
 
 - (void) pushObservations:(NSArray *) observations;
-
+- (BOOL) isPushingFavorites;
+- (BOOL) isPushingObservations;
+- (BOOL) isPushingImportant;
 @end

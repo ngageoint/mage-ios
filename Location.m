@@ -87,6 +87,15 @@
     MageSessionManager *manager = [MageSessionManager sharedManager];
     
     NSURLSessionDataTask *task = [manager GET_TASK:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id allUserLocations) {
+        if ([allUserLocations isKindOfClass:[NSData class]]) {
+            if (((NSData *)allUserLocations).length == 0) {
+                NSLog(@"User Locations is empty");
+                if (success) {
+                    success();
+                }
+                return;
+            }
+        }
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
             NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[allUserLocations count]);
             User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];

@@ -48,6 +48,8 @@ NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 - (void) updateEventForJson: (NSDictionary *) json inManagedObjectContext: (NSManagedObjectContext *) context {
     [self setRemoteId:[json objectForKey:@"id"]];
     [self setName:[json objectForKey:@"name"]];
+    [self setMaxObservationForms:[json objectForKey:@"maxObservationForms"]];
+    [self setMinObservationForms:[json objectForKey:@"minObservationForms"]];
     [self setEventDescription:[json objectForKey:@"description"]];
     [self setAcl:AFJSONObjectByRemovingKeysWithNullValues([json objectForKey:@"acl"], NSJSONReadingAllowFragments)];
     [self setForms:AFJSONObjectByRemovingKeysWithNullValues([json objectForKey:@"forms"], NSJSONReadingAllowFragments)];
@@ -84,7 +86,7 @@ NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 }
 
 - (NSDictionary *) formForObservation: (Observation *) observation {
-    return [observation getPrimaryForm];
+    return [observation getPrimaryEventForm];
 }
 
 - (NSDictionary *) formWithId: (long) formId {
