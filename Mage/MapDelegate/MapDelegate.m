@@ -1288,8 +1288,12 @@
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
         MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView];
+        // adjiust the center offset if this is the enlargedPin
+        if (annotationView == self.enlargedPin) {
+            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height));
+        }
         annotationView.layer.zPosition = [locationAnnotation.timestamp timeIntervalSinceReferenceDate];
-        annotationView.canShowCallout = self.canShowUserCallout;
+        annotationView.canShowCallout = false;
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
         annotationView.enabled = !self.hideLocations;
@@ -1354,6 +1358,11 @@
 - (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
     if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
         LocationAnnotation *annotation = view.annotation;
+        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            view.transform = CGAffineTransformScale(view.transform, 2.0, 2.0);
+            view.centerOffset = CGPointMake(0, -(view.image.size.height));
+            self.enlargedPin = view;
+        } completion:nil];
         User *user = annotation.user;
         
         if ([user avatarUrl] != nil) {
@@ -1368,6 +1377,14 @@
         double accuracy = annotation.location.horizontalAccuracy;
         self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
         [self.mapView addOverlay:self.selectedUserAccuracy];
+        
+        self.userBottomSheet = [[UserBottomSheetController alloc] initWithUser:user actionsDelegate:self scheme:self.scheme];
+        self.userBottomSheet.preferredContentSize = CGSizeMake(self.userBottomSheet.preferredContentSize.width, 220);
+
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.userBottomSheet];
+        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+        self.bottomSheet.delegate = self;
+        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *annotation = view.annotation;
         [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{

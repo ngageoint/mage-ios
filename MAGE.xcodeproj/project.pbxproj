@@ -126,13 +126,13 @@
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
+		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
+		F7103F05266A9D7F000832CD /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7103F03266A9CD7000832CD /* test_marker.png */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
 		F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */; };
 		F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */; };
 		F711241E25F69BF5008849B1 /* geometryObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711241D25F69BF5008849B1 /* geometryObservations.json */; };
 		F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711248925F7B8B0008849B1 /* twoFormsObservations.json */; };
-		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
-		F7103F05266A9D7F000832CD /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7103F03266A9CD7000832CD /* test_marker.png */; };
 		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
 		F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */; };
 		F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */ = {isa = PBXBuildFile; fileRef = F71446F0249BB5BC005A5EC1 /* icon27.png */; };
@@ -370,6 +370,9 @@
 		F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */; };
 		F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */; };
 		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
+		F7E40A6626939A4200E50E26 /* UserBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */; };
+		F7E40A6826939B4100E50E26 /* UserSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6726939B4100E50E26 /* UserSummaryView.swift */; };
+		F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */; };
 		F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */; };
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
@@ -626,13 +629,13 @@
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
+		F7103F03266A9CD7000832CD /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
 		F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
 		F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
 		F711241D25F69BF5008849B1 /* geometryObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryObservations.json; sourceTree = "<group>"; };
 		F711248925F7B8B0008849B1 /* twoFormsObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsObservations.json; sourceTree = "<group>"; };
-		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
-		F7103F03266A9CD7000832CD /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
 		F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedServiceTests.swift; sourceTree = "<group>"; };
 		F71446F0249BB5BC005A5EC1 /* icon27.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon27.png; sourceTree = "<group>"; };
@@ -937,6 +940,9 @@
 		F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldSelectionDelegate.swift; sourceTree = "<group>"; };
 		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
 		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
+		F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBottomSheetController.swift; sourceTree = "<group>"; };
+		F7E40A6726939B4100E50E26 /* UserSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSummaryView.swift; sourceTree = "<group>"; };
+		F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarUIImageView.swift; sourceTree = "<group>"; };
 		F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DisclaimerConsent.xib; sourceTree = "<group>"; };
 		F7E457611F61AC770082F527 /* EventChooserView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventChooserView.xib; sourceTree = "<group>"; };
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
@@ -1278,6 +1284,9 @@
 				2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */,
 				F795ED0624B8F15D0028FBFC /* UserViewController.swift */,
 				F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */,
+				F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */,
+				F7E40A6726939B4100E50E26 /* UserSummaryView.swift */,
+				F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -1846,6 +1855,7 @@
 				2FDBB3021C65940E000C6C2F /* Scripts */,
 				F7A94D6718AD9CB000CB9EE0 /* Products */,
 				0D59DBFCA221206612DE0C6E /* Pods */,
+				F7E40A6426936AA200E50E26 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2110,6 +2120,14 @@
 			name = ExternalDevice;
 			sourceTree = "<group>";
 		};
+		F7E40A6426936AA200E50E26 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				F7103F03266A9CD7000832CD /* test_marker.png */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		F7ED5D0F1FFD7F88007BD768 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -2180,6 +2198,7 @@
 				F7ED5D2020052161007BD768 /* Sources */,
 				F7ED5D2120052161007BD768 /* Frameworks */,
 				F7ED5D2220052161007BD768 /* Resources */,
+				8BB37D282E421095A6E09408 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2384,59 +2403,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
-		};
-		66F0FF5512710C987F4D5BAC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
-				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model10To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model11To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model12To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model13To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To16.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model15To16.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model1To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model2To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model3To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model4To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model5To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model6To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model7To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model8To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model9To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2456,14 +2423,34 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9CF7EBC76E4C31BF783CE73D /* [CP] Copy Pods Resources */ = {
+		8BB37D282E421095A6E09408 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
 				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
@@ -2491,6 +2478,130 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model10To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model11To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model12To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model13To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To16.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model15To16.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model1To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model2To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model3To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model4To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model5To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model6To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model7To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model8To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model9To15.cdm",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/sf-proj-ios.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9CF7EBC76E4C31BF783CE73D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
+				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
+				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
+				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs/mgrs.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/sf-proj-ios/sf-proj-ios.bundle",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model10To15.cdm",
@@ -2600,6 +2711,7 @@
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
+				F7E40A6626939A4200E50E26 /* UserBottomSheetController.swift in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
@@ -2693,6 +2805,7 @@
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
+				F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
@@ -2726,6 +2839,7 @@
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
+				F7E40A6826939B4100E50E26 /* UserSummaryView.swift in Sources */,
 				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,

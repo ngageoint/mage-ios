@@ -19,6 +19,7 @@
 
 @class StraightLineNavigation;
 @class ObservationBottomSheetController;
+@class UserBottomSheetController;
 
 @protocol FeedItemDelegate <NSObject>
 
@@ -70,6 +71,7 @@
 @property (nonatomic, weak) UIStackView *mapStack;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (strong, nonatomic) ObservationBottomSheetController *obsBottomSheet;
+@property (strong, nonatomic) UserBottomSheetController *userBottomSheet;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
 - (void) updateLocations:(NSArray *) locations;
