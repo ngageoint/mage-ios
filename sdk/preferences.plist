@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>imageUploadSize</key>
+	<string>3</string>
+	<key>videoUploadSize</key>
+	<string>AVAssetExportPresetHighestQuality</string>
+	<key>serverCompatibilities</key>
+	<array>
+		<dict>
+			<key>serverMajorVersion</key>
+			<integer>6</integer>
+			<key>serverMinorVersion</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>serverMajorVersion</key>
+			<integer>5</integer>
+			<key>serverMinorVersion</key>
+			<integer>4</integer>
+		</dict>
+	</array>
+	<key>attachmentPushFrequency</key>
+	<integer>60</integer>
+	<key>baseServerUrl</key>
+	<string></string>
+	<key>reportLocation</key>
+	<true/>
+	<key>gpsDistanceFilter</key>
+	<integer>10</integer>
+	<key>userFetchFrequency</key>
+	<integer>300</integer>
+	<key>observationFetchFrequency</key>
+	<integer>300</integer>
+	<key>observationPushFrequency</key>
+	<integer>45</integer>
+	<key>userReportingFrequency</key>
+	<integer>30</integer>
+	<key>userReporting</key>
+	<dict>
+		<key>preferenceKey</key>
+		<string>userReportingFrequency</string>
+		<key>title</key>
+		<string>Location Reporting Fequency</string>
+		<key>section</key>
+		<string>Frequency</string>
+		<key>labels</key>
+		<array>
+			<string>5 seconds</string>
+			<string>30 seconds</string>
+			<string>1 minute</string>
+			<string>5 minutes</string>
+			<string>10 minutes</string>
+			<string>30 minutes</string>
+			<string>Never</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>5</integer>
+			<integer>30</integer>
+			<integer>60</integer>
+			<integer>300</integer>
+			<integer>600</integer>
+			<integer>1800</integer>
+			<integer>0</integer>
+		</array>
+	</dict>
+	<key>observationFetch</key>
+	<dict>
+		<key>title</key>
+		<string>Observation Fetch Frequency</string>
+		<key>section</key>
+		<string>Frequency</string>
+		<key>labels</key>
+		<array>
+			<string>15 seconds</string>
+			<string>30 seconds</string>
+			<string>1 minute</string>
+			<string>2 minutes</string>
+			<string>5 minutes</string>
+			<string>10 minutes</string>
+			<string>30 minutes</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>15</integer>
+			<integer>30</integer>
+			<integer>60</integer>
+			<integer>120</integer>
+			<integer>300</integer>
+			<integer>600</integer>
+			<real>1800</real>
+		</array>
+		<key>preferenceKey</key>
+		<string>observationFetchFrequency</string>
+	</dict>
+	<key>userFetch</key>
+	<dict>
+		<key>title</key>
+		<string>User Fetch Frequency</string>
+		<key>section</key>
+		<string>Frequency</string>
+		<key>labels</key>
+		<array>
+			<string>15 seconds</string>
+			<string>30 seconds</string>
+			<string>1 minute</string>
+			<string>2 minutes</string>
+			<string>5 minutes</string>
+			<string>10 minutes</string>
+			<string>30 minutes</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>15</integer>
+			<integer>30</integer>
+			<integer>60</integer>
+			<integer>120</integer>
+			<integer>300</integer>
+			<integer>600</integer>
+			<real>1800</real>
+		</array>
+		<key>preferenceKey</key>
+		<string>userFetchFrequency</string>
+	</dict>
+	<key>imageUploadSizes</key>
+	<dict>
+		<key>title</key>
+		<string>Image Upload Size</string>
+		<key>section</key>
+		<string>Upload Size</string>
+		<key>labels</key>
+		<array>
+			<string>Small</string>
+			<string>Medium</string>
+			<string>Large</string>
+			<string>Original</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>0</integer>
+			<integer>1</integer>
+			<integer>2</integer>
+			<string>3</string>
+		</array>
+		<key>preferenceKey</key>
+		<string>imageUploadSize</string>
+	</dict>
+	<key>observationPushNetworkOption</key>
+	<integer>0</integer>
+	<key>observationFetchNetworkOption</key>
+	<integer>0</integer>
+	<key>attachmentPushNetworkOption</key>
+	<integer>0</integer>
+	<key>attachmentFetchNetworkOption</key>
+	<integer>0</integer>
+	<key>userPushNetworkOption</key>
+	<integer>0</integer>
+	<key>userFetchNetworkOption</key>
+	<integer>0</integer>
+	<key>videoUploadQualities</key>
+	<dict>
+		<key>title</key>
+		<string>Video Upload Quality</string>
+		<key>section</key>
+		<string>Upload Quality</string>
+		<key>labels</key>
+		<array>
+			<string>Low</string>
+			<string>Medium</string>
+			<string>High</string>
+		</array>
+		<key>values</key>
+		<array>
+			<string>AVAssetExportPresetLowQuality</string>
+			<string>AVAssetExportPresetMediumQuality</string>
+			<string>AVAssetExportPresetHighestQuality</string>
+		</array>
+		<key>preferenceKey</key>
+		<string>videoUploadSize</string>
+	</dict>
+	<key>gpsSensitivities</key>
+	<dict>
+		<key>title</key>
+		<string>GPS Distance Filter</string>
+		<key>section</key>
+		<string>Distance</string>
+		<key>preferenceKey</key>
+		<string>gpsDistanceFilter</string>
+		<key>labels</key>
+		<array>
+			<string>1 Meter</string>
+			<string>10 Meters</string>
+			<string>100 Meters</string>
+			<string>1 Kilometer</string>
+			<string>3 Kilometers</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>1</integer>
+			<integer>10</integer>
+			<integer>100</integer>
+			<integer>1000</integer>
+			<real>3000</real>
+		</array>
+	</dict>
+	<key>dataFetchEnabled</key>
+	<true/>
+	<key>wifiNetworkRestrictionType</key>
+	<integer>0</integer>
+	<key>locationServiceEnabled</key>
+	<false/>
+	<key>networkSyncOptions</key>
+	<dict>
+		<key>title</key>
+		<string>Network Sync Options</string>
+		<key>section</key>
+		<string>Network</string>
+		<key>labels</key>
+		<array>
+			<string>All</string>
+			<string>WiFi Only</string>
+			<string>None</string>
+		</array>
+		<key>values</key>
+		<array>
+			<integer>0</integer>
+			<integer>1</integer>
+			<integer>2</integer>
+		</array>
+	</dict>
+</dict>
+</plist>
