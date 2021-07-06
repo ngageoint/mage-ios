@@ -11,6 +11,7 @@ import Foundation
 class UserSummaryView: UIView {
     
     private weak var user: User?;
+    private var userActionsDelegate: UserActionsDelegate?;
     private var imageOverride: UIImage?;
     private var didSetUpConstraints = false;
     
@@ -57,10 +58,11 @@ class UserSummaryView: UIView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(imageOverride: UIImage? = nil) {
+    init(imageOverride: UIImage? = nil, userActionsDelegate: UserActionsDelegate? = nil) {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         self.imageOverride = imageOverride;
+        self.userActionsDelegate = userActionsDelegate;
         stack.addArrangedSubview(timestamp);
         stack.setCustomSpacing(12, after: timestamp);
         stack.addArrangedSubview(primaryField);
@@ -86,8 +88,9 @@ class UserSummaryView: UIView {
         super.updateConstraints();
     }
     
-    func populate(user: User) {
+    func populate(user: User, userActionsDelegate: UserActionsDelegate? = nil) {
         self.user = user;
+        self.userActionsDelegate = userActionsDelegate;
         
         if (self.imageOverride != nil) {
             avatarImage.image = self.imageOverride;

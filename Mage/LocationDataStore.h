@@ -11,7 +11,7 @@
 #import "UserSelectionDelegate.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
 
-@interface LocationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, UserActionsDelegate>
+@interface LocationDataStore : NSObject <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, UserCellActionsDelegate>
 
 @property (strong, nonatomic) Locations *locations;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

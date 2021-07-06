@@ -12,8 +12,7 @@ import Foundation
     
     private var didSetUpConstraints = false;
     private var user: User?;
-    private var actionsDelegate: ObservationActionsDelegate?;
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private var actionsDelegate: UserActionsDelegate?;
     var scheme: MDCContainerScheming?;
     
     private lazy var stackView: PassThroughStackView = {
@@ -49,6 +48,11 @@ import Foundation
         return view;
     }()
     
+    private lazy var userActionsView: UserActionsView = {
+        let view = UserActionsView(user: user, userActionsDelegate: actionsDelegate, scheme: scheme)
+        return view;
+    }()
+    
     private lazy var detailsButton: MDCButton = {
         let detailsButton = MDCButton(forAutoLayout: ());
         detailsButton.accessibilityLabel = "More Details";
@@ -80,7 +84,7 @@ import Foundation
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(user: User, actionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+    @objc public convenience init(user: User, actionsDelegate: UserActionsDelegate? = nil, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.actionsDelegate = actionsDelegate;
         self.user = user;
@@ -93,12 +97,14 @@ import Foundation
         }
         self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
         summaryView.applyTheme(withScheme: safeScheme);
+        userActionsView.applyTheme(withScheme: safeScheme);
         detailsButton.applyContainedTheme(withScheme: safeScheme);
     }
     
     override func viewDidLoad() {
         stackView.addArrangedSubview(dragHandleView);
         stackView.addArrangedSubview(summaryView);
+        stackView.addArrangedSubview(userActionsView);
         stackView.addArrangedSubview(viewObservationButtonView);
         self.view.addSubview(stackView);
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
@@ -115,7 +121,8 @@ import Foundation
             return
         }
         
-        summaryView.populate(user: safeUser);
+        summaryView.populate(user: safeUser, userActionsDelegate: actionsDelegate);
+        userActionsView.populate(user: safeUser, delegate: actionsDelegate);
     }
     
     override func updateViewConstraints() {

@@ -250,6 +250,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
     func start() {
         mapDelegate.setupListeners();
+        mapDelegate.allowEnlarge = false;
         mapDelegate.observations = Observations.init(for: user);
         mapDelegate.locations = Locations.init(for: user);
         

@@ -373,6 +373,9 @@
 		F7E40A6626939A4200E50E26 /* UserBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */; };
 		F7E40A6826939B4100E50E26 /* UserSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6726939B4100E50E26 /* UserSummaryView.swift */; };
 		F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */; };
+		F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */; };
+		F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */; };
+		F7E40A7026948C0800E50E26 /* MapDelegateUserActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6F26948C0800E50E26 /* MapDelegateUserActionsDelegate.swift */; };
 		F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */; };
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
@@ -943,6 +946,9 @@
 		F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBottomSheetController.swift; sourceTree = "<group>"; };
 		F7E40A6726939B4100E50E26 /* UserSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSummaryView.swift; sourceTree = "<group>"; };
 		F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarUIImageView.swift; sourceTree = "<group>"; };
+		F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsView.swift; sourceTree = "<group>"; };
+		F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsDelegate.swift; sourceTree = "<group>"; };
+		F7E40A6F26948C0800E50E26 /* MapDelegateUserActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateUserActionsDelegate.swift; sourceTree = "<group>"; };
 		F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DisclaimerConsent.xib; sourceTree = "<group>"; };
 		F7E457611F61AC770082F527 /* EventChooserView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventChooserView.xib; sourceTree = "<group>"; };
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
@@ -1287,6 +1293,8 @@
 				F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */,
 				F7E40A6726939B4100E50E26 /* UserSummaryView.swift */,
 				F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */,
+				F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */,
+				F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -1495,6 +1503,7 @@
 				F727516919C87B27006C63CB /* MapDelegate.m */,
 				F7154ACF260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift */,
 				F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */,
+				F7E40A6F26948C0800E50E26 /* MapDelegateUserActionsDelegate.swift */,
 			);
 			path = MapDelegate;
 			sourceTree = "<group>";
@@ -2751,6 +2760,7 @@
 				F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */,
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
+				F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */,
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F7F4754925BA3C7D006634F7 /* ObservationSummaryView.swift in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
@@ -2819,6 +2829,7 @@
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
+				F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
@@ -2867,6 +2878,7 @@
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
+				F7E40A7026948C0800E50E26 /* MapDelegateUserActionsDelegate.swift in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
