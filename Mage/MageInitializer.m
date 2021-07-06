@@ -15,7 +15,7 @@
 
 + (void) initializePreferences {
 
-    NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
+    NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences-sdk" withExtension:@"plist"];
     NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
 
     NSURL *defaultPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences" withExtension:@"plist"];
