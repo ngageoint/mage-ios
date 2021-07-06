@@ -126,13 +126,13 @@
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
+		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
+		F7103F05266A9D7F000832CD /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7103F03266A9CD7000832CD /* test_marker.png */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
 		F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */; };
 		F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */; };
 		F711241E25F69BF5008849B1 /* geometryObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711241D25F69BF5008849B1 /* geometryObservations.json */; };
 		F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711248925F7B8B0008849B1 /* twoFormsObservations.json */; };
-		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
-		F7103F05266A9D7F000832CD /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7103F03266A9CD7000832CD /* test_marker.png */; };
 		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
 		F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */; };
 		F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */ = {isa = PBXBuildFile; fileRef = F71446F0249BB5BC005A5EC1 /* icon27.png */; };
@@ -173,6 +173,92 @@
 		F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D92034CC3700C2600D /* TestingAppDelegate.m */; };
 		F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */; };
 		F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
+		F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422D2694B60300F9AC3B /* Authentication.m */; };
+		F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.m */; };
+		F72D42DD2694B60300F9AC3B /* LocalAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422F2694B60300F9AC3B /* LocalAuthentication.m */; };
+		F72D42DE2694B60300F9AC3B /* Mage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42302694B60300F9AC3B /* Mage.m */; };
+		F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */; };
+		F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */; };
+		F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42482694B60300F9AC3B /* RouteMethod.m */; };
+		F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */; };
+		F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */; };
+		F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42502694B60300F9AC3B /* ServerAuthentication.m */; };
+		F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */; };
+		F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */; };
+		F72D42E72694B60300F9AC3B /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42532694B60300F9AC3B /* ObservationImage.m */; };
+		F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */; };
+		F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */; };
+		F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */; };
+		F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42592694B60300F9AC3B /* Event+CoreDataProperties.m */; };
+		F72D42EC2694B60300F9AC3B /* Canary.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425A2694B60300F9AC3B /* Canary.m */; };
+		F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */; };
+		F72D42EE2694B60300F9AC3B /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425E2694B60300F9AC3B /* User.m */; };
+		F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42612694B60300F9AC3B /* NSDate+display.m */; };
+		F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */; };
+		F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */; };
+		F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */; };
+		F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42702694B60300F9AC3B /* MageSessionManager.m */; };
+		F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42722694B60300F9AC3B /* SessionTask.m */; };
+		F72D42F52694B60300F9AC3B /* TaskSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42732694B60300F9AC3B /* TaskSessionManager.m */; };
+		F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42772694B60300F9AC3B /* StoredPassword.m */; };
+		F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42782694B60300F9AC3B /* LocationFetchService.m */; };
+		F72D42F82694B60300F9AC3B /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42792694B60300F9AC3B /* Location.m */; };
+		F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */; };
+		F72D42FA2694B60300F9AC3B /* ObservationPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427C2694B60300F9AC3B /* ObservationPushService.m */; };
+		F72D42FB2694B60300F9AC3B /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427D2694B60300F9AC3B /* Feed.m */; };
+		F72D42FC2694B60300F9AC3B /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.m */; };
+		F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */; };
+		F72D42FE2694B60300F9AC3B /* FeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42812694B60300F9AC3B /* FeedItem.m */; };
+		F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42822694B60300F9AC3B /* ObservationFetchService.m */; };
+		F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */; };
+		F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */; };
+		F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42892694B60300F9AC3B /* MAGERoutes.m */; };
+		F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D428D2694B60300F9AC3B /* IdpAuthentication.m */; };
+		F72D43042694B60300F9AC3B /* LocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D428E2694B60300F9AC3B /* LocationService.m */; };
+		F72D43052694B60300F9AC3B /* User+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42902694B60300F9AC3B /* User+CoreDataProperties.m */; };
+		F72D43062694B60300F9AC3B /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42922694B60300F9AC3B /* Server.m */; };
+		F72D43072694B60300F9AC3B /* ObservationImportant.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42942694B60300F9AC3B /* ObservationImportant.m */; };
+		F72D43082694B60300F9AC3B /* Role+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.m */; };
+		F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42962694B60300F9AC3B /* AttachmentRoutes.m */; };
+		F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42972694B60300F9AC3B /* Model8To15.xcmappingmodel */; };
+		F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42982694B60300F9AC3B /* NSString+Contains.m */; };
+		F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429A2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.m */; };
+		F72D430D2694B60300F9AC3B /* Model5To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D429B2694B60300F9AC3B /* Model5To15.xcmappingmodel */; };
+		F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429D2694B60300F9AC3B /* ObservationRoutes.m */; };
+		F72D430F2694B60300F9AC3B /* UserUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429E2694B60300F9AC3B /* UserUtility.m */; };
+		F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */; };
+		F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */; };
+		F72D43122694B60300F9AC3B /* MageServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.m */; };
+		F72D43132694B60300F9AC3B /* ImageryLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A72694B60300F9AC3B /* ImageryLayer.m */; };
+		F72D43142694B60300F9AC3B /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A92694B60300F9AC3B /* Event.m */; };
+		F72D43152694B60300F9AC3B /* Form.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AB2694B60300F9AC3B /* Form.m */; };
+		F72D43162694B60300F9AC3B /* GeometryDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */; };
+		F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */; };
+		F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */; };
+		F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */; };
+		F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.m */; };
+		F72D431B2694B60300F9AC3B /* Layer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BD2694B60300F9AC3B /* Layer.m */; };
+		F72D431C2694B60300F9AC3B /* MageEnums.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BE2694B60300F9AC3B /* MageEnums.m */; };
+		F72D431D2694B60300F9AC3B /* StaticLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BF2694B60300F9AC3B /* StaticLayer.m */; };
+		F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */; };
+		F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */; };
+		F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C22694B60300F9AC3B /* NotificationRequester.m */; };
+		F72D43212694B60300F9AC3B /* StaticLayer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */; };
+		F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C42694B60300F9AC3B /* Model11To15.xcmappingmodel */; };
+		F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */; };
+		F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */; };
+		F72D43252694B60300F9AC3B /* Role.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C72694B60300F9AC3B /* Role.m */; };
+		F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */; };
+		F72D43272694B60300F9AC3B /* GeometrySerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.m */; };
+		F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */ = {isa = PBXBuildFile; fileRef = F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */; };
+		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
+		F72D432A2694B60300F9AC3B /* Observation.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.m */; };
+		F72D432B2694B60300F9AC3B /* ObservationFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D12694B60300F9AC3B /* ObservationFavorite.m */; };
+		F72D432C2694B60300F9AC3B /* GPSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.m */; };
+		F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */; };
+		F72D432E2694B60300F9AC3B /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D62694B60300F9AC3B /* Attachment.m */; };
+		F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */; };
+		F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */; };
 		F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* AttachmentHeader.swift */; };
 		F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */; };
 		F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */; };
@@ -626,13 +712,13 @@
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
+		F7103F03266A9CD7000832CD /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
 		F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
 		F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
 		F711241D25F69BF5008849B1 /* geometryObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryObservations.json; sourceTree = "<group>"; };
 		F711248925F7B8B0008849B1 /* twoFormsObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsObservations.json; sourceTree = "<group>"; };
-		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
-		F7103F03266A9CD7000832CD /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
 		F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedServiceTests.swift; sourceTree = "<group>"; };
 		F71446F0249BB5BC005A5EC1 /* icon27.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon27.png; sourceTree = "<group>"; };
@@ -685,6 +771,177 @@
 		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorTests.swift; sourceTree = "<group>"; };
 		F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageUserDefaultKeys.swift; sourceTree = "<group>"; };
+		F72D422C2694B60300F9AC3B /* MageServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageServer.h; sourceTree = "<group>"; };
+		F72D422D2694B60300F9AC3B /* Authentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Authentication.m; sourceTree = "<group>"; };
+		F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D422F2694B60300F9AC3B /* LocalAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAuthentication.m; sourceTree = "<group>"; };
+		F72D42302694B60300F9AC3B /* Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mage.m; sourceTree = "<group>"; };
+		F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model13To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42322694B60300F9AC3B /* GPSLocation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GPSLocation+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42332694B60300F9AC3B /* UserUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserUtility.h; sourceTree = "<group>"; };
+		F72D42342694B60300F9AC3B /* ObservationRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationRoutes.h; sourceTree = "<group>"; };
+		F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 6.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42372694B60300F9AC3B /* mage-ios-sdk 16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 16.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42382694B60300F9AC3B /* mage-ios-sdk 13.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 13.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42392694B60300F9AC3B /* mage-ios-sdk.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk.xcdatamodel"; sourceTree = "<group>"; };
+		F72D423A2694B60300F9AC3B /* mage-ios-sdk 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 3.xcdatamodel"; sourceTree = "<group>"; };
+		F72D423B2694B60300F9AC3B /* mage-ios-sdk 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 9.xcdatamodel"; sourceTree = "<group>"; };
+		F72D423C2694B60300F9AC3B /* mage-ios-sdk 10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 10.xcdatamodel"; sourceTree = "<group>"; };
+		F72D423D2694B60300F9AC3B /* mage-ios-sdk 15.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 15.xcdatamodel"; sourceTree = "<group>"; };
+		F72D423E2694B60300F9AC3B /* mage-ios-sdk 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 5.xcdatamodel"; sourceTree = "<group>"; };
+		F72D423F2694B60300F9AC3B /* mage-ios-sdk 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 2.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42402694B60300F9AC3B /* mage-ios-sdk 12.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 12.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42412694B60300F9AC3B /* mage-ios-sdk 17.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 17.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42422694B60300F9AC3B /* mage-ios-sdk 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 7.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42432694B60300F9AC3B /* mage-ios-sdk 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 4.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42442694B60300F9AC3B /* mage-ios-sdk 14.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 14.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42452694B60300F9AC3B /* mage-ios-sdk 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 8.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42462694B60300F9AC3B /* mage-ios-sdk 11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 11.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 18.xcdatamodel"; sourceTree = "<group>"; };
+		F72D42482694B60300F9AC3B /* RouteMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteMethod.m; sourceTree = "<group>"; };
+		F72D42492694B60300F9AC3B /* NSString+Contains.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Contains.h"; sourceTree = "<group>"; };
+		F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Layer+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D424B2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ImageryLayer+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D424C2694B60300F9AC3B /* AttachmentRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentRoutes.h; sourceTree = "<group>"; };
+		F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model2To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D424E2694B60300F9AC3B /* Role+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Role+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D424F2694B60300F9AC3B /* ObservationImportant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportant.h; sourceTree = "<group>"; };
+		F72D42502694B60300F9AC3B /* ServerAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerAuthentication.m; sourceTree = "<group>"; };
+		F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Location+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model1To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42532694B60300F9AC3B /* ObservationImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImage.m; sourceTree = "<group>"; };
+		F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model15To16.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Observation+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42562694B60300F9AC3B /* LdapAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LdapAuthentication.h; sourceTree = "<group>"; };
+		F72D42572694B60300F9AC3B /* ObservationImportant+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObservationImportant+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model10To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42592694B60300F9AC3B /* Event+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D425A2694B60300F9AC3B /* Canary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canary.m; sourceTree = "<group>"; };
+		F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+MAGE.m"; sourceTree = "<group>"; };
+		F72D425C2694B60300F9AC3B /* Form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Form.h; sourceTree = "<group>"; };
+		F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryDeserializer.h; sourceTree = "<group>"; };
+		F72D425E2694B60300F9AC3B /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		F72D425F2694B60300F9AC3B /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		F72D42602694B60300F9AC3B /* ImageryLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageryLayer.h; sourceTree = "<group>"; };
+		F72D42612694B60300F9AC3B /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
+		F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Server+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42632694B60300F9AC3B /* Role.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Role.h; sourceTree = "<group>"; };
+		F72D42642694B60300F9AC3B /* Feed+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Feed+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42652694B60300F9AC3B /* NotificationRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationRequester.h; sourceTree = "<group>"; };
+		F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StaticLayer+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42672694B60300F9AC3B /* NSDate+Iso8601.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Iso8601.h"; sourceTree = "<group>"; };
+		F72D42682694B60300F9AC3B /* FeedItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FeedItem+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42692694B60300F9AC3B /* StaticLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayer.h; sourceTree = "<group>"; };
+		F72D426B2694B60300F9AC3B /* MageSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSessionManager.h; sourceTree = "<group>"; };
+		F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataConnectionUtilities.m; sourceTree = "<group>"; };
+		F72D426D2694B60300F9AC3B /* TaskSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskSessionManager.h; sourceTree = "<group>"; };
+		F72D426E2694B60300F9AC3B /* SessionTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionTask.h; sourceTree = "<group>"; };
+		F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTaskQueue.m; sourceTree = "<group>"; };
+		F72D42702694B60300F9AC3B /* MageSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSessionManager.m; sourceTree = "<group>"; };
+		F72D42712694B60300F9AC3B /* DataConnectionUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataConnectionUtilities.h; sourceTree = "<group>"; };
+		F72D42722694B60300F9AC3B /* SessionTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTask.m; sourceTree = "<group>"; };
+		F72D42732694B60300F9AC3B /* TaskSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskSessionManager.m; sourceTree = "<group>"; };
+		F72D42742694B60300F9AC3B /* SessionTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionTaskQueue.h; sourceTree = "<group>"; };
+		F72D42752694B60300F9AC3B /* MageEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageEnums.h; sourceTree = "<group>"; };
+		F72D42762694B60300F9AC3B /* Layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layer.h; sourceTree = "<group>"; };
+		F72D42772694B60300F9AC3B /* StoredPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoredPassword.m; sourceTree = "<group>"; };
+		F72D42782694B60300F9AC3B /* LocationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFetchService.m; sourceTree = "<group>"; };
+		F72D42792694B60300F9AC3B /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model7To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D427B2694B60300F9AC3B /* Attachment+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D427C2694B60300F9AC3B /* ObservationPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPushService.m; sourceTree = "<group>"; };
+		F72D427D2694B60300F9AC3B /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
+		F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObservationFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D427F2694B60300F9AC3B /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model9To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42812694B60300F9AC3B /* FeedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedItem.m; sourceTree = "<group>"; };
+		F72D42822694B60300F9AC3B /* ObservationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchService.m; sourceTree = "<group>"; };
+		F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model4To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42842694B60300F9AC3B /* Canary+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Canary+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42852694B60300F9AC3B /* Attachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attachment.h; sourceTree = "<group>"; };
+		F72D42872694B60300F9AC3B /* AttachmentRoutes_Server5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentRoutes_Server5.h; sourceTree = "<group>"; };
+		F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes_Server5.m; sourceTree = "<group>"; };
+		F72D42892694B60300F9AC3B /* MAGERoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAGERoutes.m; sourceTree = "<group>"; };
+		F72D428A2694B60300F9AC3B /* ObservationFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFavorite.h; sourceTree = "<group>"; };
+		F72D428B2694B60300F9AC3B /* GPSLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSLocation.h; sourceTree = "<group>"; };
+		F72D428C2694B60300F9AC3B /* Observation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observation.h; sourceTree = "<group>"; };
+		F72D428D2694B60300F9AC3B /* IdpAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdpAuthentication.m; sourceTree = "<group>"; };
+		F72D428E2694B60300F9AC3B /* LocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationService.m; sourceTree = "<group>"; };
+		F72D428F2694B60300F9AC3B /* AttachmentPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentPushService.h; sourceTree = "<group>"; };
+		F72D42902694B60300F9AC3B /* User+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42922694B60300F9AC3B /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		F72D42932694B60300F9AC3B /* GeometrySerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometrySerializer.h; sourceTree = "<group>"; };
+		F72D42942694B60300F9AC3B /* ObservationImportant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImportant.m; sourceTree = "<group>"; };
+		F72D42952694B60300F9AC3B /* Role+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Role+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42962694B60300F9AC3B /* AttachmentRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes.m; sourceTree = "<group>"; };
+		F72D42972694B60300F9AC3B /* Model8To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model8To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42982694B60300F9AC3B /* NSString+Contains.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Contains.m"; sourceTree = "<group>"; };
+		F72D42992694B60300F9AC3B /* Layer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Layer+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D429A2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ImageryLayer+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D429B2694B60300F9AC3B /* Model5To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model5To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D429C2694B60300F9AC3B /* RouteMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteMethod.h; sourceTree = "<group>"; };
+		F72D429D2694B60300F9AC3B /* ObservationRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationRoutes.m; sourceTree = "<group>"; };
+		F72D429E2694B60300F9AC3B /* UserUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserUtility.m; sourceTree = "<group>"; };
+		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GPSLocation+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42A12694B60300F9AC3B /* Mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mage.h; sourceTree = "<group>"; };
+		F72D42A22694B60300F9AC3B /* LocalAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthentication.h; sourceTree = "<group>"; };
+		F72D42A32694B60300F9AC3B /* Team+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42A42694B60300F9AC3B /* MageServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServer.m; sourceTree = "<group>"; };
+		F72D42A52694B60300F9AC3B /* Authentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Authentication.h; sourceTree = "<group>"; };
+		F72D42A62694B60300F9AC3B /* Server+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Server+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42A72694B60300F9AC3B /* ImageryLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageryLayer.m; sourceTree = "<group>"; };
+		F72D42A82694B60300F9AC3B /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
+		F72D42A92694B60300F9AC3B /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		F72D42AA2694B60300F9AC3B /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		F72D42AB2694B60300F9AC3B /* Form.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Form.m; sourceTree = "<group>"; };
+		F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryDeserializer.m; sourceTree = "<group>"; };
+		F72D42AD2694B60300F9AC3B /* Canary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canary.h; sourceTree = "<group>"; };
+		F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+MAGE.h"; sourceTree = "<group>"; };
+		F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LdapAuthentication.m; sourceTree = "<group>"; };
+		F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationImportant+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42B12694B60300F9AC3B /* Event+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Event+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42B32694B60300F9AC3B /* ObservationImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImage.h; sourceTree = "<group>"; };
+		F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model6To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42B52694B60300F9AC3B /* Location+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Location+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42B62694B60300F9AC3B /* ServerAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAuthentication.h; sourceTree = "<group>"; };
+		F72D42B72694B60300F9AC3B /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
+		F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42B92694B60300F9AC3B /* ObservationPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPushService.h; sourceTree = "<group>"; };
+		F72D42BA2694B60300F9AC3B /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		F72D42BB2694B60300F9AC3B /* LocationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFetchService.h; sourceTree = "<group>"; };
+		F72D42BC2694B60300F9AC3B /* StoredPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoredPassword.h; sourceTree = "<group>"; };
+		F72D42BD2694B60300F9AC3B /* Layer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layer.m; sourceTree = "<group>"; };
+		F72D42BE2694B60300F9AC3B /* MageEnums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageEnums.m; sourceTree = "<group>"; };
+		F72D42BF2694B60300F9AC3B /* StaticLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayer.m; sourceTree = "<group>"; };
+		F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FeedItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To16.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42C22694B60300F9AC3B /* NotificationRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationRequester.m; sourceTree = "<group>"; };
+		F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StaticLayer+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42C42694B60300F9AC3B /* Model11To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model11To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Iso8601.m"; sourceTree = "<group>"; };
+		F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Feed+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42C72694B60300F9AC3B /* Role.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Role.m; sourceTree = "<group>"; };
+		F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model12To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42C92694B60300F9AC3B /* GeometrySerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometrySerializer.m; sourceTree = "<group>"; };
+		F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "preferences-sdk.plist"; sourceTree = "<group>"; };
+		F72D42CB2694B60300F9AC3B /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
+		F72D42CC2694B60300F9AC3B /* User+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+CoreDataProperties.h"; sourceTree = "<group>"; };
+		F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentPushService.m; sourceTree = "<group>"; };
+		F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdpAuthentication.h; sourceTree = "<group>"; };
+		F72D42CF2694B60300F9AC3B /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
+		F72D42D02694B60300F9AC3B /* Observation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observation.m; sourceTree = "<group>"; };
+		F72D42D12694B60300F9AC3B /* ObservationFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFavorite.m; sourceTree = "<group>"; };
+		F72D42D22694B60300F9AC3B /* GPSLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocation.m; sourceTree = "<group>"; };
+		F72D42D32694B60300F9AC3B /* MAGERoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGERoutes.h; sourceTree = "<group>"; };
+		F72D42D42694B60300F9AC3B /* ObservationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchService.h; sourceTree = "<group>"; };
+		F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Canary+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42D62694B60300F9AC3B /* Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attachment.m; sourceTree = "<group>"; };
+		F72D42D72694B60300F9AC3B /* FeedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItem.h; sourceTree = "<group>"; };
+		F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model3To15.xcmappingmodel; sourceTree = "<group>"; };
+		F72D42D92694B60300F9AC3B /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F730B94A2683D273004AD64A /* AttachmentHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeader.swift; sourceTree = "<group>"; };
 		F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormReorderTests.swift; sourceTree = "<group>"; };
 		F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormReorderDelegate.swift; sourceTree = "<group>"; };
@@ -1530,6 +1787,191 @@
 			path = Authentication;
 			sourceTree = "<group>";
 		};
+		F72D42282694B5B700F9AC3B /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				F7103F03266A9CD7000832CD /* test_marker.png */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		F72D422B2694B60300F9AC3B /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				F72D42852694B60300F9AC3B /* Attachment.h */,
+				F72D42D62694B60300F9AC3B /* Attachment.m */,
+				F72D427B2694B60300F9AC3B /* Attachment+CoreDataProperties.h */,
+				F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.m */,
+				F72D428F2694B60300F9AC3B /* AttachmentPushService.h */,
+				F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */,
+				F72D424C2694B60300F9AC3B /* AttachmentRoutes.h */,
+				F72D42962694B60300F9AC3B /* AttachmentRoutes.m */,
+				F72D42A52694B60300F9AC3B /* Authentication.h */,
+				F72D422D2694B60300F9AC3B /* Authentication.m */,
+				F72D42AD2694B60300F9AC3B /* Canary.h */,
+				F72D425A2694B60300F9AC3B /* Canary.m */,
+				F72D42842694B60300F9AC3B /* Canary+CoreDataProperties.h */,
+				F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */,
+				F72D425F2694B60300F9AC3B /* Event.h */,
+				F72D42A92694B60300F9AC3B /* Event.m */,
+				F72D42B12694B60300F9AC3B /* Event+CoreDataProperties.h */,
+				F72D42592694B60300F9AC3B /* Event+CoreDataProperties.m */,
+				F72D42B72694B60300F9AC3B /* Feed.h */,
+				F72D427D2694B60300F9AC3B /* Feed.m */,
+				F72D42642694B60300F9AC3B /* Feed+CoreDataProperties.h */,
+				F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */,
+				F72D42D72694B60300F9AC3B /* FeedItem.h */,
+				F72D42812694B60300F9AC3B /* FeedItem.m */,
+				F72D42682694B60300F9AC3B /* FeedItem+CoreDataProperties.h */,
+				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */,
+				F72D425C2694B60300F9AC3B /* Form.h */,
+				F72D42AB2694B60300F9AC3B /* Form.m */,
+				F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */,
+				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */,
+				F72D42932694B60300F9AC3B /* GeometrySerializer.h */,
+				F72D42C92694B60300F9AC3B /* GeometrySerializer.m */,
+				F72D428B2694B60300F9AC3B /* GPSLocation.h */,
+				F72D42D22694B60300F9AC3B /* GPSLocation.m */,
+				F72D42322694B60300F9AC3B /* GPSLocation+CoreDataProperties.h */,
+				F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */,
+				F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */,
+				F72D428D2694B60300F9AC3B /* IdpAuthentication.m */,
+				F72D42602694B60300F9AC3B /* ImageryLayer.h */,
+				F72D42A72694B60300F9AC3B /* ImageryLayer.m */,
+				F72D424B2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.h */,
+				F72D429A2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.m */,
+				F72D42762694B60300F9AC3B /* Layer.h */,
+				F72D42BD2694B60300F9AC3B /* Layer.m */,
+				F72D42992694B60300F9AC3B /* Layer+CoreDataProperties.h */,
+				F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */,
+				F72D42562694B60300F9AC3B /* LdapAuthentication.h */,
+				F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */,
+				F72D42A22694B60300F9AC3B /* LocalAuthentication.h */,
+				F72D422F2694B60300F9AC3B /* LocalAuthentication.m */,
+				F72D42BA2694B60300F9AC3B /* Location.h */,
+				F72D42792694B60300F9AC3B /* Location.m */,
+				F72D42B52694B60300F9AC3B /* Location+CoreDataProperties.h */,
+				F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */,
+				F72D42BB2694B60300F9AC3B /* LocationFetchService.h */,
+				F72D42782694B60300F9AC3B /* LocationFetchService.m */,
+				F72D42CF2694B60300F9AC3B /* LocationService.h */,
+				F72D428E2694B60300F9AC3B /* LocationService.m */,
+				F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */,
+				F72D42A12694B60300F9AC3B /* Mage.h */,
+				F72D42302694B60300F9AC3B /* Mage.m */,
+				F72D42752694B60300F9AC3B /* MageEnums.h */,
+				F72D42BE2694B60300F9AC3B /* MageEnums.m */,
+				F72D42D32694B60300F9AC3B /* MAGERoutes.h */,
+				F72D42892694B60300F9AC3B /* MAGERoutes.m */,
+				F72D422C2694B60300F9AC3B /* MageServer.h */,
+				F72D42A42694B60300F9AC3B /* MageServer.m */,
+				F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */,
+				F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */,
+				F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */,
+				F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */,
+				F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */,
+				F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */,
+				F72D429B2694B60300F9AC3B /* Model5To15.xcmappingmodel */,
+				F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */,
+				F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */,
+				F72D42972694B60300F9AC3B /* Model8To15.xcmappingmodel */,
+				F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */,
+				F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */,
+				F72D42C42694B60300F9AC3B /* Model11To15.xcmappingmodel */,
+				F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */,
+				F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */,
+				F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */,
+				F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */,
+				F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */,
+				F72D426A2694B60300F9AC3B /* Networking */,
+				F72D42652694B60300F9AC3B /* NotificationRequester.h */,
+				F72D42C22694B60300F9AC3B /* NotificationRequester.m */,
+				F72D42A82694B60300F9AC3B /* NSDate+display.h */,
+				F72D42612694B60300F9AC3B /* NSDate+display.m */,
+				F72D42672694B60300F9AC3B /* NSDate+Iso8601.h */,
+				F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */,
+				F72D42492694B60300F9AC3B /* NSString+Contains.h */,
+				F72D42982694B60300F9AC3B /* NSString+Contains.m */,
+				F72D428C2694B60300F9AC3B /* Observation.h */,
+				F72D42D02694B60300F9AC3B /* Observation.m */,
+				F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */,
+				F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */,
+				F72D428A2694B60300F9AC3B /* ObservationFavorite.h */,
+				F72D42D12694B60300F9AC3B /* ObservationFavorite.m */,
+				F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */,
+				F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */,
+				F72D42D42694B60300F9AC3B /* ObservationFetchService.h */,
+				F72D42822694B60300F9AC3B /* ObservationFetchService.m */,
+				F72D42B32694B60300F9AC3B /* ObservationImage.h */,
+				F72D42532694B60300F9AC3B /* ObservationImage.m */,
+				F72D424F2694B60300F9AC3B /* ObservationImportant.h */,
+				F72D42942694B60300F9AC3B /* ObservationImportant.m */,
+				F72D42572694B60300F9AC3B /* ObservationImportant+CoreDataProperties.h */,
+				F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */,
+				F72D42B92694B60300F9AC3B /* ObservationPushService.h */,
+				F72D427C2694B60300F9AC3B /* ObservationPushService.m */,
+				F72D42342694B60300F9AC3B /* ObservationRoutes.h */,
+				F72D429D2694B60300F9AC3B /* ObservationRoutes.m */,
+				F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */,
+				F72D42632694B60300F9AC3B /* Role.h */,
+				F72D42C72694B60300F9AC3B /* Role.m */,
+				F72D424E2694B60300F9AC3B /* Role+CoreDataProperties.h */,
+				F72D42952694B60300F9AC3B /* Role+CoreDataProperties.m */,
+				F72D429C2694B60300F9AC3B /* RouteMethod.h */,
+				F72D42482694B60300F9AC3B /* RouteMethod.m */,
+				F72D42CB2694B60300F9AC3B /* Server.h */,
+				F72D42922694B60300F9AC3B /* Server.m */,
+				F72D42A62694B60300F9AC3B /* Server+CoreDataProperties.h */,
+				F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */,
+				F72D42862694B60300F9AC3B /* Server5 */,
+				F72D42B62694B60300F9AC3B /* ServerAuthentication.h */,
+				F72D42502694B60300F9AC3B /* ServerAuthentication.m */,
+				F72D42692694B60300F9AC3B /* StaticLayer.h */,
+				F72D42BF2694B60300F9AC3B /* StaticLayer.m */,
+				F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */,
+				F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */,
+				F72D42BC2694B60300F9AC3B /* StoredPassword.h */,
+				F72D42772694B60300F9AC3B /* StoredPassword.m */,
+				F72D42D92694B60300F9AC3B /* Team.h */,
+				F72D427F2694B60300F9AC3B /* Team.m */,
+				F72D42A32694B60300F9AC3B /* Team+CoreDataProperties.h */,
+				F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.m */,
+				F72D42AA2694B60300F9AC3B /* User.h */,
+				F72D425E2694B60300F9AC3B /* User.m */,
+				F72D42CC2694B60300F9AC3B /* User+CoreDataProperties.h */,
+				F72D42902694B60300F9AC3B /* User+CoreDataProperties.m */,
+				F72D42332694B60300F9AC3B /* UserUtility.h */,
+				F72D429E2694B60300F9AC3B /* UserUtility.m */,
+			);
+			path = sdk;
+			sourceTree = "<group>";
+		};
+		F72D426A2694B60300F9AC3B /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				F72D426B2694B60300F9AC3B /* MageSessionManager.h */,
+				F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */,
+				F72D426D2694B60300F9AC3B /* TaskSessionManager.h */,
+				F72D426E2694B60300F9AC3B /* SessionTask.h */,
+				F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */,
+				F72D42702694B60300F9AC3B /* MageSessionManager.m */,
+				F72D42712694B60300F9AC3B /* DataConnectionUtilities.h */,
+				F72D42722694B60300F9AC3B /* SessionTask.m */,
+				F72D42732694B60300F9AC3B /* TaskSessionManager.m */,
+				F72D42742694B60300F9AC3B /* SessionTaskQueue.h */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		F72D42862694B60300F9AC3B /* Server5 */ = {
+			isa = PBXGroup;
+			children = (
+				F72D42872694B60300F9AC3B /* AttachmentRoutes_Server5.h */,
+				F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */,
+			);
+			path = Server5;
+			sourceTree = "<group>";
+		};
 		F73886CA258A6BF700EDA036 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1839,6 +2281,7 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F72D422B2694B60300F9AC3B /* sdk */,
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
 				2FD853771BE1564F00602CEA /* Resources */,
 				F7A94D8E18AD9CB000CB9EE0 /* MageTests */,
@@ -1846,6 +2289,7 @@
 				2FDBB3021C65940E000C6C2F /* Scripts */,
 				F7A94D6718AD9CB000CB9EE0 /* Products */,
 				0D59DBFCA221206612DE0C6E /* Pods */,
+				F72D42282694B5B700F9AC3B /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2180,6 +2624,7 @@
 				F7ED5D2020052161007BD768 /* Sources */,
 				F7ED5D2120052161007BD768 /* Frameworks */,
 				F7ED5D2220052161007BD768 /* Resources */,
+				A424AC64439D429428DD31B0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2272,6 +2717,7 @@
 				F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */,
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
+				F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */,
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
 				F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */,
 				F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */,
@@ -2384,59 +2830,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/set_build_number.sh";
-		};
-		66F0FF5512710C987F4D5BAC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
-				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model10To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model11To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model12To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model13To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To16.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model15To16.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model1To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model2To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model3To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model4To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model5To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model6To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model7To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model8To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model9To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = $SRCROOT/Scripts/set_build_number.sh;
 		};
 		7DDC4C252A7737ED0BB25ECE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2464,25 +2858,27 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/mage-ios-sdk.xcdatamodeld",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model10To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model11To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model12To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model13To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model14To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model15To16.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model1To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model2To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model3To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model4To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model5To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model6To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model7To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model8To15.xcmappingmodel",
-				"${PODS_ROOT}/../../mage-ios-sdk/MAGE/Model9To15.xcmappingmodel",
-				"${PODS_CONFIGURATION_BUILD_DIR}/mage-ios-sdk/MageSDK.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs/mgrs.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/sf-proj-ios/sf-proj-ios.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
@@ -2491,25 +2887,27 @@
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mage-ios-sdk.momd",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model10To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model11To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model12To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model13To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model14To16.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model15To16.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model1To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model2To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model3To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model4To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model5To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model6To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model7To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model8To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Model9To15.cdm",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MageSDK.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/sf-proj-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
@@ -2518,6 +2916,74 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MAGE/Pods-MAGE-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A424AC64439D429428DD31B0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh",
+				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ActivityIndicator/src/MaterialActivityIndicator.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/AppBar/src/MaterialAppBar.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/CollectionCells/src/MaterialCollectionCells.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Collections/src/MaterialCollections.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Dialogs/src/MaterialDialogs.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/PageControl/src/MaterialPageControl.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/ProgressView/src/MaterialProgressView.bundle",
+				"${PODS_ROOT}/MaterialComponents/components/Snackbar/src/MaterialSnackbar.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_arrow_back.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_check_circle.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_chevron_right.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_color_lens.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_feedback.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_help_outline.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_info.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_more_horiz.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs/mgrs.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/sf-proj-ios/sf-proj-ios.bundle",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
+				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialActivityIndicator.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialAppBar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollectionCells.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCollections.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialDialogs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialPageControl.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialProgressView.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialSnackbar.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_arrow_back.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_check_circle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_chevron_right.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_color_lens.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_feedback.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_help_outline.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_info.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_more_horiz.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/sf-proj-ios.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MAGETests/Pods-MAGETests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2530,7 +2996,10 @@
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
+				F72D43272694B60300F9AC3B /* GeometrySerializer.m in Sources */,
+				F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.m in Sources */,
 				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
+				F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
 				F770854025927E1C008903BA /* ObservationSyncStatus.swift in Sources */,
 				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
@@ -2538,14 +3007,20 @@
 				F7154ACB260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift in Sources */,
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
+				F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */,
+				F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */,
+				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
+				F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */,
 				F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */,
 				F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */,
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
+				F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
+				F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
 				04ED96511EB8FBB300B6AD8D /* MapObservations.m in Sources */,
@@ -2553,8 +3028,10 @@
 				2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				F78391BF25A4D9A800ED9C2D /* ObservationActionsSheetController.swift in Sources */,
+				F72D431C2694B60300F9AC3B /* MageEnums.m in Sources */,
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
+				F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */,
 				2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */,
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
@@ -2566,56 +3043,85 @@
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
+				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
+				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.m in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
 				F7C812E925C1B37200D4332B /* ObservationDataStore.swift in Sources */,
 				F795ED0924B8F34D0028FBFC /* UserTableHeaderView.swift in Sources */,
+				F72D42DD2694B60300F9AC3B /* LocalAuthentication.m in Sources */,
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
 				F7813A8824647C62003666ED /* DateView.swift in Sources */,
 				F7F4754D25BB2CF0006634F7 /* ObservationListActionsView.swift in Sources */,
 				F727517719C895CA006C63CB /* LocationDataStore.m in Sources */,
 				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
+				F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
 				F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */,
+				F72D42EC2694B60300F9AC3B /* Canary.m in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
+				F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m in Sources */,
+				F72D42F82694B60300F9AC3B /* Location.m in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */,
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
+				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
+				F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */,
 				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
 				F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */,
+				F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */,
+				F72D42FB2694B60300F9AC3B /* Feed.m in Sources */,
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
+				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
+				F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */,
+				F72D432E2694B60300F9AC3B /* Attachment.m in Sources */,
+				F72D43042694B60300F9AC3B /* LocationService.m in Sources */,
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
+				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
+				F72D42FC2694B60300F9AC3B /* Team.m in Sources */,
+				F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.m in Sources */,
+				F72D43082694B60300F9AC3B /* Role+CoreDataProperties.m in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
+				F72D43132694B60300F9AC3B /* ImageryLayer.m in Sources */,
 				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
+				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
+				F72D43062694B60300F9AC3B /* Server.m in Sources */,
+				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
+				F72D432C2694B60300F9AC3B /* GPSLocation.m in Sources */,
 				F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */,
 				F79116262491414B0043A529 /* MageInitializer.m in Sources */,
 				F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */,
+				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.m in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
+				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.m in Sources */,
+				F72D42E72694B60300F9AC3B /* ObservationImage.m in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
 				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
+				F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */,
+				F72D42EE2694B60300F9AC3B /* User.m in Sources */,
 				F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
@@ -2624,27 +3130,42 @@
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
+				F72D432B2694B60300F9AC3B /* ObservationFavorite.m in Sources */,
+				F72D42FA2694B60300F9AC3B /* ObservationPushService.m in Sources */,
 				F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
+				F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
+				F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */,
+				F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */,
+				F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */,
+				F72D432A2694B60300F9AC3B /* Observation.m in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
+				F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */,
+				F72D42F52694B60300F9AC3B /* TaskSessionManager.m in Sources */,
 				F7813A8324632E9A003666ED /* TextFieldView.swift in Sources */,
 				F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */,
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
+				F72D430D2694B60300F9AC3B /* Model5To15.xcmappingmodel in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F7F4754925BA3C7D006634F7 /* ObservationSummaryView.swift in Sources */,
+				F72D42DE2694B60300F9AC3B /* Mage.m in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F7F4755125BB3D77006634F7 /* AttachmentSlideshow.swift in Sources */,
+				F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */,
+				F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */,
 				F7F4754525BA357E006634F7 /* ObservationListCardCell.swift in Sources */,
 				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
+				F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */,
+				F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */,
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
@@ -2656,6 +3177,7 @@
 				F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
+				F72D430F2694B60300F9AC3B /* UserUtility.m in Sources */,
 				F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
@@ -2666,12 +3188,15 @@
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */,
 				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
+				F72D431B2694B60300F9AC3B /* Layer.m in Sources */,
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
+				F72D43072694B60300F9AC3B /* ObservationImportant.m in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
+				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.m in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
@@ -2681,7 +3206,10 @@
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
+				F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */,
+				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.m in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
+				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
@@ -2692,11 +3220,14 @@
 				F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */,
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
+				F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.m in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
+				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.m in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
+				F72D42FE2694B60300F9AC3B /* FeedItem.m in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
@@ -2705,12 +3236,18 @@
 				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
+				F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */,
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
+				F72D43142694B60300F9AC3B /* Event.m in Sources */,
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
+				F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */,
+				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
+				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */,
 				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
+				F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */,
 				2F8A2C0F2200FC2C007FE473 /* EventInformationCoordinator.m in Sources */,
 				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
@@ -2718,9 +3255,13 @@
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
 				F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
+				F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */,
+				F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
+				F72D43122694B60300F9AC3B /* MageServer.m in Sources */,
+				F72D431D2694B60300F9AC3B /* StaticLayer.m in Sources */,
 				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
@@ -2732,12 +3273,19 @@
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */,
+				F72D43252694B60300F9AC3B /* Role.m in Sources */,
+				F72D43162694B60300F9AC3B /* GeometryDeserializer.m in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
+				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.m in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
+				F72D43152694B60300F9AC3B /* Form.m in Sources */,
+				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.m in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
+				F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
+				F72D43052694B60300F9AC3B /* User+CoreDataProperties.m in Sources */,
 				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
@@ -2751,10 +3299,13 @@
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F7D9B826255DC65C00A76E2C /* MageImage.swift in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
+				F72D43212694B60300F9AC3B /* StaticLayer+CoreDataProperties.m in Sources */,
+				F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */,
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
+				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
 				F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */,
 			);
@@ -3341,6 +3892,36 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */,
+				F72D42372694B60300F9AC3B /* mage-ios-sdk 16.xcdatamodel */,
+				F72D42382694B60300F9AC3B /* mage-ios-sdk 13.xcdatamodel */,
+				F72D42392694B60300F9AC3B /* mage-ios-sdk.xcdatamodel */,
+				F72D423A2694B60300F9AC3B /* mage-ios-sdk 3.xcdatamodel */,
+				F72D423B2694B60300F9AC3B /* mage-ios-sdk 9.xcdatamodel */,
+				F72D423C2694B60300F9AC3B /* mage-ios-sdk 10.xcdatamodel */,
+				F72D423D2694B60300F9AC3B /* mage-ios-sdk 15.xcdatamodel */,
+				F72D423E2694B60300F9AC3B /* mage-ios-sdk 5.xcdatamodel */,
+				F72D423F2694B60300F9AC3B /* mage-ios-sdk 2.xcdatamodel */,
+				F72D42402694B60300F9AC3B /* mage-ios-sdk 12.xcdatamodel */,
+				F72D42412694B60300F9AC3B /* mage-ios-sdk 17.xcdatamodel */,
+				F72D42422694B60300F9AC3B /* mage-ios-sdk 7.xcdatamodel */,
+				F72D42432694B60300F9AC3B /* mage-ios-sdk 4.xcdatamodel */,
+				F72D42442694B60300F9AC3B /* mage-ios-sdk 14.xcdatamodel */,
+				F72D42452694B60300F9AC3B /* mage-ios-sdk 8.xcdatamodel */,
+				F72D42462694B60300F9AC3B /* mage-ios-sdk 11.xcdatamodel */,
+				F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */,
+			);
+			currentVersion = F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */;
+			path = "mage-ios-sdk.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F7A94D5E18AD9CAF00CB9EE0 /* Project object */;
 }
