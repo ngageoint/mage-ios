@@ -291,7 +291,15 @@ import MaterialComponents.MDCContainerScheme;
 
 extension ObservationViewCardCollectionViewController: AttachmentSelectionDelegate {
     func selectedAttachment(_ attachment: Attachment!) {
+        if (attachment.url == nil) {
+            return;
+        }
         attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+        attachmentViewCoordinator?.start();
+    }
+    
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self);
         attachmentViewCoordinator?.start();
     }
 }

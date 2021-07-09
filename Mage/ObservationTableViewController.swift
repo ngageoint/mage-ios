@@ -286,6 +286,16 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
             attachmentCoordinator.start();
         }
     }
+    
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+        if let attachmentDelegate = self.attachmentDelegate {
+            attachmentDelegate.selectedUnsentAttachment(unsentAttachment);
+        } else {
+            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self);
+            self.childCoordinators.append(attachmentCoordinator);
+            attachmentCoordinator.start();
+        }
+    }
 }
 
 extension ObservationTableViewController: ObservationActionsDelegate {

@@ -13,6 +13,7 @@
 @required
 
 - (void) selectedAttachment:(Attachment *) attachment;
+- (void) selectedUnsentAttachment: (NSDictionary *) unsentAttachment;
 
 @optional
 - (void) attachmentFabTapped:(Attachment *) attachment completionHandler: (void(^)(BOOL))handler;

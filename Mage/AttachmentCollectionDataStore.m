@@ -87,7 +87,11 @@
 
     if (self.attachmentSelectionDelegate) {
         Attachment *attachment = [self attachmentAtIndex:[indexPath row]];
-        [self.attachmentSelectionDelegate selectedAttachment:attachment];
+        if (attachment != nil) {
+            [self.attachmentSelectionDelegate selectedAttachment:attachment];
+        } else {
+            [self.attachmentSelectionDelegate selectedUnsentAttachment:[self unsentAttachmentAtIndex:[indexPath row]]];
+        }
     }
 }
 
