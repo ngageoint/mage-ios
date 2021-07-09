@@ -294,7 +294,7 @@ import MaterialComponents.MDCCard
                 formSecondaryValue = obsfield;
             }
         }
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate);
+        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate, attachmentSelectionDelegate: self);
         if let safeScheme = scheme {
             formView.applyTheme(withScheme: safeScheme);
         }
@@ -620,6 +620,19 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         let actionHandler = {() in
             attachment.markedForDeletion = false;
             attachment.dirty = false;
+            handler(false);
+        }
+        messageAction.handler = actionHandler;
+        message.action = messageAction;
+        MDCSnackbarManager.default.show(message);
+    }
+    
+    func attachmentFabTappedField(_ field: [AnyHashable : Any]!, completionHandler handler: ((Bool) -> Void)!) {
+        handler(true);
+        let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Attachment Deleted");
+        let messageAction = MDCSnackbarMessageAction();
+        messageAction.title = "UNDO";
+        let actionHandler = {() in
             handler(false);
         }
         messageAction.handler = actionHandler;

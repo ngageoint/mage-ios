@@ -13,23 +13,58 @@ import Foundation
 }
 
 protocol AttachmentCreationCoordinatorDelegate {
-    
+    // can be removed after server 5
     func attachmentCreated(attachment: Attachment);
-    func attachmentCreationCancelled();
     
+    func attachmentCreated(fieldValue: [String : AnyHashable]);
+    func attachmentCreationCancelled();
 }
 
 class AttachmentCreationCoordinator: NSObject {
     weak var rootViewController: UIViewController?;
     var observation: Observation;
+    var fieldName: String?;
+    var observationFormId: String?;
     var delegate: AttachmentCreationCoordinatorDelegate?;
     var pickerController: UIImagePickerController?;
     var audioRecorderViewController: AudioRecorderViewController?;
     
+    // this constructor is only used by the attachment card which is only for server version 5
+    // can be removed when server version 5 is gone
     init(rootViewController: UIViewController?, observation: Observation, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
         self.rootViewController = rootViewController;
         self.observation = observation;
         self.delegate = delegate;
+    }
+    
+    init(rootViewController: UIViewController?, observation: Observation, fieldName: String, observationFormId: String, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
+        self.rootViewController = rootViewController;
+        self.observation = observation;
+        self.fieldName = fieldName;
+        self.observationFormId = observationFormId;
+        self.delegate = delegate;
+    }
+    
+    func addAttachmentForSaving(location: URL, contentType: String) {
+        var attachmentJson: [String: AnyHashable] = [
+            "type": contentType,
+            "contentType": contentType,
+            "localPath": location.path,
+            "name": location.lastPathComponent
+        ]
+        DispatchQueue.main.async { [self] in
+            if (self.observationFormId != nil) {
+                attachmentJson["observationFormId"] = self.observationFormId!
+                attachmentJson["fieldName"] = self.fieldName!
+                delegate?.attachmentCreated(fieldValue: attachmentJson);
+            } else {
+                // this is only applicable in the server5 case, can be removed after that
+                attachmentJson["dirty"] = 1;
+                let attachment = Attachment(forJson: attachmentJson, in: (observation.managedObjectContext)!);
+                attachment.observation = observation;
+                delegate?.attachmentCreated(attachment: attachment);
+            }
+        }
     }
 }
 
@@ -153,17 +188,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                 guard let finalData = writeMetadataIntoImageData(imagedata: imageData, metadata: info[.mediaMetadata] as? NSMutableDictionary) else { return };
                 do {
                     try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
-                    // create the attachment object then put it in the field
-                    let attachmentJson: [String: Any] = [
-                        "contentType": "image/jpeg",
-                        "localPath": fileToWriteTo.path,
-                        "name": fileToWriteTo.lastPathComponent,
-                        "dirty": 1
-                    ]
-                    
-                    let attachment = Attachment(forJson: attachmentJson, in: (observation.managedObjectContext)!);
-                    attachment.observation = observation;
-                    delegate?.attachmentCreated(attachment: attachment);
+                    addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
                 } catch {
                     print("Unable to write image to file \(fileToWriteTo): \(error)")
                 }
@@ -214,36 +239,23 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                 print("exporting async")
                 exportSession.exportAsynchronously {
                     print("export session status \(exportSession.status)")
-                switch (exportSession.status) {
-                    case .completed:
-                        print("Export complete")
-                        // create the attachment object then put it in the field
-                        let attachmentJson: [String: Any] = [
-                            "contentType": "video/mp4",
-                            "localPath": fileToWriteTo.path,
-                            "name": fileToWriteTo.lastPathComponent,
-                            "dirty": 1
-                        ]
-                        
-                        DispatchQueue.main.async {
-                            let attachment = Attachment(forJson: attachmentJson, in: (self.observation.managedObjectContext)!);
-                            attachment.observation = self.observation;
-                            
-                            self.delegate?.attachmentCreated(attachment: attachment);
+                    switch (exportSession.status) {
+                        case .completed:
+                            print("Export complete")
+                            self.addAttachmentForSaving(location: fileToWriteTo, contentType: "video/mp4")
+                        case .failed:
+                            print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
+                        case .cancelled:
+                            print("Export cancelled");
+                        case .unknown:
+                            print("Unknown")
+                        case .waiting:
+                            print("Waiting")
+                        case .exporting:
+                            print("Exporting")
+                        @unknown default:
+                            print("Unknown")
                         }
-                    case .failed:
-                        print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
-                    case .cancelled:
-                        print("Export cancelled");
-                    case .unknown:
-                        print("Unknown")
-                    case .waiting:
-                        print("Waiting")
-                    case .exporting:
-                        print("Exporting")
-                    @unknown default:
-                        print("Unknown")
-                    }
                 }
             } catch {
                 print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
@@ -273,18 +285,8 @@ extension AttachmentCreationCoordinator: UINavigationControllerDelegate {
 extension AttachmentCreationCoordinator: AudioRecordingDelegate {
     func recordingAvailable(recording: Recording) {
         print("Recording available")
-        let attachmentJson: [String: Any] = [
-            "contentType": recording.mediaType!,
-            "localPath": recording.filePath!,
-            "name": recording.fileName!,
-            "dirty": 1
-        ]
-        DispatchQueue.main.async {
-            let attachment = Attachment(forJson: attachmentJson, in: (self.observation.managedObjectContext)!);
-            attachment.observation = self.observation;
-            
-            self.delegate?.attachmentCreated(attachment: attachment);
-            self.audioRecorderViewController?.dismiss(animated: true, completion: nil);
-        }
+        addAttachmentForSaving(location: URL(fileURLWithPath: "\(recording.filePath!)/\(recording.fileName!)"), contentType: recording.mediaType!)
+    
+        self.audioRecorderViewController?.dismiss(animated: true, completion: nil);
     }
 }

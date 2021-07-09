@@ -25,6 +25,8 @@
     [self setUrl:[json objectForKey:@"url"]];
     [self setName: [json objectForKey:@"name"]];
     [self setSize: [json objectForKey:@"size"]];
+    [self setObservationFormId: [json objectForKey:@"observationFormId"]];
+    [self setFieldName: [json objectForKey:@"fieldName"]];
     id dirty = [json objectForKey:@"dirty"];
     if (dirty != nil) {
         [self setDirty:[NSNumber numberWithBool:[dirty boolValue]]];

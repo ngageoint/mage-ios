@@ -102,7 +102,7 @@
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
-		8D07530613D539DAD7316AC0 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6486D2BD509A72B7B1ABB130 /* libPods-MAGETests.a */; };
+		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -127,7 +127,6 @@
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
-		F7103F05266A9D7F000832CD /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7103F03266A9CD7000832CD /* test_marker.png */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
 		F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */; };
 		F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */; };
@@ -368,6 +367,7 @@
 		F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */; };
 		F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */; };
+		F79A09472694D1A200EB2ABA /* AttachmentPushServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */; };
 		F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */; };
 		F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */; };
 		F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */; };
@@ -690,13 +690,13 @@
 		4CF141B01992A5D900C4B70E /* DeviceUUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUUID.h; sourceTree = "<group>"; };
 		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
-		6486D2BD509A72B7B1ABB130 /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
 		AE5061ABB839671E9481AD99 /* Pods-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE947E71CFC3CB366C545ED /* Pods-MAGE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.release.xcconfig"; sourceTree = "<group>"; };
 		B61E70D96990B16652014926 /* libPods-MAGE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MAGETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
 		F7012B9B248E96E8002BBDE8 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
@@ -719,7 +719,6 @@
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
-		F7103F03266A9CD7000832CD /* test_marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_marker.png; sourceTree = "<group>"; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
 		F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
 		F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
@@ -1083,6 +1082,7 @@
 		F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadViewController.swift; sourceTree = "<group>"; };
 		F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewControllerTests.swift; sourceTree = "<group>"; };
 		F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageRootViewController.swift; sourceTree = "<group>"; };
+		F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPushServiceTests.swift; sourceTree = "<group>"; };
 		F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLControllerTests.swift; sourceTree = "<group>"; };
 		F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewTests.swift; sourceTree = "<group>"; };
 		F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewTests.swift; sourceTree = "<group>"; };
@@ -1279,7 +1279,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D07530613D539DAD7316AC0 /* libPods-MAGETests.a in Frameworks */,
+				7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1808,7 +1808,6 @@
 		F72D42282694B5B700F9AC3B /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				F7103F03266A9CD7000832CD /* test_marker.png */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -2338,7 +2337,7 @@
 				0BD6F42A705BBE383C185A99 /* Pods_MAGE.framework */,
 				9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */,
 				B61E70D96990B16652014926 /* libPods-MAGE.a */,
-				6486D2BD509A72B7B1ABB130 /* libPods-MAGETests.a */,
+				E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2470,6 +2469,7 @@
 			isa = PBXGroup;
 			children = (
 				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
+				F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -2783,7 +2783,6 @@
 				F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */,
 				F7C640FF257EB29100C02335 /* geometryField.json in Resources */,
 				F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */,
-				F7103F05266A9D7F000832CD /* test_marker.png in Resources */,
 				F7103F02266A5D7D000832CD /* noResponse.html in Resources */,
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */,
@@ -3400,6 +3399,7 @@
 				F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */,
+				F79A09472694D1A200EB2ABA /* AttachmentPushServiceTests.swift in Sources */,
 				F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */,
 				F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */,
 				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,
