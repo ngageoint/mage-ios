@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Attachment (CoreDataProperties)
 
 @property (nullable, nonatomic, retain) NSString *contentType;
+@property (nullable, nonatomic, retain) NSString *observationFormId;
+@property (nullable, nonatomic, retain) NSString *fieldName;
 @property (nullable, nonatomic, retain) NSNumber *dirty;
 @property (nullable, nonatomic, retain) NSNumber *eventId;
 @property (nullable, nonatomic, retain) NSDate *lastModified;

@@ -18,14 +18,16 @@ import MaterialComponents.MDCButton;
 
 class AttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
-    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
+    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
+    
+    private var unsentAttachments: [[String: AnyHashable]] = []
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
         let ads: AttachmentCollectionDataStore = self.editMode ? AttachmentCollectionDataStore(buttonImage: "trash", useErrorColor: true) : AttachmentCollectionDataStore();
         ads.attachments = attachments;
-        ads.attachmentSelectionDelegate = self.attachmentSelectionDelegate;
+        ads.attachmentSelectionDelegate = self;
         return ads;
     }();
     
@@ -126,8 +128,11 @@ class AttachmentFieldView : BaseFieldView {
         cameraButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         errorLabel.font = scheme.typographyScheme.caption;
         errorLabel.textColor = scheme.colorScheme.errorColor;
-        attachmentHolderView.backgroundColor = scheme.colorScheme.backgroundColor;
-        attachmentCollectionView.backgroundColor = scheme.colorScheme.backgroundColor;
+        attachmentHolderView.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
+        attachmentCollectionView.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
+        if (editMode) {
+            self.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
+        }
         attachmentCollectionDataStore.applyTheme(withContainerScheme: scheme);
     }
     
@@ -147,8 +152,12 @@ class AttachmentFieldView : BaseFieldView {
     
     func buildView() {
         if (field[FieldKey.title.key] != nil) {
-            viewStack.addArrangedSubview(fieldNameSpacerView);
-            viewStack.setCustomSpacing(0, after: fieldNameSpacerView);
+            if (editMode) {
+                viewStack.addArrangedSubview(fieldNameSpacerView);
+                viewStack.setCustomSpacing(0, after: fieldNameSpacerView);
+            } else {
+                viewStack.addArrangedSubview(fieldNameLabel);
+            }
         }
         
         viewStack.addArrangedSubview(attachmentHolderView);
@@ -169,10 +178,10 @@ class AttachmentFieldView : BaseFieldView {
     
     func setAttachmentHolderHeight() {
         var attachmentHolderHeight: CGFloat = 100.0;
-        if let attachmentCount = attachments?.count {
-            if (attachmentCount != 0) {
-                attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * 100.0
-            }
+        var attachmentCount = attachments?.count ?? 0;
+        attachmentCount = attachmentCount + unsentAttachments.count;
+        if (attachmentCount != 0) {
+            attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * 100.0
         }
         if (heightConstraint != nil) {
             heightConstraint?.constant = attachmentHolderHeight;
@@ -220,6 +229,7 @@ class AttachmentFieldView : BaseFieldView {
             attachmentCollectionView.autoPinEdgesToSuperviewEdges();
 
             if (editMode) {
+                fieldNameSpacerView.autoSetDimension(.height, toSize: 32);
                 actionsHolderView.autoSetDimension(.height, toSize: 40);
                 audioButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
                 cameraButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
@@ -275,7 +285,47 @@ extension AttachmentFieldView : AttachmentCreationCoordinatorDelegate {
         delegate?.fieldValueChanged(field, value: [attachment] as Set<Attachment>);
     }
     
+    func attachmentCreated(fieldValue: [String : AnyHashable]) {
+        unsentAttachments.append(fieldValue);
+        attachmentCollectionDataStore.unsentAttachments = unsentAttachments;
+        attachmentCollectionView.reloadData();
+        setNeedsUpdateConstraints();
+        delegate?.fieldValueChanged(field, value: unsentAttachments);
+    }
+    
     func attachmentCreationCancelled() {
         print("Cancelled")
+    }
+}
+
+extension AttachmentFieldView : AttachmentSelectionDelegate {
+    func selectedAttachment(_ attachment: Attachment!) {
+        attachmentSelectionDelegate?.selectedAttachment(attachment);
+    }
+    
+    func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+        attachmentSelectionDelegate?.attachmentFabTapped?(attachment, completionHandler: handler);
+    }
+    
+    func attachmentFabTappedField(_ field: [AnyHashable : Any]!, completionHandler handler: ((Bool) -> Void)!) {
+        var deletedField = field as! [String : AnyHashable];
+        guard let index = unsentAttachments.firstIndex (where: { $0["name"] == deletedField["name"] }) else {
+            return;
+        }
+        
+        attachmentSelectionDelegate?.attachmentFabTappedField?(field, completionHandler: { [self] deleted in
+            deletedField["markedForDeletion"] = deleted;
+            unsentAttachments.replaceSubrange(index...index, with: [deletedField])
+            attachmentCollectionDataStore.unsentAttachments = unsentAttachments;
+            attachmentCollectionView.reloadData();
+            setNeedsUpdateConstraints();
+            delegate?.fieldValueChanged(self.field, value: unsentAttachments.filter {
+                if let marked = $0["markedForDeletion"] {
+                    return !(marked as! Bool);
+                }
+                return true;
+            });
+            handler(deleted);
+        })
     }
 }

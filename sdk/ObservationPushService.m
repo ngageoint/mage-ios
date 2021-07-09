@@ -12,6 +12,7 @@
 #import "Attachment.h"
 #import "UserUtility.h"
 #import "DataConnectionUtilities.h"
+#import "MageServer.h"
 
 NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
 
@@ -202,14 +203,46 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         NSManagedObjectID *observationID = observation.objectID;
         NSURLSessionDataTask *observationPushTask = [Observation operationToPushObservation:observation success:^(id response) {
             NSLog(@"Successfully submitted observation");
+            // save the properties of the observation before they get overwritten so we can match the attachments later
+            NSDictionary *propertiesToSave = [NSDictionary dictionaryWithDictionary:observation.properties];
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Observation *localObservation = [observation MR_inContext:localContext];
                 [localObservation populateObjectFromJson:response];
                 localObservation.dirty = [NSNumber numberWithBool:NO];
                 localObservation.error = nil;
                 
-                for (Attachment *attachment in localObservation.attachments) {
-                    attachment.observationRemoteId = localObservation.remoteId;
+                if ([MageServer isServerVersion5]) {
+                    for (Attachment *attachment in localObservation.attachments) {
+                        attachment.observationRemoteId = localObservation.remoteId;
+                    }
+                } else {
+                    // when the observation comes back from a new server the attachments will have moved from the field to the attachments array
+                    for (NSDictionary *attachmentResponse in response[@"attachments"]) {
+                        // only look for attachments without a url that match a field we tried to save
+                        if ([attachmentResponse valueForKey:@"url"] == nil) {
+                            NSString *fieldName = [attachmentResponse valueForKey:@"fieldName"];
+                            NSString *observationFormId = [attachmentResponse valueForKey:@"observationFormId"];
+                            NSString *name = [attachmentResponse valueForKey:@"name"];
+                            NSArray *forms = [propertiesToSave objectForKey:@"forms"];
+                            if (forms != nil) {
+                                NSArray *filteredForm = [forms filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"id == %@", observationFormId]];
+                                if ([filteredForm count] == 1) {
+                                    NSDictionary *form = filteredForm[0];
+                                    if ([form objectForKey:fieldName] != nil) {
+                                        NSArray *fieldAttachments = [[form objectForKey:fieldName] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", name]];
+                                        if ([fieldAttachments count] != 0) {
+                                            NSDictionary *fieldAttachment = fieldAttachments[0];
+                                            Attachment *attachment = [Attachment attachmentForJson:attachmentResponse inContext:localContext];
+                                            [attachment setObservation:localObservation];
+                                            [attachment setObservationRemoteId: localObservation.remoteId];
+                                            [attachment setDirty:[NSNumber numberWithBool:true]];
+                                            [attachment setLocalPath:[fieldAttachment valueForKey:@"localPath"]];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             } completion:^(BOOL success, NSError *error) {
 

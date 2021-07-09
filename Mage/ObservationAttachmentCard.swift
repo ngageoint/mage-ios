@@ -59,6 +59,13 @@ class ObservationAttachmentCard: MDCCard {
     func buildView() {
         self.addSubview(attachmentView);
     }
+    
+    func populate(observation: Observation? = nil) {
+        if (observation != nil) {
+            self.observation = observation;
+            attachmentView.setValue(self.observation?.attachments);
+        }
+    }
 }
 
 extension ObservationAttachmentCard: ObservationFormFieldListener {

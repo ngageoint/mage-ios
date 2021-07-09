@@ -38,3 +38,40 @@ target 'MAGE' do
       pod 'KIF'
     end
 end
+
+# This is a workaround for having tests work without useframeworks set
+# it needs more work
+# post_install do |installer|
+#   def merge_and_link_dirs(source, destination)
+#     system "echo source #{source}"
+#     system "echo dest #{destination}"
+
+#       system "echo source is symlink check"
+#       if File.symlink?(source) then
+#           system "echo source is symlink"
+#           return
+#       end
+
+#       if File.directory?(source) then
+#         system "echo source is a directory"
+#           system "echo #{source}/* #{destination}"
+#           system "mv #{source}/* #{destination}"
+#           system "rmdir #{source}"
+#       end
+#       system "echo ln -s ../#{destination} #{source}"
+#       # system "echo ln -s ../#{destination} #{source}"
+#       File.symlink("../#{destination}", source)
+#   end
+
+#   headers_dir = installer.config.project_pods_root + 'Headers/'
+
+#   # Work around for FBSnapshotTestCase with static linking.
+#   # This is needed because of buggy handling of the differing module and project names.
+#   # NOTE: Uncomment to resolve the build failure
+#   system "echo headers dir"
+#   system "echo #{headers_dir}"
+#   Dir.chdir(headers_dir) do
+#       merge_and_link_dirs('Public/FBSnapshotTestCase', 'Public/iOSSnapshotTestCase')
+#       merge_and_link_dirs('Private/FBSnapshotTestCase', 'Private/iOSSnapshotTestCase')
+#   end
+# end

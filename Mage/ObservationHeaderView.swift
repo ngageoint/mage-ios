@@ -111,7 +111,7 @@ class ObservationHeaderView : MDCCard {
         } else {
             self.importantView.isHidden = !observation.isImportant()
         }
-        
+        geometryView.setObservation(observation: observation);
         importantView.populate(observation: observation);
         observationActionsView.populate(observation: observation);
     }

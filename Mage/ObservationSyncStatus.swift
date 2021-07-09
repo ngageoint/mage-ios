@@ -51,7 +51,6 @@ class ObservationSyncStatus: UIView {
         addSubview(syncStatusView);
         self.observation = observation;
         setupSyncStatusView();
-        self.observation = observation;
     }
     
     @objc func syncObservation() {
@@ -60,7 +59,10 @@ class ObservationSyncStatus: UIView {
         setupSyncStatusView();
     }
     
-    func updateObservationStatus() {
+    func updateObservationStatus(observation: Observation? = nil) {
+        if (observation != nil) {
+            self.observation = observation;
+        }
         setupSyncStatusView();
     }
     
