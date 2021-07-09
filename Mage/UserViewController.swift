@@ -108,8 +108,16 @@ extension UserViewController : ObservationActionsDelegate {
 
 extension UserViewController : AttachmentSelectionDelegate {
     func selectedAttachment(_ attachment: Attachment!) {
-        let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
-        childCoordinators.append(attachmentCoordinator);
+        if (attachment.url != nil) {
+            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+            childCoordinators.append(attachmentCoordinator);
+            attachmentCoordinator.start();
+        }
+    }
+    
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+        let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self);
+        self.childCoordinators.append(attachmentCoordinator);
         attachmentCoordinator.start();
     }
 }

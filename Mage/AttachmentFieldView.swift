@@ -303,6 +303,10 @@ extension AttachmentFieldView : AttachmentSelectionDelegate {
         attachmentSelectionDelegate?.selectedAttachment(attachment);
     }
     
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+        attachmentSelectionDelegate?.selectedUnsentAttachment(unsentAttachment);
+    }
+    
     func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
         attachmentSelectionDelegate?.attachmentFabTapped?(attachment, completionHandler: handler);
     }
