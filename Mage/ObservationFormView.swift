@@ -23,7 +23,7 @@ class ObservationFormView: UIStackView {
     private var form: [String: Any]!;
     private var formIndex: Int!;
     private var fieldViews: [String: BaseFieldView] = [ : ];
-    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private weak var viewController: UIViewController!;
     private weak var fieldSelectionDelegate: FieldSelectionDelegate?;
     private weak var observationFormListener: ObservationFormListener?;
@@ -90,18 +90,26 @@ class ObservationFormView: UIStackView {
     func constructView() {
         formFieldAdded = false;
         for fieldDictionary in self.formFields {
-            let value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
+            let type = fieldDictionary[FieldKey.type.key] as! String;
+            var value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
+            
+            // special case for attachments
+            if (type == FieldType.attachment.key) {
+                value = self.observation.attachments?.filter() { attachment in
+                    guard let ofi = attachment.observationFormId, let fieldName = attachment.fieldName else { return false }
+                    return ofi == form[FormKey.id.key] as! String && fieldName == fieldDictionary[FieldKey.name.key] as! String;
+                }
+            }
             
             if (!editMode && value == nil) {
                 continue;
             }
             
-            let type = fieldDictionary[FieldKey.type.key] as! String;
             var fieldView: UIView?;
             switch type {
             case FieldType.attachment.key:
-                let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
-                fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
+                let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as! String, observationFormId: form[FormKey.id.key] as! String);
+                fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? Set<Attachment>), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
             case FieldType.numberfield.key:
                 fieldView = NumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
             case FieldType.textfield.key:

@@ -30,15 +30,15 @@ import Kingfisher
     }
     
     public func isFullSizeCached() -> Bool {
-        return self.attachment != nil && ImageCache.default.isCached(forKey: (self.attachment?.url!)!);
+        return self.attachment != nil && self.attachment?.url != nil && ImageCache.default.isCached(forKey: (self.attachment?.url!)!);
     }
     
     public func isLargeSizeCached() -> Bool {
-        return self.attachment != nil && (self.isFullSizeCached() || ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: getImageSize()).absoluteString));
+        return self.attachment != nil && (self.isFullSizeCached() || (self.getAttachmentUrl(size: getImageSize()) != nil && ImageCache.default.isCached(forKey: self.getAttachmentUrl(size: getImageSize())!.absoluteString)));
     }
     
     public func isThumbnailCached() -> Bool {
-        return self.attachment != nil && ImageCache.default.isCached(forKey: String(format: "%@_thumbnail", self.attachment!.url!));
+        return self.attachment != nil && self.attachment?.url != nil && ImageCache.default.isCached(forKey: String(format: "%@_thumbnail", self.attachment!.url!));
     }
     
     public func isAnyCached() -> Bool {
@@ -79,31 +79,41 @@ import Kingfisher
         self.setImage(url: url, cacheOnly: cacheOnly, fullSize: fullSize, thumbnail: thumbnail, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
-    func getAttachmentUrl(size: Int) -> URL {
+    func getAttachmentUrl(size: Int) -> URL? {
         if (self.attachment?.localPath != nil && FileManager.default.fileExists(atPath: self.attachment!.localPath!)) {
             return URL(fileURLWithPath: (self.attachment?.localPath!)!);
-        } else {
+        } else if (self.attachment?.url != nil) {
             return URL(string: String(format: "%@?size=%ld", self.attachment!.url!, size))!;
         }
+        return nil;
     }
     
-    public func setImage(url: URL,
+    public func setImage(url: URL?,
                   cacheOnly: Bool = false,
                   fullSize: Bool = false,
                   thumbnail: Bool = false,
                   indicator: Indicator? = nil,
                   progressBlock: DownloadProgressBlock? = nil,
                   completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+        if (url == nil) {
+            self.contentMode = .scaleAspectFit;
+            self.image = UIImage(named: "upload");
+            return;
+        }
+        
         self.contentMode = .scaleAspectFill;
         
-        if (url.isFileURL) {
-            let provider = LocalFileImageDataProvider(fileURL: url)
+        guard let safeUrl = url else {
+            return;
+        }
+        
+        if (safeUrl.isFileURL) {
+            let provider = LocalFileImageDataProvider(fileURL: safeUrl)
             self.kf.setImage(with: provider)
             return;
         }
         
-        
-        var thumbUrl = url;
+        var thumbUrl = safeUrl;
         if (self.attachment?.url != nil) {
             thumbUrl = URL(string: String(format: "%@_thumbnail", self.attachment!.url!))!
         }
@@ -134,7 +144,7 @@ import Kingfisher
         }
         
         if (thumbnail) {
-            let resource = ImageResource(downloadURL: url, cacheKey: thumbUrl.absoluteString)
+            let resource = ImageResource(downloadURL: safeUrl, cacheKey: thumbUrl.absoluteString)
             self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock,
                              completionHandler: completionHandler);
             return;
@@ -159,7 +169,7 @@ import Kingfisher
         }
         // Have to do this so that the placeholder image shows up behind the activity indicator
         DispatchQueue.main.async {
-            self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
+            self.kf.setImage(with: safeUrl, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
         }
     }
 }

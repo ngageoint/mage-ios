@@ -14,6 +14,8 @@
 @implementation Attachment (CoreDataProperties)
 
 @dynamic contentType;
+@dynamic observationFormId;
+@dynamic fieldName;
 @dynamic dirty;
 @dynamic eventId;
 @dynamic lastModified;

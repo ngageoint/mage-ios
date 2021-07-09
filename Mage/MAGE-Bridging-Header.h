@@ -64,6 +64,9 @@
 #import "ObservationTableHeaderView.h"
 #import "GeometryDeserializer.h"
 
+#import "ObservationPushService.h"
+#import "AttachmentPushService.h"
+
 #pragma mark - Core Data Entities
 #import "Feed.h"
 #import "FeedItem.h"

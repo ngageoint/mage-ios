@@ -23,8 +23,8 @@
 
 - (RouteMethod *) push: (Attachment *) attachment {
     RouteMethod *method = [[RouteMethod alloc] init];
-    method.method = @"POST";
-    method.route = [NSString stringWithFormat:@"%@/%@", attachment.observation.url, @"attachments"];
+    method.method = @"PUT";
+    method.route = [NSString stringWithFormat:@"%@/attachments/%@", attachment.observation.url, attachment.remoteId];
     return method;
 }
 

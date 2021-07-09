@@ -16,5 +16,6 @@
 
 @optional
 - (void) attachmentFabTapped:(Attachment *) attachment completionHandler: (void(^)(BOOL))handler;
+- (void) attachmentFabTappedField:(NSDictionary *) field completionHandler: (void(^)(BOOL))handler;
 
 @end

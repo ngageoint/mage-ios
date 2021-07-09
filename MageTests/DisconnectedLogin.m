@@ -154,12 +154,8 @@
             
             NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
             id notificationCenterMock = OCMPartialMock(defaultCenter);
-
-- (void)tearDown {
-    [super tearDown];
-    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    [HTTPStubs removeAllStubs];
+        }];
+    }];
 }
 
 - (void) testLoginDisconnectedThenRegainConnection {

@@ -51,6 +51,21 @@ import Kingfisher
         self.imageView.cancel();
     }
     
+    @objc public func setImage(newAttachment: [String : AnyHashable], button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
+        layoutSubviews();
+        self.button = button;
+        self.imageView.setImage(url: URL(fileURLWithPath: newAttachment["localPath"] as! String));
+        self.imageView.accessibilityLabel = "attachment \(newAttachment["localPath"] as! String) loaded";
+        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+        self.imageView.contentMode = .scaleAspectFit;
+        
+        if let safeButton = button {
+            self.addSubview(safeButton);
+            safeButton.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
+            safeButton.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
+        }
+    }
+    
     @objc public func setImage(attachment: Attachment, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
         self.button = button;
@@ -58,8 +73,8 @@ import Kingfisher
         let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
             self.imageView.setAttachment(attachment: attachment);
+            self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading";
-            NSLog("Loading the image \(attachment.name ?? "")")
             self.imageView.showThumbnail(completionHandler:
                                             { result in
                                                 switch result {

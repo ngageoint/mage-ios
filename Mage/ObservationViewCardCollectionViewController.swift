@@ -299,6 +299,7 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
         if let safeScheme = self.scheme {
             syncStatusView.applyTheme(withScheme: safeScheme);
         }
+        setupObservation();
         view.setNeedsUpdateConstraints();
     }
 }
