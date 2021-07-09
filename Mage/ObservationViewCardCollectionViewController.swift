@@ -60,6 +60,7 @@ import MaterialComponents.MDCContainerScheme;
     
     private lazy var syncStatusView: ObservationSyncStatus = {
         let syncStatusView = ObservationSyncStatus(observation: observation);
+        stackView.addArrangedSubview(syncStatusView);
         return syncStatusView;
     }()
     
@@ -176,22 +177,33 @@ import MaterialComponents.MDCContainerScheme;
         } else {
             observationForms = [];
         }
-        for v in stackView.arrangedSubviews {
-            v.removeFromSuperview();
-        }
-        stackView.addArrangedSubview(syncStatusView);
+        
+        syncStatusView.updateObservationStatus(observation: observation);
         addHeaderCard(stackView: stackView);
-        addLegacyAttachmentCard(stackView: stackView);
+        if (attachmentCard != nil) {
+            attachmentCard?.populate(observation: observation);
+        }
+        
+        if (stackView.arrangedSubviews.count > 2) {
+            for v in stackView.arrangedSubviews.suffix(from: 2) {
+                v.removeFromSuperview();
+            }
+        }
+        
         addFormViews(stackView: stackView);
     }
     
     func addHeaderCard(stackView: UIStackView) {
         if let safeObservation = observation {
-            headerCard = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
-            if let safeScheme = self.scheme {
-                headerCard!.applyTheme(withScheme: safeScheme);
+            if (headerCard != nil) {
+                headerCard?.populate(observation: safeObservation);
+            } else {
+                headerCard = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
+                if let safeScheme = self.scheme {
+                    headerCard!.applyTheme(withScheme: safeScheme);
+                }
+                stackView.addArrangedSubview(headerCard!);
             }
-            stackView.addArrangedSubview(headerCard!);
         }
     }
     
@@ -299,7 +311,6 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
         if let safeScheme = self.scheme {
             syncStatusView.applyTheme(withScheme: safeScheme);
         }
-        setupObservation();
         view.setNeedsUpdateConstraints();
     }
 }

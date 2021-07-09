@@ -99,9 +99,12 @@ class ObservationFormView: UIStackView {
                     guard let ofi = attachment.observationFormId, let fieldName = attachment.fieldName else { return false }
                     return ofi == form[FormKey.id.key] as! String && fieldName == fieldDictionary[FieldKey.name.key] as! String;
                 }
+                if ((value as! Set<Attachment>).count == 0) {
+                    value = nil;
+                }
             }
             
-            if (!editMode && value == nil) {
+            if (!editMode && (value == nil || (value as? String) == "")) {
                 continue;
             }
             
