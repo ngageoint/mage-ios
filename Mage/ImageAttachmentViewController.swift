@@ -184,6 +184,7 @@ extension PlaceholderImage: Placeholder {}
                 i.setProgress(progress: percentage);
             },
             completionHandler: completionHandler);
+        self.imageView?.contentMode = .scaleAspectFit
     }
     
     func showImage() {
@@ -198,6 +199,7 @@ extension PlaceholderImage: Placeholder {}
                 let percentage = (Float(receivedSize) / Float(totalSize))
                 i.setProgress(progress: percentage);
         });
+        self.imageView?.contentMode = .scaleAspectFit
     }
     
     func getDocumentsDirectory() -> NSString {
