@@ -1368,15 +1368,6 @@
         }
         User *user = annotation.user;
         
-//        if ([user avatarUrl] != nil) {
-//            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-//            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.avatarUrl]]];
-//            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
-//            view.leftCalloutAccessoryView = imageView;
-//
-//            [imageView setImage:image];
-//        }
-        
         double accuracy = annotation.location.horizontalAccuracy;
         self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
         [self.mapView addOverlay:self.selectedUserAccuracy];
@@ -1469,6 +1460,11 @@
     }
     [self.straightLineNavigation stopNavigation];
     [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination delegate:self image:image scheme:self.scheme];
+}
+
+- (void) updateStraightLineNavigationDestination: (CLLocationCoordinate2D) destination {
+    self.navigationDestinationCoordinate = destination;
+    [self.straightLineNavigation updateNavigationLinesWithManager:self.locationManager destinationCoordinate:destination];
 }
 
 - (void)mapView:(MKMapView *) mapView didDeselectAnnotationView:(MKAnnotationView *) view {
@@ -1653,6 +1649,9 @@
 
 - (void) updateLocation:(Location *) location {
     User *user = location.user;
+    if (self.userToNavigateTo == user) {
+        [self updateStraightLineNavigationDestination:location.location.coordinate];
+    }
     
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
     if (annotation == nil) {

@@ -24,6 +24,7 @@ extension MapDelegate : UserActionsDelegate {
     }
 
     func getDirectionsToUser(_ user: User) {
+        self.userToNavigateTo = user;
         self.resetEnlargedPin();
         self.userBottomSheet.dismiss(animated: true, completion: {
             guard let location: CLLocationCoordinate2D = user.location?.location().coordinate else {

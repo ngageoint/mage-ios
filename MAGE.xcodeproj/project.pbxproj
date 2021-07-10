@@ -2572,14 +2572,6 @@
 			name = ExternalDevice;
 			sourceTree = "<group>";
 		};
-		F7E40A6426936AA200E50E26 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				F7103F03266A9CD7000832CD /* test_marker.png */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		F7ED5D0F1FFD7F88007BD768 /* Settings */ = {
 			isa = PBXGroup;
 			children = (

@@ -74,6 +74,7 @@
 @property (strong, nonatomic) ObservationBottomSheetController *obsBottomSheet;
 @property (strong, nonatomic) UserBottomSheetController *userBottomSheet;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) User *userToNavigateTo;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateLocationPredicates: (NSMutableArray *) predicates;

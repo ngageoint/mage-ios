@@ -139,7 +139,6 @@ import Foundation
             return
         }
         summaryView.populate(user: safeUser);
-//        compactView.configure(observation: safeObservation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
     }
     
     @objc func detailsButtonTapped() {
