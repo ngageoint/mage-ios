@@ -111,8 +111,13 @@ class ObservationFormView: UIStackView {
             var fieldView: UIView?;
             switch type {
             case FieldType.attachment.key:
-                let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as! String, observationFormId: form[FormKey.id.key] as! String);
-                fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? Set<Attachment>), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
+                if (MageServer.isServerVersion5()) {
+                    let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation);
+                    fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? Set<Attachment>), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
+                } else {
+                    let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as! String, observationFormId: form[FormKey.id.key] as! String);
+                    fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? Set<Attachment>), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
+                }
             case FieldType.numberfield.key:
                 fieldView = NumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
             case FieldType.textfield.key:
