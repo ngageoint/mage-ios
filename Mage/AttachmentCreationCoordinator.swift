@@ -37,7 +37,7 @@ class AttachmentCreationCoordinator: NSObject {
         self.delegate = delegate;
     }
     
-    init(rootViewController: UIViewController?, observation: Observation, fieldName: String, observationFormId: String, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
+    init(rootViewController: UIViewController?, observation: Observation, fieldName: String?, observationFormId: String?, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
         self.rootViewController = rootViewController;
         self.observation = observation;
         self.fieldName = fieldName;
@@ -53,9 +53,10 @@ class AttachmentCreationCoordinator: NSObject {
             "name": location.lastPathComponent
         ]
         DispatchQueue.main.async { [self] in
-            if (self.observationFormId != nil) {
-                attachmentJson["observationFormId"] = self.observationFormId!
-                attachmentJson["fieldName"] = self.fieldName!
+            // once server 5 goes away, this will always be the case
+            if (self.observationFormId != nil || self.fieldName != nil) {
+                attachmentJson["observationFormId"] = self.observationFormId
+                attachmentJson["fieldName"] = self.fieldName
                 delegate?.attachmentCreated(fieldValue: attachmentJson);
             } else {
                 // this is only applicable in the server5 case, can be removed after that

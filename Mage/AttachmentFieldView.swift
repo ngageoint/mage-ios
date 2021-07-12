@@ -191,7 +191,7 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     override func isEmpty() -> Bool {
-        return self.attachments == nil || self.attachments?.count == 0;
+        return self.attachmentCollectionView.numberOfItems(inSection: 0) == 0;
     }
     
     override func setValue(_ value: Any?) {
@@ -220,6 +220,13 @@ class AttachmentFieldView : BaseFieldView {
     
     func setCollectionData(attachments: Set<Attachment>?) {
         attachmentCollectionDataStore.attachments = attachments;
+        attachmentCollectionView.reloadData();
+        setNeedsUpdateConstraints();
+    }
+    
+    func setUnsentAttachments(attachments: [[String: AnyHashable]]) {
+        unsentAttachments = attachments
+        attachmentCollectionDataStore.unsentAttachments = unsentAttachments;
         attachmentCollectionView.reloadData();
         setNeedsUpdateConstraints();
     }
