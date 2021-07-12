@@ -19,6 +19,10 @@ class MockAttachmentSelectionDelegate: AttachmentSelectionDelegate {
     var selectedAttachmentCalled = false;
     var attachmentSelected: Attachment?;
     
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+        
+    }
+    
     func selectedAttachment(_ attachment: Attachment!) {
         selectedAttachmentCalled = true;
         attachmentSelected = attachment;
