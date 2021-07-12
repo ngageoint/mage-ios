@@ -39,6 +39,15 @@ target 'MAGE' do
     end
 end
 
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings.delete 'ARCHS'
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+    end
+  end
+end
+
 # This is a workaround for having tests work without useframeworks set
 # it needs more work
 # post_install do |installer|
