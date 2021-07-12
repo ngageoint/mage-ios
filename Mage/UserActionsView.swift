@@ -81,6 +81,8 @@ class UserActionsView: UIView {
         self.scheme = scheme;
         emailButton.applyTextTheme(withScheme: scheme);
         emailButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+        textButton.applyTextTheme(withScheme: scheme);
+        textButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         phoneButton.applyTextTheme(withScheme: scheme);
         phoneButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
         directionsButton.applyTextTheme(withScheme: scheme);
@@ -137,17 +139,17 @@ class UserActionsView: UIView {
     }
     
     @objc func callUser() {
-        guard let number = URL(string: "tel://\(user?.phone ?? "")") else { return }
+        guard let number = URL(string: "tel:\(user?.phone ?? "")") else { return }
         UIApplication.shared.open(number)
     }
     
     @objc func textUser() {
-        guard let number = URL(string: "sms://\(user?.phone ?? "")") else { return }
+        guard let number = URL(string: "sms:\(user?.phone ?? "")") else { return }
         UIApplication.shared.open(number)
     }
     
     @objc func emailUser() {
-        guard let number = URL(string: "mailto://\(user?.email ?? "")") else { return }
+        guard let number = URL(string: "mailto:\(user?.email ?? "")") else { return }
         UIApplication.shared.open(number)
     }
 }
