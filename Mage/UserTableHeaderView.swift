@@ -278,9 +278,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                     let dictionary: [String : Any] = location.properties as! [String : Any];
                     userLastLocation = CLLocation(
                         coordinate: location.location().coordinate,
-                        altitude: dictionary["altitude"] as! CLLocationDistance,
-                        horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
-                        verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
+                        altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
+                        horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                        verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
                         timestamp: location.timestamp!);
                 }
             }

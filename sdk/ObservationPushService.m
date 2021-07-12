@@ -221,14 +221,13 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                         // only look for attachments without a url that match a field we tried to save
                         if ([attachmentResponse valueForKey:@"url"] == nil) {
                             NSString *fieldName = [attachmentResponse valueForKey:@"fieldName"];
-                            NSString *observationFormId = [attachmentResponse valueForKey:@"observationFormId"];
                             NSString *name = [attachmentResponse valueForKey:@"name"];
                             NSArray *forms = [propertiesToSave objectForKey:@"forms"];
                             if (forms != nil) {
-                                NSArray *filteredForm = [forms filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"id == %@", observationFormId]];
-                                if ([filteredForm count] == 1) {
-                                    NSDictionary *form = filteredForm[0];
+                                // search through each form for attachments that needed saving
+                                for (NSDictionary *form in forms) {
                                     if ([form objectForKey:fieldName] != nil) {
+                                        // name will be unique because when the attachment is pulled in, we rename it to MAGE_yyyyMMdd_HHmmss.extension
                                         NSArray *fieldAttachments = [[form objectForKey:fieldName] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", name]];
                                         if ([fieldAttachments count] != 0) {
                                             NSDictionary *fieldAttachment = fieldAttachments[0];

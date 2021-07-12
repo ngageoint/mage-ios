@@ -94,7 +94,11 @@ class ObservationFormView: UIStackView {
             var value = self.form?[fieldDictionary[FieldKey.name.key] as! String]
             
             // special case for attachments
+            var unsentAttachments: [[String : AnyHashable]] = [];
             if (type == FieldType.attachment.key) {
+                if (value != nil) {
+                    unsentAttachments = value as? [[String : AnyHashable]] ?? []
+                }
                 value = self.observation.attachments?.filter() { attachment in
                     guard let ofi = attachment.observationFormId, let fieldName = attachment.fieldName else { return false }
                     return ofi == form[FormKey.id.key] as! String && fieldName == fieldDictionary[FieldKey.name.key] as! String;
@@ -111,8 +115,9 @@ class ObservationFormView: UIStackView {
             var fieldView: UIView?;
             switch type {
             case FieldType.attachment.key:
-                let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as! String, observationFormId: form[FormKey.id.key] as! String);
+                let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as? String, observationFormId: form[FormKey.id.key] as? String);
                 fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? Set<Attachment>), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
+                (fieldView as! AttachmentFieldView).setUnsentAttachments(attachments: unsentAttachments);
             case FieldType.numberfield.key:
                 fieldView = NumberFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? NSNumber)?.stringValue );
             case FieldType.textfield.key:
