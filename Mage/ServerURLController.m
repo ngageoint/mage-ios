@@ -11,11 +11,12 @@
 #import "ServerURLController.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
+#import "MAGE-Swift.h"
 
 @interface ServerURLController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *setServerUrlText;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet MDCTextField *serverURL;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *errorButton;
 @property (weak, nonatomic) IBOutlet UIButton *okButton;
@@ -25,7 +26,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *serverUrlController;
 
 @end
 
@@ -62,10 +62,7 @@
     self.errorStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.setServerUrlText.textColor = self.scheme.colorScheme.primaryColor;
     
-    [self.serverUrlController applyThemeWithScheme:containerScheme];
-    // these appear to be deficiencies in the underline controller and these colors are not set
-    self.serverUrlController.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    self.serverUrlController.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    [self.serverURL applyThemeWithScheme:containerScheme];
     self.serverURL.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
@@ -81,14 +78,14 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    self.serverUrlController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.serverURL];
-    UIImageView *worldImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"world"]];
-    [self addLeadingIconConstraints:worldImage];
+    
+    UIImageView *worldImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"world"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.serverURL setLeadingView:worldImage];
     self.serverURL.leadingViewMode = UITextFieldViewModeAlways;
     self.serverURL.accessibilityLabel = @"Server URL";
-    self.serverUrlController.placeholderText = @"Server URL";
-    self.serverUrlController.floatingEnabled = true;
+    self.serverURL.placeholder = @"Server URL";
+    self.serverURL.label.text = @"Server URL";
+    [self.serverURL sizeToFit];
     
     [self applyThemeWithContainerScheme:self.scheme];
     
@@ -103,6 +100,8 @@
         [self showError:self.error];
         [self.cancelButton removeFromSuperview];
         self.serverURL.text = [url absoluteString];
+    } else {
+        [self.serverURL applyThemeWithScheme:self.scheme];
     }
     
     if ([url absoluteString].length == 0) {
@@ -120,6 +119,7 @@
         self.errorStatus.hidden = YES;
         self.errorButton.hidden = YES;
         [self.delegate setServerURL: url];
+        [self.serverURL applyThemeWithScheme:self.scheme];
     } else {
         [self showError:@"Invalid URL"];
     }
@@ -135,7 +135,8 @@
     self.errorStatus.hidden = NO;
     self.errorButton.hidden = NO;
     self.errorStatus.text = error;
-    [self.serverUrlController setErrorText:error errorAccessibilityValue:nil];
+    self.serverURL.leadingAssistiveLabel.text = error;
+    [self.serverURL applyErrorThemeWithScheme:self.scheme];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {

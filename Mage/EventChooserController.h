@@ -29,7 +29,7 @@
 @property (weak, nonatomic) id<EventSelectionDelegate> delegate;
 
 - (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme;
-- (void) eventsFetched;
+- (void) eventsFetchedFromServer;
 - (void) initializeView;
 
 @end

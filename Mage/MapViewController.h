@@ -18,7 +18,7 @@
 #import <MaterialComponents/MDCContainerScheme.h>
 //#import "MAGE-Swift.h"
 
-@interface MapViewController : UIViewController <MapCalloutTapped, ObservationSelectionDelegate, UserSelectionDelegate, FeedItemSelectionDelegate>
+@interface MapViewController : UIViewController <MapCalloutTapped, FeedItemSelectionDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) MapDelegate *mapDelegate;
 // this property should exist in this view coordinator when we get to that

@@ -157,7 +157,7 @@
 
 + (UIViewController*) topMostController
 {
-    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *topController = [UIApplication sharedApplication].windows.firstObject.rootViewController;
     
     while (topController.presentedViewController) {
         topController = topController.presentedViewController;
@@ -186,6 +186,8 @@
 }
 
 - (void) startMageApp {
+    __weak typeof(self) weakSelf = self;
+
     // do a canary save
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         Canary *canary = [Canary MR_findFirstInContext:localContext];
@@ -200,6 +202,7 @@
         if (contextDidSave && error == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
             [self.appCoordinator start];
+            [self processOfflineMapArchives];
         } else {
             NSLog(@"Could not read or write from the database %@", error);
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
@@ -210,7 +213,7 @@
             
             [self.rootViewController presentViewController:alert animated:YES completion:nil];
             [MagicalRecord cleanUp];
-            _applicationStarted = NO;
+            weakSelf.applicationStarted = NO;
         }
     }];
 }

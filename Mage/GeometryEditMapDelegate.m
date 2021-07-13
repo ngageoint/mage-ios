@@ -116,8 +116,4 @@ static NSString *mapPointPinReuseIdentifier = @"mapPointPinReuseIdentifier";
     if (self.mapEventDelegate) [self.mapEventDelegate mapViewWillStartLoadingMap:mapView];
 }
 
-- (void) mapView:(MKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews {
-    if (self.mapEventDelegate) [self.mapEventDelegate mapView:mapView didAddOverlayViews:overlayViews];
-}
-
 @end

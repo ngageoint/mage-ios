@@ -63,6 +63,7 @@
 #import "ObservationFilterTableViewController.h"
 #import "ObservationTableHeaderView.h"
 #import "GeometryDeserializer.h"
+#import "StaticPointAnnotation.h"
 
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"

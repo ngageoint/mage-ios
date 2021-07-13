@@ -250,30 +250,32 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
     func start() {
         mapDelegate.setupListeners();
+        mapDelegate.allowEnlarge = false;
         mapDelegate.observations = Observations.init(for: user);
         mapDelegate.locations = Locations.init(for: user);
         
         if (currentUserIsMe) {
-            if let locations: [GPSLocation]? = GPSLocation.fetchLastXGPSLocations(1) {
-                if locations?.count != 0, let location: GPSLocation = locations?[0] {
-                    let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
-                    let dictionary: [String : Any] = location.properties as! [String : Any];
-                    userLastLocation = CLLocation(
-                        coordinate: CLLocationCoordinate2D(
-                            latitude: centroid.y as! CLLocationDegrees,
-                            longitude: centroid.x as! CLLocationDegrees),
-                        altitude: dictionary["altitude"] as! CLLocationDistance,
-                        horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
-                        verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
-                        timestamp: location.timestamp!);
-                    self.mapDelegate.update(location, for: user);
-                }
+            let locations: [GPSLocation] = GPSLocation.fetchLastXGPSLocations(1)
+            if (locations.count != 0) {
+                let location: GPSLocation = locations[0]
+                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
+                let dictionary: [String : Any] = location.properties as! [String : Any];
+                userLastLocation = CLLocation(
+                    coordinate: CLLocationCoordinate2D(
+                        latitude: centroid.y as! CLLocationDegrees,
+                        longitude: centroid.x as! CLLocationDegrees),
+                    altitude: dictionary["altitude"] as! CLLocationDistance,
+                    horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
+                    verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
+                    timestamp: location.timestamp!);
+                self.mapDelegate.update(location, for: user);
             }
             
         }
         if (userLastLocation == nil) {
             if let locations = mapDelegate.locations.fetchedResultsController.fetchedObjects {
-                if locations.count != 0, let location: Location = locations[0] as? Location {
+                if (locations.count != 0) {
+                    let location: Location = locations[0] as Location
                     let dictionary: [String : Any] = location.properties as! [String : Any];
                     userLastLocation = CLLocation(
                         coordinate: location.location().coordinate,
@@ -397,7 +399,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             alert.popoverPresentationController?.permittedArrowDirections = .down;
         }
         
-        UIApplication.shared.keyWindow?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
+        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
 
     }
 }
@@ -454,7 +456,7 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
             alert.popoverPresentationController?.permittedArrowDirections = .down;
         }
         
-        UIApplication.shared.keyWindow?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
+        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

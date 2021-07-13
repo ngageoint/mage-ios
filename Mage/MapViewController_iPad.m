@@ -127,4 +127,36 @@
     [self.childCoordinators removeObject:coordinator];
 }
 
+- (void)observationDetailSelected:(Observation *)observation {
+    
+}
+
+- (void)selectedObservation:(Observation *)observation {
+    
+}
+
+- (void)selectedObservation:(Observation *)observation region:(MKCoordinateRegion)region {
+    
+}
+
+- (void)selectedUser:(User *)user {
+    
+}
+
+- (void)selectedUser:(User *)user region:(MKCoordinateRegion)region {
+    
+}
+
+- (void)userDetailSelected:(User *)user {
+    
+}
+
+- (void)calloutTapped:(id)calloutItem {
+    
+}
+
+- (void)feedItemSelected:(nonnull FeedItem *)feedItem {
+    
+}
+
 @end

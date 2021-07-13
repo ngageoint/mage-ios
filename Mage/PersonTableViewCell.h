@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "User.h"
 
-@protocol UserActionsDelegate <NSObject>
+@protocol UserCellActionsDelegate <NSObject>
 
 @required
 - (void) userMapTapped:(id) sender;
@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *timestamp;
 @property (weak, nonatomic) IBOutlet UILabel *myself;
-@property (weak, nonatomic) IBOutlet NSObject<UserActionsDelegate> *userActionsDelegate;
+@property (weak, nonatomic) IBOutlet NSObject<UserCellActionsDelegate> *userActionsDelegate;
 @property (strong, nonatomic) User *user;
 
 - (id) populateCellWithUser:(User *) user;

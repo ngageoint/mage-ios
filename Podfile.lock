@@ -730,7 +730,7 @@ DEPENDENCIES:
   - HexColors (~> 2.2.1)
   - KIF
   - Kingfisher (~> 6)
-  - libPhoneNumber-iOS (~> 0.8)
+  - libPhoneNumber-iOS (~> 0.9.15)
   - MagicalRecord (~> 2.3.2)
   - MaterialComponents
   - MDFInternationalization
@@ -815,6 +815,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 35583d355e2ba0c87a245ab12e9bd26b3ca92bc8
+PODFILE CHECKSUM: ce82c4975f189697aa7fb95042b709239367fc9d
 
 COCOAPODS: 1.9.3

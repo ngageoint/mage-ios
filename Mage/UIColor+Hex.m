@@ -24,6 +24,10 @@
         r = components[0];
         g = components[1];
         b = components[2];
+    } else {
+        r = 0.0;
+        g = 0.0;
+        b = 0.0;
     }
 
     return [NSString stringWithFormat:@"#%02lX%02lX%02lX",

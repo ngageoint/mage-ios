@@ -10,7 +10,7 @@ def common_pods
   pod 'UIImage-Categories', '~> 0.0.1'
   pod 'HexColors', '~> 2.2.1'
   pod 'mgrs', '~>0.1.0'
-  pod 'libPhoneNumber-iOS', '~> 0.8'
+  pod 'libPhoneNumber-iOS', '~> 0.9.15'
   pod 'zxcvbn-ios'
   pod 'DateTools', '~> 2.0.0'
   pod 'MaterialComponents'
@@ -37,6 +37,15 @@ target 'MAGE' do
       pod 'Nimble-Snapshots', '~> 9'
       pod 'KIF'
     end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings.delete 'ARCHS'
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+    end
+  end
 end
 
 # This is a workaround for having tests work without useframeworks set

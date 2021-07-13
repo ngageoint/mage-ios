@@ -139,16 +139,16 @@ class SidebarUIButton: UIButton {
                     .scaleFactor(UIScreen.main.scale),
                     .transition(.fade(1)),
                     .cacheOriginalImage
-            ]) { result in
-                switch result {
-                case .success(let value):
-                    var image: UIImage = value.image.aspectResize(to: CGSize(width: size, height: size));
-                    image = image.withRenderingMode(.alwaysTemplate);
-                    button.setImage(image, for: .normal)
-                case .failure(let error):
-                    print(error);
-                }
-            }
+                ], completionHandler:  { result in
+                    switch result {
+                    case .success(let value):
+                        var image: UIImage = value.image.aspectResize(to: CGSize(width: size, height: size));
+                        image = image.withRenderingMode(.alwaysTemplate);
+                        button.setImage(image, for: .normal)
+                    case .failure(let error):
+                        print(error);
+                    }
+                })
         } else if let safeImageName: String = imageName {
             button.setImage(UIImage(named: safeImageName), for: .normal);
         }

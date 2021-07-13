@@ -8,9 +8,11 @@
 
 @interface StyledPolygon : MKPolygon
 
-@property (nonatomic) UIColor *fillColor;
-@property (nonatomic) UIColor *lineColor;
+@property (nonatomic) UIColor * _Nullable fillColor;
+@property (nonatomic) UIColor * _Nullable lineColor;
 @property (nonatomic) CGFloat lineWidth;
+
+NS_ASSUME_NONNULL_BEGIN
 
 + (StyledPolygon *) createWithPolygon: (MKPolygon *) polygon;
 
@@ -24,5 +26,7 @@
 - (void) fillColorWithHexString: (NSString *) hex;
 - (void) lineColorWithHexString: (NSString *) hex andAlpha: (CGFloat) alpha;
 - (void) lineColorWithHexString: (NSString *) hex;
+NS_ASSUME_NONNULL_END
 
 @end
+

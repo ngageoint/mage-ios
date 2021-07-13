@@ -85,7 +85,7 @@
 }
 
 - (void) eventsFetched: (NSNotification *) notification {
-    [self.eventController eventsFetched];
+    [self.eventController eventsFetchedFromServer];
 }
 
 

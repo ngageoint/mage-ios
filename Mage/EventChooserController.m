@@ -24,13 +24,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *eventInstructions;
 @property (strong, nonatomic) NSFetchedResultsController *allEventsController;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+
+@property BOOL checkForms;
+@property BOOL eventsFetched;
+@property BOOL eventsInitialized;
+@property BOOL eventsChanged;
 @end
 
 @implementation EventChooserController {
-    BOOL checkForms;
-    BOOL eventsFetched;
-    BOOL eventsInitialized;
-    BOOL eventsChanged;
+
 }
 
 - (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
@@ -44,10 +46,10 @@
     self.eventDataSource = eventDataSource;
     self.eventDataSource.tableView = self.tableView;
     self.eventDataSource.eventSelectionDelegate = self;
-    eventsInitialized = NO;
-    eventsChanged = NO;
-    eventsFetched = NO;
-    checkForms = NO;
+    self.eventsInitialized = NO;
+    self.eventsChanged = NO;
+    self.eventsFetched = NO;
+    self.checkForms = NO;
     
     self.allEventsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
     self.allEventsController.delegate = self;
@@ -97,7 +99,7 @@
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.obscuresBackgroundDuringPresentation = NO;
     self.searchController.searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
@@ -136,7 +138,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (eventsFetched == NO && eventsInitialized == NO && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
+    if (self.eventsFetched == NO && self.eventsInitialized == NO && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         self.loadingView.alpha = 1.0f;
         self.loadingLabel.text = @"Loading Events";
         self.actionButton.hidden = YES;
@@ -144,7 +146,7 @@
     
     self.tableView.estimatedRowHeight = 52;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    eventsChanged = NO;
+    self.eventsChanged = NO;
 }
 
 - (void) viewWillLayoutSubviews {
@@ -204,7 +206,7 @@
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(nullable NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(nullable NSIndexPath *)newIndexPath {
     NSLog(@"Events changed");
     if (type == NSFetchedResultsChangeInsert || type == NSFetchedResultsChangeDelete) {
-        eventsChanged = YES;
+        self.eventsChanged = YES;
     }
 }
 
@@ -248,7 +250,7 @@
         // no events have been fetched at this point
         [self.refreshingView setHidden:YES];
     } else {
-        eventsInitialized = YES;
+        self.eventsInitialized = YES;
         if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
             Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
             [Server setCurrentEventId:e.remoteId];
@@ -272,7 +274,8 @@
     // TODO set up a timer to update the refresh button to indicate the request is taking a while
     NSTimer *timer = [NSTimer timerWithTimeInterval:10.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
         //code
-        if (eventsFetched) {
+        
+        if (weakSelf.eventsFetched) {
             [timer invalidate];
         } else {
             weakSelf.refreshingStatus.text = @"Refreshing Events seems to be taking a while...";
@@ -282,17 +285,17 @@
     [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
-- (void) eventsFetched {
+- (void) eventsFetchedFromServer {
     NSLog(@"Events were fetched");
-    eventsFetched = YES;
+    self.eventsFetched = YES;
     __weak typeof(self) weakSelf = self;
     
     [self.refreshingView setHidden:YES];
     
-    if (!eventsInitialized) {
-        eventsInitialized = YES;
+    if (!self.eventsInitialized) {
+        self.eventsInitialized = YES;
         [self refreshingButtonTapped:nil];
-    } else if (eventsChanged) {
+    } else if (self.eventsChanged) {
         // were new events found that weren't already in the list?
         [self.refreshingButton setHidden:NO];
         UIView *aV = self.refreshingButton;

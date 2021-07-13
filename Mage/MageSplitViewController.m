@@ -13,7 +13,7 @@
 #import "Mage.h"
 #import "MAGE-Swift.h"
 
-@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate, AttachmentViewDelegate, FeedItemSelectionDelegate>
+@interface MageSplitViewController () <AttachmentSelectionDelegate, UserSelectionDelegate, ObservationSelectionDelegate, AttachmentViewDelegate, FeedItemSelectionDelegate, ObservationActionsDelegate>
 @property(nonatomic, strong) UINavigationController *masterViewController;
 @property(nonatomic, strong) UINavigationController *detailViewController;
 @property(nonatomic, strong) MageSideBarController *sideBarController;
@@ -87,8 +87,7 @@
 
     self.masterViewButton = self.displayModeButtonItem;
     
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if(orientation != UIInterfaceOrientationLandscapeLeft && orientation != UIInterfaceOrientationLandscapeRight) {
+    if(!UIWindow.isLandscape) {
         [self ensureButtonVisible];
     }
 }
@@ -156,5 +155,11 @@
         [self.attachmentCoordinator start];
     }
 }
+
+- (void)selectedUnsentAttachment:(NSDictionary *)unsentAttachment {
+    self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController url:unsentAttachment[@"localPath"] delegate:self];
+    [self.attachmentCoordinator start];
+}
+
 
 @end

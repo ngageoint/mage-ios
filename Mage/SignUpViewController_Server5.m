@@ -13,7 +13,7 @@
 @interface SignUpViewController_Server5 ()
 
 @property (weak, nonatomic) UIView *captchaContainer;
-@property (weak, nonatomic) IBOutlet MDCTextField *captchaText;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *captchaText;
 
 @end
 

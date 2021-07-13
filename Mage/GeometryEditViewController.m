@@ -870,7 +870,7 @@ static float paddingPercentage = .1;
     _isRectangle = false;
     if(geometry.geometryType == SF_POLYGON){
         SFPolygon *polygon = (SFPolygon *) geometry;
-        SFLineString *ring = [polygon.rings objectAtIndex:0];
+        SFLineString *ring = [polygon ringAtIndex:0];
         NSArray *points = ring.points;
         [self updateIfRectangle: points];
     }

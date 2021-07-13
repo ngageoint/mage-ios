@@ -59,7 +59,7 @@
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 
-@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate>
+@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate, UserActionsDelegate, FeatureDetailControllerDelegate>
     @property (nonatomic, strong) LocationAccuracy *selectedUserAccuracy;
     @property (nonatomic, strong) ObservationAccuracy *selectedObservationAccuracy;
 
@@ -133,6 +133,7 @@
     self.cacheOverlayUpdateLock = [[NSObject alloc] init];
     self.updatingCacheOverlays = false;
     self.waitingCacheOverlaysUpdate = false;
+    self.allowEnlarge = true;
     self.geoPackageManager = [GPKGGeoPackageFactory manager];
     self.geoPackageCache = [[GPKGGeoPackageCache alloc]initWithManager:self.geoPackageManager];
     [self addFeeds];
@@ -157,8 +158,8 @@
     if (self.mapEventDelegate) [self.mapEventDelegate mapViewWillStartLoadingMap:mapView];
 }
 
-- (void) mapView:(MKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews {
-    if (self.mapEventDelegate) [self.mapEventDelegate mapView:mapView didAddOverlayViews:overlayViews];
+- (void) mapView:(MKMapView *)mapView didAddOverlayRenderers:(NSArray *)overlayViews {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapView:mapView didAddOverlayRenderers:overlayViews];
 }
 
 
@@ -295,14 +296,18 @@
                 if ([clickMessage length] > 0){
                     [clickMessage appendString:@"</br>"];
                 }
+                message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"</br>"];
                 [clickMessage appendString:message];
             }
         }
         
         if ([clickMessage length] > 0) {
-            if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
-                [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
-            }
+            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:@"Feature" actionsDelegate:self scheme:self.scheme];
+            self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+            [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+            self.bottomSheet.delegate = self;
+            [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
+            [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
         }
     }
 }
@@ -1288,8 +1293,12 @@
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
         MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView];
+        // adjiust the center offset if this is the enlargedPin
+        if (annotationView == self.enlargedPin) {
+            annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height));
+        }
         annotationView.layer.zPosition = [locationAnnotation.timestamp timeIntervalSinceReferenceDate];
-        annotationView.canShowCallout = self.canShowUserCallout;
+        annotationView.canShowCallout = false;
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
         annotationView.enabled = !self.hideLocations;
@@ -1354,27 +1363,35 @@
 - (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
     if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
         LocationAnnotation *annotation = view.annotation;
-        User *user = annotation.user;
-        
-        if ([user avatarUrl] != nil) {
-            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.avatarUrl]]];
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
-            view.leftCalloutAccessoryView = imageView;
-            
-            [imageView setImage:image];
+        if (self.allowEnlarge) {
+            [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                view.transform = CGAffineTransformScale(view.transform, 2.0, 2.0);
+                view.centerOffset = CGPointMake(0, -(view.image.size.height) + 14);
+                self.enlargedPin = view;
+            } completion:nil];
         }
+        User *user = annotation.user;
         
         double accuracy = annotation.location.horizontalAccuracy;
         self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
         [self.mapView addOverlay:self.selectedUserAccuracy];
+        
+        self.userBottomSheet = [[UserBottomSheetController alloc] initWithUser:user actionsDelegate:self scheme:self.scheme];
+        self.userBottomSheet.preferredContentSize = CGSizeMake(self.userBottomSheet.preferredContentSize.width, 220);
+
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.userBottomSheet];
+        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+        self.bottomSheet.delegate = self;
+        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *annotation = view.annotation;
-        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            view.transform = CGAffineTransformScale(view.transform, 2.0, 2.0);
-            view.centerOffset = CGPointMake(0, -(view.image.size.height));
-            self.enlargedPin = view;
-        } completion:nil];
+        if (self.allowEnlarge) {
+            [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                view.transform = CGAffineTransformScale(view.transform, 2.0, 2.0);
+                view.centerOffset = CGPointMake(0, -(view.image.size.height));
+                self.enlargedPin = view;
+            } completion:nil];
+        }
 
         Observation *observation = annotation.observation;
         
@@ -1396,8 +1413,11 @@
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *annotation = view.annotation;
-        NSString *clickMessage = [annotation detailTextForAnnotation];
-        [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
+        self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithAnnotation:annotation actionsDelegate:self scheme:self.scheme];
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+        self.bottomSheet.delegate = self;
+        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else {
         NSLog(@"Annotation is a %@", [view class]);
     }
@@ -1447,6 +1467,11 @@
     }
     [self.straightLineNavigation stopNavigation];
     [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination delegate:self image:image scheme:self.scheme];
+}
+
+- (void) updateStraightLineNavigationDestination: (CLLocationCoordinate2D) destination {
+    self.navigationDestinationCoordinate = destination;
+    [self.straightLineNavigation updateNavigationLinesWithManager:self.locationManager destinationCoordinate:destination];
 }
 
 - (void)mapView:(MKMapView *) mapView didDeselectAnnotationView:(MKAnnotationView *) view {
@@ -1631,6 +1656,9 @@
 
 - (void) updateLocation:(Location *) location {
     User *user = location.user;
+    if (self.userToNavigateTo == user) {
+        [self updateStraightLineNavigationDestination:location.location.coordinate];
+    }
     
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
     if (annotation == nil) {
@@ -1680,7 +1708,7 @@
 
 - (void)selectedUser:(User *) user {
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
-    [self.mapView deselectAnnotation:annotation animated:NO];
+//    [self.mapView deselectAnnotation:annotation animated:NO];
     [self.mapView selectAnnotation:annotation animated:YES];
     
     [self.mapView setCenterCoordinate:annotation.location.coordinate];
@@ -1748,11 +1776,19 @@
 - (void) resetEnlargedPin {
     if (self.enlargedPin) {
         [self.mapView deselectAnnotation:self.enlargedPin.annotation animated:true];
-        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.enlargedPin.transform = CGAffineTransformScale(self.enlargedPin.transform, 0.5, 0.5);
-            self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0));
-            self.enlargedPin = nil;
-        } completion:nil];
+        if ([self.enlargedPin.annotation isKindOfClass:[LocationAnnotation class]]) {
+            [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.enlargedPin.transform = CGAffineTransformScale(self.enlargedPin.transform, 0.5, 0.5);
+                self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0) + 7);
+                self.enlargedPin = nil;
+            } completion:nil];
+        } else {
+            [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.enlargedPin.transform = CGAffineTransformScale(self.enlargedPin.transform, 0.5, 0.5);
+                self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0));
+                self.enlargedPin = nil;
+            } completion:nil];
+        }
     }
 }
 

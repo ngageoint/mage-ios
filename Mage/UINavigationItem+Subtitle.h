@@ -11,9 +11,9 @@
 
 @interface UINavigationItem (Subtitle)
 
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *subtitleLabel;
+@property (strong, nonatomic) UILabel * _Nullable titleLabel;
+@property (strong, nonatomic) UILabel * _Nullable subtitleLabel;
 
-- (void) setTitle:(NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<MDCContainerScheming>)containerScheme;
+- (void) setTitle:(nullable NSString *) title subtitle:(nullable NSString *) subtitle scheme:(id<MDCContainerScheming>_Nullable)containerScheme;
 
 @end

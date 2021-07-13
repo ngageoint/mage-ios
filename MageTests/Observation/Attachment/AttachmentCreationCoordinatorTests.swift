@@ -23,6 +23,10 @@ class MockAttachmentCreationCoordinatorDelegate: AttachmentCreationCoordinatorDe
         attachmentCreatedCalled = true;
     }
     
+    func attachmentCreated(fieldValue: [String : AnyHashable]) {
+        
+    }
+    
     func attachmentCreationCancelled() {
         attachmentCreationCancelledCalled = true;
     }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public protocol NavigationControllerObserverDelegate : class {
+@objc public protocol NavigationControllerObserverDelegate {
     /**
      Callback when a `viewController` is popped from the `navigationController` stack
      - parameter observer: the observer that observed the pop transition
