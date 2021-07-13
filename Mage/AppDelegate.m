@@ -202,6 +202,7 @@
         if (contextDidSave && error == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
             [self.appCoordinator start];
+            [self processOfflineMapArchives];
         } else {
             NSLog(@"Could not read or write from the database %@", error);
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
