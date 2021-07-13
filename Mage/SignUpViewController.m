@@ -17,23 +17,17 @@
 #import "ServerAuthentication.h"
 #import "DBZxcvbn.h"
 #import "UIColor+Hex.h"
+#import "MAGE-Swift.h"
 
 @interface SignUpViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet MDCTextField *displayName;
-@property (weak, nonatomic) IBOutlet MDCTextField *username;
-@property (weak, nonatomic) IBOutlet MDCTextField *password;
-@property (weak, nonatomic) IBOutlet MDCTextField *passwordConfirm;
-@property (weak, nonatomic) IBOutlet MDCTextField *email;
-@property (weak, nonatomic) IBOutlet MDCTextField *phone;
-@property (weak, nonatomic) IBOutlet MDCTextField *captchaText;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *displayNameController;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *usernameController;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *passwordController;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *passwordConfirmController;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *emailController;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *phoneController;
-@property (strong, nonatomic) MDCTextInputControllerUnderline *captchaController;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *displayName;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *username;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *password;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *passwordConfirm;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *email;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *phone;
+@property (weak, nonatomic) IBOutlet MDCFilledTextField *captchaText;
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthBar;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
@@ -85,20 +79,26 @@
     self.passwordStrengthText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.showPasswordText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    [self themeTextField:self.username controller:self.usernameController];
-    [self themeTextField:self.displayName controller:self.displayNameController];
-    [self themeTextField:self.password controller:self.passwordController];
-    [self themeTextField:self.passwordConfirm controller:self.passwordConfirmController];
-    [self themeTextField:self.email controller:self.emailController];
-    [self themeTextField:self.phone controller:self.phoneController];
-    [self themeTextField:self.captchaText controller:self.captchaController];
+    [self.username applyThemeWithScheme:containerScheme];
+    [self.displayName applyThemeWithScheme:containerScheme];
+    [self.password applyThemeWithScheme:containerScheme];
+    [self.passwordConfirm applyThemeWithScheme:containerScheme];
+    [self.email applyThemeWithScheme:containerScheme];
+    [self.phone applyThemeWithScheme:containerScheme];
+    [self.captchaText applyThemeWithScheme:containerScheme];
+    
+    self.username.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.displayName.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.password.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.passwordConfirm.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.email.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.phone.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.captchaText.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 
     self.captchaProgressView.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.captchaProgressLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.captchaProgess.color = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 
-    self.passwordConfirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Confirm Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
-    self.password.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Password *"] attributes:@{NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]}];
     [self updateCGColors];
 }
 
@@ -111,14 +111,6 @@
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     [self updateCGColors];
-}
-
-- (void) themeTextField: (MDCTextField *) field controller: (MDCTextInputControllerUnderline *) controller {
-    [controller applyThemeWithScheme:self.scheme];
-    // these appear to be deficiencies in the underline controller and these colors are not set
-    controller.textInput.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    controller.textInput.clearButton.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
-    field.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
 }
 
 #pragma mark -
@@ -134,69 +126,69 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    self.usernameController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.username];
-    UIImageView *meImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"me"]];
-    [self addLeadingIconConstraints:meImage];
+    UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"me"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.username setLeadingView:meImage];
     self.username.leadingViewMode = UITextFieldViewModeAlways;
     self.username.accessibilityLabel = @"Username";
-    self.usernameController.placeholderText = @"Username *";
-    self.usernameController.floatingEnabled = true;
+    self.username.placeholder = @"Username *";
+    self.username.label.text = @"Username *";
+    self.username.leadingAssistiveLabel.text = @" ";
+    [self.username sizeToFit];
     
-    self.displayNameController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.displayName];
-    UIImageView *displayNameImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact_card"]];
-    [self addLeadingIconConstraints:displayNameImage];
+    UIImageView *displayNameImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"contact_card"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.displayName setLeadingView:displayNameImage];
     self.displayName.leadingViewMode = UITextFieldViewModeAlways;
     self.displayName.accessibilityLabel = @"Display Name";
-    self.displayNameController.placeholderText = @"Display Name *";
-    self.displayNameController.floatingEnabled = true;
+    self.displayName.placeholder = @"Display Name *";
+    self.displayName.label.text = @"Display Name *";
+    self.displayName.leadingAssistiveLabel.text = @" ";
+    [self.displayName sizeToFit];
     
-    self.emailController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.email];
-    UIImageView *emailImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"email"]];
-    [self addLeadingIconConstraints:emailImage];
+    UIImageView *emailImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"email"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.email setLeadingView:emailImage];
     self.email.leadingViewMode = UITextFieldViewModeAlways;
     self.email.accessibilityLabel = @"Email";
-    self.emailController.placeholderText = @"Email";
-    self.emailController.floatingEnabled = true;
+    self.email.placeholder = @"Email *";
+    self.email.label.text = @"Email *";
+    self.email.leadingAssistiveLabel.text = @" ";
+    [self.email sizeToFit];
     
-    self.phoneController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.phone];
-    UIImageView *phoneImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"phone"]];
-    [self addLeadingIconConstraints:phoneImage];
+    UIImageView *phoneImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"phone"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.phone setLeadingView:phoneImage];
     self.phone.leadingViewMode = UITextFieldViewModeAlways;
     self.phone.accessibilityLabel = @"Phone";
-    self.phoneController.placeholderText = @"Phone";
-    self.phoneController.floatingEnabled = true;
+    self.phone.placeholder = @"Phone *";
+    self.phone.label.text = @"Phone *";
+    self.phone.leadingAssistiveLabel.text = @" ";
+    [self.phone sizeToFit];
     
-    self.passwordController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.password];
-    UIImageView *passwordImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
-    [self addLeadingIconConstraints:passwordImage];
+    UIImageView *passwordImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.password setLeadingView:passwordImage];
     self.password.leadingViewMode = UITextFieldViewModeAlways;
     self.password.accessibilityLabel = @"Password";
-    self.passwordController.placeholderText = @"Password *";
-    self.passwordController.floatingEnabled = true;
+    self.password.placeholder = @"Password *";
+    self.password.label.text = @"Password *";
+    self.password.leadingAssistiveLabel.text = @" ";
+    [self.password sizeToFit];
     
-    self.passwordConfirmController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.passwordConfirm];
-    UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"key"]];
-    [self addLeadingIconConstraints:passwordConfirmImage];
+    UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.passwordConfirm setLeadingView:passwordConfirmImage];
     self.passwordConfirm.leadingViewMode = UITextFieldViewModeAlways;
     self.passwordConfirm.accessibilityLabel = @"Confirm Password";
-    self.passwordConfirmController.placeholderText = @"Confirm Password *";
-    self.passwordConfirmController.floatingEnabled = true;
+    self.passwordConfirm.placeholder = @"Confirm Password *";
+    self.passwordConfirm.label.text = @"Confirm Password *";
+    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+    [self.passwordConfirm sizeToFit];
     
-    self.captchaController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:self.captchaText];
-    UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"done"]];
-    [self addLeadingIconConstraints:captchaImage];
+    UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"done"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.captchaText setLeadingView:captchaImage];
     self.captchaText.leadingViewMode = UITextFieldViewModeAlways;
     self.captchaText.accessibilityLabel = @"Captcha";
-    self.captchaController.placeholderText = @"Captcha Text *";
-    self.captchaController.floatingEnabled = true;
-    
+    self.captchaText.placeholder = @"Captcha Text *";
+    self.captchaText.label.text = @"Captcha Text *";
+    self.captchaText.leadingAssistiveLabel.text = @" ";
+    [self.captchaText sizeToFit];
+
     self.zxcvbn = [[DBZxcvbn alloc] init];
     self.wandLabel.text = @"\U0000f0d0";
     self.password.delegate = self;
@@ -314,26 +306,26 @@
     [self clearFieldErrors];
     NSMutableArray *requiredFields = [[NSMutableArray alloc] init];
     if ([_username.text length] == 0) {
-        [self markFieldError:_usernameController errorText:@"Required"];
+        [self markFieldError:_username errorText:@"Required"];
         [requiredFields addObject:@"Username"];
     }
     if ([self.displayName.text length] == 0) {
-        [self markFieldError:self.displayNameController errorText:@"Required"];
+        [self markFieldError:self.displayName errorText:@"Required"];
         [requiredFields addObject:@"Display Name"];
     }
     if ([self.password.text length] == 0) {
-        [self markFieldError:self.passwordController errorText:@"Required"];
+        [self markFieldError:self.password errorText:@"Required"];
         [requiredFields addObject:@"Password"];
     }
     if ([self.passwordConfirm.text length] == 0) {
-        [self markFieldError:self.passwordConfirmController errorText:@"Required"];
+        [self markFieldError:self.passwordConfirm errorText:@"Required"];
         [requiredFields addObject:@"Confirm Password"];
     }
     if ([requiredFields count] != 0) {
         [self showDialogForRequiredFields:requiredFields];
     } else if (![self.password.text isEqualToString:self.passwordConfirm.text]) {
-        [self markFieldError:self.passwordController errorText:@"Passwords Do Not Match"];
-        [self markFieldError:self.passwordConfirmController errorText:@"Passwords Do Not Match"];
+        [self markFieldError:self.password errorText:@"Passwords Do Not Match"];
+        [self markFieldError:self.passwordConfirm errorText:@"Passwords Do Not Match"];
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:@"Passwords Do Not Match"
                                      message:@"Please update password fields to match."
@@ -358,7 +350,7 @@
                 [weakSelf getCaptcha];
             } else if (response.statusCode == 409) {
                 weakSelf.captchaText.text = @"";
-                [weakSelf markFieldError:self.captchaController errorText: @"Username is not available"];
+                [weakSelf markFieldError:self.captchaText errorText: @"Username is not available"];
                 [weakSelf setCaptcha:nil];
                 UIAlertController * alert = [UIAlertController
                                              alertControllerWithTitle:[NSString stringWithFormat:@"Username is not availble"]
@@ -381,18 +373,8 @@
     [self.password setSecureTextEntry:!self.password.secureTextEntry];
     self.password.clearsOnBeginEditing = NO;
     
-    // This is a hack to fix the fact that ios changes the font when you
-    // enable/disable the secure text field
-    self.password.font = nil;
-    self.password.font = [UIFont systemFontOfSize:14];
-    
     [self.passwordConfirm setSecureTextEntry:!self.passwordConfirm.secureTextEntry];
     self.passwordConfirm.clearsOnBeginEditing = NO;
-    
-    // This is a hack to fix the fact that ios changes the font when you
-    // enable/disable the secure text field
-    self.passwordConfirm.font = nil;
-    self.passwordConfirm.font = [UIFont systemFontOfSize:14];
 }
 
 - (IBAction) onCancel:(id) sender {
@@ -400,17 +382,26 @@
 }
 
 - (void) clearFieldErrors {
-    [self.displayNameController setErrorText:nil errorAccessibilityValue:nil];
-    [self.usernameController setErrorText:nil errorAccessibilityValue:nil];
-    [self.passwordController setErrorText:nil errorAccessibilityValue:nil];
-    [self.passwordConfirmController setErrorText:nil errorAccessibilityValue:nil];
-    [self.emailController setErrorText:nil errorAccessibilityValue:nil];
-    [self.phoneController setErrorText:nil errorAccessibilityValue:nil];
-    [self.captchaController setErrorText:nil errorAccessibilityValue:nil];
+    self.displayName.leadingAssistiveLabel.text = @" ";
+    self.username.leadingAssistiveLabel.text = @" ";
+    self.password.leadingAssistiveLabel.text = @" ";
+    self.passwordConfirm.leadingAssistiveLabel.text = @" ";
+    self.email.leadingAssistiveLabel.text = @" ";
+    self.phone.leadingAssistiveLabel.text = @" ";
+    self.captchaText.leadingAssistiveLabel.text = @" ";
+    
+    [self.displayName applyThemeWithScheme:self.scheme];
+    [self.username applyThemeWithScheme:self.scheme];
+    [self.password applyThemeWithScheme:self.scheme];
+    [self.passwordConfirm applyThemeWithScheme:self.scheme];
+    [self.email applyThemeWithScheme:self.scheme];
+    [self.phone applyThemeWithScheme:self.scheme];
+    [self.captchaText applyThemeWithScheme:self.scheme];
 }
 
-- (void) markFieldError: (MDCTextInputControllerUnderline *) field errorText: (NSString *) errorText {
-    [field setErrorText:errorText errorAccessibilityValue:nil];
+- (void) markFieldError: (MDCFilledTextField *) field errorText: (NSString *) errorText {
+    field.leadingAssistiveLabel.text = errorText;
+    [field applyErrorThemeWithScheme:self.scheme];
 }
 
 - (void) showDialogForRequiredFields:(NSArray *) fields {

@@ -171,8 +171,10 @@
         if (_sliderTimer != nil && _sliderTimer.isValid) {
             [_sliderTimer invalidate];
         }
+        __weak typeof(self) weakSelf = self;
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            _sliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateRecordingLength) userInfo:nil repeats:YES];
+            weakSelf.sliderTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateRecordingLength) userInfo:nil repeats:YES];
         });
         
         // start recording

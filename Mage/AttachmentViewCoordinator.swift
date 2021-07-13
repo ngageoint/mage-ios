@@ -167,7 +167,7 @@ import MagicalRecord;
         self.playerViewController?.addObserver(self, forKeyPath: "videoBounds", options: [.old, .new], context: nil);
 
         self.activityIndicator = UIActivityIndicatorView();
-        self.activityIndicator.style = .whiteLarge;
+        self.activityIndicator.style = .large;
 
         self.rootViewController.pushViewController(self.playerViewController!, animated: false);
         self.navigationControllerObserver.observePopTransition(of: self.playerViewController!, delegate: self);
@@ -215,6 +215,8 @@ import MagicalRecord;
             case .unknown:
                 // Player item is not yet ready.
                 print("unknown")
+            @unknown default:
+                print("fallthrough state")
             }
         }
     }

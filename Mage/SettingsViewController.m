@@ -91,7 +91,7 @@
     self.masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
     
     self.settingsDetailView = [[UIView alloc] initForAutoLayout];
-
+    
     UIViewController *detailViewController = [[UIViewController alloc] init];
     [detailViewController.view addSubview:self.settingsDetailView];
     [self.settingsDetailView autoPinEdgesToSuperviewEdges];
@@ -175,14 +175,14 @@
 - (UIViewController *)primaryViewControllerForCollapsingSplitViewController:(UISplitViewController *)splitViewController {
     self.settingsTableViewController.dataSource.showDisclosureIndicator = YES;
     [self.settingsTableViewController.tableView reloadData];
-
+    
     return nil;
 }
 
 - (UIViewController *)primaryViewControllerForExpandingSplitViewController:(UISplitViewController *)splitViewController {
     self.settingsTableViewController.dataSource.showDisclosureIndicator = NO;
     [self.settingsTableViewController.tableView reloadData];
-
+    
     return nil;
 }
 
@@ -268,11 +268,11 @@
             [self onLogout];
             break;
         }
-//        case kTheme: {
-//            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
-//            [self showDetailViewController:viewController sender:nil];
-//            break;
-//        }
+            //        case kTheme: {
+            //            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
+            //            [self showDetailViewController:viewController sender:nil];
+            //            break;
+            //        }
         case kDisclaimer: {
             DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"Disclaimer" bundle:nil];
             [viewController applyThemeWithContainerScheme:self.scheme];
@@ -292,7 +292,7 @@
     UINavigationController *navigationController = [[UINavigationController alloc] init];
     navigationController.modalPresentationStyle = UIModalPresentationCustom;
     navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-
+    
     [self presentViewController:navigationController animated:YES completion:nil];
     
     AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme];
@@ -348,6 +348,11 @@
     [self.settingsTableViewController.dataSource reloadData];
     [self.settingsTableViewController.tableView reloadData];
 }
+
+- (void)changeServerUrl {
+    
+}
+
 
 - (void) cancelLogin:(id) sender {
     [self dismissViewControllerAnimated:YES completion:nil];

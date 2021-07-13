@@ -146,7 +146,7 @@
     
     self.childCoordinators = [[NSMutableArray alloc] init];
     self.mapDelegate = [[MapDelegate alloc] init];
-    self.mapDelegate.navigationController = [UIApplication getTopViewControllerWithBase:[UIApplication sharedApplication].keyWindow.rootViewController];
+    self.mapDelegate.navigationController = [UIApplication getTopViewControllerWithBase:[UIApplication sharedApplication].windows.firstObject.rootViewController];
     self.mapDelegate.scheme = self.scheme;
     self.mapDelegate.mapStack = self.stack;
     [self.mapDelegate setMapEventDelegte:self.mapEventDelegate];

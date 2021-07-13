@@ -158,8 +158,8 @@
     if (self.mapEventDelegate) [self.mapEventDelegate mapViewWillStartLoadingMap:mapView];
 }
 
-- (void) mapView:(MKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews {
-    if (self.mapEventDelegate) [self.mapEventDelegate mapView:mapView didAddOverlayViews:overlayViews];
+- (void) mapView:(MKMapView *)mapView didAddOverlayRenderers:(NSArray *)overlayViews {
+    if (self.mapEventDelegate) [self.mapEventDelegate mapView:mapView didAddOverlayRenderers:overlayViews];
 }
 
 

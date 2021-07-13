@@ -433,6 +433,7 @@
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
 		F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */; };
+		F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */; };
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
 		F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */; };
@@ -1169,6 +1170,7 @@
 		F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMSTileOverlay.h; sourceTree = "<group>"; };
 		F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMSTileOverlay.m; sourceTree = "<group>"; };
 		F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIImagePickerController.swift; sourceTree = "<group>"; };
+		F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
 		F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsAlternate.json; sourceTree = "<group>"; };
 		F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelPadding.swift; sourceTree = "<group>"; };
@@ -2034,6 +2036,7 @@
 				F738871C258BA22500EDA036 /* UIButtonInsets.swift */,
 				F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */,
 				F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */,
+				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3129,6 +3132,7 @@
 				F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */,
 				F79116262491414B0043A529 /* MageInitializer.m in Sources */,
 				F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */,
+				F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */,
 				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.m in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,

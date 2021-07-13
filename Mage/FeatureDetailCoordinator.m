@@ -75,7 +75,7 @@
 
 #pragma mark - Popover Presentation Controller Delegate
 
-- (BOOL) popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+- (BOOL) presentationControllerShouldDismiss:(UIPresentationController *)presentationController {
     return NO;
 }
 

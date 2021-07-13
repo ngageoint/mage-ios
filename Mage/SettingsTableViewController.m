@@ -274,6 +274,10 @@
     self.childCoordinators = [[self.childCoordinators filteredArrayUsingPredicate:predicate] mutableCopy];
 }
 
+- (void)changeServerUrl {
+    
+}
+
 # pragma mark - NSNotification delegate
 
 - (void) userDefaultsChanged: (NSNotification *) notification {

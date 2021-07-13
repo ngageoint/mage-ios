@@ -78,7 +78,7 @@ import Kingfisher
             self.imageView.showThumbnail(completionHandler:
                                             { result in
                                                 switch result {
-                                                case .success(let success):
+                                                case .success(_):
                                                     self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
                                                     NSLog("Loaded the image \(self.imageView.accessibilityLabel ?? "")")
                                                 case .failure(let error):

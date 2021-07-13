@@ -70,7 +70,7 @@ class ObservationAttachmentCard: MDCCard {
 
 extension ObservationAttachmentCard: ObservationFormFieldListener {
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
-        var newProperties = self.observation?.properties as? [String: Any];
+        let newProperties = self.observation?.properties as? [String: Any];
         
         if (field[FieldKey.name.key] as! String == attachmentField[FieldKey.name.key] as! String) {
             self.observation?.addAttachments(value as! Set<Attachment>);

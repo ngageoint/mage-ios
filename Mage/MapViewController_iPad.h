@@ -8,6 +8,6 @@
 #import "MapViewController.h"
 #import "MAGEMasterSelectionDelegate.h"
 
-@interface MapViewController_iPad : MapViewController <UISplitViewControllerDelegate>
+@interface MapViewController_iPad : MapViewController <UISplitViewControllerDelegate, ObservationSelectionDelegate, UserSelectionDelegate>
 
 @end
