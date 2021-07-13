@@ -62,7 +62,7 @@ import Foundation
         return detailsButton;
     }()
     
-    private lazy var viewObservationButtonView: UIView = {
+    private lazy var detailsButtonView: UIView = {
         let view = UIView();
         view.addSubview(detailsButton);
         detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
@@ -105,7 +105,7 @@ import Foundation
         stackView.addArrangedSubview(dragHandleView);
         stackView.addArrangedSubview(summaryView);
         stackView.addArrangedSubview(userActionsView);
-        stackView.addArrangedSubview(viewObservationButtonView);
+        stackView.addArrangedSubview(detailsButtonView);
         self.view.addSubview(stackView);
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
 

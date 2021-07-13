@@ -59,7 +59,7 @@
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 
-@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate, UserActionsDelegate>
+@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate, UserActionsDelegate, FeatureDetailControllerDelegate>
     @property (nonatomic, strong) LocationAccuracy *selectedUserAccuracy;
     @property (nonatomic, strong) ObservationAccuracy *selectedObservationAccuracy;
 
@@ -296,14 +296,18 @@
                 if ([clickMessage length] > 0){
                     [clickMessage appendString:@"</br>"];
                 }
+                message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"</br>"];
                 [clickMessage appendString:message];
             }
         }
         
         if ([clickMessage length] > 0) {
-            if ([self.cacheOverlayDelegate respondsToSelector:@selector(onCacheOverlayTapped:)]) {
-                [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
-            }
+            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:@"Feature" actionsDelegate:self scheme:self.scheme];
+            self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+            [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+            self.bottomSheet.delegate = self;
+            [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
+            [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
         }
     }
 }
@@ -1409,8 +1413,11 @@
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *annotation = view.annotation;
-        NSString *clickMessage = [annotation detailTextForAnnotation];
-        [self.cacheOverlayDelegate onCacheOverlayTapped:clickMessage];
+        self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithAnnotation:annotation actionsDelegate:self scheme:self.scheme];
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+        self.bottomSheet.delegate = self;
+        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else {
         NSLog(@"Annotation is a %@", [view class]);
     }
