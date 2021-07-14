@@ -212,6 +212,7 @@ class FeedItemCard : UITableViewCell {
                     with: feedItem.feed?.iconURL(),
                     placeholder: UIImage(named: "observations"),
                     options: [
+                        .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                         .imageModifier(imageModifier),
                         .processor(processor),
                         .scaleFactor(UIScreen.main.scale),

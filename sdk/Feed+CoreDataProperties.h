@@ -8,7 +8,7 @@
 //
 
 #import "Feed.h"
-
+#import "Event.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber* pullFrequency;
 @property (nullable, nonatomic, retain) NSNumber* updateFrequency;
 @property (nullable, nonatomic, retain) NSSet<FeedItem *> *items;
+@property (nullable, nonatomic, retain) Event *event;
 @property (nullable, nonatomic, retain) NSNumber *eventId;
 
 

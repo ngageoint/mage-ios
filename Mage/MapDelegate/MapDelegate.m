@@ -59,7 +59,7 @@
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 
-@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate, UserActionsDelegate, FeatureDetailControllerDelegate>
+@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate, UserActionsDelegate, FeatureActionsDelegate, FeedItemActionsDelegate>
     @property (nonatomic, strong) LocationAccuracy *selectedUserAccuracy;
     @property (nonatomic, strong) ObservationAccuracy *selectedObservationAccuracy;
 
@@ -364,9 +364,9 @@
     
     // remove any feeds that are no longer selected
     [self.currentFeeds filterUsingPredicate:[NSPredicate predicateWithFormat:@"NOT(self in %@)", feedIdsInEvent]];
-    for (NSNumber *feedId in self.currentFeeds) {
+    for (NSString *feedId in self.currentFeeds) {
         [self.feedItemRetrievers removeObjectForKey:feedId];
-        NSArray<FeedItem*> *items = [FeedItem getFeedItemsForFeed:feedId];
+        NSArray<FeedItem*> *items = [FeedItem getFeedItemsForFeed:feedId andEvent:[Server currentEventId]];
         for (FeedItem *item in items) {
             if (item.isMappable) {
                 [self.mapView removeAnnotation:item];
@@ -377,7 +377,7 @@
     for (NSString *feedId in feedIdsInEvent) {
         FeedItemRetriever *retriever = [self.feedItemRetrievers objectForKey:feedId];
         if (retriever == nil) {
-            retriever = [FeedItemRetriever getMappableFeedRetrieverWithFeedId:feedId delegate:self];
+            retriever = [FeedItemRetriever getMappableFeedRetrieverWithFeedId:feedId eventId: [Server currentEventId] delegate:self];
         }
         if (retriever != nil) {
             [self.feedItemRetrievers setObject:retriever forKey:feedId];
@@ -1347,7 +1347,7 @@
         MKAnnotationView *annotationView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"feedItem"];
         if (!annotationView) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"feedItem"];
-            annotationView.canShowCallout = YES;
+            annotationView.canShowCallout = false;
         }
         UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
         annotationView.rightCalloutAccessoryView = rightButton;
@@ -1415,6 +1415,13 @@
         StaticPointAnnotation *annotation = view.annotation;
         self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithAnnotation:annotation actionsDelegate:self scheme:self.scheme];
         self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+        self.bottomSheet.delegate = self;
+        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
+    } else if ([view.annotation isKindOfClass:[FeedItem class]]) {
+        FeedItem *item = view.annotation;
+        self.feedItemBottomSheet = [[FeedItemBottomSheetController alloc] initWithFeedItem:item actionsDelegate:self scheme:self.scheme];
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.feedItemBottomSheet];
         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
         self.bottomSheet.delegate = self;
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];

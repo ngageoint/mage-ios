@@ -173,7 +173,6 @@
                                 uidString, @"uid",
                                 [NSString stringWithFormat:@"%@-%@", appVersion, buildNumber], @"appVersion",
                                 nil];
-    NSLog(@"login parameters %@", parameters);
     __weak __typeof__(self) weakSelf = self;
     [self.delegate loginWithParameters:parameters withAuthenticationStrategy:[self.strategy objectForKey:@"identifier"] complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {

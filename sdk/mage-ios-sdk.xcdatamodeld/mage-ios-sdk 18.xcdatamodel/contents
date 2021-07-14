@@ -30,7 +30,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recentSortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="feeds" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Feed" syncable="YES"/>
+        <relationship name="feeds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Feed" inverseName="event" inverseEntity="Feed" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Feed" representedClassName="Feed" syncable="YES">
@@ -49,12 +49,8 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updateFrequency" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="variableParams" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="feeds" inverseEntity="Event" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FeedItem" inverseName="feed" inverseEntity="FeedItem" syncable="YES"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="remoteId"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="FeedItem" representedClassName="FeedItem" syncable="YES">
         <attribute name="geometry" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -170,7 +166,7 @@
         <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="269"/>
         <element name="Canary" positionX="-2322" positionY="-1008" width="128" height="60"/>
         <element name="Event" positionX="-2466" positionY="-973" width="128" height="179"/>
-        <element name="Feed" positionX="-2322" positionY="-1008" width="128" height="269"/>
+        <element name="Feed" positionX="-2322" positionY="-1008" width="128" height="284"/>
         <element name="FeedItem" positionX="-2313" positionY="-999" width="128" height="89"/>
         <element name="GPSLocation" positionX="-1989" positionY="-1161" width="128" height="89"/>
         <element name="ImageryLayer" positionX="-2322" positionY="-1008" width="128" height="74"/>

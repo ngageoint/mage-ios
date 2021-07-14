@@ -97,6 +97,7 @@ class FeedItemSummary : UIView {
             with: iconUrl,
             placeholder: image,
             options: [
+                .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
                 .transition(.fade(1)),

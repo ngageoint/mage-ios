@@ -28,6 +28,7 @@
 @dynamic updateFrequency;
 @dynamic pullFrequency;
 @dynamic items;
+@dynamic event;
 @dynamic eventId;
 @dynamic itemsHaveSpatialDimension;
 @dynamic itemTemporalProperty;
