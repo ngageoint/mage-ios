@@ -13,8 +13,8 @@
 
 @implementation FeedItem
 
-+ (NSArray<FeedItem*> *) getFeedItemsForFeed: (NSNumber *) feedId {
-    Feed *feed = [Feed MR_findFirstByAttribute:@"remoteId" withValue:feedId];
++ (NSArray<FeedItem*> *) getFeedItemsForFeed: (NSString *) feedId andEvent: (NSNumber *) eventId {
+    Feed *feed = [Feed MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND eventId == %@)", feedId, eventId]];
     return [FeedItem MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"(feed == %@)", feed]];
 }
 

@@ -363,7 +363,23 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     
     func getDirectionsToObservation(_ observation: Observation) {
-        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
+        var extraActions: [UIAlertAction] = [];
+        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
+            if let nvc: UINavigationController = self.tabBarController?.viewControllers?.filter( {
+                vc in
+                if let navController = vc as? UINavigationController {
+                    return navController.viewControllers[0] is MapViewController
+                }
+                return false;
+            }).first as? UINavigationController {
+                nvc.popToRootViewController(animated: false);
+                self.tabBarController?.selectedViewController = nvc;
+                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
+                    mvc.mapDelegate.startStraightLineNavigation(observation.location().coordinate, image: ObservationImage.image(for: observation));
+                }
+            }
+        }));
+        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self, extraActions: extraActions);
     }
     
     func makeImportant(_ observation: Observation, reason: String) {

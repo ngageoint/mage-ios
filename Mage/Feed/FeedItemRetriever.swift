@@ -67,15 +67,15 @@ extension UIImage {
         return feedRetrievers;
     }
     
-    @objc public static func getMappableFeedRetriever(feedTag: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+    @objc public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
         if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag) {
-            return getMappableFeedRetriever(feedId: feed.remoteId!, delegate: delegate);
+            return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
         }
         return nil;
     }
     
-    @objc public static func getMappableFeedRetriever(feedId: String, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        if let feed: Feed = Feed.mr_findFirst(byAttribute: "remoteId", withValue: feedId) {
+    @objc public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+        if let feed: Feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId)) {
             if (feed.itemsHaveSpatialDimension) {
                 return FeedItemRetriever(feed: feed, delegate: delegate);
             }

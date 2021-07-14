@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray <Feed *>*) getEventFeeds: (NSNumber *) eventId;
 + (NSMutableArray <NSString *>*) populateFeedsFromJson: (NSArray *) feeds inEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
 + (NSString *) addFeedFromJson: (NSDictionary *) feed inEventId: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
-+ (NSMutableArray <NSNumber *>*) populateFeedItemsFromJson: (NSArray *) feedItems inFeedId: (NSString *) feedId inContext: (NSManagedObjectContext *) context;
++ (NSMutableArray <NSNumber *>*) populateFeedItemsFromJson: (NSArray *) feedItems inFeedId: (NSString *) feedId inEvent: (NSNumber *) eventId inContext: (NSManagedObjectContext *) context;
 + (NSString *) feedIdFromJson:(NSDictionary *) json;
 + (NSURLSessionDataTask *) operationToPullFeedsForEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(NSError *)) failure;
 + (NSURLSessionDataTask *) operationToPullFeedItemsForFeed: (NSString *) feedId inEvent: (NSNumber *) eventId success: (void (^)(void)) success failure: (void (^)(NSError *)) failure;

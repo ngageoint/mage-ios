@@ -52,6 +52,7 @@ import Kingfisher
     
     @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
         self.scheme = containerScheme;
+        self.tableView.separatorStyle = .none;
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
         self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
@@ -120,9 +121,10 @@ import Kingfisher
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell;
         let feedCell: FeedItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemTableViewCell;
-        feedCell.applyTheme(withContainerScheme: self.scheme);
+//        feedCell.applyTheme(withContainerScheme: self.scheme);
         let feedItem = fetchedResultsController.object(at: indexPath)
-        feedCell.populate(feedItem: feedItem);
+        feedCell.configure(feedItem: feedItem, actionsDelegate: self, scheme: self.scheme);
+//        feedCell.populate(feedItem: feedItem);
         cell = feedCell;
         
         return cell
@@ -161,5 +163,63 @@ extension FeedItemsViewController : NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
+    }
+}
+
+extension FeedItemsViewController: FeedItemActionsDelegate {
+    func viewFeedItem(feedItem: FeedItem) {
+        if (selectionDelegate != nil) {
+            self.selectionDelegate?.feedItemSelected(feedItem);
+        } else {
+            let feedItemViewController: FeedItemViewController = FeedItemViewController(feedItem: feedItem, scheme: self.scheme);
+            self.navigationController?.pushViewController(feedItemViewController, animated: true);
+        }
+    }
+    
+    func getDirectionsToFeedItem(_ feedItem: FeedItem) {
+        var extraActions: [UIAlertAction] = [];
+        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
+
+            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            if let url: URL = feedItem.iconURL {
+                let size = 24;
+
+                let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
+                KingfisherManager.shared.retrieveImage(with: url, options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]) { result in
+                    switch result {
+                    case .success(let value):
+                        image = value.image.resized(to: CGSize(width: size, height: size));
+                    case .failure(_):
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                    }
+                }
+            }
+
+            if let nvc: UINavigationController = self.tabBarController?.viewControllers?.filter( {
+                vc in
+                    if let navController = vc as? UINavigationController {
+                        return navController.viewControllers[0] is MapViewController
+                    }
+                    return false;
+            }).first as? UINavigationController {
+                nvc.popToRootViewController(animated: false);
+                self.tabBarController?.selectedViewController = nvc;
+                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
+                    mvc.mapDelegate.startStraightLineNavigation(feedItem.coordinate, image: image);
+                }
+            }
+        }));
+        ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions);
+    }
+    
+    func copyLocation(_ location: String) {
+        UIPasteboard.general.string = location;
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
     }
 }
