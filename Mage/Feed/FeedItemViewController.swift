@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kingfisher
 
 infix operator ???: NilCoalescingPrecedence
 
@@ -90,7 +91,7 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
         if (indexPath.section == HEADER_SECTION) {
             let cell: FeedItemCard = tableView.dequeueReusableCell(withIdentifier: headerCellIdentifier, for: indexPath) as! FeedItemCard;
             cell.applyTheme(withScheme: self.scheme);
-            cell.bind(feedItem: feedItem);
+            cell.bind(feedItem: feedItem, actionsDelegate: self);
             return cell;
         }
         
@@ -116,5 +117,55 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension;
+    }
+}
+
+extension FeedItemViewController: FeedItemActionsDelegate {
+    
+    func getDirectionsToFeedItem(_ feedItem: FeedItem) {
+        var extraActions: [UIAlertAction] = [];
+        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
+            
+            var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            if let url: URL = feedItem.iconURL {
+                let size = 24;
+                
+                let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
+                KingfisherManager.shared.retrieveImage(with: url, options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]) { result in
+                    switch result {
+                    case .success(let value):
+                        image = value.image.resized(to: CGSize(width: size, height: size));
+                    case .failure(_):
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                    }
+                }
+            }
+            
+            if let nvc: UINavigationController = self.tabBarController?.viewControllers?.filter( {
+                vc in
+                if let navController = vc as? UINavigationController {
+                    return navController.viewControllers[0] is MapViewController
+                }
+                return false;
+            }).first as? UINavigationController {
+                nvc.popToRootViewController(animated: false);
+                self.tabBarController?.selectedViewController = nvc;
+                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
+                    mvc.mapDelegate.startStraightLineNavigation(feedItem.coordinate, image: image);
+                }
+            }
+        }));
+        ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions);
+    }
+    
+    func copyLocation(_ location: String) {
+        UIPasteboard.general.string = location;
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
     }
 }
