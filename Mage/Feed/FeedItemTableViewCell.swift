@@ -9,8 +9,35 @@
 import Foundation
 import PureLayout
 import Kingfisher
+import MaterialComponents.MDCCard;
 
 class FeedItemTableViewCell : UITableViewCell {
+    private var constructed = false;
+    private var feedItem: FeedItem?;
+    private var didSetUpConstraints = false;
+    private var actionsDelegate: FeedItemActionsDelegate?;
+    private var scheme: MDCContainerScheming?;
+
+    private lazy var card: MDCCard = {
+        let card = MDCCard(forAutoLayout: ());
+        card.enableRippleBehavior = true
+        card.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
+        return card;
+    }()
+    
+    @objc func tap(_ card: MDCCard) {
+        if let feedItem = self.feedItem {
+            // let the ripple dissolve before transitioning otherwise it looks weird
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.actionsDelegate?.viewFeedItem?(feedItem: feedItem);
+            }
+        }
+    }
+    
+    private lazy var actionsView: FeedItemActionsView = {
+        let view = FeedItemActionsView(feedItem: feedItem, actionsDelegate: actionsDelegate, scheme: scheme)
+        return view;
+    }()
     
     private lazy var feedItemView: FeedItemSummary = {
         let view = FeedItemSummary();
@@ -19,20 +46,50 @@ class FeedItemTableViewCell : UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(feedItemView);
-        feedItemView.autoPinEdgesToSuperviewEdges();
+        construct();
     }
     
-    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
-        self.backgroundColor = containerScheme.colorScheme.surfaceColor;
-        feedItemView.applyTheme(withContainerScheme: containerScheme);
+    func construct() {
+        if (!constructed) {
+            self.contentView.addSubview(card);
+            card.addSubview(feedItemView);
+            card.addSubview(actionsView);
+            setNeedsUpdateConstraints();
+            constructed = true;
+        }
+    }
+    
+    func applyTheme(withScheme scheme: MDCContainerScheming) {
+        self.scheme = scheme;
+        self.backgroundColor = scheme.colorScheme.backgroundColor;
+        card.applyTheme(withScheme: scheme);
+        feedItemView.applyTheme(withScheme: scheme);
+        actionsView.applyTheme(withScheme: scheme);
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func populate(feedItem: FeedItem) {
+    func configure(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate?, scheme: MDCContainerScheming?) {
+        self.feedItem = feedItem;
+        self.actionsDelegate = actionsDelegate;
+        card.accessibilityLabel = "feed item card \(feedItem.title ?? "")"
         feedItemView.populate(feedItem: feedItem);
+        actionsView.populate(feedItem: feedItem, delegate: actionsDelegate);
+        if let safeScheme = scheme {
+            applyTheme(withScheme: safeScheme);
+        }
+    }
+    
+    override func updateConstraints() {
+        if (!didSetUpConstraints) {
+            card.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8));
+            feedItemView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+            actionsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
+            feedItemView.autoPinEdge(.bottom, to: .top, of: actionsView, withOffset: 8);
+            didSetUpConstraints = true;
+        }
+        super.updateConstraints();
     }
 }

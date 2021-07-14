@@ -48,4 +48,9 @@ extension MapDelegate : FeedItemActionsDelegate {
             self.mapCalloutDelegate.calloutTapped(feedItem);
         })
     }
+    
+    func copyLocation(_ location: String) {
+        UIPasteboard.general.string = location;
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
+    }
 }

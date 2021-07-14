@@ -8,22 +8,10 @@
 
 import Foundation
 
-class ObservationSummaryView: UIView {
+class ObservationSummaryView: CommonSummaryView<Observation> {
     
     private weak var observation: Observation?;
-    private var imageOverride: UIImage?;
     private var didSetUpConstraints = false;
-    
-    private lazy var stack: UIStackView = {
-        let stack = UIStackView(forAutoLayout: ());
-        stack.axis = .vertical
-        stack.alignment = .fill
-        stack.spacing = 0;
-        stack.distribution = .fillProportionally
-        stack.translatesAutoresizingMaskIntoConstraints = false;
-        stack.isUserInteractionEnabled = false;
-        return stack;
-    }()
     
     private let exclamation = UIImageView(image: UIImage(named: "exclamation"));
     
@@ -79,62 +67,18 @@ class ObservationSummaryView: UIView {
         return syncBadge;
     }()
     
-    private lazy var timestamp: UILabel = {
-        let timestamp = UILabel(forAutoLayout: ());
-        timestamp.numberOfLines = 0;
-        timestamp.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        return timestamp;
-    }()
-    
-    private lazy var itemImage: UIImageView = {
-        let itemImage = UIImageView(forAutoLayout: ());
-        itemImage.contentMode = .scaleAspectFit;
-        return itemImage;
-    }()
-    
-    private lazy var primaryField: UILabel = {
-        let primaryField = UILabel(forAutoLayout: ());
-        primaryField.setContentHuggingPriority(.defaultLow, for: .vertical)
-        primaryField.numberOfLines = 0;
-        return primaryField;
-    }()
-    
-    private lazy var secondaryField: UILabel = {
-        let secondaryField = UILabel(forAutoLayout: ());
-        secondaryField.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        secondaryField.numberOfLines = 0;
-        return secondaryField;
-    }()
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    init(imageOverride: UIImage? = nil) {
-        super.init(frame: CGRect.zero);
-        self.configureForAutoLayout();
-        self.imageOverride = imageOverride;
-        stack.addArrangedSubview(timestamp);
-        stack.setCustomSpacing(12, after: timestamp);
-        stack.addArrangedSubview(primaryField);
-        stack.setCustomSpacing(8, after: primaryField);
-        stack.addArrangedSubview(secondaryField);
-        
-        self.addSubview(stack);
-        self.addSubview(itemImage);
+    override init(imageOverride: UIImage? = nil) {
+        super.init(imageOverride: imageOverride);
         self.addSubview(errorBadge);
         self.addSubview(syncBadge);
     }
     
     override func updateConstraints() {
         if (!didSetUpConstraints) {
-            stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
-            itemImage.autoSetDimensions(to: CGSize(width: 48, height: 48));
-            itemImage.autoPinEdge(.left, to: .right, of: stack, withOffset: 8);
-            itemImage.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-            itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 24);
-            itemImage.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16, relation: .greaterThanOrEqual);
-            
             errorBadge.autoSetDimensions(to: CGSize(width: 25, height: 25));
             errorBadge.autoPinEdge(toSuperviewEdge: .top);
             errorBadge.autoPinEdge(toSuperviewEdge: .left);
@@ -151,7 +95,6 @@ class ObservationSummaryView: UIView {
             sync.autoPinEdge(toSuperviewEdge: .top, withInset: 1);
             sync.autoPinEdge(toSuperviewEdge: .left);
                         
-            self.autoSetDimension(.height, toSize: 90, relation: .greaterThanOrEqual)
             didSetUpConstraints = true;
         }
         super.updateConstraints();
@@ -184,16 +127,8 @@ class ObservationSummaryView: UIView {
         }
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
-        timestamp.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        timestamp.font = scheme.typographyScheme.overline;
-        timestamp.autoSetDimension(.height, toSize: timestamp.font.pointSize);
-        primaryField.textColor = scheme.colorScheme.primaryColor;
-        primaryField.font = scheme.typographyScheme.headline6;
-        primaryField.autoSetDimension(.height, toSize: primaryField.font.pointSize);
-        secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        secondaryField.font = scheme.typographyScheme.subtitle2;
-        secondaryField.autoSetDimension(.height, toSize: secondaryField.font.pointSize);
+    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+        super.applyTheme(withScheme: scheme);
         errorShapeLayer.fillColor = scheme.colorScheme.errorColor.cgColor
         exclamation.tintColor = UIColor.white;
         syncShapeLayer.fillColor = scheme.colorScheme.secondaryColor.cgColor;

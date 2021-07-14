@@ -99,7 +99,7 @@ import Foundation
             return;
         }
         self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
-        summaryView.applyTheme(withContainerScheme: safeScheme);
+        summaryView.applyTheme(withScheme: safeScheme);
         actionsView?.applyTheme(withScheme: safeScheme);
         detailsButton.applyContainedTheme(withScheme: safeScheme);
     }

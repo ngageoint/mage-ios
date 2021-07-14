@@ -10,58 +10,8 @@ import Foundation
 import PureLayout
 import Kingfisher
 
-class FeedItemSummary : UIView {
-    
-    private lazy var stack: UIStackView = {
-        let stack = UIStackView(forAutoLayout: ());
-        stack.axis = .vertical
-        stack.alignment = .fill
-        stack.spacing = 0
-        stack.distribution = .fill
-        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        stack.isLayoutMarginsRelativeArrangement = true;
-        stack.translatesAutoresizingMaskIntoConstraints = false;
-        stack.addArrangedSubview(timestamp);
-        stack.addArrangedSubview(primaryField);
-        stack.addArrangedSubview(secondaryField);
-        return stack;
-    }()
-    
-    private lazy var timestamp: UILabel = {
-        let timestamp = UILabel(forAutoLayout: ());
-        let systemFont = UIFont.systemFont(ofSize: 12.0, weight: .light)
-        let smallCapsDesc = systemFont.fontDescriptor.addingAttributes([
-            UIFontDescriptor.AttributeName.featureSettings: [
-                [
-                    UIFontDescriptor.FeatureKey.featureIdentifier: kUpperCaseType,
-                    UIFontDescriptor.FeatureKey.typeIdentifier: kUpperCaseSmallCapsSelector
-                ]
-            ]
-        ])
-        let font = UIFont(descriptor: smallCapsDesc, size: systemFont.pointSize)
-        timestamp.font = font;
-        return timestamp;
-    }()
-    
-    private lazy var itemImage: UIImageView = {
-        let itemImage = UIImageView(forAutoLayout: ());
-        itemImage.contentMode = .scaleAspectFit;
-        return itemImage;
-    }()
-    
-    private lazy var primaryField: UILabel = {
-        let primaryField = UILabel(forAutoLayout: ());
-        primaryField.font = UIFont.systemFont(ofSize: 16.0, weight: .regular);
-        primaryField.textColor = UIColor.black.withAlphaComponent(0.87);
-        return primaryField;
-    }()
-    
-    private lazy var secondaryField: UILabel = {
-        let secondaryField = UILabel(forAutoLayout: ());
-        secondaryField.font = UIFont.systemFont(ofSize: 14.0, weight: .regular);
-        secondaryField.textColor = UIColor.black.withAlphaComponent(0.60);
-        return secondaryField;
-    }()
+class FeedItemSummary : CommonSummaryView<FeedItem> {
+    private var didSetUpConstraints = false;
     
     private lazy var noContentView: UIView = {
         let view = UIView(forAutoLayout: ());
@@ -74,17 +24,14 @@ class FeedItemSummary : UIView {
         return view;
     }()
     
-    @objc public convenience init() {
-        self.init(frame: CGRect.zero);
-        self.configureForAutoLayout();
-        layoutView();
+    required init(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
     }
     
-    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
-        self.backgroundColor = containerScheme.colorScheme.surfaceColor;
-        self.timestamp.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        self.primaryField.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        self.secondaryField.textColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+    override init(imageOverride: UIImage? = nil) {
+        super.init(imageOverride: imageOverride);
+        isUserInteractionEnabled = false;
+        layoutView();
     }
     
     @objc public func populate(feedItem: FeedItem) {
@@ -123,7 +70,6 @@ class FeedItemSummary : UIView {
         secondaryField.text = feedItem.secondaryValue;
         if (feedItem.feed?.itemTemporalProperty == nil) {
             timestamp.isHidden = true;
-            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
         } else {
             if let itemDate: NSDate = feedItem.timestamp as NSDate? {
                 timestamp.text = itemDate.formattedDisplay();
@@ -131,21 +77,18 @@ class FeedItemSummary : UIView {
                 timestamp.text = " ";
             }
             timestamp.isHidden = false;
-            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 32, right: 0), excludingEdge: .right);
         }
     }
     
     func layoutView() {
-        self.addSubview(itemImage);
-        self.addSubview(stack);
         self.addSubview(noContentView);
-        noContentView.autoPinEdgesToSuperviewEdges();
-        NSLayoutConstraint.autoSetPriority(.defaultHigh) {
-            itemImage.autoSetDimensions(to: CGSize(width: 40, height: 40));
-            itemImage.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
+    }
+    
+    override func updateConstraints() {
+        if (!didSetUpConstraints) {
+            noContentView.autoPinEdgesToSuperviewEdges();
+            didSetUpConstraints = true;
         }
-        stack.autoPinEdge(.top, to: .top, of: self, withOffset: 16);
-        stack.autoPinEdge(.leading, to: .trailing, of: itemImage, withOffset: 16);
-        stack.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16);
+        super.updateConstraints();
     }
 }

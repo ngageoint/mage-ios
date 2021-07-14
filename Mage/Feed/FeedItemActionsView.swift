@@ -30,6 +30,15 @@ class FeedItemActionsView: UIView {
         return stack;
     }()
     
+    private lazy var latitudeLongitudeButton: MDCButton = {
+        let button = MDCButton(forAutoLayout: ());
+        button.accessibilityLabel = "location";
+        button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
+        button.addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
+        return button;
+    }()
+    
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton();
         directionsButton.accessibilityLabel = "directions";
@@ -46,6 +55,7 @@ class FeedItemActionsView: UIView {
         self.scheme = scheme;
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+        latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
     }
     
     public convenience init(feedItem: FeedItem?, actionsDelegate: FeedItemActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -62,6 +72,7 @@ class FeedItemActionsView: UIView {
     }
     
     func layoutView() {
+        self.addSubview(latitudeLongitudeButton);
         self.addSubview(actionButtonView);
     }
     
@@ -69,7 +80,8 @@ class FeedItemActionsView: UIView {
         if (!didSetupConstraints) {
             actionButtonView.autoSetDimension(.height, toSize: 56);
             actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16), excludingEdge: .left);
-            
+            latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
+            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
             didSetupConstraints = true;
         }
         super.updateConstraints();
@@ -78,6 +90,19 @@ class FeedItemActionsView: UIView {
     public func populate(feedItem: FeedItem?, delegate: FeedItemActionsDelegate?) {
         self.feedItem = feedItem;
         self.actionsDelegate = delegate;
+        
+        if let coordinate = self.feedItem?.coordinate {
+            if (UserDefaults.standard.showMGRS) {
+                latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(coordinate), for: .normal);
+            } else {
+                latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", coordinate.latitude, coordinate.longitude), for: .normal);
+            }
+            latitudeLongitudeButton.isEnabled = true;
+            latitudeLongitudeButton.isHidden = false;
+        } else {
+            latitudeLongitudeButton.isHidden = true;
+        }
+        
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
@@ -88,5 +113,9 @@ class FeedItemActionsView: UIView {
             return;
         }
         actionsDelegate?.getDirectionsToFeedItem?(feedItem)
+    }
+    
+    @objc func copyLocation() {
+        actionsDelegate?.copyLocation?(latitudeLongitudeButton.currentTitle ?? "No Location");
     }
 }

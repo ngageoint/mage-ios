@@ -1419,8 +1419,9 @@
         self.bottomSheet.delegate = self;
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[FeedItem class]]) {
-        FeedItem *item = view.annotation;
+        FeedItem *item = (FeedItem *)view.annotation;
         self.feedItemBottomSheet = [[FeedItemBottomSheetController alloc] initWithFeedItem:item actionsDelegate:self scheme:self.scheme];
+        self.feedItemBottomSheet.preferredContentSize = CGSizeMake(self.feedItemBottomSheet.preferredContentSize.width, 220);
         self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.feedItemBottomSheet];
         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
         self.bottomSheet.delegate = self;
