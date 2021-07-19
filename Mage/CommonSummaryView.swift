@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CommonSummaryView<T>: UIView {
+class CommonSummaryView<T, V>: UIView {
     
     var imageOverride: UIImage?;
     private var didSetUpConstraints = false;
@@ -84,7 +84,7 @@ class CommonSummaryView<T>: UIView {
         super.updateConstraints();
     }
     
-    func populate(item: T) {
+    func populate(item: T, actionsDelegate: V? = nil) {
         preconditionFailure("This method must be overridden");
     }
     

@@ -125,7 +125,7 @@ import Foundation
         guard let feedItem = self.feedItem else {
             return
         }
-        summaryView.populate(feedItem: feedItem);
+        summaryView.populate(item: feedItem, actionsDelegate: actionsDelegate);
         actionsView?.populate(feedItem: feedItem, delegate: actionsDelegate)
     }
     
@@ -142,7 +142,7 @@ import Foundation
         guard let feedItem = self.feedItem else {
             return
         }
-        summaryView.populate(feedItem: feedItem);
+        summaryView.populate(item: feedItem, actionsDelegate: actionsDelegate);
     }
     
     @objc func detailsButtonTapped() {

@@ -1,9 +1,9 @@
 //
-//  FeedItemTableViewCell.swift
+//  PersonTableViewCell.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 6/12/20.
-//  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
+//  Created by Daniel Barela on 7/14/21.
+//  Copyright © 2021 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import Foundation
@@ -11,13 +11,14 @@ import PureLayout
 import Kingfisher
 import MaterialComponents.MDCCard;
 
-class FeedItemTableViewCell : UITableViewCell {
+class PersonTableViewCell : UITableViewCell {
     private var constructed = false;
-    private var feedItem: FeedItem?;
+    private var location: Location?;
+    private var user: User?;
     private var didSetUpConstraints = false;
-    private var actionsDelegate: FeedItemActionsDelegate?;
+    private var actionsDelegate: UserActionsDelegate?;
     private var scheme: MDCContainerScheming?;
-
+    
     private lazy var card: MDCCard = {
         let card = MDCCard(forAutoLayout: ());
         card.enableRippleBehavior = true
@@ -26,21 +27,21 @@ class FeedItemTableViewCell : UITableViewCell {
     }()
     
     @objc func tap(_ card: MDCCard) {
-        if let feedItem = self.feedItem {
+        if let user = self.user {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewFeedItem?(feedItem: feedItem);
+                self.actionsDelegate?.viewUser?(user);
             }
         }
     }
     
-    private lazy var actionsView: FeedItemActionsView = {
-        let view = FeedItemActionsView(feedItem: feedItem, actionsDelegate: actionsDelegate, scheme: scheme)
+    private lazy var actionsView: UserActionsView = {
+        let view = UserActionsView(user: self.user, userActionsDelegate: actionsDelegate, scheme: scheme);
         return view;
     }()
     
-    private lazy var feedItemView: FeedItemSummary = {
-        let view = FeedItemSummary();
+    private lazy var userSummaryView: UserSummaryView = {
+        let view = UserSummaryView();
         return view;
     }()
     
@@ -52,7 +53,7 @@ class FeedItemTableViewCell : UITableViewCell {
     func construct() {
         if (!constructed) {
             self.contentView.addSubview(card);
-            card.addSubview(feedItemView);
+            card.addSubview(userSummaryView);
             card.addSubview(actionsView);
             setNeedsUpdateConstraints();
             constructed = true;
@@ -63,7 +64,7 @@ class FeedItemTableViewCell : UITableViewCell {
         self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.backgroundColor;
         card.applyTheme(withScheme: scheme);
-        feedItemView.applyTheme(withScheme: scheme);
+        userSummaryView.applyTheme(withScheme: scheme);
         actionsView.applyTheme(withScheme: scheme);
     }
     
@@ -71,12 +72,19 @@ class FeedItemTableViewCell : UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate?, scheme: MDCContainerScheming?) {
-        self.feedItem = feedItem;
+    func configure(location: Location, actionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {
+        self.location = location;
+        configure(user: location.user, actionsDelegate: actionsDelegate, scheme: scheme);
+    }
+    
+    func configure(user: User?, actionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {
+        self.user = user;
         self.actionsDelegate = actionsDelegate;
-        card.accessibilityLabel = "feed item card \(feedItem.title ?? "")"
-        feedItemView.populate(item: feedItem, actionsDelegate: actionsDelegate);
-        actionsView.populate(feedItem: feedItem, delegate: actionsDelegate);
+        if let user = self.user {
+            card.accessibilityLabel = "user card \(user.username ?? "")"
+            userSummaryView.populate(item: user);
+            actionsView.populate(user: user, delegate: actionsDelegate);
+        }
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
@@ -85,9 +93,9 @@ class FeedItemTableViewCell : UITableViewCell {
     override func updateConstraints() {
         if (!didSetUpConstraints) {
             card.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8));
-            feedItemView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+            userSummaryView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
             actionsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
-            feedItemView.autoPinEdge(.bottom, to: .top, of: actionsView, withOffset: 8);
+            userSummaryView.autoPinEdge(.bottom, to: .top, of: actionsView, withOffset: 8);
             didSetUpConstraints = true;
         }
         super.updateConstraints();

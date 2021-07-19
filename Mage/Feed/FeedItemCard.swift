@@ -98,7 +98,7 @@ class FeedItemCard : UITableViewCell {
     func bind(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate?) {
         self.feedItem = feedItem;
         self.actionsDelegate = actionsDelegate;
-        feedItemView.populate(feedItem: feedItem);
+        feedItemView.populate(item: feedItem, actionsDelegate: actionsDelegate);
         actionsView.populate(feedItem: feedItem, delegate: actionsDelegate);
         if (isMappable(feedItem: feedItem)) {
             self.mapView.isHidden = false;

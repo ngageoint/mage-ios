@@ -27,7 +27,7 @@ import Kingfisher
     }();
     
     private lazy var locationsTab: UINavigationController = {
-        let locationTableViewController: LocationTableViewController = LocationTableViewController(scheme: self.scheme);
+        let locationTableViewController: LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
         let nc = UINavigationController(rootViewController: locationTableViewController);
         nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(named: "people"), tag: 2);
         return nc;

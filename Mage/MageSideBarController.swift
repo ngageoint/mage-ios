@@ -25,7 +25,7 @@ class SidebarUIButton: UIButton {
     var activeButton: SidebarUIButton?;
     var scheme: MDCContainerScheming?;
     
-    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
+    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserActionsDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
     @objc public var delegate: Delegate?;
     
     private lazy var railScroll : UIScrollView = {
@@ -177,8 +177,8 @@ class SidebarUIButton: UIButton {
     func createLocationsRailView() -> SidebarUIButton {
         let locationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.locations, title: "People", imageName: "people");
         locationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let locationViewController : LocationTableViewController = LocationTableViewController(scheme: self.scheme);
-        locationViewController.delegate = delegate;
+        let locationViewController : LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
+        locationViewController.actionsDelegate = delegate;
         locationButton.viewController = locationViewController;
         return locationButton;
     }

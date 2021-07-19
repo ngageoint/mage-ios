@@ -10,7 +10,7 @@ import Foundation
 import PureLayout
 import Kingfisher
 
-class FeedItemSummary : CommonSummaryView<FeedItem> {
+class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
     private var didSetUpConstraints = false;
     
     private lazy var noContentView: UIView = {
@@ -34,11 +34,11 @@ class FeedItemSummary : CommonSummaryView<FeedItem> {
         layoutView();
     }
     
-    @objc public func populate(feedItem: FeedItem) {
+    @objc public override func populate(item: FeedItem, actionsDelegate: FeedItemActionsDelegate? = nil) {
         let processor = DownsamplingImageProcessor(size: CGSize(width: 40, height: 40))
         itemImage.tintColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0);
         let image = UIImage(named: "observations");
-        let iconUrl = feedItem.iconURL;
+        let iconUrl = item.iconURL;
         itemImage.kf.indicatorType = .activity
         itemImage.kf.setImage(
             with: iconUrl,
@@ -61,17 +61,17 @@ class FeedItemSummary : CommonSummaryView<FeedItem> {
             }
         }
         
-        if (!feedItem.hasContent()) {
+        if (!item.hasContent()) {
             noContentView.isHidden = false;
             return;
         }
         noContentView.isHidden = true;
-        primaryField.text = feedItem.primaryValue ?? " ";
-        secondaryField.text = feedItem.secondaryValue;
-        if (feedItem.feed?.itemTemporalProperty == nil) {
+        primaryField.text = item.primaryValue ?? " ";
+        secondaryField.text = item.secondaryValue;
+        if (item.feed?.itemTemporalProperty == nil) {
             timestamp.isHidden = true;
         } else {
-            if let itemDate: NSDate = feedItem.timestamp as NSDate? {
+            if let itemDate: NSDate = item.timestamp as NSDate? {
                 timestamp.text = itemDate.formattedDisplay();
             } else {
                 timestamp.text = " ";

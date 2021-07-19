@@ -342,10 +342,9 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
             }
         }
         if (userIds.count != 0) {
-            let userViewController = UserTableViewController(scheme: self.scheme)!;
-            userViewController.userIds = userIds;
-            userViewController.title = "Favorited By";
-            self.navigationController?.pushViewController(userViewController, animated: true);
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            locationViewController.title = "Favorited By";
+            self.navigationController?.pushViewController(locationViewController, animated: true);
         }
     }
     

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ObservationSummaryView: CommonSummaryView<Observation> {
+class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsDelegate> {
     
     private weak var observation: Observation?;
     private var didSetUpConstraints = false;
@@ -100,7 +100,7 @@ class ObservationSummaryView: CommonSummaryView<Observation> {
         super.updateConstraints();
     }
     
-    func populate(observation: Observation) {
+    func populate(observation: Observation, actionsDelegate: ObservationActionsDelegate? = nil) {
         self.observation = observation;
         
         if (self.imageOverride != nil) {

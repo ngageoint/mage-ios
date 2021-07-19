@@ -121,7 +121,7 @@ import Foundation
             return
         }
         
-        summaryView.populate(user: safeUser, userActionsDelegate: actionsDelegate);
+        summaryView.populate(item: safeUser, actionsDelegate: actionsDelegate);
         userActionsView.populate(user: safeUser, delegate: actionsDelegate);
     }
     
@@ -138,7 +138,7 @@ import Foundation
         guard let safeUser = self.user else {
             return
         }
-        summaryView.populate(user: safeUser);
+        summaryView.populate(item: safeUser, actionsDelegate: actionsDelegate);
     }
     
     @objc func detailsButtonTapped() {

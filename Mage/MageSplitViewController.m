@@ -9,7 +9,6 @@
 #import "MageSessionManager.h"
 #import "MapViewController_iPad.h"
 #import "FeedItemSelectionDelegate.h"
-#import "LocationTableViewController.h"
 #import "Mage.h"
 #import "MAGE-Swift.h"
 

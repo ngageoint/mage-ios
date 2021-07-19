@@ -27,10 +27,18 @@ class UserActionsView: UIView {
         stack.isLayoutMarginsRelativeArrangement = true;
         stack.translatesAutoresizingMaskIntoConstraints = false;
         stack.addArrangedSubview(emailButton);
-        stack.addArrangedSubview(textButton);
         stack.addArrangedSubview(phoneButton);
         stack.addArrangedSubview(directionsButton);
         return stack;
+    }()
+    
+    private lazy var latitudeLongitudeButton: MDCButton = {
+        let button = MDCButton(forAutoLayout: ());
+        button.accessibilityLabel = "location";
+        button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
+        button.addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
+        return button;
     }()
     
     private lazy var directionsButton: MDCButton = {
@@ -42,17 +50,6 @@ class UserActionsView: UIView {
         directionsButton.inkMaxRippleRadius = 30;
         directionsButton.inkStyle = .unbounded;
         return directionsButton;
-    }()
-    
-    private lazy var textButton: MDCButton = {
-        let textButton = MDCButton();
-        textButton.accessibilityLabel = "sms";
-        textButton.setImage(UIImage(named: "sms")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        textButton.addTarget(self, action: #selector(textUser), for: .touchUpInside);
-        textButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        textButton.inkMaxRippleRadius = 30;
-        textButton.inkStyle = .unbounded;
-        return textButton;
     }()
     
     private lazy var phoneButton: MDCButton = {
@@ -81,12 +78,12 @@ class UserActionsView: UIView {
         self.scheme = scheme;
         emailButton.applyTextTheme(withScheme: scheme);
         emailButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        textButton.applyTextTheme(withScheme: scheme);
-        textButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         phoneButton.applyTextTheme(withScheme: scheme);
         phoneButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+        
+        latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
     }
     
     public convenience init(user: User?, userActionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -106,6 +103,7 @@ class UserActionsView: UIView {
     
     func layoutView() {
         self.addSubview(actionButtonView);
+        self.addSubview(latitudeLongitudeButton);
     }
     
     override func updateConstraints() {
@@ -113,6 +111,8 @@ class UserActionsView: UIView {
             actionButtonView.autoSetDimension(.height, toSize: 56);
             actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16), excludingEdge: .left);
 
+            latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
+            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
             didSetupConstraints = true;
         }
         super.updateConstraints();
@@ -126,7 +126,20 @@ class UserActionsView: UIView {
         }
         if (self.user?.phone == nil) {
             phoneButton.isHidden = true;
-            textButton.isHidden = true;
+        }
+        
+        if (user.location != nil) {
+            let geometry = user.location?.getGeometry();
+            if let point: SFPoint = geometry?.centroid() {
+                if (UserDefaults.standard.showMGRS) {
+                    latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);
+                } else {
+                    latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);
+                }
+            }
+            latitudeLongitudeButton.isHidden = false;
+        } else {
+            latitudeLongitudeButton.isHidden = true;
         }
 
         if let safeScheme = scheme {
@@ -143,13 +156,13 @@ class UserActionsView: UIView {
         UIApplication.shared.open(number)
     }
     
-    @objc func textUser() {
-        guard let number = URL(string: "sms:\(user?.phone ?? "")") else { return }
-        UIApplication.shared.open(number)
-    }
-    
     @objc func emailUser() {
         guard let number = URL(string: "mailto:\(user?.email ?? "")") else { return }
         UIApplication.shared.open(number)
+    }
+    
+    @objc func copyLocation() {
+        UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
     }
 }

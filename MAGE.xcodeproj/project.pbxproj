@@ -81,8 +81,6 @@
 		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
 		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */; };
-		2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC99DC41DDA30C5003C1D36 /* UserDataStore.m */; };
-		2FC99DC81DDA335A003C1D36 /* UserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC99DC71DDA335A003C1D36 /* UserTableViewController.m */; };
 		2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FCB1AC81DDA439700A63C71 /* Users.storyboard */; };
 		2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */; };
 		2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCDC35222C27B9C004189AD /* UIColor+Adjust.m */; };
@@ -97,8 +95,6 @@
 		2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */; };
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
-		4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38E819744FBC00E7470A /* LocationTableViewController.m */; };
-		4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
@@ -167,7 +163,6 @@
 		F727516A19C87B27006C63CB /* MapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516919C87B27006C63CB /* MapDelegate.m */; };
 		F727516E19C888DB006C63CB /* Locations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727516D19C888DB006C63CB /* Locations.m */; };
 		F727517119C88CAE006C63CB /* Observations.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517019C88CAE006C63CB /* Observations.m */; };
-		F727517719C895CA006C63CB /* LocationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F727517619C895CA006C63CB /* LocationDataStore.m */; };
 		F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D82034CC3700C2600D /* TestingAppDelegate.h */; };
 		F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F729E9D92034CC3700C2600D /* TestingAppDelegate.m */; };
 		F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */; };
@@ -407,7 +402,6 @@
 		F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */; };
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
 		F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89A1F506627002C78D3 /* ObservationCell.xib */; };
-		F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89C1F506D76002C78D3 /* PersonCell.xib */; };
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
 		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
@@ -443,6 +437,10 @@
 		F7D43BE6269F3C1800561A8F /* FeedItemActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */; };
 		F7D43BE8269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE7269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift */; };
 		F7D43BEA269F505A00561A8F /* CommonSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */; };
+		F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */; };
+		F7D43BEE269F8F4D00561A8F /* LocationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */; };
+		F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */; };
+		F7D43BF226A5FCC800561A8F /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BF126A5FCC800561A8F /* UserDataStore.swift */; };
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
 		F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */; };
@@ -660,10 +658,6 @@
 		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FC8BB8C2602421400F73B0E /* AuthenticationCoordinator_Server5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator_Server5.h; sourceTree = "<group>"; };
 		2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCoordinator_Server5.m; sourceTree = "<group>"; };
-		2FC99DC31DDA30C5003C1D36 /* UserDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataStore.h; sourceTree = "<group>"; };
-		2FC99DC41DDA30C5003C1D36 /* UserDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataStore.m; sourceTree = "<group>"; };
-		2FC99DC61DDA335A003C1D36 /* UserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTableViewController.h; sourceTree = "<group>"; };
-		2FC99DC71DDA335A003C1D36 /* UserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTableViewController.m; sourceTree = "<group>"; };
 		2FCB1AC81DDA439700A63C71 /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
 		2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreTableViewDelegate.swift; sourceTree = "<group>"; };
 		2FCDC35122C27B9C004189AD /* UIColor+Adjust.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Adjust.h"; sourceTree = "<group>"; };
@@ -690,10 +684,6 @@
 		2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEditViewController.h; sourceTree = "<group>"; };
 		2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEditViewController.m; sourceTree = "<group>"; };
 		3B266AC5426B836F21B34375 /* Pods-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGETests/Pods-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
-		4C2A38E719744FBC00E7470A /* LocationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationTableViewController.h; sourceTree = "<group>"; };
-		4C2A38E819744FBC00E7470A /* LocationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationTableViewController.m; sourceTree = "<group>"; };
-		4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
-		4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewCell.m; sourceTree = "<group>"; };
 		4C390F49197DB7B000AB3CCB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
 		4C546FEB195A27F4000CF230 /* LocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationAnnotation.m; sourceTree = "<group>"; };
@@ -780,8 +770,6 @@
 		F727516D19C888DB006C63CB /* Locations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locations.m; sourceTree = "<group>"; };
 		F727516F19C88CAE006C63CB /* Observations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observations.h; sourceTree = "<group>"; };
 		F727517019C88CAE006C63CB /* Observations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observations.m; sourceTree = "<group>"; };
-		F727517519C895CA006C63CB /* LocationDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataStore.h; sourceTree = "<group>"; };
-		F727517619C895CA006C63CB /* LocationDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataStore.m; sourceTree = "<group>"; };
 		F729E9D82034CC3700C2600D /* TestingAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestingAppDelegate.h; sourceTree = "<group>"; };
 		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -1148,7 +1136,6 @@
 		F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditMapDelegate.m; sourceTree = "<group>"; };
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
 		F7C5C89A1F506627002C78D3 /* ObservationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationCell.xib; sourceTree = "<group>"; };
-		F7C5C89C1F506D76002C78D3 /* PersonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonCell.xib; sourceTree = "<group>"; };
 		F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageAppCoordinator.h; sourceTree = "<group>"; };
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
 		F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerURLView.xib; sourceTree = "<group>"; };
@@ -1189,6 +1176,10 @@
 		F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemActionsDelegate.swift; sourceTree = "<group>"; };
 		F7D43BE7269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateFeedItemActionsDelegate.swift; sourceTree = "<group>"; };
 		F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonSummaryView.swift; sourceTree = "<group>"; };
+		F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
+		F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataStore.swift; sourceTree = "<group>"; };
+		F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTableViewCell.swift; sourceTree = "<group>"; };
+		F7D43BF126A5FCC800561A8F /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
 		F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsAlternate.json; sourceTree = "<group>"; };
 		F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelPadding.swift; sourceTree = "<group>"; };
@@ -1394,7 +1385,6 @@
 				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
 				F71B34B81F43978B001D120A /* ObservationEditView.xib */,
 				F7C5C89A1F506627002C78D3 /* ObservationCell.xib */,
-				F7C5C89C1F506D76002C78D3 /* PersonCell.xib */,
 				F7E457611F61AC770082F527 /* EventChooserView.xib */,
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
@@ -1557,16 +1547,6 @@
 		4C2A38ED19745C0D00E7470A /* People */ = {
 			isa = PBXGroup;
 			children = (
-				4C2A38E719744FBC00E7470A /* LocationTableViewController.h */,
-				4C2A38E819744FBC00E7470A /* LocationTableViewController.m */,
-				2FC99DC61DDA335A003C1D36 /* UserTableViewController.h */,
-				2FC99DC71DDA335A003C1D36 /* UserTableViewController.m */,
-				4C2A38EA19745BF900E7470A /* PersonTableViewCell.h */,
-				4C2A38EB19745BF900E7470A /* PersonTableViewCell.m */,
-				2FC99DC31DDA30C5003C1D36 /* UserDataStore.h */,
-				2FC99DC41DDA30C5003C1D36 /* UserDataStore.m */,
-				F727517519C895CA006C63CB /* LocationDataStore.h */,
-				F727517619C895CA006C63CB /* LocationDataStore.m */,
 				2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */,
 				2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */,
 				F795ED0624B8F15D0028FBFC /* UserViewController.swift */,
@@ -1576,6 +1556,10 @@
 				F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */,
 				F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */,
 				F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */,
+				F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */,
+				F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */,
+				F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */,
+				F7D43BF126A5FCC800561A8F /* UserDataStore.swift */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -2791,7 +2775,6 @@
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
-				F7C5C89D1F506D76002C78D3 /* PersonCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3049,11 +3032,11 @@
 				F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
 				F770854025927E1C008903BA /* ObservationSyncStatus.swift in Sources */,
-				4C2A38E919744FBC00E7470A /* LocationTableViewController.m in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				F7154ACB260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift in Sources */,
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
+				F7D43BF226A5FCC800561A8F /* UserDataStore.swift in Sources */,
 				F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */,
 				F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
@@ -3080,7 +3063,6 @@
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
 				F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */,
-				2FC99DC51DDA30C5003C1D36 /* UserDataStore.m in Sources */,
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
@@ -3090,6 +3072,7 @@
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
+				F7D43BEE269F8F4D00561A8F /* LocationDataStore.swift in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
 				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
@@ -3103,7 +3086,6 @@
 				04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */,
 				F7813A8824647C62003666ED /* DateView.swift in Sources */,
 				F7F4754D25BB2CF0006634F7 /* ObservationListActionsView.swift in Sources */,
-				F727517719C895CA006C63CB /* LocationDataStore.m in Sources */,
 				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
 				F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
@@ -3176,7 +3158,6 @@
 				F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
-				2FC99DC81DDA335A003C1D36 /* UserTableViewController.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
@@ -3263,6 +3244,7 @@
 				F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */,
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.m in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
+				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
@@ -3293,6 +3275,7 @@
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */,
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
+				F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */,
 				F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F72D43142694B60300F9AC3B /* Event.m in Sources */,
@@ -3302,7 +3285,6 @@
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */,
-				4C2A38EC19745BF900E7470A /* PersonTableViewCell.m in Sources */,
 				F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */,
 				2F8A2C0F2200FC2C007FE473 /* EventInformationCoordinator.m in Sources */,
 				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,
