@@ -64,8 +64,9 @@ extension UserDataStore: UITableViewDataSource {
     }
     
     func configure(cell: PersonTableViewCell, at indexPath: IndexPath) {
-        let user: User = self.fetchedResultsController?.object(at: indexPath) as! User;
-        cell.configure(user: user, actionsDelegate: actionsDelegate, scheme: scheme);
+        if let user: User = self.fetchedResultsController?.object(at: indexPath) as? User {
+            cell.configure(user: user, actionsDelegate: actionsDelegate, scheme: scheme);
+        }
     }
 }
 

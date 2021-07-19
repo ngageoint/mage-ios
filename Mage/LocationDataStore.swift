@@ -72,8 +72,9 @@ extension LocationDataStore: UITableViewDataSource {
     }
     
     func configure(cell: PersonTableViewCell, at indexPath: IndexPath) {
-        let location: Location = self.locations?.fetchedResultsController.object(at: indexPath) as! Location;
-        cell.configure(location: location, actionsDelegate: actionsDelegate, scheme: scheme);
+        if let location: Location = self.locations?.fetchedResultsController.object(at: indexPath) {
+            cell.configure(location: location, actionsDelegate: actionsDelegate, scheme: scheme);
+        }
     }
 }
 
