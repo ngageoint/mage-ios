@@ -127,6 +127,13 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+
+    self.mapView = [[MKMapView alloc] initForAutoLayout];
+    self.mapView.accessibilityLabel = @"map";
+//    [self.stack addArrangedSubview:self.mapView];
+    [self.view addSubview:self.mapView];
+    [self.mapView autoPinEdgesToSuperviewEdges];
+    
     self.stack = [UIStackView newAutoLayoutView];
     self.stack.axis = UILayoutConstraintAxisVertical;
     self.stack.alignment = UIStackViewAlignmentFill;
@@ -134,11 +141,7 @@
     self.stack.distribution = UIStackViewDistributionFill;
     
     [self.view addSubview:self.stack];
-    [self.stack autoPinEdgesToSuperviewSafeArea];
-    
-    self.mapView = [[MKMapView alloc] initForAutoLayout];
-    self.mapView.accessibilityLabel = @"map";
-    [self.stack addArrangedSubview:self.mapView];
+    [self.stack autoPinEdgesToSuperviewSafeAreaWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     
     [self addMapButtons];
 
@@ -339,7 +342,7 @@
     [buttonStack autoPinEdgeToSuperviewMargin:ALEdgeLeft];
     
     [self.view insertSubview:self.createFab aboveSubview:self.mapView];
-    [self.createFab autoPinEdge:ALEdgeBottom toEdge:ALEdgeBottom ofView:self.mapView withOffset:-25];
+    [self.createFab autoPinEdge:ALEdgeBottom toEdge:ALEdgeTop ofView:self.stack withOffset:-25];
     [self.createFab autoPinEdgeToSuperviewMargin:ALEdgeRight];
 }
 

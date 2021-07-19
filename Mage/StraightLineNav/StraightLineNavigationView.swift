@@ -164,10 +164,21 @@ import PureLayout
         guard let userLocation = locationManager?.location else {
             return;
         }
-        if let heading = locationManager?.heading {
+        
+        var bearing = userLocation.course;
+        let speed = userLocation.speed;
+        // if the user is moving, use their direction of movement
+        if (bearing < 0 || speed <= 0) {
+            // if the user is not moving, use the heading of the phone
+            if let trueHeading = locationManager?.heading?.trueHeading {
+                bearing = trueHeading;
+            }
+        }
+        
+        if (bearing >= 0) {
             let bearingTo = userLocation.coordinate.bearing(to: destinationCoordinate!);
-            compassView?.updateHeading(heading: heading, destinationBearing: bearingTo, targetColor: self.relativeBearingColor, bearingColor: self.headingColor);
-            let headingMeasurement = Measurement(value: heading.trueHeading, unit: UnitAngle.degrees);
+            compassView?.updateHeading(heading: bearing, destinationBearing: bearingTo, targetColor: self.relativeBearingColor, bearingColor: self.headingColor);
+            let headingMeasurement = Measurement(value: bearing, unit: UnitAngle.degrees);
             let bearingToMeasurement = Measurement(value: bearingTo, unit: UnitAngle.degrees);
             headingLabel.text = "\(measurementFormatter.string(from: headingMeasurement))";
             relativeBearingToTargetLabel.text = "\(measurementFormatter.string(from: bearingToMeasurement))";

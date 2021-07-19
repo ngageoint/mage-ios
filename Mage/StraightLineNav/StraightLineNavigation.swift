@@ -97,12 +97,24 @@ import Foundation
     
     @objc func updateHeadingLine(manager: CLLocationManager) {
         if (self.headingModeEnabled) {
+            guard let location = manager.location else {
+                return;
+            }
+            
             guard let userCoordinate = manager.location?.coordinate else {
                 return;
             }
             
-            guard let bearing = manager.heading?.trueHeading else {
-                return;
+            var bearing = location.course;
+            let speed = location.speed;
+            // if the user is moving, use their direction of movement
+            if (bearing < 0 || speed <= 0) {
+                // if the user is not moving, use the heading of the phone
+                if let trueHeading = manager.heading?.trueHeading {
+                    bearing = trueHeading;
+                } else {
+                    return;
+                }
             }
             let bearingPoint = MKMapPoint(calculateBearingPoint(startCoordinate: userCoordinate, bearing: bearing));
             
@@ -130,6 +142,7 @@ import Foundation
                 mapView.removeOverlay(relativeBearingPolyline!);
             }
             relativeBearingPolyline = NavigationOverlay(points: coordinates, count: 2, color: relativeBearingColor)
+            mapView.addOverlay(relativeBearingPolyline!);
         }
         
         updateHeadingLine(manager: manager);

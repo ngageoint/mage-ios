@@ -289,22 +289,22 @@ class CompassView: UIView {
         return markerContainer;
     }
     
-    func updateHeading(heading: CLHeading, targetColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
+    func updateHeading(heading: CLLocationDirection, targetColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
         self.targetColor = targetColor;
         self.headingColor = headingColor;
         for v in subviews {
             v.removeFromSuperview();
         }
-        layoutView(heading: heading.trueHeading);
+        layoutView(heading: heading);
     }
     
-    func updateHeading(heading: CLHeading, destinationBearing: Double, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
+    func updateHeading(heading: CLLocationDirection, destinationBearing: Double, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
         self.targetColor = targetColor;
         self.headingColor = bearingColor;
         for v in subviews {
             v.removeFromSuperview();
         }
-        layoutView(heading: heading.trueHeading, destinationBearing: destinationBearing);
+        layoutView(heading: heading, destinationBearing: destinationBearing);
     }
     
 }
