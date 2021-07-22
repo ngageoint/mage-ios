@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -42,7 +42,7 @@ class TextFieldViewTests: KIFSpec {
                     FieldKey.name.key: "field8",
                     FieldKey.id.key: 8
                 ];
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -63,7 +63,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.fieldValue.text) == "Hello";
                 expect(textFieldView.fieldNameLabel.text) == "Field Title"
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("edit mode reference image") {
@@ -77,7 +77,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.textField.text) == "Hello";
                 expect(textFieldView.textField.placeholder) == "Field Title *"
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid false") {
@@ -93,7 +93,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.textField.placeholder) == "Field Title *"
                 expect(textFieldView.textField.leadingAssistiveLabel.text) == "Field Title is required"
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("email field") {
@@ -285,7 +285,7 @@ class TextFieldViewTests: KIFSpec {
                          "name": "field8",
                          "id": 8
                 ];
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -300,7 +300,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.fieldValue.text) == "Hi\nHello";
                 expect(textFieldView.fieldNameLabel.text) == "Multi Line Field Title"
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("edit mode reference image") {
@@ -314,7 +314,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.multilineTextField.textView.text) == "Hi\nHello";
                 expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title *"
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid false") {
@@ -329,7 +329,7 @@ class TextFieldViewTests: KIFSpec {
                 expect(textFieldView.multilineTextField.placeholder) == "Multi Line Field Title *"
                 expect(textFieldView.multilineTextField.leadingAssistiveLabel.text) == "Multi Line Field Title is required"
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("non edit mode") {

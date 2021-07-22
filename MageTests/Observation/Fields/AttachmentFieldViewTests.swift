@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import OHHTTPStubs
 import Kingfisher
 
@@ -82,7 +82,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     "name": "field0"
                 ];
                 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -126,7 +126,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("non edit mode with field title") {
@@ -154,7 +154,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("no initial value") {
@@ -168,7 +168,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 tester().waitForAnimationsToFinish(withTimeout: 0.01);
 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("one attachment set from observation") {
@@ -197,7 +197,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("3 attachments set from observation") {
@@ -249,7 +249,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment2.name ?? "") loaded")
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment3.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("4 attachments set from observation") {
@@ -309,7 +309,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment3.name ?? "") loaded")
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment4.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("5 attachments set from observation") {
@@ -379,7 +379,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment4.name ?? "") loaded")
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment5.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("one attachment set later") {
@@ -409,7 +409,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("two attachments set together later") {
@@ -452,7 +452,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment2.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment later") {
@@ -483,7 +483,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment with observation and one later") {
@@ -588,7 +588,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment name1 loaded")
                 tester().waitForView(withAccessibilityLabel: "attachment name2 loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment with observation and two later then remove first") {
@@ -649,7 +649,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment name1 loaded")
                 tester().waitForView(withAccessibilityLabel: "attachment name2 loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment with observation and two later then remove second") {
@@ -714,7 +714,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment name2 loaded")
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("required field is invalid if empty") {
@@ -734,7 +734,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 tester().waitForAnimationsToFinish(withTimeout: 0.01);
 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("required field is valid if attachment exists") {
@@ -767,7 +767,7 @@ class AttachmentFieldViewTests: KIFSpec {
 
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("should call the attachment selection delegate on tap") {
@@ -924,7 +924,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 coordinator.delegate?.attachmentCreated(attachment: attachment);
                 tester().waitForAnimationsToFinish(withTimeout: 0.01);
 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true))
             }
             
             it("set one attachment that is synced and one that is not") {

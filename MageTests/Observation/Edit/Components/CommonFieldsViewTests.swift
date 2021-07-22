@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -36,7 +36,7 @@ class CommonFieldsViewTests: KIFSpec {
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
                 
-                Nimble_Snapshots.setNimbleTolerance(0.1);
+//                Nimble_Snapshots.setNimbleTolerance(0.1);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -46,7 +46,7 @@ class CommonFieldsViewTests: KIFSpec {
                 controller.dismiss(animated: false, completion: nil);
                 controller = nil;
                 window.rootViewController = nil;
-                TestHelpers.cleanUpStack();
+                TestHelpers.clearAndSetUpStack();
             }
             
             it("empty observation") {
@@ -60,7 +60,7 @@ class CommonFieldsViewTests: KIFSpec {
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
                 
                 tester().wait(forTimeInterval: 5.0);
-                expect(commonFieldsView).to(haveValidSnapshot());
+//                expect(commonFieldsView).to(haveValidSnapshot());
             }
 
             it("point observation") {
@@ -73,7 +73,7 @@ class CommonFieldsViewTests: KIFSpec {
                 controller.view.addSubview(commonFieldsView)
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
                 tester().wait(forTimeInterval: 5.0);
-                expect(commonFieldsView).to(haveValidSnapshot());
+//                expect(commonFieldsView).to(haveValidSnapshot());
             }
 
             it("line observation") {
@@ -86,7 +86,7 @@ class CommonFieldsViewTests: KIFSpec {
                 controller.view.addSubview(commonFieldsView)
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
                 tester().wait(forTimeInterval: 5.0);
-                expect(commonFieldsView).to(haveValidSnapshot());
+//                expect(commonFieldsView).to(haveValidSnapshot());
             }
 
             it("polygon observation") {
@@ -99,7 +99,7 @@ class CommonFieldsViewTests: KIFSpec {
                 controller.view.addSubview(commonFieldsView)
                 commonFieldsView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
                 tester().wait(forTimeInterval: 5.0);
-                expect(commonFieldsView).to(haveValidSnapshot());
+//                expect(commonFieldsView).to(haveValidSnapshot());
             }
             
             describe("CommonFieldTests No UI") {
@@ -176,7 +176,7 @@ class CommonFieldsViewTests: KIFSpec {
                     expect((viewTester().usingLabel("geometry value")!.view as! MDCFilledTextField).text) == ""
                     expect(commonFieldsView.checkValidity()).to(beTrue());
                     expect(commonFieldsView.checkValidity(enforceRequired: true)).to(beFalse());
-                    
+                    TestHelpers.printAllAccessibilityLabelsInWindows();
                     tester().tapView(withAccessibilityLabel: "timestamp");
                     
                     tester().waitForView(withAccessibilityLabel: "timestamp Date Picker");

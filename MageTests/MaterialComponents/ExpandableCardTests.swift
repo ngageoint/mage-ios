@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import OHHTTPStubs
 
 @testable import MAGE
@@ -41,7 +41,7 @@ class ExpandableCardTests: KIFSpec {
                     }
                 }
                 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -61,7 +61,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("subheader set") {
@@ -74,7 +74,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("title set") {
@@ -87,7 +87,7 @@ class ExpandableCardTests: KIFSpec {
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("image name set") {
@@ -100,7 +100,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
                 tester().waitForView(withAccessibilityLabel: "form")
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("all header fields set") {
@@ -117,7 +117,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
                 tester().waitForView(withAccessibilityLabel: "form")
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("image and title set") {
@@ -132,7 +132,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
                 tester().waitForView(withAccessibilityLabel: "form")
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("header field set later") {
@@ -152,7 +152,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "form")
                 expect(expandableCard.header).to(equal("Header Later"));
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("subheader field set later") {
@@ -172,7 +172,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "form")
                 expect(expandableCard.subheader).to(equal("Subheader Later"));
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("title field set later") {
@@ -192,7 +192,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "form")
                 expect(expandableCard.title).to(equal("TITLE LATER"));
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("expanded view set") {
@@ -214,7 +214,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "expand");
                 expect(expandView.superview).toNot(beNil());
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("expanded view set with header information") {
@@ -236,7 +236,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "expand");
                 expect(expandView.superview).toNot(beNil());
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("expanded view set with header information all set after construction") {
@@ -259,7 +259,7 @@ class ExpandableCardTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "expand");
                 expect(expandView.superview).toNot(beNil());
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("expanded view initially set to unexpanded then expanded later") {
@@ -288,7 +288,7 @@ class ExpandableCardTests: KIFSpec {
                 expandableCard.expanded = true;
                 expect(viewTester().usingLabel("expandableArea").view.isHidden).to(beFalse());
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("will show unexpanded if set") {
@@ -306,7 +306,7 @@ class ExpandableCardTests: KIFSpec {
                 expect(expandableCard.showExpanded).to(beFalse());
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expandableArea")
 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("will show unexpanded if expand button is tapped") {
@@ -328,7 +328,7 @@ class ExpandableCardTests: KIFSpec {
                 expect(expandableCard.showExpanded).to(beFalse());
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expandableArea")
 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
         }
     }

@@ -34,11 +34,6 @@ class FeedItemRetrieverTests: KIFSpec {
         
         describe("FeedItemRetrieverTests") {
             
-            func clearAndSetUpStack() {
-                MageInitializer.initializePreferences();
-                MageInitializer.clearAndSetupCoreData();
-            }
-            
             beforeEach {
                 
                 TestHelpers.clearAndSetUpStack();
@@ -127,14 +122,15 @@ class FeedItemRetrieverTests: KIFSpec {
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
-                let feedItemRetriever: FeedItemRetriever = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate)!;
-                expect(feedItemRetriever.feed.remoteId) == "1"
+                let feedItemRetriever: FeedItemRetriever? = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", eventId: 1, delegate: feedItemDelegate);
+                expect(feedItemRetriever).toNot(beNil());
+                expect(feedItemRetriever?.feed.remoteId) == "1"
             }
             
             it("should return nil if no feed exists") {
                 let feedItemDelegate = MockFeedItemDelegate();
                 
-                let feedItemRetriever: FeedItemRetriever? = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate);
+                let feedItemRetriever: FeedItemRetriever? = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", eventId: 1, delegate: feedItemDelegate);
                 expect(feedItemRetriever).to(beNil());
             }
             
@@ -147,10 +143,11 @@ class FeedItemRetrieverTests: KIFSpec {
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
-                let feedItemRetriever: FeedItemRetriever = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate)!;
-                expect(feedItemRetriever.feed.remoteId) == "1"
+                let feedItemRetriever: FeedItemRetriever? = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", eventId: 1, delegate: feedItemDelegate);
+                expect(feedItemRetriever).toNot(beNil());
+                expect(feedItemRetriever?.feed.remoteId) == "1"
                 
-                let firstFeedItems: [FeedItem]? = feedItemRetriever.startRetriever();
+                let firstFeedItems: [FeedItem]? = feedItemRetriever?.startRetriever();
                 expect(firstFeedItems).to(beEmpty());
                 
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"])
@@ -167,10 +164,11 @@ class FeedItemRetrieverTests: KIFSpec {
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
                 
-                let feedItemRetriever: FeedItemRetriever = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate)!;
-                expect(feedItemRetriever.feed.remoteId) == "1"
+                let feedItemRetriever: FeedItemRetriever? = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", eventId: 1, delegate: feedItemDelegate);
+                expect(feedItemRetriever).toNot(beNil());
+                expect(feedItemRetriever?.feed.remoteId) == "1"
                 
-                let firstFeedItems: [FeedItem]? = feedItemRetriever.startRetriever();
+                let firstFeedItems: [FeedItem]? = feedItemRetriever?.startRetriever();
                 expect(firstFeedItems).to(beEmpty());
                 
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"])
@@ -198,10 +196,11 @@ class FeedItemRetrieverTests: KIFSpec {
                 }
                 let feedItemDelegate = MockFeedItemDelegate();
                 
-                let feedItemRetriever: FeedItemRetriever = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", delegate: feedItemDelegate)!;
-                expect(feedItemRetriever.feed.remoteId) == "1"
+                let feedItemRetriever: FeedItemRetriever? = FeedItemRetriever.getMappableFeedRetriever(feedId: "1", eventId: 1, delegate: feedItemDelegate);
+                expect(feedItemRetriever).toNot(beNil());
+                expect(feedItemRetriever?.feed.remoteId) == "1"
                 
-                let firstFeedItems: [FeedItem]? = feedItemRetriever.startRetriever();
+                let firstFeedItems: [FeedItem]? = feedItemRetriever?.startRetriever();
                 expect(firstFeedItems).to(beEmpty());
                 
                 waitUntil { done in

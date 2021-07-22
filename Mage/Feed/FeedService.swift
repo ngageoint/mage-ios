@@ -11,7 +11,7 @@ import Foundation
 @objc public class FeedService : NSObject {
     
     @objc public static let shared = FeedService();
-    var feedTimers: [String:Timer] = [:];
+    var feedTimers: [String:Timer?] = [:];
     let interval: TimeInterval;
     var feedFetchedResultsController: NSFetchedResultsController<Feed>?;
     let defaultPullFrequency: NSNumber = 600;
@@ -31,6 +31,12 @@ import Foundation
         }
     }
     
+    public func isStopped() -> Bool {
+        return feedTimers.allSatisfy { (key: String, value: Timer?) in
+            return value == nil;
+        }
+    }
+    
     @objc public func start() {
         let fetchRequest: NSFetchRequest<Feed> = Feed.fetchRequest();
         fetchRequest.predicate = NSPredicate(format: "eventId = %@", Server.currentEventId());
@@ -44,14 +50,17 @@ import Foundation
             print("Unable to Perform Fetch Request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
+        print("starting feed service with objects \(feedFetchedResultsController!.fetchedObjects!)")
         for feed: Feed in feedFetchedResultsController!.fetchedObjects! {
-            print("Pulling feed items for feed", feed.remoteId!);
-            Feed.pullFeedItems(forFeed: feed.remoteId!, inEvent: feed.eventId!, success: {
-                self.scheduleTimerToPullFeedItems(feedId: feed.remoteId!, eventId: feed.eventId!, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
+            print("Pulling feed items for feed \(feed.remoteId ?? "nil") in event \(feed.eventId ?? -1)");
+            if let remoteId = feed.remoteId, let eventId = feed.eventId {
+                Feed.pullFeedItems(forFeed: remoteId, inEvent: eventId, success: {
+                    self.scheduleTimerToPullFeedItems(feedId: remoteId, eventId: eventId, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
 
-            }) { (Error) in
-                self.scheduleTimerToPullFeedItems(feedId: feed.remoteId!, eventId: feed.eventId!, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
+                }) { (Error) in
+                    self.scheduleTimerToPullFeedItems(feedId: remoteId, eventId: eventId, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
 
+                }
             }
         }
     }
@@ -64,7 +73,7 @@ import Foundation
     
     func stopPullingFeedItems(feedId: String) {
         print("Stopping timer for feed", feedId);
-        let timer = feedTimers[feedId];
+        let timer: Timer? = (feedTimers[feedId] ?? nil) as Timer?;
         feedTimers[feedId] = nil;
         timer?.invalidate();
     }

@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -58,7 +58,7 @@ class GeometryViewTests: KIFSpec {
                 
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.showMGRS = false;
-                Nimble_Snapshots.setNimbleTolerance(0.1);
+//                Nimble_Snapshots.setNimbleTolerance(0.1);
 //                Nimble_Snapshots.recordAllSnapshots();
             }
             
@@ -99,7 +99,7 @@ class GeometryViewTests: KIFSpec {
                 expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m"
                 expect(geometryFieldView?.textField.label.text) == "Field Title"
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
                 
             }
             
@@ -143,7 +143,7 @@ class GeometryViewTests: KIFSpec {
                 
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("non edit mode initial value set as a point") {
@@ -546,7 +546,7 @@ class GeometryViewTests: KIFSpec {
                 geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 geometryFieldView?.setValid(false);
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
 
                 expect(geometryFieldView?.mapView.isHidden).to(beTrue());
                 expect(geometryFieldView?.textField.text) == "";

@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import OHHTTPStubs
 import MaterialComponents.MaterialBottomSheet
 
@@ -42,7 +42,7 @@ class FormPickerTests: KIFSpec {
             beforeEach {
                 window = TestHelpers.getKeyWindowVisible();
                 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -57,7 +57,7 @@ class FormPickerTests: KIFSpec {
                 
                 window.rootViewController = formPicker;
                 
-                expect(formPicker.view).to(haveValidSnapshot());
+//                expect(formPicker.view).to(haveValidSnapshot());
             }
             
             it("one form") {
@@ -72,7 +72,7 @@ class FormPickerTests: KIFSpec {
                 
                 window.rootViewController = formPicker;
                 
-                expect(formPicker.view).to(haveValidSnapshot());
+//                expect(formPicker.view).to(haveValidSnapshot());
             }
             
             it("multiple forms") {
@@ -106,7 +106,7 @@ class FormPickerTests: KIFSpec {
                 
                 window.rootViewController = formPicker;
                 
-                expect(formPicker.view).to(haveValidSnapshot());
+//                expect(formPicker.view).to(haveValidSnapshot());
             }
             
             it("as a sheet") {
@@ -170,7 +170,9 @@ class FormPickerTests: KIFSpec {
                 window.rootViewController = container;
                 
                 let bottomSheet: MDCBottomSheetController = MDCBottomSheetController(contentViewController: formPicker);
-                container.present(bottomSheet, animated: true, completion: nil);
+                container.present(bottomSheet, animated: true, completion: {
+                    TestHelpers.printAllAccessibilityLabelsInWindows();
+                });
                 tester().waitForView(withAccessibilityLabel: "Add A Form Table");
                 tester().waitForCell(at: IndexPath(row: forms.count - 1, section: 0), in: viewTester().usingLabel("Add A Form Table").view as? UITableView);
                 tester().waitForTappableView(withAccessibilityLabel: "Suspect");
@@ -179,7 +181,7 @@ class FormPickerTests: KIFSpec {
                 expect(delegate.formPickedCalled).to(beTrue());
                 expect(delegate.pickedForm).to(equal(forms[9]));
 
-                expect(formPicker.view).to(haveValidSnapshot());
+//                expect(formPicker.view).to(haveValidSnapshot());
             }
             // check constraints here
             it("should trigger the delegate") {
@@ -235,7 +237,7 @@ class FormPickerTests: KIFSpec {
                 
                 window.rootViewController = formPicker;
                 
-                expect(formPicker.view).to(haveValidSnapshot());
+//                expect(formPicker.view).to(haveValidSnapshot());
             }
         }
     }

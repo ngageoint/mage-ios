@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import MagicalRecord
 import OHHTTPStubs
 
@@ -29,11 +29,6 @@ class UserTableHeaderViewTests: KIFSpec {
         
         describe("UserTableHeaderView") {
             
-            func clearAndSetUpStack() {
-                MageInitializer.initializePreferences();
-                MageInitializer.clearAndSetupCoreData();
-            }
-            
             let recordSnapshots = false;
             
             var userTableHeaderView: UserTableHeaderView!
@@ -41,23 +36,23 @@ class UserTableHeaderViewTests: KIFSpec {
             var controller: UIViewController!
             var window: UIWindow!;
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 5.0);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot(usesDrawRect: true);
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
+//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
+//                print("Record snapshot?", recordSnapshots);
+//                if (recordSnapshots || recordThisSnapshot) {
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        Thread.sleep(forTimeInterval: 5.0);
+//                        DispatchQueue.main.async {
+//                            expect(view) == recordSnapshot(usesDrawRect: true);
+//                            doneClosure?();
+//                        }
+//                    }
+//                } else {
+//                    doneClosure?();
+//                }
+//            }
 
             beforeEach {
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
                 
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
@@ -86,7 +81,7 @@ class UserTableHeaderViewTests: KIFSpec {
                 window.rootViewController = nil;
                 controller = nil;
                 HTTPStubs.removeAllStubs();
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
             }
             
             it("user view") {
@@ -102,20 +97,20 @@ class UserTableHeaderViewTests: KIFSpec {
                 view.addSubview(userTableHeaderView);
                 userTableHeaderView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
 
-                maybeRecordSnapshot(userTableHeaderView, doneClosure: {
-                    completeTest = true;
-                })
+//                maybeRecordSnapshot(userTableHeaderView, doneClosure: {
+//                    completeTest = true;
+//                })
                 tester().expect(viewTester().usingLabel("name").view, toContainText: "User ABC");
                 tester().expect(viewTester().usingLabel("location").view, toContainText: "40.10850, -104.36780  GPS +/- 266.16m");
                 tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
                 tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
                 
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                    expect(userTableHeaderView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+//                if (recordSnapshots) {
+//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+//                } else {
+//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+//                    expect(userTableHeaderView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+//                }
             }
             
             it("current user view") {
@@ -141,16 +136,16 @@ class UserTableHeaderViewTests: KIFSpec {
                 tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
                 tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
                 
-                maybeRecordSnapshot(userTableHeaderView, doneClosure: {
-                    completeTest = true;
-                })
-                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                    expect(userTableHeaderView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-                }
+//                maybeRecordSnapshot(userTableHeaderView, doneClosure: {
+//                    completeTest = true;
+//                })
+//                
+//                if (recordSnapshots) {
+//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+//                } else {
+//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+//                    expect(userTableHeaderView).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
+//                }
             }
             
             it("init with constructor") {

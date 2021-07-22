@@ -36,7 +36,7 @@ class ObservationTests: KIFSpec {
             afterEach {
                 ObservationPushService.singleton().stop();
                 NSManagedObject.mr_setDefaultBatchSize(20);
-                TestHelpers.cleanUpStack();
+                TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
             
@@ -67,7 +67,7 @@ class ObservationTests: KIFSpec {
             
             afterEach {
                 NSManagedObject.mr_setDefaultBatchSize(20);
-                TestHelpers.cleanUpStack();
+                TestHelpers.clearAndSetUpStack();
             }
             
             it("should get the primary field name") {
@@ -1235,7 +1235,7 @@ class ObservationTests: KIFSpec {
             afterEach {
                 ObservationPushService.singleton().stop();
                 NSManagedObject.mr_setDefaultBatchSize(20);
-                TestHelpers.cleanUpStack();
+                TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
             

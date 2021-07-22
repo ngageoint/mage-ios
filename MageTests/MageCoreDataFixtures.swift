@@ -340,6 +340,7 @@ class MageCoreDataFixtures {
                 let remoteId: String = Feed.add(fromJson: feedJson, inEventId: eventId, in: localContext)
                 print("saved feed \(id)")
                 expect(remoteId) == id;
+                localContext.mr_saveToPersistentStoreAndWait();
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
@@ -466,12 +467,12 @@ class MageCoreDataFixtures {
 
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let remoteIds = Feed.populateFeedItems(fromJson: features as! [Any], inFeedId: feedId, in: localContext)
+                let remoteIds = Feed.populateFeedItems(fromJson: features as! [Any], inFeedId: feedId, inEvent: 1, in: localContext)
                 expect(remoteIds as? [String]) == feedItemIds;
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let remoteIds = Feed.populateFeedItems(fromJson: features as! [Any], inFeedId: feedId, in: localContext)
+                let remoteIds = Feed.populateFeedItems(fromJson: features as! [Any], inFeedId: feedId, inEvent: 1, in: localContext)
                 expect(remoteIds as? [String]) == feedItemIds;
             }, completion: completion);
         }

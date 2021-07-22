@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -57,7 +57,7 @@ class DateViewTests: KIFSpec {
                 for subview in view.subviews {
                     subview.removeFromSuperview();
                 }
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -73,7 +73,7 @@ class DateViewTests: KIFSpec {
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: "\(field["name"] as? String ?? "") Label");
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {
@@ -81,7 +81,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value set") {
@@ -91,7 +91,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 expect(dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later") {
@@ -103,7 +103,7 @@ class DateViewTests: KIFSpec {
 
                 dateFieldView.setValue( "2013-06-22T08:18:20.000Z")
                 expect(dateFieldView.textField.text).to(equal("2013-06-22 02:18 MDT"));
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later as Any") {
@@ -141,7 +141,7 @@ class DateViewTests: KIFSpec {
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == formatter.string(from: date);
                 expect(dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set value with touch inputs in GMT") {
@@ -242,7 +242,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.autoPinEdgesToSuperviewEdges();
 
                 dateFieldView.setValid(false);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
 
             it("set valid true after being invalid") {
@@ -254,7 +254,7 @@ class DateViewTests: KIFSpec {
 
                 dateFieldView.setValid(false);
                 dateFieldView.setValid(true);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
 
             it("required field is invalid if empty") {
@@ -289,7 +289,7 @@ class DateViewTests: KIFSpec {
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
 
             it("test delegate") {
@@ -309,7 +309,7 @@ class DateViewTests: KIFSpec {
                 dateFieldView.textFieldDidEndEditing(dateFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == formatter.string(from: newDate);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("done button should send nil as new value") {

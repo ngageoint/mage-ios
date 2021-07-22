@@ -21,14 +21,9 @@ class FeedTests: KIFSpec {
         
         describe("FeedTests") {
             
-            func clearAndSetUpStack() {
-                MageInitializer.initializePreferences();
-                MageInitializer.clearAndSetupCoreData();
-            }
-            
             beforeEach {
                 
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
                 let emptyFeeds: [String]? = nil
                 UserDefaults.standard.set(emptyFeeds, forKey: "selectedFeeds-1");
@@ -40,7 +35,7 @@ class FeedTests: KIFSpec {
             }
             
             afterEach {
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
             }
             
             func loadFeedsJson() -> NSArray {
@@ -152,7 +147,7 @@ class FeedTests: KIFSpec {
 
                 let feedItems = loadFeedItemsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", in: localContext)
+                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", inEvent: 1, in: localContext)
                     expect(remoteIds as? [String]) == feedItemIds;
                 })
 
@@ -172,7 +167,7 @@ class FeedTests: KIFSpec {
 
                 let feedItems = loadFeedItemsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", in: localContext)
+                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", inEvent: 1, in: localContext)
                     expect(remoteIds as? [String]) == feedItemIds;
                 })
 
@@ -191,7 +186,7 @@ class FeedTests: KIFSpec {
 
                 var feedItemIds: [String] = ["1","2"];
 
-                for feedItem: FeedItem in FeedItem.getFeedItems(forFeed: 1) {
+                for feedItem: FeedItem in FeedItem.getFeedItems(forFeed: "1", andEvent: 1) {
                     expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
                     feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
                 }

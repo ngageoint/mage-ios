@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import Kingfisher
 import OHHTTPStubs
 
@@ -82,11 +82,11 @@ class ObservationListCardCellTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "attachment \(observation.attachments?.first?.name ?? "") loaded")
 
                 view = viewTester().usingLabel("observation card \(observation.objectID.uriRepresentation().absoluteString)").view
-                if (!recordSnapshots) {
-                    expect(view).to(haveValidSnapshot(usesDrawRect: true))
-                } else {
-                    expect(view) == recordSnapshot(usesDrawRect: true);
-                }
+//                if (!recordSnapshots) {
+//                    expect(view).to(haveValidSnapshot(usesDrawRect: true))
+//                } else {
+//                    expect(view) == recordSnapshot(usesDrawRect: true);
+//                }
             }
         }
     }

@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -45,7 +45,7 @@ class MultiDropdownFieldViewTests: KIFSpec {
                     subview.removeFromSuperview();
                 }
                 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -63,7 +63,7 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 multidropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
                 expect(multidropdownFieldView.isEmpty()) == false;
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("non edit mode multiple values") {
@@ -75,7 +75,7 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 
                 expect(multidropdownFieldView.isEmpty()) == false;
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later") {
@@ -88,7 +88,7 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 expect(multidropdownFieldView.isEmpty()) == true;
                 multidropdownFieldView.setValue(["green", "purple"]);
                 expect(multidropdownFieldView.isEmpty()) == false;
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("multi required field should show status") {
@@ -101,7 +101,7 @@ class MultiDropdownFieldViewTests: KIFSpec {
                 
                 expect(multidropdownFieldView.isEmpty()) == true;
                 multidropdownFieldView.setValid(multidropdownFieldView.isValid());
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
         }
     }

@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -38,7 +38,7 @@ class CheckboxFieldViewTests: KIFSpec {
                     "name": "field8",
                     "id": 8
                 ];
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -61,7 +61,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 expect((viewTester().usingLabel(field["name"] as? String)?.view as! UISwitch).isUserInteractionEnabled).to(beFalse());
                 expect((viewTester().usingLabel(field["name"] as? String)?.view as! UISwitch).isEnabled).to(beTrue());
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {
@@ -72,7 +72,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value true") {
@@ -83,7 +83,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value false") {
@@ -94,7 +94,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 checkboxFieldView.autoPinEdgesToSuperviewEdges();
                 
                 controller.view.addSubview(view);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set value later") {
@@ -106,7 +106,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 
                 controller.view.addSubview(view);
                 checkboxFieldView.setValue(true);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set value simulated touch") {
@@ -121,7 +121,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: field["name"] as? String);
                 tester().setOn(true, forSwitchWithAccessibilityLabel: field["name"] as? String);
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("required") {
@@ -134,7 +134,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 
                 controller.view.addSubview(view);
                 checkboxFieldView.setValue(true);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid false") {
@@ -147,7 +147,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 controller.view.addSubview(view);
                 
                 checkboxFieldView.setValid(false);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set valid true after being invalid") {
@@ -161,7 +161,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 
                 checkboxFieldView.setValid(false);
                 checkboxFieldView.setValid(true);
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("required field is invalid if false") {
@@ -178,7 +178,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 expect(checkboxFieldView.isEmpty()) == true;
                 expect(checkboxFieldView.isValid(enforceRequired: true)) == false;
                 checkboxFieldView.setValid(checkboxFieldView.isValid());
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("required field is valid if true") {
@@ -196,7 +196,7 @@ class CheckboxFieldViewTests: KIFSpec {
                 expect(checkboxFieldView.isEmpty()) == false;
                 expect(checkboxFieldView.isValid(enforceRequired: true)) == true;
                 checkboxFieldView.setValid(checkboxFieldView.isValid());
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("test delegate false value") {

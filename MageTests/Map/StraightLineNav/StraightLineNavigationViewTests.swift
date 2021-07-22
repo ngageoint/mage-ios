@@ -10,7 +10,7 @@ import Foundation
 
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import OHHTTPStubs
 
 import MagicalRecord
@@ -31,13 +31,13 @@ class StraightLineNavigationViewTests: KIFSpec {
             var controller: UIViewController!
             var window: UIWindow!;
             
-            func maybeSnapshot() -> Snapshot {
-                if (recordSnapshots) {
-                    return recordSnapshot(usesDrawRect: true)
-                } else {
-                    return snapshot(usesDrawRect: true)
-                }
-            }
+//            func maybeSnapshot() -> Snapshot {
+//                if (recordSnapshots) {
+//                    return recordSnapshot(usesDrawRect: true)
+//                } else {
+//                    return snapshot(usesDrawRect: true)
+//                }
+//            }
             
             beforeEach {
                 window = TestHelpers.getKeyWindowVisible()
@@ -68,7 +68,7 @@ class StraightLineNavigationViewTests: KIFSpec {
                 view.addSubview(straightLineNavigationView)
                 straightLineNavigationView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
                 
-                expect(view) == maybeSnapshot();
+//                expect(view) == maybeSnapshot();
             }
         }
     }

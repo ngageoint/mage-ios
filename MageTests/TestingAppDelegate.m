@@ -13,19 +13,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 //    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-//    
-//    NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
-//    NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
-//    
-//    NSURL *defaultPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences" withExtension:@"plist"];
-//    NSDictionary *defaultPreferences = [NSDictionary dictionaryWithContentsOfURL:defaultPreferencesFile];
-//    
-//    NSMutableDictionary *allPreferences = [[NSMutableDictionary alloc] initWithDictionary:sdkPreferences];
-//    [allPreferences addEntriesFromDictionary:defaultPreferences];
-//    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
-//    
-//    [MagicalRecord setupMageCoreDataStack];
-//    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
+    
+    NSURL *sdkPreferencesFile = [[NSBundle mainBundle] URLForResource:@"MageSDK.bundle/preferences" withExtension:@"plist"];
+    NSDictionary *sdkPreferences = [NSDictionary dictionaryWithContentsOfURL:sdkPreferencesFile];
+    
+    NSURL *defaultPreferencesFile = [[NSBundle mainBundle] URLForResource:@"preferences" withExtension:@"plist"];
+    NSDictionary *defaultPreferences = [NSDictionary dictionaryWithContentsOfURL:defaultPreferencesFile];
+    
+    NSMutableDictionary *allPreferences = [[NSMutableDictionary alloc] initWithDictionary:sdkPreferences];
+    [allPreferences addEntriesFromDictionary:defaultPreferences];
+    [[NSUserDefaults standardUserDefaults]  registerDefaults:allPreferences];
+    
+    [MagicalRecord setupCoreDataStackWithInMemoryStore];
+    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
     return YES;
 }

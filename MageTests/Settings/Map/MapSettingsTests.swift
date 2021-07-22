@@ -23,15 +23,10 @@ class MapSettingsTests: KIFSpec {
             
             var mapSettings: MapSettings!
             var window: UIWindow!;
-            MageInitializer.clearAndSetupCoreData();
-            
-            func clearAndSetUpStack() {
-                MageInitializer.initializePreferences();
-            }
             
             beforeEach {
                 
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
@@ -48,7 +43,7 @@ class MapSettingsTests: KIFSpec {
             afterEach {
                 FeedService.shared.stop();
                 HTTPStubs.removeAllStubs();
-                clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack();
                 MageCoreDataFixtures.clearAllData();
             }
             

@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -45,7 +45,7 @@ class DropdownFieldViewTests: KIFSpec {
                     subview.removeFromSuperview();
                 }
                 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
@@ -62,7 +62,7 @@ class DropdownFieldViewTests: KIFSpec {
                 view.addSubview(dropdownFieldView)
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {
@@ -73,7 +73,7 @@ class DropdownFieldViewTests: KIFSpec {
                 dropdownFieldView.autoPinEdgesToSuperviewEdges();
                 
                 expect(dropdownFieldView.isEmpty()) == true;
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("initial value set") {
@@ -85,7 +85,7 @@ class DropdownFieldViewTests: KIFSpec {
                 
                 expect(dropdownFieldView.isEmpty()) == false;
 
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("set value via input") {
@@ -112,7 +112,7 @@ class DropdownFieldViewTests: KIFSpec {
                 
                 expect(dropdownFieldView.isEmpty()) == true;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
             
             it("required field should show status after value has been added") {
@@ -129,7 +129,7 @@ class DropdownFieldViewTests: KIFSpec {
                 expect(dropdownFieldView.getValue()) == "purple";
                 expect(dropdownFieldView.isEmpty()) == false;
                 dropdownFieldView.setValid(dropdownFieldView.isValid());
-                expect(view).to(haveValidSnapshot());
+//                expect(view).to(haveValidSnapshot());
             }
         }
     }

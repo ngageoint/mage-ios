@@ -9,7 +9,7 @@
 import Foundation
 import MagicalRecord
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import Kingfisher
 
 @testable import MAGE
@@ -85,7 +85,7 @@ class TestHelpers {
         MageInitializer.initializePreferences();
     }
     
-    public static func clearAndSetUpStack() {
+    public static func clearDocuments() {
         if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
             let eventsDirectory = documentsDirectory.appendingPathComponent("events");
@@ -102,13 +102,18 @@ class TestHelpers {
             }
         }
         
+    }
+    
+    public static func clearAndSetUpStack() {
+        TestHelpers.clearDocuments();
         TestHelpers.resetUserDefaults();
-        MagicalRecord.cleanUp();
+        MageCoreDataFixtures.clearAllData();
+//        MagicalRecord.cleanUp();
         
 //        MagicalRecord.deleteAndSetupMageCoreDataStack();
 //        MagicalRecord.setupCoreDataStack();
-        MagicalRecord.setupCoreDataStackWithInMemoryStore();
-        MagicalRecord.setLoggingLevel(.verbose);
+//        MagicalRecord.setupCoreDataStackWithInMemoryStore();
+//        MagicalRecord.setLoggingLevel(.verbose);
     }
     
     public static func cleanUpStack() {

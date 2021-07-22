@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -30,7 +30,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 window = TestHelpers.getKeyWindowVisible();
                 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
                 
                 TestHelpers.resetUserDefaults();
@@ -69,7 +69,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     window.rootViewController = observationEditController;
                     view = observationEditController.view;
                     
-                    expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                    expect(view).to(haveValidSnapshot(usesDrawRect: true));
                 }
                 
                 it("verify legacy behavior") {
@@ -137,7 +137,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 view = observationEditController.view;
                 
                 expect(observationEditController.title) == "Edit Observation";
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("empty new observation zero forms") {
@@ -151,10 +151,10 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
-            it("validation error on observation") {                
+            it("validation error on observation") {
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
@@ -166,7 +166,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 window.rootViewController = nc;
                 view = observationEditController.view;
                 
-                
+                TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().tapView(withAccessibilityLabel: "Save");
                 tester().waitForView(withAccessibilityLabel: "The observation has validation errors.");
             }
@@ -187,7 +187,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Add Form");
                 
                 expect(delegate.addFormCalled).to(beTrue());
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("show the form button if there are two forms") {
@@ -206,7 +206,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Add Form");
                 
                 expect(delegate.addFormCalled).to(beTrue());
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("not show the add form button if there are no forms") {
@@ -220,7 +220,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("empty new observation two forms should call add form") {
@@ -262,7 +262,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Form 1")
                 TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().waitForView(withAccessibilityLabel: "field1 value", value: "None", traits: .none);
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("user defaults") {
@@ -535,7 +535,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should expand current forms") {
@@ -574,7 +574,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "expand");
                 tester().tapView(withAccessibilityLabel: "expand");
                 tester().waitForAnimationsToFinish();
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should show current forms multiple forms") {
@@ -614,7 +614,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should show all the things form") {
@@ -649,7 +649,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 window.rootViewController = observationEditController;
                 view = observationEditController.view;
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should show checkbox form") {
@@ -673,7 +673,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
                 }
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("filling out the form should update the form header") {
@@ -701,7 +701,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Done");
                 tester().clearText(fromAndThenEnterText: "Some other text", intoViewWithAccessibilityLabel: "field1");
                 tester().tapView(withAccessibilityLabel: "Done");
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("saving the form should send the observation to the delegate") {
@@ -827,7 +827,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().setText("", intoViewWithAccessibilityLabel: "field1");
                 (viewTester().usingLabel("Field View field0").view as? TextFieldView)?.textFieldDidEndEditing(viewTester().usingLabel("field0").view as! UITextField)
                 (viewTester().usingLabel("Field View field1").view as? TextFieldView)?.textFieldDidEndEditing(viewTester().usingLabel("field1").view as! UITextField)
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
         }
     }

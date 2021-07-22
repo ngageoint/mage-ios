@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import Kingfisher
 import OHHTTPStubs
 
@@ -38,7 +38,7 @@ class ObservationBottomSheetTests: KIFSpec {
                 window = TestHelpers.getKeyWindowVisible();
                 window!.rootViewController = navigationController;
                 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
                 
                 MageCoreDataFixtures.clearAllData()
@@ -93,7 +93,7 @@ class ObservationBottomSheetTests: KIFSpec {
 
                 expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MDCBottomSheetController.self));
                 
-                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
         }
     }

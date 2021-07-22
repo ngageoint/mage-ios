@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import OHHTTPStubs
 
 @testable import MAGE
@@ -58,20 +58,20 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 return UIImage(cgImage: cgImage)
             }
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = false, doneClosure: (() -> Void)?) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 5.5);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
+//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = false, doneClosure: (() -> Void)?) {
+//                print("Record snapshot?", recordSnapshots);
+//                if (recordSnapshots || recordThisSnapshot) {
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        Thread.sleep(forTimeInterval: 5.5);
+//                        DispatchQueue.main.async {
+//                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
+//                            doneClosure?();
+//                        }
+//                    }
+//                } else {
+//                    doneClosure?();
+//                }
+//            }
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();

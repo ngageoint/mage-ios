@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import OHHTTPStubs
 
 @testable import MAGE
@@ -20,26 +20,26 @@ class ObservationHeaderViewTests: KIFSpec {
         
         describe("ObservationHeaderViewTests") {
             let recordSnapshots = false;
-            Nimble_Snapshots.setNimbleTolerance(0.1);
+//            Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var controller: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
             
-            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = true, doneClosure: (() -> Void)?) {
-                print("Record snapshot?", recordSnapshots);
-                if (recordSnapshots || recordThisSnapshot) {
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        Thread.sleep(forTimeInterval: 5.0);
-                        DispatchQueue.main.async {
-                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
-                            doneClosure?();
-                        }
-                    }
-                } else {
-                    doneClosure?();
-                }
-            }
+//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = true, doneClosure: (() -> Void)?) {
+//                print("Record snapshot?", recordSnapshots);
+//                if (recordSnapshots || recordThisSnapshot) {
+//                    DispatchQueue.global(qos: .userInitiated).async {
+//                        Thread.sleep(forTimeInterval: 5.0);
+//                        DispatchQueue.main.async {
+//                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
+//                            doneClosure?();
+//                        }
+//                    }
+//                } else {
+//                    doneClosure?();
+//                }
+//            }
             
             beforeEach {
                 if (controller != nil) {
@@ -67,7 +67,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 controller = nil;
                 view = nil;
                 window = nil;
-                TestHelpers.cleanUpStack();
+                TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
             
@@ -108,15 +108,15 @@ class ObservationHeaderViewTests: KIFSpec {
                 let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! MDCButton
                 expect(importantButton.imageTintColor(for: .normal)).to(be(MDCPalette.orange.accent400));
                 
-                maybeRecordSnapshot(view, doneClosure: {
-                    completeTest = true;
-                })
-                                
-                if (recordSnapshots) {
-                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-                } else {
-                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                }
+//                maybeRecordSnapshot(view, doneClosure: {
+//                    completeTest = true;
+//                })
+//                                
+//                if (recordSnapshots) {
+//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
+//                } else {
+//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
+//                }
             }
             
             it("tap directions button") {

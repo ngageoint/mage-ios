@@ -64,26 +64,24 @@ class ServerURLControllerTests: KIFSpec {
                 view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
                 tester().waitForView(withAccessibilityLabel: "Server URL");
-                expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
                 TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Cancel");
-                expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("OK")?.view).toNot(beNil());
             }
             
             it("should not allow setting an empty server URL") {
                 view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
-                expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("OK")?.view).toNot(beNil());
                 
                 tester().tapView(withAccessibilityLabel: "OK");
                 expect(delegate?.setServerURLCalled).to(beFalse());
                 
-                expect(viewTester().usingLabel("Server URL Error")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Server URL Error")?.view).toNot(beNil());
                 tester().expect(viewTester().usingLabel("Server URL Error")?.view, toContainText: "Invalid URL");
             }
             
@@ -91,14 +89,13 @@ class ServerURLControllerTests: KIFSpec {
                 view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
-                expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
                 tester().clearTextFromView(withAccessibilityLabel: "Server URL");
                 tester().enterText("https://magetest", intoViewWithAccessibilityLabel: "Server URL");
-                expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("OK")?.view).toNot(beNil());
                 
                 tester().tapView(withAccessibilityLabel: "OK");
-                expect(delegate?.setServerURLCalled).toEventually(beTrue());
+                expect(delegate?.setServerURLCalled).to(beTrue());
                 expect(delegate?.newURL).toEventually(equal(URL(string: "https://magetest")));
             }
             
@@ -106,11 +103,11 @@ class ServerURLControllerTests: KIFSpec {
                 view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
-                expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
                 tester().clearTextFromView(withAccessibilityLabel: "Server URL");
                 tester().enterText("https://magetest\n", intoViewWithAccessibilityLabel: "Server URL");
-                expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("OK")?.view).toNot(beNil());
                 
                 tester().tapView(withAccessibilityLabel: "OK");
                 expect(delegate?.setServerURLCalled).toEventually(beTrue());
@@ -123,13 +120,12 @@ class ServerURLControllerTests: KIFSpec {
                 view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
                 tester().waitForView(withAccessibilityLabel: "Server URL");
-                expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
                 tester().expect(viewTester().usingLabel("Server URL")?.view, toContainText: "https://magetest");
 
-                expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Cancel")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("OK")?.view).toNot(beNil());
             }
             
             it("should load current URL into the ServerURLController with an error") {
@@ -138,11 +134,11 @@ class ServerURLControllerTests: KIFSpec {
                 view = ServerURLController(delegate: delegate, andError: "Something wrong", andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
-                tester().waitForView(withAccessibilityLabel: "Server URL, Error: Something wrong");
-                expect(viewTester().usingLabel("Server URL, Error: Something wrong")?.view).toEventuallyNot(beNil());
+                TestHelpers.printAllAccessibilityLabelsInWindows();
+                tester().waitForView(withAccessibilityLabel: "Something wrong");
+                expect(viewTester().usingLabel("Something wrong")?.view).toNot(beNil());
 
-                tester().expect(viewTester().usingLabel("Server URL, Error: Something wrong")?.view, toContainText: "https://magetest");
+                tester().expect(viewTester().usingLabel("Server URL")?.view, toContainText: "https://magetest");
                 expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
                 
                 tester().waitForView(withAccessibilityLabel: "Server URL Error");
@@ -156,15 +152,14 @@ class ServerURLControllerTests: KIFSpec {
                 view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ServerURLController.self));
                 tester().waitForView(withAccessibilityLabel: "Server URL");
-                expect(viewTester().usingLabel("Server URL")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
                 tester().expect(viewTester().usingLabel("Server URL")?.view, toContainText: "https://magetest");
-                expect(viewTester().usingLabel("Cancel")?.view).toEventuallyNot(beNil());
-                expect(viewTester().usingLabel("OK")?.view).toEventuallyNot(beNil());
+                expect(viewTester().usingLabel("Cancel")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("OK")?.view).toNot(beNil());
                 
                 tester().tapView(withAccessibilityLabel: "Cancel");
-                expect(delegate?.cancelSetServerURLCalled).toEventually(beTrue());
+                expect(delegate?.cancelSetServerURLCalled).to(beTrue());
             }
         }
     }

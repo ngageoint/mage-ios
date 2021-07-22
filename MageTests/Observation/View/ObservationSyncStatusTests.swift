@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Nimble_Snapshots
+//import Nimble_Snapshots
 import OHHTTPStubs
 
 @testable import MAGE
@@ -40,12 +40,12 @@ class ObservationSyncStatusTests: KIFSpec {
                 view.autoPinEdgesToSuperviewEdges();
                 Server.setCurrentEventId(1);
 
-                Nimble_Snapshots.setNimbleTolerance(0.0);
+//                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots();
             }
             
             afterEach {
-                TestHelpers.cleanUpStack();
+                TestHelpers.clearAndSetUpStack();
                 for subview in view.subviews {
                     subview.removeFromSuperview();
                 }
@@ -102,7 +102,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Pushed on 2020-06-05 11:21 MDT");
                 
-                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("dirty") {
@@ -130,7 +130,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Changes Queued");
                 tester().waitForView(withAccessibilityLabel: "Sync Now");
                 
-                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("error") {
@@ -161,7 +161,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Error Pushing Changes\nSomething Bad");
                 
-                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("tap sync now") {
@@ -198,7 +198,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Sync Now");
                 tester().tapView(withAccessibilityLabel: "Sync Now");
                 expect(stubCalled).toEventually(beTrue());
-                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("dirty and then pushed") {
@@ -225,7 +225,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 tester().wait(forTimeInterval: 0.5);
                 observation.dirty = false;
                 syncStatus.updateObservationStatus();
-                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
+//                expect(syncStatus).to(haveValidSnapshot(usesDrawRect: true));
             }
         }
     }

@@ -103,7 +103,6 @@ class LocalLoginViewTests: KIFSpec {
                 localLoginView.applyTheme(withContainerScheme: MAGEScheme.scheme())
                 view.addSubview(localLoginView);
                 localLoginView?.autoPinEdgesToSuperviewEdges();
-                
                 tester().waitForView(withAccessibilityLabel: "Local Login View");
                 tester().waitForView(withAccessibilityLabel: "Username");
                 tester().waitForView(withAccessibilityLabel: "Password");
