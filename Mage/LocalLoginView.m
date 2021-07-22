@@ -102,17 +102,14 @@
     return YES;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSString *updatedString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {    
     // if we override this we need to check if its \n
     if ([string isEqualToString:@"\n"]) {
         [textField resignFirstResponder];
-    } else {
-        textField.text = updatedString;
+        return NO;
     }
     
-    return NO;
+    return YES;
 }
 
 - (IBAction)showPasswordSwitchAction:(id)sender {
