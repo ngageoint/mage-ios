@@ -135,15 +135,7 @@
             [self startStraightLineNavigation:self.observationToNavigateTo.location.coordinate image:self.navigationImage];
         } else if (self.feedItemToNavigateTo != nil) {
             [self startStraightLineNavigation:self.feedItemToNavigateTo.coordinate image:self.navigationImage];
-        } else {
-            // this shouldn't be active for all maps TODO
-            if ([[NSUserDefaults standardUserDefaults] showHeading]) {
-                self.headingActive = true;
-                [self startHeading];
-            }
         }
-        
-        
     }
     if (!self.mapCacheOverlays) {
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];

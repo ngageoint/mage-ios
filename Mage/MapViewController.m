@@ -217,8 +217,6 @@
     [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupMapSettingsButton];
     
-    
-
     // Start the timer for updating the circles
     [self startMapAnnotationsUpdateTimer];
     
@@ -235,6 +233,10 @@
     [self onLocationAuthorizationStatus:[CLLocationManager authorizationStatus]];
     [self.mapDelegate ensureMapLayout];
     [self setupNavigationBar];
+    
+    if ([[NSUserDefaults standardUserDefaults] showHeading]) {
+        [self.mapDelegate startHeading];
+    }
 }
 
 - (void) setupListeners {
