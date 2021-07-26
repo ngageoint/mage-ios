@@ -1814,6 +1814,10 @@
 }
 
 - (void) cancelStraightLineNavigation {
+    self.locationToNavigateTo = kCLLocationCoordinate2DInvalid;
+    self.observationToNavigateTo = nil;
+    self.userToNavigateTo = nil;
+    self.feedItemToNavigateTo = nil;
     [self.straightLineNavigation stopNavigation];
     [self.locationManager stopUpdatingLocation];
     [self.locationManager stopUpdatingHeading];

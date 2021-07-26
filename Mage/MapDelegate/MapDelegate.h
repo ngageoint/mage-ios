@@ -100,5 +100,6 @@
 - (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;
 - (void) startHeading;
 - (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination image: (UIImage *) image;
+- (void) updateStraightLineNavigationDestination: (CLLocationCoordinate2D) destination;
 - (void) resetEnlargedPin;
 @end
