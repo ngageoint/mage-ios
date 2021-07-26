@@ -123,9 +123,13 @@ class UserActionsView: UIView {
         self.userActionsDelegate = delegate;
         if (self.user?.email == nil) {
             emailButton.isHidden = true;
+        } else {
+            emailButton.isHidden = false;
         }
         if (self.user?.phone == nil) {
             phoneButton.isHidden = true;
+        } else {
+            phoneButton.isHidden = false;
         }
         
         if (user.location != nil) {

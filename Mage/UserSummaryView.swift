@@ -47,9 +47,6 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
         }
         
         primaryField.text = item.name;
-        if (item.username != nil && item.username != "") {
-            secondaryField.text = "@\(item.username ?? "")";
-        }
         
         // we do not want the date to word break so we replace all spaces with a non word breaking spaces
         var timeText = "";
