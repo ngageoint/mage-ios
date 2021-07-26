@@ -13,7 +13,10 @@ extension MapDelegate : FeatureActionsDelegate {
         self.featureBottomSheet.dismiss(animated: true) {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-                
+                self.locationToNavigateTo = location;
+                self.observationToNavigateTo = nil;
+                self.userToNavigateTo = nil;
+                self.feedItemToNavigateTo = nil;
                 let image: UIImage? = UIImage(named: "observations")
                 self.startStraightLineNavigation(location, image: image);
             }));

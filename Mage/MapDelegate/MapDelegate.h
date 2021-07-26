@@ -80,6 +80,10 @@
 @property (strong, nonatomic) FeedItemBottomSheetController *feedItemBottomSheet;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) User *userToNavigateTo;
+@property (strong, nonatomic) Observation *observationToNavigateTo;
+@property (strong, nonatomic) FeedItem *feedItemToNavigateTo;
+@property (nonatomic) CLLocationCoordinate2D locationToNavigateTo;
+@property (strong, nonatomic) UIImage *navigationImage;
 
 - (void) updateLocations:(NSArray *) locations;
 - (void) updateLocationPredicates: (NSMutableArray *) predicates;

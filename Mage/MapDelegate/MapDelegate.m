@@ -95,6 +95,12 @@
 
 @implementation MapDelegate
 
+- (instancetype) init {
+    self = [super init];
+    self.locationToNavigateTo = kCLLocationCoordinate2DInvalid;
+    return self;
+}
+
 - (void) setupListeners {
     if (self.mapView) {
         if (!self.listenersRegistered) {
@@ -120,10 +126,24 @@
         self.locationManager.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
-        if ([[NSUserDefaults standardUserDefaults] showHeading]) {
-            self.headingActive = true;
-            [self startHeading];
+        
+        if (CLLocationCoordinate2DIsValid(self.locationToNavigateTo)) {
+            [self startStraightLineNavigation:self.locationToNavigateTo image:self.navigationImage];
+        } else if (self.userToNavigateTo != nil) {
+            [self startStraightLineNavigation:self.userToNavigateTo.location.location.coordinate image:self.navigationImage];
+        } else if (self.observationToNavigateTo != nil){
+            [self startStraightLineNavigation:self.observationToNavigateTo.location.coordinate image:self.navigationImage];
+        } else if (self.feedItemToNavigateTo != nil) {
+            [self startStraightLineNavigation:self.feedItemToNavigateTo.coordinate image:self.navigationImage];
+        } else {
+            // this shouldn't be active for all maps TODO
+            if ([[NSUserDefaults standardUserDefaults] showHeading]) {
+                self.headingActive = true;
+                [self startHeading];
+            }
         }
+        
+        
     }
     if (!self.mapCacheOverlays) {
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
@@ -1463,6 +1483,7 @@
 }
 
 - (void) startStraightLineNavigation: (CLLocationCoordinate2D) destination image:(UIImage*) image {
+    self.navigationImage = image;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager startUpdatingLocation];
     self.locationManager.headingFilter = 0.5;

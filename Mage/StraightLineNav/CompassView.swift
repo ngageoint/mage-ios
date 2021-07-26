@@ -103,13 +103,6 @@ struct Marker {
 }
 
 class CompassTargetView: CompassMarkerView {
-    var targetColor: UIColor = .systemGreen;
-    
-    public convenience init(marker: Marker? = nil, compassDegrees: Double? = nil, targetColor: UIColor = .systemGreen) {
-        self.init(marker: marker, compassDegrees: compassDegrees);
-        self.targetColor = targetColor;
-    }
-    
     override func capsuleWidth() -> CGFloat {
         return 5
     }
@@ -126,6 +119,7 @@ class CompassTargetView: CompassMarkerView {
 class CompassMarkerView: UIView {
     var marker: Marker?
     var compassDegrees: Double?
+    var targetColor: UIColor = .gray;
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView(forAutoLayout: ());
@@ -138,10 +132,11 @@ class CompassMarkerView: UIView {
         return stack;
     }()
     
-    public convenience init(marker: Marker? = nil, compassDegrees: Double? = nil) {
+    public convenience init(marker: Marker? = nil, compassDegrees: Double? = nil, targetColor: UIColor = .gray) {
         self.init(frame: .zero);
         self.marker = marker;
         self.compassDegrees = compassDegrees;
+        self.targetColor = targetColor;
         layout();
     }
     
@@ -173,7 +168,7 @@ class CompassMarkerView: UIView {
         degreeLabel.autoPinEdge(toSuperviewEdge: .top, withInset: 5);
         degreeLabel.autoAlignAxis(toSuperviewAxis: .vertical);
         capsuleContainer.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 30, left: 0, bottom: 20, right: 0), excludingEdge: .bottom);
-        markerLabel.autoPinEdge(.top, to: .bottom, of: degreeLabel, withOffset: 30);
+        markerLabel.autoPinEdge(.top, to: .bottom, of: degreeLabel, withOffset: 25);
         markerLabel.autoAlignAxis(toSuperviewAxis: .vertical);
         
         self.transform = transform;
@@ -203,6 +198,8 @@ class CompassView: UIView {
     var scheme: MDCContainerScheming?;
     var targetColor: UIColor = .systemGreen;
     var headingColor: UIColor = .systemRed;
+    var viewableDegrees: Double = 360.0;
+    var compassTargetView: CompassTargetView?;
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView(forAutoLayout: ());
@@ -229,34 +226,38 @@ class CompassView: UIView {
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
-        self.backgroundColor = scheme.colorScheme.surfaceColor.withAlphaComponent(0.87);
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
     }
     
     func layoutView(heading: Double, destinationBearing: Double) {
         let rotationalHeading = 360.0 - heading;
         let markerContainer = layoutView(heading: heading);
         let marker = Marker(degrees: destinationBearing);
-        let compassTargetView = CompassTargetView(marker: marker, compassDegrees: rotationalHeading, targetColor: self.targetColor);
-        markerContainer.addSubview(compassTargetView);
-        compassTargetView.autoPinEdgesToSuperviewEdges();
+        compassTargetView = CompassTargetView(marker: marker, compassDegrees: rotationalHeading, targetColor: self.targetColor);
+        markerContainer.addSubview(compassTargetView!);
+        compassTargetView!.autoPinEdgesToSuperviewEdges();
     }
     
     @discardableResult func layoutView(heading: Double) -> UIView {
         let rotationalHeading = 360.0 - heading;
+        if (viewableDegrees >= 360.0) {
+            viewableDegrees = 359.0;
+        }
+        
         let capsule = UIView(forAutoLayout: ());
         capsule.autoSetDimensions(to: CGSize(width: 5, height: 50));
         capsule.backgroundColor = self.headingColor;
         
         let markerContainer = UIView(forAutoLayout: ());
         for marker in Marker.markers() {
-            var leftLowerLimit = heading - 60;
+            var leftLowerLimit = heading - (viewableDegrees / 2);
             if (leftLowerLimit < 0) {
                 leftLowerLimit = leftLowerLimit + 360;
             }
             if (leftLowerLimit > 360) {
                 leftLowerLimit = leftLowerLimit - 360;
             }
-            var rightUpperLimit = heading + 60;
+            var rightUpperLimit = heading + (viewableDegrees / 2);
             if (rightUpperLimit < 0) {
                 rightUpperLimit = rightUpperLimit + 360;
             }

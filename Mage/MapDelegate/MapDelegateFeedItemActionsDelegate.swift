@@ -15,7 +15,10 @@ extension MapDelegate : FeedItemActionsDelegate {
         self.feedItemBottomSheet.dismiss(animated: true, completion: {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-                
+                self.observationToNavigateTo = nil;
+                self.locationToNavigateTo = kCLLocationCoordinate2DInvalid;
+                self.userToNavigateTo = nil;
+                self.feedItemToNavigateTo = feedItem;
                 var image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
                 if let url: URL = feedItem.iconURL {
                     let size = 24;

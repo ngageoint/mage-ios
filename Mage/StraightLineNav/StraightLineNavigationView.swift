@@ -26,6 +26,31 @@ import PureLayout
     var relativeBearingToTargetLabel: UILabel = UILabel(forAutoLayout: ());
     var compassView: CompassView?;
     
+    private lazy var directionArrowLayer: CAShapeLayer = {
+        let path = CGMutablePath()
+        let heightWidth = 50
+        
+        path.move(to: CGPoint(x: heightWidth / 2, y: 0))
+        path.addLine(to: CGPoint(x:(heightWidth / 2 - 6), y:8))
+        path.addLine(to: CGPoint(x:(heightWidth / 2 - 1), y:8))
+        path.addLine(to: CGPoint(x:(heightWidth / 2 - 1), y:16))
+        path.addLine(to: CGPoint(x:(heightWidth / 2 + 1), y:16))
+        path.addLine(to: CGPoint(x:(heightWidth / 2 + 1), y:8))
+        path.addLine(to: CGPoint(x:(heightWidth / 2 + 6), y:8))
+        path.addLine(to: CGPoint(x:(heightWidth / 2), y:0))
+        
+        let shape = CAShapeLayer()
+        shape.path = path
+        
+        return shape;
+    }()
+    
+    private lazy var directionArrow: UIView = {
+        let view = UIView.newAutoLayout();
+        view.layer.insertSublayer(directionArrowLayer, at: 0);
+        return view;
+    }()
+    
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton(type: .custom);
         cancelButton.accessibilityLabel = "cancel";
@@ -34,27 +59,19 @@ import PureLayout
         return cancelButton;
     }();
     
-    private lazy var relativeBearingContainer: UIView = {
-        let view = UIView(forAutoLayout: ());
-        view.addSubview(targetMarkerView);
-        view.addSubview(relativeBearingToTargetLabel);
-        return view;
-    }();
-    
-    private lazy var headingContainer: UIView = {
-        let view = UIView(forAutoLayout: ());
+    private lazy var myInformationContainer: UIView = {
+        let view = UIView.newAutoLayout();
         view.addSubview(headingLabel);
-        view.addSubview(relativeBearingContainer);
-        return view;
-    }();
-    
-    private lazy var speedContainer: UIView = {
-        let view = UIView(forAutoLayout: ());
         view.addSubview(speedLabel);
-        view.addSubview(speedMarkerView);
-        speedLabel.textAlignment = .center;
         return view;
-    }();
+    }()
+    
+    private lazy var targetInformationContainer: UIView = {
+        let view = UIView.newAutoLayout();
+        view.addSubview(relativeBearingToTargetLabel);
+        view.addSubview(distanceToTargetLabel);
+        return view;
+    }()
     
     private lazy var targetMarkerView: UIImageView = {
         let view = UIImageView(image: UIImage(named: "location_tracking_on"));
@@ -92,10 +109,10 @@ import PureLayout
         relativeBearingToTargetLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         cancelButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         
-        headingLabel.font = scheme.typographyScheme.headline3;
+        headingLabel.font = scheme.typographyScheme.overline;
         speedLabel.font = scheme.typographyScheme.overline;
-        distanceToTargetLabel.font = scheme.typographyScheme.overline;
-        relativeBearingToTargetLabel.font = scheme.typographyScheme.overline;
+        distanceToTargetLabel.font = scheme.typographyScheme.headline6;
+        relativeBearingToTargetLabel.font = scheme.typographyScheme.headline6;
         
         compassView?.applyTheme(withScheme: scheme);
     }
@@ -118,36 +135,34 @@ import PureLayout
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
-            targetMarkerView.autoPinEdge(toSuperviewEdge: .left);
-            relativeBearingToTargetLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left);
-            relativeBearingToTargetLabel.autoPinEdge(.left, to: .right, of: targetMarkerView, withOffset: 8);
-            targetMarkerView.autoAlignAxis(.horizontal, toSameAxisOf: relativeBearingToTargetLabel);
-            relativeBearingContainer.autoAlignAxis(.vertical, toSameAxisOf: headingLabel);
-            headingLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-            relativeBearingContainer.autoPinEdge(toSuperviewEdge: .bottom);
-            relativeBearingContainer.autoPinEdge(.top, to: .bottom, of: headingLabel, withOffset: 0);
-            speedLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
-            speedLabel.autoPinEdge(.top, to: .bottom, of: speedMarkerView, withOffset: 8);
-            speedMarkerView.autoAlignAxis(.vertical, toSameAxisOf: speedLabel);
-            speedMarkerView.autoPinEdge(toSuperviewEdge: .top);
-            speedLabel.autoSetDimension(.width, toSize: 70);
-            targetMarkerView.autoSetDimensions(to: CGSize(width: 16, height: 16));
-            speedMarkerView.autoSetDimensions(to: CGSize(width: 36, height: 36));
-            destinationMarkerView.autoSetDimensions(to: CGSize(width: 36, height: 36));
-            destinationMarkerView.autoPinEdge(toSuperviewEdge: .top);
-            distanceToTargetLabel.autoSetDimension(.width, toSize: 70);
-            distanceToTargetLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top);
-            distanceToTargetLabel.autoPinEdge(.top, to: .bottom, of: destinationMarkerView, withOffset: 8);
-            destinationMarkerView.autoAlignAxis(.vertical, toSameAxisOf: distanceToTargetLabel);
-            compassView?.autoSetDimensions(to: CGSize(width: 250, height: 250))
-            speedContainer.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
-            speedContainer.autoAlignAxis(toSuperviewAxis: .horizontal);
-            destinationContainer.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-            destinationContainer.autoAlignAxis(toSuperviewAxis: .horizontal);
-            headingContainer.autoCenterInSuperview();
-            compassView?.autoCenterInSuperview();
+            compassView?.autoSetDimensions(to: CGSize(width: 350, height: 350))
+            compassView?.autoAlignAxis(toSuperviewAxis: .vertical);
+            compassView?.autoAlignAxis(.horizontal, toSameAxisOf: self, withOffset: 50);
+            
             cancelButton.autoPinEdge(toSuperviewEdge: .top, withInset: 4);
             cancelButton.autoPinEdge(toSuperviewEdge: .right, withInset: 4);
+            
+            destinationMarkerView.autoSetDimensions(to: CGSize(width: 18, height: 18));
+            destinationMarkerView.autoAlignAxis(toSuperviewAxis: .vertical);
+            targetInformationContainer.autoPinEdge(.top, to: .bottom, of: destinationMarkerView, withOffset: 16);
+            
+            distanceToTargetLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
+            relativeBearingToTargetLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left);
+            relativeBearingToTargetLabel.autoPinEdge(.left, to: .right, of: distanceToTargetLabel, withOffset: 8);
+            
+            targetInformationContainer.autoAlignAxis(toSuperviewAxis: .vertical);
+            
+            speedLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .right);
+            headingLabel.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left);
+            headingLabel.autoPinEdge(.left, to: .right, of: speedLabel, withOffset: 8);
+            myInformationContainer.autoPinEdge(.top, to: .bottom, of: targetInformationContainer, withOffset: 2);
+            myInformationContainer.autoPinEdge(toSuperviewEdge: .bottom, withInset: 4);
+            myInformationContainer.autoAlignAxis(toSuperviewAxis: .vertical);
+            
+            directionArrow.autoAlignAxis(.horizontal, toSameAxisOf: destinationMarkerView);
+            directionArrow.autoAlignAxis(.vertical, toSameAxisOf: destinationMarkerView);
+            directionArrow.autoSetDimensions(to: CGSize(width: 51, height: 51));
+            
             self.autoSetDimension(.height, toSize: 75);
             didSetupConstraints = true;
         }
@@ -181,7 +196,12 @@ import PureLayout
             let headingMeasurement = Measurement(value: bearing, unit: UnitAngle.degrees);
             let bearingToMeasurement = Measurement(value: bearingTo, unit: UnitAngle.degrees);
             headingLabel.text = "\(measurementFormatter.string(from: headingMeasurement))";
-            relativeBearingToTargetLabel.text = "\(measurementFormatter.string(from: bearingToMeasurement))";
+            relativeBearingToTargetLabel.text = "@ \(measurementFormatter.string(from: bearingToMeasurement))";
+            let degreeMeasurement = Measurement(value: 360 - (headingMeasurement.value - bearingToMeasurement.value) , unit: UnitAngle.degrees);
+            directionArrow.transform = CGAffineTransform(rotationAngle: CGFloat(degreeMeasurement.converted(to: .radians).value));
+            directionArrowLayer.fillColor = self.headingColor.cgColor;
+            relativeBearingToTargetLabel.textColor = self.relativeBearingColor;
+            headingLabel.textColor = self.headingColor;
         }
         
         if let speed = locationManager?.location?.speed {
@@ -198,11 +218,12 @@ import PureLayout
     func layoutView() {
         compassView = CompassView(scheme: self.scheme, targetColor: self.relativeBearingColor, headingColor: self.headingColor);
         compassView?.clipsToBounds = true;
-        compassView?.layer.cornerRadius = 125
+        compassView?.layer.cornerRadius = 175
         addSubview(compassView!);
-        addSubview(headingContainer);
-        addSubview(speedContainer);
-        addSubview(destinationContainer);
+        addSubview(destinationMarkerView);
+        addSubview(myInformationContainer);
+        addSubview(targetInformationContainer);
+        addSubview(directionArrow);
         addSubview(cancelButton);
     }
     
