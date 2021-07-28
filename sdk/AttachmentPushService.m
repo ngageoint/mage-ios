@@ -219,12 +219,26 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
 
     if (error) {
         NSLog(@"ATTACHMENT - error uploading attachment %@", error);
+        // try again
+        [self.pushTasks removeObject:[NSNumber numberWithLong:task.taskIdentifier]];
         return;
+    }
+    
+    if ([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        if (httpResponse.statusCode != 200) {
+            NSLog(@"ATTACHMENT - non 200 response %@", httpResponse);
+            // try again
+            [self.pushTasks removeObject:[NSNumber numberWithLong:task.taskIdentifier]];
+            return;
+        }
     }
     
     NSData *data = [self.pushData objectForKey:[NSNumber numberWithLong:task.taskIdentifier]];
     if (!data) {
         NSLog(@"ATTACHMENT - error uploading attachment, did not receive response from the server");
+        // try again
+        [self.pushTasks removeObject:[NSNumber numberWithLong:task.taskIdentifier]];
         return;
     }
     
@@ -240,17 +254,22 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
     NSString *tmpFileLocation = [NSTemporaryDirectory() stringByAppendingPathComponent:attachment.name];
     
     NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    if (response == nil) {
+        // try again
+        [self.pushTasks removeObject:[NSNumber numberWithLong:task.taskIdentifier]];
+        return;
+    }
     
-        attachment.dirty = [NSNumber numberWithBool:NO];
-        attachment.remoteId = [response valueForKey:@"id"];
-        attachment.name = [response valueForKey:@"name"];
-        attachment.url = [response valueForKey:@"url"];
-        attachment.taskIdentifier = nil;
-        NSString *dateString = [response valueForKey:@"lastModified"];
-        if (dateString != nil) {
-            NSDate *date = [NSDate dateFromIso8601String:dateString];
-            [attachment setLastModified:date];
-        }
+    attachment.dirty = [NSNumber numberWithBool:NO];
+    attachment.remoteId = [response valueForKey:@"id"];
+    attachment.name = [response valueForKey:@"name"];
+    attachment.url = [response valueForKey:@"url"];
+    attachment.taskIdentifier = nil;
+    NSString *dateString = [response valueForKey:@"lastModified"];
+    if (dateString != nil) {
+        NSDate *date = [NSDate dateFromIso8601String:dateString];
+        [attachment setLastModified:date];
+    }
     
     if (attachment.url) {
         __weak __typeof__(self) weakSelf = self;
