@@ -104,10 +104,11 @@ class TestHelpers {
         
     }
     
-    public static func clearAndSetUpStack() {
+    @discardableResult
+    public static func clearAndSetUpStack() -> [String: Bool] {
         TestHelpers.clearDocuments();
         TestHelpers.resetUserDefaults();
-        MageCoreDataFixtures.clearAllData();
+        return MageCoreDataFixtures.clearAllData();
 //        MagicalRecord.cleanUp();
         
 //        MagicalRecord.deleteAndSetupMageCoreDataStack();

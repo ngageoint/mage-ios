@@ -21,23 +21,27 @@ class MageCoreDataFixtures {
         MagicalRecord.setLoggingLevel(.warn);
     }
     
-    public static func clearAllData() {
-        MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-            Attachment.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Event.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Feed.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            FeedItem.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            GPSLocation.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Layer.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Location.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Observation.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            ObservationFavorite.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            ObservationImportant.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Role.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Server.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            Team.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-            User.mr_truncateAll(in: NSManagedObjectContext.mr_default());
-        })
+    public static func clearAllData() -> [String: Bool] {
+        let localContext: NSManagedObjectContext = NSManagedObjectContext.mr_default();
+
+        let cleared = [
+            String(describing: Attachment.self): Attachment.mr_truncateAll(in: localContext),
+            String(describing: Event.self): Event.mr_truncateAll(in: localContext),
+            String(describing: Feed.self): Feed.mr_truncateAll(in: localContext),
+            String(describing: FeedItem.self): FeedItem.mr_truncateAll(in: localContext),
+            String(describing: GPSLocation.self): GPSLocation.mr_truncateAll(in: localContext),
+            String(describing: Layer.self): Layer.mr_truncateAll(in: localContext),
+            String(describing: Location.self): Location.mr_truncateAll(in: localContext),
+            String(describing: Observation.self): Observation.mr_truncateAll(in: localContext),
+            String(describing: ObservationFavorite.self): ObservationFavorite.mr_truncateAll(in: localContext),
+            String(describing: ObservationImportant.self): ObservationImportant.mr_truncateAll(in: localContext),
+            String(describing: Role.self): Role.mr_truncateAll(in: localContext),
+            String(describing: Server.self): Server.mr_truncateAll(in: localContext),
+            String(describing: Team.self): Team.mr_truncateAll(in: localContext),
+            String(describing: User.self): User.mr_truncateAll(in: localContext)
+        ];
+        localContext.mr_saveToPersistentStoreAndWait();
+        return cleared;
     }
     
     public static func addLocation(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
@@ -171,16 +175,20 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addObservationToCurrentEvent(observationJson: [AnyHashable : Any], completion: MRSaveCompletionHandler? = nil) {
+    @discardableResult
+    public static func addObservationToCurrentEvent(observationJson: [AnyHashable : Any], completion: MRSaveCompletionHandler? = nil) -> Observation? {
         if (completion == nil){
+            var observation: Observation? = nil;
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                Observation.createObservation(observationJson, in: localContext);
+                observation = Observation.createObservation(observationJson, in: localContext);
             })
+            return observation;
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 Observation.createObservation(observationJson, in: localContext);
             }, completion: completion)
         }
+        return nil;
     }
     
     public static func loadObservationsJson(filename: String = "observations") -> [AnyHashable : Any] {

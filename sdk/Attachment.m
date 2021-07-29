@@ -42,6 +42,12 @@
     } else {
         [self setLastModified:[NSDate date]];
     }
+    id markedForDeletion = [json objectForKey:@"markedForDeletion"];
+    if (markedForDeletion != nil) {
+        [self setMarkedForDeletion:[markedForDeletion boolValue]];
+    } else {
+        [self setMarkedForDeletion:false];
+    }
     return self;
 }
 

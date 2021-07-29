@@ -57,6 +57,7 @@ class AttachmentCreationCoordinator: NSObject {
             if (self.observationFormId != nil || self.fieldName != nil) {
                 attachmentJson["observationFormId"] = self.observationFormId
                 attachmentJson["fieldName"] = self.fieldName
+                attachmentJson["action"] = "add";
                 delegate?.attachmentCreated(fieldValue: attachmentJson);
             } else {
                 // this is only applicable in the server5 case, can be removed after that

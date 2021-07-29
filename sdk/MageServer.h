@@ -22,5 +22,6 @@
 + (NSError *) generateServerCompatibilityError: (NSDictionary *) api;
 + (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure;
 + (BOOL) isServerVersion5;
++ (BOOL) isServerVersion6_0;
 
 @end

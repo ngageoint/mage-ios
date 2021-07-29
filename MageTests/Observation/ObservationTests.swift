@@ -22,6 +22,9 @@ class ObservationTests: KIFSpec {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+                
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
@@ -1090,7 +1093,7 @@ class ObservationTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
-                let observation = ObservationBuilder.createBlankObservation(1);
+                let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 observation.properties!["forms"] = [
                     [
@@ -1109,7 +1112,7 @@ class ObservationTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
-                let observation = ObservationBuilder.createBlankObservation(1);
+                let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 observation.properties!["forms"] = [
                     [
@@ -1128,7 +1131,7 @@ class ObservationTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
-                let observation = ObservationBuilder.createBlankObservation(1);
+                let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 observation.properties!["forms"] = [
                     [
@@ -1147,7 +1150,7 @@ class ObservationTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
-                let observation = ObservationBuilder.createBlankObservation(1);
+                let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 observation.properties!["forms"] = [
                     [
@@ -1166,7 +1169,7 @@ class ObservationTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
-                let observation = ObservationBuilder.createBlankObservation(1);
+                let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 observation.properties!["forms"] = [
                     [
@@ -1185,7 +1188,7 @@ class ObservationTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
-                let observation = ObservationBuilder.createBlankObservation(1);
+                let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 observation.properties!["forms"] = [
                     [
@@ -1204,7 +1207,7 @@ class ObservationTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
-                let observation = ObservationBuilder.createBlankObservation(1);
+                let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 observation.properties!["forms"] = [
                     [
@@ -1220,7 +1223,23 @@ class ObservationTests: KIFSpec {
         describe("Route Tests") {
             
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
+                var cleared = false;
+                while (!cleared) {
+                    cleared = TestHelpers.clearAndSetUpStack()[String(describing: Observation.self)] ?? false
+                    if (!cleared) {
+                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
+                    }
+                    
+                    if (!cleared) {
+                        Thread.sleep(forTimeInterval: 0.5);
+                    }
+                    
+                }
+                
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+                
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
+                
                 UserDefaults.standard.baseServerUrl = "https://magetest";
 
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
@@ -1254,12 +1273,14 @@ class ObservationTests: KIFSpec {
                 }
                 ObservationFetchService.singleton()?.start(asInitial: true);
                 expect(stubCalled).toEventually(beTrue());
-                expect(Observation.mr_findAll()?.count).toEventually(equal(1));
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 ObservationFetchService.singleton()?.stop();
             }
             
             it("should pull the observations as initial and then update one") {
                 var stubCalled = false;
+                
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist");
                 
                 stub(condition: isMethodGET() &&
                         isHost("magetest") &&
@@ -1273,7 +1294,7 @@ class ObservationTests: KIFSpec {
                 }
                 ObservationFetchService.singleton()?.start(asInitial: true);
                 expect(stubCalled).toEventually(beTrue());
-                expect(Observation.mr_findAll()?.count).toEventually(equal(1));
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 ObservationFetchService.singleton()?.stop();
                 let firstObservation1 = Observation.mr_findFirst();
                 let forms1: [[AnyHashable : Any]] = firstObservation1?.properties!["forms"] as! [[AnyHashable : Any]];
@@ -1295,7 +1316,7 @@ class ObservationTests: KIFSpec {
                 }
                 ObservationFetchService.singleton()?.start(asInitial: true);
                 expect(updateStubCalled).toEventually(beTrue());
-                expect(Observation.mr_findAll()?.count).toEventually(equal(1));
+                expect(Observation.mr_findAll()?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 ObservationFetchService.singleton()?.stop();
                 let firstObservation = Observation.mr_findFirst();
                 let forms: [[AnyHashable : Any]] = firstObservation?.properties!["forms"] as! [[AnyHashable : Any]];
@@ -1306,11 +1327,6 @@ class ObservationTests: KIFSpec {
                 
                 let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
-                
-                guard let observation: Observation = Observation.mr_findFirst() else {
-                    Nimble.fail()
-                    return;
-                }
                 
                 var stubCalled = false;
                 
@@ -1325,20 +1341,19 @@ class ObservationTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
                 }
                 
-                expect(observation).toNot(beNil());
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    guard let localObservation = observation.mr_(in: localContext) else {
+                    guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
                         Nimble.fail()
                         return;
                     }
                     // archive the observation
-                    localObservation.state = 0;
-                    localObservation.dirty = true;
+                    observation.state = 0;
+                    observation.dirty = true;
                 })
                 
                 expect(stubCalled).toEventually(beTrue());
                 
-                expect(Observation.mr_findFirst()).toEventually(beNil());
+                expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())).toEventually(beNil());
             }
             
             it("should tell the server to delete an observation and remove it if a 404 is returned") {
@@ -1346,7 +1361,7 @@ class ObservationTests: KIFSpec {
                 let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
-                guard let observation: Observation = Observation.mr_findFirst() else {
+                guard let observation: Observation = Observation.mr_findFirst(in: NSManagedObjectContext.mr_default()) else {
                     Nimble.fail()
                     return;
                 }
@@ -1369,7 +1384,7 @@ class ObservationTests: KIFSpec {
                 
                 expect(stubCalled).toEventually(beTrue());
                 
-                expect(Observation.mr_findFirst()).toEventually(beNil());
+                expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())).toEventually(beNil());
                 expect(ObservationPushService.singleton().isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
@@ -1429,24 +1444,16 @@ class ObservationTests: KIFSpec {
                 ]
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
-                guard let observation: Observation = Observation.mr_findFirst() else {
-                    Nimble.fail()
-                    return;
-                }
-                
-                expect(observation).toNot(beNil());
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    guard let localObservation = observation.mr_(in: localContext) else {
+                    guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
                         Nimble.fail()
                         return;
                     }
-                    localObservation.dirty = true;
-                })
+                    observation.dirty = true;
+                });
                 
                 expect(idStubCalled).toEventually(beTrue());
                 expect(createStubCalled).toEventually(beTrue());
-                
-                expect(Observation.mr_findFirst()!.dirty).toEventually(equal(0));
             }
             
             it("should tell the server to update an observation") {
@@ -1489,25 +1496,19 @@ class ObservationTests: KIFSpec {
                 observationJson["state"] = [
                     "name": "active"
                 ]
-                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
-                
-                guard let observation: Observation = Observation.mr_findFirst() else {
+                guard let observation: Observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson) else {
                     Nimble.fail()
                     return;
                 }
                 
-                expect(observation).toNot(beNil());
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    guard let localObservation = observation.mr_(in: localContext) else {
-                        Nimble.fail()
-                        return;
-                    }
-                    localObservation.dirty = true;
+                    let localObservation = observation.mr_(in: localContext);
+                    localObservation?.dirty = 1;
                 })
                 
-                expect(updateStubCalled).toEventually(beTrue());
-                
-                expect(Observation.mr_findFirst()!.dirty).toEventually(equal(0));
+                expect(updateStubCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Update never called")
+
+                expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())?.dirty).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Did not find observation");
             }
             
             it("should tell the server to add an observation favorite") {
@@ -1531,22 +1532,14 @@ class ObservationTests: KIFSpec {
                 observationJson["state"] = [
                     "name": "active"
                 ]
-                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
-                
-                guard let observation: Observation = Observation.mr_findFirst() else {
+                guard let observation: Observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson) else {
                     Nimble.fail()
                     return;
                 }
-                
-                expect(observation).toNot(beNil());
-                expect(Observation.mr_findFirst()!.favorites?.count).toEventually(equal(0));
-                
+                print("Observation \(observation.remoteId)")
                 observation.toggleFavorite(completion: nil);
-                
+
                 expect(stubCalled).toEventually(beTrue());
-                expect(Observation.mr_findFirst()!.favorites!.count).toEventually(equal(1));
-                expect(Observation.mr_findFirst()!.favorites!.first!.dirty).toEventually(beFalse());
-                expect(ObservationPushService.singleton().isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
             it("should tell the server to delete an observation favorite") {
@@ -1569,22 +1562,20 @@ class ObservationTests: KIFSpec {
                 observationJson["state"] = [
                     "name": "active"
                 ]
-                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
-                
-                guard let observation: Observation = Observation.mr_findFirst() else {
+                guard let observation: Observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson) else {
                     Nimble.fail()
                     return;
                 }
                 
                 expect(observation).toNot(beNil());
-                expect(Observation.mr_findFirst()!.favorites?.count).toEventually(equal(1));
+                expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())!.favorites?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
 
                 observation.toggleFavorite(completion: nil);
                 
                 expect(stubCalled).toEventually(beTrue());
                 
-                expect(Observation.mr_findFirst()!.favorites!.first!.favorite).toEventually(beFalse());
-                expect(Observation.mr_findFirst()!.favorites!.first!.dirty).toEventually(beFalse());
+                expect(Observation.mr_findFirst()!.favorites!.first!.favorite).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+                expect(Observation.mr_findFirst()!.favorites!.first!.dirty).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(ObservationPushService.singleton().isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
@@ -1609,9 +1600,7 @@ class ObservationTests: KIFSpec {
                 observationJson["state"] = [
                     "name": "active"
                 ]
-                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
-                
-                guard let observation: Observation = Observation.mr_findFirst() else {
+                guard let observation: Observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson) else {
                     Nimble.fail()
                     return;
                 }
@@ -1621,7 +1610,7 @@ class ObservationTests: KIFSpec {
                 observation.flagImportant(withDescription: "new important")
                 
                 expect(stubCalled).toEventually(beTrue());
-                expect(Observation.mr_findFirst()!.isImportant()).toEventually(beTrue());
+                expect(Observation.mr_findFirst()!.isImportant()).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
@@ -1648,9 +1637,7 @@ class ObservationTests: KIFSpec {
                 observationJson["state"] = [
                     "name": "active"
                 ]
-                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
-                
-                guard let observation: Observation = Observation.mr_findFirst() else {
+                guard let observation: Observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson) else {
                     Nimble.fail()
                     return;
                 }
@@ -1660,9 +1647,290 @@ class ObservationTests: KIFSpec {
 
                     observation.removeImportant()
                 expect(stubCalled).toEventually(beTrue());
-                expect(Observation.mr_findFirst()!.isImportant()).toEventually(beFalse());
-                expect(Observation.mr_findFirst()!.observationImportant!.dirty).toEventually(equal(0));
+                expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())!.isImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+                expect(Observation.mr_findFirst()!.observationImportant!.dirty).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+            }
+        }
+        
+        describe("Attachment Tests") {
+            
+            beforeEach {
+                var cleared = false;
+                while (!cleared) {
+                    cleared = TestHelpers.clearAndSetUpStack()[String(describing: Observation.self)] ?? false
+                    if (!cleared) {
+                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
+                    }
+                    
+                    if (!cleared) {
+                        Thread.sleep(forTimeInterval: 0.5);
+                    }
+                    
+                }
+                
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+                
+                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
+                
+                UserDefaults.standard.baseServerUrl = "https://magetest";
+                
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentForm")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                Server.setCurrentEventId(1);
+                UserDefaults.standard.currentUserId = "userabc";
+                NSManagedObject.mr_setDefaultBatchSize(0);
+                ObservationPushService.singleton()?.start();
+            }
+            
+            afterEach {
+                ObservationPushService.singleton().stop();
+                NSManagedObject.mr_setDefaultBatchSize(20);
+                TestHelpers.clearAndSetUpStack();
+                HTTPStubs.removeAllStubs();
+            }
+            
+            it("should tell the server to update an observation with an attachment") {
+                var updateStubCalled = false;
+            
+                let url = Bundle(for: ObservationTests.self).url(forResource: "test_marker", withExtension: "png")!
+
+                var baseObservationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson()
+                baseObservationJson["url"] = "https://magetest/api/events/1/observations/observationabctest";
+                baseObservationJson["id"] = "observationabctest";
+                baseObservationJson["important"] = nil;
+                baseObservationJson["favoriteUserIds"] = nil;
+                baseObservationJson["attachments"] = nil;
+                baseObservationJson["lastModified"] = nil;
+                baseObservationJson["createdAt"] = nil;
+                baseObservationJson["eventId"] = nil;
+                baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
+                baseObservationJson["state"] = [
+                    "name": "active"
+                ]
+                baseObservationJson["properties"] = [
+                    "timestamp": "2020-06-05T17:21:46.969Z",
+                    "forms": [[
+                        "id": "formid1",
+                        "formId": 1,
+                        "field23": [[
+                            "action": "add",
+                            "name": "test_marker.png",
+                            "contentType": "image/png",
+                            "localPath": url.path,
+                            "fieldName": "field23",
+                            "observationFormId": "formid1"
+                        ]]
+                    ]]
+                ];
+                
+                stub(condition: isMethodPUT() &&
+                        isHost("magetest") &&
+                        isScheme("https") &&
+                        isPath("/api/events/1/observations/observationabctest")
+                        &&
+                        hasJsonBody(baseObservationJson)
+                ) { (request) -> HTTPStubsResponse in
+//                    let httpBody = request.ohhttpStubs_httpBody
+//                    let jsonBody = (try? JSONSerialization.jsonObject(with: httpBody!, options: [])) as? [AnyHashable : Any]
+                    let response: [String: Any] = [
+                        "id" : "observationabctest",
+                        "url": "https://magetest/api/events/1/observations/observationabctest"
+                    ];
+                    updateStubCalled = true;
+                    return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
+                }
+                
+                let observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
+                        Nimble.fail()
+                        return;
+                    }
+                    observation.dirty = true;
+                });
+
+                expect(updateStubCalled).toEventually(beTrue());
+            }
+        
+        
+            it("should tell the server to update an observation with an added and deleted attachment") {
+                var updateStubCalled = false;
+                
+                let url = Bundle(for: ObservationTests.self).url(forResource: "test_marker", withExtension: "png")!
+                
+                var baseObservationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson()
+                baseObservationJson["url"] = "https://magetest/api/events/1/observations/observationabctest";
+                baseObservationJson["id"] = "observationabctest";
+                baseObservationJson["important"] = nil;
+                baseObservationJson["favoriteUserIds"] = nil;
+                baseObservationJson["attachments"] = [[
+                    "contentType": "image/jpeg",
+                    "size": 69937,
+                    "name": "attachment.jpg",
+                    "relativePath": "observations1/2020/06/05/attachment.jpg",
+                    "lastModified": "2020-06-05T17:21:54.220Z",
+                    "height": 668,
+                    "width": 1356,
+                    "oriented": true,
+                    "id": "attachmentabc",
+                    "url": "https://magetest/api/events/1/observations/observationabc/attachments/attachmentabc",
+                    "observationFormId": "formid1",
+                    "fieldName": "field23",
+                    "markedForDeletion": true
+                ]];
+                baseObservationJson["lastModified"] = nil;
+                baseObservationJson["createdAt"] = nil;
+                baseObservationJson["eventId"] = nil;
+                baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
+                baseObservationJson["state"] = [
+                    "name": "active"
+                ]
+                baseObservationJson["properties"] = [
+                    "timestamp": "2020-06-05T17:21:46.969Z",
+                    "forms": [[
+                        "id": "formid1",
+                        "formId": 1,
+                        "field23": [[
+                            "action": "add",
+                            "name": "test_marker.png",
+                            "contentType": "image/png",
+                            "localPath": url.path,
+                            "fieldName": "field23",
+                            "observationFormId": "formid1"
+                        ]]
+                    ]]
+                ];
+                
+                var expectedJson = baseObservationJson;
+                expectedJson["attachments"] = nil;
+                expectedJson["properties"] = [
+                    "timestamp": "2020-06-05T17:21:46.969Z",
+                    "forms": [[
+                        "id": "formid1",
+                        "formId": 1,
+                        "field23": [[
+                            "action": "add",
+                            "name": "test_marker.png",
+                            "contentType": "image/png",
+                            "localPath": url.path,
+                            "fieldName": "field23",
+                            "observationFormId": "formid1"
+                        ],[
+                            "action": "delete",
+                            "id": "attachmentabc"
+                        ]]
+                    ]]
+                ];
+                
+                stub(condition: isMethodPUT() &&
+                        isHost("magetest") &&
+                        isScheme("https") &&
+                        isPath("/api/events/1/observations/observationabctest")
+                        &&
+                        hasJsonBody(expectedJson)
+                ) { (request) -> HTTPStubsResponse in
+                    let httpBody = request.ohhttpStubs_httpBody
+                    let jsonBody = (try? JSONSerialization.jsonObject(with: httpBody!, options: [])) as? [AnyHashable : Any]
+                    print("Json body \(jsonBody)")
+                    let response: [String: Any] = [
+                        "id" : "observationabctest",
+                        "url": "https://magetest/api/events/1/observations/observationabctest"
+                    ];
+                    updateStubCalled = true;
+                    return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
+                }
+                
+                let observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
+                        Nimble.fail()
+                        return;
+                    }
+                    observation.dirty = true;
+                });
+                
+                expect(updateStubCalled).toEventually(beTrue());
+            }
+        
+            it("should tell the server to update an observation with a deleted attachment") {
+                var updateStubCalled = false;
+                                
+                var baseObservationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson()
+                baseObservationJson["url"] = "https://magetest/api/events/1/observations/observationabctest";
+                baseObservationJson["id"] = "observationabctest";
+                baseObservationJson["important"] = nil;
+                baseObservationJson["favoriteUserIds"] = nil;
+                baseObservationJson["attachments"] = [[
+                    "contentType": "image/jpeg",
+                    "size": 69937,
+                    "name": "attachment.jpg",
+                    "relativePath": "observations1/2020/06/05/attachment.jpg",
+                    "lastModified": "2020-06-05T17:21:54.220Z",
+                    "height": 668,
+                    "width": 1356,
+                    "oriented": true,
+                    "id": "attachmentabc",
+                    "url": "https://magetest/api/events/1/observations/observationabc/attachments/attachmentabc",
+                    "observationFormId": "formid1",
+                    "fieldName": "field23",
+                    "markedForDeletion": true
+                ]];
+                baseObservationJson["lastModified"] = nil;
+                baseObservationJson["createdAt"] = nil;
+                baseObservationJson["eventId"] = nil;
+                baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
+                baseObservationJson["state"] = [
+                    "name": "active"
+                ]
+                baseObservationJson["properties"] = [
+                    "timestamp": "2020-06-05T17:21:46.969Z",
+                    "forms": [[
+                        "id": "formid1",
+                        "formId": 1
+                    ]]
+                ];
+                
+                var expectedJson = baseObservationJson;
+                expectedJson["attachments"] = nil;
+                expectedJson["properties"] = [
+                    "timestamp": "2020-06-05T17:21:46.969Z",
+                    "forms": [[
+                        "id": "formid1",
+                        "formId": 1,
+                        "field23": [[
+                            "action": "delete",
+                            "id": "attachmentabc"
+                        ]]
+                    ]]
+                ];
+                
+                stub(condition: isMethodPUT() &&
+                        isHost("magetest") &&
+                        isScheme("https") &&
+                        isPath("/api/events/1/observations/observationabctest")
+                         &&
+                         hasJsonBody(expectedJson)
+                ) { (request) -> HTTPStubsResponse in
+                    let response: [String: Any] = [
+                        "id" : "observationabctest",
+                        "url": "https://magetest/api/events/1/observations/observationabctest"
+                    ];
+                    updateStubCalled = true;
+                    return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
+                }
+                
+                let observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
+                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                    guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
+                        Nimble.fail()
+                        return;
+                    }
+                    observation.dirty = true;
+                });
+                
+                expect(updateStubCalled).toEventually(beTrue());
             }
         }
     }

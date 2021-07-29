@@ -310,7 +310,30 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     [observationJson setObject: [dateFormat stringFromDate:self.timestamp] forKey:@"timestamp"];
 
     NSMutableDictionary *jsonProperties = [[NSMutableDictionary alloc] initWithDictionary:self.properties];
+    
+    NSMutableDictionary *attachmentsToDelete = [[NSMutableDictionary alloc] init];
+    if (![MageServer isServerVersion5]) {
+        // check for attachments marked for deletion and be sure to add them to the form properties
+        for (Attachment *attachment in self.attachments) {
+            if (attachment.markedForDeletion) {
+                NSDictionary *currentAttachmentsPerForm = [attachmentsToDelete objectForKey:attachment.observationFormId];
+                NSMutableDictionary *attachmentsPerForm = [[NSMutableDictionary alloc] init];
+                if (currentAttachmentsPerForm == nil) {
+                    attachmentsPerForm = [[NSMutableDictionary alloc] initWithDictionary:currentAttachmentsPerForm];
+                }
 
+                NSArray *currentAttachmentsInField = [attachmentsPerForm objectForKey:attachment.fieldName];
+                NSMutableArray *attachmentsInField = [[NSMutableArray alloc] init];
+                if (currentAttachmentsInField == nil) {
+                    attachmentsInField = [[NSMutableArray alloc] initWithArray:currentAttachmentsInField];
+                }
+                
+                [attachmentsInField addObject:attachment];
+                [attachmentsPerForm setObject:attachmentsInField forKey:attachment.fieldName];
+                [attachmentsToDelete setObject:attachmentsPerForm forKey: attachment.observationFormId];
+            }
+        }
+    }
     NSArray *forms = [jsonProperties objectForKey:@"forms"];
     NSMutableArray *formArray = [[NSMutableArray alloc] init];
     if (forms) {
@@ -319,7 +342,6 @@ NSString * const kObservationErrorMessage = @"errorMessage";
             for (id key in form) {
                 id value = [form objectForKey:key];
                 id field = [[self fieldNameToFieldForEvent:event andFormId:[form objectForKey:@"formId"]] objectForKey:key];
-                // TODO: serialize attachment field types properly
                 if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
                     @try {
                         SFGeometry *fieldGeometry = value;
@@ -328,7 +350,26 @@ NSString * const kObservationErrorMessage = @"errorMessage";
                     @catch (NSException *e){
                         NSLog(@"Problem parsing geometry %@", e);
                     }
-                
+                }
+            }
+
+            // check for deleted attachments and add them to the proper field
+            NSDictionary *attachmentsToDeleteForForm = [attachmentsToDelete objectForKey:[form objectForKey: @"id"]];
+            if (attachmentsToDeleteForForm != nil) {
+                for (NSString *field in attachmentsToDeleteForForm.allKeys) {
+                    NSArray *attachmentsToDeleteForField = [attachmentsToDeleteForForm objectForKey:field];
+                    id value = [form objectForKey:field];
+                    NSMutableArray *newAttachments = [[NSMutableArray alloc] init];
+                    if (value != nil) {
+                        newAttachments = [NSMutableArray arrayWithArray:value];
+                    }
+                    for (Attachment *a in attachmentsToDeleteForField) {
+                        [newAttachments addObject: @{
+                            @"id": a.remoteId,
+                            @"action": @"delete"
+                        }];
+                    }
+                    [formProperties setObject:newAttachments forKey:field];
                 }
             }
             [formArray addObject:formProperties];
@@ -579,15 +620,37 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 + (NSURLSessionDataTask *) operationToUpdateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSLog(@"Trying to update observation %@", observation.url);
     Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
-
-    NSURLSessionDataTask *task = [[MageSessionManager sharedManager] PUT_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
-        if (success) {
-            success(response);
-        }
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        failure(error);
-    }];
+    NSURLSessionDataTask *task = nil;
+    
+    if ([MageServer isServerVersion5]) {
+        task = [[MageSessionManager sharedManager] PUT_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
+    } else if ([MageServer isServerVersion6_0]) {
+        task = [[MageSessionManager sharedManager] PUT_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
+    } else {
+        // 6.1 and above
+        task = [[MageSessionManager sharedManager] PATCH_TASK:observation.url parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
+            if (success) {
+                success(response);
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            failure(error);
+        }];
+    }
 
     return task;
 }

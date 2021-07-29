@@ -128,6 +128,10 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     return [[NSUserDefaults standardUserDefaults] integerForKey:@"serverMajorVersion"] == 5;
 }
 
++ (BOOL) isServerVersion6_0 {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:@"serverMajorVersion"] == 6 && [[NSUserDefaults standardUserDefaults] integerForKey:@"serverMinorVersion"] == 0;
+}
+
 + (void) serverWithURL:(NSURL *) url success:(void (^) (MageServer *)) success  failure:(void (^) (NSError *error)) failure {
     
     if (!url || !url.scheme || !url.host) {
