@@ -21,6 +21,7 @@ public enum FieldKey : String {
     case max
     case archived
     case hidden
+    case allowedAttachmentTypes
     
     var key: String {
         return self.rawValue

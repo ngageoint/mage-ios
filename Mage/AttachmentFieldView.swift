@@ -169,10 +169,18 @@ class AttachmentFieldView : BaseFieldView {
             
             viewStack.addArrangedSubview(actionsHolderView);
             
-            actionsHolderView.addArrangedSubview(audioButton);
-            actionsHolderView.addArrangedSubview(cameraButton);
-            actionsHolderView.addArrangedSubview(galleryButton);
-            actionsHolderView.addArrangedSubview(videoButton);
+            if let allowedAttachmentTypes: [String] = field[FieldKey.allowedAttachmentTypes.key] as? [String] {
+                if (allowedAttachmentTypes.contains("audio")) {
+                    actionsHolderView.addArrangedSubview(audioButton);
+                }
+                if (allowedAttachmentTypes.contains("image")) {
+                    actionsHolderView.addArrangedSubview(cameraButton);
+                    actionsHolderView.addArrangedSubview(galleryButton);
+                }
+                if (allowedAttachmentTypes.contains("video")) {
+                    actionsHolderView.addArrangedSubview(videoButton);
+                }
+            }
         }
     }
     
