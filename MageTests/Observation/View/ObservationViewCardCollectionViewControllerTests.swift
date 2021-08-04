@@ -20,7 +20,6 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("ObservationViewCardCollectionViewControllerTests") {
-            let recordSnapshots = false;
 //            Nimble_Snapshots.setNimbleTolerance(0.1);
             
             var controller: UINavigationController!
@@ -110,7 +109,6 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("initialize the ObservationViewCardCollectionViewController") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -140,8 +138,6 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("observation needs syncing") {
-                var completeTest = false;
-                
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -172,8 +168,6 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("observation needs syncing and then gets pushed") {
-                var completeTest = false;
-                
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")

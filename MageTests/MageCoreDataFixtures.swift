@@ -21,6 +21,7 @@ class MageCoreDataFixtures {
         MagicalRecord.setLoggingLevel(.warn);
     }
     
+    @discardableResult
     public static func clearAllData() -> [String: Bool] {
         let localContext: NSManagedObjectContext = NSManagedObjectContext.mr_default();
 
@@ -181,6 +182,11 @@ class MageCoreDataFixtures {
             var observation: Observation? = nil;
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 observation = Observation.createObservation(observationJson, in: localContext);
+                if let importantJson: [AnyHashable : Any] = observationJson["important"] as? [AnyHashable : Any] {
+                    let important: ObservationImportant = ObservationImportant(forJson: importantJson, in: localContext);
+                    important.observation = observation;
+                    observation?.observationImportant = important;
+                }
             })
             return observation;
         } else {

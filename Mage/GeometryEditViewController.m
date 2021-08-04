@@ -157,6 +157,7 @@ static float paddingPercentage = .1;
         
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"close"] style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
+        doneButton.isAccessibilityElement = true;
         doneButton.accessibilityLabel = @"Apply";
         
         UIBarButtonItem *clearButton;
@@ -167,7 +168,9 @@ static float paddingPercentage = .1;
             clearAction.accessibilityLabel = @"clear";
             
             UIMenu *clearMenu = [UIMenu menuWithTitle:@"" children:@[clearAction]];
-            clearButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_small"] menu:clearMenu];
+            UIImage *moreImage = [UIImage imageNamed:@"more_small"];
+            moreImage.accessibilityLabel = @"more_menu";
+            clearButton = [[UIBarButtonItem alloc] initWithImage:moreImage menu:clearMenu];
             clearButton.isAccessibilityElement = true;
             clearButton.accessibilityLabel = @"more_menu";
         } else {
@@ -760,6 +763,7 @@ static float paddingPercentage = .1;
     }
     if ([view.annotation isKindOfClass:[GPKGMapPoint class]]) {
         view.accessibilityLabel = @"shape_point";
+        view.image.accessibilityLabel = @"shape_point";
 
         [self locationEnabled:NO];
 
@@ -815,8 +819,6 @@ static float paddingPercentage = .1;
 }
 
 - (void) annotationViewDragEnding: (MKAnnotationView *) annotationView withCoordinate: (CLLocationCoordinate2D) coordinate {
-    NSLog(@"Coordinate %f, %f", coordinate.latitude, coordinate.longitude);
-
     [self updateLocationTextWithCoordinate:coordinate];
     [self updateShape:coordinate];
     [self updateHint];

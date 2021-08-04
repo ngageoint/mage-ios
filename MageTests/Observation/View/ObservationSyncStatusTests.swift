@@ -39,7 +39,8 @@ class ObservationSyncStatusTests: KIFSpec {
                 controller.view.addSubview(view);
                 view.autoPinEdgesToSuperviewEdges();
                 Server.setCurrentEventId(1);
-
+                UserDefaults.standard.serverMajorVersion = 6;
+                UserDefaults.standard.serverMinorVersion = 0;
 //                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots();
             }
@@ -62,7 +63,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
@@ -85,7 +86,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
@@ -111,7 +112,7 @@ class ObservationSyncStatusTests: KIFSpec {
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 
                 let observations = Observation.mr_findAll();
@@ -175,7 +176,6 @@ class ObservationSyncStatusTests: KIFSpec {
                 
                 var stubCalled = false;
                 
-                // make the request take long enough to capture the image
                 stub(condition: isMethodPUT() && isHost("magetest") && isScheme("https") && isPath("/api/events/1/observations/observationabc")) { (request) -> HTTPStubsResponse in
                     let response: [String: Any] = [ : ];
                     stubCalled = true;

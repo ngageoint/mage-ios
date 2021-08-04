@@ -72,7 +72,6 @@ class ObservationHeaderViewTests: KIFSpec {
             }
             
             it("initialize the ObservationHeaderView") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -107,6 +106,8 @@ class ObservationHeaderViewTests: KIFSpec {
                 expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for: .normal)).to(be(MDCPalette.green.accent700));
                 let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! MDCButton
                 expect(importantButton.imageTintColor(for: .normal)).to(be(MDCPalette.orange.accent400));
+                
+                tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())")
                 
 //                maybeRecordSnapshot(view, doneClosure: {
 //                    completeTest = true;
@@ -146,11 +147,11 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "directions");
                 
                 expect(delegate.getDirectionsToObservationsCalled).to(beTrue());
+                
+                tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())")
             }
             
             it("tap important button") {
-                var completeTest = false;
-
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -200,6 +201,8 @@ class ObservationHeaderViewTests: KIFSpec {
                 headerView.populate(observation: observation);
                 tester().expect(viewTester().usingLabel("important reason").view, toContainText: "New important!")
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "edit important");
+                
+                tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())")
             }
             
             it("tap favorite button") {
@@ -229,6 +232,8 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "favorite");
                 
                 expect(delegate.favoriteCalled).to(beTrue());
+                
+                tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())")
             }
         }
     }
