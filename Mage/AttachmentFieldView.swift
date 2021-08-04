@@ -180,6 +180,11 @@ class AttachmentFieldView : BaseFieldView {
                 if (allowedAttachmentTypes.contains("video")) {
                     actionsHolderView.addArrangedSubview(videoButton);
                 }
+            } else {
+                actionsHolderView.addArrangedSubview(audioButton);
+                actionsHolderView.addArrangedSubview(cameraButton);
+                actionsHolderView.addArrangedSubview(galleryButton);
+                actionsHolderView.addArrangedSubview(videoButton);
             }
         }
     }
