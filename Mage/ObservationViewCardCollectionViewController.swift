@@ -180,12 +180,13 @@ import MaterialComponents.MDCContainerScheme;
         
         syncStatusView.updateObservationStatus(observation: observation);
         addHeaderCard(stackView: stackView);
+        addLegacyAttachmentCard(stackView: stackView);
+        var headerViews = 2;
         if (attachmentCard != nil) {
-            attachmentCard?.populate(observation: observation);
+            headerViews = 4;
         }
-        
-        if (stackView.arrangedSubviews.count > 2) {
-            for v in stackView.arrangedSubviews.suffix(from: 2) {
+        if (stackView.arrangedSubviews.count > headerViews) {
+            for v in stackView.arrangedSubviews.suffix(from: headerViews) {
                 v.removeFromSuperview();
             }
         }
@@ -213,14 +214,18 @@ import MaterialComponents.MDCContainerScheme;
         if (MageServer.isServerVersion5()) {
             if let safeObservation = observation {
                 if (safeObservation.attachments?.count != 0) {
-                    attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self);
+                    if (attachmentCard != nil) {
+                        attachmentCard?.populate(observation: observation);
+                    } else {
+                        attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self);
+                        stackView.addArrangedSubview(attachmentHeader);
+                        stackView.addArrangedSubview(attachmentCard!);
+                    }
                     
                     if let safeScheme = self.scheme {
                         attachmentCard!.applyTheme(withScheme: safeScheme);
                         attachmentHeader.applyTheme(withScheme: safeScheme);
                     }
-                    stackView.addArrangedSubview(attachmentHeader);
-                    stackView.addArrangedSubview(attachmentCard!);
                 }
             }
         }
