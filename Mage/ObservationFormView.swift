@@ -101,20 +101,24 @@ class ObservationFormView: UIStackView {
                 }
                 value = self.observation.attachments?.filter() { attachment in
                     guard let ofi = attachment.observationFormId, let fieldName = attachment.fieldName else { return false }
-                    return ofi == form[FormKey.id.key] as! String && fieldName == fieldDictionary[FieldKey.name.key] as! String;
+                    return ofi == form[FormKey.id.key] as? String && fieldName == fieldDictionary[FieldKey.name.key] as? String &&
+                        !attachment.markedForDeletion;
                 }
                 if ((value as! Set<Attachment>).count == 0) {
                     value = nil;
                 }
-            }
-            
-            if (!editMode && (value == nil || (value as? String) == "")) {
+            } else if (!editMode && (value == nil || (value as? String) == "")) {
                 continue;
             }
             
             var fieldView: UIView?;
             switch type {
             case FieldType.attachment.key:
+                if (!editMode && value == nil && unsentAttachments.filter {
+                    return $0["action"] as? String != "delete";
+                }.count == 0) {
+                    continue;
+                }
                 let coordinator: AttachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as? String, observationFormId: form[FormKey.id.key] as? String);
                 fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? Set<Attachment>), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: coordinator);
                 (fieldView as! AttachmentFieldView).setUnsentAttachments(attachments: unsentAttachments);
