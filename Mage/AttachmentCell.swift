@@ -13,6 +13,7 @@ import Kingfisher
     private lazy var imageView: AttachmentUIImageView = {
         let imageView: AttachmentUIImageView = AttachmentUIImageView(image: nil);
         imageView.configureForAutoLayout();
+        imageView.clipsToBounds = true;
         return imageView;
     }();
     

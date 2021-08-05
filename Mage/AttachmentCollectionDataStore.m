@@ -60,12 +60,10 @@
         Attachment *attachment = [self attachmentAtIndex:sender.tag];
         if (attachment != nil) {
             [self.attachmentSelectionDelegate attachmentFabTapped:attachment completionHandler:^(BOOL deleted) {
-                [self.attachmentCollection reloadData];
             }];
         } else {
             NSDictionary *unsentAttachment = [self unsentAttachmentAtIndex:sender.tag];
             [self.attachmentSelectionDelegate attachmentFabTappedField:unsentAttachment completionHandler:^(BOOL deleted) {
-                [self.attachmentCollection reloadData];
             }];
         }
     }

@@ -191,7 +191,9 @@ class AttachmentFieldView : BaseFieldView {
     
     func setAttachmentHolderHeight() {
         var attachmentHolderHeight: CGFloat = 100.0;
-        var attachmentCount = attachments?.count ?? 0;
+        var attachmentCount = attachments?.filter { attachment in
+            return !attachment.markedForDeletion
+        }.count ?? 0;
         attachmentCount = attachmentCount + unsentAttachments.count;
         if (attachmentCount != 0) {
             attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * 100.0
@@ -258,6 +260,7 @@ class AttachmentFieldView : BaseFieldView {
             }
         }
         setAttachmentHolderHeight();
+        attachmentCollectionView.layoutIfNeeded();
 
         super.updateConstraints();
     }
@@ -328,7 +331,11 @@ extension AttachmentFieldView : AttachmentSelectionDelegate {
     }
     
     func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        attachmentSelectionDelegate?.attachmentFabTapped?(attachment, completionHandler: handler);
+        attachmentSelectionDelegate?.attachmentFabTapped?(attachment, completionHandler: { [self] deleted in
+            attachmentCollectionView.reloadData();
+            setNeedsUpdateConstraints();
+            handler(deleted);
+        });
     }
     
     func attachmentFabTappedField(_ field: [AnyHashable : Any]!, completionHandler handler: ((Bool) -> Void)!) {

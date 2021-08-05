@@ -124,7 +124,6 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             print("Present the camera")
             self.pickerController = UIImagePickerController();
             self.pickerController!.delegate = self;
-            self.pickerController!.allowsEditing = true;
             self.pickerController!.sourceType = .camera;
             self.pickerController!.mediaTypes = [kUTTypeImage as String];
             self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
@@ -145,19 +144,19 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             print("Present the gallery")
             self.pickerController = UIImagePickerController();
             self.pickerController!.delegate = self;
-            self.pickerController!.allowsEditing = true;
             self.pickerController!.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
             self.pickerController!.sourceType = .photoLibrary;
             self.pickerController!.videoQuality = .typeHigh;
             self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
         }
     }
-    
 }
 
 extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         print("picked a picture \(info)")
+        
+        picker.dismiss(animated: true, completion: nil);
         
         let mediaType = info[.mediaType] as? String;
         if (mediaType == kUTTypeImage as String) {
@@ -176,29 +175,30 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
         
-        if let chosenImage = info[.editedImage] as? UIImage,
+        if let chosenImage = info[.originalImage] as? UIImage,
            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             if (picker.sourceType == .camera) {
                 UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
             }
-            let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
-            let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
-            do {
-                try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                let finalImage = chosenImage.qualityScaled();
-                guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
-                guard let finalData = writeMetadataIntoImageData(imagedata: imageData, metadata: info[.mediaMetadata] as? NSMutableDictionary) else { return };
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
+                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
                 do {
-                    try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
-                    addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
+                    try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                    let finalImage = chosenImage.qualityScaled();
+                    guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
+                    guard let finalData = writeMetadataIntoImageData(imagedata: imageData, metadata: info[.mediaMetadata] as? NSMutableDictionary) else { return };
+                    do {
+                        try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
+                        addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
+                    } catch {
+                        print("Unable to write image to file \(fileToWriteTo): \(error)")
+                    }
                 } catch {
-                    print("Unable to write image to file \(fileToWriteTo): \(error)")
+                    print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
                 }
-            } catch {
-                print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
             }
         }
-        picker.dismiss(animated: true, completion: nil);
     }
     
     func writeMetadataIntoImageData(imagedata: Data, metadata: NSMutableDictionary?) -> Data? {
@@ -263,8 +263,6 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                 print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
             }
         }
-            
-        picker.dismiss(animated: true, completion: nil);
     }
     
     func videoUploadQuality() -> String {

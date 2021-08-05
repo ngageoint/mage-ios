@@ -182,7 +182,7 @@ import MaterialComponents.MDCContainerScheme;
         addHeaderCard(stackView: stackView);
         addLegacyAttachmentCard(stackView: stackView);
         var headerViews = 2;
-        if (attachmentCard != nil) {
+        if (MageServer.isServerVersion5()) {
             headerViews = 4;
         }
         if (stackView.arrangedSubviews.count > headerViews) {
@@ -213,19 +213,28 @@ import MaterialComponents.MDCContainerScheme;
     func addLegacyAttachmentCard(stackView: UIStackView) {
         if (MageServer.isServerVersion5()) {
             if let safeObservation = observation {
-                if (safeObservation.attachments?.count != 0) {
-                    if (attachmentCard != nil) {
-                        attachmentCard?.populate(observation: observation);
-                    } else {
-                        attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self);
-                        stackView.addArrangedSubview(attachmentHeader);
-                        stackView.addArrangedSubview(attachmentCard!);
-                    }
-                    
+                if (attachmentCard != nil) {
+                    attachmentCard?.populate(observation: observation);
+                } else {
+                    attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self);
                     if let safeScheme = self.scheme {
                         attachmentCard!.applyTheme(withScheme: safeScheme);
                         attachmentHeader.applyTheme(withScheme: safeScheme);
                     }
+                    stackView.addArrangedSubview(attachmentHeader);
+                    stackView.addArrangedSubview(attachmentCard!);
+                }
+                
+                let attachmentCount = safeObservation.attachments?.filter() { attachment in
+                    return !attachment.markedForDeletion
+                }.count
+                
+                if (attachmentCount != 0) {
+                    attachmentHeader.isHidden = false;
+                    attachmentCard?.isHidden = false;
+                } else {
+                    attachmentHeader.isHidden = true;
+                    attachmentCard?.isHidden = true;
                 }
             }
         }
