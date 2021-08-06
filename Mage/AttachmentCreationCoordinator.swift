@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Photos
 
 @objc public protocol AudioRecordingDelegate {
     @objc func recordingAvailable(recording: Recording);
@@ -21,6 +22,9 @@ protocol AttachmentCreationCoordinatorDelegate {
 }
 
 class AttachmentCreationCoordinator: NSObject {
+    var photoLocations: [TimeInterval : CLLocation] = [:]
+    var photoHeadings: [TimeInterval : CLHeading] = [:]
+    var locationManager: CLLocationManager?;
     weak var rootViewController: UIViewController?;
     var observation: Observation;
     var fieldName: String?;
@@ -68,6 +72,16 @@ class AttachmentCreationCoordinator: NSObject {
             }
         }
     }
+    
+    func initializeLocationManager() {
+        // ask for permission
+        locationManager = CLLocationManager();
+        locationManager?.delegate = self;
+        locationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+        locationManager?.distanceFilter = kCLDistanceFilterNone;
+        locationManager?.headingFilter = kCLHeadingFilterNone;
+        locationManager?.requestWhenInUseAuthorization();
+    }
 }
 
 extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
@@ -114,6 +128,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
         print("Add camera")
         ExternalDevice.checkCameraPermissions(for: self.rootViewController) { (permissionGranted) in
             if (permissionGranted) {
+                self.initializeLocationManager()
                 self.presentCamera();
             }
         }
@@ -159,8 +174,10 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         picker.dismiss(animated: true, completion: nil);
         
         let mediaType = info[.mediaType] as? String;
-        if (mediaType == kUTTypeImage as String) {
-            handleImage(picker: picker, info: info);
+        if (mediaType == kUTTypeImage as String && picker.sourceType == .camera) {
+            handleCameraImage(picker: picker, info: info);
+        } else if (mediaType == kUTTypeImage as String && picker.sourceType != .camera) {
+            handleSavedImage(picker: picker, info: info);
         } else if (mediaType == kUTTypeMovie as String) {
             handleMovie(picker: picker, info: info);
         }
@@ -169,17 +186,63 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil);
         delegate?.attachmentCreationCancelled();
+        locationManager?.stopUpdatingHeading();
+        locationManager?.stopUpdatingLocation();
+        photoHeadings.removeAll();
+        photoLocations.removeAll();
     }
     
-    func handleImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
+    func handleSavedImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
+        let dateFormatter = DateFormatter();
+        dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
+        
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            if let phasset = info[.phAsset] as? PHAsset,
+               let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
+                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
+                self.addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
+
+                let manager = PHImageManager.default()
+                let requestOptions = PHImageRequestOptions()
+                requestOptions.isSynchronous = true
+                requestOptions.deliveryMode = .fastFormat
+                requestOptions.isNetworkAccessAllowed = true
+                manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
+                    if let data = data,
+                    let cImage = CIImage(data: data) {
+                        let chosenImage = UIImage(ciImage: cImage)
+                        
+                        do {
+                            try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                            let finalImage = chosenImage.qualityScaled();
+                            guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
+                            let metadata: [String : Any] = cImage.properties
+        
+                            guard let finalData = self.writeMetadataIntoImageData(imagedata: imageData, metadata: NSDictionary(dictionary: metadata)) else { return };
+
+                            do {
+                                try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
+                            } catch {
+                                print("Unable to write image to file \(fileToWriteTo): \(error)")
+                            }
+                        } catch {
+                            print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func handleCameraImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
+        locationManager?.stopUpdatingHeading();
+        locationManager?.stopUpdatingLocation();
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
         
         if let chosenImage = info[.originalImage] as? UIImage,
            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            if (picker.sourceType == .camera) {
-                UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
-            }
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
                 let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
@@ -187,9 +250,20 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                     try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
                     let finalImage = chosenImage.qualityScaled();
                     guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
-                    guard let finalData = writeMetadataIntoImageData(imagedata: imageData, metadata: info[.mediaMetadata] as? NSMutableDictionary) else { return };
+                    var metadata: [AnyHashable : Any] = info[.mediaMetadata] as? [AnyHashable : Any] ?? [:];
+                    
+                    if let gpsDictionary = createGpsExifData(metadata: metadata) {
+                        metadata[kCGImagePropertyGPSDictionary] = gpsDictionary
+                    }
+                    
+                    guard let finalData = writeMetadataIntoImageData(imagedata: imageData, metadata: NSDictionary(dictionary: metadata)) else { return };
                     do {
                         try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
+                        
+                        try? PHPhotoLibrary.shared().performChangesAndWait {
+                            PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileToWriteTo)
+                        }
+                        
                         addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
                     } catch {
                         print("Unable to write image to file \(fileToWriteTo): \(error)")
@@ -197,11 +271,13 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                 } catch {
                     print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
                 }
+                photoHeadings.removeAll();
+                photoLocations.removeAll();
             }
         }
     }
     
-    func writeMetadataIntoImageData(imagedata: Data, metadata: NSMutableDictionary?) -> Data? {
+    func writeMetadataIntoImageData(imagedata: Data, metadata: NSDictionary?) -> Data? {
         // Add metadata to jpgData
         guard let source = CGImageSourceCreateWithData(imagedata as CFData, nil),
               let uniformTypeIdentifier = CGImageSourceGetType(source) else { return nil; }
@@ -210,6 +286,81 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         CGImageDestinationAddImageFromSource(destination, source, 0, metadata)
         guard CGImageDestinationFinalize(destination) else { return nil; }
         return finalData as Data;
+    }
+    
+    func createGpsExifFromLocation(location: CLLocation?, heading: CLHeading?) -> [AnyHashable : Any]? {
+        guard let safeLocation: CLLocation = location else {
+            return nil;
+        }
+        
+        let metersPerSecondMeasurement = Measurement(value: safeLocation.speed, unit: UnitSpeed.metersPerSecond);
+        
+        var gpsDictionary: [AnyHashable : Any] = [
+            kCGImagePropertyGPSLatitude: safeLocation.coordinate.latitude,
+            kCGImagePropertyGPSLongitude: safeLocation.coordinate.longitude,
+            kCGImagePropertyGPSSpeed: metersPerSecondMeasurement.converted(to: UnitSpeed.kilometersPerHour),
+            kCGImagePropertyGPSSpeedRef: "K",
+            kCGImagePropertyGPSTrack: safeLocation.course,
+            kCGImagePropertyGPSTrackRef: "T",
+            kCGImagePropertyGPSAltitude: safeLocation.altitude,
+            kCGImagePropertyGPSAltitudeRef: 0
+        ];
+        
+        if let safeHeading: CLHeading = heading {
+            gpsDictionary[kCGImagePropertyGPSImgDirection] = safeHeading.trueHeading;
+            gpsDictionary[kCGImagePropertyGPSImgDirectionRef] = "T";
+            gpsDictionary[kCGImagePropertyGPSDestBearing] = safeHeading.trueHeading;
+            gpsDictionary[kCGImagePropertyGPSDestBearingRef] = "T";
+        }
+        return gpsDictionary;
+    }
+    
+    func createGpsExifData(metadata: [AnyHashable : Any]) -> [AnyHashable : Any]? {
+        if (photoLocations.count != 0) {
+            if let exifDictionary = metadata[kCGImagePropertyExifDictionary] as? [AnyHashable : AnyObject], let dateTimeString = exifDictionary[kCGImagePropertyExifDateTimeOriginal] as? String {
+                let dateFormatter = DateFormatter();
+                dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss";
+                dateFormatter.locale = Locale(identifier: "en_US_POSIX");
+                let dateTimeOfImage = dateFormatter.date(from: dateTimeString);
+                let timeIntervalOfImage = dateTimeOfImage?.timeIntervalSince1970 ?? 0;
+                
+                let sortedKeys: [TimeInterval] = photoLocations.keys.sorted(by: <);
+                let firstLocationAfterImageIndex = sortedKeys.firstIndex { time in
+                    return time > timeIntervalOfImage
+                } ?? sortedKeys.count - 1;
+                
+                var maybeLocation: CLLocation? = photoLocations[sortedKeys[firstLocationAfterImageIndex]]
+                
+                if (firstLocationAfterImageIndex != 0) {
+                    let locationTimeBeforeImage = sortedKeys[firstLocationAfterImageIndex - 1]
+                    let locationTimeAfterImage = sortedKeys[firstLocationAfterImageIndex]
+                    if ((timeIntervalOfImage - locationTimeBeforeImage) <= (locationTimeAfterImage - timeIntervalOfImage)) {
+                        maybeLocation = photoLocations[sortedKeys[firstLocationAfterImageIndex - 1]]
+                    }
+                }
+                
+                var maybeHeading: CLHeading?;
+                if (photoHeadings.count != 0) {
+                    let sortedHeadingKeys: [TimeInterval] = photoHeadings.keys.sorted(by: <);
+                    let firstHeadingAfterImageIndex = sortedHeadingKeys.firstIndex { time in
+                        return time > timeIntervalOfImage
+                    } ?? sortedHeadingKeys.count - 1;
+                    
+                    maybeHeading = photoHeadings[sortedHeadingKeys[firstHeadingAfterImageIndex]]
+                    
+                    if (firstHeadingAfterImageIndex != 0) {
+                        let headingTimeBeforeImage = sortedHeadingKeys[firstHeadingAfterImageIndex - 1]
+                        let headingTimeAfterImage = sortedHeadingKeys[firstHeadingAfterImageIndex]
+                        if ((timeIntervalOfImage - headingTimeBeforeImage) <= (headingTimeAfterImage - timeIntervalOfImage)) {
+                            maybeHeading = photoHeadings[sortedHeadingKeys[firstHeadingAfterImageIndex - 1]]
+                        }
+                    }
+                }
+                
+                return createGpsExifFromLocation(location: maybeLocation, heading: maybeHeading);
+            }
+        }
+        return nil;
     }
 
     func handleMovie(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
@@ -288,5 +439,28 @@ extension AttachmentCreationCoordinator: AudioRecordingDelegate {
         addAttachmentForSaving(location: URL(fileURLWithPath: "\(recording.filePath!)/\(recording.fileName!)"), contentType: recording.mediaType!)
     
         self.audioRecorderViewController?.dismiss(animated: true, completion: nil);
+    }
+}
+
+extension AttachmentCreationCoordinator: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if (status == .authorizedAlways || status == .authorizedWhenInUse) {
+            locationManager?.startUpdatingLocation();
+            locationManager?.startUpdatingHeading();
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // save the locations so we can get the correct one when an image is taken
+        for location in locations {
+            photoLocations[location.timestamp.timeIntervalSince1970] = location;
+            print("location to be saved is \(location)")
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        photoHeadings[newHeading.timestamp.timeIntervalSince1970] = newHeading;
+        print("heading to be saved is \(newHeading)")
     }
 }
