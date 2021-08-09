@@ -316,6 +316,14 @@ extension ObservationViewCardCollectionViewController: AttachmentSelectionDelega
         attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self);
         attachmentViewCoordinator?.start();
     }
+    
+    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+        if (attachment.url == nil) {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+        attachmentViewCoordinator?.start();
+    }
 }
 
 extension ObservationViewCardCollectionViewController: AttachmentViewDelegate {

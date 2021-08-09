@@ -14,6 +14,7 @@
 
 - (void) selectedAttachment:(Attachment *) attachment;
 - (void) selectedUnsentAttachment: (NSDictionary *) unsentAttachment;
+- (void) selectedNotCachedAttachment: (Attachment *) attachment completionHandler: (void(^)(BOOL))handler;
 
 @optional
 - (void) attachmentFabTapped:(Attachment *) attachment completionHandler: (void(^)(BOOL))handler;

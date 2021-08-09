@@ -296,6 +296,30 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
             attachmentCoordinator.start();
         }
     }
+
+    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+        if let attachmentDelegate = self.attachmentDelegate {
+            attachmentDelegate.selectedNotCachedAttachment(attachment, completionHandler: handler);
+        } else {
+            if (!DataConnectionUtilities.shouldFetchAttachments()) {
+                if (attachment.contentType?.hasPrefix("image") == true) {
+                    let alert = UIAlertController(title: "View Image", message: "Your attachment fetch settings do not allow auto downloading of images.  Would you like to view the image?", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+                        handler(true);
+                    }))
+                    alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil));
+                    self.present(alert, animated: true, completion: nil);
+                } else if (attachment.contentType?.hasPrefix("video") == true) {
+                    if (attachment.url == nil) {
+                        return;
+                    }
+                    let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+                    self.childCoordinators.append(attachmentCoordinator);
+                    attachmentCoordinator.start();
+                }
+            }
+        }
+    }
 }
 
 extension ObservationTableViewController: ObservationActionsDelegate {

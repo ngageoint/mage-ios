@@ -330,6 +330,10 @@ extension AttachmentFieldView : AttachmentSelectionDelegate {
         attachmentSelectionDelegate?.selectedUnsentAttachment(unsentAttachment);
     }
     
+    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+        attachmentSelectionDelegate?.selectedNotCachedAttachment(attachment, completionHandler: handler);
+    }
+    
     func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
         attachmentSelectionDelegate?.attachmentFabTapped?(attachment, completionHandler: { [self] deleted in
             attachmentCollectionView.reloadData();

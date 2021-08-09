@@ -120,6 +120,14 @@ extension UserViewController : AttachmentSelectionDelegate {
         self.childCoordinators.append(attachmentCoordinator);
         attachmentCoordinator.start();
     }
+    
+    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+        if (attachment.url != nil) {
+            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+            childCoordinators.append(attachmentCoordinator);
+            attachmentCoordinator.start();
+        }
+    }
 }
 
 extension UserViewController : AttachmentViewDelegate {

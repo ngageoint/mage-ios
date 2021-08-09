@@ -16,6 +16,8 @@ import Kingfisher
     var largeSizeCached: Bool = false;
     public var placeholderIsRealImage: Bool = false;
     public var useDownloadPlaceholder: Bool = true;
+    public var loaded: Bool = false;
+    public var loadedThumb: Bool = false;
     
     override init(image: UIImage?) {
         super.init(image: image)
@@ -53,10 +55,11 @@ import Kingfisher
         self.kf.cancelDownloadTask();
     }
     
-    public func showThumbnail(indicator: Indicator? = nil,
+    public func showThumbnail(cacheOnly: Bool = false,
+                              indicator: Indicator? = nil,
                               progressBlock: DownloadProgressBlock? = nil,
                               completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
-        self.setImage(url: self.getAttachmentUrl(size: getImageSize()), thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
+        self.setImage(url: self.getAttachmentUrl(size: getImageSize()), cacheOnly: cacheOnly, thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
     public func setAttachment(attachment: Attachment) {
@@ -68,7 +71,7 @@ import Kingfisher
         self.placeholderIsRealImage = false;
         self.url = url;
     }
-    
+        
     public func showImage(cacheOnly: Bool = false,
                           fullSize: Bool = false,
                           thumbnail: Bool = false,
@@ -95,6 +98,7 @@ import Kingfisher
                   indicator: Indicator? = nil,
                   progressBlock: DownloadProgressBlock? = nil,
                   completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+        // this is the case where the attachment was saved by another user, but not uploaded to the server yet
         if (url == nil) {
             self.contentMode = .scaleAspectFit;
             self.image = UIImage(named: "upload");
@@ -120,6 +124,8 @@ import Kingfisher
         
         if (indicator != nil) {
             self.kf.indicatorType = .custom(indicator: indicator!);
+        } else {
+            self.kf.indicatorType = .activity;
         }
         var options: KingfisherOptionsInfo = [
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
@@ -144,32 +150,93 @@ import Kingfisher
         }
         
         if (thumbnail) {
-            let resource = ImageResource(downloadURL: safeUrl, cacheKey: thumbUrl.absoluteString)
-            self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock,
-                             completionHandler: completionHandler);
+            // Have to do this so that the placeholder image shows up behind the activity indicator
+            DispatchQueue.main.async {
+                let resource = ImageResource(downloadURL: safeUrl, cacheKey: thumbUrl.absoluteString)
+                self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock) { result in
+                    
+                    switch result {
+                    case .failure(let error):
+                        if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
+                            print("cache miss \(key)")
+                        }
+                    case .success(_):
+                        self.loadedThumb = true;
+                        break;
+                    }
+                    completionHandler?(result);
+                };
+            }
             return;
         }
         // if they have the original sized image, show that
         else if (self.isFullSizeCached() || fullSize) {
             self.placeholderIsRealImage = true;
             self.kf.setImage(with: URL(string: self.attachment!.url!),
-                             options: options, progressBlock: progressBlock,
-                                        completionHandler: completionHandler);
+                             options: options, progressBlock: progressBlock) { result in
+                
+                switch result {
+                case .failure(let error):
+                    if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
+                        print("cache miss \(key)")
+                    }
+                case .success(_):
+                    self.loaded = true;
+                    break;
+                }
+                completionHandler?(result);
+            };
             return;
         }
         // else if they had a large sized image downloaded
         else if (self.isLargeSizeCached()) {
             self.placeholderIsRealImage = true;
-            placeholder.kf.setImage(with: self.getAttachmentUrl(size: getImageSize()), options: options)
+            placeholder.kf.setImage(with: self.getAttachmentUrl(size: getImageSize()), options: options) { result in
+                
+                switch result {
+                case .failure(let error):
+                    if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
+                        print("cache miss \(key)")
+                    }
+                case .success(_):
+                    self.loadedThumb = true;
+                    break;
+                }
+                completionHandler?(result);
+            };
         }
         // if they had the thumbnail already downloaded for some reason, show that while we go get the bigger one
         else if (ImageCache.default.isCached(forKey: thumbUrl.absoluteString)) {
             self.placeholderIsRealImage = true;
-            placeholder.kf.setImage(with: thumbUrl, options: options)
+            placeholder.kf.setImage(with: thumbUrl, options: options) { result in
+                
+                switch result {
+                case .failure(let error):
+                    if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
+                        print("cache miss \(key)")
+                    }
+                case .success(_):
+                    self.loadedThumb = true;
+                    break;
+                }
+                completionHandler?(result);
+            };
         }
         // Have to do this so that the placeholder image shows up behind the activity indicator
         DispatchQueue.main.async {
-            self.kf.setImage(with: safeUrl, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
+            self.kf.setImage(with: safeUrl, placeholder: placeholder, options: options, progressBlock: progressBlock) { result in
+                
+                switch result {
+                case .failure(let error):
+                    if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
+                        print("cache miss \(key)")
+                    }
+                case .success(_):
+                    self.loaded = true;
+                    break;
+                }
+                completionHandler?(result);
+            };
         }
     }
 }

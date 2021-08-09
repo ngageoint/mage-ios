@@ -55,7 +55,7 @@ import Kingfisher
     @objc public func setImage(newAttachment: [String : AnyHashable], button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
         self.button = button;
-        self.imageView.setImage(url: URL(fileURLWithPath: newAttachment["localPath"] as! String));
+        self.imageView.setImage(url: URL(fileURLWithPath: newAttachment["localPath"] as! String), cacheOnly: !DataConnectionUtilities.shouldFetchAttachments());
         self.imageView.accessibilityLabel = "attachment \(newAttachment["localPath"] as! String) loaded";
         self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
         self.imageView.contentMode = .scaleAspectFit;
@@ -76,7 +76,8 @@ import Kingfisher
             self.imageView.setAttachment(attachment: attachment);
             self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading";
-            self.imageView.showThumbnail(completionHandler:
+            self.imageView.showThumbnail(cacheOnly: !DataConnectionUtilities.shouldFetchAttachments(),
+                                         completionHandler:
                                             { result in
                                                 switch result {
                                                 case .success(_):

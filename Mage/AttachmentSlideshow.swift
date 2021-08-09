@@ -9,6 +9,44 @@
 import Foundation
 import Kingfisher
 
+class MDCActivityIndicatorProgress: Indicator {
+    private let progressIndicatorView: IndicatorView
+    
+    private lazy var activityIndicator: MDCActivityIndicator = {
+        let activityIndicator = MDCActivityIndicator()
+        activityIndicator.sizeToFit()
+        activityIndicator.indicatorMode = .determinate
+        activityIndicator.progress = 0.5
+        return activityIndicator;
+    }()
+    
+    var view: IndicatorView {
+        return progressIndicatorView
+    }
+    unowned let parent: AttachmentUIImageView;
+    
+    func startAnimatingView() {
+        view.isHidden = false
+        self.activityIndicator.startAnimating();
+    }
+    func stopAnimatingView() {
+        view.isHidden = true
+        activityIndicator.stopAnimating();
+    }
+    
+    func setProgress(progress: Float) {
+        activityIndicator.progress = progress;
+    }
+    
+    init(parent: AttachmentUIImageView) {
+        self.parent = parent;
+        self.progressIndicatorView = UIView(forAutoLayout: ());
+        self.progressIndicatorView.layer.zPosition = 1000;
+        self.progressIndicatorView.addSubview(activityIndicator);
+        activityIndicator.autoCenterInSuperview();
+    }
+}
+
 class AttachmentSlideShow: UIView {
 
     private var didSetUpConstraints = false;
@@ -71,41 +109,90 @@ class AttachmentSlideShow: UIView {
         }
     }
     
+    // everything should be set on this already
+    func showThumbnail(imageView: AttachmentUIImageView, cacheOnly: Bool = !DataConnectionUtilities.shouldFetchAttachments()) {
+        imageView.accessibilityLabel = "attachment \(imageView.attachment?.name ?? "")";
+
+        let i = MDCActivityIndicatorProgress(parent: imageView);
+        
+        imageView.showThumbnail(cacheOnly: cacheOnly,
+                                indicator: i,
+                                progressBlock: {
+                                    receivedSize, totalSize in
+                                    let percentage = (Float(receivedSize) / Float(totalSize))
+                                    i.setProgress(progress: percentage);
+                                },
+                                completionHandler:
+                                    { result in
+                                        switch result {
+                                        case .success(_):
+                                            imageView.accessibilityLabel = "attachment \(imageView.attachment?.name ?? "") loaded";
+                                            if (self.attachmentSelectionDelegate != nil) {
+                                                imageView.isUserInteractionEnabled = true;
+                                                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))
+                                                imageView.addGestureRecognizer(tapGesture);
+                                            }
+                                        case .failure(let error):
+                                            if (self.attachmentSelectionDelegate != nil) {
+                                                imageView.isUserInteractionEnabled = true;
+                                                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.notCachedImageViewTapped(sender:)))
+                                                imageView.addGestureRecognizer(tapGesture);
+                                            }
+                                            print(error);
+                                        }
+                                    });
+    }
+    
     func populate(observation: Observation, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
-        for view in stackView.arrangedSubviews {
-            view.removeFromSuperview();
-        }
+        
         guard let safeAttachments = observation.attachments else {
             return
         }
+        // remove deleted attachments
+        for view in stackView.arrangedSubviews {
+            if let attachmentView: AttachmentUIImageView = view as? AttachmentUIImageView {
+                if (attachmentView.attachment != nil && !safeAttachments.contains(attachmentView.attachment!)) {
+                    view.removeFromSuperview();
+                }
+            } else {
+                view.removeFromSuperview();
+            }
+        }
+        
+        // add new ones
         for (_, attachment) in safeAttachments.enumerated() {
-            let imageView = AttachmentUIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: height))
-            stackView.addArrangedSubview(imageView);
-            imageView.autoMatch(.width, to: .width, of: slidescroll);
-            imageView.clipsToBounds = true
-            imageView.contentMode = .scaleAspectFill
-            imageView.isUserInteractionEnabled = true;
-            imageView.kf.indicatorType = .activity;
+            var imageView: AttachmentUIImageView? = nil;
             
+            for view in stackView.arrangedSubviews {
+                if let attachmentView: AttachmentUIImageView = view as? AttachmentUIImageView {
+                    if (attachmentView.attachment != nil && attachment == attachmentView.attachment! && imageView == nil) {
+                        imageView = attachmentView;
+                        // already added this image view and loaded the thumbnail
+                        if (attachmentView.loadedThumb) {
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (imageView == nil) {
+                imageView = AttachmentUIImageView(frame: CGRect(x: 0, y: 0, width: slidescroll.frame.size.width, height: height))
+                imageView?.configureForAutoLayout();
+                stackView.addArrangedSubview(imageView!);
+                imageView?.autoMatch(.width, to: .width, of: slidescroll);
+                imageView?.clipsToBounds = true
+                imageView?.contentMode = .scaleAspectFill
+                imageView?.isUserInteractionEnabled = true;
+                imageView?.kf.indicatorType = .activity;
+            }
+            
+            guard let imageView = imageView else {
+                return;
+            }
             let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
             if (attachment.contentType?.hasPrefix("image") ?? false) {
                 imageView.setAttachment(attachment: attachment);
-                imageView.accessibilityLabel = "attachment \(attachment.name ?? "")";
-                imageView.showThumbnail(completionHandler:
-                                                { result in
-                                                    switch result {
-                                                    case .success(_):
-                                                        imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
-                                                        if (attachmentSelectionDelegate != nil) {
-                                                            imageView.isUserInteractionEnabled = true;
-                                                            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))
-                                                            imageView.addGestureRecognizer(tapGesture);
-                                                        }
-                                                    case .failure(let error):
-                                                        print(error);
-                                                    }
-                                                });
+                showThumbnail(imageView: imageView);
             } else if (attachment.contentType?.hasPrefix("video") ?? false) {
                 let url = self.getAttachmentUrl(size: imageSize, attachment: attachment);
                 imageView.setAttachment(attachment: attachment);
@@ -169,6 +256,14 @@ class AttachmentSlideShow: UIView {
     @objc func imageViewTapped(sender: UITapGestureRecognizer) {
         let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
         attachmentSelectionDelegate?.selectedAttachment(attachmentImageView.attachment);
+    }
+    
+    @objc func notCachedImageViewTapped(sender: UITapGestureRecognizer) {
+        let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
+        attachmentImageView.kf.indicatorType = .activity;
+        attachmentSelectionDelegate?.selectedNotCachedAttachment(attachmentImageView.attachment, completionHandler: { forceDownload in
+            self.showThumbnail(imageView: attachmentImageView, cacheOnly: !forceDownload);
+        });
     }
     
     override func updateConstraints() {
