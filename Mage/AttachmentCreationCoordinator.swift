@@ -246,6 +246,8 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
                 let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
+                let originalFileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date()))_original.jpeg");
+
                 do {
                     try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
                     let finalImage = chosenImage.qualityScaled();
@@ -260,13 +262,25 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                     do {
                         try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
                         
-                        try? PHPhotoLibrary.shared().performChangesAndWait {
-                            PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileToWriteTo)
-                        }
-                        
                         addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
                     } catch {
                         print("Unable to write image to file \(fileToWriteTo): \(error)")
+                    }
+                    
+                    // save the original image that was not resized to the photo library, with GPS data
+                    guard let originalImageData = chosenImage.jpegData(compressionQuality: 1.0) else { return };
+                    guard let originalWithGPS = writeMetadataIntoImageData(imagedata: originalImageData, metadata: NSDictionary(dictionary: metadata)) else { return };
+                    do {
+                        try originalWithGPS.write(to: originalFileToWriteTo, options: .completeFileProtection)
+
+                        try? PHPhotoLibrary.shared().performChangesAndWait {
+                            PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: originalFileToWriteTo)
+                        }
+                        
+                        try FileManager.default.removeItem(at: originalFileToWriteTo);
+
+                    } catch {
+                        print("Unable to write image to file \(originalFileToWriteTo): \(error)")
                     }
                 } catch {
                     print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
