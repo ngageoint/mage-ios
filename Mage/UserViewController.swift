@@ -109,21 +109,21 @@ extension UserViewController : ObservationActionsDelegate {
 extension UserViewController : AttachmentSelectionDelegate {
     func selectedAttachment(_ attachment: Attachment!) {
         if (attachment.url != nil) {
-            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
             childCoordinators.append(attachmentCoordinator);
             attachmentCoordinator.start();
         }
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
-        let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self);
+        let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self, scheme: scheme);
         self.childCoordinators.append(attachmentCoordinator);
         attachmentCoordinator.start();
     }
     
     func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
         if (attachment.url != nil) {
-            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
             childCoordinators.append(attachmentCoordinator);
             attachmentCoordinator.start();
         }

@@ -58,20 +58,7 @@ extension PlaceholderImage: Placeholder {}
     override func viewDidLoad() {
         super.viewDidLoad();
         if (self.attachment != nil) {
-            self.showAttachment()
-            { result in
-                switch result {
-                case .success(let value):
-                    // TODO handle the case where if the downloaded image is the actual full size one (image thumbnailing is off) we should store the image in the cache
-                    // with the base url as the key
-
-                    // if the thumbnail is not cached, cache it now
-                    if(!ImageCache.default.isCached(forKey: String(format: "%@_thumbnail", self.attachment!.url!))) {
-                        ImageCache.default.store(value.image, forKey: String(format: "%@_thumbnail", self.attachment!.url!));
-                    }
-                case .failure(_): break
-                }
-            };
+            self.showAttachment(largeSize: true)
         } else if (self.url != nil) {
             self.showImage();
         }
@@ -170,13 +157,14 @@ extension PlaceholderImage: Placeholder {}
         return ImageCache.default.isCached(forKey: self.attachment!.url!);
     }
     
-    func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+    func showAttachment(largeSize: Bool = false, fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         self.progressView?.isHidden = true;
         let i = MyIndicator(parent: self);
 
         self.imageView?.setAttachment(attachment: self.attachment!);
         self.imageView?.showImage(
             fullSize: fullSize,
+            largeSize: largeSize,
             indicator: i,
             progressBlock: {
                 receivedSize, totalSize in

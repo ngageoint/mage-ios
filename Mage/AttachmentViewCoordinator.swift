@@ -14,6 +14,7 @@ import MagicalRecord;
 }
 
 @objc class AttachmentViewCoordinator: NSObject, MediaLoaderDelegate, NavigationControllerObserverDelegate, AskToDownloadDelegate {
+    var scheme: MDCContainerScheming?;
 
     var attachment: Attachment!
     var delegate: AttachmentViewDelegate?
@@ -34,10 +35,11 @@ import MagicalRecord;
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
-    @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?) {
+    @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.attachment = attachment;
         self.delegate = delegate;
+        self.scheme = scheme;
         
         self.tempFile =  NSTemporaryDirectory() + URL.init(string: self.attachment.url!)!.lastPathComponent;
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
@@ -45,10 +47,11 @@ import MagicalRecord;
         self.mediaLoader = MediaLoader(delegate: self);
     }
     
-    @objc public init(rootViewController: UINavigationController, url: URL, delegate: AttachmentViewDelegate?) {
+    @objc public init(rootViewController: UINavigationController, url: URL, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.urlToLoad = url;
         self.delegate = delegate;
+        self.scheme = scheme;
         
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
@@ -66,6 +69,7 @@ import MagicalRecord;
                 return self.showAttachment(animated: animated);
             } else {
                 let vc: AskToDownloadViewController = AskToDownloadViewController(attachment: theAttachment, delegate: self);
+                vc.applyTheme(withContainerScheme: scheme);
                 self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
@@ -75,6 +79,7 @@ import MagicalRecord;
                 return self.loadURL(animated: animated);
             } else {
                 let vc: AskToDownloadViewController = AskToDownloadViewController(url: self.urlToLoad!, delegate: self);
+                vc.applyTheme(withContainerScheme: scheme);
                 self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;

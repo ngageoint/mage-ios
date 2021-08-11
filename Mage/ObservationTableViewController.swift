@@ -281,7 +281,7 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
         if let attachmentDelegate = self.attachmentDelegate {
             attachmentDelegate.selectedAttachment(attachment);
         } else {
-            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
             self.childCoordinators.append(attachmentCoordinator);
             attachmentCoordinator.start();
         }
@@ -291,7 +291,7 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
         if let attachmentDelegate = self.attachmentDelegate {
             attachmentDelegate.selectedUnsentAttachment(unsentAttachment);
         } else {
-            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self);
+            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self, scheme: scheme);
             self.childCoordinators.append(attachmentCoordinator);
             attachmentCoordinator.start();
         }
@@ -313,7 +313,7 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
                     if (attachment.url == nil) {
                         return;
                     }
-                    let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self);
+                    let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
                     self.childCoordinators.append(attachmentCoordinator);
                     attachmentCoordinator.start();
                 }

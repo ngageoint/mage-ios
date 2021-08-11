@@ -358,7 +358,6 @@
 		F795ED1624BD0B9A0028FBFC /* userabc.json in Resources */ = {isa = PBXBuildFile; fileRef = F795ED1524BD0B9A0028FBFC /* userabc.json */; };
 		F795ED1824BF36DD0028FBFC /* locationsabc.json in Resources */ = {isa = PBXBuildFile; fileRef = F795ED1724BF36DD0028FBFC /* locationsabc.json */; };
 		F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */; };
-		F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */ = {isa = PBXBuildFile; fileRef = F796E44C24193D00005CA09C /* AskToDownload.xib */; };
 		F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */; };
 		F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */; };
@@ -1076,7 +1075,6 @@
 		F795ED1524BD0B9A0028FBFC /* userabc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = userabc.json; sourceTree = "<group>"; };
 		F795ED1724BF36DD0028FBFC /* locationsabc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = locationsabc.json; sourceTree = "<group>"; };
 		F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewCoordinator.swift; sourceTree = "<group>"; };
-		F796E44C24193D00005CA09C /* AskToDownload.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AskToDownload.xib; sourceTree = "<group>"; };
 		F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadViewController.swift; sourceTree = "<group>"; };
 		F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewControllerTests.swift; sourceTree = "<group>"; };
 		F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageRootViewController.swift; sourceTree = "<group>"; };
@@ -2268,7 +2266,6 @@
 			isa = PBXGroup;
 			children = (
 				F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */,
-				F796E44C24193D00005CA09C /* AskToDownload.xib */,
 			);
 			path = Attachment;
 			sourceTree = "<group>";
@@ -2746,7 +2743,6 @@
 				2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
-				F796E44D24193D00005CA09C /* AskToDownload.xib in Resources */,
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */,
