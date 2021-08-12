@@ -149,14 +149,14 @@
     if (self.attachmentCoordinator) {
         [self.attachmentCoordinator setAttachmentWithAttachment:attachment];
     } else {
-        self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController attachment:attachment delegate:self];
+        self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController attachment:attachment delegate:self scheme:_scheme];
         [self.childCoordinators addObject:self.attachmentCoordinator];
         [self.attachmentCoordinator start];
     }
 }
 
 - (void)selectedUnsentAttachment:(NSDictionary *)unsentAttachment {
-    self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController url:unsentAttachment[@"localPath"] delegate:self];
+    self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController url:unsentAttachment[@"localPath"] delegate:self scheme:_scheme];
     [self.attachmentCoordinator start];
 }
 

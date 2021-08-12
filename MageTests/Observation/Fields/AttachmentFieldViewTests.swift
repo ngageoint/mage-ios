@@ -16,6 +16,10 @@ import Kingfisher
 @testable import MAGE
 
 class MockAttachmentSelectionDelegate: AttachmentSelectionDelegate {
+    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+        
+    }
+    
     var selectedAttachmentCalled = false;
     var attachmentSelected: Attachment?;
     

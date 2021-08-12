@@ -412,7 +412,7 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
             if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
                 let fullAvatarUrl = URL(fileURLWithPath: "\(documentsDirectories[0])/\(avatarUrl)")
                 if let saveNavigationController = navigationController {
-                    let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: saveNavigationController, url: fullAvatarUrl, delegate: nil);
+                    let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: saveNavigationController, url: fullAvatarUrl, delegate: nil, scheme: scheme);
                     childCoordinators.append(coordinator);
                     coordinator.start();
                 }

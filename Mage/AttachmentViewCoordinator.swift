@@ -14,6 +14,7 @@ import MagicalRecord;
 }
 
 @objc class AttachmentViewCoordinator: NSObject, MediaLoaderDelegate, NavigationControllerObserverDelegate, AskToDownloadDelegate {
+    var scheme: MDCContainerScheming?;
 
     var attachment: Attachment!
     var delegate: AttachmentViewDelegate?
@@ -34,21 +35,27 @@ import MagicalRecord;
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
-    @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?) {
+    @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.attachment = attachment;
         self.delegate = delegate;
+        self.scheme = scheme;
         
-        self.tempFile =  NSTemporaryDirectory() + URL.init(string: self.attachment.url!)!.lastPathComponent;
+        if let attachmentUrl = self.attachment.url {
+            self.tempFile =  NSTemporaryDirectory() + (URL(string: attachmentUrl)?.lastPathComponent ?? "tempfile");
+        } else {
+            self.tempFile =  NSTemporaryDirectory() + "tempfile";
+        }
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
         self.mediaLoader = MediaLoader(delegate: self);
     }
     
-    @objc public init(rootViewController: UINavigationController, url: URL, delegate: AttachmentViewDelegate?) {
+    @objc public init(rootViewController: UINavigationController, url: URL, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.urlToLoad = url;
         self.delegate = delegate;
+        self.scheme = scheme;
         
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
@@ -66,15 +73,17 @@ import MagicalRecord;
                 return self.showAttachment(animated: animated);
             } else {
                 let vc: AskToDownloadViewController = AskToDownloadViewController(attachment: theAttachment, delegate: self);
+                vc.applyTheme(withContainerScheme: scheme);
                 self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
             }
-        } else {
-            if (self.urlToLoad?.isFileURL == true || DataConnectionUtilities.shouldFetchAvatars()) {
+        } else if let urlToLoad = self.urlToLoad {
+            if (urlToLoad.isFileURL == true || DataConnectionUtilities.shouldFetchAvatars()) {
                 return self.loadURL(animated: animated);
             } else {
-                let vc: AskToDownloadViewController = AskToDownloadViewController(url: self.urlToLoad!, delegate: self);
+                let vc: AskToDownloadViewController = AskToDownloadViewController(url: urlToLoad, delegate: self);
+                vc.applyTheme(withContainerScheme: scheme);
                 self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
@@ -93,25 +102,31 @@ import MagicalRecord;
     }
     
     func loadURL(animated: Bool = false) {
-        self.imageViewController = ImageAttachmentViewController(url: self.urlToLoad!);
-        self.imageViewController?.view.backgroundColor = UIColor.black;
-        self.rootViewController.pushViewController(self.imageViewController!, animated: animated);
-        self.navigationControllerObserver.observePopTransition(of: self.imageViewController!, delegate: self);
-        self.hasPushedViewController = true;
+        if let urlToLoad = self.urlToLoad {
+            let imageViewController = ImageAttachmentViewController(url: urlToLoad)
+            imageViewController.view.backgroundColor = UIColor.black;
+            self.rootViewController.pushViewController(imageViewController, animated: animated);
+            self.navigationControllerObserver.observePopTransition(of: imageViewController, delegate: self);
+            self.hasPushedViewController = true;
+            self.imageViewController = imageViewController;
+        }
     }
     
     func showAttachment(animated: Bool = false) {
-        if (self.attachment.contentType!.hasPrefix("image")) {
-            self.imageViewController = ImageAttachmentViewController(attachment: self.attachment);
-            // not sure if we still need this TODO test
-            self.imageViewController?.view.backgroundColor = UIColor.black;
-            self.rootViewController.pushViewController(self.imageViewController!, animated: animated);
-            self.navigationControllerObserver.observePopTransition(of: self.imageViewController!, delegate: self);
-            self.hasPushedViewController = true;
-        } else if (self.attachment.contentType!.hasPrefix("video")) {
-            self.playAudioVideo();
-        } else if (self.attachment.contentType!.hasPrefix("audio")) {
-            self.downloadAudio();
+        if let contentType = self.attachment.contentType {
+            if contentType.hasPrefix("image") {
+                let imageViewController = ImageAttachmentViewController(attachment: self.attachment);
+                // not sure if we still need this TODO test
+                imageViewController.view.backgroundColor = UIColor.black;
+                self.rootViewController.pushViewController(imageViewController, animated: animated);
+                self.navigationControllerObserver.observePopTransition(of: imageViewController, delegate: self);
+                self.hasPushedViewController = true;
+                self.imageViewController = imageViewController;
+            } else if contentType.hasPrefix("video") {
+                self.playAudioVideo();
+            } else if contentType.hasPrefix("audio") {
+                self.downloadAudio();
+            }
         }
     }
     
@@ -128,49 +143,56 @@ import MagicalRecord;
     }
     
     func downloadAudio() {
-        if ((self.attachment.localPath != nil) && FileManager.default.fileExists(atPath: self.attachment.localPath!)) {
+        if let localPath = self.attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
             self.playAudioVideo();
             return;
         }
-        print("playing audio:", String.init(format: "%@", self.attachment.url!));
-        self.urlToLoad = URL(string: String.init(format: "%@", self.attachment.url!));
-        if (attachment.name != nil) {
-            self.tempFile = (self.tempFile ?? "") + "_" + attachment.name!;
-        } else if let ext = (UTTypeCopyPreferredTagWithClass(attachment.contentType! as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue()) {
-            self.tempFile = (self.tempFile ?? "") + "." + String(ext);
-        } else {
-            self.tempFile = (self.tempFile ?? "") + ".mp3";
+        if let attachmentUrl = self.attachment.url, let urlToLoad = URL(string: String(format: "%@", attachmentUrl)) {
+            print("playing audio:", String(format: "%@", attachmentUrl));
+            self.urlToLoad = urlToLoad
+            if let name = attachment.name {
+                self.tempFile = (self.tempFile ?? "") + "_" + name;
+            } else if let contentType = attachment.contentType, let ext = (UTTypeCopyPreferredTagWithClass(contentType as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue()) {
+                self.tempFile = (self.tempFile ?? "") + "." + String(ext);
+            } else {
+                self.tempFile = (self.tempFile ?? "") + ".mp3";
+            }
+            self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: urlToLoad);
         }
-        self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: self.urlToLoad!);
     }
     
     func playAudioVideo() {
-        if ((self.attachment.localPath != nil) && FileManager.default.fileExists(atPath: self.attachment.localPath!)) {
-            print("Playing locally", attachment.localPath!);
-            self.urlToLoad = URL(fileURLWithPath: attachment.localPath!);
-        } else {
+        if let localPath = self.attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
+            print("Playing locally", localPath);
+            self.urlToLoad = URL(fileURLWithPath: localPath);
+        } else if let attachmentUrl = self.attachment.url {
             print("Playing from link");
-            self.urlToLoad = URL(string: self.attachment.url!);
+            self.urlToLoad = URL(string: attachmentUrl);
         }
         
-        let playerItem = self.mediaLoader?.createPlayerItem(from: self.urlToLoad!, toFile: self.tempFile);
-        playerItem?.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
+        guard let urlToLoad = self.urlToLoad, let playerItem = self.mediaLoader?.createPlayerItem(from: urlToLoad, toFile: self.tempFile) else {
+            return;
+        }
         
-        self.player = AVPlayer(playerItem: playerItem);
+        playerItem.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
         
-        self.player?.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
-        self.player?.automaticallyWaitsToMinimizeStalling = false;
+        let player = AVPlayer(playerItem: playerItem);
+        self.player = player;
+        
+        player.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
+        player.automaticallyWaitsToMinimizeStalling = false;
 
-        self.playerViewController = AVPlayerViewController();
-        self.playerViewController?.player = self.player;
-        self.playerViewController?.view.autoresizingMask = [.flexibleHeight, .flexibleWidth];
-        self.playerViewController?.addObserver(self, forKeyPath: "videoBounds", options: [.old, .new], context: nil);
+        let playerViewController = AVPlayerViewController();
+        self.playerViewController = playerViewController;
+        playerViewController.player = self.player;
+        playerViewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth];
+        playerViewController.addObserver(self, forKeyPath: "videoBounds", options: [.old, .new], context: nil);
 
         self.activityIndicator = UIActivityIndicatorView();
         self.activityIndicator.style = .large;
 
-        self.rootViewController.pushViewController(self.playerViewController!, animated: false);
-        self.navigationControllerObserver.observePopTransition(of: self.playerViewController!, delegate: self);
+        self.rootViewController.pushViewController(playerViewController, animated: false);
+        self.navigationControllerObserver.observePopTransition(of: playerViewController, delegate: self);
         self.hasPushedViewController = true;
     }
     
@@ -191,8 +213,8 @@ import MagicalRecord;
                     }
                 }
             }
-        } else if keyPath == "videoBounds" && !self.playerViewController!.view.center.equalTo(CGPoint(x: 0, y: 0)) {
-            self.activityIndicator.center = self.playerViewController!.view.center;
+        } else if let center = self.playerViewController?.view.center, keyPath == "videoBounds", !center.equalTo(CGPoint(x: 0, y: 0)) {
+            self.activityIndicator.center = center;
             self.playerViewController?.view.addSubview(self.activityIndicator);
             self.playerViewController?.view.bringSubviewToFront(self.activityIndicator);
             self.activityIndicator.startAnimating();

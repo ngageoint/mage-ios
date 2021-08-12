@@ -14,6 +14,7 @@
 #import "MageServer.h"
 #import "RouteMethod.h"
 #import "MAGERoutes.h"
+#import "MAGE-Swift.h"
 
 NSString * const kAttachmentPushFrequencyKey = @"attachmentPushFrequency";
 NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.background.attachment";
@@ -276,7 +277,11 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
 
         [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
             [weakSelf.pushTasks removeObject:[NSNumber numberWithLong:task.taskIdentifier]];
-
+            // push local file to the image cache
+            if ([NSFileManager.defaultManager fileExistsAtPath:attachment.localPath]) {
+                NSData *fileData = [NSFileManager.defaultManager contentsAtPath:attachment.localPath];
+                [ImageCacheProvider.shared cacheImageWithImage:[UIImage imageWithData:fileData] data:fileData key:attachment.url];
+            }
             NSURL *attachmentUrl = [NSURL fileURLWithPath:tmpFileLocation];
             NSError *removeError;
             NSLog(@"ATTACHMENT - Deleting tmp multi part file for attachment upload %@", attachmentUrl);

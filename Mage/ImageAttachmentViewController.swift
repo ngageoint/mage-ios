@@ -58,20 +58,7 @@ extension PlaceholderImage: Placeholder {}
     override func viewDidLoad() {
         super.viewDidLoad();
         if (self.attachment != nil) {
-            self.showAttachment()
-            { result in
-                switch result {
-                case .success(let value):
-                    // TODO handle the case where if the downloaded image is the actual full size one (image thumbnailing is off) we should store the image in the cache
-                    // with the base url as the key
-
-                    // if the thumbnail is not cached, cache it now
-                    if(!ImageCache.default.isCached(forKey: String(format: "%@_thumbnail", self.attachment!.url!))) {
-                        ImageCache.default.store(value.image, forKey: String(format: "%@_thumbnail", self.attachment!.url!));
-                    }
-                case .failure(_): break
-                }
-            };
+            self.showAttachment(largeSize: true)
         } else if (self.url != nil) {
             self.showImage();
         }
@@ -132,51 +119,59 @@ extension PlaceholderImage: Placeholder {}
         let alert = UIAlertController(title: "Save Image", message: "Please Select an Option", preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "Save Current Image", style: .default , handler:{ (UIAlertAction)in
-            let url: URL = self.getAttachmentUrl(size: self.imageSize);
-            self.presentShareSheet(url: url);
+            if let url: URL = self.getAttachmentUrl(size: self.imageSize) {
+                self.presentShareSheet(url: url);
+            }
         }))
         
-        if (self.attachment != nil && !self.isFullSizeCached()) {
-            let attachmentMbs: Double = ((self.attachment!.size?.doubleValue ?? 0) / (1000.0 * 1024.0));
+        if let attachment = self.attachment, !self.isFullSizeCached() {
+            let attachmentMbs: Double = ((attachment.size?.doubleValue ?? 0) / (1000.0 * 1024.0));
             alert.addAction(UIAlertAction(title: String.init(format: "Download and Save Full Size Image %.2F MBs", attachmentMbs), style: .default , handler:{ (UIAlertAction)in
                 print("Go Download Full size")
                 self.showAttachment(fullSize: true)
                 { result in
                     switch result {
                     case .success(_):
-                        self.presentShareSheet(url: URL(string: self.attachment!.url!)!)
+                        if let attachmentUrl = attachment.url {
+                            self.presentShareSheet(url: URL(string: attachmentUrl)!)
+                        }
                     case .failure(let error):
                         print(error);
                     }
                 };
             }))
-        } else if (self.url != nil) {
-            self.presentShareSheet(url: self.url!);
+        } else if let url = self.url {
+            self.presentShareSheet(url: url);
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         self.present(alert, animated: true, completion: nil)
     }
     
-    func getAttachmentUrl(size: Int) -> URL {
-        if (self.attachment?.localPath != nil && FileManager.default.fileExists(atPath: self.attachment!.localPath!)) {
-            return URL(fileURLWithPath: self.attachment!.localPath!);
-        } else {
-            return URL(string: String(format: "%@?size=%ld", self.attachment!.url!, size))!;
+    func getAttachmentUrl(size: Int) -> URL? {
+        if let localPath = self.attachment?.localPath, FileManager.default.fileExists(atPath: localPath) {
+            return URL(fileURLWithPath: localPath);
+        } else if let attachmentUrl = self.attachment?.url {
+            return URL(string: String(format: "%@?size=%ld", attachmentUrl, size))!;
         }
+        return nil;
     }
     
     func isFullSizeCached() -> Bool {
-        return ImageCache.default.isCached(forKey: self.attachment!.url!);
+        if let attachmentUrl = self.attachment?.url {
+            return ImageCache.default.isCached(forKey: attachmentUrl);
+        }
+        return false;
     }
     
-    func showAttachment(fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
+    func showAttachment(largeSize: Bool = false, fullSize: Bool = false, completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         self.progressView?.isHidden = true;
         let i = MyIndicator(parent: self);
 
         self.imageView?.setAttachment(attachment: self.attachment!);
         self.imageView?.showImage(
             fullSize: fullSize,
+            largeSize: largeSize,
             indicator: i,
             progressBlock: {
                 receivedSize, totalSize in

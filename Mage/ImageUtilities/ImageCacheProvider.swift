@@ -30,4 +30,8 @@ import Kingfisher
     @objc public func setImageViewUrl(imageView: UIImageView, url: URL) {
         imageView.kf.setImage(with: url)
     }
+    
+    @objc public func cacheImage(image: UIImage, data: Data? = nil, key: String) {
+        ImageCache.default.store(image, original: data, forKey: key);
+    }
 }
