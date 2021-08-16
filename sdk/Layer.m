@@ -195,6 +195,9 @@ float const EXTERNAL_LAYER_PROCESSING = -1;
             [removedSelectedStaticLayers removeObjectsInArray:layerRemoteIds];
             
             NSMutableArray *selectedEventStaticLayers = [[selectedStaticLayers objectForKey:[[Server currentEventId] stringValue]] mutableCopy];
+            if (selectedEventStaticLayers == nil) {
+                selectedEventStaticLayers = [[NSMutableArray alloc] init];
+            }
             [selectedEventStaticLayers removeObjectsInArray:removedSelectedStaticLayers];
             [selectedStaticLayers setObject:selectedEventStaticLayers forKey:[[Server currentEventId] stringValue]];
             
