@@ -16,6 +16,7 @@ import Foundation
     private var coordinate: CLLocationCoordinate2D?;
     private var featureTitle: String?;
     private var actionsDelegate: FeatureActionsDelegate?;
+    private var featureItem: FeatureItem = FeatureItem();
     var scheme: MDCContainerScheming?;
     
     @objc public lazy var scrollView: UIScrollView = {
@@ -56,8 +57,26 @@ import Foundation
     @objc public lazy var textView: UITextView = {
         let textView = UITextView();
         textView.isScrollEnabled = false;
-//        textView.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0);
+        textView.dataDetectorTypes = .all;
+        textView.isEditable = false;
+        textView.textContainerInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8);
         return textView;
+    }()
+    
+    private lazy var featureTitleView: UILabel = {
+        let view = UILabel.newAutoLayout();
+        if let featureTitle = featureTitle {
+            view.text = featureTitle;
+            view.isHidden = false;
+        } else {
+            view.isHidden = true;
+        }
+        return view;
+    }()
+    
+    private lazy var summaryView: FeatureSummaryView = {
+        let view = FeatureSummaryView()
+        return view;
     }()
     
     private lazy var featureActionsView: FeatureActionsView = {
@@ -80,14 +99,6 @@ import Foundation
         return detailsButton;
     }()
     
-    private lazy var detailsButtonView: UIView = {
-        let view = UIView();
-//        view.addSubview(detailsButton);
-//        detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
-//        detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
-        return view;
-    }()
-    
     private lazy var expandView: UIView = {
         let view = UIView(forAutoLayout: ());
         view.setContentHuggingPriority(.defaultLow, for: .vertical);
@@ -102,13 +113,17 @@ import Foundation
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(featureDetail: String, coordinate: CLLocationCoordinate2D, featureTitle: String?, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+    @objc public convenience init(featureDetail: String, coordinate: CLLocationCoordinate2D, featureTitle: String?, layerName: String? = nil, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.actionsDelegate = actionsDelegate;
         self.featureDetail = featureDetail;
         self.featureTitle = featureTitle;
         self.coordinate = coordinate;
         self.scheme = scheme;
+        featureItem.coordinate = coordinate;
+        featureItem.featureTitle = featureTitle;
+        featureItem.featureDetail = layerName;
+        featureItem.iconURL = nil;
     }
     
     @objc public convenience init(annotation: StaticPointAnnotation, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
@@ -116,6 +131,11 @@ import Foundation
         self.actionsDelegate = actionsDelegate;
         self.annotation = annotation;
         self.scheme = scheme;
+        self.coordinate = coordinate;
+        featureItem.coordinate = annotation.coordinate;
+        featureItem.featureTitle = annotation.title;
+        featureItem.featureDetail = annotation.subtitle;
+        featureItem.iconURL = URL(string: annotation.iconUrl);
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
@@ -124,14 +144,16 @@ import Foundation
         }
         self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
         textView.textColor = self.scheme?.colorScheme.onSurfaceColor;
+        textView.font = self.scheme?.typographyScheme.body1;
         detailsButton.applyContainedTheme(withScheme: safeScheme);
+        summaryView.applyTheme(withScheme: safeScheme);
     }
     
     override func viewDidLoad() {
         stackView.addArrangedSubview(dragHandleView);
+        stackView.addArrangedSubview(summaryView);
         stackView.addArrangedSubview(featureActionsView);
         stackView.addArrangedSubview(textView);
-        stackView.addArrangedSubview(detailsButtonView);
         scrollView.addSubview(stackView);
         self.view.addSubview(scrollView);
         
@@ -144,7 +166,7 @@ import Foundation
     
     override func viewWillAppear(_ animated: Bool) {
         textView.attributedText = getAttributedMessage();
-//        textView.isScrollEnabled = true;
+        summaryView.populate(item: featureItem);
     }
     
     override func updateViewConstraints() {
@@ -161,7 +183,13 @@ import Foundation
     func getAttributedMessage() -> NSAttributedString {
         if (featureDetail != nil) {
             let data = Data(featureDetail!.utf8);
-            if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
+            if let attributedString = try? NSMutableAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
+                if let surfaceColor = self.scheme?.colorScheme.onSurfaceColor {
+                    attributedString.addAttribute(.foregroundColor, value: surfaceColor, range: NSMakeRange(0, attributedString.length));
+                }
+                if let font = self.scheme?.typographyScheme.body1 {
+                    attributedString.addAttribute(.font, value: font, range: NSMakeRange(0, attributedString.length));
+                }
                 return attributedString
             }
         }
@@ -178,11 +206,5 @@ import Foundation
     
     func refresh() {
         textView.attributedText = getAttributedMessage();
-    }
-    
-    @objc func detailsButtonTapped() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                self.actionsDelegate?.viewUser?(safeUser);
-            }
     }
 }

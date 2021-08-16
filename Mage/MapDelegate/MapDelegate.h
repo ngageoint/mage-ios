@@ -69,6 +69,7 @@
 @property (nonatomic) BOOL canShowObservationCallout;
 @property (nonatomic) BOOL canShowGpsLocationCallout;
 @property (nonatomic) BOOL allowEnlarge;
+@property (nonatomic) BOOL trackViewState;
 @property (nonatomic, strong) NSMutableDictionary *locationAnnotations;
 @property (nonatomic, strong) MapObservations *mapObservations;
 @property (nonatomic, weak) UIViewController *navigationController;

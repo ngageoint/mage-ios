@@ -270,7 +270,14 @@
                     
                     if ([MapUtils rect:tapRect ContainsLineStart:CGPointMake(mp.x, mp.y) andLineEnd:CGPointMake(mp2.x, mp2.y)]) {
                         NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
-                        [self.cacheOverlayDelegate onCacheOverlayTapped:polyline.title];
+                        StaticLayer *staticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, [Server currentEventId]]];
+
+                        self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:polyline.subtitle coordinate:tapCoord featureTitle:polyline.title layerName:staticLayer.name actionsDelegate:self scheme:self.scheme];
+                        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+                        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+                        self.bottomSheet.delegate = self;
+                        [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
+                        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
                         return;
                     }
                 }
@@ -291,7 +298,14 @@
                 
                 if(CGPathContainsPoint(mpr , NULL, mapPointAsCGP, FALSE)){
                     NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
-                    [self.cacheOverlayDelegate onCacheOverlayTapped:polygon.title];
+                    StaticLayer *staticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, [Server currentEventId]]];
+                    
+                    self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:polygon.subtitle coordinate:tapCoord featureTitle:polygon.title layerName:staticLayer.name actionsDelegate:self scheme:self.scheme];
+                    self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+                    [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+                    self.bottomSheet.delegate = self;
+                    [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
+                    [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
                     return;
                 }
                 
@@ -302,19 +316,44 @@
     
     if ([self.mapCacheOverlays count] > 0) {
         NSMutableString * clickMessage = [[NSMutableString alloc] init];
+        NSUInteger featureCount = 0;
+        SFGeometry *geometry = nil;
         for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
-            NSString * message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
-            if (message != nil){
-                if ([clickMessage length] > 0){
-                    [clickMessage appendString:@"</br>"];
+            if ([cacheOverlay isKindOfClass:[GeoPackageFeatureTableCacheOverlay class]]) {
+                GeoPackageFeatureTableCacheOverlay *featureOverlay = (GeoPackageFeatureTableCacheOverlay *)cacheOverlay;
+                GPKGFeatureTableData *tableData = [featureOverlay getFeatureTableDataWithLocationCoordinate:tapCoord andMap:self.mapView];
+                featureCount += [tableData rows].count;
+                for (GPKGFeatureRowData *row in [tableData rows]) {
+                    geometry = row.geometry;
+                    for (id key in row.values) {
+                        if (![row.geometryColumn isEqualToString:key]) {
+                            [clickMessage appendString:[NSString stringWithFormat:@"%@: %@</br>", key, [row.values objectForKey:key]]];
+                        }
+                    }
                 }
-                message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"</br>"];
-                [clickMessage appendString:message];
+            } else {
+                NSString *message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
+                if (message != nil){
+                    if ([clickMessage length] > 0){
+                        [clickMessage appendString:@"</br>"];
+                    }
+                    message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"</br>"];
+                    [clickMessage appendString:message];
+                }
             }
         }
         
         if ([clickMessage length] > 0) {
-            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:@"Feature" actionsDelegate:self scheme:self.scheme];
+            NSString *featureTitle = @"Feature";
+            CLLocationCoordinate2D coordinate = tapCoord;
+            if (geometry != nil) {
+                coordinate = CLLocationCoordinate2DMake(geometry.centroid.y.doubleValue, geometry.centroid.x.doubleValue);
+            }
+            if (featureCount > 1) {
+                featureTitle = [NSString stringWithFormat:@"%lu Features", (unsigned long)featureCount];
+                coordinate = tapCoord;
+            }
+            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:featureTitle layerName: nil actionsDelegate:self scheme:self.scheme];
             self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
             [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
             self.bottomSheet.delegate = self;
@@ -1231,8 +1270,9 @@
                         polygon.lineWidth = [lineWidth floatValue];
                     }
                     
-                    polygon.title = [NSString stringWithFormat:@"%@</br>%@",[feature valueForKeyPath:@"properties.name"], [feature valueForKeyPath:@"properties.description"]];
-
+                    polygon.title = [feature valueForKeyPath:@"properties.name"];
+                    polygon.subtitle = [feature valueForKeyPath:@"properties.description"];
+                    
                     [annotations addObject:polygon];
                     [_mapView addOverlay:polygon];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"LineString"]) {
@@ -1253,8 +1293,8 @@
                     } else {
                         polyline.lineWidth = [lineWidth floatValue];
                     }
-                    
-                    polyline.title = [NSString stringWithFormat:@"%@</br>%@",[feature valueForKeyPath:@"properties.name"], [feature valueForKeyPath:@"properties.description"]];
+                    polyline.title = [feature valueForKeyPath:@"properties.name"];
+                    polyline.subtitle = [feature valueForKeyPath:@"properties.description"];
                     [annotations addObject:polyline];
                     [_mapView addOverlay:polyline];
                 }
@@ -1299,6 +1339,9 @@
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     self.isTrackingAnimation = NO;
+    if (_trackViewState) {
+        [NSUserDefaults.standardUserDefaults setMapRegion: mapView.region];
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {

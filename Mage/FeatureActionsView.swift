@@ -31,6 +31,15 @@ class FeatureActionsView: UIView {
         return stack;
     }()
     
+    private lazy var latitudeLongitudeButton: MDCButton = {
+        let button = MDCButton(forAutoLayout: ());
+        button.accessibilityLabel = "location";
+        button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
+        button.addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
+        return button;
+    }()
+    
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton();
         directionsButton.accessibilityLabel = "directions";
@@ -42,11 +51,11 @@ class FeatureActionsView: UIView {
         return directionsButton;
     }()
     
-    
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.scheme = scheme;
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
+        latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
     }
     
     public convenience init(location: CLLocationCoordinate2D?, title: String?, featureActionsDelegate: FeatureActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -64,11 +73,14 @@ class FeatureActionsView: UIView {
     }
     
     func layoutView() {
+        self.addSubview(latitudeLongitudeButton);
         self.addSubview(actionButtonView);
     }
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
+            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left);
+            latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
             actionButtonView.autoSetDimension(.height, toSize: 56);
             actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16), excludingEdge: .left);
             
@@ -81,6 +93,16 @@ class FeatureActionsView: UIView {
         self.location = location;
         self.title = title;
         self.featureActionsDelegate = delegate;
+        
+        if let location = location {
+            if (UserDefaults.standard.showMGRS) {
+                latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(location), for: .normal);
+            } else {
+                latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", location.latitude, location.longitude), for: .normal);
+            }
+            latitudeLongitudeButton.isEnabled = true;
+        }
+        
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
@@ -91,5 +113,10 @@ class FeatureActionsView: UIView {
             return;
         }
         featureActionsDelegate?.getDirectionsToLocation?(location, title: title);
+    }
+    
+    @objc func copyLocation() {
+        UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
     }
 }

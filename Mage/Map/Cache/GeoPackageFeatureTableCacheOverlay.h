@@ -90,4 +90,6 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
  */
 -(NSArray<GeoPackageTileTableCacheOverlay *> *) getLinkedTileTables;
 
+-(GPKGFeatureTableData *) getFeatureTableDataWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView;
+
 @end

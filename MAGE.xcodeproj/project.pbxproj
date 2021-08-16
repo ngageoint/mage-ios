@@ -149,7 +149,6 @@
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
 		F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */; };
-		F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B81F43978B001D120A /* ObservationEditView.xib */; };
 		F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */; };
 		F71B7251246B545F00E4CF33 /* GeometryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724F246B53F500E4CF33 /* GeometryViewTests.swift */; };
 		F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B7252246C412900E4CF33 /* BaseFieldView.swift */; };
@@ -400,7 +399,6 @@
 		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
 		F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */; };
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
-		F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C89A1F506627002C78D3 /* ObservationCell.xib */; };
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
 		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
@@ -493,6 +491,7 @@
 		F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F475F625BF5348006634F7 /* PassThroughStackView.swift */; };
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
 		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
+		F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
 		F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */; };
 		F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */; };
@@ -748,7 +747,6 @@
 		F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecorderViewController.h; sourceTree = "<group>"; };
 		F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderViewController.m; sourceTree = "<group>"; };
 		F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderViewController.xib; sourceTree = "<group>"; };
-		F71B34B81F43978B001D120A /* ObservationEditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditView.xib; sourceTree = "<group>"; };
 		F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewTests.swift; sourceTree = "<group>"; };
 		F71B724F246B53F500E4CF33 /* GeometryViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryViewTests.swift; sourceTree = "<group>"; };
 		F71B7252246C412900E4CF33 /* BaseFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFieldView.swift; sourceTree = "<group>"; };
@@ -1133,7 +1131,6 @@
 		F7C5C8951F4B8F7E002C78D3 /* GeometryEditMapDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditMapDelegate.h; sourceTree = "<group>"; };
 		F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditMapDelegate.m; sourceTree = "<group>"; };
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
-		F7C5C89A1F506627002C78D3 /* ObservationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationCell.xib; sourceTree = "<group>"; };
 		F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageAppCoordinator.h; sourceTree = "<group>"; };
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
 		F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerURLView.xib; sourceTree = "<group>"; };
@@ -1247,6 +1244,7 @@
 		F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMSTileOverlay.h; sourceTree = "<group>"; };
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
 		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
+		F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureSummaryView.swift; sourceTree = "<group>"; };
 		F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormViewTests.swift; sourceTree = "<group>"; };
 		F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldView.swift; sourceTree = "<group>"; };
 		F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldViewTests.swift; sourceTree = "<group>"; };
@@ -1366,6 +1364,7 @@
 				F7D43BDB269E0DF900561A8F /* FeatureBottomSheetController.swift */,
 				F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */,
 				F7D43BDF269E0FEB00561A8F /* FeatureActionsView.swift */,
+				F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */,
 			);
 			name = Feature;
 			sourceTree = "<group>";
@@ -1381,8 +1380,6 @@
 				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
 				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
-				F71B34B81F43978B001D120A /* ObservationEditView.xib */,
-				F7C5C89A1F506627002C78D3 /* ObservationCell.xib */,
 				F7E457611F61AC770082F527 /* EventChooserView.xib */,
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
@@ -2747,7 +2744,6 @@
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */,
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
-				F7C5C89B1F506627002C78D3 /* ObservationCell.xib in Resources */,
 				F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */,
@@ -2764,7 +2760,6 @@
 				F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */,
 				F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */,
 				F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */,
-				F71B34B91F43978B001D120A /* ObservationEditView.xib in Resources */,
 				F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
 				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
@@ -3035,6 +3030,7 @@
 				F7D43BF226A5FCC800561A8F /* UserDataStore.swift in Sources */,
 				F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */,
 				F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */,
+				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,

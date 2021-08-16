@@ -69,6 +69,15 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     return message;
 }
 
+-(GPKGFeatureTableData *) getFeatureTableDataWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{
+    GPKGFeatureTableData * featureTableData = nil;
+    if(self.featureOverlayQuery != nil){
+        featureTableData = [self.featureOverlayQuery buildMapClickTableDataWithLocationCoordinate:locationCoordinate andMapView:mapView];
+    }
+    
+    return featureTableData;
+}
+
 -(BOOL) getIndexed{
     return self.indexed;
 }

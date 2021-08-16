@@ -30,6 +30,29 @@ import Foundation
         set(colorData, forKey: key)
     }
     
+    @objc func mkcoordinateregion(forKey key: String) -> MKCoordinateRegion {
+        if let regionData = array(forKey: key) as? [Double] {
+            return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: regionData[0], longitude: regionData[1]), latitudinalMeters: regionData[2], longitudinalMeters: regionData[3]);
+        }
+        return MKCoordinateRegion(center: kCLLocationCoordinate2DInvalid, span: MKCoordinateSpan(latitudeDelta: -1, longitudeDelta: -1));
+    }
+    
+    func setRegion(_ value: MKCoordinateRegion, forKey key: String) {
+        let span = value.span
+        let center = value.center
+        
+        let loc1 = CLLocation(latitude: center.latitude - span.latitudeDelta * 0.5, longitude: center.longitude)
+        let loc2 = CLLocation(latitude: center.latitude + span.latitudeDelta * 0.5, longitude: center.longitude)
+        let loc3 = CLLocation(latitude: center.latitude, longitude: center.longitude - span.longitudeDelta * 0.5)
+        let loc4 = CLLocation(latitude: center.latitude, longitude: center.longitude + span.longitudeDelta * 0.5)
+        
+        let metersInLatitude = loc1.distance(from: loc2)
+        let metersInLongitude = loc3.distance(from: loc4)
+        
+        let regionData: [Double] = [value.center.latitude, value.center.longitude, metersInLatitude, metersInLongitude];
+        setValue(regionData, forKey: key);
+    }
+    
     var showHeadingSet: Bool {
         get {
             return value(forKey: #keyPath(UserDefaults.showHeading)) != nil;
@@ -69,6 +92,15 @@ import Foundation
         }
         set {
             set(newValue, forKey: #function)
+        }
+    }
+    
+    var mapRegion: MKCoordinateRegion {
+        get {
+            return mkcoordinateregion(forKey: #function)
+        }
+        set {
+            setRegion(newValue, forKey: #function)
         }
     }
     

@@ -133,7 +133,7 @@
 //    [self.stack addArrangedSubview:self.mapView];
     [self.view addSubview:self.mapView];
     [self.mapView autoPinEdgesToSuperviewEdges];
-    
+     
     self.stack = [UIStackView newAutoLayoutView];
     self.stack.axis = UILayoutConstraintAxisVertical;
     self.stack.alignment = UIStackViewAlignmentFill;
@@ -183,8 +183,18 @@
     [self applyThemeWithContainerScheme:self.scheme];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.mapDelegate.trackViewState = true;
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    MKCoordinateRegion region = [NSUserDefaults.standardUserDefaults mapRegion];
+    if (CLLocationCoordinate2DIsValid(region.center)) {
+        [self.mapView setRegion:region];
+    }
     
     [self.mapDelegate setupListeners];
     
