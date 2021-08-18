@@ -90,15 +90,6 @@ import Foundation
         }
     }()
     
-    private lazy var detailsButton: MDCButton = {
-        let detailsButton = MDCButton(forAutoLayout: ());
-        detailsButton.accessibilityLabel = "More Details";
-        detailsButton.setTitle("More Details", for: .normal);
-        detailsButton.clipsToBounds = true;
-        detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside);
-        return detailsButton;
-    }()
-    
     private lazy var expandView: UIView = {
         let view = UIView(forAutoLayout: ());
         view.setContentHuggingPriority(.defaultLow, for: .vertical);
@@ -135,7 +126,9 @@ import Foundation
         featureItem.coordinate = annotation.coordinate;
         featureItem.featureTitle = annotation.title;
         featureItem.featureDetail = annotation.subtitle;
-        featureItem.iconURL = URL(string: annotation.iconUrl);
+        if (annotation.iconUrl != nil) {
+            featureItem.iconURL = URL(string: annotation.iconUrl);
+        }
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
@@ -143,10 +136,10 @@ import Foundation
             return;
         }
         self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
-        textView.textColor = self.scheme?.colorScheme.onSurfaceColor;
-        textView.font = self.scheme?.typographyScheme.body1;
-        detailsButton.applyContainedTheme(withScheme: safeScheme);
+        textView.textColor = safeScheme.colorScheme.onSurfaceColor;
+        textView.font = safeScheme.typographyScheme.body1;
         summaryView.applyTheme(withScheme: safeScheme);
+        self.scheme = safeScheme;
     }
     
     override func viewDidLoad() {
