@@ -3,6 +3,23 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 3.0.0
+
+##### Release Notes
+* Multi form support:  Users will be able to add multiple forms to an observation when the server configuration allows.
+* Brand new look and feel:  This release unifies the look and feel of the iOS app with Android and the web using Material design practices
+* Straight line navigation: Users can now navigate, within the app, to any feature on the map including users or observations
+* This version supports MAGE server versions 5.4 and 6.x
+
+##### Features
+* Bottom sheets are now used for all map items, replacing callouts
+* Main map now remembers the last position and zoom level
+* When images are captured with the camera for an observation, the GPS location is added to the image metadata
+* SDK has been merged into the mage-ios baseline
+* Adds support for feeds in preparation for MAGE server updates
+
+##### Bug Fixes
+
 ## 2.1.3
 
 ##### Release Notes
