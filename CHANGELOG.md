@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Brand new look and feel:  This release unifies the look and feel of the iOS app with Android and the web using Material design practices
 * Straight line navigation: Users can now navigate, within the app, to any feature on the map including users or observations
 * This version supports MAGE server versions 5.4 and 6.x
+* This release no longer has a dependency on mage-ios-sdk, it has since been deprecated.
 
 ##### Features
 * Bottom sheets are now used for all map items, replacing callouts
