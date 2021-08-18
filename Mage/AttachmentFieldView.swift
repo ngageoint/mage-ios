@@ -260,7 +260,6 @@ class AttachmentFieldView : BaseFieldView {
             }
         }
         setAttachmentHolderHeight();
-        attachmentCollectionView.layoutIfNeeded();
 
         super.updateConstraints();
     }

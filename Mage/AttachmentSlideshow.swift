@@ -202,35 +202,36 @@ class AttachmentSlideShow: UIView {
                 }
                 let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
                 imageView.contentMode = .scaleAspectFit;
-                imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
-                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                    .transition(.fade(0.2)),
-                    .scaleFactor(UIScreen.main.scale),
-                    .processor(DownsamplingImageProcessor(size: imageView.frame.size)),
-                    .cacheOriginalImage
-                ], completionHandler:
-                    { result in
-                        switch result {
-                        case .success(_):
-                            imageView.contentMode = .scaleAspectFill;
-                            let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
-                            overlay.contentMode = .scaleAspectFit;
-                            imageView.addSubview(overlay);
-                            overlay.autoCenterInSuperview();
-                            if (attachmentSelectionDelegate != nil) {
-                                imageView.isUserInteractionEnabled = true;
-                                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))
-                                imageView.addGestureRecognizer(tapGesture);
+                DispatchQueue.main.async {
+                    imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
+                        .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                        .transition(.fade(0.2)),
+                        .scaleFactor(UIScreen.main.scale),
+                        .processor(DownsamplingImageProcessor(size: imageView.frame.size)),
+                        .cacheOriginalImage
+                    ], completionHandler:
+                        { result in
+                            switch result {
+                            case .success(_):
+                                imageView.contentMode = .scaleAspectFill;
+                                let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
+                                overlay.contentMode = .scaleAspectFit;
+                                imageView.addSubview(overlay);
+                                overlay.autoCenterInSuperview();
+                                if (attachmentSelectionDelegate != nil) {
+                                    imageView.isUserInteractionEnabled = true;
+                                    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))
+                                    imageView.addGestureRecognizer(tapGesture);
+                                }
+                            case .failure(let error):
+                                print(error);
+                                imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
+                                let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
+                                overlay.contentMode = .scaleAspectFit;
+                                imageView.addSubview(overlay);
                             }
-                        case .failure(let error):
-                            print(error);
-                            imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
-                            let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
-                            overlay.contentMode = .scaleAspectFit;
-                            imageView.addSubview(overlay);
-                        }
-                    });
-                
+                        });
+                }
             } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
                 imageView.image = UIImage(named: "audio_thumbnail");
                 imageView.contentMode = .scaleAspectFit;

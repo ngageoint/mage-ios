@@ -95,31 +95,33 @@ import Kingfisher
             }
             let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
             self.imageView.contentMode = .scaleAspectFit;
-            self.imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
-                .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                .transition(.fade(0.2)),
-                .scaleFactor(UIScreen.main.scale),
-                .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
-                .cacheOriginalImage
-            ], completionHandler:
-                { result in
-                    switch result {
-                    case .success(_):
-                        self.imageView.contentMode = .scaleAspectFill;
-                        self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
-                        let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
-                        overlay.contentMode = .scaleAspectFit;
-                        self.imageView.addSubview(overlay);
-                        overlay.autoCenterInSuperview();
-                    case .failure(let error):
-                        print(error);
-                        self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
-                        let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
-                        overlay.contentMode = .scaleAspectFit;
-                        self.imageView.addSubview(overlay);
-                    }
-                });
-            
+            DispatchQueue.main.async {
+                self.imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .transition(.fade(0.2)),
+                    .scaleFactor(UIScreen.main.scale),
+                    .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
+                    .cacheOriginalImage
+                ], completionHandler:
+                    { result in
+                        switch result {
+                        case .success(_):
+                            self.imageView.contentMode = .scaleAspectFill;
+                            self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+                            let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
+                            overlay.contentMode = .scaleAspectFit;
+                            self.imageView.addSubview(overlay);
+                            overlay.autoCenterInSuperview();
+                        case .failure(let error):
+                            print(error);
+                            self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
+                            let overlay: UIImageView = UIImageView(image: UIImage.init(named: "audio_thumbnail"));
+                            overlay.contentMode = .scaleAspectFit;
+                            self.imageView.addSubview(overlay);
+                            overlay.autoCenterInSuperview();
+                        }
+                    });
+            }
         } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
             self.imageView.image = UIImage(named: "audio_thumbnail");
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
