@@ -36,6 +36,7 @@ import MaterialComponents.MDCCard
     var formViews: [ObservationFormView] = [];
     var commonFieldView: CommonFieldsView?;
     private var keyboardHelper: KeyboardHelper?;
+    private var bottomConstraint: NSLayoutConstraint?;
     
     private lazy var event: Event = {
         return Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!);
@@ -81,12 +82,13 @@ import MaterialComponents.MDCCard
     }()
     
     private func addStackViewConstraints() {
+        bottomConstraint = stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -60)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             // Add room for the "Add Form" FAB
-            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -60),
+            bottomConstraint!,
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
@@ -155,11 +157,21 @@ import MaterialComponents.MDCCard
         setupFormDependentButtons();
         
         keyboardHelper = KeyboardHelper { [weak self] animation, keyboardFrame, duration in
+            guard let self = self else {
+                return;
+            }
             switch animation {
             case .keyboardWillShow:
-                self?.navigationItem.rightBarButtonItem?.isEnabled = false;
+                self.navigationItem.rightBarButtonItem?.isEnabled = false;
+                self.navigationItem.leftBarButtonItem?.isEnabled = false;
+                self.bottomConstraint?.constant = -keyboardFrame.height;
+                self.view.layoutIfNeeded();
+                self.scrollView.contentOffset = CGPoint(x: self.scrollView.contentOffset.x, y: self.scrollView.contentOffset.y + keyboardFrame.height - 60)
             case .keyboardWillHide:
-                self?.navigationItem.rightBarButtonItem?.isEnabled = true;
+                self.navigationItem.rightBarButtonItem?.isEnabled = true;
+                self.navigationItem.leftBarButtonItem?.isEnabled = true;
+                self.bottomConstraint?.constant = -60;
+                self.view.layoutIfNeeded();
             }
         }
     }
