@@ -15,8 +15,7 @@ class MDCActivityIndicatorProgress: Indicator {
     private lazy var activityIndicator: MDCActivityIndicator = {
         let activityIndicator = MDCActivityIndicator()
         activityIndicator.sizeToFit()
-        activityIndicator.indicatorMode = .determinate
-        activityIndicator.progress = 0.5
+        activityIndicator.indicatorMode = .indeterminate
         return activityIndicator;
     }()
     

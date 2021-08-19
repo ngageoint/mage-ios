@@ -22,6 +22,7 @@ protocol AttachmentCreationCoordinatorDelegate {
 }
 
 class AttachmentCreationCoordinator: NSObject {
+    var scheme: MDCContainerScheming?;
     var photoLocations: [TimeInterval : CLLocation] = [:]
     var photoHeadings: [TimeInterval : CLHeading] = [:]
     var locationManager: CLLocationManager?;
@@ -32,21 +33,28 @@ class AttachmentCreationCoordinator: NSObject {
     var delegate: AttachmentCreationCoordinatorDelegate?;
     var pickerController: UIImagePickerController?;
     var audioRecorderViewController: AudioRecorderViewController?;
+    var workingOverlayController: AttachmentProgressViewController?;
     
     // this constructor is only used by the attachment card which is only for server version 5
     // can be removed when server version 5 is gone
-    init(rootViewController: UIViewController?, observation: Observation, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
+    init(rootViewController: UIViewController?, observation: Observation, delegate: AttachmentCreationCoordinatorDelegate? = nil, scheme: MDCContainerScheming? = nil) {
         self.rootViewController = rootViewController;
         self.observation = observation;
         self.delegate = delegate;
+        self.scheme = scheme;
     }
     
-    init(rootViewController: UIViewController?, observation: Observation, fieldName: String?, observationFormId: String?, delegate: AttachmentCreationCoordinatorDelegate? = nil) {
+    init(rootViewController: UIViewController?, observation: Observation, fieldName: String?, observationFormId: String?, delegate: AttachmentCreationCoordinatorDelegate? = nil, scheme: MDCContainerScheming? = nil) {
         self.rootViewController = rootViewController;
         self.observation = observation;
         self.fieldName = fieldName;
         self.observationFormId = observationFormId;
         self.delegate = delegate;
+        self.scheme = scheme;
+    }
+    
+    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+        self.scheme = containerScheme;
     }
     
     func addAttachmentForSaving(location: URL, contentType: String) {
@@ -193,6 +201,12 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     }
     
     func handleSavedImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
+        self.workingOverlayController = AttachmentProgressViewController();
+        self.rootViewController?.present(self.workingOverlayController!, animated: false, completion: nil);
+        if let scheme = self.scheme {
+            self.workingOverlayController?.applyTheme(withContainerScheme: scheme);
+        }
+        
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
         
@@ -201,28 +215,43 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                 let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
                 let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
-                self.addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
 
                 let manager = PHImageManager.default()
                 let requestOptions = PHImageRequestOptions()
                 requestOptions.isSynchronous = true
                 requestOptions.deliveryMode = .fastFormat
                 requestOptions.isNetworkAccessAllowed = true
+                DispatchQueue.main.async {
+                    self.workingOverlayController?.setProgressMessage(message: "Retrieving image...")
+                }
                 manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
                     if let data = data,
                     let cImage = CIImage(data: data) {
                         let chosenImage = UIImage(ciImage: cImage)
                         
                         do {
+                            DispatchQueue.main.async {
+                                self.workingOverlayController?.setProgressMessage(message: "Scaling image...")
+                            }
                             try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
                             let finalImage = chosenImage.qualityScaled();
                             guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
                             let metadata: [String : Any] = cImage.properties
         
+                            DispatchQueue.main.async {
+                                self.workingOverlayController?.setProgressMessage(message: "Writing metadata into image...")
+                            }
                             guard let finalData = self.writeMetadataIntoImageData(imagedata: imageData, metadata: NSDictionary(dictionary: metadata)) else { return };
 
                             do {
+                                DispatchQueue.main.async {
+                                    self.workingOverlayController?.setProgressMessage(message: "Saving image...")
+                                }
                                 try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
+                                addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
+                                DispatchQueue.main.async {
+                                    workingOverlayController?.dismiss(animated: true, completion: nil);
+                                }
                             } catch {
                                 print("Unable to write image to file \(fileToWriteTo): \(error)")
                             }

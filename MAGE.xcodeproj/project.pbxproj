@@ -492,6 +492,7 @@
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
 		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
 		F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */; };
+		F7F8B4B726CE88B500DACCC7 /* AttachmentProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
 		F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */; };
 		F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */; };
@@ -1245,6 +1246,7 @@
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
 		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
 		F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureSummaryView.swift; sourceTree = "<group>"; };
+		F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentProgressViewController.swift; sourceTree = "<group>"; };
 		F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormViewTests.swift; sourceTree = "<group>"; };
 		F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldView.swift; sourceTree = "<group>"; };
 		F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldViewTests.swift; sourceTree = "<group>"; };
@@ -2255,6 +2257,7 @@
 				F7CC45D62440DC690054C8E1 /* MediaLoader.m */,
 				F7D9B829255EF6A800A76E2C /* AttachmentCreationCoordinator.swift */,
 				F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */,
+				F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */,
 			);
 			name = Attachment;
 			sourceTree = "<group>";
@@ -3260,6 +3263,7 @@
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
+				F7F8B4B726CE88B500DACCC7 /* AttachmentProgressViewController.swift in Sources */,
 				F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
