@@ -129,8 +129,8 @@
     [super viewDidLoad];
 
     self.mapView = [[MKMapView alloc] initForAutoLayout];
+    [self.mapView setShowsCompass:false];
     self.mapView.accessibilityLabel = @"map";
-//    [self.stack addArrangedSubview:self.mapView];
     [self.view addSubview:self.mapView];
     [self.mapView autoPinEdgesToSuperviewEdges];
      
@@ -679,19 +679,6 @@
 - (void) feedItemSelected:(FeedItem *)feedItem {
     FeedItemViewController *fivc = [[FeedItemViewController alloc] initWithFeedItem:feedItem scheme:self.scheme];
     [self.navigationController pushViewController:fivc animated:YES];
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    CGPoint point = [gestureRecognizer locationInView:self.mapView];
-    if ([otherGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] && ((UITapGestureRecognizer *) otherGestureRecognizer).numberOfTapsRequired == 1) {
-        CLLocationCoordinate2D location = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
-        MapShapeObservation *mapShapeObservation = [self.mapDelegate.mapObservations clickedShapeAtLocation:location];
-        if (mapShapeObservation != nil) {
-            return YES;
-        }
-    }
-    
-    return NO;
 }
 
 @end

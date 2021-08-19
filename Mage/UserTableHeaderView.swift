@@ -376,6 +376,12 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         }
     }
     
+    func getDocumentsDirectory() -> NSString {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory as NSString
+    }
+    
     func presentMapsActionSheetForURLs(urlMap: [String: URL?]) {
         let alert = UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
         alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
@@ -392,6 +398,47 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                 }));
             }
         }
+        alert.addAction(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
+            guard let location: CLLocationCoordinate2D = self.user?.location?.location().coordinate else {
+                return;
+            }
+            var image: UIImage? = UIImage(named: "me")
+            if let safeIconUrl = self.user?.iconUrl {
+                if (safeIconUrl.lowercased().hasPrefix("http")) {
+                    let token = StoredPassword.retrieveStoredToken();
+                    do {
+                        try image = UIImage(data: Data(contentsOf: URL(string: "\(safeIconUrl)?access_token=\(token ?? "")")!))
+                    } catch {
+                        // whatever
+                    }
+                } else {
+                    do {
+                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(safeIconUrl)")))
+                    } catch {
+                        // whatever
+                    }
+                }
+                let scale = image?.size.width ?? 0.0 / 37;
+                image = UIImage(cgImage: image!.cgImage!, scale: scale, orientation: image!.imageOrientation);
+            }
+            
+            if let nvc: UINavigationController = self.navigationController?.tabBarController?.viewControllers?.filter( {
+                vc in
+                if let navController = vc as? UINavigationController {
+                    return navController.viewControllers[0] is MapViewController
+                }
+                return false;
+            }).first as? UINavigationController {
+                nvc.popToRootViewController(animated: false);
+                self.navigationController?.tabBarController?.selectedViewController = nvc;
+                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
+                    mvc.mapDelegate.userToNavigateTo = self.user;
+                    mvc.mapDelegate.startStraightLineNavigation(location, image: image);
+                }
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
         
         if (alert.popoverPresentationController != nil) {
             alert.popoverPresentationController?.sourceView = self;
