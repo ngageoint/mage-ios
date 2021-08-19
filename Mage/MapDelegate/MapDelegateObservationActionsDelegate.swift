@@ -11,6 +11,7 @@ import Foundation
 extension MapDelegate : ObservationActionsDelegate {
     
     func viewObservation(_ observation: Observation) {
+        self.resetEnlargedPin();
         self.obsBottomSheet.dismiss(animated: true, completion: {
             self.mapCalloutDelegate.calloutTapped(observation);
         });

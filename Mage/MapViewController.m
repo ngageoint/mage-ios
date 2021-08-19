@@ -665,13 +665,11 @@
 }
 
 - (void) userDetailSelected:(User *) user {
-//    [self.mapDelegate selectedUser:user];
     UserViewController *uc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
     [self.navigationController pushViewController:uc animated:YES];
 }
 
 - (void)observationDetailSelected:(Observation *)observation {
-    [self.mapDelegate observationDetailSelected:observation];
     ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation scheme:self.scheme];
     [self.navigationController pushViewController:ovc animated:YES];
 }

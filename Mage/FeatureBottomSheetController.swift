@@ -154,12 +154,10 @@ import Foundation
             applyTheme(withScheme: safeScheme);
         }
         
-        view.setNeedsUpdateConstraints();
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         textView.attributedText = getAttributedMessage();
         summaryView.populate(item: featureItem);
+        
+        view.setNeedsUpdateConstraints();
     }
     
     override func updateViewConstraints() {

@@ -1484,6 +1484,8 @@
     } else {
         NSLog(@"Annotation is a %@", [view class]);
     }
+    [mapView deselectAnnotation:view.annotation animated:false];
+
 }
 
 - (void) startHeading {
@@ -1772,7 +1774,6 @@
 
 - (void)selectedUser:(User *) user {
     LocationAnnotation *annotation = [self.locationAnnotations objectForKey:user.remoteId];
-//    [self.mapView deselectAnnotation:annotation animated:NO];
     [self.mapView selectAnnotation:annotation animated:YES];
     
     [self.mapView setCenterCoordinate:annotation.location.coordinate];
