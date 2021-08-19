@@ -25,8 +25,8 @@ struct VideoImageProvider: ImageDataProvider {
     
     init(url: URL, localPath: String?) {
         self.url = url
-        if (localPath != nil) {
-            self.localFile = URL(fileURLWithPath: localPath!)
+        if let localPath = localPath, FileManager.default.fileExists(atPath: localPath) {
+            self.localFile = URL(fileURLWithPath: localPath)
         } else {
             self.localFile = nil;
         }
@@ -39,11 +39,8 @@ struct VideoImageProvider: ImageDataProvider {
     
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            if (self.localFile != nil && FileManager.default.fileExists(atPath: self.localFile!.path)) {
-                let asset: AVURLAsset = AVURLAsset(url: self.localFile!);
-//                let mediaLoader = MediaLoader(file: self.localFile!.path)
-//                asset.resourceLoader.setDelegate(mediaLoader, queue: DispatchQueue.main);
-
+            if let localFile = self.localFile, FileManager.default.fileExists(atPath: localFile.path) {
+                let asset: AVURLAsset = AVURLAsset(url: localFile);
                 do {
                     handler(.success(try self.generateThumb(asset: asset)));
                 } catch let error as NSError {
@@ -54,25 +51,23 @@ struct VideoImageProvider: ImageDataProvider {
             }
             
             if (!DataConnectionUtilities.shouldFetchAttachments()) {
-//                let rect = CGRect(origin: .zero, size: CGSize(width:150, height:150))
-//                UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
-//                UIColor.init(white: 0, alpha: 0.06).setFill();
-//                UIRectFill(rect)
-//                let image = UIGraphicsGetImageFromCurrentImageContext()
-//                UIGraphicsEndImageContext()
-//                return handler(.success(Data.init((image?.cgImage?.png)!)));
                 return handler(.failure(NSError(domain:"", code:-1, userInfo:nil)))
             }
             let token: String = StoredPassword.retrieveStoredToken();
         
             var urlComponents: URLComponents? = URLComponents(url: self.url, resolvingAgainstBaseURL: false);
-            urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
+            if (urlComponents?.queryItems) != nil {
+                urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
+            } else {
+                urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
+            }
             let realUrl: URL = (urlComponents?.url)!;
+            print("realURL \(realUrl)")
             let asset: AVURLAsset = AVURLAsset(url: realUrl);
             do {
                 handler(.success(try self.generateThumb(asset: asset)));
             } catch let error as NSError {
-                print("\(error.description).")
+                print("thrown error from generate thumb for url \(realUrl) \(error.description).")
                 handler(.failure(error));
             }
         }

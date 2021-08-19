@@ -39,6 +39,14 @@ import Kingfisher
             safeButton.removeFromSuperview();
         }
     }
+    
+    func getAttachmentUrl(attachment: Attachment) -> URL {
+        if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
+            return URL(fileURLWithPath: attachment.localPath!);
+        } else {
+            return URL(string: attachment.url!)!;
+        }
+    }
 
     func getAttachmentUrl(size: Int, attachment: Attachment) -> URL {
         if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
@@ -71,7 +79,6 @@ import Kingfisher
         layoutSubviews();
         self.button = button;
         self.imageView.kf.indicatorType = .activity;
-        let imageSize: Int = Int(max(self.frame.size.height, self.frame.size.width) * UIScreen.main.scale);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
             self.imageView.setAttachment(attachment: attachment);
             self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
@@ -88,7 +95,7 @@ import Kingfisher
                                                 }
                                             });
         } else if (attachment.contentType?.hasPrefix("video") ?? false) {
-            let url = self.getAttachmentUrl(size: imageSize, attachment: attachment);
+            let url = self.getAttachmentUrl(attachment: attachment);
             var localPath: String? = nil;
             if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
                 localPath = attachment.localPath;
@@ -115,7 +122,7 @@ import Kingfisher
                         case .failure(let error):
                             print(error);
                             self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
-                            let overlay: UIImageView = UIImageView(image: UIImage.init(named: "audio_thumbnail"));
+                            let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
                             overlay.contentMode = .scaleAspectFit;
                             self.imageView.addSubview(overlay);
                             overlay.autoCenterInSuperview();
