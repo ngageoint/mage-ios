@@ -62,7 +62,6 @@ struct VideoImageProvider: ImageDataProvider {
                 urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
             }
             let realUrl: URL = (urlComponents?.url)!;
-            print("realURL \(realUrl)")
             let asset: AVURLAsset = AVURLAsset(url: realUrl);
             do {
                 handler(.success(try self.generateThumb(asset: asset)));

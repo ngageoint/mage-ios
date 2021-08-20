@@ -41,6 +41,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             avatarBorder.autoPinEdge(.top, to: .bottom, of: mapView, withOffset: -32);
             stack.autoPinEdge(.top, to: .bottom, of: avatarBorder, withOffset: 4);
             stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8), excludingEdge: .top);
+            didSetupConstraints = true;
         }
         super.updateConstraints();
     }

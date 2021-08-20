@@ -36,6 +36,7 @@ import Foundation
         self.title = user.name;
         self.tableView.register(cellClass: ObservationListCardCell.self);
         self.tableView.accessibilityIdentifier = "user observations";
+        self.tableView.separatorStyle = .none;
     }
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
@@ -66,12 +67,13 @@ import Foundation
         super.viewDidLoad()
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 160;
-        tableView.setAndLayoutTableHeaderView(header: userTableHeaderView);
         applyTheme(withContainerScheme: self.scheme);
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
+        tableView.setAndLayoutTableHeaderView(header: userTableHeaderView);
+
         userTableHeaderView.navigationController = self.navigationController;
         userTableHeaderView.start();
         observationDataStore.startFetchController(observations: Observations(for: user));

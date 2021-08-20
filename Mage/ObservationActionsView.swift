@@ -185,6 +185,7 @@ class ObservationActionsView: UIView {
         setImportantButton.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .left);
         buttonView.addSubview(cancelOrRemoveButton);
         cancelOrRemoveButton.autoPinEdge(.right, to: .left, of: setImportantButton, withOffset: 8)
+        cancelOrRemoveButton.autoAlignAxis(.horizontal, toSameAxisOf: setImportantButton)
         
         importantWrapperView.addSubview(importantInputView);
         importantInputView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8), excludingEdge: .bottom);

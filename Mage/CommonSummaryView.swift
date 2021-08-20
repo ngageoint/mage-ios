@@ -94,7 +94,7 @@ class CommonSummaryView<T, V>: UIView {
         timestamp.autoSetDimension(.height, toSize: timestamp.font.pointSize);
         primaryField.textColor = scheme.colorScheme.primaryColor;
         primaryField.font = scheme.typographyScheme.headline6;
-        primaryField.autoSetDimension(.height, toSize: primaryField.font.pointSize);
+        primaryField.autoSetDimension(.height, toSize: primaryField.font.pointSize, relation: .greaterThanOrEqual);
         secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         secondaryField.font = scheme.typographyScheme.subtitle2;
         secondaryField.autoSetDimension(.height, toSize: secondaryField.font.pointSize);
