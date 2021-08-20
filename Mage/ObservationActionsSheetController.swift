@@ -123,7 +123,7 @@ class ObservationActionsSheetController: UITableViewController {
             return cell;
         }
         
-        if (((observation.properties?["forms"] as? [[AnyHashable : Any]])?.count ?? 0) <= 1) {
+        if (userHasEditPermissions && ((observation.properties?["forms"] as? [[AnyHashable : Any]])?.count ?? 0) <= 1) {
             // if there is 1 form or less, don't show reorder
             correctedRow = correctedRow + 1;
         }
