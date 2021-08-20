@@ -148,6 +148,8 @@ class ObservationTableViewController: UITableViewController {
         self.navigationController?.view.addSubview(createFab);
         self.createFab.autoPinEdge(toSuperviewMargin: .right);
         self.createFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
+        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
+        createFab.isHidden = !user.hasEditPermission()
         self.applyTheme(withContainerScheme: self.scheme);
         setupFilterListeners();
         
