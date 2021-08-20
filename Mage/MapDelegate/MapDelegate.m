@@ -1488,6 +1488,12 @@
 
 }
 
+- (void) stopHeading {
+    if ([self.straightLineNavigation stopHeading]) {
+        [self.locationManager stopUpdatingHeading];
+    }
+}
+
 - (void) startHeading {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults showHeadingSet]) {

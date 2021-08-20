@@ -246,6 +246,8 @@
     
     if ([[NSUserDefaults standardUserDefaults] showHeading]) {
         [self.mapDelegate startHeading];
+    } else {
+        [self.mapDelegate stopHeading];
     }
 }
 
@@ -310,6 +312,11 @@
     
     [defaults addObserver:self
                forKeyPath:GeoPackageImported
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    
+    [defaults addObserver:self
+               forKeyPath:@"showHeading"
                   options:NSKeyValueObservingOptionNew
                   context:NULL];
     
@@ -401,6 +408,7 @@
         [defaults removeObserver:self forKeyPath:kFavortiesFilterKey];
         [defaults removeObserver:self forKeyPath:kImportantFilterKey];
         [defaults removeObserver:self forKeyPath:GeoPackageImported];
+        [defaults removeObserver:self forKeyPath:@"showHeading"];
     }
     @catch (id exception) {
         NSLog(@"Exception removing observers %@", exception);
@@ -463,6 +471,12 @@
         [self setNavBarTitle];
     } else if ([GeoPackageImported isEqualToString:keyPath]) {
         [self setupMapSettingsButton];
+    } else if ([@"showHeading" isEqualToString:keyPath]) {
+        if ([NSUserDefaults.standardUserDefaults showHeading]) {
+            [self.mapDelegate startHeading];
+        } else {
+            [self.mapDelegate stopHeading];
+        }
     }
 }
 

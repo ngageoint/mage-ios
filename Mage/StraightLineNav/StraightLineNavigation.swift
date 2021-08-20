@@ -54,6 +54,17 @@ import Foundation
         updateHeadingLine(manager: manager);
     }
     
+    @objc func stopHeading() -> Bool {
+        if (!navigationModeEnabled && headingModeEnabled) {
+            headingModeEnabled = false;
+            if let safeHeadingPolyline = headingPolyline {
+                mapView.removeOverlay(safeHeadingPolyline);
+            }
+            return true;
+        }
+        return false;
+    }
+    
     @objc func stopNavigation() {
         navigationModeEnabled = false;
         if let safeRelativeBearingPolyline = relativeBearingPolyline {
