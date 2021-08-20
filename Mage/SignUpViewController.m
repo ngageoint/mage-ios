@@ -148,8 +148,8 @@
     [self.email setLeadingView:emailImage];
     self.email.leadingViewMode = UITextFieldViewModeAlways;
     self.email.accessibilityLabel = @"Email";
-    self.email.placeholder = @"Email *";
-    self.email.label.text = @"Email *";
+    self.email.placeholder = @"Email";
+    self.email.label.text = @"Email";
     self.email.leadingAssistiveLabel.text = @" ";
     [self.email sizeToFit];
     
@@ -157,8 +157,8 @@
     [self.phone setLeadingView:phoneImage];
     self.phone.leadingViewMode = UITextFieldViewModeAlways;
     self.phone.accessibilityLabel = @"Phone";
-    self.phone.placeholder = @"Phone *";
-    self.phone.label.text = @"Phone *";
+    self.phone.placeholder = @"Phone";
+    self.phone.label.text = @"Phone";
     self.phone.leadingAssistiveLabel.text = @" ";
     [self.phone sizeToFit];
     
