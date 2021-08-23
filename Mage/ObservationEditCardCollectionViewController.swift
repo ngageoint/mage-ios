@@ -30,6 +30,7 @@ import MaterialComponents.MDCCard
     var observationForms: [[String: Any]] = [];
     var observationProperties: [String: Any] = [ : ];
     var newObservation: Bool = false;
+    var alreadyPromptedToAddForm: Bool = false;
     var scheme: MDCContainerScheming?;
     
     var cards: [ExpandableCard] = [];
@@ -188,7 +189,8 @@ import MaterialComponents.MDCCard
         // If there are forms and this is a new observation call addForm
         // It is expected that the delegate will add the form if only one exists
         // and prompt the user if more than one exists
-        if (newObservation && eventForms.count != 0 && observationForms.isEmpty) {
+        if (!alreadyPromptedToAddForm && newObservation && eventForms.count != 0 && observationForms.isEmpty) {
+            alreadyPromptedToAddForm = true;
             self.delegate?.addForm();
         }
     }
