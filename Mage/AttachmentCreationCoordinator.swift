@@ -8,6 +8,7 @@
 
 import Foundation
 import Photos
+import PhotosUI
 
 @objc public protocol AudioRecordingDelegate {
     @objc func recordingAvailable(recording: Recording);
@@ -165,13 +166,133 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     func presentGallery() {
         DispatchQueue.main.async {
             print("Present the gallery")
-            self.pickerController = UIImagePickerController();
-            self.pickerController!.delegate = self;
-            self.pickerController!.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
-            self.pickerController!.sourceType = .photoLibrary;
-            self.pickerController!.videoQuality = .typeHigh;
-            self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
+            if #available(iOS 14, *) {
+                var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+                configuration.filter = .images;
+                configuration.selectionLimit = 1;
+                
+                let photoPicker = PHPickerViewController(configuration: configuration);
+                photoPicker.delegate = self;
+                self.rootViewController?.present(photoPicker, animated: true, completion: nil);
+            } else {
+                // Fallback on earlier versions
+                self.pickerController = UIImagePickerController();
+                self.pickerController!.delegate = self;
+                self.pickerController!.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
+                self.pickerController!.sourceType = .photoLibrary;
+                self.pickerController!.videoQuality = .typeHigh;
+                self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
+            }
         }
+    }
+}
+
+@available(iOS 14, *)
+extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard !results.isEmpty else { return }
+        
+        let dateFormatter = DateFormatter();
+        dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
+        
+        let identifiers = results.compactMap(\.assetIdentifier)
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        self.workingOverlayController = AttachmentProgressViewController();
+        self.workingOverlayController?.modalPresentationStyle = .overFullScreen;
+        if let scheme = self.scheme {
+            self.workingOverlayController?.applyTheme(withContainerScheme: scheme);
+        }
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            if let phasset = fetchResult.firstObject,
+               let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                
+                DispatchQueue.main.async {
+                    self.rootViewController?.present(self.workingOverlayController!, animated: false, completion: nil);
+                }
+                
+                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
+                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
+                
+                let manager = PHImageManager.default()
+                let requestOptions = PHImageRequestOptions()
+                requestOptions.isSynchronous = true
+                requestOptions.deliveryMode = .fastFormat
+                requestOptions.isNetworkAccessAllowed = true
+                DispatchQueue.main.async {
+                    self.workingOverlayController?.setProgressMessage(message: "Retrieving image...")
+                }
+                manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
+                    if let data = data,
+                       let cImage = CIImage(data: data) {
+                        let chosenImage = UIImage(ciImage: cImage)
+                        
+                        do {
+                            DispatchQueue.main.async {
+                                self.workingOverlayController?.setProgressMessage(message: "Scaling image...")
+                            }
+                            try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                            let finalImage = chosenImage.qualityScaled();
+                            guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
+                            let metadata: [String : Any] = cImage.properties
+                            
+                            DispatchQueue.main.async {
+                                self.workingOverlayController?.setProgressMessage(message: "Writing metadata into image...")
+                            }
+                            guard let finalData = self.writeMetadataIntoImageData(imagedata: imageData, metadata: NSDictionary(dictionary: metadata)) else { return };
+                            
+                            do {
+                                DispatchQueue.main.async {
+                                    self.workingOverlayController?.setProgressMessage(message: "Saving image...")
+                                }
+                                try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
+                                addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
+                                DispatchQueue.main.async {
+                                    self.workingOverlayController?.dismiss(animated: true, completion: nil);
+                                }
+                            } catch {
+                                print("Unable to write image to file \(fileToWriteTo): \(error)")
+                                DispatchQueue.main.async {
+                                    self.workingOverlayController?.dismiss(animated: true, completion: nil);
+                                }
+                            }
+                        } catch {
+                            print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                            DispatchQueue.main.async {
+                                self.workingOverlayController?.dismiss(animated: true, completion: nil);
+                            }
+                        }
+                    }
+                }
+            } else {
+                // The user selected certain photos to share with MAGE and this wasn't one of them
+                // prompt the user to pick more photos to share
+                print("Cannot access asset")
+                let alert = UIAlertController(title: "Permission Denied", message: "MAGE is unable to access the photo you have chosen.  Please update the photos MAGE is allowed to access and try again.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "Update allowed photos", style: .default , handler:{ (UIAlertAction)in
+                    let library = PHPhotoLibrary.shared()
+                    library.register(self);
+                    if let rootViewController = self.rootViewController {
+                        library.presentLimitedLibraryPicker(from: rootViewController)
+                    }
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                if let rootViewController = self.rootViewController {
+                    rootViewController.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+}
+
+extension AttachmentCreationCoordinator: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        let library = PHPhotoLibrary.shared()
+        library.unregisterChangeObserver(self);
+        // show the image picker again
+        self.presentGallery();
     }
 }
 
@@ -185,7 +306,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         if (mediaType == kUTTypeImage as String && picker.sourceType == .camera) {
             handleCameraImage(picker: picker, info: info);
         } else if (mediaType == kUTTypeImage as String && picker.sourceType != .camera) {
-            handleSavedImage(picker: picker, info: info);
+            handleSavedImage_iOS13(picker: picker, info: info);
         } else if (mediaType == kUTTypeMovie as String) {
             handleMovie(picker: picker, info: info);
         }
@@ -200,8 +321,9 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         photoLocations.removeAll();
     }
     
-    func handleSavedImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
+    func handleSavedImage_iOS13(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
         self.workingOverlayController = AttachmentProgressViewController();
+        self.workingOverlayController?.modalPresentationStyle = .fullScreen;
         self.rootViewController?.present(self.workingOverlayController!, animated: false, completion: nil);
         if let scheme = self.scheme {
             self.workingOverlayController?.applyTheme(withContainerScheme: scheme);
@@ -210,58 +332,69 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
         
-        DispatchQueue.global(qos: .userInitiated).async { [self] in
-            if let phasset = info[.phAsset] as? PHAsset,
-               let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+        if let chosenImage = info[.originalImage] as? UIImage,
+           let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            if (picker.sourceType == .camera) {
+                UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+            }
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
                 let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
                 let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
-
-                let manager = PHImageManager.default()
-                let requestOptions = PHImageRequestOptions()
-                requestOptions.isSynchronous = true
-                requestOptions.deliveryMode = .fastFormat
-                requestOptions.isNetworkAccessAllowed = true
-                DispatchQueue.main.async {
-                    self.workingOverlayController?.setProgressMessage(message: "Retrieving image...")
-                }
-                manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
-                    if let data = data,
-                    let cImage = CIImage(data: data) {
-                        let chosenImage = UIImage(ciImage: cImage)
-                        
-                        do {
-                            DispatchQueue.main.async {
-                                self.workingOverlayController?.setProgressMessage(message: "Scaling image...")
-                            }
-                            try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                            let finalImage = chosenImage.qualityScaled();
-                            guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
-                            let metadata: [String : Any] = cImage.properties
-        
-                            DispatchQueue.main.async {
-                                self.workingOverlayController?.setProgressMessage(message: "Writing metadata into image...")
-                            }
-                            guard let finalData = self.writeMetadataIntoImageData(imagedata: imageData, metadata: NSDictionary(dictionary: metadata)) else { return };
-
-                            do {
-                                DispatchQueue.main.async {
-                                    self.workingOverlayController?.setProgressMessage(message: "Saving image...")
-                                }
-                                try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
-                                addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
-                                DispatchQueue.main.async {
-                                    workingOverlayController?.dismiss(animated: true, completion: nil);
-                                }
-                            } catch {
-                                print("Unable to write image to file \(fileToWriteTo): \(error)")
-                            }
-                        } catch {
-                            print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                do {
+                    try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                    DispatchQueue.main.async {
+                        self.workingOverlayController?.setProgressMessage(message: "Scaling image...")
+                    }
+                    let finalImage = chosenImage.qualityScaled();
+                    guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
+                    DispatchQueue.main.async {
+                        self.workingOverlayController?.setProgressMessage(message: "Writing metadata into image...")
+                    }
+                    guard let finalData = writeMetadataIntoImageData(imagedata: imageData, metadata: info[.mediaMetadata] as? NSMutableDictionary) else { return };
+                    do {
+                        DispatchQueue.main.async {
+                            self.workingOverlayController?.setProgressMessage(message: "Saving image...")
                         }
+                        try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
+                        addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
+                        DispatchQueue.main.async {
+                            workingOverlayController?.dismiss(animated: true, completion: nil);
+                        }
+                    } catch {
+                        print("Unable to write image to file \(fileToWriteTo): \(error)")
+                        DispatchQueue.main.async {
+                            workingOverlayController?.dismiss(animated: true, completion: nil);
+                        }
+                    }
+                } catch {
+                    print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                    DispatchQueue.main.async {
+                        workingOverlayController?.dismiss(animated: true, completion: nil);
                     }
                 }
             }
+        } else {
+            // The user selected certain photos to share with MAGE and this wasn't one of them
+            // prompt the user to pick more photos to share, on iOS 13, send them to the privacy settings
+            print("Cannot access asset")
+            
+            let alert = UIAlertController(title: "Permission Denied", message: "MAGE is unable to access the photo you have chosen.  Please update the photos MAGE is allowed to access and try again.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Update allowed photos", style: .default , handler:{ (UIAlertAction)in
+                guard let url = URL(string: UIApplication.openSettingsURLString),
+                      UIApplication.shared.canOpenURL(url) else {
+                    assertionFailure("Not able to open App privacy settings")
+                    return
+                }
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            if let rootViewController = self.rootViewController {
+                rootViewController.present(alert, animated: true, completion: nil)
+            }
         }
+        
     }
     
     func handleCameraImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
