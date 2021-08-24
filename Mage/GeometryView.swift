@@ -21,6 +21,7 @@ class GeometryView : BaseFieldView {
     private var mkmapDelegate: MKMapViewDelegate?;
     
     private var mapObservation: MapObservation?;
+    private var accuracyOverlay: ObservationAccuracy?;
     
     lazy var textField: MDCFilledTextField = {
         // this is just an estimated size
@@ -54,6 +55,7 @@ class GeometryView : BaseFieldView {
         mapView.delegate = mkmapDelegate;
         mapDelegate?.setupListeners();
         mapDelegate?.hideStaticLayers = true;
+        mapDelegate?.allowEnlarge = false;
         return mapView;
     }()
     
@@ -150,7 +152,7 @@ class GeometryView : BaseFieldView {
     func addToMapAsObservation() {
         if (self.observation?.getGeometry() != nil) {
             self.mapObservation?.remove(from: self.mapView);
-            self.mapObservation = self.observationManager.addToMap(with: self.observation);
+            self.mapObservation = self.observationManager.addToMap(with: self.observation, andAnimateDrop: false);
             guard let viewRegion = self.mapObservation?.viewRegion(of: self.mapView) else { return };
             self.mapView.setRegion(viewRegion, animated: true);
         }
@@ -229,8 +231,11 @@ class GeometryView : BaseFieldView {
                 
                 accuracyLabel.text = String(format: "%@ ± %.02fm", formattedProvider, accuracy!);
                 if let centroid = (self.value as? SFGeometry)!.centroid() {
-                    let overlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
-                        self.mapView.addOverlay(overlay);
+                    if let accuracyOverlay = accuracyOverlay {
+                        self.mapView.removeOverlay(accuracyOverlay);
+                    }
+                    accuracyOverlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
+                        self.mapView.addOverlay(accuracyOverlay!);
                 }
             }
         }
