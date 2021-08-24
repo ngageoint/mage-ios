@@ -198,13 +198,13 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     func addHeaderCard(stackView: UIStackView) {
-        if let safeObservation = observation {
-            if (headerCard != nil) {
-                headerCard?.populate(observation: safeObservation);
+        if let observation = observation {
+            if let headerCard = headerCard {
+                headerCard.populate(observation: observation);
             } else {
-                headerCard = ObservationHeaderView(observation: safeObservation, observationActionsDelegate: self);
-                if let safeScheme = self.scheme {
-                    headerCard!.applyTheme(withScheme: safeScheme);
+                headerCard = ObservationHeaderView(observation: observation, observationActionsDelegate: self);
+                if let scheme = self.scheme {
+                    headerCard!.applyTheme(withScheme: scheme);
                 }
                 stackView.addArrangedSubview(headerCard!);
             }
@@ -215,20 +215,20 @@ import MaterialComponents.MDCContainerScheme;
     // TODO: this can be removed once all servers are upgraded
     func addLegacyAttachmentCard(stackView: UIStackView) {
         if (MageServer.isServerVersion5()) {
-            if let safeObservation = observation {
-                if (attachmentCard != nil) {
-                    attachmentCard?.populate(observation: observation);
+            if let observation = observation {
+                if let attachmentCard = attachmentCard {
+                    attachmentCard.populate(observation: observation);
                 } else {
-                    attachmentCard = ObservationAttachmentCard(observation: safeObservation, attachmentSelectionDelegate: self);
-                    if let safeScheme = self.scheme {
-                        attachmentCard!.applyTheme(withScheme: safeScheme);
-                        attachmentHeader.applyTheme(withScheme: safeScheme);
+                    attachmentCard = ObservationAttachmentCard(observation: observation, attachmentSelectionDelegate: self);
+                    if let scheme = self.scheme {
+                        attachmentCard!.applyTheme(withScheme: scheme);
+                        attachmentHeader.applyTheme(withScheme: scheme);
                     }
                     stackView.addArrangedSubview(attachmentHeader);
                     stackView.addArrangedSubview(attachmentCard!);
                 }
                 
-                let attachmentCount = safeObservation.attachments?.filter() { attachment in
+                let attachmentCount = observation.attachments?.filter() { attachment in
                     return !attachment.markedForDeletion
                 }.count
                 
@@ -340,9 +340,10 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
         if (observation.objectID != self.observation?.objectID) {
             return;
         }
+        headerCard?.populate(observation: observation, ignoreGeometry: true);
         syncStatusView.updateObservationStatus();
-        if let safeScheme = self.scheme {
-            syncStatusView.applyTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            syncStatusView.applyTheme(withScheme: scheme);
         }
         view.setNeedsUpdateConstraints();
     }
@@ -409,7 +410,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     func makeImportant(_ observation: Observation, reason: String) {
         observation.flagImportant(withDescription: reason) { success, error in
             // update the view
-            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+            observation.managedObjectContext?.refresh(observation, mergeChanges: true);
             self.headerCard?.populate(observation: observation);
         }
     }
