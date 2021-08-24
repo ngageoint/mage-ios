@@ -163,7 +163,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
         switch(type) {
             case NSFetchedResultsChangeInsert: {
                 NSLog(@"important inserted, push em %@", anObject);
-                [self pushImportant:@[anObject]];
+                if ([[anObject observation] remoteId]) [self pushImportant:@[anObject]];
                 break;
             }
             case NSFetchedResultsChangeDelete: {
@@ -279,6 +279,8 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                 }
                 
                 localObservation.error = localError;
+                // TODO if we set the error, the push service sees it as an update so it tries to resend immediately
+                // we need to put in some kind of throttle
             } completion:^(BOOL success, NSError *coreDataError) {
                 [weakSelf.pushingObservations removeObjectForKey:observationID];
                 
@@ -333,29 +335,36 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     // only push important changes that haven't already been told to be pushed
     NSMutableDictionary *importantsToPush = [[NSMutableDictionary alloc] init];
     for (ObservationImportant *important in importants) {
-        if ([self.pushingImportant objectForKey:important.objectID] == nil) {
-            NSLog(@"adding important to push %@", important.objectID);
-            [self.pushingImportant setObject:important forKey:important.objectID];
-            [importantsToPush setObject:important forKey:important.objectID];
+        if (important.observation.remoteId != nil && [self.pushingImportant objectForKey:important.observation.remoteId] == nil) {
+            NSLog(@"adding important to push %@", important.observation.remoteId);
+            [self.pushingImportant setObject:important forKey:important.observation.remoteId];
+            [importantsToPush setObject:important forKey:important.observation.remoteId];
         }
     }
     
     NSLog(@"about to push an additional %lu importants", (unsigned long) importantsToPush.count);
     __weak typeof(self) weakSelf = self;
     MageSessionManager *manager = [MageSessionManager sharedManager];
-    for (ObservationImportant *important in [importantsToPush allValues]) {
-        NSManagedObjectID *importantIDtoPush = important.objectID;
+    for (NSString *observationId in importantsToPush) {
+        ObservationImportant *important = importantsToPush[observationId];
         NSURLSessionDataTask *importantPushTask = [Observation operationToPushImportant:important success:^(id response) {
-            NSLog(@"Successfully submitted important");
+            // verify that the current state in our data is the same as returned from the server
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationImportant *localImportant = [important MR_inContext:localContext];
-                localImportant.dirty = [NSNumber numberWithBool:NO];
+                BOOL serverImportant = response[@"important"] != nil;
+                if ([localImportant.important isEqualToNumber:[NSNumber numberWithBool:serverImportant]]) {
+                    localImportant.dirty = [NSNumber numberWithBool:NO];
+                } else {
+                    // force a push again
+                    localImportant.timestamp = [NSDate date];
+                }
+                [localImportant.managedObjectContext refreshObject:localImportant.observation mergeChanges:false];
             } completion:^(BOOL success, NSError *error) {
-                [weakSelf.pushingImportant removeObjectForKey:importantIDtoPush];
+                [weakSelf.pushingImportant removeObjectForKey:observationId];
             }];
         } failure:^(NSError* error) {
             NSLog(@"Error submitting important");
-            [weakSelf.pushingImportant removeObjectForKey:importantIDtoPush];
+            [weakSelf.pushingImportant removeObjectForKey:observationId];
         }];
         
         [manager addTask:importantPushTask];

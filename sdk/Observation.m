@@ -1293,12 +1293,23 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     }
     __weak typeof(self) weakSelf = self;
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        ObservationImportant *important = [weakSelf.observationImportant MR_inContext:localContext];
-        if (important) {
-            important.dirty = [NSNumber numberWithBool:YES];
-
-            important.important = [NSNumber numberWithBool:NO];
+        
+        Observation *localObservation = [weakSelf MR_inContext:localContext];
+        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
+        
+        ObservationImportant *important = weakSelf.observationImportant;
+        if (!important) {
+            important = [ObservationImportant MR_createEntityInContext:localContext];
+            important.observation = localObservation;
+            localObservation.observationImportant = important;
         }
+        
+        important.dirty = [NSNumber numberWithBool:YES];
+        important.important = [NSNumber numberWithBool:NO];
+        important.userId = currentUser.remoteId;
+        important.reason = nil;
+        important.timestamp = [NSDate date];
+
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
         if (completion) {
             completion(contextDidSave, error);
