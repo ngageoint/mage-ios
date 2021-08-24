@@ -228,11 +228,11 @@ class ObservationActionsView: UIView {
         self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
-        if let safeObservation = observation {
-            populate(observation: safeObservation);
+        if let observation = observation {
+            populate(observation: observation);
         }
-        if let safeScheme = self.scheme {
-            applyTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            applyTheme(withScheme: scheme);
         }
         self.accessibilityLabel = "actions";
     }
@@ -282,8 +282,19 @@ class ObservationActionsView: UIView {
         }
         
         isImportant = false;
+        if (!self.importantWrapperView.isHidden) {
+            UIView.animate(withDuration: 0.2) {
+                self.importantWrapperView.isHidden = true;
+            }
+        }
         importantInputView.text = nil;
         importantButton.setImage(UIImage(named: "flag_outline"), for: .normal);
+        setImportantButton.accessibilityLabel = "Flag as important";
+        setImportantButton.setTitle("Flag as important", for: .normal);
+        setImportantButton.isEnabled = true;
+        cancelOrRemoveButton.accessibilityLabel = "Cancel";
+        cancelOrRemoveButton.setTitle("Cancel", for: .normal);
+        cancelOrRemoveButton.isEnabled = true;
         if let important = observation.observationImportant {
             if (important.important == NSNumber(booleanLiteral: true)) {
                 isImportant = true;
@@ -325,16 +336,19 @@ class ObservationActionsView: UIView {
     @objc func makeImportant() {
         importantInputView.resignFirstResponder();
         observationActionsDelegate?.makeImportant?(observation!, reason: self.importantInputView.text ?? "");
-        toggleImportant();
+        setImportantButton.setTitle("Saving", for: .normal);
+        setImportantButton.isEnabled = false;
     }
     
     @objc func removeImportant() {
         importantInputView.resignFirstResponder();
         if (observation?.isImportant() == true) {
             observationActionsDelegate?.removeImportant?(observation!);
+            cancelOrRemoveButton.setTitle("Removing", for: .normal);
+            cancelOrRemoveButton.isEnabled = false;
+        } else {
+            toggleImportant();
         }
-        
-        toggleImportant();
     }
     
     @objc func doneButtonPressed() {
