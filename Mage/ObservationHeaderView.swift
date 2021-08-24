@@ -101,7 +101,7 @@ class ObservationHeaderView : MDCCard {
         self.observationSummaryView.applyTheme(withScheme: scheme);
     }
     
-    @objc public func populate(observation: Observation, animate: Bool = true) {
+    @objc public func populate(observation: Observation, animate: Bool = true, ignoreGeometry: Bool = false) {
         observationSummaryView.populate(observation: observation);
         
         if (animate) {
@@ -111,7 +111,9 @@ class ObservationHeaderView : MDCCard {
         } else {
             self.importantView.isHidden = !observation.isImportant()
         }
-        geometryView.setObservation(observation: observation);
+        if (!ignoreGeometry) {
+            geometryView.setObservation(observation: observation);
+        }
         importantView.populate(observation: observation);
         observationActionsView.populate(observation: observation);
     }
