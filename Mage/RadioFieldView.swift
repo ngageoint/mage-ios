@@ -103,6 +103,7 @@ class RadioFieldView: BaseFieldView {
         for cb in choiceButtons {
             if (cb.value.button == button) {
                 value = cb.key;
+                delegate?.fieldValueChanged(field, value: value);
                 cb.value.button.isSelected = true;
             } else {
                 cb.value.button.isSelected = false;

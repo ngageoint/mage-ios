@@ -11,6 +11,7 @@ import MaterialComponents.MDCTextField;
 
 class DateView : BaseFieldView {
     private var date: Date?;
+    private var shouldResign: Bool = false;
     
     internal lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker();
@@ -109,10 +110,12 @@ class DateView : BaseFieldView {
     }
     
     @objc func doneButtonPressed() {
+        shouldResign = true;
         textField.resignFirstResponder();
     }
     
     @objc func cancelButtonPressed() {
+        shouldResign = true;
         date = value as? Date;
         if let safeDate = date {
             datePicker.date = safeDate;
@@ -161,6 +164,11 @@ class DateView : BaseFieldView {
 }
 
 extension DateView: UITextFieldDelegate {
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        return shouldResign;
+    }
+
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         self.date = nil;
         self.value = nil;
@@ -193,5 +201,6 @@ extension DateView: UITextFieldDelegate {
         } else {
             datePicker.date = Date()
         }
+        shouldResign = false;
     }
 }

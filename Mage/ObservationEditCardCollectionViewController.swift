@@ -167,12 +167,23 @@ import MaterialComponents.MDCCard
                 self.navigationItem.leftBarButtonItem?.isEnabled = false;
                 self.bottomConstraint?.constant = -keyboardFrame.height;
                 self.view.layoutIfNeeded();
-                self.scrollView.contentOffset = CGPoint(x: self.scrollView.contentOffset.x, y: self.scrollView.contentOffset.y + keyboardFrame.height - 60)
+
+                if let firstResponder = self.stackView.firstResponder {
+                    let firstResponderPoint = self.scrollView.convert(CGPoint(x: 0, y: firstResponder.frame.origin.y + 20), from: firstResponder.superview);
+                    self.scrollView.setContentOffset(CGPoint(x:self.scrollView.contentOffset.x, y: firstResponderPoint.y - 60), animated: true);
+                } else {
+                    self.scrollView.contentOffset = CGPoint(x: self.scrollView.contentOffset.x, y: self.scrollView.contentOffset.y + keyboardFrame.height - 60)
+                }
+
             case .keyboardWillHide:
                 self.navigationItem.rightBarButtonItem?.isEnabled = true;
                 self.navigationItem.leftBarButtonItem?.isEnabled = true;
                 self.bottomConstraint?.constant = -60;
                 self.view.layoutIfNeeded();
+                self.stackView.isUserInteractionEnabled = true;
+            
+            case .keyboardDidShow:
+                self.stackView.isUserInteractionEnabled = false;
             }
         }
     }
@@ -550,6 +561,7 @@ import MaterialComponents.MDCCard
         }
         cards = [];
         setupObservation(observation: self.observation!);
+        formViews = [];
         addFormViews(stackView: stackView);
         
         observation?.clearFormsToBeDeleted();

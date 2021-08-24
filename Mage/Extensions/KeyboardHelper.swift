@@ -2,6 +2,7 @@ extension KeyboardHelper {
     enum Animation {
         case keyboardWillShow
         case keyboardWillHide
+        case keyboardDidShow
     }
     
     typealias HandleBlock = (_ animation: Animation, _ keyboardFrame: CGRect, _ duration: TimeInterval) -> Void
@@ -28,6 +29,11 @@ final class KeyboardHelper {
         _ = NotificationCenter.default
             .addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { [weak self] notification in
                 self?.handle(animation: .keyboardWillHide, notification: notification)
+            }
+        
+        _ = NotificationCenter.default
+            .addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: .main) { [weak self] notification in
+                self?.handle(animation: .keyboardDidShow, notification: notification)
             }
     }
     

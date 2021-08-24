@@ -493,6 +493,7 @@
 		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
 		F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */; };
 		F7F8B4B726CE88B500DACCC7 /* AttachmentProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */; };
+		F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */; };
 		F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */; };
 		F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */; };
 		F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */; };
@@ -1247,6 +1248,7 @@
 		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
 		F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureSummaryView.swift; sourceTree = "<group>"; };
 		F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentProgressViewController.swift; sourceTree = "<group>"; };
+		F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormViewTests.swift; sourceTree = "<group>"; };
 		F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldView.swift; sourceTree = "<group>"; };
 		F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownFieldViewTests.swift; sourceTree = "<group>"; };
@@ -2042,6 +2044,7 @@
 				F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */,
 				F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */,
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
+				F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3163,6 +3166,7 @@
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
+				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,

@@ -10,6 +10,7 @@ import Foundation
 import MaterialComponents.MDCTextField;
 
 class NumberFieldView : BaseFieldView {
+    private var shouldResign: Bool = false;
     private var number: NSNumber?;
     private var min: NSNumber?;
     private var max: NSNumber?;
@@ -89,7 +90,6 @@ class NumberFieldView : BaseFieldView {
     func setupInputView() {
         if (editMode) {
             viewStack.addArrangedSubview(textField);
-            setPlaceholder(textField: textField);
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
             viewStack.addArrangedSubview(fieldValue);
@@ -126,10 +126,12 @@ class NumberFieldView : BaseFieldView {
     }
     
     @objc func doneButtonPressed() {
+        shouldResign = true;
         textField.resignFirstResponder();
     }
     
     @objc func cancelButtonPressed() {
+        shouldResign = true;
         setTextFieldValue();
         textField.resignFirstResponder();
     }
@@ -189,6 +191,10 @@ class NumberFieldView : BaseFieldView {
 
 extension NumberFieldView: UITextFieldDelegate {
     
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        return shouldResign;
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let text: String = textField.text {
             let number = formatter.number(from: text);
@@ -199,6 +205,7 @@ extension NumberFieldView: UITextFieldDelegate {
             }
             self.number = number;
         }
+        shouldResign = false;
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
