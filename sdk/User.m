@@ -264,6 +264,19 @@ static User *currentUser = nil;
                 } else {
                     user.avatarUrl = oldAvatar;
                 }
+                NSDictionary *myRole = [myself objectForKey:@"role"];
+                if (myRole != nil) {
+                    Role *role = [Role MR_findFirstByAttribute:@"remoteId" withValue:[myRole objectForKey:@"id"]];
+                    if (role == nil) {
+                        role = [Role insertRoleForJson:myRole inManagedObjectContext:localContext];
+                    }
+
+                    if (role) {
+                        user.role = role;
+                        [role addUsersObject:user];
+                    }
+                }
+                
             }
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (error) {
