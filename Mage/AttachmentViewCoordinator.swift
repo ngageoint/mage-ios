@@ -16,11 +16,12 @@ import MagicalRecord;
 @objc class AttachmentViewCoordinator: NSObject, MediaLoaderDelegate, NavigationControllerObserverDelegate, AskToDownloadDelegate {
     var scheme: MDCContainerScheming?;
 
-    var attachment: Attachment!
+    var attachment: Attachment?
     var delegate: AttachmentViewDelegate?
     var rootViewController: UINavigationController
     var navigationControllerObserver: NavigationControllerObserver
     var tempFile: String?
+    var contentType: String?
     
     var playerViewController: AVPlayerViewController?
     var player: AVPlayer?
@@ -41,7 +42,7 @@ import MagicalRecord;
         self.delegate = delegate;
         self.scheme = scheme;
         
-        if let attachmentUrl = self.attachment.url {
+        if let attachmentUrl = self.attachment?.url {
             self.tempFile =  NSTemporaryDirectory() + (URL(string: attachmentUrl)?.lastPathComponent ?? "tempfile");
         } else {
             self.tempFile =  NSTemporaryDirectory() + "tempfile";
@@ -51,14 +52,17 @@ import MagicalRecord;
         self.mediaLoader = MediaLoader(delegate: self);
     }
     
-    @objc public init(rootViewController: UINavigationController, url: URL, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
+    @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.urlToLoad = url;
         self.delegate = delegate;
         self.scheme = scheme;
+        self.contentType = contentType;
+        self.tempFile =  NSTemporaryDirectory() + url.lastPathComponent;
         
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
+        self.mediaLoader = MediaLoader(delegate: self);
     }
     
     @objc public func start() {
@@ -102,20 +106,26 @@ import MagicalRecord;
     }
     
     func loadURL(animated: Bool = false) {
-        if let urlToLoad = self.urlToLoad {
-            let imageViewController = ImageAttachmentViewController(url: urlToLoad)
-            imageViewController.view.backgroundColor = UIColor.black;
-            self.rootViewController.pushViewController(imageViewController, animated: animated);
-            self.navigationControllerObserver.observePopTransition(of: imageViewController, delegate: self);
-            self.hasPushedViewController = true;
-            self.imageViewController = imageViewController;
+        if let urlToLoad = self.urlToLoad, let contentType = self.contentType {
+            if contentType.hasPrefix("image") {
+                let imageViewController = ImageAttachmentViewController(url: urlToLoad)
+                imageViewController.view.backgroundColor = UIColor.black;
+                self.rootViewController.pushViewController(imageViewController, animated: animated);
+                self.navigationControllerObserver.observePopTransition(of: imageViewController, delegate: self);
+                self.hasPushedViewController = true;
+                self.imageViewController = imageViewController;
+            } else if contentType.hasPrefix("video") {
+                self.playAudioVideo();
+            } else if contentType.hasPrefix("audio") {
+                self.downloadAudio();
+            }
         }
     }
     
     func showAttachment(animated: Bool = false) {
-        if let contentType = self.attachment.contentType {
+        if let attachment = self.attachment, let contentType = attachment.contentType {
             if contentType.hasPrefix("image") {
-                let imageViewController = ImageAttachmentViewController(attachment: self.attachment);
+                let imageViewController = ImageAttachmentViewController(attachment: attachment);
                 // not sure if we still need this TODO test
                 imageViewController.view.backgroundColor = UIColor.black;
                 self.rootViewController.pushViewController(imageViewController, animated: animated);
@@ -143,31 +153,38 @@ import MagicalRecord;
     }
     
     func downloadAudio() {
-        if let localPath = self.attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
-            self.playAudioVideo();
-            return;
-        }
-        if let attachmentUrl = self.attachment.url, let urlToLoad = URL(string: String(format: "%@", attachmentUrl)) {
-            print("playing audio:", String(format: "%@", attachmentUrl));
-            self.urlToLoad = urlToLoad
-            if let name = attachment.name {
-                self.tempFile = (self.tempFile ?? "") + "_" + name;
-            } else if let contentType = attachment.contentType, let ext = (UTTypeCopyPreferredTagWithClass(contentType as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue()) {
-                self.tempFile = (self.tempFile ?? "") + "." + String(ext);
-            } else {
-                self.tempFile = (self.tempFile ?? "") + ".mp3";
+        if let attachment = self.attachment {
+            if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
+                self.playAudioVideo();
+                return;
             }
+            if let attachmentUrl = attachment.url, let urlToLoad = URL(string: String(format: "%@", attachmentUrl)) {
+                print("playing audio:", String(format: "%@", attachmentUrl));
+                self.urlToLoad = urlToLoad
+                if let name = attachment.name {
+                    self.tempFile = (self.tempFile ?? "") + "_" + name;
+                } else if let contentType = attachment.contentType, let ext = (UTTypeCopyPreferredTagWithClass(contentType as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue()) {
+                    self.tempFile = (self.tempFile ?? "") + "." + String(ext);
+                } else {
+                    self.tempFile = (self.tempFile ?? "") + ".mp3";
+                }
+                self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: urlToLoad);
+            }
+        } else if let urlToLoad = urlToLoad {
+            self.tempFile = (self.tempFile ?? "") + ".mp3";
             self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: urlToLoad);
         }
     }
     
     func playAudioVideo() {
-        if let localPath = self.attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
-            print("Playing locally", localPath);
-            self.urlToLoad = URL(fileURLWithPath: localPath);
-        } else if let attachmentUrl = self.attachment.url {
-            print("Playing from link");
-            self.urlToLoad = URL(string: attachmentUrl);
+        if let attachment = self.attachment {
+            if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
+                print("Playing locally", localPath);
+                self.urlToLoad = URL(fileURLWithPath: localPath);
+            } else if let attachmentUrl = attachment.url {
+                print("Playing from link");
+                self.urlToLoad = URL(string: attachmentUrl);
+            }
         }
         
         guard let urlToLoad = self.urlToLoad, let playerItem = self.mediaLoader?.createPlayerItem(from: urlToLoad, toFile: self.tempFile) else {
@@ -258,11 +275,15 @@ import MagicalRecord;
         print("Media load complete");
         if (withNewFile) {
             MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
-                let localAttachment = self.attachment.mr_(in: localContext);
-                localAttachment?.localPath = filePath;
+                if let attachment = self.attachment {
+                    let localAttachment = attachment.mr_(in: localContext);
+                    localAttachment?.localPath = filePath;
+                }
             }) { (success, error) in
-                if (self.attachment.contentType?.hasPrefix("audio") == true) {
-                    self.playAudioVideo();
+                if let attachment = self.attachment {
+                    if (attachment.contentType?.hasPrefix("audio") == true) {
+                        self.playAudioVideo();
+                    }
                 }
             };
         }

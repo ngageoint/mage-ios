@@ -293,7 +293,7 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
         if let attachmentDelegate = self.attachmentDelegate {
             attachmentDelegate.selectedUnsentAttachment(unsentAttachment);
         } else {
-            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self, scheme: scheme);
+            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: (unsentAttachment["contentType"] as! String), delegate: self, scheme: scheme);
             self.childCoordinators.append(attachmentCoordinator);
             attachmentCoordinator.start();
         }

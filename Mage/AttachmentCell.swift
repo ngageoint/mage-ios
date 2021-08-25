@@ -63,10 +63,57 @@ import Kingfisher
     @objc public func setImage(newAttachment: [String : AnyHashable], button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
         self.button = button;
-        self.imageView.setImage(url: URL(fileURLWithPath: newAttachment["localPath"] as! String), cacheOnly: !DataConnectionUtilities.shouldFetchAttachments());
-        self.imageView.accessibilityLabel = "attachment \(newAttachment["localPath"] as! String) loaded";
-        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
-        self.imageView.contentMode = .scaleAspectFit;
+        self.imageView.kf.indicatorType = .activity;
+        guard let contentType = newAttachment["contentType"] as? String, let localPath = newAttachment["localPath"] as? String else {
+            return
+        }
+        if (contentType.hasPrefix("image")) {
+            self.imageView.setImage(url: URL(fileURLWithPath: localPath), cacheOnly: !DataConnectionUtilities.shouldFetchAttachments());
+            self.imageView.accessibilityLabel = "attachment \(localPath) loaded";
+            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+            self.imageView.contentMode = .scaleAspectFit;
+        } else if (contentType.hasPrefix("video")) {
+            let provider: VideoImageProvider = VideoImageProvider(localPath: localPath);
+            self.imageView.contentMode = .scaleAspectFit;
+            DispatchQueue.main.async {
+                self.imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .transition(.fade(0.2)),
+                    .scaleFactor(UIScreen.main.scale),
+                    .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
+                    .cacheOriginalImage
+                ], completionHandler:
+                    { result in
+                        switch result {
+                        case .success(_):
+                            self.imageView.contentMode = .scaleAspectFill;
+                            self.imageView.accessibilityLabel = "local \(localPath) loaded";
+                            let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
+                            overlay.contentMode = .scaleAspectFit;
+                            self.imageView.addSubview(overlay);
+                            overlay.autoCenterInSuperview();
+                        case .failure(let error):
+                            print(error);
+                            self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
+                            let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
+                            overlay.contentMode = .scaleAspectFit;
+                            self.imageView.addSubview(overlay);
+                            overlay.autoCenterInSuperview();
+                        }
+                    });
+            }
+        } else if (contentType.hasPrefix("audio")) {
+            self.imageView.image = UIImage(named: "audio_thumbnail");
+            self.imageView.accessibilityLabel = "local \(localPath) loaded";
+            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+            self.imageView.contentMode = .scaleAspectFit;
+        } else {
+            self.imageView.image = UIImage(named: "paperclip_thumbnail");
+            self.imageView.accessibilityLabel = "local \(localPath) loaded";
+            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+            self.imageView.contentMode = .scaleAspectFit;
+        }
+        
         
         if let safeButton = button {
             self.addSubview(safeButton);

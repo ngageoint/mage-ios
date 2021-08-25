@@ -198,19 +198,10 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
         
         let identifiers = results.compactMap(\.assetIdentifier)
         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-        self.workingOverlayController = AttachmentProgressViewController();
-        self.workingOverlayController?.modalPresentationStyle = .overFullScreen;
-        if let scheme = self.scheme {
-            self.workingOverlayController?.applyTheme(withContainerScheme: scheme);
-        }
         DispatchQueue.global(qos: .userInitiated).async { [self] in
             if let phasset = fetchResult.firstObject,
                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                
-                DispatchQueue.main.async {
-                    self.rootViewController?.present(self.workingOverlayController!, animated: false, completion: nil);
-                }
-                
+
                 let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
                 let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
                 
@@ -219,49 +210,26 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 requestOptions.isSynchronous = true
                 requestOptions.deliveryMode = .fastFormat
                 requestOptions.isNetworkAccessAllowed = true
-                DispatchQueue.main.async {
-                    self.workingOverlayController?.setProgressMessage(message: "Retrieving image...")
-                }
+
                 manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
                     if let data = data,
                        let cImage = CIImage(data: data) {
-                        let chosenImage = UIImage(ciImage: cImage)
-                        
                         do {
-                            DispatchQueue.main.async {
-                                self.workingOverlayController?.setProgressMessage(message: "Scaling image...")
-                            }
                             try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                            let finalImage = chosenImage.qualityScaled();
-                            guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
-                            let metadata: [String : Any] = cImage.properties
-                            
-                            DispatchQueue.main.async {
-                                self.workingOverlayController?.setProgressMessage(message: "Writing metadata into image...")
-                            }
-                            guard let finalData = self.writeMetadataIntoImageData(imagedata: imageData, metadata: NSDictionary(dictionary: metadata)) else { return };
+
+                            guard let finalData = cImage.qualityScaled() else { return }
                             
                             do {
-                                DispatchQueue.main.async {
-                                    self.workingOverlayController?.setProgressMessage(message: "Saving image...")
-                                }
                                 try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
                                 addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
-                                DispatchQueue.main.async {
-                                    self.workingOverlayController?.dismiss(animated: true, completion: nil);
-                                }
                             } catch {
                                 print("Unable to write image to file \(fileToWriteTo): \(error)")
-                                DispatchQueue.main.async {
-                                    self.workingOverlayController?.dismiss(animated: true, completion: nil);
-                                }
                             }
+                        
                         } catch {
                             print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
-                            DispatchQueue.main.async {
-                                self.workingOverlayController?.dismiss(animated: true, completion: nil);
-                            }
                         }
+
                     }
                 }
             } else {
@@ -334,9 +302,6 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         
         if let chosenImage = info[.originalImage] as? UIImage,
            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            if (picker.sourceType == .camera) {
-                UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
-            }
             DispatchQueue.global(qos: .userInitiated).async { [self] in
                 let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
                 let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
@@ -345,8 +310,8 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                     DispatchQueue.main.async {
                         self.workingOverlayController?.setProgressMessage(message: "Scaling image...")
                     }
-                    let finalImage = chosenImage.qualityScaled();
-                    guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
+//                    let finalImage = chosenImage.qualityScaled();
+                    guard let imageData = chosenImage.qualityScaled() else { return };
                     DispatchQueue.main.async {
                         self.workingOverlayController?.setProgressMessage(message: "Writing metadata into image...")
                     }
@@ -412,8 +377,8 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
 
                 do {
                     try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                    let finalImage = chosenImage.qualityScaled();
-                    guard let imageData = finalImage.jpegData(compressionQuality: 1.0) else { return };
+//                    let finalImage = chosenImage.qualityScaled();
+                    guard let imageData = chosenImage.qualityScaled() else { return };
                     var metadata: [AnyHashable : Any] = info[.mediaMetadata] as? [AnyHashable : Any] ?? [:];
                     
                     if let gpsDictionary = createGpsExifData(metadata: metadata) {

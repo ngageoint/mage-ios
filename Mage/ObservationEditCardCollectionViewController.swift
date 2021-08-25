@@ -675,7 +675,7 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), delegate: self, scheme: scheme);
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: (unsentAttachment["contentType"] as! String), delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
     

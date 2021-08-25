@@ -156,7 +156,7 @@
 }
 
 - (void)selectedUnsentAttachment:(NSDictionary *)unsentAttachment {
-    self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController url:unsentAttachment[@"localPath"] delegate:self scheme:_scheme];
+    self.attachmentCoordinator = [[AttachmentViewCoordinator alloc] initWithRootViewController:self.mapViewController.navigationController url:unsentAttachment[@"localPath"] contentType: unsentAttachment[@"contentType"] delegate:self scheme:_scheme];
     [self.attachmentCoordinator start];
 }
 

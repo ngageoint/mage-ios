@@ -19,8 +19,8 @@ extension CGImage {
 }
 
 struct VideoImageProvider: ImageDataProvider {
-    var cacheKey: String { return url.absoluteString }
-    let url: URL
+    var cacheKey: String { return url?.absoluteString ?? "" }
+    let url: URL?
     let localFile: URL?
     
     init(url: URL, localPath: String?) {
@@ -35,6 +35,15 @@ struct VideoImageProvider: ImageDataProvider {
     init(url: URL) {
         self.url = url;
         self.localFile = nil;
+    }
+    
+    init(localPath: String) {
+        if FileManager.default.fileExists(atPath: localPath) {
+            self.localFile = URL(fileURLWithPath: localPath)
+        } else {
+            self.localFile = nil;
+        }
+        self.url = nil;
     }
     
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
@@ -55,7 +64,8 @@ struct VideoImageProvider: ImageDataProvider {
             }
             let token: String = StoredPassword.retrieveStoredToken();
         
-            var urlComponents: URLComponents? = URLComponents(url: self.url, resolvingAgainstBaseURL: false);
+            guard let url = self.url else { return }
+            var urlComponents: URLComponents? = URLComponents(url: url, resolvingAgainstBaseURL: false);
             if (urlComponents?.queryItems) != nil {
                 urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
             } else {
