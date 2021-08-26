@@ -148,8 +148,6 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                 break;
             }
             case NSFetchedResultsChangeDelete:
-                NSLog(@"favorites deleted, push em");
-                if ([[anObject observation] remoteId]) [self pushFavorites:@[anObject]];
                 break;
             case NSFetchedResultsChangeUpdate: {
                 NSLog(@"favorites updated, push em");

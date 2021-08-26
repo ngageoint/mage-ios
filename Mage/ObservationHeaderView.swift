@@ -18,10 +18,6 @@ class ObservationHeaderView : MDCCard {
     weak var observationActionsDelegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
     
-    func stop() {
-        geometryView.cleanup();
-    }
-    
     private lazy var stack: UIStackView = {
         let stack = UIStackView(forAutoLayout: ());
         stack.axis = .vertical

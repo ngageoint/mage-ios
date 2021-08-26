@@ -153,8 +153,6 @@ import MaterialComponents.MDCContainerScheme;
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
-        headerCard?.stop();
-        headerCard = nil;
         
         let removedSubviews = cards.reduce([]) { (allSubviews, subview) -> [UIView] in
             stackView.removeArrangedSubview(subview)
