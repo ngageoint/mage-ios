@@ -153,7 +153,9 @@ class AttachmentSlideShow: UIView {
     func populate(observation: Observation, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         
-        guard let safeAttachments = observation.attachments else {
+        guard let safeAttachments = observation.attachments?.filter({ attachment in
+            return attachment.url != nil
+        }) else {
             return
         }
         // remove deleted attachments
