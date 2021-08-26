@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 2.1.4
+
+##### Release Notes
+
+##### Features
+
+##### Bug Fixes
+* This version is now only compatible with server version 5.4+
+
 ## 2.1.3
 
 ##### Release Notes
