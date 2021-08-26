@@ -266,7 +266,7 @@ static User *currentUser = nil;
                 }
                 NSDictionary *myRole = [myself objectForKey:@"role"];
                 if (myRole != nil) {
-                    Role *role = [Role MR_findFirstByAttribute:@"remoteId" withValue:[myRole objectForKey:@"id"]];
+                    Role *role = [Role MR_findFirstByAttribute:@"remoteId" withValue:[myRole objectForKey:@"id"] inContext:localContext];
                     if (role == nil) {
                         role = [Role insertRoleForJson:myRole inManagedObjectContext:localContext];
                     }
