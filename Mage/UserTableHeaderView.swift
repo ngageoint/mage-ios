@@ -388,6 +388,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
             if let coordinate = self.userLastLocation?.coordinate {
                 UIPasteboard.general.string = CoordinateDisplay.displayFromCoordinate(coordinate: coordinate);
+                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
             }
         }));
         for (app, url) in urlMap {
