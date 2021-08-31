@@ -32,7 +32,7 @@ import MagicalRecord;
     var fullAudioDataLength: Int = 0;
     
     var mediaLoader: MediaLoader?;
-    var activityIndicator: UIActivityIndicatorView!
+    var activityIndicator: UIActivityIndicatorView?
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
@@ -182,19 +182,27 @@ import MagicalRecord;
                 print("Playing locally", localPath);
                 self.urlToLoad = URL(fileURLWithPath: localPath);
             } else if let attachmentUrl = attachment.url {
-                print("Playing from link");
-                self.urlToLoad = URL(string: attachmentUrl);
+                print("Playing from link \(attachmentUrl)");
+                let token: String = StoredPassword.retrieveStoredToken();
+
+                if let url = URL(string: attachmentUrl) {
+                    var urlComponents: URLComponents? = URLComponents(url: url, resolvingAgainstBaseURL: false);
+                    if (urlComponents?.queryItems) != nil {
+                        urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
+                    } else {
+                        urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
+                    }
+                    self.urlToLoad = (urlComponents?.url)!;
+                }
             }
         }
         
-        guard let urlToLoad = self.urlToLoad, let playerItem = self.mediaLoader?.createPlayerItem(from: urlToLoad, toFile: self.tempFile) else {
+        guard let urlToLoad = self.urlToLoad else {
             return;
         }
-        
-        playerItem.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
-        
-        let player = AVPlayer(playerItem: playerItem);
+        let player = AVPlayer(url: urlToLoad);
         self.player = player;
+        self.player?.currentItem?.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
         
         player.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
         player.automaticallyWaitsToMinimizeStalling = false;
@@ -206,11 +214,12 @@ import MagicalRecord;
         playerViewController.addObserver(self, forKeyPath: "videoBounds", options: [.old, .new], context: nil);
 
         self.activityIndicator = UIActivityIndicatorView();
-        self.activityIndicator.style = .large;
+        self.activityIndicator?.style = .large;
 
         self.rootViewController.pushViewController(playerViewController, animated: false);
         self.navigationControllerObserver.observePopTransition(of: playerViewController, delegate: self);
         self.hasPushedViewController = true;
+        player.play();
     }
     
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -218,23 +227,27 @@ import MagicalRecord;
             let oldStatus = AVPlayer.TimeControlStatus(rawValue: oldValue)
             let newStatus = AVPlayer.TimeControlStatus(rawValue: newValue)
             DispatchQueue.main.async {[weak self] in
-
-                if (newStatus == .waitingToPlayAtSpecifiedRate && !self!.activityIndicator.isAnimating) {
-                    self!.activityIndicator.startAnimating();
+                guard let activityIndicator = self?.activityIndicator else { return }
+                if (newStatus == .waitingToPlayAtSpecifiedRate && activityIndicator.isAnimating) {
+                    activityIndicator.startAnimating();
                 }
                 if newStatus != oldStatus {
                     if newStatus == .playing || newStatus == .paused {
-                        self!.activityIndicator.stopAnimating()
+                        activityIndicator.stopAnimating()
                     } else {
-                        self!.activityIndicator.startAnimating()
+                        activityIndicator.startAnimating()
                     }
                 }
             }
         } else if let center = self.playerViewController?.view.center, keyPath == "videoBounds", !center.equalTo(CGPoint(x: 0, y: 0)) {
-            self.activityIndicator.center = center;
-            self.playerViewController?.view.addSubview(self.activityIndicator);
-            self.playerViewController?.view.bringSubviewToFront(self.activityIndicator);
-            self.activityIndicator.startAnimating();
+            guard let activityIndicator = self.activityIndicator else { return }
+
+            activityIndicator.center = center;
+            if (activityIndicator.superview == nil) {
+                self.playerViewController?.view.addSubview(activityIndicator);
+            }
+            self.playerViewController?.view.bringSubviewToFront(activityIndicator);
+            activityIndicator.startAnimating();
         } else if keyPath == #keyPath(AVPlayerItem.status) {
             let status: AVPlayerItem.Status
             if let statusNumber = change?[.newKey] as? NSNumber {
@@ -246,11 +259,21 @@ import MagicalRecord;
             // Switch over status value
             switch status {
             case .readyToPlay:
+                if let activityIndicator = self.activityIndicator {
+                    if (activityIndicator.superview != nil) {
+                        activityIndicator.removeFromSuperview();
+                    }
+                }
                 // Player item is ready to play.
                 player?.play()
             case .failed:
                 // Player item failed. See error.
-                print("Fail")
+                print("Fail \((object as? AVPlayerItem)?.error) ")
+                if let error = (object as? AVPlayerItem)?.error?.localizedDescription {
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to play video with error: \(error)"))
+                } else {
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to play video"))
+                }
             case .unknown:
                 // Player item is not yet ready.
                 print("unknown")
