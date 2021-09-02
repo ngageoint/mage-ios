@@ -132,7 +132,7 @@ class ObservationActionsSheetController: UITableViewController {
             cell.textLabel?.text = "Reorder Forms";
             cell.accessibilityLabel = "Reorder Forms";
             cell.tag = ObservationActionsSheetController.REORDER_CELL_TAG
-            cell.imageView?.image = UIImage(named: "form")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
+            cell.imageView?.image = UIImage(named: "reorder")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.accessoryType = .disclosureIndicator;
             return cell;
         }
