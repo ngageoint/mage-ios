@@ -12,7 +12,7 @@ class MultiDropdownFieldView : BaseFieldView {
     
     lazy var textField: MDCFilledTextField = {
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
-        textField.trailingView = UIImageView(image: UIImage(named: "expand"));
+        textField.trailingView = UIImageView(image: UIImage(named: "arrow_drop_down"));
         textField.trailingViewMode = .always;
         if (value != nil) {
             textField.text = getDisplayValue();
@@ -38,6 +38,7 @@ class MultiDropdownFieldView : BaseFieldView {
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
+        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     func addFieldView() {
