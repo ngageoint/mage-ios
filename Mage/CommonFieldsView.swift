@@ -17,6 +17,7 @@ class CommonFieldsView: MDCCard {
     weak var observation: Observation?;
     var eventForms: [[String:Any]]?;
     weak var fieldSelectionDelegate: FieldSelectionDelegate?;
+    var commonPropertiesListener: ObservationCommonPropertiesListener?;
     
     lazy var dateField: [String: Any] = {
         let dateField: [String: Any] =
@@ -48,9 +49,10 @@ class CommonFieldsView: MDCCard {
         return geometryView;
     }()
     
-    init(observation: Observation, fieldSelectionDelegate: FieldSelectionDelegate? = nil) {
+    init(observation: Observation, fieldSelectionDelegate: FieldSelectionDelegate? = nil, commonPropertiesListener: ObservationCommonPropertiesListener? = nil) {
         self.observation = observation;
         self.fieldSelectionDelegate = fieldSelectionDelegate;
+        self.commonPropertiesListener = commonPropertiesListener;
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         buildView();
@@ -127,9 +129,9 @@ extension CommonFieldsView: ObservationFormFieldListener {
             }
         } else if (field[FieldKey.name.key] as! String == locationField[FieldKey.name.key] as! String) {
             if let safeGeometry: SFGeometry = value as? SFGeometry {
-                safeObservation.setGeometry(safeGeometry);
+                commonPropertiesListener?.geometryUpdated(safeGeometry, accuracy: nil, delta: nil, provider: "manual");
             } else {
-                safeObservation.setGeometry(nil);
+                commonPropertiesListener?.geometryUpdated(nil, accuracy: nil, delta: nil, provider: nil);
             }
             
         }

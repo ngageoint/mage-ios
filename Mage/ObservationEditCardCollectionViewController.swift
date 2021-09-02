@@ -262,7 +262,7 @@ import MaterialComponents.MDCCard
     
     func addCommonFields(stackView: UIStackView) {
          if let safeObservation = observation {
-            commonFieldView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate);
+            commonFieldView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate, commonPropertiesListener: self);
             if let safeScheme = scheme {
                 commonFieldView!.applyTheme(withScheme: safeScheme);
             }
@@ -627,6 +627,19 @@ extension ObservationEditCardCollectionViewController: ObservationFormListener {
         observationProperties[ObservationKey.forms.key] = observationForms;
         observation?.properties = observationProperties;
         setExpandableCardHeaderInformation(form: form, index: index);
+        if let safeObservation = self.observation {
+            commonFieldView?.setObservation(observation: safeObservation);
+        }
+    }
+}
+
+extension ObservationEditCardCollectionViewController: ObservationCommonPropertiesListener {
+    func geometryUpdated(_ geometry: SFGeometry?, accuracy: String?, delta: Double?, provider: String?) {
+        observationProperties[ObservationKey.accuracy.key] = accuracy;
+        observationProperties[ObservationKey.delta.key] = delta;
+        observationProperties[ObservationKey.provider.key] = provider;
+        observation?.properties = observationProperties;
+        observation?.setGeometry(geometry);
         if let safeObservation = self.observation {
             commonFieldView?.setObservation(observation: safeObservation);
         }

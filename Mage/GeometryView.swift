@@ -220,23 +220,27 @@ class GeometryView : BaseFieldView {
     func setAccuracy(_ accuracy: Double?, provider: String?) {
         self.accuracy = accuracy;
         self.provider = provider;
-        if (accuracy != nil) {
-            if (self.provider != "manual") {
-                var formattedProvider: String = "";
-                if (self.provider == "gps") {
-                    formattedProvider = provider!.uppercased();
-                } else if (provider != nil) {
-                    formattedProvider = provider!.capitalized;
+        if self.provider == "manual" {
+            accuracyLabel.text = "";
+            if let accuracyOverlay = accuracyOverlay {
+                self.mapView.removeOverlay(accuracyOverlay);
+            }
+            return
+        }
+        if let accuracy = accuracy, let provider = provider {
+            var formattedProvider: String = "";
+            if provider == "gps" {
+                formattedProvider = provider.uppercased()
+            } else {
+                formattedProvider = provider.capitalized;
+            }
+            accuracyLabel.text = String(format: "%@ ± %.02fm", formattedProvider, accuracy);
+            if let centroid = (self.value as? SFGeometry)?.centroid() {
+                if let accuracyOverlay = accuracyOverlay {
+                    self.mapView.removeOverlay(accuracyOverlay);
                 }
-                
-                accuracyLabel.text = String(format: "%@ ± %.02fm", formattedProvider, accuracy!);
-                if let centroid = (self.value as? SFGeometry)!.centroid() {
-                    if let accuracyOverlay = accuracyOverlay {
-                        self.mapView.removeOverlay(accuracyOverlay);
-                    }
-                    accuracyOverlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
-                        self.mapView.addOverlay(accuracyOverlay!);
-                }
+                accuracyOverlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
+                self.mapView.addOverlay(accuracyOverlay!);
             }
         }
     }
@@ -245,7 +249,7 @@ class GeometryView : BaseFieldView {
         self.setValue(value as? SFGeometry);
     }
     
-    func setValue(_ value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil) {
+    func setValue(_ value: SFGeometry?, accuracy: Double? = nil, provider: String? = "manual") {
         self.value = value;
         if (value != nil) {
             latitudeLongitudeButton.isEnabled = true;

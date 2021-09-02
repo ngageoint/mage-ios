@@ -63,6 +63,9 @@ public enum FormKey : String {
 public enum ObservationKey : String {
     
     case forms
+    case accuracy
+    case provider
+    case delta
     
     var key: String {
         return self.rawValue

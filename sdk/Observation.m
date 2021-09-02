@@ -64,10 +64,12 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
 
     [properties setObject:[observation.timestamp iso8601String] forKey:@"timestamp"];
-    if (geometry != nil) {
+    if (geometry != nil && provider != nil) {
         [properties setObject:provider forKey:@"provider"];
-        [properties setObject:[NSNumber numberWithDouble:accuracy] forKey:@"accuracy"];
-        [properties setObject:[NSNumber numberWithInt:(int)delta] forKey:@"delta"];
+        if (![provider isEqualToString:@"manual"]) {
+            [properties setObject:[NSNumber numberWithDouble:accuracy] forKey:@"accuracy"];
+            [properties setObject:[NSNumber numberWithInt:(int)delta] forKey:@"delta"];
+        }
     }
     [properties setObject:[[NSMutableArray alloc] init] forKey:@"forms"];
 

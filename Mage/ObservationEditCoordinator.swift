@@ -20,6 +20,10 @@ import MaterialComponents.MaterialBottomSheet
     @objc func editComplete(_ observation: Observation, coordinator: NSObject);
 }
 
+protocol ObservationCommonPropertiesListener {
+    func geometryUpdated(_ geometry: SFGeometry?, accuracy: String?, delta: Double?, provider: String?);
+}
+
 @objc class ObservationEditCoordinator: NSObject {
     
     var newObservation = false;
