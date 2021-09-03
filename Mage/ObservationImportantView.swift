@@ -12,8 +12,13 @@ import PureLayout
 class ObservationImportantView: UIView {
     weak var observation: Observation?;
     var scheme: MDCContainerScheming?;
-    var reasonLabel: UILabel = UILabel(forAutoLayout: ());
     var flaggedByLabel: UILabel = UILabel(forAutoLayout: ());
+    
+    private lazy var reasonLabel: UILabel = {
+        var reasonLabel: UILabel = UILabel(forAutoLayout: ());
+        reasonLabel.numberOfLines = 0;
+        return reasonLabel;
+    }()
     
     private lazy var flagImage: UIImageView = {
         let flag = UIImage(named: "flag");
