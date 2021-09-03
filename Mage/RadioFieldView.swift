@@ -12,6 +12,13 @@ class RadioFieldView: BaseFieldView {
     
     var choiceButtons: [String: (button: MDCButton, label: UILabel)] = [:];
     
+    lazy var errorPadding: UIView = {
+        let padding = UIView.newAutoLayout();
+        padding.addSubview(errorLabel);
+        errorLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0))
+        return padding;
+    }()
+    
     lazy var errorLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
@@ -56,7 +63,7 @@ class RadioFieldView: BaseFieldView {
             viewStack.spacing = 0;
             viewStack.addArrangedSubview(fieldNameLabel);
             addChoices();
-            viewStack.addArrangedSubview(errorLabel);
+            viewStack.addArrangedSubview(errorPadding);
             viewStack.setCustomSpacing(8, after: fieldNameLabel);
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
@@ -97,7 +104,7 @@ class RadioFieldView: BaseFieldView {
             value.button.setImageTintColor(scheme.colorScheme.primaryColor, for: .selected)
             value.label.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
         }
-        errorLabel.font = scheme.typographyScheme.body1.withSize(12);
+        errorLabel.font = scheme.typographyScheme.caption;
     }
     
     @objc func handleRadioTap(_ button: MDCButton) {

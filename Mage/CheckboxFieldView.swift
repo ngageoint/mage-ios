@@ -28,6 +28,13 @@ class CheckboxFieldView : BaseFieldView {
         return label;
     }()
     
+    lazy var errorPadding: UIView = {
+        let padding = UIView.newAutoLayout();
+        padding.addSubview(errorLabel);
+        errorLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0))
+        return padding;
+    }()
+    
     lazy var errorLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
         label.textColor = globalErrorContainerScheme().colorScheme.primaryColor;
@@ -80,7 +87,7 @@ class CheckboxFieldView : BaseFieldView {
     func addFieldView() {
         if (editMode) {
             viewStack.addArrangedSubview(containerView);
-            viewStack.addArrangedSubview(errorLabel);
+            viewStack.addArrangedSubview(errorPadding);
             viewStack.setCustomSpacing(3.5, after: containerView);
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
