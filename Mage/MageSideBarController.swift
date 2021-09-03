@@ -178,7 +178,7 @@ class SidebarUIButton: UIButton {
         let locationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.locations, title: "People", imageName: "people");
         locationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
         let locationViewController : LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
-        locationViewController.actionsDelegate = delegate;
+//        locationViewController.actionsDelegate = delegate;
         locationButton.viewController = locationViewController;
         return locationButton;
     }
@@ -186,7 +186,8 @@ class SidebarUIButton: UIButton {
     func createObservationsRailView() -> SidebarUIButton {
         let observationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.observations, title: "Observations", imageName: "observations");
         observationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let observationViewController : ObservationTableViewController = ObservationTableViewController(attachmentDelegate: delegate, observationActionsDelegate: delegate, scheme: self.scheme);
+//        let observationViewController : ObservationTableViewController = ObservationTableViewController(attachmentDelegate: delegate, observationActionsDelegate: delegate, scheme: self.scheme);
+        let observationViewController : ObservationTableViewController = ObservationTableViewController(scheme: self.scheme);
         observationButton.viewController = observationViewController;
         return observationButton;
     }

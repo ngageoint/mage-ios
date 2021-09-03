@@ -25,6 +25,8 @@
 @property (strong, nonatomic) NSMutableArray *childCoordinators;
 @property (nonatomic) LocationService *locationService;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) IBOutlet MDCFloatingButton *createFab;
+
 
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme andMapEventDelegate: (id<MKMapViewDelegate>) mapEventDelegate;
 - (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;

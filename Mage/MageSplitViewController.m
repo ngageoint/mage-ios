@@ -59,8 +59,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setMaximumPrimaryColumnWidth:376];
+    [self setMaximumPrimaryColumnWidth:426];
     [self setPreferredPrimaryColumnWidthFraction:1.0];
+    self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     self.childCoordinators = [[NSMutableArray alloc] init];
     
     [[Mage singleton] startServicesAsInitial:YES];

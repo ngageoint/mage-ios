@@ -40,9 +40,8 @@
     UIBarButtonItem *profileButton2 = [[UIBarButtonItem alloc] initWithCustomView:self.profileButton];
     UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithTitle:@"Filter"  style:UIBarButtonItemStylePlain target:self action:@selector(filterTapped:)];
     UIBarButtonItem *moreButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreTapped:)];
-    UIBarButtonItem *newButton = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(createNewObservation:)];
     
-    [self.navigationItem setRightBarButtonItems: [NSArray arrayWithObjects: moreButton, [self createSeparator], profileButton2, [self createSeparator], filterButton, [self createSeparator], newButton, nil]];
+    [self.navigationItem setRightBarButtonItems: [NSArray arrayWithObjects: moreButton, [self createSeparator], profileButton2, [self createSeparator], filterButton, nil]];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -52,6 +51,7 @@
 
     self.offlineObservationManager = [[MageOfflineObservationManager alloc] initWithDelegate:self];
     [self.offlineObservationManager start];
+    [self.createFab setHidden:true];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -128,7 +128,8 @@
 }
 
 - (void)observationDetailSelected:(Observation *)observation {
-    
+    ObservationViewCardCollectionViewController *ovc = [[ObservationViewCardCollectionViewController alloc] initWithObservation:observation scheme:self.scheme];
+    [self.navigationController pushViewController:ovc animated:YES];
 }
 
 - (void)selectedObservation:(Observation *)observation {
@@ -148,15 +149,23 @@
 }
 
 - (void)userDetailSelected:(User *)user {
-    
+    UserViewController *uc = [[UserViewController alloc] initWithUser:user scheme:self.scheme];
+    [self.navigationController pushViewController:uc animated:YES];
 }
 
 - (void)calloutTapped:(id)calloutItem {
-    
+    if ([calloutItem isKindOfClass:[User class]]) {
+        [self userDetailSelected:(User *) calloutItem];
+    } else if ([calloutItem isKindOfClass:[Observation class]]) {
+        [self observationDetailSelected:(Observation *) calloutItem];
+    } else if ([calloutItem isKindOfClass:[FeedItem class]]) {
+        [self feedItemSelected:(FeedItem *) calloutItem];
+    }
 }
 
 - (void)feedItemSelected:(nonnull FeedItem *)feedItem {
-    
+    FeedItemViewController *fivc = [[FeedItemViewController alloc] initWithFeedItem:feedItem scheme:self.scheme];
+    [self.navigationController pushViewController:fivc animated:YES];
 }
 
 @end

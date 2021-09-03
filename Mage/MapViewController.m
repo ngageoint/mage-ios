@@ -39,7 +39,6 @@
 @interface MapViewController ()<UserTrackingModeChanged, LocationAuthorizationStatusChanged, CacheOverlayDelegate, ObservationEditDelegate, MapSettingsCoordinatorDelegate, FeatureDetailDelegate, AttachmentViewDelegate, UIGestureRecognizerDelegate>
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *trackingButton;
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *reportLocationButton;
-    @property (strong, nonatomic) IBOutlet MDCFloatingButton *createFab;
     @property (strong, nonatomic) IBOutlet UIButton *showPeopleButton;
     @property (strong, nonatomic) IBOutlet UIButton *showObservationsButton;
     @property (strong, nonatomic) IBOutlet MDCFloatingButton *mapSettingsButton;
