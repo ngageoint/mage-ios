@@ -86,6 +86,7 @@ public enum FieldType : String {
     case geometry
     case radio
     case multiselectdropdown
+    case hidden
     
     var key: String {
         return self.rawValue

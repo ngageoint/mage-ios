@@ -97,6 +97,7 @@ class RadioFieldView: BaseFieldView {
             value.button.setImageTintColor(scheme.colorScheme.primaryColor, for: .selected)
             value.label.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
         }
+        errorLabel.font = scheme.typographyScheme.body1.withSize(12);
     }
     
     @objc func handleRadioTap(_ button: MDCButton) {

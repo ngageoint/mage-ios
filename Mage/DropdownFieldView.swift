@@ -73,10 +73,6 @@ class DropdownFieldView : BaseFieldView {
         return (textField.text ?? "").count == 0;
     }
     
-    override func getErrorMessage() -> String {
-        return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
-    }
-    
     override func setValid(_ valid: Bool) {
         super.setValid(valid);
         if (valid) {
@@ -88,5 +84,41 @@ class DropdownFieldView : BaseFieldView {
             textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
             textField.leadingAssistiveLabel.text = getErrorMessage();
         }
+    }
+    
+    func getInvalidChoice() -> String? {
+        var choiceStrings: [String] = []
+        if let choices = self.field[FieldKey.choices.key] as? [[String: Any]] {
+            for choice in choices {
+                if let choiceString = choice[FieldKey.title.key] as? String {
+                    choiceStrings.append(choiceString)
+                }
+            }
+        }
+        
+        if let value = self.value as? String {
+            if (!choiceStrings.contains(value)) {
+                return value;
+            }
+        }
+        
+        return nil;
+    }
+    
+    override func isValid(enforceRequired: Bool = false) -> Bool {
+        if getInvalidChoice() != nil {
+            return false;
+        }
+        
+        // verify the choices are in the list of choices in case defaults were set
+        return super.isValid(enforceRequired: enforceRequired);
+    }
+    
+    override func getErrorMessage() -> String {
+        if let invalidChoice = getInvalidChoice() {
+            return "\(invalidChoice) is not a valid option."
+        }
+        
+        return ((field[FieldKey.title.key] as? String) ?? "Field ") + " is required";
     }
 }

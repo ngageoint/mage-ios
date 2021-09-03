@@ -19,6 +19,10 @@ class TextFieldView : BaseFieldView {
         multilineTextField.textView.delegate = self;
         multilineTextField.textView.inputAccessoryView = accessoryView;
         multilineTextField.textView.keyboardType = keyboardType;
+        if (field[FieldKey.type.key] as? String == FieldType.textarea.key) {
+            multilineTextField.trailingView = UIImageView(image: UIImage(named: "text_fields"));
+            multilineTextField.trailingViewMode = .always;
+        }
         multilineTextField.textView.autocapitalizationType = .none;
         multilineTextField.textView.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         multilineTextField.placeholder = field[FieldKey.title.key] as? String
@@ -36,6 +40,16 @@ class TextFieldView : BaseFieldView {
         textField.delegate = self;
         textField.inputAccessoryView = accessoryView;
         textField.keyboardType = keyboardType;
+        if (field[FieldKey.type.key] as? String == FieldType.email.key) {
+            textField.trailingView = UIImageView(image: UIImage(named: "mail_outline"));
+            textField.trailingViewMode = .always;
+        } else if (field[FieldKey.type.key] as? String == FieldType.textfield.key) {
+            textField.trailingView = UIImageView(image: UIImage(named: "outline_title"));
+            textField.trailingViewMode = .always;
+        } else if (field[FieldKey.type.key] as? String == FieldType.password.key) {
+            textField.trailingView = UIImageView(image: UIImage(named: "outline_lock"));
+            textField.trailingViewMode = .always;
+        }
         textField.autocapitalizationType = .none;
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         textField.leadingAssistiveLabel.text = " ";
@@ -99,8 +113,10 @@ class TextFieldView : BaseFieldView {
         super.applyTheme(withScheme: scheme);
         if (multiline) {
             multilineTextField.applyTheme(withScheme: scheme);
+            multilineTextField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         } else {
             textField.applyTheme(withScheme: scheme);
+            textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         }
     }
     
@@ -114,7 +130,11 @@ class TextFieldView : BaseFieldView {
         } else {
             viewStack.addArrangedSubview(fieldNameLabel);
             viewStack.addArrangedSubview(fieldValue);
-            fieldValue.text = getValue();
+            if (field[FieldKey.type.key] as? String == FieldType.password.key) {
+                fieldValue.text = "*********";
+            } else {
+                fieldValue.text = getValue();
+            }
         }
     }
     

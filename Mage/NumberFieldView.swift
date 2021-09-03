@@ -55,6 +55,8 @@ class NumberFieldView : BaseFieldView {
     lazy var textField: MDCFilledTextField = {
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         textField.delegate = self;
+        textField.trailingView = UIImageView(image: UIImage(named: "tag"));
+        textField.trailingViewMode = .always;
         textField.accessibilityLabel = field[FieldKey.name.key] as? String ?? "";
         textField.leadingAssistiveLabel.text = helperText ?? " ";
         textField.inputAccessoryView = accessoryView;
@@ -85,6 +87,7 @@ class NumberFieldView : BaseFieldView {
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
+        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     func setupInputView() {

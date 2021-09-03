@@ -168,7 +168,7 @@ class FormDefaultsViewController: UIViewController {
         }
         let observation: Observation = Observation(context: managedObjectContext);
         observation.properties = [ObservationKey.forms.key: [newForm]];
-        observationFormView = ObservationFormView(observation: observation, form: newForm, eventForm: eventForm, formIndex: 0, viewController: navController, delegate: formDefaultsCoordinator);
+        observationFormView = ObservationFormView(observation: observation, form: newForm, eventForm: eventForm, formIndex: 0, viewController: navController, delegate: formDefaultsCoordinator, includeAttachmentFields: false);
     }
     
     override func viewDidLoad() {

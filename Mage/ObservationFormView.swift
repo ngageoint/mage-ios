@@ -31,6 +31,7 @@ class ObservationFormView: UIStackView {
     private weak var observationActionsDelegate: ObservationActionsDelegate?;
     private var editMode: Bool = true;
     private var formFieldAdded: Bool = false;
+    private var includeAttachmentFields: Bool = true;
     private var scheme: MDCContainerScheming?;
 
     private lazy var formFields: [[String: Any]] = {
@@ -54,7 +55,7 @@ class ObservationFormView: UIStackView {
         self.spacing = 12;
     }
     
-    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, editMode: Bool = true, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil) {
+    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, editMode: Bool = true, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, includeAttachmentFields: Bool = true) {
         self.init(frame: .zero)
         self.observation = observation;
         self.form = form;
@@ -66,6 +67,7 @@ class ObservationFormView: UIStackView {
         self.fieldSelectionDelegate = delegate;
         self.observationFormListener = observationFormListener;
         self.observationActionsDelegate = observationActionsDelegate;
+        self.includeAttachmentFields = includeAttachmentFields;
         constructView();
         self.accessibilityLabel = "Form \(self.eventForm?[FormKey.id.key] ?? "")";
     }
@@ -118,6 +120,9 @@ class ObservationFormView: UIStackView {
             var fieldView: UIView?;
             switch type {
             case FieldType.attachment.key:
+                if (!includeAttachmentFields) {
+                    continue;
+                }
                 if (!editMode && value == nil && unsentAttachments.filter {
                     return $0["action"] as? String != "delete";
                 }.count == 0) {

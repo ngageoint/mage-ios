@@ -61,7 +61,8 @@ class DateView : BaseFieldView {
         textField.inputView = datePicker;
         textField.inputAccessoryView = dateAccessoryView;
         textField.leadingAssistiveLabel.text = " ";
-        textField.clearButtonMode = .always;
+        textField.trailingView = UIImageView(image: UIImage(named: "today"));
+        textField.trailingViewMode = .always;
         textField.sizeToFit();
         return textField;
     }()
@@ -69,6 +70,7 @@ class DateView : BaseFieldView {
     override func applyTheme(withScheme scheme: MDCContainerScheming) {
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
+        textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -99,14 +101,20 @@ class DateView : BaseFieldView {
     func setTextFieldValue() {
         if (self.value != nil) {
             textField.text = (datePicker.date as NSDate).formattedDisplay();
+            textField.clearButtonMode = .always;
+            textField.trailingViewMode = .never;
         } else {
             textField.text = nil;
+            textField.clearButtonMode = .never;
+            textField.trailingViewMode = .always;
         }
     }
     
     @objc func dateChanged() {
         date = datePicker.date;
         textField.text = (datePicker.date as NSDate).formattedDisplay();
+        textField.clearButtonMode = .always;
+        textField.trailingViewMode = .never;
     }
     
     @objc func doneButtonPressed() {
@@ -141,6 +149,11 @@ class DateView : BaseFieldView {
             if let safeDate = self.value as? Date {
                 datePicker.date = safeDate;
                 editMode ? (textField.text = (datePicker.date as NSDate).formattedDisplay()) : (fieldValue.text = (datePicker.date as NSDate).formattedDisplay());
+                textField.clearButtonMode = .always;
+                textField.trailingViewMode = .never;
+            } else{
+                textField.clearButtonMode = .never;
+                textField.trailingViewMode = .always;
             }
         }
     }
@@ -153,8 +166,8 @@ class DateView : BaseFieldView {
         super.setValid(valid);
         if (valid) {
             textField.leadingAssistiveLabel.text = " ";
-            if let safeScheme = scheme {
-                textField.applyTheme(withScheme: safeScheme);
+            if let scheme = scheme {
+                textField.applyTheme(withScheme: scheme);
             }
         } else {
             textField.applyErrorTheme(withScheme: globalErrorContainerScheme());

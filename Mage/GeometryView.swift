@@ -27,7 +27,7 @@ class GeometryView : BaseFieldView {
         // this is just an estimated size
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 300, height: 100));
         textField.label.text = fieldNameLabel.text
-        textField.trailingView = UIImageView(image: UIImage(named: "observations")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate));
+        textField.trailingView = UIImageView(image: UIImage(named: "outline_place"));
         textField.trailingViewMode = .always;
         textField.sizeToFit()
         return textField;
