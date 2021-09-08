@@ -70,6 +70,11 @@ import MagicalRecord;
     }
     
     @objc public func start(_ animated: Bool = true) {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let navigationController = UINavigationController();
+            self.rootViewController.present(navigationController, animated: animated, completion: nil);
+            self.rootViewController = navigationController;
+        }
         if let theAttachment = self.attachment {
             if ((theAttachment.localPath != nil
                 && FileManager.default.fileExists(atPath: theAttachment.localPath!) == true)
@@ -217,6 +222,7 @@ import MagicalRecord;
         self.activityIndicator?.style = .large;
 
         self.rootViewController.pushViewController(playerViewController, animated: false);
+        playerViewController.navigationItem.backButtonTitle = "Back";
         self.navigationControllerObserver.observePopTransition(of: playerViewController, delegate: self);
         self.hasPushedViewController = true;
         player.play();

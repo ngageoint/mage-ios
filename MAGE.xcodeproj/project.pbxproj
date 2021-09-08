@@ -88,11 +88,10 @@
 		2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FCDC35722C2888C004189AD /* AuthenticationButton.xib */; };
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
-		2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
 		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
 		2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF74A4C1BEBFAD900416090 /* WebKit.framework */; };
-		2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */; };
+		2FFBCA1119DB43F40033132F /* MapViewController_iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.swift */; };
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
@@ -380,6 +379,7 @@
 		F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7AA6AF8206EA810004F9437 /* idp-authView.xib */; };
 		F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */; };
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
+		F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AC803526E7E366004B944D /* MageSplitViewController.swift */; };
 		F7B1C4722674033D0005FCE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1C475267404BC0005FCE4 /* ViewLoaderAppDelegate.m */; };
 		F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B1C477267405A50005FCE4 /* ViewLoader.swift */; };
@@ -669,15 +669,12 @@
 		2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "Resources/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		2FD9103A1D2421B600CFE797 /* UIImage+Thumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Thumbnail.h"; sourceTree = "<group>"; };
 		2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Thumbnail.m"; sourceTree = "<group>"; };
-		2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSplitViewController.h; sourceTree = "<group>"; };
-		2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSplitViewController.m; sourceTree = "<group>"; };
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
 		2FF4670B1A12798C00BA8357 /* CALayer+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+IB.m"; sourceTree = "<group>"; };
 		2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineMapTableViewController.h; sourceTree = "<group>"; };
 		2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineMapTableViewController.m; sourceTree = "<group>"; };
 		2FF74A4C1BEBFAD900416090 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		2FFBCA0F19DB43F40033132F /* MapViewController_iPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController_iPad.h; sourceTree = "<group>"; };
-		2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController_iPad.m; sourceTree = "<group>"; };
+		2FFBCA1019DB43F40033132F /* MapViewController_iPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController_iPad.swift; sourceTree = "<group>"; };
 		2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionDelegate.h; sourceTree = "<group>"; };
 		2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationSelectionDelegate.h; sourceTree = "<group>"; };
 		2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageSideBarController.swift; sourceTree = "<group>"; };
@@ -1108,6 +1105,7 @@
 		F7AA6AF8206EA810004F9437 /* idp-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "idp-authView.xib"; sourceTree = "<group>"; };
 		F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDPLoginView.h; sourceTree = "<group>"; };
 		F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IDPLoginView.m; sourceTree = "<group>"; };
+		F7AC803526E7E366004B944D /* MageSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageSplitViewController.swift; sourceTree = "<group>"; };
 		F7B1C474267404BC0005FCE4 /* ViewLoaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewLoaderAppDelegate.h; sourceTree = "<group>"; };
 		F7B1C475267404BC0005FCE4 /* ViewLoaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewLoaderAppDelegate.m; sourceTree = "<group>"; };
 		F7B1C477267405A50005FCE4 /* ViewLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLoader.swift; sourceTree = "<group>"; };
@@ -1499,13 +1497,12 @@
 		2FE24CDB19C79B850019688B /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				2FE24CDC19C79BCC0019688B /* MageSplitViewController.h */,
-				2FE24CDD19C79BCC0019688B /* MageSplitViewController.m */,
 				2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */,
 				2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */,
 				2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */,
 				F775F0981A8AAFB5009218C1 /* MAGEMasterSelectionDelegate.h */,
 				F77AF8DD24DC5AF9003997D8 /* FeedItemSelectionDelegate.h */,
+				F7AC803526E7E366004B944D /* MageSplitViewController.swift */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -1537,8 +1534,7 @@
 		2FFBCA0E19DB43C80033132F /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				2FFBCA0F19DB43F40033132F /* MapViewController_iPad.h */,
-				2FFBCA1019DB43F40033132F /* MapViewController_iPad.m */,
+				2FFBCA1019DB43F40033132F /* MapViewController_iPad.swift */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -3091,7 +3087,7 @@
 				F72D42EC2694B60300F9AC3B /* Canary.m in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
 				F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */,
-				2FFBCA1119DB43F40033132F /* MapViewController_iPad.m in Sources */,
+				2FFBCA1119DB43F40033132F /* MapViewController_iPad.swift in Sources */,
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m in Sources */,
@@ -3166,6 +3162,7 @@
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
+				F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */,
 				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */,
@@ -3330,7 +3327,6 @@
 				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
-				2FE24CDE19C79BCC0019688B /* MageSplitViewController.m in Sources */,
 				F7081DB42627696F004B89D4 /* CompassView.swift in Sources */,
 				F7D43BE2269F329D00561A8F /* FeedItemBottomSheetController.swift in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,

@@ -13,7 +13,7 @@ import Foundation
     @objc optional func moreActionsTapped(_ observation: Observation);
     @objc optional func showFavorites(_ observation: Observation);
     @objc optional func favoriteObservation(_ observation: Observation);
-    @objc optional func getDirectionsToObservation(_ observation: Observation);
+    @objc optional func getDirectionsToObservation(_ observation: Observation, sourceView: UIView?);
     @objc optional func copyLocation(_ locationString: String);
     @objc optional func makeImportant(_ observation: Observation, reason: String);
     @objc optional func removeImportant(_ observation: Observation);

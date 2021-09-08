@@ -8,6 +8,13 @@
 
 import Foundation
 
+struct StraightLineNavigationNotification {
+    var image: UIImage? = nil
+    var coordinate: CLLocationCoordinate2D
+    var user: User? = nil
+    var feedItem: FeedItem? = nil
+}
+
 @objc protocol StraightLineNavigationDelegate {
     @objc func cancelStraightLineNavigation();
 }

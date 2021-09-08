@@ -151,8 +151,8 @@ class UserActionsView: UIView {
         }
     }
     
-    @objc func getDirectionsToUser() {
-        userActionsDelegate?.getDirectionsToUser?(user!);
+    @objc func getDirectionsToUser(_ sender: UIButton) {
+        userActionsDelegate?.getDirectionsToUser?(user!, sourceView: sender);
     }
     
     @objc func callUser() {

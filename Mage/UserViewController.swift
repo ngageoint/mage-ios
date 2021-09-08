@@ -103,8 +103,12 @@ extension UserViewController : ObservationActionsDelegate {
         MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
     }
     
-    func getDirectionsToObservation(_ observation: Observation) {
-        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self);
+    func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
+        var extraActions: [UIAlertAction] = [];
+        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(for: observation), coordinate: observation.location().coordinate))
+        }));
+        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
 }
 

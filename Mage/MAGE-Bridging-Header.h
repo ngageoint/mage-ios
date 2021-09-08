@@ -54,6 +54,8 @@
 #import "GeometryEditViewController.h"
 #import "GeometryEditMapDelegate.h"
 #import "MapViewController.h"
+#import "MapSettingsCoordinator.h"
+#import "SettingsViewController.h"
 #import "TimeFilter.h"
 #import "ObservationImage.h"
 #import "MageFilter.h"

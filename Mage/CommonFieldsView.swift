@@ -23,8 +23,8 @@ class CommonFieldsView: MDCCard {
         let dateField: [String: Any] =
             [FieldKey.title.key: "Date",
              FieldKey.required.key: true,
-             FieldKey.name.key: "timestamp",
-             FieldKey.type.key: "date"
+             FieldKey.name.key: ObservationKey.timestamp.key,
+             FieldKey.type.key: FieldType.date.key
         ];
         return dateField;
     }()
@@ -33,8 +33,8 @@ class CommonFieldsView: MDCCard {
         let locationField: [String: Any] =
             [FieldKey.title.key: "Location",
              FieldKey.required.key: true,
-             FieldKey.name.key: "geometry",
-             FieldKey.type.key: "geometry"
+             FieldKey.name.key: ObservationKey.geometry.key,
+             FieldKey.type.key: FieldType.geometry.key
         ];
         return locationField;
     }()

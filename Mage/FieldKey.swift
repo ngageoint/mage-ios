@@ -66,6 +66,8 @@ public enum ObservationKey : String {
     case accuracy
     case provider
     case delta
+    case timestamp
+    case geometry
     
     var key: String {
         return self.rawValue

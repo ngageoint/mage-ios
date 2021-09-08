@@ -108,11 +108,11 @@ class FeatureActionsView: UIView {
         }
     }
     
-    @objc func getDirectionsToFeature() {
+    @objc func getDirectionsToFeature(_ sender: UIButton) {
         guard let location = self.location else {
             return;
         }
-        featureActionsDelegate?.getDirectionsToLocation?(location, title: title);
+        featureActionsDelegate?.getDirectionsToLocation?(location, title: title, sourceView: sender);
     }
     
     @objc func copyLocation() {

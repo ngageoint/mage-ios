@@ -33,12 +33,12 @@ class MockObservationActionsDelegate: ObservationActionsDelegate {
         observationSent = observation;
     }
     
-    func getDirections(_ observation: Observation) {
+    func getDirections(_ observation: Observation, sourceView: UIView?) {
         getDirectionsCalled = true;
         observationSent = observation;
     }
     
-    func getDirectionsToObservation(_ observation: Observation) {
+    func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
         getDirectionsToObservationsCalled = true;
         observationSent = observation;
     }

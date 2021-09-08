@@ -229,7 +229,7 @@ extension LocationsTableViewController: UserActionsDelegate {
         self.navigationController?.pushViewController(uvc, animated: true);
     }
     
-    func getDirectionsToUser(_ user: User) {
+    func getDirectionsToUser(_ user: User, sourceView: UIView?) {
         guard let location: CLLocationCoordinate2D = user.location?.location().coordinate else {
             return;
         }
@@ -256,21 +256,8 @@ extension LocationsTableViewController: UserActionsDelegate {
                 image = UIImage(cgImage: image!.cgImage!, scale: scale, orientation: image!.imageOrientation);
             }
             
-            if let nvc: UINavigationController = self.tabBarController?.viewControllers?.filter( {
-                vc in
-                if let navController = vc as? UINavigationController {
-                    return navController.viewControllers[0] is MapViewController
-                }
-                return false;
-            }).first as? UINavigationController {
-                nvc.popToRootViewController(animated: false);
-                self.tabBarController?.selectedViewController = nvc;
-                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
-                    mvc.mapDelegate.userToNavigateTo = user;
-                    mvc.mapDelegate.startStraightLineNavigation(location, image: image);
-                }
-            }
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: user))
         }));
-        ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: user.name ?? "User", viewController: self.navigationController!, extraActions: extraActions);
+        ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: user.name ?? "User", viewController: self.navigationController!, extraActions: extraActions, sourceView: sourceView);
     }
 }

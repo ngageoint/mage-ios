@@ -11,7 +11,7 @@ import Kingfisher
 
 extension MapDelegate : FeedItemActionsDelegate {
     
-    func getDirectionsToFeedItem(_ feedItem: FeedItem) {
+    func getDirectionsToFeedItem(_ feedItem: FeedItem, sourceView: UIView? = nil) {
         self.feedItemBottomSheet.dismiss(animated: true, completion: {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
@@ -42,7 +42,7 @@ extension MapDelegate : FeedItemActionsDelegate {
                 
                 self.startStraightLineNavigation(feedItem.coordinate, image: image);
             }));
-            ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self.navigationController, extraActions: extraActions);
+            ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self.navigationController, extraActions: extraActions, sourceView: nil);
         });
     }
     

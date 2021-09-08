@@ -10,7 +10,7 @@ import Foundation
 
 class ObservationActionHandler {
     
-    static func getDirections(latitude: CLLocationDegrees, longitude: CLLocationDegrees, title: String, viewController: UIViewController, extraActions: [UIAlertAction]? = nil) {
+    static func getDirections(latitude: CLLocationDegrees, longitude: CLLocationDegrees, title: String, viewController: UIViewController, extraActions: [UIAlertAction]? = nil, sourceView: UIView? = nil) {
         let appleMapsQueryString = "daddr=\(latitude),\(longitude)&ll=\(latitude),\(longitude)&q=\(title)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
         let appleMapsUrl = URL(string: "https://maps.apple.com/?\(appleMapsQueryString ?? "")");
         
@@ -34,6 +34,18 @@ class ObservationActionHandler {
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
+        
+        if let popoverController = alert.popoverPresentationController {
+            var view: UIView = viewController.view;
+            if let sourceView = sourceView {
+                view = sourceView;
+            } else {
+                popoverController.permittedArrowDirections = [];
+            }
+            popoverController.sourceView = view
+            popoverController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+        }
+        
         viewController.present(alert, animated: true, completion: nil);
     }
     

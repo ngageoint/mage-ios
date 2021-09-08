@@ -19,7 +19,6 @@
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "MageServer.h"
-#import "MageSplitViewController.h"
 #import "MAGE-Swift.h"
 #import "MagicalRecord+MAGE.h"
 
@@ -139,7 +138,7 @@
     [Event sendRecentEvent];
     [FeedService.shared restart];
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        MageSplitViewController *svc = [[MageSplitViewController alloc] initWithScheme:_scheme];
+        MageSplitViewController *svc = [[MageSplitViewController alloc] initWithContainerScheme:self.scheme];
         svc.modalPresentationStyle = UIModalPresentationFullScreen;
         svc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self.navigationController presentViewController:svc animated:YES completion:NULL];

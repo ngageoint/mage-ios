@@ -177,8 +177,8 @@ class ObservationListActionsView: UIView {
         observationActionsDelegate?.favoriteObservation?(observation!);
     }
     
-    @objc func getDirectionsToObservation() {
-        observationActionsDelegate?.getDirectionsToObservation?(observation!);
+    @objc func getDirectionsToObservation(_ sender: UIButton) {
+        observationActionsDelegate?.getDirectionsToObservation?(observation!, sourceView: sender);
     }
     
     @objc func copyLocation() {

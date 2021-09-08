@@ -9,7 +9,7 @@
 import Foundation
 
 extension MapDelegate : FeatureActionsDelegate {
-    func getDirectionsToLocation(_ location: CLLocationCoordinate2D, title: String?) {
+    func getDirectionsToLocation(_ location: CLLocationCoordinate2D, title: String?, sourceView: UIView?) {
         self.featureBottomSheet.dismiss(animated: true) {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
@@ -20,7 +20,7 @@ extension MapDelegate : FeatureActionsDelegate {
                 let image: UIImage? = UIImage(named: "observations")
                 self.startStraightLineNavigation(location, image: image);
             }));
-            ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: title ?? "Feature", viewController: self.navigationController, extraActions: extraActions);
+            ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: title ?? "Feature", viewController: self.navigationController, extraActions: extraActions, sourceView: nil);
         }
     }
 }

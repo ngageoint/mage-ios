@@ -442,10 +442,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
         
-        if (alert.popoverPresentationController != nil) {
-            alert.popoverPresentationController?.sourceView = self;
-            alert.popoverPresentationController?.sourceRect = self.frame;
-            alert.popoverPresentationController?.permittedArrowDirections = .down;
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self
+            popoverController.sourceRect = CGRect(x: self.bounds.midX, y: self.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
         }
         
         UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
@@ -499,10 +499,11 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
             }
         }));
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
-        if (alert.popoverPresentationController != nil) {
-            alert.popoverPresentationController?.sourceView = self;
-            alert.popoverPresentationController?.sourceRect = self.frame;
-            alert.popoverPresentationController?.permittedArrowDirections = .down;
+
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self
+            popoverController.sourceRect = CGRect(x: self.bounds.midX, y: self.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
         }
         
         UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)

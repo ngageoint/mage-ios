@@ -9,7 +9,7 @@
 import Foundation
 
 @objc protocol FeedItemActionsDelegate {
-    @objc optional func getDirectionsToFeedItem(_ feedItem: FeedItem);
+    @objc optional func getDirectionsToFeedItem(_ feedItem: FeedItem, sourceView: UIView?);
     @objc optional func viewFeedItem(feedItem: FeedItem);
     @objc optional func copyLocation(_ location: String);
 }

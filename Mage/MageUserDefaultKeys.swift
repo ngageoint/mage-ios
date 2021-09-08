@@ -8,6 +8,10 @@
 
 import Foundation
 
+extension Notification.Name {
+    public static let StartStraightLineNavigation = Notification.Name("StartStraightLineNavigation")
+}
+
 @objc extension UserDefaults {
     
     @objc func color(forKey key: String) -> UIColor? {

@@ -103,6 +103,11 @@ extension PlaceholderImage: Placeholder {}
                     var filesToShare = [Any]()
                     filesToShare.append(imageURL)
                     let activityViewController = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
+                    if let popoverController = activityViewController.popoverPresentationController {
+                        popoverController.sourceView = self.view
+                        popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                        popoverController.permittedArrowDirections = []
+                    }
                     self.present(activityViewController, animated: true, completion: nil)
                 } catch {
                     // Prints the localized description of the error from the do block
@@ -145,6 +150,12 @@ extension PlaceholderImage: Placeholder {}
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
         self.present(alert, animated: true, completion: nil)
     }
     

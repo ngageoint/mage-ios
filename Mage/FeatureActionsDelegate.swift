@@ -9,6 +9,6 @@
 import Foundation
 
 @objc protocol FeatureActionsDelegate {
-    @objc optional func getDirectionsToLocation(_ location: CLLocationCoordinate2D, title: String?);
+    @objc optional func getDirectionsToLocation(_ location: CLLocationCoordinate2D, title: String?, sourceView: UIView?);
     @objc optional func viewFeature(annotation: MapAnnotation);
 }

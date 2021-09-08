@@ -122,7 +122,7 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
 
 extension FeedItemViewController: FeedItemActionsDelegate {
     
-    func getDirectionsToFeedItem(_ feedItem: FeedItem) {
+    func getDirectionsToFeedItem(_ feedItem: FeedItem, sourceView: UIView? = nil) {
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             
@@ -147,21 +147,9 @@ extension FeedItemViewController: FeedItemActionsDelegate {
                 }
             }
             
-            if let nvc: UINavigationController = self.tabBarController?.viewControllers?.filter( {
-                vc in
-                if let navController = vc as? UINavigationController {
-                    return navController.viewControllers[0] is MapViewController
-                }
-                return false;
-            }).first as? UINavigationController {
-                nvc.popToRootViewController(animated: false);
-                self.tabBarController?.selectedViewController = nvc;
-                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
-                    mvc.mapDelegate.startStraightLineNavigation(feedItem.coordinate, image: image);
-                }
-            }
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: feedItem.coordinate))
         }));
-        ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions);
+        ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
     
     func copyLocation(_ location: String) {

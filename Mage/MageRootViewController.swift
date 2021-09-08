@@ -142,6 +142,25 @@ import Kingfisher
         offlineObservationManager.start()
         setServerConnectionStatus();
         UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
+        
+        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { notification in
+            guard let notificationObject: StraightLineNavigationNotification = notification.object as? StraightLineNavigationNotification else {
+                return;
+            }
+            self.mapTab.popToRootViewController(animated: false);
+            self.selectedViewController = self.mapTab;
+            
+            if let mvc: MapViewController = self.mapTab.viewControllers[0] as? MapViewController {
+                mvc.mapDelegate.feedItemToNavigateTo = nil;
+                mvc.mapDelegate.userToNavigateTo = nil;
+                if let user = notificationObject.user {
+                    mvc.mapDelegate.userToNavigateTo = user;
+                } else if let feedItem = notificationObject.feedItem {
+                    mvc.mapDelegate.feedItemToNavigateTo = feedItem;
+                }
+                mvc.mapDelegate.startStraightLineNavigation(notificationObject.coordinate, image: notificationObject.image);
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -150,6 +169,7 @@ import Kingfisher
         Mage.singleton()?.stopServices();
         offlineObservationManager.stop();
         UserDefaults.standard.removeObserver(self, forKeyPath: "loginType", context: nil);
+        NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil);
     }
     
     func createOrderedTabs() {

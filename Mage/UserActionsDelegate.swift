@@ -9,6 +9,6 @@
 import Foundation
 
 @objc protocol UserActionsDelegate {
-    @objc optional func getDirectionsToUser(_ user: User);
+    @objc optional func getDirectionsToUser(_ user: User, sourceView: UIView?);
     @objc optional func viewUser(_ user: User);
 }

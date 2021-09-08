@@ -108,11 +108,11 @@ class FeedItemActionsView: UIView {
         }
     }
     
-    @objc func getDirectionsToFeature() {
+    @objc func getDirectionsToFeature(_ sender: UIButton) {
         guard let feedItem = self.feedItem else {
             return;
         }
-        actionsDelegate?.getDirectionsToFeedItem?(feedItem)
+        actionsDelegate?.getDirectionsToFeedItem?(feedItem, sourceView: sender)
     }
     
     @objc func copyLocation() {

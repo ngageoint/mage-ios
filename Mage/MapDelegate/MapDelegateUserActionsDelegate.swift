@@ -23,7 +23,7 @@ extension MapDelegate : UserActionsDelegate {
         return documentsDirectory as NSString
     }
 
-    func getDirectionsToUser(_ user: User) {
+    func getDirectionsToUser(_ user: User, sourceView: UIView?) {
         self.userToNavigateTo = user;
         self.observationToNavigateTo = nil;
         self.locationToNavigateTo = kCLLocationCoordinate2DInvalid;
@@ -58,7 +58,7 @@ extension MapDelegate : UserActionsDelegate {
                 
                 self.startStraightLineNavigation(location, image: image);
             }));
-            ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: user.name ?? "User", viewController: self.navigationController, extraActions: extraActions);
+            ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: user.name ?? "User", viewController: self.navigationController, extraActions: extraActions, sourceView: nil);
         });
     }
 }
