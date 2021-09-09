@@ -32,7 +32,6 @@ import MagicalRecord;
     var fullAudioDataLength: Int = 0;
     
     var mediaLoader: MediaLoader?;
-    var activityIndicator: UIActivityIndicatorView?
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
@@ -208,53 +207,29 @@ import MagicalRecord;
         let player = AVPlayer(url: urlToLoad);
         self.player = player;
         self.player?.currentItem?.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
+        // even though we are not going to do anything with the delegate, it must be set so we can later export the video if the user wants
+        (self.player?.currentItem?.asset as? AVURLAsset)?.resourceLoader.setDelegate(self, queue: .main)
         
         player.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
-        player.automaticallyWaitsToMinimizeStalling = false;
+        player.automaticallyWaitsToMinimizeStalling = true;
 
         let playerViewController = AVPlayerViewController();
         self.playerViewController = playerViewController;
+        self.playerViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveVideo))
+        
+        self.playerViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismiss))
         playerViewController.player = self.player;
         playerViewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth];
         playerViewController.addObserver(self, forKeyPath: "videoBounds", options: [.old, .new], context: nil);
 
-        self.activityIndicator = UIActivityIndicatorView();
-        self.activityIndicator?.style = .large;
-
         self.rootViewController.pushViewController(playerViewController, animated: false);
-        playerViewController.navigationItem.backButtonTitle = "Back";
         self.navigationControllerObserver.observePopTransition(of: playerViewController, delegate: self);
         self.hasPushedViewController = true;
         player.play();
     }
     
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "timeControlStatus", let change = change, let newValue = change[NSKeyValueChangeKey.newKey] as? Int, let oldValue = change[NSKeyValueChangeKey.oldKey] as? Int {
-            let oldStatus = AVPlayer.TimeControlStatus(rawValue: oldValue)
-            let newStatus = AVPlayer.TimeControlStatus(rawValue: newValue)
-            DispatchQueue.main.async {[weak self] in
-                guard let activityIndicator = self?.activityIndicator else { return }
-                if (newStatus == .waitingToPlayAtSpecifiedRate && activityIndicator.isAnimating) {
-                    activityIndicator.startAnimating();
-                }
-                if newStatus != oldStatus {
-                    if newStatus == .playing || newStatus == .paused {
-                        activityIndicator.stopAnimating()
-                    } else {
-                        activityIndicator.startAnimating()
-                    }
-                }
-            }
-        } else if let center = self.playerViewController?.view.center, keyPath == "videoBounds", !center.equalTo(CGPoint(x: 0, y: 0)) {
-            guard let activityIndicator = self.activityIndicator else { return }
-
-            activityIndicator.center = center;
-            if (activityIndicator.superview == nil) {
-                self.playerViewController?.view.addSubview(activityIndicator);
-            }
-            self.playerViewController?.view.bringSubviewToFront(activityIndicator);
-            activityIndicator.startAnimating();
-        } else if keyPath == #keyPath(AVPlayerItem.status) {
+        if keyPath == #keyPath(AVPlayerItem.status) {
             let status: AVPlayerItem.Status
             if let statusNumber = change?[.newKey] as? NSNumber {
                 status = AVPlayerItem.Status(rawValue: statusNumber.intValue)!
@@ -265,16 +240,10 @@ import MagicalRecord;
             // Switch over status value
             switch status {
             case .readyToPlay:
-                if let activityIndicator = self.activityIndicator {
-                    if (activityIndicator.superview != nil) {
-                        activityIndicator.removeFromSuperview();
-                    }
-                }
                 // Player item is ready to play.
                 player?.play()
             case .failed:
                 // Player item failed. See error.
-                print("Fail \((object as? AVPlayerItem)?.error) ")
                 if let error = (object as? AVPlayerItem)?.error?.localizedDescription {
                     MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to play video with error: \(error)"))
                 } else {
@@ -317,4 +286,85 @@ import MagicalRecord;
             };
         }
     }
+    
+    func getDocumentsDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory as String
+    }
+    
+    @objc func dismiss() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.playerViewController?.dismiss(animated: true, completion: nil);
+        } else {
+            self.rootViewController.popViewController(animated: true);
+        }
+    }
+    
+    @objc func saveVideo() {
+        
+        self.playerViewController?.navigationItem.rightBarButtonItem?.title = "Saving..."
+        self.playerViewController?.navigationItem.rightBarButtonItem?.isEnabled = false
+        
+        guard let asset: AVURLAsset = player?.currentItem?.asset as? AVURLAsset , let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality) else {
+            self.playerViewController?.navigationItem.rightBarButtonItem?.title = "Save"
+            self.playerViewController?.navigationItem.rightBarButtonItem?.isEnabled = true
+            return;
+        }
+
+        var fileUrl: URL = URL(fileURLWithPath: self.getDocumentsDirectory());
+        if let name = attachment?.name {
+            fileUrl = fileUrl.appendingPathComponent(name);
+        } else {
+            fileUrl = fileUrl.appendingPathComponent("temp.mov");
+        }
+        exportSession.outputURL = URL(fileURLWithPath: fileUrl.path)
+        exportSession.outputFileType = .mov
+        let startTime = CMTimeMake(value: 0, timescale: 1)
+        let timeRange = CMTimeRangeMake(start: startTime, duration: asset.duration)
+        exportSession.timeRange = timeRange
+        print("Exporting to file \(fileUrl)")
+        if FileManager.default.fileExists(atPath: fileUrl.path) {
+            do {
+                try FileManager.default.removeItem(at: fileUrl)
+            } catch let error {
+                print("Failed to delete file with error: \(error)")
+            }
+        }
+        exportSession.exportAsynchronously {
+            DispatchQueue.main.async {
+                self.playerViewController?.navigationItem.rightBarButtonItem?.title = "Save"
+                self.playerViewController?.navigationItem.rightBarButtonItem?.isEnabled = true
+            }
+            switch exportSession.status {
+            case .completed:
+                UISaveVideoAtPathToSavedPhotosAlbum(fileUrl.path, self, #selector(self.videoExportComplete(videoPath:didFinishSavingWithError:contextInfo:)), nil)
+            case .failed:
+                if let recoverySuggestion = (exportSession.error as NSError?)?.localizedRecoverySuggestion {
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to save video. \(recoverySuggestion)"))
+                } else {
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to save video. \(exportSession.error?.localizedDescription ?? "")"))
+                }
+            case .cancelled:
+                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Save video cancelled"))
+            default: break
+            }
+        }
+    }
+    
+    @objc func videoExportComplete(videoPath: String, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        do {
+            print("Removing file at \(videoPath)")
+            try FileManager.default.removeItem(atPath: videoPath);
+        } catch {
+            print("Error removing item \(error)")
+        }
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Saved video to the camera roll"))
+    }
+}
+
+// no implementation of the delegate is needed
+// this is only here to allow the export session to not fail if the user wants to export the video
+extension AttachmentViewCoordinator : AVAssetResourceLoaderDelegate {
+    
 }
