@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 3.0.1
+
+##### Bug Fixes
+* copy and paste is back for form fields
+* iPad behaves more like the web
+
 ## 3.0.0
 
 ##### Release Notes
