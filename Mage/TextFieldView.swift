@@ -215,6 +215,10 @@ extension TextFieldView {
 
 extension TextFieldView: UITextFieldDelegate {
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        shouldResign = false;
+    }
+    
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return shouldResign;
     }

@@ -72,7 +72,7 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
-    return [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
+    return [(NSArray *)[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
 }
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
@@ -147,12 +147,12 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)sectionIndex {
-    NSInteger rows = [[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] count];
+    NSInteger rows = [(NSArray *)[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] count];
     return rows > 0 ? [[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"header"] : nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    NSInteger rows = [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
+    NSInteger rows = [(NSArray *)[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
     id header = [[self.sections objectAtIndex:section] valueForKeyPath:@"header"];
     return rows > 0 && header != nil ? 45.0 : CGFLOAT_MIN;
 }
@@ -165,12 +165,12 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)sectionIndex {
-    NSInteger rows = [[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] count];
+    NSInteger rows = [(NSArray *)[[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"rows"] count];
     return rows > 0 ? [[self.sections objectAtIndex:sectionIndex] valueForKeyPath:@"footer"] : nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    NSInteger rows = [[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
+    NSInteger rows = [(NSArray *)[[self.sections objectAtIndex:section] valueForKeyPath:@"rows"] count];
     id footer = [[self.sections objectAtIndex:section] valueForKeyPath:@"footer"];
     return rows > 0 && footer != nil ? UITableViewAutomaticDimension : CGFLOAT_MIN;
 }
