@@ -124,6 +124,18 @@
 - (void) cancelSetServerURL {
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController popViewControllerAnimated:NO];
+    NSURL *url = [MageServer baseURL];
+    if ([url absoluteString].length == 0) {
+        [self changeServerUrl];
+        return;
+    } else {
+        __weak __typeof__(self) weakSelf = self;
+        [MageServer serverWithURL:url success:^(MageServer *mageServer) {
+            [weakSelf startAuthentication:mageServer];
+        } failure:^(NSError *error) {
+            [weakSelf setServerURLWithError: error.localizedDescription];
+        }];
+    }
 }
 
 
