@@ -66,8 +66,6 @@
     @property (nonatomic, strong) NSMutableDictionary<NSString *, CacheOverlay *> *mapCacheOverlays;
     @property (nonatomic, strong) GPKGBoundingBox * addedCacheBoundingBox;
     @property (nonatomic, strong) CacheOverlayUpdate * cacheOverlayUpdate;
-    @property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
-    @property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
     @property (nonatomic, strong) NSObject * cacheOverlayUpdateLock;
     @property (nonatomic) BOOL updatingCacheOverlays;
     @property (nonatomic) BOOL waitingCacheOverlaysUpdate;
@@ -85,8 +83,6 @@
     @property (strong, nonatomic) MapObservationManager *mapObservationManager;
 @property (strong, nonatomic) NSMutableArray *listenersRegistered;
 @property (nonatomic) id<MKMapViewDelegate> mapEventDelegate;
-@property (strong, nonatomic) GPKGGeoPackage * countriesGeoPackage;
-@property (strong, nonatomic) GPKGGeoPackage * darkCountriesGeoPackage;
 @property (strong, nonatomic) NSMutableDictionary *feedItemRetrievers;
 @property (strong, nonatomic) MDCBottomSheetController *bottomSheet;
 @property (strong, nonatomic) MKAnnotationView *enlargedPin;
@@ -395,12 +391,6 @@
         [self.mapView removeOverlay:self.selectedObservationAccuracy];
         self.selectedObservationAccuracy = nil;
     }
-    [self.darkCountriesGeoPackage close];
-    [self.darkCountriesGeoPackage.metadataDb close];
-    self.darkCountriesGeoPackage = nil;
-    [self.countriesGeoPackage close];
-    [self.countriesGeoPackage.metadataDb close];
-    self.countriesGeoPackage = nil;
     [self.geoPackageCache closeAll];
     [self.geoPackageManager close];
     self.geoPackageManager = nil;
@@ -585,7 +575,6 @@
         self.mapCacheOverlays = [[NSMutableDictionary alloc] init];
     }
 
-    [self createBackgroundOverlay];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self setupMapType:defaults];
         
@@ -969,54 +958,24 @@
     }
 }
 
-- (void) createBackgroundOverlay {
-    if (self.backgroundOverlay) return;
-    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
-    self.countriesGeoPackage = [manager open:@"countries"];
-    if (self.countriesGeoPackage) {
-        GPKGFeatureDao * featureDao = [self.countriesGeoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.countriesGeoPackage andFeatureDao:featureDao];
-        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.countriesGeoPackage andFeatureDao:featureDao]];
-        
-        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
-        [self.backgroundOverlay setMinZoom:0];
-        self.backgroundOverlay.darkTheme = NO;
-
-        self.backgroundOverlay.canReplaceMapContent = true;
-    }
-    
-    self.darkCountriesGeoPackage = [manager open:@"countries_dark"];
-    if (self.darkCountriesGeoPackage) {
-        GPKGFeatureDao * darkFeatureDao = [self.darkCountriesGeoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.darkCountriesGeoPackage andFeatureDao:darkFeatureDao];
-        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.darkCountriesGeoPackage andFeatureDao:darkFeatureDao]];
-        
-        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
-        [self.darkBackgroundOverlay setMinZoom:0];
-        self.darkBackgroundOverlay.darkTheme = YES;
-
-        self.darkBackgroundOverlay.canReplaceMapContent = true;
-    }
-}
-
 - (void) addBackgroundMap {
+    BaseMapOverlay *backgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getBaseMap];
+    BaseMapOverlay *darkBackgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getDarkBaseMap];
     if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-        [self.mapView removeOverlay:self.backgroundOverlay];
-        [self.mapView addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
+        [self.mapView removeOverlay:backgroundOverlay];
+        [self.mapView addOverlay:darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
     } else {
         NSLog(@"Adding the background map");
-        [self.mapView removeOverlay:self.darkBackgroundOverlay];
-        [self.mapView addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveRoads];
+        [self.mapView removeOverlay:darkBackgroundOverlay];
+        [self.mapView addOverlay:backgroundOverlay level:MKOverlayLevelAboveRoads];
     }
 }
 
 - (void) removeBackgroundMap {
-    [self.mapView removeOverlay: self.backgroundOverlay];
-    [self.mapView removeOverlay: self.darkBackgroundOverlay];
+    BaseMapOverlay *backgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getBaseMap];
+    BaseMapOverlay *darkBackgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getDarkBaseMap];
+    [self.mapView removeOverlay: backgroundOverlay];
+    [self.mapView removeOverlay: darkBackgroundOverlay];
 }
 
 /**

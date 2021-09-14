@@ -1257,6 +1257,9 @@ class ObservationTests: KIFSpec {
             
             afterEach {
                 ObservationPushService.singleton().stop();
+                expect(ObservationPushService.singleton().isPushingFavorites()).toEventually(beFalse());
+                expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse());
+                expect(ObservationPushService.singleton().isPushingObservations()).toEventually(beFalse());
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
@@ -1658,10 +1661,14 @@ class ObservationTests: KIFSpec {
                 expect(localObservation).toNot(beNil());
                 expect(localObservation.isImportant()).to(beTrue());
 
-                localObservation.removeImportant()
+                var importantRemoved = false;
+                localObservation.removeImportant { success, error in
+                    importantRemoved = true;
+                }
+                expect(importantRemoved).toEventually(beTrue());
+                
                 expect(stubCalled).toEventually(beTrue());
-                expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())!.isImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                expect(Observation.mr_findFirst()!.observationImportant!.dirty).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+
                 expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
         }

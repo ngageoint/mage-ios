@@ -26,6 +26,7 @@
 #import "MapUtils.h"
 #import "BaseMapOverlay.h"
 #import "GPKGGeoPackageFactory.h"
+#import "AppDelegate.h"
 #import <mgrs/MGRS.h>
 #import <mgrs/mgrs-umbrella.h>
 #import <PureLayout/PureLayout.h>
@@ -60,8 +61,6 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) id fieldDefinition;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 @property (nonatomic) BOOL isObservationGeometry;
-@property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
-@property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @property (strong, nonatomic) MDCFloatingButton *pointButton;
@@ -119,9 +118,6 @@ static float paddingPercentage = .1;
     self.hintLabel.textColor = containerScheme.colorScheme.onPrimaryColor;
     
     [self setShapeTypeSelection];
-    [self createBackgroundOverlay];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [self setupMapType:defaults];
 }
 
 - (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
@@ -228,64 +224,23 @@ static float paddingPercentage = .1;
 }
 
 - (void) addBackgroundMap {
+    BaseMapOverlay *backgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getBaseMap];
+    BaseMapOverlay *darkBackgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getDarkBaseMap];
     if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-        if (self.backgroundOverlay) {
-            [self.map removeOverlay:self.backgroundOverlay];
-        }
-        if (self.darkBackgroundOverlay) {
-            [self.map addOverlay:self.darkBackgroundOverlay level:MKOverlayLevelAboveLabels];
-        }
+        [self.map removeOverlay:backgroundOverlay];
+        [self.map addOverlay:darkBackgroundOverlay level:MKOverlayLevelAboveRoads];
     } else {
-        if (self.darkBackgroundOverlay) {
-            [self.map removeOverlay:self.darkBackgroundOverlay];
-        }
-        if (self.backgroundOverlay) {
-            [self.map addOverlay:self.backgroundOverlay level:MKOverlayLevelAboveLabels];
-        }
+        NSLog(@"Adding the background map");
+        [self.map removeOverlay:darkBackgroundOverlay];
+        [self.map addOverlay:backgroundOverlay level:MKOverlayLevelAboveRoads];
     }
 }
 
 - (void) removeBackgroundMap {
-    if (self.backgroundOverlay) {
-        [self.map removeOverlay: self.backgroundOverlay];
-    }
-    if (self.darkBackgroundOverlay) {
-        [self.map removeOverlay: self.darkBackgroundOverlay];
-    }
-}
-
-- (void) createBackgroundOverlay {
-    if (self.backgroundOverlay) return;
-    GPKGGeoPackageManager *manager = [GPKGGeoPackageFactory manager];
-    GPKGGeoPackage * geoPackage = [manager open:@"countries"];
-    if (geoPackage) {
-        GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
-        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao]];
-        
-        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
-        [self.backgroundOverlay setMinZoom:0];
-        self.backgroundOverlay.darkTheme = NO;
-
-        self.backgroundOverlay.canReplaceMapContent = true;
-    }
-    
-    GPKGGeoPackage * darkGeoPackage = [manager open:@"countries_dark"];
-    if (darkGeoPackage) {
-        GPKGFeatureDao * darkFeatureDao = [geoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao];
-        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkGeoPackage andFeatureDao:darkFeatureDao]];
-        
-        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
-        [self.darkBackgroundOverlay setMinZoom:0];
-        self.darkBackgroundOverlay.darkTheme = YES;
-
-        self.darkBackgroundOverlay.canReplaceMapContent = true;
-    }
+    BaseMapOverlay *backgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getBaseMap];
+    BaseMapOverlay *darkBackgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getDarkBaseMap];
+    [self.map removeOverlay: backgroundOverlay];
+    [self.map removeOverlay: darkBackgroundOverlay];
 }
 
 - (void) buildView {
@@ -293,6 +248,8 @@ static float paddingPercentage = .1;
     self.map.accessibilityLabel = @"Geometry Edit Map";
     [self.view addSubview:self.map];
     [self.map autoPinEdgesToSuperviewEdges];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [self setupMapType:defaults];
     
     // field type tabs
     self.fieldTypeTabs = [[MDCTabBarView alloc] init];
@@ -422,7 +379,6 @@ static float paddingPercentage = .1;
     self.map.delegate = _mapDelegate;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.map.mapType = [defaults integerForKey:@"mapType"];
     
     self.decimalFormatter = [[NSNumberFormatter alloc] init];
     self.decimalFormatter.numberStyle = NSNumberFormatterDecimalStyle;

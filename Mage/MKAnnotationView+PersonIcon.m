@@ -40,7 +40,6 @@
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
         image = [UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", documentsDirectory, user.iconUrl]]];
     }
-    NSLog(@"Showing icon from %@", user.iconUrl);
     
     float scale = image.size.width / 37;
     

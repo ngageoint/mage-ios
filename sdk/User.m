@@ -186,7 +186,7 @@ static User *currentUser = nil;
                     }
                 } else {
                     // already exists in core data, lets update the object we have
-                    NSLog(@"Updating user location in the database");
+                    NSLog(@"Updating user in the database");
                     NSString *oldIcon = user.iconUrl;
                     NSString *oldAvatar = user.avatarUrl;
                     

@@ -10,6 +10,8 @@
 #import "ObservationFetchService.h"
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"
+#import "BaseMapOverlay.h"
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -19,5 +21,7 @@
 - (void) logout;
 - (void) chooseEvent;
 - (void) createRootView;
+- (BaseMapOverlay *) getBaseMap;
+- (BaseMapOverlay *) getDarkBaseMap;
 
 @end

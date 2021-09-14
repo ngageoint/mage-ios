@@ -345,7 +345,7 @@ class MapViewControllerTests: KIFSpec {
                 let point: SFPoint = geometry as! SFPoint;
                 expect(point.x).to(beCloseTo(-105.2677));
                 expect(point.y).to(beCloseTo(40.008));
-                expect(properties["accuracy"] as? Double).to(equal(0))
+                expect(properties["accuracy"] as? Double).to(beNil())
                 expect(properties["delta"] as? Int).to(equal(0));
                 expect(properties["provider"] as? String).to(equal("manual"));
                 expect(properties["timestamp"] as? String).toNot(beNil());
@@ -410,7 +410,7 @@ class MapViewControllerTests: KIFSpec {
                 let point: SFPoint = geometry as! SFPoint;
                 expect(point.x).to(beCloseTo(-105.2677));
                 expect(point.y).to(beCloseTo(40.008));
-                expect(properties["accuracy"] as? Double).to(equal(0))
+                expect(properties["accuracy"] as? Double).to(beNil())
                 expect(properties["delta"] as? Int).to(equal(0));
                 expect(properties["provider"] as? String).to(equal("manual"));
                 expect(properties["timestamp"] as? String).toNot(beNil());

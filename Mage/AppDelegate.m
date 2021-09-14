@@ -32,6 +32,10 @@
 #import "GeoPackageFeatureTableCacheOverlay.h"
 #import "MageConstants.h"
 #import "GPKGFeatureTileTableLinker.h"
+#import "GPKGExtendedRelationsDao.h"
+#import "GPKGRelationTypes.h"
+#import "GPKGRelatedTablesExtension.h"
+#import "GPKGMediaDao.h"
 #import "MageOfflineObservationManager.h"
 #import "Server.h"
 #import "MageAppCoordinator.h"
@@ -50,6 +54,8 @@
 @property (nonatomic, strong) UINavigationController *rootViewController;
 @property (nonatomic, strong) UIApplication *application;
 @property (nonatomic) BOOL applicationStarted;
+@property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
+@property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
 @end
 
 @implementation AppDelegate
@@ -451,6 +457,37 @@
     @catch (NSException *e) {
         // probably was already imported and that is fine
     }
+    
+    GPKGGeoPackage *countriesGeoPackage = [manager open:@"countries"];
+    if (countriesGeoPackage) {
+        GPKGFeatureDao * featureDao = [countriesGeoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:countriesGeoPackage andFeatureDao:featureDao];
+        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:countriesGeoPackage andFeatureDao:featureDao]];
+        
+        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+        [self.backgroundOverlay setMinZoom:0];
+        self.backgroundOverlay.darkTheme = NO;
+        
+        self.backgroundOverlay.canReplaceMapContent = true;
+    }
+    
+    GPKGGeoPackage *darkCountriesGeoPackage = [manager open:@"countries_dark"];
+    if (darkCountriesGeoPackage) {
+        GPKGFeatureDao * darkFeatureDao = [darkCountriesGeoPackage featureDaoWithTableName:@"countries"];
+        
+        // If indexed, add as a tile overlay
+        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkCountriesGeoPackage andFeatureDao:darkFeatureDao];
+        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkCountriesGeoPackage andFeatureDao:darkFeatureDao]];
+        
+        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+        [self.darkBackgroundOverlay setMinZoom:0];
+        self.darkBackgroundOverlay.darkTheme = YES;
+        
+        self.darkBackgroundOverlay.canReplaceMapContent = true;
+    }
+    
     @try {
         //databases call only returns the geopacakge if it is named the same as the name of the actual file on disk
         NSArray * geoPackages = [manager databases];
@@ -474,6 +511,14 @@
     @catch (NSException *e) {
         NSLog(@"Problem getting GeoPackages %@", e);
     }
+}
+
+- (BaseMapOverlay *) getBaseMap {
+    return self.backgroundOverlay;
+}
+
+- (BaseMapOverlay *) getDarkBaseMap {
+    return self.darkBackgroundOverlay;
 }
 
 -(GeoPackageCacheOverlay *) getGeoPackageCacheOverlayWithManager: (GPKGGeoPackageManager *) manager andName: (NSString *) name{

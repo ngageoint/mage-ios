@@ -77,10 +77,6 @@ class GeometryViewTests: KIFSpec {
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let mockMapDelegate = MockMapViewDelegate()
                 
-                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expectation.fulfill()
-                }
-                
                 let plainDelegate: PlainMapViewDelegate = PlainMapViewDelegate();
                 plainDelegate.mockMapViewDelegate = mockMapDelegate;
                 
@@ -90,12 +86,6 @@ class GeometryViewTests: KIFSpec {
                 view.addSubview(geometryFieldView!)
                 geometryFieldView?.autoPinEdgesToSuperviewEdges();
                 
-                NSLog("waiting for complete to be true");
-                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
-                XCTAssertEqual(result, .completed)
-                
-                expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
-                expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                 expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m"
                 expect(geometryFieldView?.textField.label.text) == "Field Title"
                 
@@ -180,7 +170,7 @@ class GeometryViewTests: KIFSpec {
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let mockMapDelegate = MockMapViewDelegate()
 
-                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                mockMapDelegate.mapDidFinishLoadingClosure = { mapView in
                     expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
@@ -191,7 +181,7 @@ class GeometryViewTests: KIFSpec {
                 
                 view.addSubview(geometryFieldView!)
                 geometryFieldView?.autoPinEdgesToSuperviewEdges();
-                
+                                
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
@@ -234,7 +224,7 @@ class GeometryViewTests: KIFSpec {
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let mockMapDelegate = MockMapViewDelegate()
                 
-                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+                mockMapDelegate.mapDidFinishLoadingClosure = { mapView in
                     expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
@@ -303,6 +293,7 @@ class GeometryViewTests: KIFSpec {
             it("initial value set wtih observation with accuracy") {
                 let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
                 let observation: Observation = ObservationBuilder.createPointObservation();
+                ObservationBuilder.addObservationProperty(observation: observation, key: "provider", value: "gps")
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
                 let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()]
                 
@@ -326,7 +317,7 @@ class GeometryViewTests: KIFSpec {
                 XCTAssertEqual(result, .completed)
                                 
                 expect(geometryFieldView?.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780  ± 100.49m";
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m";
                 expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
             
@@ -532,7 +523,7 @@ class GeometryViewTests: KIFSpec {
                 XCTAssertEqual(result, .completed)
                 
                 expect(geometryFieldView?.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780  ± 100.49m";
+                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 ";
                 expect(geometryFieldView?.textField.label.text) == "Field Title"
             }
 
