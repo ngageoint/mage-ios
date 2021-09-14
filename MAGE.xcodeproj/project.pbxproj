@@ -259,6 +259,7 @@
 		F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */; };
 		F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1226541C2300D645AC /* ColorPickerViewController.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
+		F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */; };
 		F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886C625894CEA00EDA036 /* KeyboardHelper.swift */; };
 		F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */; };
 		F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */; };
@@ -950,6 +951,7 @@
 		F7331D1226541C2300D645AC /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
 		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
+		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
 		F73886C625894CEA00EDA036 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
 		F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewController.swift; sourceTree = "<group>"; };
@@ -1964,6 +1966,7 @@
 				F72D42902694B60300F9AC3B /* User+CoreDataProperties.m */,
 				F72D42332694B60300F9AC3B /* UserUtility.h */,
 				F72D429E2694B60300F9AC3B /* UserUtility.m */,
+				F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */,
 			);
 			path = sdk;
 			sourceTree = "<group>";
@@ -3066,6 +3069,7 @@
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
+				F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */,
 				F7D43BEE269F8F4D00561A8F /* LocationDataStore.swift in Sources */,
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
 				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
