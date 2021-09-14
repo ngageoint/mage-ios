@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 3.0.2
+
+##### Bug Fixes
+* fixes a bug where users with the no edit role were not being shown the create button
+
 ## 3.0.1
 
 ##### Bug Fixes

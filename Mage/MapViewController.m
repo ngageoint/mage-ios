@@ -347,8 +347,6 @@
     [self.createFab setImage:[UIImage imageNamed:@"add_location"] forState:UIControlStateNormal];
     [self.createFab addTarget:self action:@selector(createNewObservation:) forControlEvents:UIControlEventTouchUpInside];
     self.createFab.accessibilityLabel = @"New";
-    User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
-    [self.createFab setHidden:![currentUser hasEditPermission]];
     
     [buttonStack addArrangedSubview:self.trackingButton];
     [buttonStack addArrangedSubview:self.reportLocationButton];
