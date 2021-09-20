@@ -48,7 +48,23 @@ class CommonSummaryView<T, V>: UIView {
         let secondaryField = UILabel(forAutoLayout: ());
         secondaryField.setContentHuggingPriority(.defaultHigh, for: .vertical)
         secondaryField.numberOfLines = 0;
+        secondaryField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        secondaryField.lineBreakMode = .byWordWrapping
+        secondaryField.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return secondaryField;
+    }()
+    
+    // this is for sublcases to add extra to to the secondary field area
+    lazy var secondaryContainer: UIStackView = {
+        let stack = UIStackView(forAutoLayout: ());
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        stack.spacing = 8;
+        stack.distribution = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false;
+        stack.isUserInteractionEnabled = false;
+        stack.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        return stack;
     }()
     
     required init(coder aDecoder: NSCoder) {
@@ -63,7 +79,8 @@ class CommonSummaryView<T, V>: UIView {
         stack.setCustomSpacing(12, after: timestamp);
         stack.addArrangedSubview(primaryField);
         stack.setCustomSpacing(8, after: primaryField);
-        stack.addArrangedSubview(secondaryField);
+        secondaryContainer.addArrangedSubview(secondaryField);
+        stack.addArrangedSubview(secondaryContainer);
         
         self.addSubview(stack);
         self.addSubview(itemImage);
@@ -77,7 +94,6 @@ class CommonSummaryView<T, V>: UIView {
             itemImage.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
             itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 24);
             itemImage.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16, relation: .greaterThanOrEqual);
-            
             self.autoSetDimension(.height, toSize: 90, relation: .greaterThanOrEqual)
             didSetUpConstraints = true;
         }
@@ -97,6 +113,7 @@ class CommonSummaryView<T, V>: UIView {
         primaryField.autoSetDimension(.height, toSize: primaryField.font.pointSize, relation: .greaterThanOrEqual);
         secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         secondaryField.font = scheme.typographyScheme.subtitle2;
-        secondaryField.autoSetDimension(.height, toSize: secondaryField.font.pointSize);
+        secondaryContainer.autoSetDimension(.height, toSize: secondaryField.font.pointSize + 2)
+        secondaryField.autoSetDimension(.height, toSize: secondaryField.font.pointSize + 2);
     }
 }

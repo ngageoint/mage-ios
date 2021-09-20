@@ -311,35 +311,41 @@
     }
     
     if ([self.mapCacheOverlays count] > 0) {
-        NSMutableString * clickMessage = [[NSMutableString alloc] init];
+//        NSMutableString * clickMessage = [[NSMutableString alloc] init];
         NSUInteger featureCount = 0;
         SFGeometry *geometry = nil;
+        NSMutableArray <GeoPackageFeatureItem *> *featureItems = [[NSMutableArray alloc] init];
         for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
             if ([cacheOverlay isKindOfClass:[GeoPackageFeatureTableCacheOverlay class]]) {
                 GeoPackageFeatureTableCacheOverlay *featureOverlay = (GeoPackageFeatureTableCacheOverlay *)cacheOverlay;
-                GPKGFeatureTableData *tableData = [featureOverlay getFeatureTableDataWithLocationCoordinate:tapCoord andMap:self.mapView];
-                featureCount += [tableData rows].count;
-                for (GPKGFeatureRowData *row in [tableData rows]) {
-                    geometry = row.geometry;
-                    for (id key in row.values) {
-                        if (![row.geometryColumn isEqualToString:key]) {
-                            [clickMessage appendString:[NSString stringWithFormat:@"%@: %@</br>", key, [row.values objectForKey:key]]];
-                        }
-                    }
-                }
-            } else {
-                NSString *message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
-                if (message != nil){
-                    if ([clickMessage length] > 0){
-                        [clickMessage appendString:@"</br>"];
-                    }
-                    message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"</br>"];
-                    [clickMessage appendString:message];
-                }
+                
+                NSArray <GeoPackageFeatureItem *> *items = [featureOverlay getFeaturesNearTap:tapCoord andMap:self.mapView];
+                [featureItems addObjectsFromArray:items];
+                
+//                GPKGFeatureTableData *tableData = [featureOverlay getFeatureTableDataWithLocationCoordinate:tapCoord andMap:self.mapView];
+//                featureCount += [tableData rows].count;
+//                for (GPKGFeatureRowData *row in [tableData rows]) {
+//                    geometry = row.geometry;
+//                    for (id key in row.values) {
+//                        if (![row.geometryColumn isEqualToString:key]) {
+//                            [clickMessage appendString:[NSString stringWithFormat:@"%@: %@</br>", key, [row.values objectForKey:key]]];
+//                        }
+//                    }
+//                }
             }
+//            } else {
+//                NSString *message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
+//                if (message != nil){
+//                    if ([clickMessage length] > 0){
+//                        [clickMessage appendString:@"</br>"];
+//                    }
+//                    message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"</br>"];
+//                    [clickMessage appendString:message];
+//                }
+//            }
         }
         
-        if ([clickMessage length] > 0) {
+        if ([featureItems count] > 0) {
             NSString *featureTitle = @"Feature";
             CLLocationCoordinate2D coordinate = tapCoord;
             if (geometry != nil) {
@@ -349,11 +355,12 @@
                 featureTitle = [NSString stringWithFormat:@"%lu Features", (unsigned long)featureCount];
                 coordinate = tapCoord;
             }
-            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:featureTitle layerName: nil actionsDelegate:self scheme:self.scheme];
-            self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+            self.geoPackageFeatureBottomSheet = [[GeoPackageFeatureBottomSheetController alloc] initWithGeoPackageFeatureItem:featureItems actionsDelegate:self scheme:self.scheme];
+//            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:featureTitle layerName: nil actionsDelegate:self scheme:self.scheme];
+            self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.geoPackageFeatureBottomSheet];
             [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
             self.bottomSheet.delegate = self;
-            [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
+            [self.bottomSheet setTrackingScrollView:self.geoPackageFeatureBottomSheet.scrollView];
             [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
         }
     }
@@ -576,15 +583,15 @@
     }
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [self setupMapType:defaults];
+    [self setupMapType];
         
-    BOOL showTraffic = [defaults boolForKey:@"mapShowTraffic"];
+    BOOL showTraffic = [defaults mapShowTraffic];
     self.mapView.showsTraffic = showTraffic && self.mapView.mapType != MKMapTypeSatellite && self.mapView.mapType != 3;
     
     [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     
-    [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
-    [self updateOnlineLayers:[defaults objectForKey:@"selectedOnlineLayers"]];
+    [self updateStaticLayers:[defaults selectedStaticLayers]];
+    [self updateOnlineLayers:[defaults selectedOnlineLayers]];
     NSLog(@"Ensure map layout finished");
 }
 
@@ -605,12 +612,14 @@
     }
 }
 
-- (void) setupMapType: (id) object {
-    NSInteger mapType = [object integerForKey:@"mapType"];
+- (void) setupMapType {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    NSInteger mapType = [defaults mapType];
     if (mapType == 3) {
         [self addBackgroundMap];
     } else {
-        self.mapView.mapType = [object integerForKey:@"mapType"];
+        self.mapView.mapType = [defaults mapType];
         [self removeBackgroundMap];
     }
 }
@@ -735,6 +744,7 @@
         }
         
         // The user has asked for this overlay
+        NSLog(@"The user asked for this one %@: %@", [cacheOverlay getName], cacheOverlay.enabled? @"YES" : @"NO");
         if(cacheOverlay.enabled){
             
             // Handle each type of cache overlay
@@ -842,7 +852,8 @@
     // Check each GeoPackage table
     for(CacheOverlay * tableCacheOverlay in [geoPackageCacheOverlay getChildren]){
         // Check if the table is enabled
-        if(tableCacheOverlay.enabled || YES){
+        NSLog(@"is the table enabled %@: %@", [tableCacheOverlay getName], tableCacheOverlay.enabled ? @"YES": @"NO");
+        if(tableCacheOverlay.enabled){
             
             // Get and open if needed the GeoPackage
             GPKGGeoPackage * geoPackage = [self.geoPackageCache geoPackageOpenName: [geoPackageCacheOverlay getName]];
@@ -998,12 +1009,20 @@
             if(featureTableCacheOverlay.parent.replacedCacheOverlay != nil){
                 cacheOverlay = nil;
             }
-            for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
-                if(cacheOverlay != nil){
-                    // Add the existing linked tile cache overlays
-                    [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+            if ([[featureTableCacheOverlay getLinkedTileTables] count] != 0) {
+                
+                for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
+                    if(cacheOverlay != nil){
+                        // Add the existing linked tile cache overlays
+                        [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+                    }
+                    [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
                 }
-                [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
+            } else if ([featureTableCacheOverlay tileOverlay] != nil) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSLog(@"Adding feature overlay");
+                    [self.mapView addOverlay:[featureTableCacheOverlay tileOverlay] level:MKOverlayLevelAboveLabels];
+                });
             }
         }
         if(cacheOverlay == nil){
@@ -1015,13 +1034,13 @@
             // If indexed, add as a tile overlay
             if([featureTableCacheOverlay getIndexed]){
                 GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
-                int maxFeaturesPerTile = 0;
+                NSInteger maxFeaturesPerTile = 0;
                 if([featureDao geometryType] == SF_POINT){
-                    maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_points_per_tile"];
+                    maxFeaturesPerTile = [defaults geoPackageFeatureTilesMaxPointsPerTile];
                 }else{
-                    maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_features_per_tile"];
+                    maxFeaturesPerTile = [defaults geoPackageFeatureTilesMaxFeaturesPerTile];
                 }
-                [featureTiles setMaxFeaturesPerTile:[NSNumber numberWithInt:maxFeaturesPerTile]];
+                [featureTiles setMaxFeaturesPerTile:[NSNumber numberWithInteger: maxFeaturesPerTile]];
                 GPKGNumberFeaturesTile * numberFeaturesTile = [[GPKGNumberFeaturesTile alloc] init];
                 // Adjust the max features number tile draw paint attributes here as needed to
                 // change how tiles are drawn when more than the max features exist in a tile
@@ -1050,11 +1069,11 @@
             }
             // Not indexed, add the features to the map
             else {
-                int maxFeaturesPerTable = 0;
+                NSInteger maxFeaturesPerTable = 0;
                 if([featureDao geometryType] == SF_POINT){
-                    maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_points_per_table"];
+                    maxFeaturesPerTable = [defaults geoPackageFeaturesMaxPointsPerTable];
                 }else{
-                    maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_features_per_table"];
+                    maxFeaturesPerTable = [defaults geoPackageFeaturesMaxFeaturesPerTable];
                 }
                 SFPProjection * projection = featureDao.projection;
                 GPKGMapShapeConverter * shapeConverter = [[GPKGMapShapeConverter alloc] initWithProjection:projection];

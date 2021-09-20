@@ -566,6 +566,28 @@
             }
             GeoPackageFeatureTableCacheOverlay * tableCache = [[GeoPackageFeatureTableCacheOverlay alloc] initWithName:featureTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andIndexed:indexed andGeometryType:geometryType];
             
+            GPKGExtendedRelationsDao *relationsDao = [GPKGExtendedRelationsDao createWithDatabase:geoPackage.database];
+            GPKGRelatedTablesExtension *rte = [[GPKGRelatedTablesExtension alloc] initWithGeoPackage:geoPackage];
+            GPKGResultSet *relations = [relationsDao relationsToBaseTable:featureTable];
+            NSMutableArray<GPKGExtendedRelation *> *mediaTables = [[NSMutableArray alloc] init];
+            @try {
+                while([relations moveToNext]){
+                    GPKGExtendedRelation *extendedRelation = [relationsDao relation:relations];
+                    if ([extendedRelation relationType] == [GPKGRelationTypes fromName:GPKG_RT_MEDIA_NAME]){
+                        [mediaTables addObject:extendedRelation];
+//                        GPKGMediaDao *media = [rte mediaDaoForRelation:extendedRelation];
+//                        rte mappingsForTableName:<#(NSString *)#> withBaseId:<#(int)#>
+//                        [rte mappingsForRelation:extendedRelation withBaseId:0];
+                    }
+//                    [relatedTables addObject:extendedRelation.relatedTableName];
+                }
+            } @finally {
+                [relations close];
+            }
+            
+            tableCache.rte = rte;
+            tableCache.mediaTables = mediaTables;
+            
             // If indexed, check for linked tile tables
             if(indexed){
                 NSArray<NSString *> * linkedTileTables = [linker tileTablesForFeatureTable:featureTable];

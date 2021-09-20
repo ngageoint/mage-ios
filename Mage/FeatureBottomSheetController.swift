@@ -131,6 +131,15 @@ import Foundation
         }
     }
     
+    @objc public convenience init(featureItem: FeatureItem, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+        self.init(frame: CGRect.zero);
+        self.actionsDelegate = actionsDelegate;
+        self.annotation = annotation;
+        self.scheme = scheme;
+        self.coordinate = coordinate;
+        self.featureItem = featureItem;
+    }
+    
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
         guard let safeScheme = scheme else {
             return;

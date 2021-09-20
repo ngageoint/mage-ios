@@ -15,6 +15,8 @@ import Foundation
     private var actionsDelegate: ObservationActionsDelegate?;
     private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     var scheme: MDCContainerScheming?;
+    private var rightConstraint: NSLayoutConstraint?;
+    private var leftConstraint: NSLayoutConstraint?;
     
     private lazy var stackView: PassThroughStackView = {
         let stackView = PassThroughStackView(forAutoLayout: ());
@@ -101,7 +103,6 @@ import Foundation
         stackView.addArrangedSubview(compactView);
         stackView.addArrangedSubview(viewObservationButtonView);
         self.view.addSubview(stackView);
-        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
         guard let safeObservation = self.observation else {
             return
         }
@@ -122,11 +123,26 @@ import Foundation
     
     override func updateViewConstraints() {
         if (!didSetUpConstraints) {
-            stackView.autoPinEdgesToSuperviewEdges(with: .zero);
+            stackView.autoPinEdge(toSuperviewEdge: .top);
+            stackView.autoPinEdge(toSuperviewEdge: .bottom);
             didSetUpConstraints = true;
         }
         
+        leftConstraint?.autoRemove();
+        rightConstraint?.autoRemove();
+        if (self.traitCollection.horizontalSizeClass == .regular) {
+            leftConstraint = stackView.autoPinEdge(toSuperviewMargin: .left, withInset: -40);
+            rightConstraint = stackView.autoPinEdge(toSuperviewMargin: .right, withInset: -40);
+        } else {
+            leftConstraint = stackView.autoPinEdge(toSuperviewEdge: .left);
+            rightConstraint = stackView.autoPinEdge(toSuperviewEdge: .right);
+        }
+        
         super.updateViewConstraints();
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        self.view.setNeedsUpdateConstraints()
     }
     
     func refresh() {

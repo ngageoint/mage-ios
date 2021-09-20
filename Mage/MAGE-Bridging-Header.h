@@ -13,6 +13,8 @@
 
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"
+#import "GPKGFeatureRowData.h"
+
 #import "FadeTransitionSegue.h"
 #import "MediaLoader.h"
 #import "MageServer.h"

@@ -22,6 +22,7 @@ import MaterialComponents.MaterialBottomSheet
 
 protocol ObservationCommonPropertiesListener {
     func geometryUpdated(_ geometry: SFGeometry?, accuracy: String?, delta: Double?, provider: String?);
+    func timestampUpdated(_ date: Date?);
 }
 
 @objc class ObservationEditCoordinator: NSObject {

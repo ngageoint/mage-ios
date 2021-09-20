@@ -260,6 +260,10 @@
 		F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1226541C2300D645AC /* ColorPickerViewController.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
 		F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */; };
+		F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */; };
+		F73607D726F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D626F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift */; };
+		F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */; };
+		F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */; };
 		F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886C625894CEA00EDA036 /* KeyboardHelper.swift */; };
 		F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */; };
 		F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */; };
@@ -952,6 +956,10 @@
 		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
 		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
+		F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummaryView.swift; sourceTree = "<group>"; };
+		F73607D626F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetController.swift; sourceTree = "<group>"; };
+		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageBottomSheetViewController.swift; sourceTree = "<group>"; };
 		F73886C625894CEA00EDA036 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
 		F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewController.swift; sourceTree = "<group>"; };
@@ -1369,6 +1377,8 @@
 				F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */,
 				F7D43BDF269E0FEB00561A8F /* FeatureActionsView.swift */,
 				F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */,
+				F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */,
+				F73607D626F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift */,
 			);
 			name = Feature;
 			sourceTree = "<group>";
@@ -1391,6 +1401,7 @@
 				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
 				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
 				F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */,
+				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1997,6 +2008,14 @@
 			path = Server5;
 			sourceTree = "<group>";
 		};
+		F73607DA26F90C41008CF824 /* BottomSheets */ = {
+			isa = PBXGroup;
+			children = (
+				F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */,
+			);
+			path = BottomSheets;
+			sourceTree = "<group>";
+		};
 		F73886CA258A6BF700EDA036 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -2355,6 +2374,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F73607DA26F90C41008CF824 /* BottomSheets */,
 				F7B1C473267404A80005FCE4 /* ViewLoader */,
 				F7154ABF260CE136002C8617 /* Navigation */,
 				F743008A2547759C00DCE050 /* Extensions */,
@@ -3039,6 +3059,7 @@
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
+				F73607D726F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
@@ -3114,6 +3135,7 @@
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
+				F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */,
 				F72D432E2694B60300F9AC3B /* Attachment.m in Sources */,
@@ -3128,6 +3150,7 @@
 				F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.m in Sources */,
 				F72D43082694B60300F9AC3B /* Role+CoreDataProperties.m in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
+				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
 				F72D43132694B60300F9AC3B /* ImageryLayer.m in Sources */,
 				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
@@ -3275,6 +3298,7 @@
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */,
+				F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */,
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */,
 				F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */,

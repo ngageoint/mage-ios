@@ -11,10 +11,21 @@ import PureLayout
 import Kingfisher
 
 @objc class FeatureItem: NSObject {
-    var featureDetail: String?;
-    var coordinate: CLLocationCoordinate2D?;
-    var featureTitle: String?;
-    var iconURL: URL?;
+    @objc public init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, iconURL: URL? = nil, images: [UIImage]? = nil) {
+        self.featureId = featureId
+        self.featureDetail = featureDetail
+        self.coordinate = coordinate
+        self.featureTitle = featureTitle
+        self.iconURL = iconURL
+        self.images = images
+    }
+    
+    @objc public var featureId: Int = 0;
+    @objc public var featureDetail: String?;
+    @objc public var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid;
+    @objc public var featureTitle: String?;
+    @objc public var iconURL: URL?;
+    @objc public var images: [UIImage]?;
 }
 
 class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate> {

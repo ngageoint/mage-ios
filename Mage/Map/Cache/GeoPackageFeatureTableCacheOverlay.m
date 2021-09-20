@@ -8,6 +8,10 @@
 
 #import "GeoPackageFeatureTableCacheOverlay.h"
 #import "GPKGMapShapeConverter.h"
+#import "GPKGMapUtils.h"
+#import "GPKGProperties.h"
+#import "GPKGPropertyConstants.h"
+#import "GPKGDataColumnsDao.h"
 
 NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 
@@ -17,7 +21,6 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 @property (nonatomic) enum SFGeometryType geometryType;
 @property (strong, nonatomic) NSMutableDictionary<NSNumber *, GPKGMapShape *> * shapes;
 @property (strong, nonatomic) NSMutableArray<GeoPackageTileTableCacheOverlay *> * linkedTiles;
-
 @end
 
 @implementation GeoPackageFeatureTableCacheOverlay
@@ -72,10 +75,156 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 -(GPKGFeatureTableData *) getFeatureTableDataWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView{
     GPKGFeatureTableData * featureTableData = nil;
     if(self.featureOverlayQuery != nil){
+        
         featureTableData = [self.featureOverlayQuery buildMapClickTableDataWithLocationCoordinate:locationCoordinate andMapView:mapView];
     }
     
     return featureTableData;
+}
+
+- (NSArray<GeoPackageFeatureItem *> *) getFeaturesNearTap: (CLLocationCoordinate2D) tapLocation andMap: (MKMapView *) mapView {
+    NSMutableArray<GeoPackageFeatureItem *> *featureItems = [[NSMutableArray alloc] init];
+    // Get the zoom level
+    double zoom = [GPKGMapUtils currentZoomWithMapView:mapView];
+    
+    // Build a bounding box to represent the click location
+    GPKGBoundingBox * boundingBox = [GPKGMapUtils buildClickBoundingBoxWithLocationCoordinate:tapLocation andMapView:mapView andScreenPercentage:self.featureOverlayQuery.screenClickPercentage];
+    
+    // Get the map click distance tolerance
+    GPKGMapTolerance *tolerance = [GPKGMapUtils toleranceWithLocationCoordinate:tapLocation andMapView:mapView andScreenPercentage:self.featureOverlayQuery.screenClickPercentage];
+    
+    GPKGFeatureTableStyles *styles = self.featureOverlayQuery.featureTiles.featureTableStyles;
+    
+    // Verify the features are indexed and we are getting information
+    if([self.featureOverlayQuery isIndexed] && (self.featureOverlayQuery.maxFeaturesInfo || self.featureOverlayQuery.featuresInfo)){
+        
+        @try {
+            
+            if([self.featureOverlayQuery onAtZoom:zoom andLocationCoordinate:tapLocation]){
+                
+                // Get the number of features in the tile location
+                int tileFeatureCount = [self.featureOverlayQuery tileFeatureCountWithLocationCoordinate:tapLocation andDoubleZoom:zoom];
+                
+                // If more than a configured max features to drawere
+                if([self.featureOverlayQuery moreThanMaxFeatures:tileFeatureCount]){
+                    
+                    // Build the max features message
+                    if(self.featureOverlayQuery.maxFeaturesInfo){
+//                        tableData = [[GPKGFeatureTableData alloc] initWithName:[self.featureOverlayQuery.featureTiles featureDao].tableName andCount:tileFeatureCount];
+                    }
+                    
+                }
+                // Else, query for the features near the click
+                else if(self.featureOverlayQuery.featuresInfo){
+                    
+                    // Query for results and build the message
+                    GPKGFeatureIndexResults * results = [self.featureOverlayQuery queryFeaturesWithBoundingBox:boundingBox inProjection:nil];
+                    
+                    for (GPKGFeatureRow *featureRow in results) {
+                        NSArray<GPKGMediaRow *> * medias = nil;
+                        int featureId = featureRow.idValue;
+                        for (GPKGExtendedRelation *relation in _mediaTables) {
+                            
+                            NSArray<NSNumber *> *relatedMedia = [self.rte mappingsForTableName:relation.mappingTableName withBaseId:featureId];
+                            GPKGMediaDao *mediaDao = [self.rte mediaDaoForTableName:relation.relatedTableName];
+                            medias = [mediaDao rowsWithIds:relatedMedia];
+                        }
+                        GPKGDataColumnsDao *dataColumnsDao = [self dataColumnsDao:self.featureOverlayQuery.featureTiles.featureDao.database];
+                        
+                        NSMutableDictionary * values = [NSMutableDictionary dictionary];
+                        NSMutableDictionary *featureDataTypes = [NSMutableDictionary dictionary];
+                        NSString * geometryColumnName = nil;
+                        
+                        CLLocationCoordinate2D coordinate = tapLocation;
+                        
+                        int geometryColumn = [featureRow geometryColumnIndex];
+                        for(int i = 0; i < [featureRow columnCount]; i++){
+                            
+                            NSObject * value = [featureRow valueWithIndex:i];
+                            
+                            NSString * columnName = [featureRow columnNameWithIndex:i];
+                            
+                            columnName = [self columnNameWithDataColumnsDao:dataColumnsDao andFeatureRow:featureRow andColumnName:columnName];
+                            
+                            if(i == geometryColumn){
+                                geometryColumnName = columnName;
+                                GPKGGeometryData *geometry = (GPKGGeometryData *)value;
+                                SFPoint *centroid = [geometry.geometry centroid];
+                                coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
+                            }
+                            [featureDataTypes setValue:[GPKGDataTypes name:featureRow.featureColumns.columns[i].dataType] forKey:columnName];
+                            if(value != nil){
+                                [values setObject:value forKey:columnName];
+                            }
+                        }
+                        
+                        GPKGFeatureRowData * featureRowData = [[GPKGFeatureRowData alloc] initWithValues:values andGeometryColumnName:geometryColumnName];
+                        
+                        GPKGFeatureStyle *featureStyle = [styles featureStyleWithFeature:featureRow];
+                        UIImage *image = nil;
+                        if ([featureStyle hasIcon]){
+                            GPKGIconRow *icon = featureStyle.icon;
+                            image = icon.dataImage;
+                        }
+                        GPKGStyleRow *style = [featureStyle style];
+                                                
+                        GeoPackageFeatureItem *featureItem = [[GeoPackageFeatureItem alloc] initWithFeatureId:featureId featureRowData: featureRowData featureDataTypes: featureDataTypes coordinate:coordinate layerName: [self getName] icon:image style: style mediaRows:medias];
+                        [featureItems addObject:featureItem];
+                    }
+                    GPKGFeatureTableData *tableData = [self.featureOverlayQuery.featureInfoBuilder buildTableDataAndCloseWithFeatureIndexResults:results andTolerance:tolerance andPoint: [[SFPoint alloc] initWithXValue:tapLocation.longitude andYValue:tapLocation.latitude]];
+                    NSLog(@"table data is %@", tableData);
+                }
+            }
+            
+        }
+        @catch (NSException *e) {
+            NSLog(@"Build Map Click Message Error: %@", [e description]);
+        }
+    }
+    
+    return featureItems;
+}
+
+- (NSString *) attemptToCreateTitle: (NSDictionary *) values {
+    __block NSString *title = @"GeoPackage Feature";
+    [values.allKeys enumerateObjectsUsingBlock:^(id  _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *keyStr = ((NSString*)key).lowercaseString;
+        if ([keyStr isEqualToString:@"name"]) {
+            title = [values objectForKey:(NSString*)key];
+            *stop = true;
+        }
+        if ([keyStr isEqualToString:@"title"]) {
+            title = [values objectForKey:(NSString*)key];
+            *stop = true;
+        }
+    }];
+    
+    return title;
+}
+
+-(NSString *) columnNameWithDataColumnsDao: (GPKGDataColumnsDao *) dataColumnsDao andFeatureRow: (GPKGFeatureRow *) featureRow andColumnName: (NSString *) columnName{
+    
+    NSString * newColumnName = columnName;
+    
+    if(dataColumnsDao != nil){
+        GPKGDataColumns * dataColumn = [dataColumnsDao dataColumnByTableName:featureRow.table.tableName andColumnName:columnName];
+        if(dataColumn != nil){
+            newColumnName = dataColumn.name;
+        }
+    }
+    
+    return newColumnName;
+}
+
+-(GPKGDataColumnsDao *) dataColumnsDao: (GPKGConnection *) database {
+    
+    GPKGDataColumnsDao * dataColumnsDao = [[GPKGDataColumnsDao alloc] initWithDatabase:database];
+    
+    if(![dataColumnsDao tableExists]){
+        dataColumnsDao = nil;
+    }
+    
+    return dataColumnsDao;
 }
 
 -(BOOL) getIndexed{
