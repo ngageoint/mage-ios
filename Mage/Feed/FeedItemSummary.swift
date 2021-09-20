@@ -82,6 +82,8 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
     
     func layoutView() {
         self.addSubview(noContentView);
+        primaryField.numberOfLines = 1;
+        primaryField.lineBreakMode = .byTruncatingTail
     }
     
     override func updateConstraints() {
