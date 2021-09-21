@@ -314,13 +314,15 @@
 //        NSMutableString * clickMessage = [[NSMutableString alloc] init];
         NSUInteger featureCount = 0;
         SFGeometry *geometry = nil;
-        NSMutableArray <GeoPackageFeatureItem *> *featureItems = [[NSMutableArray alloc] init];
+        NSMutableArray <BottomSheetItem *> *bottomSheetItems = [[NSMutableArray alloc] init];
         for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
             if ([cacheOverlay isKindOfClass:[GeoPackageFeatureTableCacheOverlay class]]) {
                 GeoPackageFeatureTableCacheOverlay *featureOverlay = (GeoPackageFeatureTableCacheOverlay *)cacheOverlay;
                 
                 NSArray <GeoPackageFeatureItem *> *items = [featureOverlay getFeaturesNearTap:tapCoord andMap:self.mapView];
-                [featureItems addObjectsFromArray:items];
+                for (GeoPackageFeatureItem *item in items) {
+                    [bottomSheetItems addObject:[[BottomSheetItem alloc] initWithItem:item actionDelegate:self]];
+                }
                 
 //                GPKGFeatureTableData *tableData = [featureOverlay getFeatureTableDataWithLocationCoordinate:tapCoord andMap:self.mapView];
 //                featureCount += [tableData rows].count;
@@ -345,7 +347,7 @@
 //            }
         }
         
-        if ([featureItems count] > 0) {
+        if ([bottomSheetItems count] > 0) {
             NSString *featureTitle = @"Feature";
             CLLocationCoordinate2D coordinate = tapCoord;
             if (geometry != nil) {
@@ -355,12 +357,12 @@
                 featureTitle = [NSString stringWithFormat:@"%lu Features", (unsigned long)featureCount];
                 coordinate = tapCoord;
             }
-            self.geoPackageFeatureBottomSheet = [[GeoPackageFeatureBottomSheetController alloc] initWithGeoPackageFeatureItem:featureItems actionsDelegate:self scheme:self.scheme];
+            self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:bottomSheetItems scheme:self.scheme];
 //            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:featureTitle layerName: nil actionsDelegate:self scheme:self.scheme];
-            self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.geoPackageFeatureBottomSheet];
+            self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
             [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
             self.bottomSheet.delegate = self;
-            [self.bottomSheet setTrackingScrollView:self.geoPackageFeatureBottomSheet.scrollView];
+            [self.bottomSheet setTrackingScrollView:self.mageBottomSheet.scrollView];
             [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
         }
     }
@@ -1436,11 +1438,12 @@
             self.selectedObservationAccuracy = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
             [self.mapView addOverlay:self.selectedObservationAccuracy];
         }
-        self.obsBottomSheet = [[ObservationBottomSheetController alloc] initWithObservation:observation actionsDelegate:self scheme:self.scheme];
-        self.obsBottomSheet.preferredContentSize = CGSizeMake(self.obsBottomSheet.preferredContentSize.width,
+        BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:observation actionDelegate:self];
+        self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:@[bottomSheetItem] scheme:self.scheme];
+        self.mageBottomSheet.preferredContentSize = CGSizeMake(self.mageBottomSheet.preferredContentSize.width,
                                                               observation.isImportant ? 260 : 220);
         
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.obsBottomSheet];
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
         self.bottomSheet.delegate = self;
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];

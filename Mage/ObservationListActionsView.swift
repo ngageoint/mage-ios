@@ -75,6 +75,7 @@ class ObservationListActionsView: UIView {
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
 
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
     }
     
     public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {

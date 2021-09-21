@@ -155,12 +155,6 @@ import Foundation
         return view;
     }()
     
-    private lazy var expandView: UIView = {
-        let view = UIView(forAutoLayout: ());
-        view.setContentHuggingPriority(.defaultLow, for: .vertical);
-        return view;
-    }();
-    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }

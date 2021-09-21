@@ -8,14 +8,24 @@
 
 import UIKit
 
-class MageBottomSheetViewController: UIViewController {
+@objc class BottomSheetItem: NSObject {
+    @objc public var item: Any
+    @objc public var actionDelegate: Any?
+    
+    @objc public init(item: Any, actionDelegate: Any? = nil) {
+        self.item = item;
+        self.actionDelegate = actionDelegate;
+    }
+}
+
+@objc class MageBottomSheetViewController: UIViewController {
     
     private var didSetUpConstraints = false;
-    private var actionsDelegate: FeatureActionsDelegate?;
-    private var featureItems: [GeoPackageFeatureItem] = [];
+    private var items: [BottomSheetItem] = [];
     var scheme: MDCContainerScheming?;
     private var rightConstraint: NSLayoutConstraint?;
     private var leftConstraint: NSLayoutConstraint?;
+    var currentBottomSheetView: UIView?
     
     @objc public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
@@ -112,11 +122,58 @@ class MageBottomSheetViewController: UIViewController {
         return view;
     }()
     
+    init(frame: CGRect) {
+        super.init(nibName: nil, bundle: nil);
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
+    }
+    
+    @objc public convenience init(items: [BottomSheetItem], scheme: MDCContainerScheming?) {
+        self.init(frame: CGRect.zero);
+        self.scheme = scheme;
+        self.items = items;
+        pageControl.numberOfPages = items.count
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        if (items.count > 1) {
+            stackView.addArrangedSubview(pageControlHolder);
+        } else {
+            stackView.addArrangedSubview(dragHandleView);
+        }
+        scrollView.addSubview(stackView);
+        self.view.addSubview(scrollView);
+        
+        if let safeScheme = scheme {
+            applyTheme(withScheme: safeScheme);
+        }
+        
+        populateView();
+        
+        view.setNeedsUpdateConstraints();
+    }
+    
+    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        guard let scheme = scheme else {
+            return;
+        }
+        self.view.backgroundColor = scheme.colorScheme.surfaceColor;
+        
+        leftButton.applyTextTheme(withScheme: scheme);
+        leftButton.tintColor = scheme.colorScheme.primaryColor;
+        rightButton.applyTextTheme(withScheme: scheme);
+        rightButton.tintColor = scheme.colorScheme.primaryColor;
+        
+        pageControl.pageIndicatorTintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        pageControl.currentPageIndicatorTintColor = scheme.colorScheme.primaryColor;
+        pageNumberLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        pageNumberLabel.font = scheme.typographyScheme.caption;
+        self.scheme = scheme;
     }
     
     @objc func leftButtonTap() {
@@ -137,5 +194,57 @@ class MageBottomSheetViewController: UIViewController {
     
     @objc func pageControlChangedValue() {
         self.populateView()
+    }
+    
+    override func updateViewConstraints() {
+        if (!didSetUpConstraints) {
+            scrollView.autoPinEdge(toSuperviewEdge: .top);
+            scrollView.autoPinEdge(toSuperviewEdge: .bottom);
+            
+            stackView.autoPinEdgesToSuperviewEdges();
+            stackView.autoMatch(.width, to: .width, of: scrollView);
+            didSetUpConstraints = true;
+        }
+        
+        leftConstraint?.autoRemove();
+        rightConstraint?.autoRemove();
+        if (self.traitCollection.horizontalSizeClass == .regular) {
+            leftConstraint = scrollView.autoPinEdge(toSuperviewMargin: .left);
+            rightConstraint = scrollView.autoPinEdge(toSuperviewMargin: .right);
+        } else {
+            leftConstraint = scrollView.autoPinEdge(toSuperviewEdge: .left);
+            rightConstraint = scrollView.autoPinEdge(toSuperviewEdge: .right);
+        }
+        
+        super.updateViewConstraints();
+    }
+    
+    func populateView() {
+        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            if self.currentBottomSheetView?.superview != nil {
+                self.currentBottomSheetView?.removeFromSuperview();
+            }
+            self.pageNumberLabel.text = "\(self.pageControl.currentPage+1) of \(self.pageControl.numberOfPages)";
+            
+            let item = self.items[self.pageControl.currentPage];
+            if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
+                self.currentBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+                self.stackView.addArrangedSubview(self.currentBottomSheetView!);
+            } else if let bottomSheetItem = item.item as? Observation {
+                self.currentBottomSheetView = ObservationBottomSheetView(observation: bottomSheetItem, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
+                self.stackView.addArrangedSubview(self.currentBottomSheetView!);
+            }
+            self.view.setNeedsUpdateConstraints();
+            
+//            self.summaryView.populate(item: self.featureItems[self.pageControl.currentPage]);
+//            self.featureActionsView.populate(location: self.featureItems[self.pageControl.currentPage].coordinate, title: nil, delegate: self.actionsDelegate);
+//            self.mediaCollection.isHidden = (self.featureItems[self.pageControl.currentPage].mediaRows?.count ?? 0) == 0
+//            self.mediaCollection.reloadData();
+//            self.addProperties();
+        }, completion: nil);
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        self.view.setNeedsUpdateConstraints()
     }
 }

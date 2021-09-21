@@ -264,6 +264,8 @@
 		F73607D726F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D626F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift */; };
 		F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */; };
 		F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */; };
+		F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */; };
+		F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */; };
 		F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886C625894CEA00EDA036 /* KeyboardHelper.swift */; };
 		F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */; };
 		F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */; };
@@ -306,7 +308,7 @@
 		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
-		F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */; };
+		F76FFBE6261D0D6900532330 /* ObservationBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */; };
 		F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */; };
 		F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */; };
 		F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */; };
@@ -960,6 +962,8 @@
 		F73607D626F234C4008CF824 /* GeoPackageFeatureBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetController.swift; sourceTree = "<group>"; };
 		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageBottomSheetViewController.swift; sourceTree = "<group>"; };
+		F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureItem.swift; sourceTree = "<group>"; };
+		F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetView.swift; sourceTree = "<group>"; };
 		F73886C625894CEA00EDA036 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
 		F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewController.swift; sourceTree = "<group>"; };
@@ -1016,7 +1020,7 @@
 		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldViewTests.swift; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetController.swift; sourceTree = "<group>"; };
+		F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetView.swift; sourceTree = "<group>"; };
 		F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateObservationActionsDelegate.swift; sourceTree = "<group>"; };
 		F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineNavigationView.swift; sourceTree = "<group>"; };
 		F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAttachmentCard.swift; sourceTree = "<group>"; };
@@ -1732,7 +1736,6 @@
 				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
 				F7C812E825C1B37200D4332B /* ObservationDataStore.swift */,
 				F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */,
-				F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */,
 				F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */,
 			);
 			name = Observation;
@@ -2012,6 +2015,9 @@
 			isa = PBXGroup;
 			children = (
 				F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */,
+				F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */,
+				F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */,
+				F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */,
 			);
 			path = BottomSheets;
 			sourceTree = "<group>";
@@ -3176,7 +3182,7 @@
 				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
 				F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */,
 				F72D42EE2694B60300F9AC3B /* User.m in Sources */,
-				F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */,
+				F76FFBE6261D0D6900532330 /* ObservationBottomSheetView.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
@@ -3307,6 +3313,7 @@
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
 				F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */,
 				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
+				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */,
@@ -3341,6 +3348,7 @@
 				F72D43252694B60300F9AC3B /* Role.m in Sources */,
 				F72D43162694B60300F9AC3B /* GeometryDeserializer.m in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
+				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.m in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.m in Sources */,

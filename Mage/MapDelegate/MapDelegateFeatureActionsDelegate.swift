@@ -10,7 +10,7 @@ import Foundation
 
 extension MapDelegate : FeatureActionsDelegate {
     func getDirectionsToLocation(_ location: CLLocationCoordinate2D, title: String?, sourceView: UIView?) {
-        self.featureBottomSheet.dismiss(animated: true) {
+        self.mageBottomSheet.dismiss(animated: true) {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
                 self.locationToNavigateTo = location;

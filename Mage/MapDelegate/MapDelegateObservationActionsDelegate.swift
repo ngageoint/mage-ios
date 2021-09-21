@@ -12,20 +12,20 @@ extension MapDelegate : ObservationActionsDelegate {
     
     func viewObservation(_ observation: Observation) {
         self.resetEnlargedPin();
-        self.obsBottomSheet.dismiss(animated: true, completion: {
+        self.mageBottomSheet.dismiss(animated: true, completion: {
             self.mapCalloutDelegate.calloutTapped(observation);
         });
     }
     
     func favoriteObservation(_ observation: Observation) {
-        observation.toggleFavorite { (_, _) in
-            self.obsBottomSheet.refresh();
-        }
+//        observation.toggleFavorite { (_, _) in
+//            self.mageBottomSheet.refresh();
+//        }
     }
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
         self.resetEnlargedPin();
-        self.obsBottomSheet.dismiss(animated: true, completion: {
+        self.mageBottomSheet.dismiss(animated: true, completion: {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
                 self.observationToNavigateTo = observation;
