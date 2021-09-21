@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GeoPackageFeatureBottomSheetView: UIView {
+class GeoPackageFeatureBottomSheetView: BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var actionsDelegate: FeatureActionsDelegate?;

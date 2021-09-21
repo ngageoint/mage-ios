@@ -1,5 +1,5 @@
 //
-//  FeedItemBottomSheetController.swift
+//  FeedItemBottomSheetView.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 7/14/21.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc class FeedItemBottomSheetController: UIViewController {
+class FeedItemBottomSheetView: BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var feedItem: FeedItem?;
@@ -26,21 +26,6 @@ import Foundation
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         stackView.clipsToBounds = true;
         return stackView;
-    }()
-    
-    private lazy var dragHandleView: UIView = {
-        let drag = UIView(forAutoLayout: ());
-        drag.autoSetDimensions(to: CGSize(width: 50, height: 7));
-        drag.clipsToBounds = true;
-        drag.backgroundColor = .black.withAlphaComponent(0.37);
-        drag.layer.cornerRadius = 3.5;
-        
-        let view = UIView(forAutoLayout: ());
-        view.addSubview(drag);
-        drag.autoAlignAxis(toSuperviewAxis: .vertical);
-        drag.autoPinEdge(toSuperviewEdge: .bottom);
-        drag.autoPinEdge(toSuperviewEdge: .top, withInset: 7);
-        return view;
     }()
     
     private lazy var summaryView: FeedItemSummary = {
@@ -79,49 +64,41 @@ import Foundation
         return view;
     }();
     
-    init(frame: CGRect) {
-        super.init(nibName: nil, bundle: nil);
-    }
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-        self.init(frame: CGRect.zero);
+    init(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+        super.init(frame: CGRect.zero);
         self.actionsDelegate = actionsDelegate;
         self.feedItem = feedItem;
         self.scheme = scheme;
-    }
-    
-    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let safeScheme = scheme else {
-            return;
-        }
-        self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
-        summaryView.applyTheme(withScheme: safeScheme);
-        actionsView?.applyTheme(withScheme: safeScheme);
-        detailsButton.applyContainedTheme(withScheme: safeScheme);
-    }
-    
-    override func viewDidLoad() {
-        stackView.addArrangedSubview(dragHandleView);
+        
         stackView.addArrangedSubview(summaryView);
         if (actionsView != nil) {
             stackView.addArrangedSubview(actionsView!);
         }
         stackView.addArrangedSubview(detailsButtonView);
-        self.view.addSubview(stackView);
+        self.addSubview(stackView);
         stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
         
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
+        populateView();
+        if let scheme = scheme {
+            applyTheme(withScheme: scheme);
         }
-        
-        self.view.setNeedsUpdateConstraints();
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        guard let scheme = scheme else {
+            return;
+        }
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
+        summaryView.applyTheme(withScheme: scheme);
+        actionsView?.applyTheme(withScheme: scheme);
+        detailsButton.applyContainedTheme(withScheme: scheme);
+    }
+    
+    func populateView() {
         guard let feedItem = self.feedItem else {
             return
         }
@@ -129,16 +106,16 @@ import Foundation
         actionsView?.populate(feedItem: feedItem, delegate: actionsDelegate)
     }
     
-    override func updateViewConstraints() {
+    override func updateConstraints() {
         if (!didSetUpConstraints) {
             stackView.autoPinEdgesToSuperviewEdges(with: .zero);
             didSetUpConstraints = true;
         }
         
-        super.updateViewConstraints();
+        super.updateConstraints();
     }
     
-    func refresh() {
+    override func refresh() {
         guard let feedItem = self.feedItem else {
             return
         }

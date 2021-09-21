@@ -18,9 +18,9 @@ extension MapDelegate : ObservationActionsDelegate {
     }
     
     func favoriteObservation(_ observation: Observation) {
-//        observation.toggleFavorite { (_, _) in
-//            self.mageBottomSheet.refresh();
-//        }
+        observation.toggleFavorite { (_, _) in
+            self.mageBottomSheet.currentBottomSheetView?.refresh();
+        }
     }
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {

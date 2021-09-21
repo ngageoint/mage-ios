@@ -267,12 +267,14 @@
                     if ([MapUtils rect:tapRect ContainsLineStart:CGPointMake(mp.x, mp.y) andLineEnd:CGPointMake(mp2.x, mp2.y)]) {
                         NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
                         StaticLayer *staticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, [Server currentEventId]]];
-
-                        self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:polyline.subtitle coordinate:tapCoord featureTitle:polyline.title layerName:staticLayer.name actionsDelegate:self scheme:self.scheme];
-                        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+                        
+                        FeatureItem *featureItem = [[FeatureItem alloc] initWithFeatureId:0 featureDetail:polyline.subtitle coordinate:tapCoord featureTitle:polyline.title layerName: staticLayer.name iconURL:nil images:nil];
+                        BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self];
+                        self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:@[item] scheme:self.scheme];
+                        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
                         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
                         self.bottomSheet.delegate = self;
-                        [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
+                        [self.bottomSheet setTrackingScrollView:self.mageBottomSheet.scrollView];
                         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
                         return;
                     }
@@ -296,11 +298,14 @@
                     NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
                     StaticLayer *staticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, [Server currentEventId]]];
                     
-                    self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:polygon.subtitle coordinate:tapCoord featureTitle:polygon.title layerName:staticLayer.name actionsDelegate:self scheme:self.scheme];
-                    self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+                    FeatureItem *featureItem = [[FeatureItem alloc] initWithFeatureId:0 featureDetail:polygon.subtitle coordinate:tapCoord featureTitle:polygon.title layerName: staticLayer.name iconURL:nil images:nil];
+                    BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self];
+                    self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:@[item] scheme:self.scheme];
+                    self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
+                    
                     [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
                     self.bottomSheet.delegate = self;
-                    [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
+                    [self.bottomSheet setTrackingScrollView:self.mageBottomSheet.scrollView];
                     [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
                     return;
                 }
@@ -1223,6 +1228,7 @@
             for (NSDictionary *feature in [staticLayer.data objectForKey:@"features"]) {
                 if ([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Point"]) {
                     StaticPointAnnotation *annotation = [[StaticPointAnnotation alloc] initWithFeature:feature];
+                    annotation.layerName = staticLayer.name;
                     [_mapView addAnnotation:annotation];
                     [annotations addObject:annotation];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Polygon"]) {
@@ -1410,11 +1416,11 @@
         double accuracy = annotation.location.horizontalAccuracy;
         self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
         [self.mapView addOverlay:self.selectedUserAccuracy];
-        
-        self.userBottomSheet = [[UserBottomSheetController alloc] initWithUser:user actionsDelegate:self scheme:self.scheme];
-        self.userBottomSheet.preferredContentSize = CGSizeMake(self.userBottomSheet.preferredContentSize.width, 220);
+        BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:user actionDelegate:self];
+        self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:@[bottomSheetItem] scheme:self.scheme];
+        self.mageBottomSheet.preferredContentSize = CGSizeMake(self.mageBottomSheet.preferredContentSize.width, 220);
 
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.userBottomSheet];
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
         self.bottomSheet.delegate = self;
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
@@ -1449,16 +1455,22 @@
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *annotation = view.annotation;
-        self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithAnnotation:annotation actionsDelegate:self scheme:self.scheme];
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
+        
+        FeatureItem *featureItem = [[FeatureItem alloc] initWithAnnotation:annotation];
+        BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self];
+        self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:@[item] scheme:self.scheme];
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
         self.bottomSheet.delegate = self;
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
     } else if ([view.annotation isKindOfClass:[FeedItem class]]) {
         FeedItem *item = (FeedItem *)view.annotation;
-        self.feedItemBottomSheet = [[FeedItemBottomSheetController alloc] initWithFeedItem:item actionsDelegate:self scheme:self.scheme];
-        self.feedItemBottomSheet.preferredContentSize = CGSizeMake(self.feedItemBottomSheet.preferredContentSize.width, 220);
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.feedItemBottomSheet];
+        
+        BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:item actionDelegate:self];
+        self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:@[bottomSheetItem] scheme:self.scheme];
+        self.mageBottomSheet.preferredContentSize = CGSizeMake(self.mageBottomSheet.preferredContentSize.width, 220);
+
+        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
         [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
         self.bottomSheet.delegate = self;
         [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];

@@ -19,11 +19,7 @@
 #import "FeatureDetailViewController.h"
 
 @class StraightLineNavigation;
-//@class ObservationBottomSheetController;
-@class UserBottomSheetController;
-@class FeatureBottomSheetController;
 @class MageBottomSheetViewController;
-@class FeedItemBottomSheetController;
 
 @protocol FeedItemDelegate <NSObject>
 
@@ -76,11 +72,7 @@
 @property (nonatomic, weak) UIViewController *navigationController;
 @property (nonatomic, weak) UIStackView *mapStack;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
-//@property (strong, nonatomic) ObservationBottomSheetController *obsBottomSheet;
-@property (strong, nonatomic) UserBottomSheetController *userBottomSheet;
-@property (strong, nonatomic) FeatureBottomSheetController *featureBottomSheet;
 @property (strong, nonatomic) MageBottomSheetViewController *mageBottomSheet;
-@property (strong, nonatomic) FeedItemBottomSheetController *feedItemBottomSheet;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) User *userToNavigateTo;
 @property (strong, nonatomic) Observation *observationToNavigateTo;

@@ -12,7 +12,7 @@ extension MapDelegate : UserActionsDelegate {
     
     func viewUser(_ user: User) {
         self.resetEnlargedPin();
-        self.userBottomSheet.dismiss(animated: true, completion: {
+        self.mageBottomSheet.dismiss(animated: true, completion: {
             self.mapCalloutDelegate.calloutTapped(user);
         });
     }
@@ -29,7 +29,7 @@ extension MapDelegate : UserActionsDelegate {
         self.locationToNavigateTo = kCLLocationCoordinate2DInvalid;
         self.feedItemToNavigateTo = nil;
         self.resetEnlargedPin();
-        self.userBottomSheet.dismiss(animated: true, completion: {
+        self.mageBottomSheet.dismiss(animated: true, completion: {
             guard let location: CLLocationCoordinate2D = user.location?.location().coordinate else {
                 return;
             }
@@ -37,17 +37,17 @@ extension MapDelegate : UserActionsDelegate {
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
                 
                 var image: UIImage? = UIImage(named: "me")
-                if let safeIconUrl = user.iconUrl {
-                    if (safeIconUrl.lowercased().hasPrefix("http")) {
+                if let iconUrl = user.iconUrl {
+                    if (iconUrl.lowercased().hasPrefix("http")) {
                         let token = StoredPassword.retrieveStoredToken();
                         do {
-                            try image = UIImage(data: Data(contentsOf: URL(string: "\(safeIconUrl)?access_token=\(token ?? "")")!))
+                            try image = UIImage(data: Data(contentsOf: URL(string: "\(iconUrl)?access_token=\(token ?? "")")!))
                         } catch {
                             // whatever
                         }
                     } else {
                         do {
-                            try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(safeIconUrl)")))
+                            try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(iconUrl)")))
                         } catch {
                             // whatever
                         }

@@ -25,7 +25,7 @@ import UIKit
     var scheme: MDCContainerScheming?;
     private var rightConstraint: NSLayoutConstraint?;
     private var leftConstraint: NSLayoutConstraint?;
-    var currentBottomSheetView: UIView?
+    var currentBottomSheetView: BottomSheetView?
     
     @objc public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
@@ -233,14 +233,15 @@ import UIKit
             } else if let bottomSheetItem = item.item as? Observation {
                 self.currentBottomSheetView = ObservationBottomSheetView(observation: bottomSheetItem, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
                 self.stackView.addArrangedSubview(self.currentBottomSheetView!);
+            } else if let bottomSheetItem = item.item as? User {
+                self.currentBottomSheetView = UserBottomSheetView(user: bottomSheetItem, actionsDelegate: item.actionDelegate as? UserActionsDelegate, scheme: self.scheme);
+                self.stackView.addArrangedSubview(self.currentBottomSheetView!);
+            } else if let bottomSheetItem = item.item as? FeatureItem {
+                self.currentBottomSheetView = FeatureBottomSheetView(featureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+                self.stackView.addArrangedSubview(self.currentBottomSheetView!);
             }
+            self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
             self.view.setNeedsUpdateConstraints();
-            
-//            self.summaryView.populate(item: self.featureItems[self.pageControl.currentPage]);
-//            self.featureActionsView.populate(location: self.featureItems[self.pageControl.currentPage].coordinate, title: nil, delegate: self.actionsDelegate);
-//            self.mediaCollection.isHidden = (self.featureItems[self.pageControl.currentPage].mediaRows?.count ?? 0) == 0
-//            self.mediaCollection.reloadData();
-//            self.addProperties();
         }, completion: nil);
     }
     

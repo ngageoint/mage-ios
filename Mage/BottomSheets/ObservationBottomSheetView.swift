@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ObservationBottomSheetView: UIView {
+class ObservationBottomSheetView: BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var observation: Observation?;
@@ -71,31 +71,45 @@ class ObservationBottomSheetView: UIView {
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let safeScheme = scheme else {
+        guard let scheme = scheme else {
             return;
         }
-        self.backgroundColor = safeScheme.colorScheme.surfaceColor;
-        compactView.applyTheme(withScheme: safeScheme);
-        detailsButton.applyContainedTheme(withScheme: safeScheme);
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
+        compactView.applyTheme(withScheme: scheme);
+        detailsButton.applyContainedTheme(withScheme: scheme);
     }
     
     func populateView() {
-        guard let safeObservation = self.observation else {
+        guard let observation = self.observation else {
             return
         }
         
-        compactView.configure(observation: safeObservation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
+        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
 
-//        if (safeObservation.isImportant()) {
-//            dragHandleView.backgroundColor = compactView.importantView.backgroundColor;
-//        } else {
-//            dragHandleView.backgroundColor = .clear;
-//        }
+
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
         
         self.setNeedsUpdateConstraints();
+    }
+    
+    override func getHeaderColor() -> UIColor? {
+        guard let observation = self.observation else {
+            return .clear
+        }
+        if (observation.isImportant()) {
+            return compactView.importantView.backgroundColor;
+        } else {
+            return .clear;
+        }
+    }
+    
+    override func refresh() {
+        guard let observation = self.observation else {
+            return
+        }
+        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
     }
     
     override func updateConstraints() {
@@ -108,19 +122,19 @@ class ObservationBottomSheetView: UIView {
     }
     
     @objc func tap(_ card: MDCCard) {
-        if let safeObservation = observation {
+        if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewObservation?(safeObservation);
+                self.actionsDelegate?.viewObservation?(observation);
             }
         }
     }
     
     @objc func detailsButtonTapped() {
-        if let safeObservation = observation {
+        if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewObservation?(safeObservation);
+                self.actionsDelegate?.viewObservation?(observation);
             }
         }
     }
