@@ -23,6 +23,7 @@
 #import "AppDelegate.h"
 #import "Authentication.h"
 #import "UIColor+Hex.h"
+#import "ContactInfo.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
@@ -276,14 +277,18 @@ BOOL signingIn = YES;
 
 - (void) failedToAuthenticate:(NSString *) message {
     NSString *error = [message isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : message;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Login Failed"
-                                                                   message:error
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    alert.accessibilityLabel = @"Login Failed";
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-
     
-    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
+    
+    UITextView *messageView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
+    messageView.attributedText = info.messageWithContactInfo;
+    messageView.textAlignment = NSTextAlignmentCenter;
+    messageView.font = [UIFont systemFontOfSize:20];
+    messageView.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [messageView sizeToFit];
+    
+    [self.loginView.view addSubview:messageView];
+    [self.loginView.view sendSubviewToBack:messageView];
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {

@@ -98,6 +98,9 @@
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
 		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
+		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
+		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
+		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -688,6 +691,12 @@
 		4CF141B01992A5D900C4B70E /* DeviceUUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUUID.h; sourceTree = "<group>"; };
 		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
+		8474FD9526FB8B220041891A /* EmailBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmailBuilder.h; sourceTree = "<group>"; };
+		8474FD9626FB8B220041891A /* EmailBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmailBuilder.m; sourceTree = "<group>"; };
+		8474FD9826FB8B890041891A /* LinkGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkGenerator.h; sourceTree = "<group>"; };
+		8474FD9926FB8B890041891A /* LinkGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkGenerator.m; sourceTree = "<group>"; };
+		8474FD9B26FB8C410041891A /* ContactInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactInfo.h; sourceTree = "<group>"; };
+		8474FD9C26FB8C410041891A /* ContactInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactInfo.m; sourceTree = "<group>"; };
 		85D46DAF483BCF6C67E734D2 /* Pods-MAGE-MAGETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.release.xcconfig"; sourceTree = "<group>"; };
 		9ABC96505F9E30DDA75EDBBC /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D090CC74251BF6C219BBBD0 /* Pods-MAGE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE/Pods-MAGE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1662,6 +1671,19 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
+		8474FD9426FB8AFE0041891A /* Contact */ = {
+			isa = PBXGroup;
+			children = (
+				8474FD9526FB8B220041891A /* EmailBuilder.h */,
+				8474FD9626FB8B220041891A /* EmailBuilder.m */,
+				8474FD9826FB8B890041891A /* LinkGenerator.h */,
+				8474FD9926FB8B890041891A /* LinkGenerator.m */,
+				8474FD9B26FB8C410041891A /* ContactInfo.h */,
+				8474FD9C26FB8C410041891A /* ContactInfo.m */,
+			);
+			name = Contact;
+			sourceTree = "<group>";
+		};
 		F706B2152554365900C19BA7 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2355,6 +2377,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				8474FD9426FB8AFE0041891A /* Contact */,
 				F7B1C473267404A80005FCE4 /* ViewLoader */,
 				F7154ABF260CE136002C8617 /* Navigation */,
 				F743008A2547759C00DCE050 /* Extensions */,
@@ -3104,6 +3127,7 @@
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
 				F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */,
 				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
+				8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */,
 				F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */,
 				F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */,
 				F72D42FB2694B60300F9AC3B /* Feed.m in Sources */,
@@ -3125,6 +3149,7 @@
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
 				F72D42FC2694B60300F9AC3B /* Team.m in Sources */,
+				8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */,
 				F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.m in Sources */,
 				F72D43082694B60300F9AC3B /* Role+CoreDataProperties.m in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
@@ -3209,6 +3234,7 @@
 				F7D43BE8269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift in Sources */,
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
+				8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */,
 				F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
 				F72D430F2694B60300F9AC3B /* UserUtility.m in Sources */,
