@@ -384,17 +384,19 @@ BOOL signingIn = YES;
 }
 
 - (void) registrationWasSuccessful {
-    UIAlertController * alert = [UIAlertController
-                                 alertControllerWithTitle:@"Registration Sent"
-                                 message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    alert.accessibilityLabel = @"Registration Sent";
+    NSString * error =@"Your device has been registered.  \nAn administrator has been notified to approve this device.";
     
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    if (![[self.navigationController topViewController] isKindOfClass:[LoginViewController class]]) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Registration Sent" andMessage:error];
+    
+    UITextView *messageText = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
+    messageText.attributedText = info.messageWithContactInfo;
+    messageText.textAlignment = NSTextAlignmentCenter;
+    messageText.font = self.scheme.typographyScheme.body1;
+    messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    messageText.scrollEnabled = false;
+    [messageText sizeToFit];
+            
+    [self.loginView  addView:messageText];
     
 }
 
