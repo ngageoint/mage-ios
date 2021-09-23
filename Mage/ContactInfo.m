@@ -25,12 +25,11 @@
 
 - (NSAttributedString *) messageWithContactInfo {
     NSString * htmlString = [self constructMessage];
-       NSAttributedString *attributedString = [[NSAttributedString alloc]
+    NSAttributedString *attributedString = [[NSAttributedString alloc]
                  initWithData: [htmlString dataUsingEncoding:NSUnicodeStringEncoding]
                       options: @{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
            documentAttributes: nil
-                        error: nil
-       ];
+                        error: nil];
     return attributedString;
 }
 
@@ -43,7 +42,9 @@
     NSString* emailLink = [LinkGenerator emailLinkWithMessage:_message andIdentifier:_identifier andStrategy:_strategy];
     NSString* phoneLink = [LinkGenerator phoneLink];
     
-    NSString* extendedMessage = [_message copy];
+    NSString* extendedMessage = [self title];
+    extendedMessage = [extendedMessage stringByAppendingString:@"<br /><br />"];
+    extendedMessage = [extendedMessage stringByAppendingString:[_message copy]];
     if(emailLink != nil || phoneLink != nil) {
         extendedMessage = [extendedMessage stringByAppendingString:@"<br /><br />"];
         extendedMessage = [extendedMessage stringByAppendingString:@"You may contact your MAGE administrator via "];

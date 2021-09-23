@@ -21,9 +21,9 @@
 
 @interface LoginViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
-
 - (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
 - (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme;
+
+- (void) addView: (UIView *) newView;
 
 @end

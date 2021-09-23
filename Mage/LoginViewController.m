@@ -31,6 +31,7 @@
 @property (weak, nonatomic) id<LoginDelegate, IDPButtonDelegate> delegate;
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
 
 @end
 
@@ -160,6 +161,10 @@
     }
     
     self.statusView.hidden = !self.loginFailure;
+}
+
+- (void) addView: (UIView *) newView {
+    [self.loginsStackView addArrangedSubview:newView];    
 }
 
 @end

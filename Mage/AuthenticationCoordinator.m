@@ -280,20 +280,17 @@ BOOL signingIn = YES;
     
     ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
     
-    UITextView *messageView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.loginsStackView.bounds.size.width, self.loginView.loginsStackView.bounds.size.height)];
-    messageView.attributedText = info.messageWithContactInfo;
-    messageView.textAlignment = NSTextAlignmentCenter;
-    messageView.font = [UIFont systemFontOfSize:20];
-    messageView.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    [messageView sizeToFit];
+    UITextView *messageText = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
+    messageText.attributedText = info.messageWithContactInfo;
+    messageText.textAlignment = NSTextAlignmentCenter;
+    messageText.font = [UIFont systemFontOfSize:20];
+    messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    [messageText sizeToFit];
     
-    UIView *stackView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
-    [stackView addSubview:messageView];
+    UIView *messageView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
+    [messageView addSubview:messageText];
             
-    [self.loginView.loginsStackView  addArrangedSubview:stackView];
-    //[self.loginView.loginsStackView insertArrangedSubview:stackView atIndex:self.loginView.loginsStackView.arrangedSubviews.count-1];
-    //[self.loginView.view addSubview:messageView];
-    //[self.loginView.view sendSubviewToBack:messageView];
+    [self.loginView  addView:messageView];
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
