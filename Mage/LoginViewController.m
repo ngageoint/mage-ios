@@ -168,9 +168,16 @@
     
     if(![lastView isMemberOfClass:[LocalLoginView class]] && ![lastView isMemberOfClass:[LdapLoginView class]] && ![lastView isMemberOfClass:[IDPLoginView class]] && ![lastView isMemberOfClass:[OrView class]]) {
         [self.loginsStackView removeArrangedSubview:lastView];
+        [lastView removeFromSuperview];
     }
     
-    [self.loginsStackView addArrangedSubview:newView];    
+    [self.loginsStackView addArrangedSubview:newView];
+    
+    if([self.loginsStackView.superview isMemberOfClass:[UIScrollView class]]) {
+        UIScrollView * scrollView = (UIScrollView *)self.loginsStackView.superview;
+        CGPoint bottomOffset = CGPointMake(0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom);
+        [scrollView setContentOffset:bottomOffset animated:YES];
+    }
 }
 
 @end
