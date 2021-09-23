@@ -283,14 +283,12 @@ BOOL signingIn = YES;
     UITextView *messageText = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
     messageText.attributedText = info.messageWithContactInfo;
     messageText.textAlignment = NSTextAlignmentCenter;
-    messageText.font = [UIFont systemFontOfSize:20];
+    messageText.font = self.scheme.typographyScheme.body1;
     messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    messageText.scrollEnabled = false;
     [messageText sizeToFit];
-    
-    UIView *messageView  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
-    [messageView addSubview:messageText];
             
-    [self.loginView  addView:messageView];
+    [self.loginView  addView:messageText];
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
