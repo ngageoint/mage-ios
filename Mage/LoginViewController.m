@@ -164,6 +164,12 @@
 }
 
 - (void) addView: (UIView *) newView {
+    UIView * lastView = self.loginsStackView.arrangedSubviews[self.loginsStackView.arrangedSubviews.count-1];
+    
+    if(![lastView isMemberOfClass:[LocalLoginView class]] && ![lastView isMemberOfClass:[LdapLoginView class]] && ![lastView isMemberOfClass:[IDPLoginView class]] && ![lastView isMemberOfClass:[OrView class]]) {
+        [self.loginsStackView removeArrangedSubview:lastView];
+    }
+    
     [self.loginsStackView addArrangedSubview:newView];    
 }
 
