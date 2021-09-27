@@ -170,6 +170,7 @@
 
 - (void) setContactInfo:(ContactInfo *) contactInfo {
     self.messageView.attributedText = contactInfo.messageWithContactInfo;
+    self.messageView.accessibilityLabel = contactInfo.title;
     self.messageView.textAlignment = NSTextAlignmentCenter;
     self.messageView.font = self.scheme.typographyScheme.body1;
     self.messageView.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
