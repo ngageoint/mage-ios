@@ -178,9 +178,11 @@
     self.messageView.hidden = NO;
     
     if([self.loginsStackView.superview isMemberOfClass:[UIScrollView class]]) {
-        UIScrollView * scrollView = (UIScrollView *)self.loginsStackView.superview;
-        CGPoint bottomOffset = CGPointMake(0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom);
-        [scrollView setContentOffset:bottomOffset animated:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIScrollView * scrollView = (UIScrollView *)self.loginsStackView.superview;
+            CGPoint bottomOffset = CGPointMake(0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom);
+            [scrollView setContentOffset:bottomOffset animated:YES];
+        });
     }
 }
 
