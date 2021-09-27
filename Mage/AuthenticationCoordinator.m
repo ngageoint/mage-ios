@@ -279,16 +279,8 @@ BOOL signingIn = YES;
     NSString *error = [message isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : message;
     
     ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
-    
-    UITextView *messageText = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
-    messageText.attributedText = info.messageWithContactInfo;
-    messageText.textAlignment = NSTextAlignmentCenter;
-    messageText.font = self.scheme.typographyScheme.body1;
-    messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    messageText.scrollEnabled = false;
-    [messageText sizeToFit];
             
-    [self.loginView  addView:messageText];
+    [self.loginView  setContactInfo:info];
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
@@ -388,15 +380,7 @@ BOOL signingIn = YES;
     
     ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Registration Sent" andMessage:error];
     
-    UITextView *messageText = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginView.view.bounds.size.width, self.loginView.view.bounds.size.height)];
-    messageText.attributedText = info.messageWithContactInfo;
-    messageText.textAlignment = NSTextAlignmentCenter;
-    messageText.font = self.scheme.typographyScheme.body1;
-    messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    messageText.scrollEnabled = false;
-    [messageText sizeToFit];
-            
-    [self.loginView  addView:messageText];
+    [self.loginView  setContactInfo:info];
     
 }
 

@@ -32,6 +32,7 @@
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
+@property (strong, nonatomic) IBOutlet UITextView *messageView;
 
 @end
 
@@ -160,18 +161,21 @@
         [self.loginsStackView insertArrangedSubview:view atIndex:self.loginsStackView.arrangedSubviews.count-1];
     }
     
+    self.messageView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginsStackView.bounds.size.width, self.loginsStackView.bounds.size.height)];
+    self.messageView.hidden = YES;
+    [self.loginsStackView addArrangedSubview:self.messageView];
+    
     self.statusView.hidden = !self.loginFailure;
 }
 
-- (void) addView: (UIView *) newView {
-    UIView * lastView = self.loginsStackView.arrangedSubviews[self.loginsStackView.arrangedSubviews.count-1];
-    
-    if(![lastView isMemberOfClass:[LocalLoginView class]] && ![lastView isMemberOfClass:[LdapLoginView class]] && ![lastView isMemberOfClass:[IDPLoginView class]] && ![lastView isMemberOfClass:[OrView class]]) {
-        [self.loginsStackView removeArrangedSubview:lastView];
-        [lastView removeFromSuperview];
-    }
-    
-    [self.loginsStackView addArrangedSubview:newView];
+- (void) setContactInfo:(ContactInfo *) contactInfo {
+    self.messageView.attributedText = contactInfo.messageWithContactInfo;
+    self.messageView.textAlignment = NSTextAlignmentCenter;
+    self.messageView.font = self.scheme.typographyScheme.body1;
+    self.messageView.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.messageView.scrollEnabled = false;
+    [self.messageView sizeToFit];
+    self.messageView.hidden = NO;
     
     if([self.loginsStackView.superview isMemberOfClass:[UIScrollView class]]) {
         UIScrollView * scrollView = (UIScrollView *)self.loginsStackView.superview;

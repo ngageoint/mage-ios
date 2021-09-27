@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
 #import "User.h"
+#import "ContactInfo.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
 
 @protocol LoginDelegate
@@ -24,6 +25,6 @@
 - (instancetype) initWithMageServer: (MageServer *) server andDelegate: (id<LoginDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
 - (instancetype) initWithMageServer:(MageServer *)server andUser: (User *) user andDelegate:(id<LoginDelegate>)delegate andScheme: (id<MDCContainerScheming>) containerScheme;
 
-- (void) addView: (UIView *) newView;
+- (void) setContactInfo: (ContactInfo *) contactInfo;
 
 @end
