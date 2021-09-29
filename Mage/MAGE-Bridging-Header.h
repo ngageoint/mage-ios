@@ -19,7 +19,6 @@
 #import "MediaLoader.h"
 #import "MageServer.h"
 #import "Mage.h"
-#import "MageInitializer.h"
 #import "Server.h"
 #import <MGRS.h>
 #import "MagicalRecord+MAGE.h"

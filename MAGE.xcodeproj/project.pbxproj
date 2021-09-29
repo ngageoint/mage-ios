@@ -343,7 +343,7 @@
 		F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */; };
 		F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */; };
 		F7911623249125230043A529 /* MageRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911622249125230043A529 /* MageRootViewTests.swift */; };
-		F79116262491414B0043A529 /* MageInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F79116252491414B0043A529 /* MageInitializer.m */; };
+		F79116262491414B0043A529 /* MageInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79116252491414B0043A529 /* MageInitializer.swift */; };
 		F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911627249154130043A529 /* MageCoreDataFixtures.swift */; };
 		F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */; };
 		F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */; };
@@ -1063,8 +1063,7 @@
 		F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldView.swift; sourceTree = "<group>"; };
 		F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldViewTests.swift; sourceTree = "<group>"; };
 		F7911622249125230043A529 /* MageRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageRootViewTests.swift; sourceTree = "<group>"; };
-		F79116242491414B0043A529 /* MageInitializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MageInitializer.h; sourceTree = "<group>"; };
-		F79116252491414B0043A529 /* MageInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageInitializer.m; sourceTree = "<group>"; };
+		F79116252491414B0043A529 /* MageInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageInitializer.swift; sourceTree = "<group>"; };
 		F7911627249154130043A529 /* MageCoreDataFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageCoreDataFixtures.swift; sourceTree = "<group>"; };
 		F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsViewTests.swift; sourceTree = "<group>"; };
 		F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFieldDelegate.swift; sourceTree = "<group>"; };
@@ -2430,8 +2429,7 @@
 				F73CD0841F7E941E00B4124D /* TransitionViewController.m */,
 				F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */,
 				F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */,
-				F79116242491414B0043A529 /* MageInitializer.h */,
-				F79116252491414B0043A529 /* MageInitializer.m */,
+				F79116252491414B0043A529 /* MageInitializer.swift */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -3167,7 +3165,7 @@
 				F72D432C2694B60300F9AC3B /* GPSLocation.m in Sources */,
 				F7D43BDA269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift in Sources */,
 				F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */,
-				F79116262491414B0043A529 /* MageInitializer.m in Sources */,
+				F79116262491414B0043A529 /* MageInitializer.swift in Sources */,
 				F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */,
 				F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */,
 				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.m in Sources */,

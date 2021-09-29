@@ -82,6 +82,7 @@
     
     [_childCoordinators addObject:authCoordinator];
     [authCoordinator start:mageServer];
+    [FeedService.shared stop];
 }
 
 - (void) authenticationSuccessful {
@@ -110,7 +111,7 @@
     __weak __typeof__(self) weakSelf = self;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"baseServerUrl"];
     [MageServer serverWithURL:url success:^(MageServer *mageServer) {
-        [MagicalRecord deleteAndSetupMageCoreDataStack];
+        [MageInitializer clearServerSpecificData];
         dispatch_async(dispatch_get_main_queue(), ^{
             [FadeTransitionSegue addFadeTransitionToView:weakSelf.navigationController.view];
             [weakSelf.navigationController popViewControllerAnimated:NO];

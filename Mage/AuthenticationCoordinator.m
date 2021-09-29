@@ -23,6 +23,7 @@
 #import "AppDelegate.h"
 #import "Authentication.h"
 #import "UIColor+Hex.h"
+#import "MAGE-Swift.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
@@ -231,7 +232,7 @@ BOOL signingIn = YES;
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     alert.accessibilityLabel = @"Loss of Unsaved Data";
                     [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                        [MagicalRecord deleteAndSetupMageCoreDataStack];
+                        [MageInitializer clearServerSpecificData];
                         [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
                     }]];
                     
@@ -241,7 +242,7 @@ BOOL signingIn = YES;
                     
                     [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
                 } else {
-                    [MagicalRecord deleteAndSetupMageCoreDataStack];
+                    [MageInitializer clearServerSpecificData];
                     [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
                 }
                 
