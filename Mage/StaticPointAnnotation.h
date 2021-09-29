@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) NSDictionary *feature;
 @property (strong, nonatomic) NSString *iconUrl;
+@property (strong, nonatomic) NSString *layerName;
 
 - (id)initWithFeature:(NSDictionary *) feature;
 - (UIView *) detailViewForAnnotation;

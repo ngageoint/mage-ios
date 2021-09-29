@@ -29,6 +29,7 @@ import Foundation
         for (key, _) in feedTimers {
             stopPullingFeedItems(feedId: key);
         }
+        feedFetchedResultsController = nil;
     }
     
     public func isStopped() -> Bool {

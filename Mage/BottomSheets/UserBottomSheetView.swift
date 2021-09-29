@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc class UserBottomSheetController: UIViewController {
+class UserBottomSheetView: BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var user: User?;
@@ -26,21 +26,6 @@ import Foundation
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         stackView.clipsToBounds = true;
         return stackView;
-    }()
-    
-    private lazy var dragHandleView: UIView = {
-        let drag = UIView(forAutoLayout: ());
-        drag.autoSetDimensions(to: CGSize(width: 50, height: 7));
-        drag.clipsToBounds = true;
-        drag.backgroundColor = .black.withAlphaComponent(0.37);
-        drag.layer.cornerRadius = 3.5;
-        
-        let view = UIView(forAutoLayout: ());
-        view.addSubview(drag);
-        drag.autoAlignAxis(toSuperviewAxis: .vertical);
-        drag.autoPinEdge(toSuperviewEdge: .bottom);
-        drag.autoPinEdge(toSuperviewEdge: .top, withInset: 7);
-        return view;
     }()
     
     private lazy var summaryView: UserSummaryView = {
@@ -67,6 +52,8 @@ import Foundation
         view.addSubview(detailsButton);
         detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
         detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
+        detailsButton.autoPinEdge(.top, to: .top, of: view);
+        detailsButton.autoPinEdge(.bottom, to: .bottom, of: view);
         return view;
     }()
     
@@ -75,77 +62,64 @@ import Foundation
         view.setContentHuggingPriority(.defaultLow, for: .vertical);
         return view;
     }();
-    
-    init(frame: CGRect) {
-        super.init(nibName: nil, bundle: nil);
-    }
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(user: User, actionsDelegate: UserActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-        self.init(frame: CGRect.zero);
+    init(user: User, actionsDelegate: UserActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+        super.init(frame: CGRect.zero);
+        self.translatesAutoresizingMaskIntoConstraints = false;
         self.actionsDelegate = actionsDelegate;
         self.user = user;
         self.scheme = scheme;
+        stackView.addArrangedSubview(summaryView);
+        stackView.addArrangedSubview(userActionsView);
+        stackView.addArrangedSubview(detailsButtonView);
+        self.addSubview(stackView);
+        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
+        
+        summaryView.populate(item: user, actionsDelegate: actionsDelegate);
+        userActionsView.populate(user: user, delegate: actionsDelegate);
+        
+        if let scheme = scheme {
+            applyTheme(withScheme: scheme);
+        }
+        
+        self.setNeedsUpdateConstraints();
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
         guard let safeScheme = scheme else {
             return;
         }
-        self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
+        self.backgroundColor = safeScheme.colorScheme.surfaceColor;
         summaryView.applyTheme(withScheme: safeScheme);
         userActionsView.applyTheme(withScheme: safeScheme);
         detailsButton.applyContainedTheme(withScheme: safeScheme);
     }
     
-    override func viewDidLoad() {
-        stackView.addArrangedSubview(dragHandleView);
-        stackView.addArrangedSubview(summaryView);
-        stackView.addArrangedSubview(userActionsView);
-        stackView.addArrangedSubview(detailsButtonView);
-        self.view.addSubview(stackView);
-        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
-
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
-        
-        self.view.setNeedsUpdateConstraints();
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        guard let safeUser = self.user else {
-            return
-        }
-        
-        summaryView.populate(item: safeUser, actionsDelegate: actionsDelegate);
-        userActionsView.populate(user: safeUser, delegate: actionsDelegate);
-    }
-    
-    override func updateViewConstraints() {
+    override func updateConstraints() {
         if (!didSetUpConstraints) {
             stackView.autoPinEdgesToSuperviewEdges(with: .zero);
             didSetUpConstraints = true;
         }
         
-        super.updateViewConstraints();
+        super.updateConstraints();
     }
     
-    func refresh() {
-        guard let safeUser = self.user else {
+    override func refresh() {
+        guard let user = self.user else {
             return
         }
-        summaryView.populate(item: safeUser, actionsDelegate: actionsDelegate);
+        summaryView.populate(item: user, actionsDelegate: actionsDelegate);
     }
     
     @objc func detailsButtonTapped() {
-        if let safeUser = user {
+        if let user = user {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewUser?(safeUser);
+                self.actionsDelegate?.viewUser?(user);
             }
         }
     }

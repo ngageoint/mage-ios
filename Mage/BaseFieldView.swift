@@ -55,7 +55,6 @@ class BaseFieldView : UIView {
         stackView.distribution = .fill
         stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8)
         stackView.isLayoutMarginsRelativeArrangement = false;
-//        stackView.translatesAutoresizingMaskIntoConstraints = true;
         return stackView;
     }()
     

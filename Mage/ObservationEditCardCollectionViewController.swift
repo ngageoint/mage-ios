@@ -270,7 +270,9 @@ import MaterialComponents.MDCCard
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
-        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms.count == 0) {
+        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms.filter({ form in
+            return !(form[FormKey.archived.key] as? Bool ?? false)
+        }).count == 0) {
             addFormFAB.isHidden = true;
         }
         if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
@@ -682,6 +684,20 @@ extension ObservationEditCardCollectionViewController: ObservationCommonProperti
         observation?.setGeometry(geometry);
         if let safeObservation = self.observation {
             commonFieldView?.setObservation(observation: safeObservation);
+        }
+    }
+    
+    func timestampUpdated(_ date: Date?) {
+        let formatter = ISO8601DateFormatter();
+        formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
+        if let date = date {
+            let formatter = ISO8601DateFormatter();
+            formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
+            observationProperties[ObservationKey.timestamp.key] = formatter.string(from:date);
+            observation?.timestamp = date;
+        } else {
+            observationProperties.removeValue(forKey: ObservationKey.timestamp.key)
+            observation?.timestamp = nil;
         }
     }
 }

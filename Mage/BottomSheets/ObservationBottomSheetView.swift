@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc class ObservationBottomSheetController: UIViewController {
+class ObservationBottomSheetView: BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var observation: Observation?;
@@ -27,21 +27,6 @@ import Foundation
         stackView.translatesAutoresizingMaskIntoConstraints = false;
         stackView.clipsToBounds = true;
         return stackView;
-    }()
-    
-    private lazy var dragHandleView: UIView = {
-        let drag = UIView(forAutoLayout: ());
-        drag.autoSetDimensions(to: CGSize(width: 50, height: 7));
-        drag.clipsToBounds = true;
-        drag.backgroundColor = .black.withAlphaComponent(0.37);
-        drag.layer.cornerRadius = 3.5;
-        
-        let view = UIView(forAutoLayout: ());
-        view.addSubview(drag);
-        drag.autoAlignAxis(toSuperviewAxis: .vertical);
-        drag.autoPinEdge(toSuperviewEdge: .bottom);
-        drag.autoPinEdge(toSuperviewEdge: .top, withInset: 7);
-        return view;
     }()
     
     private lazy var compactView: ObservationCompactView = {
@@ -63,93 +48,94 @@ import Foundation
         view.addSubview(detailsButton);
         detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
         detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
+        detailsButton.autoPinEdge(.top, to: .top, of: view);
+        detailsButton.autoPinEdge(.bottom, to: .bottom, of: view);
         return view;
     }()
-    
-    private lazy var expandView: UIView = {
-        let view = UIView(forAutoLayout: ());
-        view.setContentHuggingPriority(.defaultLow, for: .vertical);
-        return view;
-    }();
-    
-    init(frame: CGRect) {
-        super.init(nibName: nil, bundle: nil);
-    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(observation: Observation, actionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-        self.init(frame: CGRect.zero);
+    init(observation: Observation, actionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming?) {
         self.actionsDelegate = actionsDelegate;
         self.observation = observation;
         self.scheme = scheme;
+        super.init(frame: CGRect.zero);
+        self.translatesAutoresizingMaskIntoConstraints = false;
+        
+        stackView.addArrangedSubview(compactView);
+        stackView.addArrangedSubview(viewObservationButtonView);
+        self.addSubview(stackView);
+        populateView();
+        applyTheme(withScheme: self.scheme);
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let safeScheme = scheme else {
+        guard let scheme = scheme else {
             return;
         }
-        self.view.backgroundColor = safeScheme.colorScheme.surfaceColor;
-        compactView.applyTheme(withScheme: safeScheme);
-        detailsButton.applyContainedTheme(withScheme: safeScheme);
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
+        compactView.applyTheme(withScheme: scheme);
+        detailsButton.applyContainedTheme(withScheme: scheme);
     }
     
-    override func viewDidLoad() {
-        stackView.addArrangedSubview(dragHandleView);
-        stackView.addArrangedSubview(compactView);
-        stackView.addArrangedSubview(viewObservationButtonView);
-        self.view.addSubview(stackView);
-        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
-        guard let safeObservation = self.observation else {
+    func populateView() {
+        guard let observation = self.observation else {
             return
         }
         
-        compactView.configure(observation: safeObservation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
+        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
 
-        if (safeObservation.isImportant()) {
-            dragHandleView.backgroundColor = compactView.importantView.backgroundColor;
-        } else {
-            dragHandleView.backgroundColor = .clear;
-        }
+
         if let safeScheme = scheme {
             applyTheme(withScheme: safeScheme);
         }
         
-        self.view.setNeedsUpdateConstraints();
+        self.setNeedsUpdateConstraints();
     }
     
-    override func updateViewConstraints() {
+    override func getHeaderColor() -> UIColor? {
+        guard let observation = self.observation else {
+            return .clear
+        }
+        if (observation.isImportant()) {
+            return compactView.importantView.backgroundColor;
+        } else {
+            return .clear;
+        }
+    }
+    
+    override func refresh() {
+        guard let observation = self.observation else {
+            return
+        }
+        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
+    }
+    
+    override func updateConstraints() {
         if (!didSetUpConstraints) {
-            stackView.autoPinEdgesToSuperviewEdges(with: .zero);
+            stackView.autoPinEdgesToSuperviewEdges();
             didSetUpConstraints = true;
         }
         
-        super.updateViewConstraints();
-    }
-    
-    func refresh() {
-        guard let safeObservation = self.observation else {
-            return
-        }
-        compactView.configure(observation: safeObservation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
+        super.updateConstraints();
     }
     
     @objc func tap(_ card: MDCCard) {
-        if let safeObservation = observation {
+        if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewObservation?(safeObservation);
+                self.actionsDelegate?.viewObservation?(observation);
             }
         }
     }
     
     @objc func detailsButtonTapped() {
-        if let safeObservation = observation {
+        if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewObservation?(safeObservation);
+                self.actionsDelegate?.viewObservation?(observation);
             }
         }
     }

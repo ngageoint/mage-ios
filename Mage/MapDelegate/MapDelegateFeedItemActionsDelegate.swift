@@ -12,7 +12,7 @@ import Kingfisher
 extension MapDelegate : FeedItemActionsDelegate {
     
     func getDirectionsToFeedItem(_ feedItem: FeedItem, sourceView: UIView? = nil) {
-        self.feedItemBottomSheet.dismiss(animated: true, completion: {
+        self.mageBottomSheet.dismiss(animated: true, completion: {
             var extraActions: [UIAlertAction] = [];
             extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
                 self.observationToNavigateTo = nil;
@@ -47,7 +47,7 @@ extension MapDelegate : FeedItemActionsDelegate {
     }
     
     func viewFeedItem(feedItem: FeedItem) {
-        self.feedItemBottomSheet.dismiss(animated: true, completion: {
+        self.mageBottomSheet.dismiss(animated: true, completion: {
             self.mapCalloutDelegate.calloutTapped(feedItem);
         })
     }

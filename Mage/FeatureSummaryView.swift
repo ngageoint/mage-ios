@@ -11,14 +11,45 @@ import PureLayout
 import Kingfisher
 
 @objc class FeatureItem: NSObject {
-    var featureDetail: String?;
-    var coordinate: CLLocationCoordinate2D?;
-    var featureTitle: String?;
-    var iconURL: URL?;
+    
+    @objc public init(annotation: StaticPointAnnotation) {
+        self.featureDetail = (annotation.feature["properties"] as? [AnyHashable : Any])?["description"] as? String
+        self.coordinate = annotation.coordinate
+        self.featureTitle = (annotation.feature["properties"] as? [AnyHashable : Any])?["name"] as? String
+        self.layerName = annotation.layerName
+        if let iconUrl = annotation.iconUrl {
+            self.iconURL = URL(string: iconUrl);
+        }
+    }
+    
+    @objc public init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, layerName: String? = nil, iconURL: URL? = nil, images: [UIImage]? = nil) {
+        self.featureId = featureId
+        self.featureDetail = featureDetail
+        self.coordinate = coordinate
+        self.featureTitle = featureTitle
+        self.iconURL = iconURL
+        self.images = images
+        self.layerName = layerName;
+    }
+    
+    @objc public var featureId: Int = 0;
+    @objc public var featureDetail: String?;
+    @objc public var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid;
+    @objc public var featureTitle: String?;
+    @objc public var iconURL: URL?;
+    @objc public var images: [UIImage]?;
+    @objc public var layerName: String?
 }
 
 class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate> {
     private var didSetUpConstraints = false;
+    
+    private lazy var secondaryLabelIcon: UIImageView = {
+        let secondaryLabelIcon = UIImageView(image: UIImage(named: "layers"));
+        secondaryLabelIcon.tintColor = secondaryField.textColor
+        secondaryLabelIcon.autoSetDimensions(to: CGSize(width: 14, height: 14));
+        return secondaryLabelIcon;
+    }();
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
@@ -58,6 +89,10 @@ class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate
         
         primaryField.text = item.featureTitle ?? " ";
         timestamp.isHidden = true;
-        secondaryField.text = item.featureDetail;
+        secondaryField.text = item.layerName;
+        if (secondaryLabelIcon.superview == nil) {
+            secondaryContainer.insertArrangedSubview(secondaryLabelIcon, at: 0);
+        }
+//        secondaryField.text = item.featureDetail;
     }
 }

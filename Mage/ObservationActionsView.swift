@@ -219,6 +219,7 @@ class ObservationActionsView: UIView {
 
         cancelOrRemoveButton.applyTextTheme(withScheme: scheme);
         setImportantButton.applyContainedTheme(withScheme: scheme);
+        self.backgroundColor = scheme.colorScheme.surfaceColor
     }
     
     public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {

@@ -143,14 +143,14 @@ import Kingfisher
         setServerConnectionStatus();
         UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
         
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { notification in
+        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { [weak self]  notification in
             guard let notificationObject: StraightLineNavigationNotification = notification.object as? StraightLineNavigationNotification else {
                 return;
             }
-            self.mapTab.popToRootViewController(animated: false);
-            self.selectedViewController = self.mapTab;
+            self?.mapTab.popToRootViewController(animated: false);
+            self?.selectedViewController = self?.mapTab;
             
-            if let mvc: MapViewController = self.mapTab.viewControllers[0] as? MapViewController {
+            if let mvc: MapViewController = self?.mapTab.viewControllers[0] as? MapViewController {
                 mvc.mapDelegate.feedItemToNavigateTo = nil;
                 mvc.mapDelegate.userToNavigateTo = nil;
                 if let user = notificationObject.user {

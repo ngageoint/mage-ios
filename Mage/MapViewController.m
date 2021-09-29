@@ -639,7 +639,7 @@
 -(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
         CGPoint cgPoint = [tapGestureRecognizer locationInView:self.mapView];
-        [self.mapDelegate mapClickAtPoint:cgPoint];
+        [self.mapDelegate mapTap:cgPoint];
     }
 }
 

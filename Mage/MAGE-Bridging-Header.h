@@ -13,11 +13,12 @@
 
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"
+#import "GPKGFeatureRowData.h"
+
 #import "FadeTransitionSegue.h"
 #import "MediaLoader.h"
 #import "MageServer.h"
 #import "Mage.h"
-#import "MageInitializer.h"
 #import "Server.h"
 #import <MGRS.h>
 #import "MagicalRecord+MAGE.h"

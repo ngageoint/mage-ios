@@ -59,7 +59,7 @@
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 
-@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate, UserActionsDelegate, FeatureActionsDelegate, FeedItemActionsDelegate>
+@interface MapDelegate () <MDCBottomSheetControllerDelegate, ObservationActionsDelegate, StraightLineNavigationDelegate, UserActionsDelegate, FeatureActionsDelegate, FeedItemActionsDelegate, BottomSheetDelegate>
     @property (nonatomic, strong) LocationAccuracy *selectedUserAccuracy;
     @property (nonatomic, strong) ObservationAccuracy *selectedObservationAccuracy;
 
@@ -87,6 +87,7 @@
 @property (strong, nonatomic) MDCBottomSheetController *bottomSheet;
 @property (strong, nonatomic) MKAnnotationView *enlargedPin;
 @property (nonatomic) BOOL headingActive;
+@property (nonatomic) BOOL regionChanging;
 @end
 
 @implementation MapDelegate
@@ -236,6 +237,39 @@
     }
 }
 
+- (NSArray <BottomSheetItem *>*) createBottomSheetItemsFromAnnotations: (NSSet<id<MKAnnotation>> *) annotations {
+    NSMutableArray<BottomSheetItem *> *items = [NSMutableArray array];
+    
+    for (id<MKAnnotation> mkannotation in annotations) {
+        if ([mkannotation isKindOfClass:[LocationAnnotation class]]) {
+            LocationAnnotation *annotation = mkannotation;
+            User *user = annotation.user;
+            
+            BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:user actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+            [items addObject:bottomSheetItem];
+        } else if ([mkannotation isKindOfClass:[ObservationAnnotation class]]) {
+            ObservationAnnotation *annotation = mkannotation;
+            Observation *observation = annotation.observation;
+            BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:observation actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+            [items addObject:bottomSheetItem];
+        } else if ([mkannotation isKindOfClass:[StaticPointAnnotation class]]) {
+            StaticPointAnnotation *annotation = mkannotation;
+            
+            FeatureItem *featureItem = [[FeatureItem alloc] initWithAnnotation:annotation];
+            BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+            [items addObject:item];
+        } else if ([mkannotation isKindOfClass:[FeedItem class]]) {
+            FeedItem *item = (FeedItem *)mkannotation;
+            BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:item actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+            [items addObject: bottomSheetItem];
+        } else {
+            NSLog(@"Annotation is a %@", [mkannotation class]);
+        }
+    }
+
+    return items;
+}
+
 -(void)mapTap: (CGPoint) tapPoint {
 
     CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
@@ -250,7 +284,18 @@
         _areaAnnotation = nil;
     }
     
-    CGRect tapRect = CGRectMake(mapPointAsCGP.x, mapPointAsCGP.y, tolerance, tolerance);
+    CGRect tapRect = CGRectMake(mapPointAsCGP.x - (tolerance / 2), mapPointAsCGP.y - (tolerance / 2), tolerance, tolerance);
+    
+    NSSet<id<MKAnnotation>> * annotationsTapped = [self.mapView annotationsInMapRect:MKMapRectMake(mapPoint.x - (tolerance / 2), mapPoint.y - (tolerance / 2), tolerance, tolerance)];
+
+    NSMutableArray<BottomSheetItem *> *bottomSheetItems = [NSMutableArray arrayWithArray: [self createBottomSheetItemsFromAnnotations:annotationsTapped]];
+    
+    MapShapeObservation *mapShapeObservation = [self.mapObservations clickedShapeAtLocation:tapCoord];
+    if (mapShapeObservation != nil) {
+        Observation *observation = mapShapeObservation.observation;
+        BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:observation actionDelegate:self annotationView:nil];
+        [bottomSheetItems addObject:bottomSheetItem];
+    }
     
     for (NSString* layerId in self.staticLayers) {
         NSArray *layerFeatures = [self.staticLayers objectForKey:layerId];
@@ -267,14 +312,11 @@
                     if ([MapUtils rect:tapRect ContainsLineStart:CGPointMake(mp.x, mp.y) andLineEnd:CGPointMake(mp2.x, mp2.y)]) {
                         NSLog(@"tapped the polyline in layer %@ named %@", layerId, polyline.title);
                         StaticLayer *staticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, [Server currentEventId]]];
-
-                        self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:polyline.subtitle coordinate:tapCoord featureTitle:polyline.title layerName:staticLayer.name actionsDelegate:self scheme:self.scheme];
-                        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
-                        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
-                        self.bottomSheet.delegate = self;
-                        [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
-                        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
-                        return;
+                        
+                        FeatureItem *featureItem = [[FeatureItem alloc] initWithFeatureId:0 featureDetail:polyline.subtitle coordinate:tapCoord featureTitle:polyline.title layerName: staticLayer.name iconURL:nil images:nil];
+                        BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self annotationView:nil];
+                        [bottomSheetItems addObject:item];
+                        break;
                     }
                 }
             } else if ([feature isKindOfClass:[MKPolygon class]]){
@@ -296,67 +338,84 @@
                     NSLog(@"tapped the polygon in layer %@ named %@", layerId, polygon.title);
                     StaticLayer *staticLayer = [StaticLayer MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", layerId, [Server currentEventId]]];
                     
-                    self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:polygon.subtitle coordinate:tapCoord featureTitle:polygon.title layerName:staticLayer.name actionsDelegate:self scheme:self.scheme];
-                    self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
-                    [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
-                    self.bottomSheet.delegate = self;
-                    [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
-                    [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
-                    return;
+                    FeatureItem *featureItem = [[FeatureItem alloc] initWithFeatureId:0 featureDetail:polygon.subtitle coordinate:tapCoord featureTitle:polygon.title layerName: staticLayer.name iconURL:nil images:nil];
+                    BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self annotationView:nil];
+                    [bottomSheetItems addObject:item];
                 }
                 
                 CGPathRelease(mpr);
             }
         }
     }
-    
+        
     if ([self.mapCacheOverlays count] > 0) {
-        NSMutableString * clickMessage = [[NSMutableString alloc] init];
-        NSUInteger featureCount = 0;
-        SFGeometry *geometry = nil;
         for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
             if ([cacheOverlay isKindOfClass:[GeoPackageFeatureTableCacheOverlay class]]) {
                 GeoPackageFeatureTableCacheOverlay *featureOverlay = (GeoPackageFeatureTableCacheOverlay *)cacheOverlay;
-                GPKGFeatureTableData *tableData = [featureOverlay getFeatureTableDataWithLocationCoordinate:tapCoord andMap:self.mapView];
-                featureCount += [tableData rows].count;
-                for (GPKGFeatureRowData *row in [tableData rows]) {
-                    geometry = row.geometry;
-                    for (id key in row.values) {
-                        if (![row.geometryColumn isEqualToString:key]) {
-                            [clickMessage appendString:[NSString stringWithFormat:@"%@: %@</br>", key, [row.values objectForKey:key]]];
-                        }
-                    }
-                }
-            } else {
-                NSString *message = [cacheOverlay onMapClickWithLocationCoordinate:tapCoord andMap:self.mapView];
-                if (message != nil){
-                    if ([clickMessage length] > 0){
-                        [clickMessage appendString:@"</br>"];
-                    }
-                    message = [message stringByReplacingOccurrencesOfString:@"\n" withString:@"</br>"];
-                    [clickMessage appendString:message];
+                
+                NSArray <GeoPackageFeatureItem *> *items = [featureOverlay getFeaturesNearTap:tapCoord andMap:self.mapView];
+                for (GeoPackageFeatureItem *item in items) {
+                    [bottomSheetItems addObject:[[BottomSheetItem alloc] initWithItem:item actionDelegate:self annotationView: nil]];
                 }
             }
-        }
-        
-        if ([clickMessage length] > 0) {
-            NSString *featureTitle = @"Feature";
-            CLLocationCoordinate2D coordinate = tapCoord;
-            if (geometry != nil) {
-                coordinate = CLLocationCoordinate2DMake(geometry.centroid.y.doubleValue, geometry.centroid.x.doubleValue);
-            }
-            if (featureCount > 1) {
-                featureTitle = [NSString stringWithFormat:@"%lu Features", (unsigned long)featureCount];
-                coordinate = tapCoord;
-            }
-            self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithFeatureDetail:clickMessage coordinate:tapCoord featureTitle:featureTitle layerName: nil actionsDelegate:self scheme:self.scheme];
-            self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
-            [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
-            self.bottomSheet.delegate = self;
-            [self.bottomSheet setTrackingScrollView:self.featureBottomSheet.scrollView];
-            [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
         }
     }
+    
+    if (bottomSheetItems.count == 0) {
+        return;
+    }
+    self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:bottomSheetItems scheme:self.scheme bottomSheetDelegate: self];
+    self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
+    [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
+    self.bottomSheet.delegate = self;
+    [self.bottomSheet setTrackingScrollView:self.mageBottomSheet.scrollView];
+    [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
+}
+
+- (void) bottomSheetItemShowing:(BottomSheetItem *)item {
+    [self resetEnlargedPin];
+    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        if (item.annotationView != nil) {
+            
+            if ([item.annotationView.annotation isKindOfClass:[LocationAnnotation class]]) {
+                LocationAnnotation *annotation = item.annotationView.annotation;
+                
+                double accuracy = annotation.location.horizontalAccuracy;
+                self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
+                [self.mapView addOverlay:self.selectedUserAccuracy];
+                
+                [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    item.annotationView.transform = CGAffineTransformScale(item.annotationView.transform, 2.0, 2.0);
+                    item.annotationView.centerOffset = CGPointMake(0, -(item.annotationView.image.size.height) + 14);
+                    self.enlargedPin = item.annotationView;
+                } completion:nil];
+            } else if ([item.annotationView.annotation isKindOfClass:[ObservationAnnotation class]]) {
+                
+                ObservationAnnotation *annotation = item.annotationView.annotation;
+                Observation *observation = annotation.observation;
+                
+                [annotation setSubtitle:observation.timestamp.timeAgoSinceNow];
+                
+                id accuracyProperty = [observation.properties valueForKeyPath:@"accuracy"];
+                if (accuracyProperty != nil) {
+                    double accuracy = [accuracyProperty doubleValue];
+                    self.selectedObservationAccuracy = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
+                    [self.mapView addOverlay:self.selectedObservationAccuracy];
+                }
+                [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    item.annotationView.transform = CGAffineTransformScale(item.annotationView.transform, 2.0, 2.0);
+                    item.annotationView.centerOffset = CGPointMake(0, -(item.annotationView.image.size.height));
+                    self.enlargedPin = item.annotationView;
+                } completion:nil];
+            } else {
+                [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    item.annotationView.transform = CGAffineTransformScale(item.annotationView.transform, 2.0, 2.0);
+                    item.annotationView.centerOffset = CGPointMake(0, -(item.annotationView.image.size.height));
+                    self.enlargedPin = item.annotationView;
+                } completion:nil];
+            }
+        }
+    } completion:nil];
 }
 
 - (void) cleanup {
@@ -576,15 +635,15 @@
     }
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [self setupMapType:defaults];
+    [self setupMapType];
         
-    BOOL showTraffic = [defaults boolForKey:@"mapShowTraffic"];
+    BOOL showTraffic = [defaults mapShowTraffic];
     self.mapView.showsTraffic = showTraffic && self.mapView.mapType != MKMapTypeSatellite && self.mapView.mapType != 3;
     
     [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     
-    [self updateStaticLayers:[defaults objectForKey:@"selectedStaticLayers"]];
-    [self updateOnlineLayers:[defaults objectForKey:@"selectedOnlineLayers"]];
+    [self updateStaticLayers:[defaults selectedStaticLayers]];
+    [self updateOnlineLayers:[defaults selectedOnlineLayers]];
     NSLog(@"Ensure map layout finished");
 }
 
@@ -605,12 +664,14 @@
     }
 }
 
-- (void) setupMapType: (id) object {
-    NSInteger mapType = [object integerForKey:@"mapType"];
+- (void) setupMapType {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    NSInteger mapType = [defaults mapType];
     if (mapType == 3) {
         [self addBackgroundMap];
     } else {
-        self.mapView.mapType = [object integerForKey:@"mapType"];
+        self.mapView.mapType = [defaults mapType];
         [self removeBackgroundMap];
     }
 }
@@ -735,6 +796,7 @@
         }
         
         // The user has asked for this overlay
+        NSLog(@"The user asked for this one %@: %@", [cacheOverlay getName], cacheOverlay.enabled? @"YES" : @"NO");
         if(cacheOverlay.enabled){
             
             // Handle each type of cache overlay
@@ -842,7 +904,8 @@
     // Check each GeoPackage table
     for(CacheOverlay * tableCacheOverlay in [geoPackageCacheOverlay getChildren]){
         // Check if the table is enabled
-        if(tableCacheOverlay.enabled || YES){
+        NSLog(@"is the table enabled %@: %@", [tableCacheOverlay getName], tableCacheOverlay.enabled ? @"YES": @"NO");
+        if(tableCacheOverlay.enabled){
             
             // Get and open if needed the GeoPackage
             GPKGGeoPackage * geoPackage = [self.geoPackageCache geoPackageOpenName: [geoPackageCacheOverlay getName]];
@@ -998,12 +1061,20 @@
             if(featureTableCacheOverlay.parent.replacedCacheOverlay != nil){
                 cacheOverlay = nil;
             }
-            for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
-                if(cacheOverlay != nil){
-                    // Add the existing linked tile cache overlays
-                    [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+            if ([[featureTableCacheOverlay getLinkedTileTables] count] != 0) {
+                
+                for(GeoPackageTileTableCacheOverlay * linkedTileTable in [featureTableCacheOverlay getLinkedTileTables]){
+                    if(cacheOverlay != nil){
+                        // Add the existing linked tile cache overlays
+                        [self addGeoPackageTileCacheOverlay:enabledCacheOverlays andCacheOverlay:linkedTileTable andGeoPackage:geoPackage andLinkedToFeatures:true];
+                    }
+                    [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
                 }
-                [self.mapCacheOverlays removeObjectForKey:[linkedTileTable getCacheName]];
+            } else if ([featureTableCacheOverlay tileOverlay] != nil) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSLog(@"Adding feature overlay");
+                    [self.mapView addOverlay:[featureTableCacheOverlay tileOverlay] level:MKOverlayLevelAboveLabels];
+                });
             }
         }
         if(cacheOverlay == nil){
@@ -1015,13 +1086,13 @@
             // If indexed, add as a tile overlay
             if([featureTableCacheOverlay getIndexed]){
                 GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
-                int maxFeaturesPerTile = 0;
+                NSInteger maxFeaturesPerTile = 0;
                 if([featureDao geometryType] == SF_POINT){
-                    maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_points_per_tile"];
+                    maxFeaturesPerTile = [defaults geoPackageFeatureTilesMaxPointsPerTile];
                 }else{
-                    maxFeaturesPerTile = (int)[defaults integerForKey:@"geopackage_feature_tiles_max_features_per_tile"];
+                    maxFeaturesPerTile = [defaults geoPackageFeatureTilesMaxFeaturesPerTile];
                 }
-                [featureTiles setMaxFeaturesPerTile:[NSNumber numberWithInt:maxFeaturesPerTile]];
+                [featureTiles setMaxFeaturesPerTile:[NSNumber numberWithInteger: maxFeaturesPerTile]];
                 GPKGNumberFeaturesTile * numberFeaturesTile = [[GPKGNumberFeaturesTile alloc] init];
                 // Adjust the max features number tile draw paint attributes here as needed to
                 // change how tiles are drawn when more than the max features exist in a tile
@@ -1050,11 +1121,11 @@
             }
             // Not indexed, add the features to the map
             else {
-                int maxFeaturesPerTable = 0;
+                NSInteger maxFeaturesPerTable = 0;
                 if([featureDao geometryType] == SF_POINT){
-                    maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_points_per_table"];
+                    maxFeaturesPerTable = [defaults geoPackageFeaturesMaxPointsPerTable];
                 }else{
-                    maxFeaturesPerTable = (int)[defaults integerForKey:@"geopackage_features_max_features_per_table"];
+                    maxFeaturesPerTable = [defaults geoPackageFeaturesMaxFeaturesPerTable];
                 }
                 SFPProjection * projection = featureDao.projection;
                 GPKGMapShapeConverter * shapeConverter = [[GPKGMapShapeConverter alloc] initWithProjection:projection];
@@ -1202,6 +1273,7 @@
             for (NSDictionary *feature in [staticLayer.data objectForKey:@"features"]) {
                 if ([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Point"]) {
                     StaticPointAnnotation *annotation = [[StaticPointAnnotation alloc] initWithFeature:feature];
+                    annotation.layerName = staticLayer.name;
                     [_mapView addAnnotation:annotation];
                     [annotations addObject:annotation];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Polygon"]) {
@@ -1291,12 +1363,14 @@
 }
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+    self.regionChanging = true;
     if (self.mapView.userTrackingMode == MKUserTrackingModeFollow) {
         self.isTrackingAnimation = YES;
     }
 }
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    self.regionChanging = false;
     self.isTrackingAnimation = NO;
     if (_trackViewState) {
         [NSUserDefaults.standardUserDefaults setMapRegion: mapView.region];
@@ -1374,79 +1448,6 @@
     return nil;
 }
 
-- (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
-    if ([view.annotation isKindOfClass:[LocationAnnotation class]]) {
-        LocationAnnotation *annotation = view.annotation;
-        if (self.allowEnlarge) {
-            [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                view.transform = CGAffineTransformScale(view.transform, 2.0, 2.0);
-                view.centerOffset = CGPointMake(0, -(view.image.size.height) + 14);
-                self.enlargedPin = view;
-            } completion:nil];
-        }
-        User *user = annotation.user;
-        
-        double accuracy = annotation.location.horizontalAccuracy;
-        self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
-        [self.mapView addOverlay:self.selectedUserAccuracy];
-        
-        self.userBottomSheet = [[UserBottomSheetController alloc] initWithUser:user actionsDelegate:self scheme:self.scheme];
-        self.userBottomSheet.preferredContentSize = CGSizeMake(self.userBottomSheet.preferredContentSize.width, 220);
-
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.userBottomSheet];
-        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
-        self.bottomSheet.delegate = self;
-        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
-    } else if ([view.annotation isKindOfClass:[ObservationAnnotation class]]) {
-        ObservationAnnotation *annotation = view.annotation;
-        if (self.allowEnlarge) {
-            [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                view.transform = CGAffineTransformScale(view.transform, 2.0, 2.0);
-                view.centerOffset = CGPointMake(0, -(view.image.size.height));
-                self.enlargedPin = view;
-            } completion:nil];
-        }
-
-        Observation *observation = annotation.observation;
-        
-        [annotation setSubtitle:observation.timestamp.timeAgoSinceNow];
-        
-        id accuracyProperty = [observation.properties valueForKeyPath:@"accuracy"];
-        if (accuracyProperty != nil) {
-            double accuracy = [accuracyProperty doubleValue];
-            self.selectedObservationAccuracy = [ObservationAccuracy circleWithCenterCoordinate:observation.location.coordinate radius:accuracy];
-            [self.mapView addOverlay:self.selectedObservationAccuracy];
-        }
-        self.obsBottomSheet = [[ObservationBottomSheetController alloc] initWithObservation:observation actionsDelegate:self scheme:self.scheme];
-        self.obsBottomSheet.preferredContentSize = CGSizeMake(self.obsBottomSheet.preferredContentSize.width,
-                                                              observation.isImportant ? 260 : 220);
-        
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.obsBottomSheet];
-        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
-        self.bottomSheet.delegate = self;
-        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
-    } else if ([view.annotation isKindOfClass:[StaticPointAnnotation class]]) {
-        StaticPointAnnotation *annotation = view.annotation;
-        self.featureBottomSheet = [[FeatureBottomSheetController alloc] initWithAnnotation:annotation actionsDelegate:self scheme:self.scheme];
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.featureBottomSheet];
-        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
-        self.bottomSheet.delegate = self;
-        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
-    } else if ([view.annotation isKindOfClass:[FeedItem class]]) {
-        FeedItem *item = (FeedItem *)view.annotation;
-        self.feedItemBottomSheet = [[FeedItemBottomSheetController alloc] initWithFeedItem:item actionsDelegate:self scheme:self.scheme];
-        self.feedItemBottomSheet.preferredContentSize = CGSizeMake(self.feedItemBottomSheet.preferredContentSize.width, 220);
-        self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.feedItemBottomSheet];
-        [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
-        self.bottomSheet.delegate = self;
-        [self.navigationController presentViewController:self.bottomSheet animated:true completion:nil];
-    } else {
-        NSLog(@"Annotation is a %@", [view class]);
-    }
-    [mapView deselectAnnotation:view.annotation animated:false];
-
-}
-
 - (void) stopHeading {
     if ([self.straightLineNavigation stopHeading]) {
         [self.locationManager stopUpdatingHeading];
@@ -1515,16 +1516,6 @@
         [_mapView removeOverlay:self.selectedObservationAccuracy];
         self.selectedObservationAccuracy = nil;
     }
-    
-    if (_areaAnnotation != nil && view.annotation == _areaAnnotation) {
-        [self performSelector:@selector(reSelectAnnotationIfNoneSelected:)
-                   withObject:view.annotation afterDelay:0];
-    }
-}
-
-- (void)reSelectAnnotationIfNoneSelected:(id<MKAnnotation>)annotation {
-    if (_mapView.selectedAnnotations == nil || _mapView.selectedAnnotations.count == 0)
-        [_mapView selectAnnotation:annotation animated:NO];
 }
 
 - (void) mapView:(MKMapView *) mapView annotationView:(MKAnnotationView *) view calloutAccessoryControlTapped:(UIControl *) control {
@@ -1774,29 +1765,16 @@
     }
 }
 
+- (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
+    [mapView deselectAnnotation:view.annotation animated:false];
+}
+
 - (void)observationDetailSelected:(Observation *)observation {
     [self selectedObservation:observation];
 }
 
 - (void)userDetailSelected:(User *)user {
     [self selectedUser:user];
-}
-
-- (void) mapClickAtPoint: (CGPoint) point{
-    
-    CLLocationCoordinate2D location = [self.mapView convertPoint:point toCoordinateFromView:self.mapView];
-    
-    [self.mapObservations clearShapeAnnotation];
-    
-    MapShapeObservation *mapShapeObservation = [self.mapObservations clickedShapeAtLocation:location];
-    if (mapShapeObservation != nil) {
-        MapAnnotation *shapeAnnotation = [self.mapObservationManager addShapeAnnotationAtLocation:location forObservation:mapShapeObservation.observation andHidden:self.hideObservations];
-        [self.mapObservations setShapeAnnotation:shapeAnnotation withShapeObservation:mapShapeObservation];
-    }
-    
-    if (!self.hideStaticLayers) {
-        [self mapTap:point];
-    }
 }
 
 - (void)bottomSheetControllerDidDismissBottomSheet:(nonnull MDCBottomSheetController *)controller {
@@ -1807,12 +1785,18 @@
     if (self.enlargedPin) {
         [self.mapView deselectAnnotation:self.enlargedPin.annotation animated:true];
         if ([self.enlargedPin.annotation isKindOfClass:[LocationAnnotation class]]) {
+            if (self.selectedUserAccuracy != nil) {
+                [self.mapView removeOverlay: self.selectedUserAccuracy];
+            }
             [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.enlargedPin.transform = CGAffineTransformScale(self.enlargedPin.transform, 0.5, 0.5);
                 self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0) + 7);
                 self.enlargedPin = nil;
             } completion:nil];
         } else {
+            if (self.selectedObservationAccuracy != nil) {
+                [self.mapView removeOverlay: self.selectedObservationAccuracy];
+            }
             [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.enlargedPin.transform = CGAffineTransformScale(self.enlargedPin.transform, 0.5, 0.5);
                 self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0));
