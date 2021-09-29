@@ -88,7 +88,7 @@
 - (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user;
 - (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
 - (void) setMapView:(MKMapView *)mapView;
-- (void) mapClickAtPoint: (CGPoint) point;
+- (void) mapTap: (CGPoint) tapPoint;
 - (void) cleanup;
 - (void) ensureMapLayout;
 - (void) setupListeners;

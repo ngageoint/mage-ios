@@ -8,13 +8,19 @@
 
 import UIKit
 
+@objc protocol BottomSheetDelegate {
+    @objc optional func bottomSheetItemShowing(_ item: BottomSheetItem);
+}
+
 @objc class BottomSheetItem: NSObject {
     @objc public var item: Any
+    @objc public var annotationView: MKAnnotationView?
     @objc public var actionDelegate: Any?
     
-    @objc public init(item: Any, actionDelegate: Any? = nil) {
+    @objc public init(item: Any, actionDelegate: Any? = nil, annotationView: MKAnnotationView? = nil) {
         self.item = item;
         self.actionDelegate = actionDelegate;
+        self.annotationView = annotationView;
     }
 }
 
@@ -26,6 +32,7 @@ import UIKit
     private var rightConstraint: NSLayoutConstraint?;
     private var leftConstraint: NSLayoutConstraint?;
     var currentBottomSheetView: BottomSheetView?
+    private var bottomSheetDelegate: BottomSheetDelegate?
     
     @objc public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
@@ -130,13 +137,13 @@ import UIKit
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(items: [BottomSheetItem], scheme: MDCContainerScheming?) {
+    @objc public convenience init(items: [BottomSheetItem], scheme: MDCContainerScheming?, bottomSheetDelegate: BottomSheetDelegate? = nil) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.items = items;
+        self.bottomSheetDelegate = bottomSheetDelegate;
         pageControl.numberOfPages = items.count
     }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -146,6 +153,7 @@ import UIKit
         } else {
             stackView.addArrangedSubview(dragHandleView);
         }
+        
         scrollView.addSubview(stackView);
         self.view.addSubview(scrollView);
         
@@ -242,6 +250,7 @@ import UIKit
             }
             self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
             self.view.setNeedsUpdateConstraints();
+            self.bottomSheetDelegate?.bottomSheetItemShowing?(item)
         }, completion: nil);
     }
     

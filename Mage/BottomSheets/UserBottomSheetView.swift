@@ -52,6 +52,8 @@ class UserBottomSheetView: BottomSheetView {
         view.addSubview(detailsButton);
         detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
         detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
+        detailsButton.autoPinEdge(.top, to: .top, of: view);
+        detailsButton.autoPinEdge(.bottom, to: .bottom, of: view);
         return view;
     }()
     
@@ -67,6 +69,7 @@ class UserBottomSheetView: BottomSheetView {
     
     init(user: User, actionsDelegate: UserActionsDelegate? = nil, scheme: MDCContainerScheming?) {
         super.init(frame: CGRect.zero);
+        self.translatesAutoresizingMaskIntoConstraints = false;
         self.actionsDelegate = actionsDelegate;
         self.user = user;
         self.scheme = scheme;

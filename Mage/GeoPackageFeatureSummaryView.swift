@@ -50,11 +50,7 @@ class GeoPackageFeatureSummaryView : CommonSummaryView<GeoPackageFeatureItem, Fe
         } else {
             timestamp.isHidden = true;
         }
-        
-        secondaryField.text = item.layerName;
-        if (secondaryLabelIcon.superview == nil) {
-            secondaryContainer.insertArrangedSubview(secondaryLabelIcon, at: 0);
-        }
+        self.createSecondaryTitle(item: item);
     }
     
     func getDate(item: GeoPackageFeatureItem) -> Date? {
@@ -66,10 +62,28 @@ class GeoPackageFeatureSummaryView : CommonSummaryView<GeoPackageFeatureItem, Fe
         return nil;
     }
     
+    func createSecondaryTitle(item: GeoPackageFeatureItem) {
+        if let values = item.featureRowData?.values(), let titleKey = values.keys.first(where: { key in
+            return ["secondaryfield", "subtitle", "variantfield"].contains((key as? String)?.lowercased());
+        }) {
+            if let title = values[titleKey] as? String {
+                secondaryField.text = title;
+            }
+        }
+        
+        secondaryField.text = item.layerName;
+        if (secondaryLabelIcon.superview == nil) {
+            secondaryContainer.insertArrangedSubview(secondaryLabelIcon, at: 0);
+        }
+    }
+    
     func createTitle(item: GeoPackageFeatureItem) -> String {
         let title = "GeoPackage Feature";
+        if item.maxFeaturesReached {
+            return "\(item.featureCount) Features";
+        }
         if let values = item.featureRowData?.values(), let titleKey = values.keys.first(where: { key in
-            return ["name", "title"].contains((key as? String)?.lowercased());
+            return ["name", "title", "primaryfield"].contains((key as? String)?.lowercased());
         }) {
             return values[titleKey] as? String ?? title;
         }

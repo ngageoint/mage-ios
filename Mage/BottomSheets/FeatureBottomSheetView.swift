@@ -54,50 +54,17 @@ class FeatureBottomSheetView: BottomSheetView {
     }()
     
     private lazy var featureActionsView: FeatureActionsView = {
-        
-//        if (annotation != nil) {
-//            let view = FeatureActionsView(location: annotation?.coordinate, title: annotation?.title, featureActionsDelegate: actionsDelegate, scheme: scheme);
-//            return view;
-//        } else {
         let view = FeatureActionsView(location: featureItem.coordinate, title: featureItem.featureTitle, featureActionsDelegate: actionsDelegate, scheme: scheme);
-            return view;
-//        }
+        return view;
     }()
     
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
-    
-//    init(featureDetail: String, coordinate: CLLocationCoordinate2D, featureTitle: String?, layerName: String? = nil, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-//        super.init(frame: CGRect.zero);
-//        self.actionsDelegate = actionsDelegate;
-//        self.featureDetail = featureDetail;
-//        self.featureTitle = featureTitle;
-//        self.coordinate = coordinate;
-//        self.scheme = scheme;
-//        featureItem.coordinate = coordinate;
-//        featureItem.featureTitle = featureTitle;
-//        featureItem.featureDetail = layerName;
-//        featureItem.iconURL = nil;
-//        createView();
-//    }
-//
-//    init(annotation: StaticPointAnnotation, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-//        super.init(frame: CGRect.zero);
-//        self.actionsDelegate = actionsDelegate;
-//        self.annotation = annotation;
-//        self.scheme = scheme;
-//        featureItem.coordinate = annotation.coordinate;
-//        featureItem.featureTitle = annotation.title;
-//        featureItem.featureDetail = annotation.subtitle;
-//        if (annotation.iconUrl != nil) {
-//            featureItem.iconURL = URL(string: annotation.iconUrl);
-//        }
-//        createView();
-//    }
-    
+
     init(featureItem: FeatureItem, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
         super.init(frame: CGRect.zero);
+        self.translatesAutoresizingMaskIntoConstraints = false;
         self.actionsDelegate = actionsDelegate;
         self.scheme = scheme;
         self.featureItem = featureItem;
@@ -153,14 +120,6 @@ class FeatureBottomSheetView: BottomSheetView {
                 return attributedString
             }
         }
-//        guard let annotation = self.annotation else {
-//            return NSAttributedString(string:"");
-//        }
-//        
-//        let data = Data(annotation.detailTextForAnnotation().utf8);
-//        if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
-//            return attributedString
-//        }
         return NSAttributedString(string: "");
     }
     

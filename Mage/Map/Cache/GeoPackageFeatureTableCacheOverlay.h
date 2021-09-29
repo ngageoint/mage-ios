@@ -22,9 +22,6 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
  */
 @property (strong, nonatomic) GPKGFeatureOverlayQuery * featureOverlayQuery;
 
-@property (strong, nonatomic) GPKGRelatedTablesExtension *rte;
-@property (strong, nonatomic) NSArray<GPKGExtendedRelation *> *mediaTables;
-
 /**
  *  Initializer
  *

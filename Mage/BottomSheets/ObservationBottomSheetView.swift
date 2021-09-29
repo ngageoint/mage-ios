@@ -62,6 +62,7 @@ class ObservationBottomSheetView: BottomSheetView {
         self.observation = observation;
         self.scheme = scheme;
         super.init(frame: CGRect.zero);
+        self.translatesAutoresizingMaskIntoConstraints = false;
         
         stackView.addArrangedSubview(compactView);
         stackView.addArrangedSubview(viewObservationButtonView);

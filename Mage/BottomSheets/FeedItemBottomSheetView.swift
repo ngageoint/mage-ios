@@ -55,6 +55,8 @@ class FeedItemBottomSheetView: BottomSheetView {
         view.addSubview(detailsButton);
         detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
         detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
+        detailsButton.autoPinEdge(.top, to: .top, of: view);
+        detailsButton.autoPinEdge(.bottom, to: .bottom, of: view);
         return view;
     }()
     
@@ -70,6 +72,7 @@ class FeedItemBottomSheetView: BottomSheetView {
     
     init(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate? = nil, scheme: MDCContainerScheming?) {
         super.init(frame: CGRect.zero);
+        self.translatesAutoresizingMaskIntoConstraints = false;
         self.actionsDelegate = actionsDelegate;
         self.feedItem = feedItem;
         self.scheme = scheme;

@@ -391,6 +391,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
             gpCell.backgroundColor = self.scheme.colorScheme.surfaceColor;
             gpCell.overlay = localOverlay;
             gpCell.mainTable = self.tableView;
+            gpCell.mageLayer = nil;
             [gpCell configure];
             [gpCell bringSubviewToFront:gpCell.tableView];
             return gpCell;

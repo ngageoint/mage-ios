@@ -39,6 +39,17 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         return stackView;
     }()
     
+    lazy var attributeRowStack: UIStackView = {
+        let stackView = UIStackView(forAutoLayout: ());
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 0
+        stackView.distribution = .fill
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
+        stackView.isLayoutMarginsRelativeArrangement = true;
+        return stackView;
+    }()
+    
     private lazy var mediaCollection: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
@@ -80,6 +91,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         self.scheme = scheme;
         featureItem = geoPackageFeatureItem;
         super.init(frame: CGRect.zero);
+        self.translatesAutoresizingMaskIntoConstraints = false;
         
         self.addSubview(stackView)
         stackView.addArrangedSubview(summaryView);
@@ -87,6 +99,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         stackView.addArrangedSubview(featureActionsView);
         stackView.addArrangedSubview(mediaCollection);
         stackView.addArrangedSubview(propertyStack);
+        stackView.addArrangedSubview(attributeRowStack);
         populateView();
         applyTheme(withScheme: self.scheme);
     }
@@ -174,6 +187,21 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
                     self.propertyStack.setCustomSpacing(14, after: valueTextView);
                 }
             }
+        }
+        
+        guard let attributeRows = featureItem.attributeRows else {
+            return;
+        }
+        
+        for attributeRow in attributeRows {
+            let separator = UIView.newAutoLayout();
+            separator.autoSetDimension(.height, toSize: 1);
+            separator.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+            self.attributeRowStack.addArrangedSubview(separator);
+            
+            let featureItemBottomSheetView:GeoPackageFeatureBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: attributeRow, actionsDelegate: actionsDelegate, scheme: scheme);
+            
+            self.attributeRowStack.addArrangedSubview(featureItemBottomSheetView);
         }
     }
 }

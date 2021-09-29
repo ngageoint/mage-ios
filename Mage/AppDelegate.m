@@ -42,7 +42,6 @@
 #import "TransitionViewController.h"
 #import "Layer.h"
 #import "MageConstants.h"
-#import "MageInitializer.h"
 #import "MAGE-Swift.h"
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -565,29 +564,7 @@
                 minZoom = MIN(minZoom, (int)MAGE_FEATURES_MAX_ZOOM);
             }
             GeoPackageFeatureTableCacheOverlay * tableCache = [[GeoPackageFeatureTableCacheOverlay alloc] initWithName:featureTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andIndexed:indexed andGeometryType:geometryType];
-            
-            GPKGExtendedRelationsDao *relationsDao = [GPKGExtendedRelationsDao createWithDatabase:geoPackage.database];
-            GPKGRelatedTablesExtension *rte = [[GPKGRelatedTablesExtension alloc] initWithGeoPackage:geoPackage];
-            GPKGResultSet *relations = [relationsDao relationsToBaseTable:featureTable];
-            NSMutableArray<GPKGExtendedRelation *> *mediaTables = [[NSMutableArray alloc] init];
-            @try {
-                while([relations moveToNext]){
-                    GPKGExtendedRelation *extendedRelation = [relationsDao relation:relations];
-                    if ([extendedRelation relationType] == [GPKGRelationTypes fromName:GPKG_RT_MEDIA_NAME]){
-                        [mediaTables addObject:extendedRelation];
-//                        GPKGMediaDao *media = [rte mediaDaoForRelation:extendedRelation];
-//                        rte mappingsForTableName:<#(NSString *)#> withBaseId:<#(int)#>
-//                        [rte mappingsForRelation:extendedRelation withBaseId:0];
-                    }
-//                    [relatedTables addObject:extendedRelation.relatedTableName];
-                }
-            } @finally {
-                [relations close];
-            }
-            
-            tableCache.rte = rte;
-            tableCache.mediaTables = mediaTables;
-            
+
             // If indexed, check for linked tile tables
             if(indexed){
                 NSArray<NSString *> * linkedTileTables = [linker tileTablesForFeatureTable:featureTable];
@@ -714,6 +691,20 @@
         imported = [manager importGeoPackageFromPath:path withName:name andOverride:overwrite andMove:true];
         NSLog(@"Imported local Geopackage %d", imported);
         if (imported && !alreadyImported) {
+            // index any feature tables that were not indexed already
+            GPKGGeoPackage *geoPackage = [manager open:name];
+            NSArray * featureTables = [geoPackage featureTables];
+            for(NSString * featureTable in featureTables){
+                
+                GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:featureTable];
+                GPKGFeatureTableIndex * featureTableIndex = [[GPKGFeatureTableIndex alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
+                if(![featureTableIndex isIndexed]){
+                    NSLog(@"Indexing the feature table %@", featureTable);
+                    [featureTableIndex index];
+                    NSLog(@"done indexing the feature table %@", featureTable);
+                }
+            }
+            
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Layer *l = [Layer MR_createEntityInContext:localContext];
                 l.name = name;
@@ -721,6 +712,8 @@
                 l.type = @"GeoPackage";
                 l.eventId = [NSNumber numberWithInt:-1];
                 [self updateSelectedCaches:name];
+            } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+                NSLog(@"Saved the local GeoPackage %@ with error %@", contextDidSave ? @"YES" : @"NO", error);
             }];
         }
     }
