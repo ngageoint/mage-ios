@@ -49,14 +49,44 @@
     self.geometry = [SFGeometryUtils encodeGeometry:simpleFeature];
 }
 
+- (nullable NSString *) valueForKey:(NSString *) key {
+    id value = self.properties[key];
+    if (value == nil) {
+        return nil;
+    }
+    NSString *valueString = [value stringValue];
+    if (self.feed != nil && self.feed.itemPropertiesSchema != nil && self.feed.itemPropertiesSchema[@"properties"] != nil && self.feed.itemPropertiesSchema[@"properties"][key] != nil) {
+        NSDictionary *keySchema = self.feed.itemPropertiesSchema[@"properties"][key];
+        if ([keySchema valueForKey:@"type"] != nil) {
+            NSString *type = [keySchema valueForKey:@"type"];
+            if ([type isEqualToString:@"number"]) {
+                if ([keySchema valueForKey:@"format"] != nil) {
+                    NSString *format = [keySchema valueForKey:@"format"];
+                    if ([format isEqualToString:@"date"]) {
+                        NSDateFormatter *dateDisplayFormatter = [[NSDateFormatter alloc] init];
+                        dateDisplayFormatter.dateFormat = @"yyyy-MM-dd";
+                        dateDisplayFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+                        valueString = [dateDisplayFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[value doubleValue]/1000.0]];
+                    }
+                }
+            }
+        }
+    }
+    return valueString;
+}
+
 - (nullable NSString *) primaryValue {
-    id value = [((NSDictionary *)self.properties) valueForKey:self.feed.itemPrimaryProperty];
-    return [value description];
-//    return [((NSDictionary *)self.properties) valueForKey:self.feed.itemPrimaryProperty];
+    if (self.feed.itemPrimaryProperty == nil) {
+        return nil;
+    }
+    return [self valueForKey:self.feed.itemPrimaryProperty];
 }
 
 - (nullable NSString *) secondaryValue {
-    return [((NSDictionary *)self.properties) valueForKey:self.feed.itemSecondaryProperty];
+    if (self.feed.itemSecondaryProperty == nil) {
+        return nil;
+    }
+    return [self valueForKey:self.feed.itemSecondaryProperty];
 }
 
 - (nullable NSURL *) iconURL {

@@ -47,6 +47,7 @@ extension MapDelegate : FeedItemActionsDelegate {
     }
     
     func viewFeedItem(feedItem: FeedItem) {
+        self.resetEnlargedPin();
         self.mageBottomSheet.dismiss(animated: true, completion: {
             self.mapCalloutDelegate.calloutTapped(feedItem);
         })

@@ -99,19 +99,12 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
         cell.applyTheme(withScheme: self.scheme);
         
         let key = properties?.keys.sorted()[indexPath.row] ?? ""
-        let value = properties?[key];
         
-        cell.keyField.text = key;
-        if (feedItem.feed?.itemTemporalProperty == key) {
-            if let itemDate: NSDate = feedItem.timestamp as NSDate? {
-                cell.valueField.text = itemDate.formattedDisplay();
-            }
-        } else if (value is Date) {
-            cell.valueField.text = (value as? NSDate)!.formattedDisplay();
-        } else {
-            cell.valueField.text = value ??? " "
+        if let itemPropertiesSchema = feedItem.feed?.itemPropertiesSchema as? [String : Any], let propertySchema = itemPropertiesSchema["properties"] as? [String : Any], let keySchema = propertySchema[key] as? [String : Any] {
+            cell.keyField.text = keySchema["title"] as? String
         }
         
+        cell.valueField.text = feedItem.value(forKey:key) ?? "";
         return cell
     }
     

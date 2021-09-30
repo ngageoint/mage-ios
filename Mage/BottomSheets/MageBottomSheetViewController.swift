@@ -247,6 +247,9 @@ import UIKit
             } else if let bottomSheetItem = item.item as? FeatureItem {
                 self.currentBottomSheetView = FeatureBottomSheetView(featureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
                 self.stackView.addArrangedSubview(self.currentBottomSheetView!);
+            } else if let bottomSheetItem = item.item as? FeedItem {
+                self.currentBottomSheetView = FeedItemBottomSheetView(feedItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeedItemActionsDelegate, scheme: self.scheme);
+                self.stackView.addArrangedSubview(self.currentBottomSheetView!);
             }
             self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
             self.view.setNeedsUpdateConstraints();

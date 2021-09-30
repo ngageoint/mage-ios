@@ -68,15 +68,11 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
         noContentView.isHidden = true;
         primaryField.text = item.primaryValue ?? " ";
         secondaryField.text = item.secondaryValue;
-        if (item.feed?.itemTemporalProperty == nil) {
-            timestamp.isHidden = true;
-        } else {
-            if let itemDate: NSDate = item.timestamp as NSDate? {
-                timestamp.text = itemDate.formattedDisplay();
-            } else {
-                timestamp.text = " ";
-            }
+        if let itemTemporalProperty = item.feed?.itemTemporalProperty {
+            timestamp.text = item.value(forKey: itemTemporalProperty)
             timestamp.isHidden = false;
+        } else {
+            timestamp.isHidden = true;
         }
     }
     

@@ -997,6 +997,7 @@
 		F755B55A25E41BFF008E8D41 /* testRecording.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testRecording.mp4; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
 		F75A10F12048B037002F9906 /* TableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
+		F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 19.xcdatamodel"; sourceTree = "<group>"; };
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
 		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
@@ -3823,6 +3824,7 @@
 		F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */,
 				F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */,
 				F72D42372694B60300F9AC3B /* mage-ios-sdk 16.xcdatamodel */,
 				F72D42382694B60300F9AC3B /* mage-ios-sdk 13.xcdatamodel */,
@@ -3842,7 +3844,7 @@
 				F72D42462694B60300F9AC3B /* mage-ios-sdk 11.xcdatamodel */,
 				F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */,
 			);
-			currentVersion = F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */;
+			currentVersion = F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */;
 			path = "mage-ios-sdk.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

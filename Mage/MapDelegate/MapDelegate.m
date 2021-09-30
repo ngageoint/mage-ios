@@ -1389,7 +1389,7 @@
         annotationView.canShowCallout = false;
         annotationView.hidden = self.hideLocations;
         annotationView.accessibilityElementsHidden = self.hideLocations;
-        annotationView.enabled = !self.hideLocations;
+        annotationView.enabled = false;
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
@@ -1398,10 +1398,10 @@
         if (annotationView == self.enlargedPin) {
             annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height));
         }
-        annotationView.canShowCallout = false;// self.canShowObservationCallout;
+        annotationView.canShowCallout = false;
         annotationView.hidden = self.hideObservations;
         annotationView.accessibilityElementsHidden = self.hideObservations;
-        annotationView.enabled = !self.hideObservations;
+        annotationView.enabled = false;
         annotationView.accessibilityLabel = [NSString stringWithFormat:@"Observation Annotation %@", observationAnnotation.observation.objectID.URIRepresentation];
         return annotationView;
     }
@@ -1424,6 +1424,9 @@
             MKAnnotationView *mapPointImageView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:@"pinImageAnnotation"];
             if (mapPointImageView == nil) {
                 mapPointImageView = [[MapShapePointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinImageAnnotation" andMapView:mapView andDragCallback:nil];
+                mapPointImageView.canShowCallout = false;
+                [mapPointImageView setEnabled:false];
+                [mapPointImageView setUserInteractionEnabled:false];
             }
             mapPointImageView.image = options.image;
             mapPointImageView.centerOffset = options.imageCenterOffset;
@@ -1436,9 +1439,9 @@
         if (!annotationView) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"feedItem"];
             annotationView.canShowCallout = false;
+            [annotationView setEnabled:false];
+            [annotationView setUserInteractionEnabled:false];
         }
-        UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-        annotationView.rightCalloutAccessoryView = rightButton;
         [FeedItemRetriever setAnnotationImageWithFeedItem:item annotationView:annotationView];
         annotationView.annotation = annotation;
         annotationView.accessibilityLabel = [NSString stringWithFormat:@"Feed %@ Item %@", item.feed.remoteId, item.remoteId];
@@ -1767,6 +1770,7 @@
 
 - (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
     [mapView deselectAnnotation:view.annotation animated:false];
+    [self mapTap:[mapView convertCoordinate:view.annotation.coordinate toPointToView:mapView]];
 }
 
 - (void)observationDetailSelected:(Observation *)observation {

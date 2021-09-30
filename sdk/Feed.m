@@ -24,6 +24,7 @@
     [self setUpdateFrequency:[[json objectForKey:@"updateFrequency"] objectForKey:@"seconds"]];
     [self setPullFrequency:[[json objectForKey:@"updateFrequency"] objectForKey:@"seconds"]];
     [self setMapStyle:[json objectForKey:@"mapStyle"]];
+    [self setItemPropertiesSchema:[json objectForKey:@"itemPropertiesSchema"]];
     [self setItemPrimaryProperty:[json objectForKey:@"itemPrimaryProperty"]];
     [self setItemSecondaryProperty:[json objectForKey:@"itemSecondaryProperty"]];
     [self setItemTemporalProperty:[json objectForKey:@"itemTemporalProperty"]];

@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) feedItemIdFromJson:(NSDictionary *) json;
 - (id) populateObjectFromJson: (NSDictionary *) json withFeed: (Feed *) feed;
 - (BOOL) hasContent;
+- (nullable NSString *) valueForKey:(NSString *) key;
 
 @end
 

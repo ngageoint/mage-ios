@@ -32,5 +32,6 @@
 @dynamic eventId;
 @dynamic itemsHaveSpatialDimension;
 @dynamic itemTemporalProperty;
+@dynamic itemPropertiesSchema;
 
 @end
