@@ -1853,8 +1853,6 @@
 				F72D427D2694B60300F9AC3B /* Feed.m */,
 				F72D42642694B60300F9AC3B /* Feed+CoreDataProperties.h */,
 				F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */,
-				F72D42812694B60300F9AC3B /* FeedItem.swift */,
-				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */,
 				F72D425C2694B60300F9AC3B /* Form.h */,
 				F72D42AB2694B60300F9AC3B /* Form.m */,
 				F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */,
@@ -2327,6 +2325,15 @@
 			path = Fields;
 			sourceTree = "<group>";
 		};
+		F7A5A336270CE20F00961CAA /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				F72D42812694B60300F9AC3B /* FeedItem.swift */,
+				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
@@ -2377,6 +2384,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F7A5A336270CE20F00961CAA /* CoreData */,
 				F73607DA26F90C41008CF824 /* BottomSheets */,
 				F7B1C473267404A80005FCE4 /* ViewLoader */,
 				F7154ABF260CE136002C8617 /* Navigation */,
