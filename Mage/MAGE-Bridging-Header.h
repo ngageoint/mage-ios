@@ -72,7 +72,6 @@
 
 #pragma mark - Core Data Entities
 #import "Feed.h"
-#import "FeedItem.h"
 #import "Attachment.h"
 #import "Event.h"
 #import "Observation.h"

@@ -200,7 +200,7 @@
 		F72D42FB2694B60300F9AC3B /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427D2694B60300F9AC3B /* Feed.m */; };
 		F72D42FC2694B60300F9AC3B /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.m */; };
 		F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */; };
-		F72D42FE2694B60300F9AC3B /* FeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42812694B60300F9AC3B /* FeedItem.m */; };
+		F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42812694B60300F9AC3B /* FeedItem.swift */; };
 		F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42822694B60300F9AC3B /* ObservationFetchService.m */; };
 		F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */; };
 		F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */; };
@@ -232,7 +232,7 @@
 		F72D431B2694B60300F9AC3B /* Layer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BD2694B60300F9AC3B /* Layer.m */; };
 		F72D431C2694B60300F9AC3B /* MageEnums.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BE2694B60300F9AC3B /* MageEnums.m */; };
 		F72D431D2694B60300F9AC3B /* StaticLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BF2694B60300F9AC3B /* StaticLayer.m */; };
-		F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */; };
+		F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */; };
 		F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */; };
 		F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C22694B60300F9AC3B /* NotificationRequester.m */; };
 		F72D43212694B60300F9AC3B /* StaticLayer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */; };
@@ -836,7 +836,6 @@
 		F72D42652694B60300F9AC3B /* NotificationRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationRequester.h; sourceTree = "<group>"; };
 		F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StaticLayer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42672694B60300F9AC3B /* NSDate+Iso8601.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Iso8601.h"; sourceTree = "<group>"; };
-		F72D42682694B60300F9AC3B /* FeedItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FeedItem+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42692694B60300F9AC3B /* StaticLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayer.h; sourceTree = "<group>"; };
 		F72D426B2694B60300F9AC3B /* MageSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSessionManager.h; sourceTree = "<group>"; };
 		F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataConnectionUtilities.m; sourceTree = "<group>"; };
@@ -860,7 +859,7 @@
 		F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObservationFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D427F2694B60300F9AC3B /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model9To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42812694B60300F9AC3B /* FeedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedItem.m; sourceTree = "<group>"; };
+		F72D42812694B60300F9AC3B /* FeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		F72D42822694B60300F9AC3B /* ObservationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchService.m; sourceTree = "<group>"; };
 		F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model4To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42842694B60300F9AC3B /* Canary+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Canary+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -921,7 +920,7 @@
 		F72D42BD2694B60300F9AC3B /* Layer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layer.m; sourceTree = "<group>"; };
 		F72D42BE2694B60300F9AC3B /* MageEnums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageEnums.m; sourceTree = "<group>"; };
 		F72D42BF2694B60300F9AC3B /* StaticLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayer.m; sourceTree = "<group>"; };
-		F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FeedItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FeedItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To16.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42C22694B60300F9AC3B /* NotificationRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationRequester.m; sourceTree = "<group>"; };
 		F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StaticLayer+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -944,7 +943,6 @@
 		F72D42D42694B60300F9AC3B /* ObservationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchService.h; sourceTree = "<group>"; };
 		F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Canary+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F72D42D62694B60300F9AC3B /* Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attachment.m; sourceTree = "<group>"; };
-		F72D42D72694B60300F9AC3B /* FeedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItem.h; sourceTree = "<group>"; };
 		F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model3To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42D92694B60300F9AC3B /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -1855,10 +1853,8 @@
 				F72D427D2694B60300F9AC3B /* Feed.m */,
 				F72D42642694B60300F9AC3B /* Feed+CoreDataProperties.h */,
 				F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */,
-				F72D42D72694B60300F9AC3B /* FeedItem.h */,
-				F72D42812694B60300F9AC3B /* FeedItem.m */,
-				F72D42682694B60300F9AC3B /* FeedItem+CoreDataProperties.h */,
-				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */,
+				F72D42812694B60300F9AC3B /* FeedItem.swift */,
+				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */,
 				F72D425C2694B60300F9AC3B /* Form.h */,
 				F72D42AB2694B60300F9AC3B /* Form.m */,
 				F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */,
@@ -3259,7 +3255,7 @@
 				F72D43072694B60300F9AC3B /* ObservationImportant.m in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
-				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.m in Sources */,
+				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
@@ -3292,7 +3288,7 @@
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
 				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.m in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
-				F72D42FE2694B60300F9AC3B /* FeedItem.m in Sources */,
+				F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,

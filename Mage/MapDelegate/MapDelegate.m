@@ -466,7 +466,7 @@
     [self.currentFeeds filterUsingPredicate:[NSPredicate predicateWithFormat:@"NOT(self in %@)", feedIdsInEvent]];
     for (NSString *feedId in self.currentFeeds) {
         [self.feedItemRetrievers removeObjectForKey:feedId];
-        NSArray<FeedItem*> *items = [FeedItem getFeedItemsForFeed:feedId andEvent:[Server currentEventId]];
+        NSArray<FeedItem*> *items = [FeedItem getFeedItemsWithFeedId:feedId eventId:[Server currentEventId]];
         for (FeedItem *item in items) {
             if (item.isMappable) {
                 [self.mapView removeAnnotation:item];
@@ -483,6 +483,7 @@
             [self.feedItemRetrievers setObject:retriever forKey:feedId];
             NSArray<FeedItem*> *items = [retriever startRetriever];
             for (FeedItem *item in items) {
+                NSLog(@"Item.remoteId is %@", item.remoteId);
                 if (item.isMappable) {
                     [self.mapView addAnnotation:item];
                 }

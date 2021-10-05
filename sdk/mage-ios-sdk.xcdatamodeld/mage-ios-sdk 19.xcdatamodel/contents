@@ -53,7 +53,7 @@
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="feeds" inverseEntity="Event" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FeedItem" inverseName="feed" inverseEntity="FeedItem" syncable="YES"/>
     </entity>
-    <entity name="FeedItem" representedClassName="FeedItem" syncable="YES">
+    <entity name="FeedItem" representedClassName=".FeedItem" syncable="YES">
         <attribute name="geometry" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="MagePropertiesTransformer" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>

@@ -14,12 +14,12 @@
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
 #import "MapCalloutTapped.h"
-#import "FeedItem.h"
 #import <MaterialComponents/MDCContainerScheme.h>
 #import "FeatureDetailViewController.h"
 
 @class StraightLineNavigation;
 @class MageBottomSheetViewController;
+@class FeedItem;
 
 @protocol FeedItemDelegate <NSObject>
 

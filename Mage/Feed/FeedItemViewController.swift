@@ -102,9 +102,11 @@ public func ???<T>(optional: T?, defaultValue: @autoclosure () -> String) -> Str
         
         if let itemPropertiesSchema = feedItem.feed?.itemPropertiesSchema as? [String : Any], let propertySchema = itemPropertiesSchema["properties"] as? [String : Any], let keySchema = propertySchema[key] as? [String : Any] {
             cell.keyField.text = keySchema["title"] as? String
+        } else {
+            cell.keyField.text = key
         }
         
-        cell.valueField.text = feedItem.value(forKey:key) ?? "";
+        cell.valueField.text = feedItem.valueForKey(key: key) ?? "";
         return cell
     }
     

@@ -69,7 +69,7 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
         primaryField.text = item.primaryValue ?? " ";
         secondaryField.text = item.secondaryValue;
         if let itemTemporalProperty = item.feed?.itemTemporalProperty {
-            timestamp.text = item.value(forKey: itemTemporalProperty)
+            timestamp.text = item.valueForKey(key: itemTemporalProperty)
             timestamp.isHidden = false;
         } else {
             timestamp.isHidden = true;

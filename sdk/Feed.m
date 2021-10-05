@@ -8,9 +8,12 @@
 //
 
 #import "Feed.h"
-#import "FeedItem.h"
+//#import "FeedItem.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
+#import "MAGE-Swift.h"
+
+//@class FeedItem;
 
 @implementation Feed
 
@@ -104,14 +107,13 @@
     NSMutableArray *feedItemRemoteIds = [[NSMutableArray alloc] init];
     Feed *feed = [Feed MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@ AND eventId == %@", feedId, eventId] inContext:context];
     for (id feedItem in feedItems) {
-        NSString *remoteFeedItemId = [FeedItem feedItemIdFromJson:feedItem];
+        NSString *remoteFeedItemId = [FeedItem feedItemIdFromJsonWithJson:feedItem];
         [feedItemRemoteIds addObject:remoteFeedItemId];
         FeedItem *fi = [FeedItem MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"(remoteId == %@ AND feed == %@)", remoteFeedItemId, feed] inContext:context];
         if (fi == nil) {
             fi = [FeedItem MR_createEntityInContext:context];
         }
-        
-        [fi populateObjectFromJson:feedItem withFeed:feed];
+        [fi populateWithJson:feedItem feed:feed];
     }
     
     [FeedItem MR_deleteAllMatchingPredicate:[NSPredicate predicateWithFormat:@"(NOT (remoteId IN %@)) AND feed == %@", feedItemRemoteIds, feed] inContext:context];
