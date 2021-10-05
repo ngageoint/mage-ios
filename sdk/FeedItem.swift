@@ -88,10 +88,6 @@ import CoreData
         
         let geometry = GeometryDeserializer.parseGeometry(json["geometry"] as? [AnyHashable : Any])
         self.simpleFeature = geometry;
-        if (self.simpleFeature == nil) {
-            print("simple feature set to nil \(json)")
-        }
-        
         self.properties = json["properties"] as? [AnyHashable : Any]
         self.feed = feed
     }
