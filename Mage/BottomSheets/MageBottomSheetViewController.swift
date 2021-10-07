@@ -96,7 +96,7 @@ import UIKit
         button.setImage(UIImage(named: "navigate_before")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        button.inkMaxRippleRadius = 30;
+        button.inkMaxRippleRadius = 20;
         button.inkStyle = .unbounded;
         button.addTarget(self, action: #selector(leftButtonTap), for: .touchUpInside);
         return button;
@@ -108,7 +108,7 @@ import UIKit
         button.setImage(UIImage(named: "navigate_next")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
-        button.inkMaxRippleRadius = 30;
+        button.inkMaxRippleRadius = 20;
         button.inkStyle = .unbounded;
         button.addTarget(self, action: #selector(rightButtonTap), for: .touchUpInside);
         return button;
