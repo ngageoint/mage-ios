@@ -33,7 +33,7 @@
         <relationship name="feeds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Feed" inverseName="event" inverseEntity="Feed" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
     </entity>
-    <entity name="Feed" representedClassName="Feed" syncable="YES">
+    <entity name="Feed" representedClassName=".Feed" syncable="YES">
         <attribute name="constantParams" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="itemPrimaryProperty" optional="YES" attributeType="String" syncable="YES"/>

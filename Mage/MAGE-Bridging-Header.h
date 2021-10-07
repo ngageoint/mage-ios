@@ -71,7 +71,6 @@
 #import "AttachmentPushService.h"
 
 #pragma mark - Core Data Entities
-#import "Feed.h"
 #import "Attachment.h"
 #import "Event.h"
 #import "Observation.h"

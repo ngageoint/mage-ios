@@ -180,7 +180,7 @@ import Kingfisher
         allTabs.append(locationsTab);
         allTabs.append(observationsTab);
         
-        for feed in Feed.getEventFeeds(Server.currentEventId()) {
+        for feed in Feed.getEventFeeds(eventId: Server.currentEventId()) {
             let nc = createFeedViewController(feed: feed);
             allTabs.append(nc);
             feedViewControllers.append(nc);
@@ -210,7 +210,7 @@ import Kingfisher
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
         nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));
 
-        if let url: URL = feed.iconURL() {
+        if let url: URL = feed.iconURL {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
             KingfisherManager.shared.retrieveImage(with: url, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),

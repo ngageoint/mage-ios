@@ -7,22 +7,6 @@
 //
 //
 
-//#import "FeedItem.h"
-//
-//@implementation FeedItem (CoreDataProperties)
-//
-//+ (NSFetchRequest<FeedItem *> *)fetchRequest {
-//	return [NSFetchRequest fetchRequestWithEntityName:@"FeedItem"];
-//}
-//
-//@dynamic remoteId;
-//@dynamic geometry;
-//@dynamic properties;
-//@dynamic feed;
-//
-//@end
-
-
 import Foundation
 import CoreData
 

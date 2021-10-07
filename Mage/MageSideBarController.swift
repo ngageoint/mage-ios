@@ -193,7 +193,7 @@ class SidebarUIButton: UIButton {
     }
     
     func createFeedRailView(feed: Feed) -> SidebarUIButton {
-        let feedButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.feed, title: feed.title, iconUrl: feed.iconURL(), imageName: "rss");
+        let feedButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.feed, title: feed.title, iconUrl: feed.iconURL, imageName: "rss");
         feedButton.feed = feed;
         feedButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
         let feedItemsViewController: FeedItemsViewController = FeedItemsViewController(feed: feed, selectionDelegate: delegate, scheme: self.scheme);

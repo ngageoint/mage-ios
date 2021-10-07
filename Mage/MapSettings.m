@@ -7,7 +7,6 @@
 #import "MapSettings.h"
 #import "MapTypeTableViewCell.h"
 #import "ObservationTableHeaderView.h"
-#import "Feed.h"
 #import "Server.h"
 #import "MAGE-Swift.h"
 
@@ -84,7 +83,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _feeds = [Feed getMappableFeeds:[Server currentEventId]];
+    _feeds = [Feed getMappableFeedsWithEventId:[Server currentEventId]];
 }
 
 - (void) setMapsToDownloadCount:(NSUInteger)mapsToDownloadCount {

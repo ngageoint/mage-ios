@@ -35,7 +35,7 @@ import CoreData
     }
     
     @objc public var iconURL: URL? {
-        return self.feed?.iconURL()
+        return self.feed?.iconURL
     }
     
     @objc public var timestamp: Date? {

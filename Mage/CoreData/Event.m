@@ -9,12 +9,12 @@
 #import "Event.h"
 #import "Team.h"
 #import "User.h"
-#import "Feed.h"
 #import "Server.h"
 #import "StaticLayer.h"
 
 #import "MageServer.h"
 #import "MageSessionManager.h"
+#import "MAGE-Swift.h"
 
 NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
 
@@ -70,8 +70,7 @@ NSString * const MAGEEventsFetched = @"mil.nga.giat.mage.events.fetched";
         }
     }
     [Layer populateLayersFromJson:[json objectForKey:@"layers"] inEventId: self.remoteId inContext:context];
-    [Feed refreshFeedsForEvent:self.remoteId];
-//    [Feed populateFeedsFromJson:[json objectForKey:@"feeds"] inEventId: self.remoteId inContext: context];
+    [Feed refreshFeedsWithEventId:self.remoteId];
 }
 
 - (BOOL) isUserInEvent: (User *) user {
