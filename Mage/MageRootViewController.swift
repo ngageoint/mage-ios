@@ -68,13 +68,30 @@ import Kingfisher
         fatalError("This class does not support NSCoding")
     }
     
+    private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance) {
+        itemAppearance.normal.iconColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]
+        
+        itemAppearance.selected.iconColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+        itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87)]
+    }
+    
     @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
         if (scheme != nil) {
             self.scheme = scheme!;
         }
-        self.tabBar.barTintColor = self.scheme.colorScheme.surfaceColor;
-        self.tabBar.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
-        self.tabBar.unselectedItemTintColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        let appearance = UITabBarAppearance();
+        appearance.selectionIndicatorTintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+        appearance.backgroundColor = self.scheme.colorScheme.surfaceColor
+        self.tabBar.standardAppearance = appearance;
+        setTabBarItemColors(appearance.stackedLayoutAppearance)
+        setTabBarItemColors(appearance.inlineLayoutAppearance)
+        setTabBarItemColors(appearance.compactInlineLayoutAppearance)
+        
+        if #available(iOS 15.0, *) {
+            self.tabBar.scrollEdgeAppearance = appearance
+        }
+        
         self.view.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
         
         setNavigationControllerAppearance(nc: self.moreNavigationController);

@@ -18,7 +18,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var currentUserIsMe: Bool = false;
     var childCoordinators: [Any] = [];
     weak var navigationController: UINavigationController?;
-    var scheme: MDCContainerScheming!;
+    var scheme: MDCContainerScheming?;
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
@@ -46,25 +46,28 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         super.updateConstraints();
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
-        self.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        guard let scheme = self.scheme else {
+            return
+        }
+        self.backgroundColor = scheme.colorScheme.backgroundColor;
         
-        avatarBorder.backgroundColor = self.scheme.colorScheme.backgroundColor;
-        avatarImage.tintColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        nameField.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        avatarBorder.backgroundColor = scheme.colorScheme.backgroundColor;
+        avatarImage.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        nameField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         
-        locationIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        locationLabel.textColor = self.scheme.colorScheme.primaryColor;
-        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        locationIcon.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        locationLabel.textColor = scheme.colorScheme.primaryColor;
+        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
         
-        emailIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        emailLabel.textColor = self.scheme.colorScheme.primaryColor;
-        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        emailIcon.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        emailLabel.textColor = scheme.colorScheme.primaryColor;
+        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
         
-        phoneIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        phoneLabel.textColor = self.scheme.colorScheme.primaryColor;
-        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        phoneIcon.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        phoneLabel.textColor = scheme.colorScheme.primaryColor;
+        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
     }
     
     private lazy var mapDelegate: MapDelegate = {
@@ -222,7 +225,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return emailLabel;
     }()
     
-    @objc public convenience init(user: User, scheme: MDCContainerScheming) {
+    @objc public convenience init(user: User, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.configureForAutoLayout();
@@ -344,8 +347,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let accuracyFont = UIFont.systemFont(ofSize: 11);
         
         let locationText = NSMutableAttributedString();
-        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.primaryColor]));
-        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]));
+        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: self.scheme?.colorScheme.primaryColor ?? .label]));
+        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: (self.scheme?.colorScheme.onSurfaceColor ?? .label).withAlphaComponent(0.6)]));
         
         self.locationLabel.attributedText = locationText;
     }
