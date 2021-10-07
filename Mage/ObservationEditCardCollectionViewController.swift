@@ -347,21 +347,33 @@ import MaterialComponents.MDCCard
             return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }
         
+        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+        
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?[FormKey.primaryFeedField.key] as! String? {
-            if let obsfield = observationForm[primaryField] as! String? {
-                formPrimaryValue = obsfield;
+        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
+            if let primaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == primaryFieldName
+            }) {
+                if let obsfield = observationForm[primaryFieldName] {
+                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                }
             }
         }
-        if let secondaryField = eventForm?[FormKey.secondaryFeedField.key] as! String? {
-            if let obsfield = observationForm[secondaryField] as! String? {
-                formSecondaryValue = obsfield;
+        
+        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
+            if let secondaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+            }) {
+                if let obsfield = observationForm[secondaryFieldName] {
+                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                }
             }
         }
+        
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate, attachmentSelectionDelegate: self);
-        if let safeScheme = scheme {
-            formView.applyTheme(withScheme: safeScheme);
+        if let scheme = scheme {
+            formView.applyTheme(withScheme: scheme);
         }
         let formSpacerView = UIView(forAutoLayout: ());
         formSpacerView.addSubview(formView);
@@ -387,8 +399,8 @@ import MaterialComponents.MDCCard
         button.applyTextTheme(withScheme: globalErrorContainerScheme())
         
         var tintColor: UIColor? = nil;
-        if let safeColor = eventForm?[FormKey.color.key] as? String {
-            tintColor = UIColor(hex: safeColor);
+        if let color = eventForm?[FormKey.color.key] as? String {
+            tintColor = UIColor(hex: color);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
@@ -405,8 +417,8 @@ import MaterialComponents.MDCCard
         // or reorder remove the form so the user is not distracted with a refresh
         observation?.addForm(toBeDeleted: sender.tag);
         cards[sender.tag].isHidden = true;
-        if let safeObservation = self.observation {
-            self.commonFieldView?.setObservation(observation: safeObservation);
+        if let observation = self.observation {
+            self.commonFieldView?.setObservation(observation: observation);
         }
         
         setupFormDependentButtons();
@@ -418,8 +430,8 @@ import MaterialComponents.MDCCard
             self.cards[sender.tag].isHidden = false;
             self.observation?.removeForm(toBeDeleted: sender.tag);
             self.setupFormDependentButtons();
-            if let safeObservation = self.observation {
-                self.commonFieldView?.setObservation(observation: safeObservation);
+            if let observation = self.observation {
+                self.commonFieldView?.setObservation(observation: observation);
             }
         }
         messageAction.handler = actionHandler;
@@ -431,19 +443,32 @@ import MaterialComponents.MDCCard
         let eventForm: [String: Any]? = self.eventForms.first { (eventForm) -> Bool in
             return eventForm[FormKey.id.key] as? Int == form[EventKey.formId.key] as? Int
         }
+        
+        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?[FormKey.primaryField.key] as! String? {
-            if let obsfield = form[primaryField] as? String {
-                formPrimaryValue = obsfield;
+        
+        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
+            if let primaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == primaryFieldName
+            }) {
+                if let obsfield = form[primaryFieldName] {
+                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                }
             }
         }
-        if let secondaryField = eventForm?[FormKey.secondaryField.key] as! String? {
-            // TODO: handle non strings
-            if let obsfield = form[secondaryField] as! String? {
-                formSecondaryValue = obsfield;
+        
+        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
+            if let secondaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+            }) {
+                if let obsfield = form[secondaryFieldName] {
+                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                }
             }
         }
+        
         cards[index].header = formPrimaryValue;
         cards[index].subheader = formSecondaryValue;
     }
@@ -452,10 +477,10 @@ import MaterialComponents.MDCCard
         // allow MDCButton ink ripple
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
             removeDeletedForms();
-            guard let safeObservation = self.observation else {
+            guard let observation = self.observation else {
                 return
             }
-            self.delegate?.reorderForms(observation: safeObservation);
+            self.delegate?.reorderForms(observation: observation);
         }
     }
     
@@ -480,16 +505,16 @@ import MaterialComponents.MDCCard
     
     @objc func saveObservation(sender: UIBarButtonItem) {
         removeDeletedForms();
-        guard let safeObservation = self.observation else { return }
+        guard let observation = self.observation else { return }
         if (checkObservationValidity()) {
-            self.delegate?.saveObservation(observation: safeObservation);
+            self.delegate?.saveObservation(observation: observation);
         }
     }
     
     func checkObservationValidity() -> Bool {
         var valid: Bool = false;
-        if let safeCommonFieldView = commonFieldView {
-            valid = safeCommonFieldView.checkValidity(enforceRequired: true)
+        if let commonFieldView = commonFieldView {
+            valid = commonFieldView.checkValidity(enforceRequired: true)
         } else {
             valid = true;
         }
@@ -543,14 +568,15 @@ import MaterialComponents.MDCCard
         
         // check each form for min max
         var formIdCount: [Int : Int] = [ : ];
-        if let safeObservation = self.observation, let safeProperties = safeObservation.properties {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                let observationForms: [[String: Any]] = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
-                let formsToBeDeleted = observation?.getFormsToBeDeleted() ?? IndexSet();
-                for (index, form) in observationForms.enumerated() {
-                    if (!formsToBeDeleted.contains(index)) {
-                        let formId = form[EventKey.formId.key] as! Int;
-                        formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
+        if let observation = self.observation, let properties = observation.properties {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                if let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as? [[String: Any]] {
+                    let formsToBeDeleted = observation.getFormsToBeDeleted();
+                    for (index, form) in observationForms.enumerated() {
+                        if (!formsToBeDeleted.contains(index)) {
+                            let formId = form[EventKey.formId.key] as! Int;
+                            formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
+                        }
                     }
                 }
             }
@@ -638,8 +664,8 @@ import MaterialComponents.MDCCard
         self.observation?.properties = observationProperties;
         let previousStackViewHeight = stackView.bounds.size.height;
         let card:ExpandableCard = addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
-        if let safeScheme = scheme {
-            card.applyTheme(withScheme: safeScheme);
+        if let scheme = scheme {
+            card.applyTheme(withScheme: scheme);
         }
         card.expanded = true;
         // scroll the view down to the form they just added but not quite all the way down because then it looks like you
@@ -680,8 +706,8 @@ extension ObservationEditCardCollectionViewController: ObservationCommonProperti
         observationProperties[ObservationKey.provider.key] = provider;
         observation?.properties = observationProperties;
         observation?.setGeometry(geometry);
-        if let safeObservation = self.observation {
-            commonFieldView?.setObservation(observation: safeObservation);
+        if let observation = self.observation {
+            commonFieldView?.setObservation(observation: observation);
         }
     }
 }
@@ -723,12 +749,18 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         if (attachment.url == nil) {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: (unsentAttachment["contentType"] as! String), delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: (unsentAttachment["contentType"] as! String), delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
     
@@ -736,7 +768,10 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         if (attachment.url == nil) {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
 }

@@ -138,7 +138,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     
     if (primaryFeedField != nil && [observationForms count] > 0) {
         id value = [[self getPrimaryObservationForm] objectForKey:[primaryFeedField objectForKey:@"name"]];
-        return [self fieldValueText:value field:primaryFeedField];
+        return [Observation fieldValueText:value field:primaryFeedField];
     }
     
     return nil;
@@ -158,7 +158,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     
     if (variantFeedField != nil && [observationForms count] > 0) {
         id value = [[self getPrimaryObservationForm] objectForKey:[variantFeedField objectForKey:@"name"]];
-        return [self fieldValueText:value field:variantFeedField];
+        return [Observation fieldValueText:value field:variantFeedField];
     }
     
     return nil;
@@ -170,7 +170,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     
     if (primaryFeedField != nil && [observationForms count] > 0) {
         id value = [[self getPrimaryObservationForm] objectForKey:[primaryFeedField objectForKey:@"name"]];
-        return [self fieldValueText:value field:primaryFeedField];
+        return [Observation fieldValueText:value field:primaryFeedField];
     }
     
     return nil;
@@ -182,7 +182,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     
     if (secondaryFeedField != nil && [observationForms count] > 0) {
         id value = [[self getPrimaryObservationForm] objectForKey:[secondaryFeedField objectForKey:@"name"]];
-        return [self fieldValueText:value field:secondaryFeedField];
+        return [Observation fieldValueText:value field:secondaryFeedField];
     }
     
     return nil;
@@ -202,7 +202,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     return nil;
 }
 
-- (NSString *) fieldValueText:(id) value field:(NSDictionary *) field {
++ (NSString *) fieldValueText:(id) value field:(NSDictionary *) field {
     if (value == nil) return @"";
     
     NSString *type = [field valueForKey:@"type"];
