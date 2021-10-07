@@ -11,7 +11,7 @@ import Kingfisher
     var profileTabBarItem: UITabBarItem?;
     var moreTabBarItem: UITabBarItem?;
     var moreTableViewDelegate: UITableViewDelegate?;
-    var scheme: MDCContainerScheming!;
+    var scheme: MDCContainerScheming?;
     var feedViewControllers: [UINavigationController] = [];
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
@@ -59,7 +59,7 @@ import Kingfisher
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc public init(containerScheme: MDCContainerScheming) {
+    @objc public init(containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
         super.init(nibName: nil, bundle: nil);
     }
@@ -68,31 +68,33 @@ import Kingfisher
         fatalError("This class does not support NSCoding")
     }
     
-    private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance) {
-        itemAppearance.normal.iconColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]
+    private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance, scheme: MDCContainerScheming) {
+        itemAppearance.normal.iconColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]
         
-        itemAppearance.selected.iconColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
-        itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87)]
+        itemAppearance.selected.iconColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+        itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.primaryColor.withAlphaComponent(0.87)]
     }
     
     @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        if (scheme != nil) {
-            self.scheme = scheme!;
+        guard let scheme = scheme else {
+            return
         }
+
+        self.scheme = scheme;
         let appearance = UITabBarAppearance();
-        appearance.selectionIndicatorTintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
-        appearance.backgroundColor = self.scheme.colorScheme.surfaceColor
+        appearance.selectionIndicatorTintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+        appearance.backgroundColor = scheme.colorScheme.surfaceColor
         self.tabBar.standardAppearance = appearance;
-        setTabBarItemColors(appearance.stackedLayoutAppearance)
-        setTabBarItemColors(appearance.inlineLayoutAppearance)
-        setTabBarItemColors(appearance.compactInlineLayoutAppearance)
+        setTabBarItemColors(appearance.stackedLayoutAppearance, scheme: scheme)
+        setTabBarItemColors(appearance.inlineLayoutAppearance, scheme: scheme)
+        setTabBarItemColors(appearance.compactInlineLayoutAppearance, scheme: scheme)
         
         if #available(iOS 15.0, *) {
             self.tabBar.scrollEdgeAppearance = appearance
         }
         
-        self.view.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
+        self.view.tintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
         
         setNavigationControllerAppearance(nc: self.moreNavigationController);
         setNavigationControllerAppearance(nc: mapTab);
@@ -106,36 +108,39 @@ import Kingfisher
         
         if let topViewController = self.moreNavigationController.topViewController {
             if let tableView = topViewController.view as? UITableView {
-                tableView.tintColor = self.scheme.colorScheme.primaryColor
-                tableView.backgroundColor = self.scheme.colorScheme.backgroundColor
+                tableView.tintColor = scheme.colorScheme.primaryColor
+                tableView.backgroundColor = scheme.colorScheme.backgroundColor
             }
         }
         
-        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
-
+        self.view.backgroundColor = scheme.colorScheme.backgroundColor;
     }
     
     func setNavigationControllerAppearance(nc: UINavigationController?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         nc?.navigationBar.isTranslucent = false;
-        nc?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-        nc?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-        nc?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.onPrimaryColor];
-        nc?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor];
+        nc?.navigationBar.barTintColor = scheme.colorScheme.primaryColorVariant;
+        nc?.navigationBar.tintColor = scheme.colorScheme.onPrimaryColor;
+        nc?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.onPrimaryColor];
+        nc?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
+            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
         ];
         
         nc?.navigationBar.standardAppearance = appearance;
         nc?.navigationBar.scrollEdgeAppearance = appearance;
-        nc?.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-        nc?.navigationBar.scrollEdgeAppearance?.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+        nc?.navigationBar.standardAppearance.backgroundColor = scheme.colorScheme.primaryColorVariant;
+        nc?.navigationBar.scrollEdgeAppearance?.backgroundColor = scheme.colorScheme.primaryColorVariant;
     }
     
     override func viewDidLoad() {
@@ -149,7 +154,7 @@ import Kingfisher
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        applyTheme();
+        applyTheme(withScheme: self.scheme);
         if let moreTableView = moreNavigationController.topViewController?.view as? UITableView {
             if let proxyDelegate = moreTableView.delegate {
                 moreTableViewDelegate = MoreTableViewDelegate(proxyDelegate: proxyDelegate, containerScheme: scheme)

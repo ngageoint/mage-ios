@@ -61,7 +61,11 @@ class SidebarUIButton: UIButton {
         return rail;
     }()
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         navigationRail.backgroundColor = containerScheme.colorScheme.surfaceColor;
         view.backgroundColor = containerScheme.colorScheme.backgroundColor;

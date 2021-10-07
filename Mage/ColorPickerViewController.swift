@@ -84,7 +84,11 @@ import Foundation
     
     let titleLabel = UILabel(forAutoLayout: ());
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         view.backgroundColor = self.scheme?.colorScheme.surfaceColor;
         doneButton.applyTextTheme(withScheme: containerScheme);

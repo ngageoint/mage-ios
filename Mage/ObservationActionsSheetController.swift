@@ -49,7 +49,11 @@ class ObservationActionsSheetController: UITableViewController {
         self.userHasEditPermissions = user.hasEditPermission();
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
         cancelButton.applyTextTheme(withScheme: containerScheme);

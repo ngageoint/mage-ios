@@ -60,7 +60,7 @@ protocol ObservationCommonPropertiesListener {
         return User.fetchCurrentUser(in: self.managedObjectContext);
     }()
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
     }
     

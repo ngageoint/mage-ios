@@ -66,7 +66,11 @@ class ObservationFormReorder: UITableViewController {
         }
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;

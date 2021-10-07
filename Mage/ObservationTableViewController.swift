@@ -58,7 +58,11 @@ class ObservationTableViewController: UITableViewController {
         self.scheme = scheme;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.tableView.separatorStyle = .none;

@@ -29,7 +29,11 @@ class AttachmentProgressViewController: UIViewController {
         self.scheme = scheme;
     }
     
-    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         
         self.view.backgroundColor = containerScheme.colorScheme.surfaceColor.withAlphaComponent(0.87);

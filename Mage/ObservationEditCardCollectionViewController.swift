@@ -103,7 +103,11 @@ import MaterialComponents.MDCCard
         ])
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         addFormFAB.applySecondaryTheme(withScheme: containerScheme);
         

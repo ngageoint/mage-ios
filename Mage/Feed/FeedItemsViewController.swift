@@ -50,7 +50,11 @@ import Kingfisher
         tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.tableView.separatorStyle = .none;
         self.navigationController?.navigationBar.isTranslucent = false;

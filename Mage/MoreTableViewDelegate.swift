@@ -10,9 +10,9 @@ import SwiftUI
 
 class MoreTableViewDelegate : NSObject, UITableViewDelegate {
     var proxyDelegate: UITableViewDelegate
-    var scheme: MDCContainerScheming
+    var scheme: MDCContainerScheming?
     
-    init(proxyDelegate delegate: UITableViewDelegate, containerScheme: MDCContainerScheming) {
+    init(proxyDelegate delegate: UITableViewDelegate, containerScheme: MDCContainerScheming?) {
         proxyDelegate = delegate
         scheme = containerScheme;
         super.init()
@@ -35,14 +35,14 @@ class MoreTableViewDelegate : NSObject, UITableViewDelegate {
             proxyDelegate.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
         }
 
-        cell.backgroundColor = scheme.colorScheme.surfaceColor;
-        cell.textLabel?.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        cell.backgroundColor = scheme?.colorScheme.surfaceColor;
+        cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         cell.accessoryType = .none
             
         let button = UIButton(type: .custom)
         button.frame = CGRect(x: 0, y: 0, width: 11, height: 14)
         button.setBackgroundImage(UIImage(systemName: "chevron.right", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal)
-        button.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        button.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         cell.accessoryView = button
     }
 }

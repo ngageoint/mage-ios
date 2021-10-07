@@ -65,7 +65,11 @@ import Kingfisher
         self.delegate = delegate;
     }
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;

@@ -98,7 +98,11 @@ class FormDefaultsViewController: UIViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         formNameLabel.textColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);

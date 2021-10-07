@@ -54,7 +54,7 @@ class AttachmentCreationCoordinator: NSObject {
         self.scheme = scheme;
     }
     
-    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
     }
     

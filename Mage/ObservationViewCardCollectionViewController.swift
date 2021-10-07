@@ -64,8 +64,11 @@ import MaterialComponents.MDCContainerScheme;
         return syncStatusView;
     }()
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
+        guard let containerScheme = containerScheme else {
+            return;
+        }
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
         self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
@@ -125,7 +128,7 @@ import MaterialComponents.MDCContainerScheme;
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(observation: Observation, scheme: MDCContainerScheming) {
+    @objc convenience public init(observation: Observation, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.scheme = scheme;
