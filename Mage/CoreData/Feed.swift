@@ -177,8 +177,8 @@ import CoreData
         self.variableParams = json["variableParams"]
         self.updateFrequency = (json["updateFrequency"] as? [AnyHashable : Any])?["seconds"] as? NSNumber
         self.pullFrequency = (json["updateFrequency"] as? [AnyHashable : Any])?["seconds"] as? NSNumber
-        self.mapStyle = json["mapStyle"]
-        self.itemPropertiesSchema = json["itemPropertiesSchema"]
+        self.mapStyle = json["mapStyle"] as? [AnyHashable : Any]
+        self.itemPropertiesSchema = json["itemPropertiesSchema"] as? [AnyHashable : Any]
         self.itemPrimaryProperty = json["itemPrimaryProperty"] as? String
         self.itemSecondaryProperty = json["itemSecondaryProperty"] as? String
         self.itemTemporalProperty = json["itemTemporalProperty"] as? String

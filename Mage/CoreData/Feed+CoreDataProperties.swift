@@ -72,7 +72,7 @@ extension Feed {
     @NSManaged var itemSecondaryProperty: String?;
     @NSManaged var constantParams: Any?;
     @NSManaged var variableParams: Any?;
-    @NSManaged var mapStyle: Any?;
+    @NSManaged var mapStyle: [AnyHashable : Any]?;
     @NSManaged var updateFrequency: NSNumber?;
     @NSManaged var pullFrequency: NSNumber?;
     @NSManaged var items: Set<FeedItem>;
@@ -80,5 +80,5 @@ extension Feed {
     @NSManaged var eventId: NSNumber?;
     @NSManaged var itemsHaveSpatialDimension: Bool;
     @NSManaged var itemTemporalProperty: String?;
-    @NSManaged var itemPropertiesSchema: Any?;
+    @NSManaged var itemPropertiesSchema: [AnyHashable : Any]?;
 }
