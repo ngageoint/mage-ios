@@ -108,17 +108,27 @@ class ObservationFormTableViewCell: UITableViewCell {
     }
     
     func configure(observationForm: [String : Any], eventForm: [String: Any], scheme: MDCContainerScheming?) {
+        let fields: [[String: Any]] = eventForm[FormKey.fields.key] as? [[String: Any]] ?? [];
+        
         var formPrimaryValue: String? = nil;
-        if let primaryField = eventForm[FormKey.primaryFeedField.key] as! String? {
-            if let obsfield = observationForm[primaryField] as? String? {
-                formPrimaryValue = obsfield;
+        var formSecondaryValue: String? = nil;
+        if let primaryFieldName = eventForm[FormKey.primaryFeedField.key] as? String {
+            if let primaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == primaryFieldName
+            }) {
+                if let obsfield = observationForm[primaryFieldName] {
+                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                }
             }
         }
         
-        var formSecondaryValue: String? = nil;
-        if let secondaryField = eventForm[FormKey.secondaryFeedField.key] as! String? {
-            if let obsfield = observationForm[secondaryField] as? String? {
-                formSecondaryValue = obsfield;
+        if let secondaryFieldName = eventForm[FormKey.secondaryFeedField.key] as? String {
+            if let secondaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+            }) {
+                if let obsfield = observationForm[secondaryFieldName] {
+                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                }
             }
         }
         
