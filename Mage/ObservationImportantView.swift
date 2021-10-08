@@ -26,11 +26,11 @@ class ObservationImportantView: UIView {
         return flagView;
     }()
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
         reasonLabel.textColor = UIColor.black.withAlphaComponent(0.87);
-        reasonLabel.font = scheme.typographyScheme.body2;
+        reasonLabel.font = scheme?.typographyScheme.body2;
         flaggedByLabel.textColor = UIColor.black.withAlphaComponent(0.6);
-        flaggedByLabel.font = scheme.typographyScheme.overline;
+        flaggedByLabel.font = scheme?.typographyScheme.overline;
         flagImage.tintColor = UIColor.black.withAlphaComponent(0.87);
     }
     
@@ -43,12 +43,10 @@ class ObservationImportantView: UIView {
         self.configureForAutoLayout();
         layoutView();
         self.backgroundColor = MDCPalette.orange.accent400;
-        if let safeObservation = observation {
-            populate(observation: safeObservation);
+        if let observation = observation {
+            populate(observation: observation);
         }
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     func layoutView() {

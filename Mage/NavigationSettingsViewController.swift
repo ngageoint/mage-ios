@@ -34,11 +34,13 @@ import Foundation
     }
     
     public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        if (scheme != nil) {
-            self.scheme = scheme!;
+        guard let scheme = scheme else {
+            return
         }
-        self.view.backgroundColor = scheme?.colorScheme.backgroundColor;
-        self.tableView.backgroundColor = scheme?.colorScheme.backgroundColor;
+        self.scheme = scheme;
+
+        self.view.backgroundColor = scheme.colorScheme.backgroundColor;
+        self.tableView.backgroundColor = scheme.colorScheme.backgroundColor;
     }
     
     override func viewDidLoad() {

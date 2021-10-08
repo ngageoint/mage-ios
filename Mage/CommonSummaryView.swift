@@ -104,7 +104,11 @@ class CommonSummaryView<T, V>: UIView {
         preconditionFailure("This method must be overridden");
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         timestamp.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         timestamp.font = scheme.typographyScheme.overline;
         timestamp.autoSetDimension(.height, toSize: timestamp.font.pointSize);

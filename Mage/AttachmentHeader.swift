@@ -27,10 +27,10 @@ class AttachmentHeader: UIView {
         fatalError("This class does not support NSCoding")
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
         self.scheme = scheme;
-        headerLabel.font = scheme.typographyScheme.overline;
-        headerLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        headerLabel.font = scheme?.typographyScheme.overline;
+        headerLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
     }
     
     func buildView() {

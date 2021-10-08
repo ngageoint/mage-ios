@@ -49,12 +49,12 @@ class CheckboxFieldView : BaseFieldView {
         return containerView;
     }()
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
         super.applyTheme(withScheme: scheme);
-        label.font = scheme.typographyScheme.body1;
-        label.textColor = scheme.colorScheme.onSurfaceColor;
-        errorLabel.font = scheme.typographyScheme.caption;
-        checkboxSwitch.onTintColor = scheme.colorScheme.primaryColorVariant;
+        label.font = scheme?.typographyScheme.body1;
+        label.textColor = scheme?.colorScheme.onSurfaceColor;
+        errorLabel.font = scheme?.typographyScheme.caption;
+        checkboxSwitch.onTintColor = scheme?.colorScheme.primaryColorVariant;
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -113,11 +113,11 @@ class CheckboxFieldView : BaseFieldView {
     
     override func setValid(_ valid: Bool) {
         valid ? (errorLabel.text = "") : (errorLabel.text = getErrorMessage());
-        if let safeScheme = scheme {
+        if let scheme = scheme {
             if (valid) {
-                applyTheme(withScheme: safeScheme);
+                applyTheme(withScheme: scheme);
             } else {
-                label.textColor = safeScheme.colorScheme.errorColor;
+                label.textColor = scheme.colorScheme.errorColor;
             }
         }
     }

@@ -72,7 +72,7 @@ class ObservationCompactView: UIView {
         construct()
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
         self.scheme = scheme;
         importantView.applyTheme(withScheme: scheme);
         observationSummaryView.applyTheme(withScheme: scheme);
@@ -97,9 +97,7 @@ class ObservationCompactView: UIView {
         } else {
             attachmentSlideshow.isHidden = true;
         }
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     override func updateConstraints() {

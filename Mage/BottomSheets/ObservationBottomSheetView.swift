@@ -75,6 +75,7 @@ class ObservationBottomSheetView: BottomSheetView {
         guard let scheme = scheme else {
             return;
         }
+        self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.surfaceColor;
         compactView.applyTheme(withScheme: scheme);
         detailsButton.applyContainedTheme(withScheme: scheme);
@@ -87,10 +88,7 @@ class ObservationBottomSheetView: BottomSheetView {
         
         compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
 
-
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
         
         self.setNeedsUpdateConstraints();
     }

@@ -132,10 +132,10 @@ class SidebarUIButton: UIButton {
         button.sidebarType = sidebarType;
         button.title = title;
         
-        if let safeUrl: URL = iconUrl {
+        if let iconUrl: URL = iconUrl {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size));
             button.kf.setImage(
-                with: safeUrl,
+                with: iconUrl,
                 for: .normal,
                 placeholder: UIImage(named: "rss"),
                 options: [
@@ -153,8 +153,8 @@ class SidebarUIButton: UIButton {
                         print(error);
                     }
                 })
-        } else if let safeImageName: String = imageName {
-            button.setImage(UIImage(named: safeImageName), for: .normal);
+        } else if let imageName: String = imageName {
+            button.setImage(UIImage(named: imageName), for: .normal);
         }
         
         return button;
@@ -206,8 +206,8 @@ class SidebarUIButton: UIButton {
     }
     
     @objc func activateButton(button: SidebarUIButton) {
-        if let safeButton = activeButton {
-            safeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        if let activeButton = activeButton {
+            activeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         }
         button.tintColor = self.scheme?.colorScheme.primaryColor;
         activeButton = button;

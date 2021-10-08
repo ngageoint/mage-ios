@@ -63,7 +63,10 @@ class CommonFieldsView: MDCCard {
         fatalError("This class does not support NSCoding")
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return;
+        }
         super.applyTheme(withScheme: scheme);
         geometryView.applyTheme(withScheme: scheme);
         dateView.applyTheme(withScheme: scheme);
@@ -100,8 +103,8 @@ class CommonFieldsView: MDCCard {
     func setObservation(observation: Observation) {
         self.observation = observation;
         setDateValue();
-        if let safeObservation = self.observation {
-            geometryView.setObservation(observation: safeObservation);
+        if let observation = self.observation {
+            geometryView.setObservation(observation: observation);
         }
     }
 }
@@ -114,18 +117,18 @@ extension CommonFieldsView: FieldSelectionDelegate {
 
 extension CommonFieldsView: ObservationFormFieldListener {
     func fieldValueChanged(_ field: [String : Any], value: Any?) {
-        guard let safeObservation = self.observation else { return }
-        var newProperties = safeObservation.properties as? [String: Any];
+        guard let observation = self.observation else { return }
+        var newProperties = observation.properties as? [String: Any];
         
         if (field[FieldKey.name.key] as! String == dateField[FieldKey.name.key] as! String) {
             let formatter = ISO8601DateFormatter();
             formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
             if (value == nil) {
                 newProperties?.removeValue(forKey: dateField[FieldKey.name.key] as! String)
-                safeObservation.timestamp = nil;
+                observation.timestamp = nil;
             } else {
                 newProperties?[dateField[FieldKey.name.key] as! String] = value as! String;
-                safeObservation.timestamp = dateView.value as? Date;
+                observation.timestamp = dateView.value as? Date;
             }
         } else if (field[FieldKey.name.key] as! String == locationField[FieldKey.name.key] as! String) {
             if let safeGeometry: SFGeometry = value as? SFGeometry {
@@ -135,6 +138,6 @@ extension CommonFieldsView: ObservationFormFieldListener {
             }
             
         }
-        safeObservation.properties = newProperties;
+        observation.properties = newProperties;
     }
 }

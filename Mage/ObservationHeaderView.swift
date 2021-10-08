@@ -42,7 +42,6 @@ class ObservationHeaderView : MDCCard {
     
     private lazy var divider: UIView = {
         let divider = UIView(forAutoLayout: ());
-        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
         divider.autoSetDimension(.height, toSize: 1);
         return divider;
     }()
@@ -89,12 +88,17 @@ class ObservationHeaderView : MDCCard {
         super.updateConstraints();
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         self.geometryView.applyTheme(withScheme: scheme);
         self.importantView.applyTheme(withScheme: scheme);
         self.observationActionsView.applyTheme(withScheme: scheme);
         self.observationSummaryView.applyTheme(withScheme: scheme);
+        divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
     }
     
     @objc public func populate(observation: Observation, animate: Bool = true, ignoreGeometry: Bool = false) {

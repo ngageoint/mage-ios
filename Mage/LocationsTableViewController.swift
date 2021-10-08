@@ -64,16 +64,16 @@ class LocationsTableViewController: UITableViewController {
         
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onSecondaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
+            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onSecondaryColor
         ];
         
         self.navigationController?.navigationBar.standardAppearance = appearance;
@@ -241,17 +241,17 @@ extension LocationsTableViewController: UserActionsDelegate {
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             
             var image: UIImage? = UIImage(named: "me")
-            if let safeIconUrl = user.iconUrl {
-                if (safeIconUrl.lowercased().hasPrefix("http")) {
+            if let iconUrl = user.iconUrl {
+                if (iconUrl.lowercased().hasPrefix("http")) {
                     let token = StoredPassword.retrieveStoredToken();
                     do {
-                        try image = UIImage(data: Data(contentsOf: URL(string: "\(safeIconUrl)?access_token=\(token ?? "")")!))
+                        try image = UIImage(data: Data(contentsOf: URL(string: "\(iconUrl)?access_token=\(token ?? "")")!))
                     } catch {
                         // whatever
                     }
                 } else {
                     do {
-                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(safeIconUrl)")))
+                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(iconUrl)")))
                     } catch {
                         // whatever
                     }

@@ -21,7 +21,7 @@ func globalContainerScheme() -> MDCContainerScheming {
     containerScheme.colorScheme.backgroundColor = UIColor.systemGroupedBackground;
     containerScheme.colorScheme.onBackgroundColor = UIColor.label;
     containerScheme.colorScheme.errorColor = .systemRed;
-    containerScheme.colorScheme.onPrimaryColor = .white;
+    containerScheme.colorScheme.onPrimaryColor = UIColor(named: "onPrimary") ?? .white;
     
     return containerScheme;
 }

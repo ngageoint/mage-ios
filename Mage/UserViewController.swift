@@ -49,16 +49,16 @@ import Foundation
         
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onSecondaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
+            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onSecondaryColor
         ];
         
         self.navigationController?.navigationBar.standardAppearance = appearance;

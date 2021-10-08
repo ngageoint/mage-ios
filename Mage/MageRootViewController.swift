@@ -123,17 +123,17 @@ import Kingfisher
 
         nc?.navigationBar.isTranslucent = false;
         nc?.navigationBar.barTintColor = scheme.colorScheme.primaryColorVariant;
-        nc?.navigationBar.tintColor = scheme.colorScheme.onPrimaryColor;
-        nc?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.onPrimaryColor];
-        nc?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor];
+        nc?.navigationBar.tintColor = scheme.colorScheme.onSecondaryColor;
+        nc?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.onSecondaryColor];
+        nc?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
             NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
             NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
         ];
         

@@ -67,7 +67,11 @@ class DateView : BaseFieldView {
         return textField;
     }()
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
@@ -125,8 +129,8 @@ class DateView : BaseFieldView {
     @objc func cancelButtonPressed() {
         shouldResign = true;
         date = value as? Date;
-        if let safeDate = date {
-            datePicker.date = safeDate;
+        if let date = date {
+            datePicker.date = date;
         }
         setTextFieldValue();
         textField.resignFirstResponder();
@@ -144,10 +148,10 @@ class DateView : BaseFieldView {
         datePicker.date = Date();
         editMode ? (textField.text = nil) : (fieldValue.text = nil);
         
-        if let safeValue = value {
-            self.value = formatter.date(from: safeValue);
-            if let safeDate = self.value as? Date {
-                datePicker.date = safeDate;
+        if let value = value {
+            self.value = formatter.date(from: value);
+            if let date = self.value as? Date {
+                datePicker.date = date;
                 editMode ? (textField.text = (datePicker.date as NSDate).formattedDisplay()) : (fieldValue.text = (datePicker.date as NSDate).formattedDisplay());
                 textField.clearButtonMode = .always;
                 textField.trailingViewMode = .never;

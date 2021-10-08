@@ -90,16 +90,16 @@ static float paddingPercentage = .1;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
-    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onSecondaryColor};
+    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor};
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
         NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
     };
     appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
         NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
     };
     

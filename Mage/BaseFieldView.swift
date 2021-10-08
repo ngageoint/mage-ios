@@ -20,8 +20,8 @@ class BaseFieldView : UIView {
     
     private lazy var fieldSelectionCoordinator: FieldSelectionCoordinator? = {
         var fieldSelectionCoordinator: FieldSelectionCoordinator? = nil;
-        if let safeDelegate: FieldSelectionDelegate = delegate {
-            fieldSelectionCoordinator = FieldSelectionCoordinator(field: field, formField: self, delegate: safeDelegate, scheme: self.scheme);
+        if let delegate: FieldSelectionDelegate = delegate {
+            fieldSelectionCoordinator = FieldSelectionCoordinator(field: field, formField: self, delegate: delegate, scheme: self.scheme);
         }
         return fieldSelectionCoordinator;
     }();
@@ -76,15 +76,16 @@ class BaseFieldView : UIView {
         }
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
         self.scheme = scheme;
         fieldSelectionCoordinator?.applyTheme(withScheme: scheme)
-        fieldValue.textColor = scheme.colorScheme.onSurfaceColor;
-        fieldValue.font = scheme.typographyScheme.body1;
-        fieldNameLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        var font = scheme.typographyScheme.body1;
-        font = font.withSize(font.pointSize * 0.8);
-        fieldNameLabel.font = font;
+        fieldValue.textColor = scheme?.colorScheme.onSurfaceColor;
+        fieldValue.font = scheme?.typographyScheme.body1;
+        fieldNameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        if let font = scheme?.typographyScheme.body1 {
+            let smallFont = font.withSize(font.pointSize * 0.8);
+            fieldNameLabel.font = smallFont;
+        }
     }
     
     override func updateConstraints() {

@@ -115,16 +115,16 @@ import MaterialComponents.MDCCard
         
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onSecondaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
+            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onSecondaryColor
         ];
         
         self.navigationController?.navigationBar.standardAppearance = appearance;
@@ -234,9 +234,7 @@ import MaterialComponents.MDCCard
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
+        applyTheme(withContainerScheme: scheme);
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -269,8 +267,8 @@ import MaterialComponents.MDCCard
     func setupFormDependentButtons() {
         addFormFAB.isEnabled = true;
         addFormFAB.isHidden = false;
-        if let safeScheme = self.scheme {
-            addFormFAB.applySecondaryTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            addFormFAB.applySecondaryTheme(withScheme: scheme);
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
@@ -287,11 +285,11 @@ import MaterialComponents.MDCCard
     
     func setupObservation(observation: Observation) {
         self.observation = observation;
-        if let safeProperties = self.observation?.properties as? [String: Any] {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
+        if let properties = self.observation?.properties as? [String: Any] {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = properties[ObservationKey.forms.key] as! [[String: Any]];
             }
-            self.observationProperties = safeProperties;
+            self.observationProperties = properties;
         } else {
             self.observationProperties = [ObservationKey.forms.key:[]];
             observationForms = [];
@@ -307,11 +305,9 @@ import MaterialComponents.MDCCard
     }
     
     func addCommonFields(stackView: UIStackView) {
-         if let safeObservation = observation {
-            commonFieldView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate, commonPropertiesListener: self);
-            if let safeScheme = scheme {
-                commonFieldView!.applyTheme(withScheme: safeScheme);
-            }
+         if let observation = observation {
+            commonFieldView = CommonFieldsView(observation: observation, fieldSelectionDelegate: delegate, commonPropertiesListener: self);
+            commonFieldView!.applyTheme(withScheme: scheme);
             stackView.addArrangedSubview(commonFieldView!);
          }
     }
@@ -325,13 +321,11 @@ import MaterialComponents.MDCCard
     // for legacy servers add the attachment field to common
     func addLegacyAttachmentCard(stackView: UIStackView) {
         if (MageServer.isServerVersion5()) {
-            if let safeObservation = observation {
-                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
+            if let observation = observation {
+                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: observation, attachmentSelectionDelegate: self, viewController: self);
                 let attachmentHeader: AttachmentHeader = AttachmentHeader();
-                if let safeScheme = self.scheme {
-                    attachmentCard.applyTheme(withScheme: safeScheme);
-                    attachmentHeader.applyTheme(withScheme: safeScheme);
-                }
+                attachmentCard.applyTheme(withScheme: scheme);
+                attachmentHeader.applyTheme(withScheme: scheme);
                 stackView.addArrangedSubview(attachmentHeader);
                 stackView.addArrangedSubview(attachmentCard);
             }
@@ -341,9 +335,7 @@ import MaterialComponents.MDCCard
     func addFormViews(stackView: UIStackView) {
         for (index, form) in self.observationForms.enumerated() {
             let card:ExpandableCard = addObservationFormView(observationForm: form, index: index);
-            if let safeScheme = scheme {
-                card.applyTheme(withScheme: safeScheme);
-            }
+            card.applyTheme(withScheme: scheme);
             card.expanded = newObservation || index == 0;
         }
     }
@@ -392,7 +384,7 @@ import MaterialComponents.MDCCard
         button.tag = index;
 
         let divider = UIView(forAutoLayout: ());
-        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
+        divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12);
         divider.autoSetDimension(.height, toSize: 1);
         formSpacerView.addSubview(divider);
         divider.autoPinEdge(toSuperviewEdge: .left);
@@ -699,8 +691,8 @@ extension ObservationEditCardCollectionViewController: ObservationFormListener {
         observationProperties[ObservationKey.forms.key] = observationForms;
         observation?.properties = observationProperties;
         setExpandableCardHeaderInformation(form: form, index: index);
-        if let safeObservation = self.observation {
-            commonFieldView?.setObservation(observation: safeObservation);
+        if let observation = self.observation {
+            commonFieldView?.setObservation(observation: observation);
         }
     }
 }

@@ -29,7 +29,7 @@ class FieldSelectionCoordinator {
         self.scheme = scheme;
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
         self.scheme = scheme;
     }
     

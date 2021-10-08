@@ -157,11 +157,9 @@ class ObservationFormView: UIStackView {
             default:
                 print("No view is configured for type \(type)")
             }
-            if let baseFieldView = fieldView as? BaseFieldView, let safeKey = fieldDictionary[FieldKey.name.key] as? String {
-                if let safeScheme = scheme {
-                    baseFieldView.applyTheme(withScheme: safeScheme)
-                }
-                fieldViews[safeKey] = baseFieldView;
+            if let baseFieldView = fieldView as? BaseFieldView, let key = fieldDictionary[FieldKey.name.key] as? String {
+                baseFieldView.applyTheme(withScheme: scheme)
+                fieldViews[key] = baseFieldView;
                 formFieldAdded = true;
                 self.addArrangedSubview(baseFieldView);
             }
@@ -169,8 +167,8 @@ class ObservationFormView: UIStackView {
     }
     
     func fieldViewForField(field: [String: Any]) -> BaseFieldView? {
-        if let safeKey = field[FieldKey.name.key] as? String {
-            return fieldViews[safeKey]
+        if let key = field[FieldKey.name.key] as? String {
+            return fieldViews[key]
         }
         return nil;
     }

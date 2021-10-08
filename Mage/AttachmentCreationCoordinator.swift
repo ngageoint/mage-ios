@@ -430,27 +430,27 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     }
     
     func createGpsExifFromLocation(location: CLLocation?, heading: CLHeading?) -> [AnyHashable : Any]? {
-        guard let safeLocation: CLLocation = location else {
+        guard let location: CLLocation = location else {
             return nil;
         }
         
-        let metersPerSecondMeasurement = Measurement(value: safeLocation.speed, unit: UnitSpeed.metersPerSecond);
+        let metersPerSecondMeasurement = Measurement(value: location.speed, unit: UnitSpeed.metersPerSecond);
         
         var gpsDictionary: [AnyHashable : Any] = [
-            kCGImagePropertyGPSLatitude: safeLocation.coordinate.latitude,
-            kCGImagePropertyGPSLongitude: safeLocation.coordinate.longitude,
+            kCGImagePropertyGPSLatitude: location.coordinate.latitude,
+            kCGImagePropertyGPSLongitude: location.coordinate.longitude,
             kCGImagePropertyGPSSpeed: metersPerSecondMeasurement.converted(to: UnitSpeed.kilometersPerHour),
             kCGImagePropertyGPSSpeedRef: "K",
-            kCGImagePropertyGPSTrack: safeLocation.course,
+            kCGImagePropertyGPSTrack: location.course,
             kCGImagePropertyGPSTrackRef: "T",
-            kCGImagePropertyGPSAltitude: safeLocation.altitude,
+            kCGImagePropertyGPSAltitude: location.altitude,
             kCGImagePropertyGPSAltitudeRef: 0
         ];
         
-        if let safeHeading: CLHeading = heading {
-            gpsDictionary[kCGImagePropertyGPSImgDirection] = safeHeading.trueHeading;
+        if let heading: CLHeading = heading {
+            gpsDictionary[kCGImagePropertyGPSImgDirection] = heading.trueHeading;
             gpsDictionary[kCGImagePropertyGPSImgDirectionRef] = "T";
-            gpsDictionary[kCGImagePropertyGPSDestBearing] = safeHeading.trueHeading;
+            gpsDictionary[kCGImagePropertyGPSDestBearing] = heading.trueHeading;
             gpsDictionary[kCGImagePropertyGPSDestBearingRef] = "T";
         }
         return gpsDictionary;

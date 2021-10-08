@@ -61,16 +61,16 @@
     self.masterViewController.navigationBar.translucent = NO;
     self.masterViewController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.masterViewController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.masterViewController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
-    self.masterViewController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+    self.masterViewController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onSecondaryColor};
+    self.masterViewController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor};
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
         NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
     };
     appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
         NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
     };
     

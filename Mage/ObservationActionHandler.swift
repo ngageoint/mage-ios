@@ -27,8 +27,8 @@ class ObservationActionHandler {
                 print("opened? \(success)")
             }
         }))
-        if let safeExtraActions = extraActions {
-            for action in safeExtraActions {
+        if let extraActions = extraActions {
+            for action in extraActions {
                 alert.addAction(action);
             }
         }

@@ -71,17 +71,17 @@ import MaterialComponents.MDCContainerScheme;
         }
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onSecondaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor,
             NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor,
             NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
         ];
         
@@ -149,8 +149,8 @@ import MaterialComponents.MDCContainerScheme;
         super.viewWillAppear(animated);
         ObservationPushService.singleton()?.add(self);
         setupObservation();
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
+        if let scheme = self.scheme {
+            applyTheme(withContainerScheme: scheme);
         }
     }
     
@@ -174,9 +174,9 @@ import MaterialComponents.MDCContainerScheme;
     func setupObservation() {
         self.title = observation?.primaryFeedFieldText();
 
-        if let safeProperties = self.observation?.properties as? [String: Any] {
-            if (safeProperties.keys.contains("forms")) {
-                observationForms = safeProperties["forms"] as! [[String: Any]];
+        if let properties = self.observation?.properties as? [String: Any] {
+            if (properties.keys.contains("forms")) {
+                observationForms = properties["forms"] as! [[String: Any]];
             }
         } else {
             observationForms = [];
@@ -284,14 +284,14 @@ import MaterialComponents.MDCContainerScheme;
         }
         
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, attachmentSelectionDelegate: self, observationActionsDelegate: self);
-        if let safeScheme = self.scheme {
-            formView.applyTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            formView.applyTheme(withScheme: scheme);
         }
         var formSpacerView: UIView?;
         if (!formView.isEmpty()) {
             formSpacerView = UIView(forAutoLayout: ());
             let divider = UIView(forAutoLayout: ());
-            divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
+            divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12);
             divider.autoSetDimension(.height, toSize: 1);
             formSpacerView?.addSubview(divider);
             formSpacerView?.addSubview(formView);

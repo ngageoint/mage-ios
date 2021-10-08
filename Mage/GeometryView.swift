@@ -64,7 +64,11 @@ class GeometryView : BaseFieldView {
         return observationManager;
     }()
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         accuracyLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         accuracyLabel.font = scheme.typographyScheme.caption;
@@ -284,18 +288,18 @@ class GeometryView : BaseFieldView {
     }
     
     override func setValid(_ valid: Bool) {
-        if let safeScheme = scheme {
+        if let scheme = scheme {
             if (valid) {
-                textField.applyTheme(withScheme: safeScheme);
+                textField.applyTheme(withScheme: scheme);
                 textField.leadingAssistiveLabel.text = nil
                 textField.sizeToFit()
-                applyTheme(withScheme: safeScheme);
+                applyTheme(withScheme: scheme);
             } else {
                 textField.applyErrorTheme(withScheme: globalErrorContainerScheme());
                 textField.leadingAssistiveLabel.text = "\(field[FieldKey.title.key] as? String ?? "") is required"
                 textField.sizeToFit()
                 latitudeLongitudeButton.applyTextTheme(withScheme: globalErrorContainerScheme());
-                fieldNameLabel.textColor = safeScheme.colorScheme.errorColor;
+                fieldNameLabel.textColor = scheme.colorScheme.errorColor;
             }
         }
     }

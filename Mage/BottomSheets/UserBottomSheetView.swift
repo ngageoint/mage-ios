@@ -90,13 +90,14 @@ class UserBottomSheetView: BottomSheetView {
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let safeScheme = scheme else {
+        guard let scheme = scheme else {
             return;
         }
-        self.backgroundColor = safeScheme.colorScheme.surfaceColor;
-        summaryView.applyTheme(withScheme: safeScheme);
-        userActionsView.applyTheme(withScheme: safeScheme);
-        detailsButton.applyContainedTheme(withScheme: safeScheme);
+        self.scheme = scheme;
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
+        summaryView.applyTheme(withScheme: scheme);
+        userActionsView.applyTheme(withScheme: scheme);
+        detailsButton.applyContainedTheme(withScheme: scheme);
     }
     
     override func updateConstraints() {

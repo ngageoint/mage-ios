@@ -84,7 +84,11 @@ class NumberFieldView : BaseFieldView {
         setValue(value);
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
@@ -147,8 +151,8 @@ class NumberFieldView : BaseFieldView {
     }
     
     override func getErrorMessage() -> String {
-        if let safeHelp = helperText {
-            return safeHelp
+        if let helperText = helperText {
+            return helperText
         }
         return "Must be a number";
     }
@@ -182,8 +186,8 @@ class NumberFieldView : BaseFieldView {
         super.setValid(valid);
         if (valid) {
             textField.leadingAssistiveLabel.text = helperText;
-            if let safeScheme = scheme {
-                textField.applyTheme(withScheme: safeScheme);
+            if let scheme = scheme {
+                textField.applyTheme(withScheme: scheme);
             }
         } else {
             textField.applyErrorTheme(withScheme: globalErrorContainerScheme());

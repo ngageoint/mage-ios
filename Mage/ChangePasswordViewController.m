@@ -70,9 +70,9 @@
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.cancelButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.cancelButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
     self.changeButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.changeButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.changeButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
     self.showCurrentPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
     self.showNewPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
     self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];

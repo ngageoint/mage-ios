@@ -59,17 +59,17 @@ import Kingfisher
         self.tableView.separatorStyle = .none;
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor;
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onSecondaryColor];
+        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor];
         let appearance = UINavigationBarAppearance();
         appearance.configureWithOpaqueBackground();
         appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor,
             NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
         ];
         appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
+            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor,
             NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
         ];
         
@@ -104,9 +104,7 @@ import Kingfisher
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
+        applyTheme(withContainerScheme: scheme);
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

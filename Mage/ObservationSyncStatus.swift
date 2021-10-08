@@ -25,7 +25,11 @@ class ObservationSyncStatus: UIView {
         return syncStatusView;
     }();
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.surfaceColor;
         syncStatusView.applyTheme(withScheme: scheme);
@@ -83,8 +87,8 @@ class ObservationSyncStatus: UIView {
             syncStatusView.accessibilityLabel = "Error Pushing Changes\n\(observation?.errorMessage() ?? "")";
             syncStatusView.imageView.image = UIImage(named: "error_outline");
             syncStatusView.leadingButton.isHidden = true;
-            if let safeScheme = scheme {
-                applyTheme(withScheme: safeScheme);
+            if let scheme = scheme {
+                applyTheme(withScheme: scheme);
             }
             syncStatusView.sizeToFit();
             return;
@@ -100,8 +104,8 @@ class ObservationSyncStatus: UIView {
             syncStatusView.imageView.image = UIImage(named: "done");
             syncStatusView.imageView.tintColor = MDCPalette.green.accent700;
             syncStatusView.leadingButton.isHidden = true;
-            if let safeScheme = scheme {
-                applyTheme(withScheme: safeScheme);
+            if let scheme = scheme {
+                applyTheme(withScheme: scheme);
             }
             syncStatusView.sizeToFit();
             return;
@@ -113,8 +117,8 @@ class ObservationSyncStatus: UIView {
             syncStatusView.accessibilityLabel = "Force Pushing Changes..."
             syncStatusView.imageView.image = UIImage(named: "cached");
             syncStatusView.leadingButton.isHidden = true;
-            if let safeScheme = scheme {
-                applyTheme(withScheme: safeScheme);
+            if let scheme = scheme {
+                applyTheme(withScheme: scheme);
             }
             syncStatusView.sizeToFit();
             return;
@@ -127,8 +131,8 @@ class ObservationSyncStatus: UIView {
         syncStatusView.leadingButton.setTitle("Sync Now", for: .normal);
         syncStatusView.leadingButton.accessibilityLabel = "Sync Now";
         syncStatusView.leadingButton.addTarget(self, action: #selector(self.syncObservation), for: .touchUpInside)
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
+        if let scheme = scheme {
+            applyTheme(withScheme: scheme);
         }
         syncStatusView.sizeToFit();
     }

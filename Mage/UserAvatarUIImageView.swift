@@ -86,15 +86,15 @@ import Kingfisher
     }
     
     func getAvatarUrl(size: Int) -> URL? {
-        guard let safeUrl = self.user?.avatarUrl else {
+        guard let avatarUrl = self.user?.avatarUrl else {
             return nil;
         }
         
-        let localPath = "\(getDocumentsDirectory())/\(safeUrl)";
+        let localPath = "\(getDocumentsDirectory())/\(avatarUrl)";
         if (FileManager.default.fileExists(atPath: localPath)) {
             return URL(fileURLWithPath: localPath);
         } else {
-            return URL(string: String(format: "%@?size=%ld", safeUrl, size))!;
+            return URL(string: String(format: "%@?size=%ld", avatarUrl, size))!;
         }
     }
     
@@ -107,10 +107,10 @@ import Kingfisher
                          completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) {
         self.contentMode = .scaleAspectFill;
         
-        if let safeUrl = url {
+        if let url = url {
         
-            if (safeUrl.isFileURL) {
-                let provider = LocalFileImageDataProvider(fileURL: safeUrl)
+            if (url.isFileURL) {
+                let provider = LocalFileImageDataProvider(fileURL: url)
                 self.kf.setImage(with: provider)
                 return;
             }
@@ -141,7 +141,7 @@ import Kingfisher
             }
             
             if (thumbnail) {
-                let resource = ImageResource(downloadURL: safeUrl, cacheKey: safeUrl.absoluteString)
+                let resource = ImageResource(downloadURL: url, cacheKey: url.absoluteString)
                 self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock,
                                  completionHandler: completionHandler);
                 return;
@@ -149,7 +149,7 @@ import Kingfisher
             // if they have the original sized image, show that
             else if (self.isFullSizeCached() || fullSize) {
                 self.placeholderIsRealImage = true;
-                self.kf.setImage(with: safeUrl,
+                self.kf.setImage(with: url,
                                  options: options, progressBlock: progressBlock,
                                  completionHandler: completionHandler);
                 return;
@@ -160,13 +160,13 @@ import Kingfisher
                 placeholder.kf.setImage(with: self.getAvatarUrl(size: getImageSize()), options: options)
             }
             // if they had the thumbnail already downloaded for some reason, show that while we go get the bigger one
-            else if (ImageCache.default.isCached(forKey: safeUrl.absoluteString)) {
+            else if (ImageCache.default.isCached(forKey: url.absoluteString)) {
                 self.placeholderIsRealImage = true;
                 placeholder.kf.setImage(with: url, options: options)
             }
             // Have to do this so that the placeholder image shows up behind the activity indicator
             DispatchQueue.main.async {
-                self.kf.setImage(with: safeUrl, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
+                self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
             }
         } else {
             self.image = UIImage(named: "avatar_small");

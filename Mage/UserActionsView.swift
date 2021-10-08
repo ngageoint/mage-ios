@@ -74,7 +74,11 @@ class UserActionsView: UIView {
         return emailButton;
     }()
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         emailButton.applyTextTheme(withScheme: scheme);
         emailButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
@@ -93,11 +97,11 @@ class UserActionsView: UIView {
         self.userActionsDelegate = userActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
-        if let safeUser = user {
-            populate(user: safeUser, delegate: userActionsDelegate);
+        if let user = user {
+            populate(user: user, delegate: userActionsDelegate);
         }
-        if let safeScheme = self.scheme {
-            applyTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            applyTheme(withScheme: scheme);
         }
     }
     

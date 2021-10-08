@@ -82,14 +82,14 @@ protocol ObservationCommonPropertiesListener {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
             self.rootViewController?.present(alert, animated: true, completion: nil);
         } else {
-            if let safeNav = navigationController {
-                safeNav.modalPresentationStyle = .custom;
-                safeNav.modalTransitionStyle = .crossDissolve;
-                self.rootViewController?.present(safeNav, animated: true, completion: nil);
+            if let navigationController = navigationController {
+                navigationController.modalPresentationStyle = .custom;
+                navigationController.modalTransitionStyle = .crossDissolve;
+                self.rootViewController?.present(navigationController, animated: true, completion: nil);
                 observationEditController = ObservationEditCardCollectionViewController(delegate: self, observation: observation!, newObservation: newObservation, containerScheme: self.scheme);
-                safeNav.pushViewController(observationEditController!, animated: true);
-                if let safeScheme = self.scheme {
-                    observationEditController?.applyTheme(withContainerScheme: safeScheme);
+                navigationController.pushViewController(observationEditController!, animated: true);
+                if let scheme = self.scheme {
+                    observationEditController?.applyTheme(withContainerScheme: scheme);
                 }
             }
         }
@@ -101,15 +101,13 @@ protocol ObservationCommonPropertiesListener {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
             self.rootViewController?.present(alert, animated: true, completion: nil);
         } else {
-            if let safeNav = navigationController {
-                safeNav.modalPresentationStyle = .custom;
-                safeNav.modalTransitionStyle = .crossDissolve;
-                self.rootViewController?.present(safeNav, animated: true, completion: nil);
+            if let navigationController = navigationController {
+                navigationController.modalPresentationStyle = .custom;
+                navigationController.modalTransitionStyle = .crossDissolve;
+                self.rootViewController?.present(navigationController, animated: true, completion: nil);
                 observationFormReorder = ObservationFormReorder(observation: observation!, delegate: self, containerScheme: self.scheme);
-                safeNav.pushViewController(self.observationFormReorder!, animated: true);
-                if let safeScheme = self.scheme {
-                    self.observationFormReorder!.applyTheme(withContainerScheme: safeScheme);
-                }
+                navigationController.pushViewController(self.observationFormReorder!, animated: true);
+                self.observationFormReorder!.applyTheme(withContainerScheme: scheme);
             }
         }
     }
@@ -165,11 +163,11 @@ protocol ObservationCommonPropertiesListener {
     func addFormToObservation(observation: Observation, form: [String: AnyHashable]) {
         var observationProperties: [String: Any] = [ObservationKey.forms.key:[]];
         var observationForms: [[String: Any]] = [];
-        if let safeProperties = observation.properties as? [String: Any] {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
+        if let properties = observation.properties as? [String: Any] {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = properties[ObservationKey.forms.key] as! [[String: Any]];
             }
-            observationProperties = safeProperties;
+            observationProperties = properties;
         }
         observationForms.append(setupFormWithDefaults(observation: observation, form: form));
         observationProperties[ObservationKey.forms.key] = observationForms;
@@ -212,8 +210,8 @@ extension ObservationEditCoordinator: ObservationFormReorderDelegate {
         self.observation = observation;
         self.observation!.userId = user.remoteId;
 
-        if let safeObservationEditController = self.observationEditController {
-            safeObservationEditController.formsReordered(observation: self.observation!);
+        if let observationEditController = self.observationEditController {
+            observationEditController.formsReordered(observation: self.observation!);
             self.navigationController?.popViewController(animated: true);
 
         } else {

@@ -31,6 +31,12 @@ class FormDefaultsViewController: UIViewController {
         managedObjectContext.mr_setWorkingName("Form Default Temporary Context");
         return managedObjectContext;
     } ()
+    
+    private lazy var divider: UIView = {
+        let divider = UIView(forAutoLayout: ());
+        divider.autoSetDimension(.height, toSize: 1);
+        return divider;
+    }()
 
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
@@ -115,12 +121,13 @@ class FormDefaultsViewController: UIViewController {
         defaultDescriptionLabel.font = containerScheme.typographyScheme.caption;
         observationFormView?.applyTheme(withScheme: containerScheme);
         card.applyTheme(withScheme: containerScheme);
-        if let safeColor = eventForm[FormKey.color.key] as? String {
-            image.tintColor = UIColor(hex: safeColor);
+        if let color = eventForm[FormKey.color.key] as? String {
+            image.tintColor = UIColor(hex: color);
         } else {
             image.tintColor = containerScheme.colorScheme.primaryColor
         }
         resetButton.applyTextTheme(withScheme: globalErrorContainerScheme());
+        divider.backgroundColor = containerScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
     }
     
     @objc func resetDefaults() {
@@ -194,13 +201,10 @@ class FormDefaultsViewController: UIViewController {
         stackView.addArrangedSubview(defaultDescriptionLabel);
         stackView.setCustomSpacing(16, after: defaultDescriptionLabel);
         buildObservationFormView();
-        if let safeFormView = observationFormView {
-            stackView.addArrangedSubview(safeFormView);
+        if let formView = observationFormView {
+            stackView.addArrangedSubview(formView);
         }
         
-        let divider = UIView(forAutoLayout: ());
-        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
-        divider.autoSetDimension(.height, toSize: 1);
         stackView.addArrangedSubview(divider);
         
         let buttonContainer = UIView.newAutoLayout();
@@ -214,9 +218,7 @@ class FormDefaultsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
+        applyTheme(withContainerScheme: scheme);
     }
     
     override func updateViewConstraints() {

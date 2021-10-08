@@ -96,7 +96,11 @@ class RadioFieldView: BaseFieldView {
         }
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         for value in choiceButtons.values {
             value.button.applyTextTheme(withScheme: scheme);
@@ -144,11 +148,11 @@ class RadioFieldView: BaseFieldView {
     
     override func setValid(_ valid: Bool) {
         valid ? (errorLabel.text = "") : (errorLabel.text = getErrorMessage());
-        if let safeScheme = scheme {
+        if let scheme = scheme {
             if (valid) {
-                applyTheme(withScheme: safeScheme);
+                applyTheme(withScheme: scheme);
             } else {
-                errorLabel.textColor = safeScheme.colorScheme.errorColor;
+                errorLabel.textColor = scheme.colorScheme.errorColor;
             }
         }
     }

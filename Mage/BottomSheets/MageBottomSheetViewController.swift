@@ -157,9 +157,7 @@ import UIKit
         scrollView.addSubview(stackView);
         self.view.addSubview(scrollView);
         
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
         
         populateView();
         

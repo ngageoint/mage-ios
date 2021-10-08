@@ -51,7 +51,11 @@ class ObservationAttachmentCard: MDCCard {
         super.updateConstraints();
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         attachmentView.applyTheme(withScheme: scheme);
     }

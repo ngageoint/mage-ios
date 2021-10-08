@@ -87,10 +87,8 @@ class FeedItemCard : UITableViewCell {
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
         self.backgroundColor = scheme?.colorScheme.surfaceColor;
-        if let safeScheme = scheme {
-            feedItemView.applyTheme(withScheme: safeScheme);
-            actionsView.applyTheme(withScheme: safeScheme);
-        }
+        feedItemView.applyTheme(withScheme: scheme);
+        actionsView.applyTheme(withScheme: scheme);
         self.locationLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         self.locationIcon.tintColor = scheme?.colorScheme.primaryColor;
     }

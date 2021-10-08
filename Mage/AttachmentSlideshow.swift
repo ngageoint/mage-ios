@@ -153,7 +153,7 @@ class AttachmentSlideShow: UIView {
     func populate(observation: Observation, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         
-        guard let safeAttachments = observation.attachments?.filter({ attachment in
+        guard let attachments = observation.attachments?.filter({ attachment in
             return attachment.url != nil
         }) else {
             return
@@ -161,7 +161,7 @@ class AttachmentSlideShow: UIView {
         // remove deleted attachments
         for view in stackView.arrangedSubviews {
             if let attachmentView: AttachmentUIImageView = view as? AttachmentUIImageView {
-                if (attachmentView.attachment != nil && !safeAttachments.contains(attachmentView.attachment!)) {
+                if (attachmentView.attachment != nil && !attachments.contains(attachmentView.attachment!)) {
                     view.removeFromSuperview();
                 }
             } else {
@@ -170,7 +170,7 @@ class AttachmentSlideShow: UIView {
         }
         
         // add new ones
-        for (_, attachment) in safeAttachments.enumerated() {
+        for (_, attachment) in attachments.enumerated() {
             var imageView: AttachmentUIImageView? = nil;
             
             for view in stackView.arrangedSubviews {
@@ -259,8 +259,8 @@ class AttachmentSlideShow: UIView {
             
         }
         
-        slidescroll.contentSize = CGSize(width: CGFloat(safeAttachments.count) * CGFloat(self.bounds.width), height: height)
-        pageControl.numberOfPages = safeAttachments.count;
+        slidescroll.contentSize = CGSize(width: CGFloat(attachments.count) * CGFloat(self.bounds.width), height: height)
+        pageControl.numberOfPages = attachments.count;
     }
     
     @objc func imageViewTapped(sender: UITapGestureRecognizer) {
@@ -289,13 +289,13 @@ class AttachmentSlideShow: UIView {
         super.updateConstraints();
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
         self.scheme = scheme;
-        self.backgroundColor = scheme.colorScheme.backgroundColor;
-        self.pageControl.pageIndicatorTintColor = scheme.colorScheme.onPrimaryColor.withAlphaComponent(0.6);
-        self.pageControl.currentPageIndicatorTintColor = scheme.colorScheme.primaryColor;
+        self.backgroundColor = scheme?.colorScheme.backgroundColor;
+        self.pageControl.pageIndicatorTintColor = scheme?.colorScheme.onPrimaryColor.withAlphaComponent(0.6);
+        self.pageControl.currentPageIndicatorTintColor = scheme?.colorScheme.primaryColor;
         for view in stackView.arrangedSubviews {
-            view.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4);
+            view.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4);
         }
     }
     

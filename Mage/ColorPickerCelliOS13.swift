@@ -13,8 +13,8 @@ class ColorPickerCelliOS13: UITableViewCell {
     let colorWell: UIView = UIView(forAutoLayout: ());
     var colorPreference: String? {
         didSet {
-            if let safeColorPreference = colorPreference {
-                colorWell.backgroundColor = UserDefaults.standard.color(forKey: safeColorPreference)
+            if let colorPreference = colorPreference {
+                colorWell.backgroundColor = UserDefaults.standard.color(forKey: colorPreference)
             }
         }
     }

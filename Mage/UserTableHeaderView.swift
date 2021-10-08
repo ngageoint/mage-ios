@@ -335,8 +335,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     }
     
     @objc public func updateUserDefaults(notification: Notification) {
-        if let safeLocation = userLastLocation {
-            setLocationText(userLastLocation: safeLocation);
+        if let userLastLocation = userLastLocation {
+            setLocationText(userLastLocation: userLastLocation);
         }
     }
 
@@ -372,8 +372,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         if (urlMap.count > 1) {
             presentMapsActionSheetForURLs(urlMap: urlMap);
         } else {
-            if let safeUrl = urlMap["Apple Maps"] {
-                UIApplication.shared.open(safeUrl!, options: [:]) { (success) in
+            if let url = urlMap["Apple Maps"] {
+                UIApplication.shared.open(url!, options: [:]) { (success) in
                     print("Opened \(success)")
                 }
             }
@@ -395,9 +395,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             }
         }));
         for (app, url) in urlMap {
-            if let safeUrl = url {
+            if let url = url {
                 alert.addAction(UIAlertAction(title: app, style: .default, handler: { (action) in
-                    UIApplication.shared.open(safeUrl, options: [:]) { (success) in
+                    UIApplication.shared.open(url, options: [:]) { (success) in
                         print("Opened \(success)")
                     }
                 }));
@@ -408,17 +408,17 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                 return;
             }
             var image: UIImage? = UIImage(named: "me")
-            if let safeIconUrl = self.user?.iconUrl {
-                if (safeIconUrl.lowercased().hasPrefix("http")) {
+            if let iconUrl = self.user?.iconUrl {
+                if (iconUrl.lowercased().hasPrefix("http")) {
                     let token = StoredPassword.retrieveStoredToken();
                     do {
-                        try image = UIImage(data: Data(contentsOf: URL(string: "\(safeIconUrl)?access_token=\(token ?? "")")!))
+                        try image = UIImage(data: Data(contentsOf: URL(string: "\(iconUrl)?access_token=\(token ?? "")")!))
                     } catch {
                         // whatever
                     }
                 } else {
                     do {
-                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(safeIconUrl)")))
+                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(iconUrl)")))
                     } catch {
                         // whatever
                     }

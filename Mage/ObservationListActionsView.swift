@@ -64,7 +64,11 @@ class ObservationListActionsView: UIView {
         return directionsButton;
     }()
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         favoriteCount.textColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         favoriteCount.font = scheme.typographyScheme.overline;
@@ -85,12 +89,10 @@ class ObservationListActionsView: UIView {
         self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
-        if let safeObservation = observation {
-            populate(observation: safeObservation, delegate: observationActionsDelegate);
+        if let observation = observation {
+            populate(observation: observation, delegate: observationActionsDelegate);
         }
-        if let safeScheme = self.scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     func layoutView() {

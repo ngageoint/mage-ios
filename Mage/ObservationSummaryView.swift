@@ -127,11 +127,11 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         }
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
         super.applyTheme(withScheme: scheme);
-        errorShapeLayer.fillColor = scheme.colorScheme.errorColor.cgColor
+        errorShapeLayer.fillColor = scheme?.colorScheme.errorColor.cgColor
         exclamation.tintColor = UIColor.white;
-        syncShapeLayer.fillColor = scheme.colorScheme.secondaryColor.cgColor;
+        syncShapeLayer.fillColor = scheme?.colorScheme.secondaryColor.cgColor;
         sync.tintColor = UIColor.white;
     }
 }

@@ -64,8 +64,8 @@ struct StraightLineNavigationNotification {
     @objc func stopHeading() -> Bool {
         if (!navigationModeEnabled && headingModeEnabled) {
             headingModeEnabled = false;
-            if let safeHeadingPolyline = headingPolyline {
-                mapView.removeOverlay(safeHeadingPolyline);
+            if let headingPolyline = headingPolyline {
+                mapView.removeOverlay(headingPolyline);
             }
             return true;
         }
@@ -74,11 +74,11 @@ struct StraightLineNavigationNotification {
     
     @objc func stopNavigation() {
         navigationModeEnabled = false;
-        if let safeRelativeBearingPolyline = relativeBearingPolyline {
-            mapView.removeOverlay(safeRelativeBearingPolyline);
+        if let relativeBearingPolyline = relativeBearingPolyline {
+            mapView.removeOverlay(relativeBearingPolyline);
         }
-        if let safeHeadingPolyline = headingPolyline {
-            mapView.removeOverlay(safeHeadingPolyline);
+        if let headingPolyline = headingPolyline {
+            mapView.removeOverlay(headingPolyline);
         }
         navView?.removeFromSuperview();
     }
