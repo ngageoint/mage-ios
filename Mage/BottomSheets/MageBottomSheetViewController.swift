@@ -114,13 +114,15 @@ import UIKit
         return button;
     }()
     
-    private lazy var dragHandleView: UIView = {
+    private lazy var drag: UIView = {
         let drag = UIView(forAutoLayout: ());
         drag.autoSetDimensions(to: CGSize(width: 50, height: 7));
         drag.clipsToBounds = true;
-        drag.backgroundColor = .black.withAlphaComponent(0.37);
         drag.layer.cornerRadius = 3.5;
-        
+        return drag;
+    }()
+    
+    private lazy var dragHandleView: UIView = {
         let view = UIView(forAutoLayout: ());
         view.addSubview(drag);
         drag.autoAlignAxis(toSuperviewAxis: .vertical);
@@ -174,6 +176,8 @@ import UIKit
         leftButton.tintColor = scheme.colorScheme.primaryColor;
         rightButton.applyTextTheme(withScheme: scheme);
         rightButton.tintColor = scheme.colorScheme.primaryColor;
+        
+        drag.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         
         pageControl.pageIndicatorTintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         pageControl.currentPageIndicatorTintColor = scheme.colorScheme.primaryColor;

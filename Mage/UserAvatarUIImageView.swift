@@ -169,7 +169,7 @@ import Kingfisher
                 self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
             }
         } else {
-            self.image = UIImage(named: "avatar_small");
+            self.image = UIImage(named: "portrait")
         }
     }
 }

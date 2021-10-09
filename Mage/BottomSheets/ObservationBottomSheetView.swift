@@ -30,8 +30,7 @@ class ObservationBottomSheetView: BottomSheetView {
     }()
     
     private lazy var compactView: ObservationCompactView = {
-        let view = ObservationCompactView(cornerRadius: 0.0, includeAttachments: false);
-        return view;
+        return ObservationCompactView(cornerRadius: 0.0, includeAttachments: false);
     }()
     
     private lazy var detailsButton: MDCButton = {

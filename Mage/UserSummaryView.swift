@@ -34,6 +34,16 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
         isUserInteractionEnabled = false;
     }
     
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        super.applyTheme(withScheme: scheme);
+
+        guard let scheme = scheme else {
+            return
+        }
+        
+        avatarImage.tintColor = scheme.colorScheme.primaryColor;
+    }
+    
     override func populate(item: User, actionsDelegate: UserActionsDelegate? = nil) {
         self.user = item;
         self.userActionsDelegate = actionsDelegate;
