@@ -92,7 +92,7 @@ class CommonSummaryView<T, V>: UIView {
             itemImage.autoSetDimensions(to: CGSize(width: 48, height: 48));
             itemImage.autoPinEdge(.left, to: .right, of: stack, withOffset: 8);
             itemImage.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-            itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 24);
+            itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 16);
             itemImage.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16, relation: .greaterThanOrEqual);
             self.autoSetDimension(.height, toSize: 90, relation: .greaterThanOrEqual)
             didSetUpConstraints = true;
