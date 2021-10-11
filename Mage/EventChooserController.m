@@ -70,16 +70,16 @@
 
     self.view.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.loadingView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    self.chooseEventTitle.textColor = self.scheme.colorScheme.onPrimaryColor;
-    self.eventInstructions.textColor = [self.scheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.87];
+    self.chooseEventTitle.textColor = self.scheme.colorScheme.onSecondaryColor;
+    self.eventInstructions.textColor = [self.scheme.colorScheme.onSecondaryColor colorWithAlphaComponent:0.87];
     self.actionButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.loadingLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.activityIndicator.color = self.scheme.colorScheme.primaryColorVariant;
     self.tableView.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.refreshingButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.refreshingView.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.refreshingButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.refreshingStatus.textColor = self.scheme.colorScheme.onPrimaryColor;
+    self.refreshingButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
+    self.refreshingStatus.textColor = self.scheme.colorScheme.onSecondaryColor;
     
     self.searchController.searchBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.searchController.searchBar.tintColor = self.scheme.colorScheme.onPrimaryColor;

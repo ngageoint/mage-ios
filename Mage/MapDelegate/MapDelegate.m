@@ -483,7 +483,6 @@
             [self.feedItemRetrievers setObject:retriever forKey:feedId];
             NSArray<FeedItem*> *items = [retriever startRetriever];
             for (FeedItem *item in items) {
-                NSLog(@"Item.remoteId is %@", item.remoteId);
                 if (item.isMappable) {
                     [self.mapView addAnnotation:item];
                 }

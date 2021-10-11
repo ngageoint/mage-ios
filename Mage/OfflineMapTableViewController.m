@@ -194,7 +194,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         imageView.image = [UIImage imageNamed:@"layers_large"];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.translatesAutoresizingMaskIntoConstraints = NO;
-        imageView.alpha = 0.6f;
+        imageView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
         title.text = @"No Layers";
@@ -202,7 +202,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         title.textAlignment = NSTextAlignmentCenter;
         title.translatesAutoresizingMaskIntoConstraints = NO;
         title.font = [UIFont systemFontOfSize:24];
-        title.alpha = 0.6f;
+        title.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         [title sizeToFit];
         
         UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, 0)];
@@ -210,7 +210,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         description.numberOfLines = 0;
         description.textAlignment = NSTextAlignmentCenter;
         description.translatesAutoresizingMaskIntoConstraints = NO;
-        description.alpha = 0.6f;
+        description.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         [description sizeToFit];
         
         [view addSubview:title];

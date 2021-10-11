@@ -88,36 +88,30 @@ static float paddingPercentage = .1;
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     self.scheme = containerScheme;
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onSecondaryColor};
-    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor};
-    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    
-    self.navigationController.navigationBar.standardAppearance = appearance;
-    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    
     self.slidescroll.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-    [self.fieldTypeTabs applyPrimaryThemeWithScheme:containerScheme];
-    self.fieldTypeTabs.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+        [self.fieldTypeTabs applySurfaceThemeWithScheme:self.scheme];
+    } else {
+        [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
+    }
     [self themeTextField:self.latitudeField withScheme:containerScheme];
     [self themeTextField:self.longitudeField withScheme:containerScheme];
     [self themeTextField:self.mgrsField withScheme:containerScheme];
     self.hintView.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-    self.hintLabel.textColor = containerScheme.colorScheme.onPrimaryColor;
+    self.hintLabel.textColor = containerScheme.colorScheme.onSecondaryColor;
     
     [self setShapeTypeSelection];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+        [self.fieldTypeTabs applySurfaceThemeWithScheme:self.scheme];
+    } else {
+        [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
+    }
+    
+    // this will force the offline map to update
+    [self setupMapType:[NSUserDefaults standardUserDefaults]];
 }
 
 - (void) addLeadingIconConstraints: (UIImageView *) leadingIcon {
@@ -439,6 +433,7 @@ static float paddingPercentage = .1;
     [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
     
     [self applyThemeWithContainerScheme:self.scheme];
+    [self updateHint];
 }
 
 -(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (SFGeometry *) geometry {

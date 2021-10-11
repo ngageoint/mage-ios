@@ -181,6 +181,7 @@
 }
 
 - (void) createLoadingView {
+    [MAGEScheme setupApplicationAppearanceWithScheme:[MAGEScheme scheme]];
     self.rootViewController = [[UINavigationController alloc] init];
     self.rootViewController.navigationBarHidden = YES;
     [self.window setRootViewController:self.rootViewController];

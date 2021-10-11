@@ -92,28 +92,6 @@
         self.scheme = containerScheme;
     }
     
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onSecondaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onSecondaryColor};
-    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor};
-    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    
-    self.navigationController.navigationBar.standardAppearance = appearance;
-    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    
-    
     self.trackingButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.trackingButton.tintColor = self.scheme.colorScheme.primaryColor;
     self.reportLocationButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -180,6 +158,11 @@
     [self.mapView addGestureRecognizer:longPressGestureRecognizer];
     
     [self applyThemeWithContainerScheme:self.scheme];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    // this will force the offline map to update
+    [self.mapDelegate setupMapType];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -560,11 +543,11 @@
         circle.tag = 998;
         circle.layer.cornerRadius = 10;
         circle.layer.borderWidth = .5;
-        circle.layer.borderColor = [[self.scheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.6] CGColor];
+        circle.layer.borderColor = [[self.scheme.colorScheme.onSecondaryColor colorWithAlphaComponent:0.6] CGColor];
         [circle setBackgroundColor:self.scheme.colorScheme.primaryColorVariant];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
         [imageView setFrame:CGRectMake(3, 2, 14, 15)];
-        [imageView setTintColor:self.scheme.colorScheme.onPrimaryColor];
+        [imageView setTintColor:self.scheme.colorScheme.onSecondaryColor];
         [circle addSubview:imageView];
         [self.mapSettingsButton addSubview:circle];
     } else {

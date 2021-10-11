@@ -113,25 +113,6 @@ import MaterialComponents.MDCCard
         
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onSecondaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onSecondaryColor
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onSecondaryColor
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        
         formsHeader.applyTheme(withScheme: containerScheme);
     }
     

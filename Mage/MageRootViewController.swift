@@ -68,43 +68,13 @@ import Kingfisher
         fatalError("This class does not support NSCoding")
     }
     
-    private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance, scheme: MDCContainerScheming) {
-        itemAppearance.normal.iconColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]
-        
-        itemAppearance.selected.iconColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
-        itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.primaryColor.withAlphaComponent(0.87)]
-    }
-    
     @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
         guard let scheme = scheme else {
             return
         }
 
         self.scheme = scheme;
-        let appearance = UITabBarAppearance();
-        appearance.selectionIndicatorTintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
-        appearance.backgroundColor = scheme.colorScheme.surfaceColor
-        self.tabBar.standardAppearance = appearance;
-        setTabBarItemColors(appearance.stackedLayoutAppearance, scheme: scheme)
-        setTabBarItemColors(appearance.inlineLayoutAppearance, scheme: scheme)
-        setTabBarItemColors(appearance.compactInlineLayoutAppearance, scheme: scheme)
-        
-        if #available(iOS 15.0, *) {
-            self.tabBar.scrollEdgeAppearance = appearance
-        }
-        
         self.view.tintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
-        
-        setNavigationControllerAppearance(nc: self.moreNavigationController);
-        setNavigationControllerAppearance(nc: mapTab);
-        setNavigationControllerAppearance(nc: observationsTab);
-        setNavigationControllerAppearance(nc: locationsTab);
-        setNavigationControllerAppearance(nc: meTab);
-        setNavigationControllerAppearance(nc: settingsTabItem);
-        for navigationController in feedViewControllers {
-            setNavigationControllerAppearance(nc: navigationController);
-        }
         
         if let topViewController = self.moreNavigationController.topViewController {
             if let tableView = topViewController.view as? UITableView {
@@ -114,33 +84,6 @@ import Kingfisher
         }
         
         self.view.backgroundColor = scheme.colorScheme.backgroundColor;
-    }
-    
-    func setNavigationControllerAppearance(nc: UINavigationController?) {
-        guard let scheme = scheme else {
-            return
-        }
-
-        nc?.navigationBar.isTranslucent = false;
-        nc?.navigationBar.barTintColor = scheme.colorScheme.primaryColorVariant;
-        nc?.navigationBar.tintColor = scheme.colorScheme.onSecondaryColor;
-        nc?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.onSecondaryColor];
-        nc?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
-            NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
-            NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
-        ];
-        
-        nc?.navigationBar.standardAppearance = appearance;
-        nc?.navigationBar.scrollEdgeAppearance = appearance;
-        nc?.navigationBar.standardAppearance.backgroundColor = scheme.colorScheme.primaryColorVariant;
-        nc?.navigationBar.scrollEdgeAppearance?.backgroundColor = scheme.colorScheme.primaryColorVariant;
     }
     
     override func viewDidLoad() {
