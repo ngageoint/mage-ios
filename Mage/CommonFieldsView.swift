@@ -17,7 +17,7 @@ class CommonFieldsView: MDCCard {
     weak var observation: Observation?;
     var eventForms: [[String:Any]]?;
     weak var fieldSelectionDelegate: FieldSelectionDelegate?;
-    var commonPropertiesListener: ObservationCommonPropertiesListener?;
+    weak var commonPropertiesListener: ObservationCommonPropertiesListener?;
     
     lazy var dateField: [String: Any] = {
         let dateField: [String: Any] =

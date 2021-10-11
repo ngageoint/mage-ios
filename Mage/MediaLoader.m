@@ -17,7 +17,7 @@
 @property (strong, nonatomic) NSString *tempFile;
 @property (nonatomic, assign) NSUInteger fullAudioDataLength;
 @property (nonatomic, strong) NSURL *urlToLoad;
-@property (nonatomic, strong) id<MediaLoaderDelegate> delegate;
+@property (nonatomic, weak) id<MediaLoaderDelegate> delegate;
 @property (strong, nonatomic) NSString *existingFile;
 @property (strong, nonatomic) NSString *mimeExtension;
 @property (strong, nonatomic) NSString *finalFile;

@@ -14,7 +14,7 @@ import PhotosUI
     @objc func recordingAvailable(recording: Recording);
 }
 
-protocol AttachmentCreationCoordinatorDelegate {
+protocol AttachmentCreationCoordinatorDelegate: AnyObject {
     // can be removed after server 5
     func attachmentCreated(attachment: Attachment);
     
@@ -31,7 +31,7 @@ class AttachmentCreationCoordinator: NSObject {
     var observation: Observation;
     var fieldName: String?;
     var observationFormId: String?;
-    var delegate: AttachmentCreationCoordinatorDelegate?;
+    weak var delegate: AttachmentCreationCoordinatorDelegate?;
     var pickerController: UIImagePickerController?;
     var audioRecorderViewController: AudioRecorderViewController?;
     var workingOverlayController: AttachmentProgressViewController?;

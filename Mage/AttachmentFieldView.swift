@@ -18,8 +18,8 @@ import MaterialComponents.MDCButton;
 
 class AttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
+    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
     
     private var unsentAttachments: [[String: AnyHashable]] = []

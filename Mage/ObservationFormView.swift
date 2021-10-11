@@ -23,7 +23,7 @@ class ObservationFormView: UIStackView {
     private var form: [String: Any]!;
     private var formIndex: Int!;
     private var fieldViews: [String: BaseFieldView] = [ : ];
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private weak var viewController: UIViewController!;
     private weak var fieldSelectionDelegate: FieldSelectionDelegate?;

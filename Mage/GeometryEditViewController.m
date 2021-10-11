@@ -151,24 +151,18 @@ static float paddingPercentage = .1;
         doneButton.accessibilityLabel = @"Apply";
         
         UIBarButtonItem *clearButton;
-        if (@available(iOS 14.0, *)) {
-            UIAction *clearAction = [UIAction actionWithTitle:@"Clear" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-                [self clearLocation];
-            }];
-            clearAction.accessibilityLabel = @"clear";
-            
-            UIMenu *clearMenu = [UIMenu menuWithTitle:@"" children:@[clearAction]];
-            UIImage *moreImage = [UIImage imageNamed:@"more_small"];
-            moreImage.accessibilityLabel = @"more_menu";
-            clearButton = [[UIBarButtonItem alloc] initWithImage:moreImage menu:clearMenu];
-            clearButton.isAccessibilityElement = true;
-            clearButton.accessibilityLabel = @"more_menu";
-        } else {
-            // Fallback on earlier versions
-            // just stick the clear button in there for now
-            clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(clearLocation)];
-            clearButton.accessibilityLabel = @"clear";
-        }
+        __weak typeof(self) weakSelf = self;
+        UIAction *clearAction = [UIAction actionWithTitle:@"Clear" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf clearLocation];
+        }];
+        clearAction.accessibilityLabel = @"clear";
+        
+        UIMenu *clearMenu = [UIMenu menuWithTitle:@"" children:@[clearAction]];
+        UIImage *moreImage = [UIImage imageNamed:@"more_small"];
+        moreImage.accessibilityLabel = @"more_menu";
+        clearButton = [[UIBarButtonItem alloc] initWithImage:moreImage menu:clearMenu];
+        clearButton.isAccessibilityElement = true;
+        clearButton.accessibilityLabel = @"more_menu";
         [self.navigationItem setLeftBarButtonItem:backButton];
         [self.navigationItem setRightBarButtonItems:@[clearButton, doneButton]];
     }
