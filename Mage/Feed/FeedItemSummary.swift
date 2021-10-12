@@ -20,7 +20,9 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
         label.font = UIFont.systemFont(ofSize: 32, weight: .regular);
         label.textColor = UIColor.black.withAlphaComponent(0.60);
         view.addSubview(label);
-        label.autoCenterInSuperview();
+        label.autoAlignAxis(toSuperviewAxis: .horizontal);
+        label.autoPinEdge(toSuperviewEdge: .left, withInset: 16);
+//        label.autoCenterInSuperview();
         return view;
     }()
     
@@ -28,8 +30,8 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
         fatalError("This class does not support NSCoding")
     }
     
-    override init(imageOverride: UIImage? = nil) {
-        super.init(imageOverride: imageOverride);
+    override init(imageOverride: UIImage? = nil, hideImage: Bool = false) {
+        super.init(imageOverride: imageOverride, hideImage: hideImage);
         isUserInteractionEnabled = false;
         layoutView();
     }
@@ -63,9 +65,14 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
         
         if (!item.hasContent()) {
             noContentView.isHidden = false;
+            primaryField.isHidden = true;
+            secondaryField.isHidden = true;
+            timestamp.isHidden = true;
             return;
         }
         noContentView.isHidden = true;
+        primaryField.isHidden = false;
+        secondaryField.isHidden = false;
         primaryField.text = item.primaryValue ?? " ";
         secondaryField.text = item.secondaryValue;
         if let itemTemporalProperty = item.feed?.itemTemporalProperty {

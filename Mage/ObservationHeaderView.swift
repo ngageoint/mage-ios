@@ -36,7 +36,7 @@ class ObservationHeaderView : MDCCard {
     }()
     
     private lazy var observationSummaryView: ObservationSummaryView = {
-        let summary = ObservationSummaryView();
+        let summary = ObservationSummaryView(imageOverride: nil, hideImage: true);
         return summary;
     }()
     

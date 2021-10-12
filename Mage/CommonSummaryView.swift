@@ -11,6 +11,7 @@ import Foundation
 class CommonSummaryView<T, V>: UIView {
     
     var imageOverride: UIImage?;
+    private var hideImage = false;
     private var didSetUpConstraints = false;
     
     lazy var stack: UIStackView = {
@@ -71,10 +72,11 @@ class CommonSummaryView<T, V>: UIView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(imageOverride: UIImage? = nil) {
+    init(imageOverride: UIImage? = nil, hideImage: Bool = false) {
         super.init(frame: CGRect.zero);
         self.configureForAutoLayout();
         self.imageOverride = imageOverride;
+        self.hideImage = hideImage;
         stack.addArrangedSubview(timestamp);
         stack.setCustomSpacing(12, after: timestamp);
         stack.addArrangedSubview(primaryField);
@@ -83,17 +85,23 @@ class CommonSummaryView<T, V>: UIView {
         stack.addArrangedSubview(secondaryContainer);
         
         self.addSubview(stack);
-        self.addSubview(itemImage);
+        if (!hideImage) {
+            self.addSubview(itemImage);
+        }
     }
     
     override func updateConstraints() {
         if (!didSetUpConstraints) {
-            stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
-            itemImage.autoSetDimensions(to: CGSize(width: 48, height: 48));
-            itemImage.autoPinEdge(.left, to: .right, of: stack, withOffset: 8);
-            itemImage.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
-            itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 16);
-            itemImage.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16, relation: .greaterThanOrEqual);
+            if (!hideImage) {
+                stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0), excludingEdge: .right);
+                itemImage.autoSetDimensions(to: CGSize(width: 48, height: 48));
+                itemImage.autoPinEdge(.left, to: .right, of: stack, withOffset: 8);
+                itemImage.autoPinEdge(toSuperviewEdge: .right, withInset: 16);
+                itemImage.autoPinEdge(toSuperviewEdge: .top, withInset: 16);
+                itemImage.autoPinEdge(toSuperviewEdge: .bottom, withInset: 16, relation: .greaterThanOrEqual);
+            } else {
+                stack.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 0));
+            }
             self.autoSetDimension(.height, toSize: 90, relation: .greaterThanOrEqual)
             didSetUpConstraints = true;
         }

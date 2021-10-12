@@ -10,13 +10,14 @@ import Foundation
 import PureLayout
 import Kingfisher
 
-class FeedItemCard : UITableViewCell {
+class FeedItemCard : MDCCard {
     private var feedItem: FeedItem?;
     private var actionsDelegate: FeedItemActionsDelegate?;
     private var scheme: MDCContainerScheming?;
+    private var hideSummaryImage: Bool = false;
     
     private lazy var feedItemView: FeedItemSummary = {
-        let view = FeedItemSummary();
+        let view = FeedItemSummary(imageOverride: nil, hideImage: hideSummaryImage);
         return view;
     }()
     
@@ -75,25 +76,35 @@ class FeedItemCard : UITableViewCell {
         return label;
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(content);
+    public convenience init(item: FeedItem?, actionsDelegate: FeedItemActionsDelegate?, hideSummaryImage: Bool = false) {
+        self.init(frame: CGRect.zero)
+        self.configureForAutoLayout();
+        self.feedItem = item;
+        self.actionsDelegate = actionsDelegate;
+        self.hideSummaryImage = hideSummaryImage;
+        self.addSubview(content);
         content.autoPinEdgesToSuperviewEdges();
+        bind(feedItem: item, actionsDelegate: actionsDelegate)
     }
     
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        self.backgroundColor = scheme?.colorScheme.surfaceColor;
+    override func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
+        guard let scheme = scheme else {
+            return
+        }
+
+        super.applyTheme(withScheme: scheme);
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
         feedItemView.applyTheme(withScheme: scheme);
         actionsView.applyTheme(withScheme: scheme);
-        self.locationLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        self.locationIcon.tintColor = scheme?.colorScheme.primaryColor;
+        self.locationLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        self.locationIcon.tintColor = scheme.colorScheme.primaryColor;
     }
     
-    func bind(feedItem: FeedItem, actionsDelegate: FeedItemActionsDelegate?) {
+    func bind(feedItem: FeedItem?, actionsDelegate: FeedItemActionsDelegate?) {
+        guard let feedItem = feedItem else {
+            return
+        }
+
         self.feedItem = feedItem;
         self.actionsDelegate = actionsDelegate;
         feedItemView.populate(item: feedItem, actionsDelegate: actionsDelegate);
