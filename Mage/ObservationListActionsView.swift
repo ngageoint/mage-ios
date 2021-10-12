@@ -13,7 +13,7 @@ import MaterialComponents.MDCPalettes
 class ObservationListActionsView: UIView {
     var didSetupConstraints = false;
     var observation: Observation?;
-    var observationActionsDelegate: ObservationActionsDelegate?;
+    weak var observationActionsDelegate: ObservationActionsDelegate?;
     internal var currentUserFavorited: Bool = false;
     internal var isImportant: Bool = false;
     var bottomSheet: MDCBottomSheetController?;

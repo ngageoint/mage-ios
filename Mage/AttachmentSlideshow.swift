@@ -50,7 +50,7 @@ class AttachmentSlideShow: UIView {
 
     private var didSetUpConstraints = false;
     private var height: CGFloat = 150.0;
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private var scheme: MDCContainerScheming?;
     
     private lazy var slidescroll: UIScrollView = {

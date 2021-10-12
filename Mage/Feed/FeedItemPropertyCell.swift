@@ -54,7 +54,7 @@ class FeedItemPropertyCell : UITableViewCell {
     }
     
     public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        self.backgroundColor = scheme?.colorScheme.surfaceColor;
+        self.backgroundColor = .clear;
         self.keyField.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         self.valueField.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
     }

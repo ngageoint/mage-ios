@@ -20,5 +20,6 @@ extension FeedItem {
     @NSManaged var geometry: Data?
     @NSManaged var feed: Feed?
     @NSManaged var properties: Any?
+    @NSManaged var temporalSortValue: NSNumber?;
     
 }

@@ -25,7 +25,7 @@ import MaterialComponents.MDCContainerScheme;
     var bottomSheet: MDCBottomSheetController?;
     var scheme: MDCContainerScheming?;
     var attachmentCard: ObservationAttachmentCard?;
-    let attachmentHeader: AttachmentHeader = AttachmentHeader();
+    let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
     let formsHeader = FormsHeader(forAutoLayout: ());
     
     private lazy var eventForms: [[String: Any]] = {
@@ -152,7 +152,7 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     func setupObservation() {
-        self.title = observation?.primaryFeedFieldText();
+        self.title = "Observation";
 
         if let properties = self.observation?.properties as? [String: Any] {
             if (properties.keys.contains("forms")) {

@@ -12,7 +12,7 @@ class ObservationCompactView: UIView {
     private var constructed = false;
     private var didSetUpConstraints = false;
     private var observation: Observation?;
-    private var actionsDelegate: ObservationActionsDelegate?;
+    private weak var actionsDelegate: ObservationActionsDelegate?;
     private var scheme: MDCContainerScheming?;
     private var cornerRadius:CGFloat = 0.0;
     private var includeAttachments: Bool = false;

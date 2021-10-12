@@ -24,8 +24,8 @@ class GeoPackageFeatureSummaryView : CommonSummaryView<GeoPackageFeatureItem, Fe
         fatalError("This class does not support NSCoding")
     }
     
-    override init(imageOverride: UIImage? = nil) {
-        super.init(imageOverride: imageOverride);
+    override init(imageOverride: UIImage? = nil, hideImage: Bool = false) {
+        super.init(imageOverride: imageOverride, hideImage: hideImage);
         isUserInteractionEnabled = false;
     }
     

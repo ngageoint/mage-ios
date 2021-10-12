@@ -89,6 +89,9 @@ import CoreData
         let geometry = GeometryDeserializer.parseGeometry(json["geometry"] as? [AnyHashable : Any])
         self.simpleFeature = geometry;
         self.properties = json["properties"] as? [AnyHashable : Any]
+        if let temporalProperty = feed.itemTemporalProperty, let temporalValue = (self.properties as? [AnyHashable : Any])?[temporalProperty] as? NSNumber {
+            self.temporalSortValue = temporalValue
+        }
         self.feed = feed
     }
     
@@ -101,7 +104,7 @@ import CoreData
             return nil;
         }
         
-        if let feed = self.feed, let itemPropertiesSchema = feed.itemPropertiesSchema as? [AnyHashable : Any], let properties = itemPropertiesSchema["properties"] as? [AnyHashable : Any], let keySchema = properties[key] as? [AnyHashable : Any], let type = keySchema["type"] as? String {
+        if let feed = self.feed, let itemPropertiesSchema = feed.itemPropertiesSchema, let properties = itemPropertiesSchema["properties"] as? [AnyHashable : Any], let keySchema = properties[key] as? [AnyHashable : Any], let type = keySchema["type"] as? String {
             if (type == "number") {
                 if let numberValue = value as? NSNumber, let format = keySchema["format"] as? String, format == "date" {
                     let dateDisplayFormatter = DateFormatter();

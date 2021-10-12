@@ -251,7 +251,7 @@
 		F72D432E2694B60300F9AC3B /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D62694B60300F9AC3B /* Attachment.m */; };
 		F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */; };
 		F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */; };
-		F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* AttachmentHeader.swift */; };
+		F730B94B2683D273004AD64A /* CardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* CardHeader.swift */; };
 		F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */; };
 		F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */; };
 		F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */; };
@@ -944,7 +944,7 @@
 		F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model3To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42D92694B60300F9AC3B /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
-		F730B94A2683D273004AD64A /* AttachmentHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeader.swift; sourceTree = "<group>"; };
+		F730B94A2683D273004AD64A /* CardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeader.swift; sourceTree = "<group>"; };
 		F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormReorderTests.swift; sourceTree = "<group>"; };
 		F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormReorderDelegate.swift; sourceTree = "<group>"; };
 		F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSettingsViewController.swift; sourceTree = "<group>"; };
@@ -2014,7 +2014,7 @@
 				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
 				F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */,
 				F7F4753025B73C3E006634F7 /* FormsHeader.swift */,
-				F730B94A2683D273004AD64A /* AttachmentHeader.swift */,
+				F730B94A2683D273004AD64A /* CardHeader.swift */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -3297,7 +3297,7 @@
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
 				F7F8B4B726CE88B500DACCC7 /* AttachmentProgressViewController.swift in Sources */,
-				F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */,
+				F730B94B2683D273004AD64A /* CardHeader.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,

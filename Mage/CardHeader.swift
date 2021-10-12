@@ -1,5 +1,5 @@
 //
-//  AttachmentHeader.swift
+//  CardHeader.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 6/23/21.
@@ -8,23 +8,29 @@
 
 import Foundation
 
-class AttachmentHeader: UIView {
+class CardHeader: UIView {
     var didSetupConstraints = false;
     var scheme: MDCContainerScheming?;
+    var headerText: String?;
     
     private lazy var headerLabel: UILabel = {
         let label: UILabel = UILabel(forAutoLayout: ());
-        label.text = "ATTACHMENTS";
+        label.text = headerText;
         return label;
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame);
-        buildView();
     }
     
     required init?(coder: NSCoder) {
         fatalError("This class does not support NSCoding")
+    }
+    
+    public convenience init(headerText: String?) {
+        self.init(frame: CGRect.zero)
+        self.headerText = headerText
+        buildView();
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming?) {

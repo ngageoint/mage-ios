@@ -14,7 +14,7 @@ import MaterialComponents.MDCCard;
     private var constructed = false;
     private var didSetUpConstraints = false;
     private var observation: Observation?;
-    private var actionsDelegate: ObservationActionsDelegate?;
+    private weak var actionsDelegate: ObservationActionsDelegate?;
     
     private lazy var card: MDCCard = {
         let card = MDCCard(forAutoLayout: ());

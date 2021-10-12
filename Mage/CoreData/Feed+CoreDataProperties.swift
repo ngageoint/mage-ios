@@ -7,54 +7,6 @@
 //
 //
 
-//#import "Feed+CoreDataProperties.h"
-//
-//@implementation Feed (CoreDataProperties)
-//
-//@property (nullable, nonatomic, copy) NSString* remoteId;
-//@property (nullable, nonatomic, copy) NSString *title;
-//@property (nullable, nonatomic, copy) NSNumber *tag;
-//@property (nullable, nonatomic, copy) NSString *summary;
-//@property (nonatomic) BOOL itemsHaveIdentity;
-//@property (nonatomic) BOOL itemsHaveSpatialDimension;
-//@property (nullable, nonatomic, copy) NSString *itemPrimaryProperty;
-//@property (nullable, nonatomic, copy) NSString *itemSecondaryProperty;
-//@property (nullable, nonatomic, copy) NSString *itemTemporalProperty;
-//@property (nullable, nonatomic, retain) id constantParams;
-//@property (nullable, nonatomic, retain) id variableParams;
-//@property (nullable, nonatomic, retain) id mapStyle;
-//@property (nullable, nonatomic, retain) id itemPropertiesSchema;
-//@property (nullable, nonatomic, retain) NSNumber* pullFrequency;
-//@property (nullable, nonatomic, retain) NSNumber* updateFrequency;
-//@property (nullable, nonatomic, retain) NSSet<FeedItem *> *items;
-//@property (nullable, nonatomic, retain) Event *event;
-//@property (nullable, nonatomic, retain) NSNumber *eventId;
-//
-//+ (NSFetchRequest<Feed *> *)fetchRequest {
-//	return [NSFetchRequest fetchRequestWithEntityName:@"Feed"];
-//}
-//
-//@dynamic remoteId;
-//@dynamic title;
-//@dynamic tag;
-//@dynamic summary;
-//@dynamic itemsHaveIdentity;
-//@dynamic itemPrimaryProperty;
-//@dynamic itemSecondaryProperty;
-//@dynamic constantParams;
-//@dynamic variableParams;
-//@dynamic mapStyle;
-//@dynamic updateFrequency;
-//@dynamic pullFrequency;
-//@dynamic items;
-//@dynamic event;
-//@dynamic eventId;
-//@dynamic itemsHaveSpatialDimension;
-//@dynamic itemTemporalProperty;
-//@dynamic itemPropertiesSchema;
-//
-//@end
-
 import Foundation
 import CoreData
 
