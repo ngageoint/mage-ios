@@ -13,8 +13,8 @@ import Foundation
 import CoreData
 
 extension Event {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Feed> {
-        return NSFetchRequest<Feed>(entityName: "Event")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Event> {
+        return NSFetchRequest<Event>(entityName: "Event")
     }
     
     @NSManaged var eventDescription: String?

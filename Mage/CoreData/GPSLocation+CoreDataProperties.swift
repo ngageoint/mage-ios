@@ -13,8 +13,8 @@ import Foundation
 import CoreData
 
 extension GPSLocation {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Feed> {
-        return NSFetchRequest<Feed>(entityName: "GPSLocation")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<GPSLocation> {
+        return NSFetchRequest<GPSLocation>(entityName: "GPSLocation")
     }
     
     @NSManaged var eventId: NSNumber?;
