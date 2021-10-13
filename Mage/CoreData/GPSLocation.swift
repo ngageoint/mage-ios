@@ -52,10 +52,23 @@ import sf_ios
         
         let point = SFPoint(xValue: location.coordinate.longitude, andYValue: location.coordinate.latitude);
         
-//        let gpsLocation = GPSLocation(context: context);
         self.geometry = point;
         self.timestamp = location.timestamp;
         self.eventId = Server.currentEventId();
+        
+        let radioTechDict = telephonyInfo.serviceCurrentRadioAccessTechnology ?? [:];
+        let carrierInfoDict : [String : CTCarrier] = telephonyInfo.serviceSubscriberCellularProviders ?? [:];
+
+        var carrierInformations: [[AnyHashable:Any]] = [];
+        for key in radioTechDict.keys {
+            let carrier = carrierInfoDict[key];
+            carrierInformations.append([
+                "carrier_name": carrier?.carrierName ?? "No carrier",
+                "country_code": carrier?.isoCountryCode ?? "Airplane mode, no sim or out of range",
+                "mobile_country_code": carrier?.mobileCountryCode ?? "No sim or out of range"
+                ]);
+        }
+        
         self.properties = [
             "altitude": location.altitude,
             "accuracy": location.horizontalAccuracy,
@@ -67,6 +80,7 @@ import sf_ios
             "battery_level": device.batteryLevel * 100,
             "battery_state": batteryState,
             "telephone_network": telephonyInfo.serviceCurrentRadioAccessTechnology ?? "Unknown",
+            "carrier_information": carrierInformations,
             "network": manager.localizedNetworkReachabilityStatusString(),
             "mage_version": "\(appVersion ?? "")-\(buildNumber ?? "")",
             "provider": "gps",
