@@ -13,7 +13,6 @@
 #import "User.h"
 #import "Role.h"
 #import "Server.h"
-#import "Event.h"
 #import "MageSessionManager.h"
 #import "MageEnums.h"
 #import "NSDate+Iso8601.h"
@@ -27,6 +26,7 @@
 #import "SFGeometryUtils.h"
 #import "NotificationRequester.h"
 #import "MAGERoutes.h"
+#import "MAGE-Swift.h"
 
 NSString * const kObservationErrorStatusCode = @"errorStatusCode";
 NSString * const kObservationErrorDescription = @"errorDescription";
@@ -93,7 +93,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 }
 
 - (Event *) event {
-    self._event = [Event getEventById:self.eventId inContext:self.managedObjectContext];
+    self._event = [Event getEventWithEventId:self.eventId context:self.managedObjectContext];
     return self._event;
 }
 
@@ -598,7 +598,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 //                failure(error);
 //                return;
             }
-            Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+            Event *event = [Event getCurrentEventWithContext:observation.managedObjectContext];
             NSURLSessionDataTask *putTask = [manager PUT_TASK:observationUrl parameters:[observation createJsonToSubmitForEvent:event] success:^(NSURLSessionTask *task, id response) {
                 if (success) {
                     success(response);
@@ -621,7 +621,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 
 + (NSURLSessionDataTask *) operationToUpdateObservation:(Observation *) observation success:(void (^)(id)) success failure: (void (^)(NSError *)) failure {
     NSLog(@"Trying to update observation %@", observation.url);
-    Event *event = [Event getCurrentEventInContext:observation.managedObjectContext];
+    Event *event = [Event getCurrentEventWithContext:observation.managedObjectContext];
     NSURLSessionDataTask *task = nil;
     
     if ([MageServer isServerVersion5]) {
@@ -808,7 +808,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
             NSLog(@"Recieved %lu new observations and send bulk is %d", (unsigned long) newObservationCount, sendBulkNotification);
             if ((sendBulkNotification && newObservationCount > 0) || newObservationCount > 1) {
                 NSNumber *eventId = [Server currentEventId];
-                Event *event = [Event getEventById:eventId inContext:localContext];
+                Event *event = [Event getEventWithEventId:eventId context:localContext];
                 [NotificationRequester sendBulkNotificationCount:newObservationCount inEvent:event];
             } else if (obsToNotifyAbout) {
                 [NotificationRequester observationPulled:obsToNotifyAbout];
@@ -1059,7 +1059,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 - (NSString *) observationText {
     Event *event = [self event];
     
-    NSDictionary *form = [event formForObservation:self];
+    NSDictionary *form = [event formWithObservation:self];
     NSMutableArray *generalFields = [NSMutableArray arrayWithObjects:@"timestamp", @"geometry", @"type", nil];
 
     NSMutableString *text = [[NSMutableString alloc] init];
@@ -1107,7 +1107,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
         }
 
         id value = [self.properties objectForKey:[field objectForKey:@"name"]];
-        if (![value length] || ([value isKindOfClass:[NSArray class]] && ![value count])) {
+        if (![value length] || ([value isKindOfClass:[NSArray class]] && ![((NSArray *)value) count])) {
             continue;
         }
 

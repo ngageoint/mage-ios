@@ -17,7 +17,6 @@
 #import "StaticLayer.h"
 #import "Layer.h"
 #import "Server.h"
-#import "Event.h"
 #import "MAGE-Swift.h"
 
 @interface OfflineMapTableViewController () <NSFetchedResultsControllerDelegate>
@@ -260,7 +259,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         case AVAILABLE_SECTION:
             return AVAILABLE_SECTION_NAME;
         case DOWNLOADED_SECTION:
-            return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name];
+            return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]].name];
         case PROCESSING_SECTION:
             return PROCESSING_SECTION_NAME;
         case MY_MAPS_SECTION:

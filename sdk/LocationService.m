@@ -6,7 +6,6 @@
 
 #import "LocationService.h"
 #import "User.h"
-#import "Event.h"
 #import "Server.h"
 #import "MageSessionManager.h"
 #import "DataConnectionUtilities.h"
@@ -100,10 +99,10 @@ NSInteger const kLocationPushLimit = 100;
     __weak typeof(self) weakSelf = self;
 
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        if ([[Event getCurrentEventInContext:localContext] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:localContext]]) {
+        if ([[Event getCurrentEventWithContext:localContext] isUserInEventWithUser:[User fetchCurrentUserInManagedObjectContext:localContext]]) {
             NSMutableArray *locationEntities = [NSMutableArray arrayWithCapacity:locations.count];
             for (CLLocation *location in locations) {
-                [locationEntities addObject:[[GPSLocation alloc] initWithLocation:location context:localContext]];
+                [locationEntities addObject:[GPSLocation gpsLocationWithLocation:location context:localContext]];
             }
             
             CLLocation *location = [locations firstObject];

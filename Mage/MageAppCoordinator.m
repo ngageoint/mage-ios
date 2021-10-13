@@ -12,7 +12,6 @@
 #import "AuthenticationCoordinator_Server5.h"
 #import "ServerURLController.h"
 #import "EventChooserCoordinator.h"
-#import "Event.h"
 
 #import <UserNotifications/UserNotifications.h>
 #import "UserUtility.h"

@@ -23,8 +23,16 @@ class ObservationFormReorder: UITableViewController {
     var observationProperties: [String: Any] = [ : ];
     var scheme: MDCContainerScheming?;
     
-    private lazy var eventForms: [[String: Any]] = {
-        let eventForms = Event.getById(self.observation.eventId as Any, in: (self.observation.managedObjectContext)!).forms as? [[String: Any]] ?? [];
+    private lazy var event: Event? = {
+        guard let eventId = observation.eventId, let context = observation.managedObjectContext else {
+            return nil
+        }
+        
+        return Event.getEvent(eventId: eventId, context: context)
+    }()
+    
+    private lazy var eventForms: [[String: Any]]? = {
+        let eventForms = event?.forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     
@@ -141,7 +149,7 @@ class ObservationFormReorder: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let formCell : ObservationFormTableViewCell = tableView.dequeue(cellClass: ObservationFormTableViewCell.self, forIndexPath: indexPath);
         let observationForm = observationForms[indexPath.row];
-        if let eventForm: [String: Any] = self.eventForms.first(where: { (form) -> Bool in
+        if let eventForm: [String: Any] = self.eventForms?.first(where: { (form) -> Bool in
             return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }) {
             formCell.configure(observationForm: observationForm, eventForm: eventForm, scheme: self.scheme);

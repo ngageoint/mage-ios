@@ -10,6 +10,7 @@ import Foundation
 
 extension Notification.Name {
     public static let StartStraightLineNavigation = Notification.Name("StartStraightLineNavigation")
+    public static let MAGEEventsFetched = Notification.Name("MAGEEventsFetched")
 }
 
 @objc extension UserDefaults {

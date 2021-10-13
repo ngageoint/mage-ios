@@ -28,8 +28,16 @@ import MaterialComponents.MDCContainerScheme;
     let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
     let formsHeader = FormsHeader(forAutoLayout: ());
     
+    private lazy var event: Event? = {
+        guard let observation = observation, let eventId = observation.eventId, let context = observation.managedObjectContext else {
+            return nil
+        }
+        
+        return Event.getEvent(eventId: eventId, context: context)
+    }()
+    
     private lazy var eventForms: [[String: Any]] = {
-        let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
+        let eventForms = event?.forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     

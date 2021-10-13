@@ -6,7 +6,7 @@
 
 #import "ObservationImage.h"
 #import "Server.h"
-#import "Event.h"
+#import "MAGE-Swift.h"
 
 const CGFloat annotationScaleWidth = 35.0;
 

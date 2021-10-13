@@ -39,12 +39,16 @@ import MaterialComponents.MDCCard
     private var keyboardHelper: KeyboardHelper?;
     private var bottomConstraint: NSLayoutConstraint?;
     
-    private lazy var event: Event = {
-        return Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!);
+    private lazy var event: Event? = {
+        guard let observation = observation, let eventId = observation.eventId, let context = observation.managedObjectContext else {
+            return nil
+        }
+
+        return Event.getEvent(eventId: eventId, context: context)
     }()
         
-    private lazy var eventForms: [[String: Any]] = {
-        let eventForms = event.forms as? [[String: Any]] ?? [];
+    private lazy var eventForms: [[String: Any]]? = {
+        let eventForms = event?.forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     
@@ -223,7 +227,7 @@ import MaterialComponents.MDCCard
         // If there are forms and this is a new observation call addForm
         // It is expected that the delegate will add the form if only one exists
         // and prompt the user if more than one exists
-        if (!alreadyPromptedToAddForm && newObservation && eventForms.count != 0 && observationForms.isEmpty) {
+        if (!alreadyPromptedToAddForm && newObservation && eventForms?.count != 0 && observationForms.isEmpty) {
             alreadyPromptedToAddForm = true;
             self.delegate?.addForm();
         }
@@ -253,12 +257,12 @@ import MaterialComponents.MDCCard
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
-        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms.filter({ form in
+        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms?.filter({ form in
             return !(form[FormKey.archived.key] as? Bool ?? false)
         }).count == 0) {
             addFormFAB.isHidden = true;
         }
-        if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+        if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             addFormFAB.applySecondaryTheme(withScheme: globalDisabledScheme())
         }
         formsHeader.reorderButton.isHidden = realFormCount <= 1;
@@ -322,7 +326,7 @@ import MaterialComponents.MDCCard
     }
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-        let eventForm: [String: Any]? = self.eventForms.first { (form) -> Bool in
+        let eventForm: [String: Any]? = self.eventForms?.first { (form) -> Bool in
             return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }
         
@@ -419,7 +423,7 @@ import MaterialComponents.MDCCard
     }
     
     func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
-        let eventForm: [String: Any]? = self.eventForms.first { (eventForm) -> Bool in
+        let eventForm: [String: Any]? = self.eventForms?.first { (eventForm) -> Bool in
             return eventForm[FormKey.id.key] as? Int == form[EventKey.formId.key] as? Int
         }
         
@@ -466,9 +470,9 @@ import MaterialComponents.MDCCard
     @objc func addForm(sender: UIButton) {
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
 
-        if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+        if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // max amount of forms for this event have been added
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
@@ -506,7 +510,7 @@ import MaterialComponents.MDCCard
         
         // if this is a legacy server and the event has forms, there needs to be 1
         if (MageServer.isServerVersion5()) {
-            if (eventForms.count > 0 && realFormCount == 0) {
+            if ((eventForms?.count ?? 0) > 0 && realFormCount == 0) {
                 let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "One form must be added to this observation");
                 let messageAction = MDCSnackbarMessageAction();
                 messageAction.title = "OK";
@@ -526,18 +530,18 @@ import MaterialComponents.MDCCard
         }
         // end legacy check
         
-        if (realFormCount > (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+        if (realFormCount > (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // too many forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
             MDCSnackbarManager.default.show(message);
             return false;
         }
-        if (realFormCount < (event.minObservationForms ?? NSNumber(value: 0)) as! Int) {
+        if (realFormCount < (event?.minObservationForms ?? NSNumber(value: 0)) as! Int) {
             // not enough forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least \(event.minObservationForms ?? 0)");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least \(event?.minObservationForms ?? 0)");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
@@ -561,27 +565,29 @@ import MaterialComponents.MDCCard
             }
         }
         
-        for eventForm in eventForms {
-            let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
-            let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
-            let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
-            if (formCount < eventFormMin) {
-                // not enough of this form
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
-            }
-            if (formCount > eventFormMax) {
-                // too many of this form
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
+        if let eventForms = eventForms {
+            for eventForm in eventForms {
+                let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
+                let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
+                let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
+                if (formCount < eventFormMin) {
+                    // not enough of this form
+                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
+                    let messageAction = MDCSnackbarMessageAction();
+                    messageAction.title = "OK";
+                    message.action = messageAction;
+                    MDCSnackbarManager.default.show(message);
+                    return false;
+                }
+                if (formCount > eventFormMax) {
+                    // too many of this form
+                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
+                    let messageAction = MDCSnackbarMessageAction();
+                    messageAction.title = "OK";
+                    message.action = messageAction;
+                    MDCSnackbarManager.default.show(message);
+                    return false;
+                }
             }
         }
         

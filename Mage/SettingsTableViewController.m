@@ -11,7 +11,6 @@
 #import "Server.h"
 #import "MageServer.h"
 #import "EventChooserController.h"
-#import "Event.h"
 #import "NSDate+display.h"
 #import "AppDelegate.h"
 #import "EventChooserCoordinator.h"

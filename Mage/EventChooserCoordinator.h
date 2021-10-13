@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Event.h"
+#import "MAGE-Swift.h"
 #import "Form.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
 

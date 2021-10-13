@@ -43,7 +43,6 @@
 #import "SFPProjection.h"
 #import "SFPProjectionTransform.h"
 #import "MapShapePointAnnotationView.h"
-#import "Event.h"
 #import "Form.h"
 #import "Observation.h"
 #import "MapUtils.h"
@@ -536,7 +535,7 @@
     if (!_observations) return;
     _observations.delegate = self;
     
-    Event *event = [Event getCurrentEventInContext:observations.fetchedResultsController.managedObjectContext];
+    Event *event = [Event getCurrentEventWithContext:observations.fetchedResultsController.managedObjectContext];
     
     _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:event.forms];
     

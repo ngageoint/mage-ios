@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Event.h"
+#import "MAGE-Swift.h"
 
 @interface EventTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *eventName;

@@ -5,7 +5,7 @@
 //
 
 #import "EventChooserController.h"
-#import "Event.h"
+#import "MAGE-Swift.h"
 #import "Form.h"
 #import "Mage.h"
 #import "Server.h"
@@ -51,7 +51,7 @@
     self.eventsFetched = NO;
     self.checkForms = NO;
     
-    self.allEventsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.allEventsController = [Event caseInsensitiveSortFetchAllWithSortTerm:@"name" ascending:true predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] groupBy:nil context:[NSManagedObjectContext MR_defaultContext]];
     self.allEventsController.delegate = self;
     NSError *error;
     
@@ -162,7 +162,7 @@
     __weak typeof(self) weakSelf = self;
 
     // verify the user is still in this event
-    Event *fetchedEvent = [Event getEventById:event.remoteId inContext:[NSManagedObjectContext MR_defaultContext]];
+    Event *fetchedEvent = [Event getEventWithEventId:event.remoteId context:[NSManagedObjectContext MR_defaultContext]];
     if (fetchedEvent == nil) {
     
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unauthorized"

@@ -7,7 +7,6 @@
 //
 
 #import "FormDefaults.h"
-#import "Event.h"
 #import "GeometrySerializer.h"
 #import "GeometryDeserializer.h"
 

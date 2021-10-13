@@ -72,7 +72,6 @@
 
 #pragma mark - Core Data Entities
 #import "Attachment.h"
-#import "Event.h"
 #import "Observation.h"
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"

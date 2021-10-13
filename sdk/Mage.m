@@ -13,7 +13,7 @@
 #import "AttachmentPushService.h"
 #import "User.h"
 #import "Role.h"
-#import "Event.h"
+#import "MAGE-Swift.h"
 #import "Form.h"
 #import "Layer.h"
 #import "MageServer.h"
@@ -70,18 +70,18 @@
     MageSessionManager *manager = [MageSessionManager sharedManager];
     NSURLSessionDataTask *myselfTask = [User operationToFetchMyselfWithSuccess:^{
         
-        NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^{
+        NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^(NSURLSessionDataTask *task, id response){
             NSArray *events = [Event MR_findAll];
             [self fetchFormAndStaticLayerForEvents: events];
-        } failure:^(NSError *error) {
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
             NSLog(@"Failure to pull events");
-            [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MAGEEventsFetched" object:nil];
             NSArray *events = [Event MR_findAll];
             [self fetchFormAndStaticLayerForEvents: events];
         }];
         [manager addTask:eventTask];
     } failure:^(NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MAGEEventsFetched" object:nil];
         NSArray *events = [Event MR_findAll];
         [self fetchFormAndStaticLayerForEvents: events];
     }];

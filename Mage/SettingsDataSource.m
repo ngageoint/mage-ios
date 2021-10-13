@@ -44,7 +44,7 @@ static const NSInteger LEGAL_SECTION = 8;
     
     if (self) {
         self.scheme = containerScheme;
-        self.event = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
+        self.event = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
         
         User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
         NSArray *recentEventIds = [user.recentEventIds filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", self.event.remoteId]];

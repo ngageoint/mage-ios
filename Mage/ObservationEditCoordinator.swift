@@ -47,12 +47,12 @@ protocol ObservationCommonPropertiesListener: AnyObject {
         return managedObjectContext;
     } ()
     
-    private lazy var event: Event = {
-        return Event.getCurrentEvent(in: self.managedObjectContext);
+    private lazy var event: Event? = {
+        return Event.getCurrentEvent(context: self.managedObjectContext);
     } ()
     
     private lazy var eventForms: [[String: AnyHashable]] = {
-        let eventForms = event.forms as? [[String: AnyHashable]] ?? [];
+        let eventForms = event?.forms as? [[String: AnyHashable]] ?? [];
         return eventForms;
     }()
     
@@ -77,7 +77,11 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     }
     
     @objc public func start() {
-        if (!self.event.isUser(inEvent: user)) {
+        guard let event = event else {
+            return
+        }
+
+        if (!event.isUserInEvent(user: user)) {
             let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create or edit observations for an event you are not part of.", preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
             self.rootViewController?.present(alert, animated: true, completion: nil);
@@ -96,7 +100,11 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     }
     
     @objc public func startFormReorder() {
-        if (!self.event.isUser(inEvent: user)) {
+        guard let event = event else {
+            return
+        }
+
+        if (!event.isUserInEvent(user: user)) {
             let alert = UIAlertController(title: "You are not part of this event", message: "You cannot edit this observation.", preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
             self.rootViewController?.present(alert, animated: true, completion: nil);
@@ -248,7 +256,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     }
     
     func addForm() {
-        let forms: [[String: AnyHashable]] = (event.forms as! [[String : AnyHashable]]).filter { form in
+        let forms: [[String: AnyHashable]] = (event?.forms as! [[String : AnyHashable]]).filter { form in
             return !(form[FormKey.archived.rawValue] as? Bool ?? false)
         };
         let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, observation: observation, scheme: self.scheme);

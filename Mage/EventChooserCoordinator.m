@@ -29,7 +29,7 @@
 
 - (instancetype) initWithViewController: (UIViewController *) viewController andDelegate: (id<EventChooserDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:MAGEEventsFetched object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:@"MAGEEventsFetched" object:nil];
         self.delegate = delegate;
         self.viewController = viewController;
         self.scheme = containerScheme;
@@ -39,7 +39,7 @@
 
 - (void) start {
     if ([Server currentEventId] != nil) {
-        Event *event = [Event getEventById:[Server currentEventId] inContext:[NSManagedObjectContext MR_defaultContext]];
+        Event *event = [Event getEventWithEventId:[Server currentEventId] context:[NSManagedObjectContext MR_defaultContext]];
         if (event != nil) {
             self.eventToSegueTo = event;
             [self.eventController dismissViewControllerAnimated:NO completion:nil];

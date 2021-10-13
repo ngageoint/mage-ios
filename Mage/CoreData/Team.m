@@ -7,7 +7,6 @@
 //
 
 #import "Team.h"
-#import "Event.h"
 #import "User.h"
 
 @implementation Team

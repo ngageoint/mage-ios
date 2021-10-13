@@ -23,8 +23,10 @@ import sf_ios
         }
     }
     
-    @objc public convenience init(location: CLLocation, context: NSManagedObjectContext) {
-        self.init(context: context);
+    @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation? {
+        guard let gpsLocation = GPSLocation.mr_createEntity(in: context) else {
+            return nil;
+        }
 //    @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation {
         let device = UIDevice.current
         device.isBatteryMonitoringEnabled = true;
@@ -52,9 +54,9 @@ import sf_ios
         
         let point = SFPoint(xValue: location.coordinate.longitude, andYValue: location.coordinate.latitude);
         
-        self.geometry = point;
-        self.timestamp = location.timestamp;
-        self.eventId = Server.currentEventId();
+        gpsLocation.geometry = point;
+        gpsLocation.timestamp = location.timestamp;
+        gpsLocation.eventId = Server.currentEventId();
         
         let radioTechDict = telephonyInfo.serviceCurrentRadioAccessTechnology ?? [:];
         let carrierInfoDict : [String : CTCarrier] = telephonyInfo.serviceSubscriberCellularProviders ?? [:];
@@ -69,7 +71,7 @@ import sf_ios
                 ]);
         }
         
-        self.properties = [
+        gpsLocation.properties = [
             "altitude": location.altitude,
             "accuracy": location.horizontalAccuracy,
             "verticalAccuracy": location.verticalAccuracy,
@@ -89,6 +91,7 @@ import sf_ios
             "device_name": device.name,
             "device_model": device.model
         ];
+        return gpsLocation;
     }
     
     @objc public static func fetchGPSLocations(limit: NSNumber?, context: NSManagedObjectContext) -> [GPSLocation] {

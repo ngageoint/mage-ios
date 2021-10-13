@@ -21,7 +21,6 @@
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
-#import "Event.h"
 #import "MageFilter.h"
 #import "SFPoint.h"
 #import "ObservationAnnotationView.h"
@@ -204,8 +203,8 @@
     [self setNavBarTitle];
     
     [self setupListeners];
-    Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
-    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
+    Event *currentEvent = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
+    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEventWithUser:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupMapSettingsButton];
     
     // Start the timer for updating the circles
@@ -363,9 +362,9 @@
 
 - (void) setNavBarTitle {
     if ([[MageFilter getFilterString] length] != 0 || [[MageFilter getLocationFilterString] length] != 0) {
-        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
+        [self setNavBarTitle:[Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
     } else {
-        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:nil];
+        [self setNavBarTitle:[Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:nil];
     }
 }
 
@@ -440,7 +439,7 @@
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
+        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserInManagedObjectContext:context]]];
     } else if ([kObservationTimeFilterKey isEqualToString:keyPath] || [kObservationTimeFilterUnitKey isEqualToString:keyPath] || [kObservationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observationsForMap];
         [self setNavBarTitle];
@@ -505,7 +504,7 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-    BOOL inEvent = [[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]];
+    BOOL inEvent = [[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserInManagedObjectContext:context]];
     if (!inEvent) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Not In Event"
                                                                         message:@"You cannot report your location for an event you are not part of."

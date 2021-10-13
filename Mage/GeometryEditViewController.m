@@ -21,7 +21,6 @@
 #import "SFGeometryEnvelopeBuilder.h"
 #import "Observation.h"
 #import "ObservationShapeStyle.h"
-#import "Event.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
 #import "BaseMapOverlay.h"
