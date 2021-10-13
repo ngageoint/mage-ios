@@ -218,7 +218,7 @@
 		F72D430D2694B60300F9AC3B /* Model5To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D429B2694B60300F9AC3B /* Model5To15.xcmappingmodel */; };
 		F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429D2694B60300F9AC3B /* ObservationRoutes.m */; };
 		F72D430F2694B60300F9AC3B /* UserUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429E2694B60300F9AC3B /* UserUtility.m */; };
-		F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */; };
+		F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */; };
 		F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */; };
 		F72D43122694B60300F9AC3B /* MageServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.m */; };
 		F72D43132694B60300F9AC3B /* ImageryLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A72694B60300F9AC3B /* ImageryLayer.m */; };
@@ -246,7 +246,7 @@
 		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
 		F72D432A2694B60300F9AC3B /* Observation.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.m */; };
 		F72D432B2694B60300F9AC3B /* ObservationFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D12694B60300F9AC3B /* ObservationFavorite.m */; };
-		F72D432C2694B60300F9AC3B /* GPSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.m */; };
+		F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.swift */; };
 		F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */; };
 		F72D432E2694B60300F9AC3B /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D62694B60300F9AC3B /* Attachment.m */; };
 		F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */; };
@@ -783,7 +783,6 @@
 		F72D422F2694B60300F9AC3B /* LocalAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAuthentication.m; sourceTree = "<group>"; };
 		F72D42302694B60300F9AC3B /* Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mage.m; sourceTree = "<group>"; };
 		F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model13To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42322694B60300F9AC3B /* GPSLocation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GPSLocation+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42332694B60300F9AC3B /* UserUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserUtility.h; sourceTree = "<group>"; };
 		F72D42342694B60300F9AC3B /* ObservationRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationRoutes.h; sourceTree = "<group>"; };
 		F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 6.xcdatamodel"; sourceTree = "<group>"; };
@@ -867,7 +866,6 @@
 		F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes_Server5.m; sourceTree = "<group>"; };
 		F72D42892694B60300F9AC3B /* MAGERoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAGERoutes.m; sourceTree = "<group>"; };
 		F72D428A2694B60300F9AC3B /* ObservationFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFavorite.h; sourceTree = "<group>"; };
-		F72D428B2694B60300F9AC3B /* GPSLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSLocation.h; sourceTree = "<group>"; };
 		F72D428C2694B60300F9AC3B /* Observation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observation.h; sourceTree = "<group>"; };
 		F72D428D2694B60300F9AC3B /* IdpAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdpAuthentication.m; sourceTree = "<group>"; };
 		F72D428E2694B60300F9AC3B /* LocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationService.m; sourceTree = "<group>"; };
@@ -886,7 +884,7 @@
 		F72D429C2694B60300F9AC3B /* RouteMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteMethod.h; sourceTree = "<group>"; };
 		F72D429D2694B60300F9AC3B /* ObservationRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationRoutes.m; sourceTree = "<group>"; };
 		F72D429E2694B60300F9AC3B /* UserUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserUtility.m; sourceTree = "<group>"; };
-		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GPSLocation+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GPSLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42A12694B60300F9AC3B /* Mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mage.h; sourceTree = "<group>"; };
 		F72D42A22694B60300F9AC3B /* LocalAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthentication.h; sourceTree = "<group>"; };
@@ -936,7 +934,7 @@
 		F72D42CF2694B60300F9AC3B /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
 		F72D42D02694B60300F9AC3B /* Observation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observation.m; sourceTree = "<group>"; };
 		F72D42D12694B60300F9AC3B /* ObservationFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFavorite.m; sourceTree = "<group>"; };
-		F72D42D22694B60300F9AC3B /* GPSLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocation.m; sourceTree = "<group>"; };
+		F72D42D22694B60300F9AC3B /* GPSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocation.swift; sourceTree = "<group>"; };
 		F72D42D32694B60300F9AC3B /* MAGERoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGERoutes.h; sourceTree = "<group>"; };
 		F72D42D42694B60300F9AC3B /* ObservationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchService.h; sourceTree = "<group>"; };
 		F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Canary+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -2278,10 +2276,8 @@
 				F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */,
 				F72D42812694B60300F9AC3B /* FeedItem.swift */,
 				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */,
-				F72D428B2694B60300F9AC3B /* GPSLocation.h */,
-				F72D42D22694B60300F9AC3B /* GPSLocation.m */,
-				F72D42322694B60300F9AC3B /* GPSLocation+CoreDataProperties.h */,
-				F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */,
+				F72D42D22694B60300F9AC3B /* GPSLocation.swift */,
+				F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */,
 				F72D42602694B60300F9AC3B /* ImageryLayer.h */,
 				F72D42A72694B60300F9AC3B /* ImageryLayer.m */,
 				F72D424B2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.h */,
@@ -3163,7 +3159,7 @@
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
 				F72D43062694B60300F9AC3B /* Server.m in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
-				F72D432C2694B60300F9AC3B /* GPSLocation.m in Sources */,
+				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,
 				F7D43BDA269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift in Sources */,
 				F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */,
 				F79116262491414B0043A529 /* MageInitializer.swift in Sources */,
@@ -3270,7 +3266,7 @@
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
 				F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */,
-				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.m in Sources */,
+				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */,
@@ -3718,7 +3714,7 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zxcvbn-ios/zxcvbn_ios.framework/Headers\"",
 				);
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
@@ -3767,7 +3763,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (

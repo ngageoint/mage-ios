@@ -1706,12 +1706,12 @@
         annotation = [[LocationAnnotation alloc] initWithGPSLocation:location user:user];
         [_mapView addAnnotation:annotation];
         [self.locationAnnotations setObject:annotation forKey:user.remoteId];
-        SFGeometry * geometry = [location getGeometry];
+        SFGeometry * geometry = location.geometry;
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue])];
     } else {
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
-        SFGeometry * geometry = [location getGeometry];
+        SFGeometry * geometry = location.geometry;
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [annotation setCoordinate:coordinate];

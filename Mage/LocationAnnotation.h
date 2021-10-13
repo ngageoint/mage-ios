@@ -9,7 +9,7 @@
 #import "MapAnnotation.h"
 #import "User.h"
 #import "Location.h"
-#import "GPSLocation.h"
+#import "MAGE-Swift.h"
 
 @interface LocationAnnotation : MapAnnotation
 

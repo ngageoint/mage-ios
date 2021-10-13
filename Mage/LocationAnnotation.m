@@ -37,7 +37,7 @@
 
 -(id) initWithGPSLocation: (GPSLocation *) gpsLocation user: (User *) user {
     if ((self = [super init])) {
-        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[gpsLocation getGeometry]];
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:gpsLocation.geometry];
         _location = [[CLLocation alloc] initWithCoordinate:(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]))
                                                   altitude:[[gpsLocation.properties valueForKey:@"altitude"] doubleValue]
                                         horizontalAccuracy:[[gpsLocation.properties valueForKey:@"accuracy"] doubleValue]

@@ -84,13 +84,13 @@ class MageCoreDataFixtures {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation(for: location, in: localContext);
+                let gpsLocation = GPSLocation(location: location, context: localContext);
             })
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation(for: location, in: localContext);
+                let gpsLocation = GPSLocation(location: location, context: localContext);
             }, completion: completion)
         }
     }
@@ -351,14 +351,14 @@ class MageCoreDataFixtures {
         }
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let remoteId: String = Feed.add(fromJson: feedJson, inEventId: eventId, in: localContext)
+                let remoteId: String = Feed.addFeed(json: feedJson, eventId: eventId, context: localContext)!
                 print("saved feed \(id)")
                 expect(remoteId) == id;
                 localContext.mr_saveToPersistentStoreAndWait();
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let remoteId: String = Feed.add(fromJson: feedJson, inEventId: eventId, in: localContext)
+                let remoteId: String = Feed.addFeed(json: feedJson, eventId: eventId, context: localContext)!
                 print("saved feed \(id)")
                 expect(remoteId) == id;
             }, completion: completion);
@@ -460,12 +460,12 @@ class MageCoreDataFixtures {
 
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let remoteIds: [String] = Feed.populateFeeds(fromJson: jsonDictionary as! [Any], inEventId: eventId, in: localContext) as! [String]
+                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext) as! [String]
                 expect(remoteIds) == feedIds;
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let remoteIds: [String] = Feed.populateFeeds(fromJson: jsonDictionary as! [Any], inEventId: eventId, in: localContext) as! [String]
+                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext) as! [String]
                 expect(remoteIds) == feedIds;
             }, completion: completion);
         }
@@ -481,12 +481,12 @@ class MageCoreDataFixtures {
 
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let remoteIds = Feed.populateFeedItems(fromJson: features as! [Any], inFeedId: feedId, inEvent: 1, in: localContext)
+                let remoteIds = Feed.populateFeedItems(feedItems: features as! [[AnyHashable:Any]], feedId: feedId, eventId: 1, context: localContext)
                 expect(remoteIds as? [String]) == feedItemIds;
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let remoteIds = Feed.populateFeedItems(fromJson: features as! [Any], inFeedId: feedId, inEvent: 1, in: localContext)
+                let remoteIds = Feed.populateFeedItems(feedItems: features as! [[AnyHashable:Any]], feedId: feedId, eventId: 1, context: localContext)
                 expect(remoteIds as? [String]) == feedItemIds;
             }, completion: completion);
         }

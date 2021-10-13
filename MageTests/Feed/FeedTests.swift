@@ -81,7 +81,7 @@ class FeedTests: KIFSpec {
             it("should populate feeds from json all new") {
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    let remoteIds = Feed.populateFeeds(feeds: feeds as! [[AnyHashable : Any]], eventId: 1, context: localContext)
                     expect(remoteIds) == ["0","1","2","3"];
                 })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
@@ -92,7 +92,7 @@ class FeedTests: KIFSpec {
                 UserDefaults.standard.set(["6","7"], forKey: "selectedFeeds");
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    let remoteIds = Feed.populateFeeds(feeds: feeds as! [[AnyHashable : Any]], eventId: 1, context: localContext)
                     expect(remoteIds) == ["0","1","2","3"];
                 })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
@@ -106,7 +106,7 @@ class FeedTests: KIFSpec {
                 UserDefaults.standard.set(["1","2"], forKey: "selectedFeeds-1");
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    let remoteIds = Feed.populateFeeds(feeds: feeds as! [[AnyHashable :Any]], eventId: 1, context: localContext)
                     expect(remoteIds) == ["0","1","2","3"];
                 })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
@@ -121,7 +121,7 @@ class FeedTests: KIFSpec {
 
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    let remoteIds = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext)
                     expect(remoteIds) == ["0","1","2","3"];
                 })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
@@ -135,7 +135,7 @@ class FeedTests: KIFSpec {
                 UserDefaults.standard.set(["2"], forKey: "selectedFeeds-1");
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext)
+                    let remoteIds = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext)
                     expect(remoteIds) == ["0","1","2","3"];
                 })
                 let selectedFeeds: [String] = UserDefaults.standard.object(forKey: "selectedFeeds-1") as! [String];
@@ -147,7 +147,7 @@ class FeedTests: KIFSpec {
 
                 let feedItems = loadFeedItemsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", inEvent: 1, in: localContext)
+                    let remoteIds = Feed.populateFeedItems(feedItems: feedItems as! [[AnyHashable:Any]], feedId: "1", eventId: 1, context: localContext)
                     expect(remoteIds as? [String]) == feedItemIds;
                 })
 
@@ -167,7 +167,7 @@ class FeedTests: KIFSpec {
 
                 let feedItems = loadFeedItemsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds = Feed.populateFeedItems(fromJson: feedItems as! [Any], inFeedId: "1", inEvent: 1, in: localContext)
+                    let remoteIds = Feed.populateFeedItems(feedItems: feedItems as! [[AnyHashable:Any]], feedId: "1", eventId: 1, context: localContext)
                     expect(remoteIds as? [String]) == feedItemIds;
                 })
 
@@ -186,7 +186,7 @@ class FeedTests: KIFSpec {
 
                 var feedItemIds: [String] = ["1","2"];
 
-                for feedItem: FeedItem in FeedItem.getFeedItems(forFeed: "1", andEvent: 1) {
+                for feedItem: FeedItem in FeedItem.getFeedItems(feedId: "1", eventId: 1)! {
                     expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
                     feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
                 }

@@ -22,7 +22,6 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "Event.h"
-#import "GPSLocation.h"
 #import "MageFilter.h"
 #import "SFPoint.h"
 #import "ObservationAnnotationView.h"

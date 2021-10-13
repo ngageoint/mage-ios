@@ -10,7 +10,6 @@
 #import "UserSelectionDelegate.h"
 #import "Locations.h"
 #import "Observations.h"
-#import "GPSLocation.h"
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
 #import "MapCalloutTapped.h"
@@ -20,6 +19,7 @@
 @class StraightLineNavigation;
 @class MageBottomSheetViewController;
 @class FeedItem;
+@class GPSLocation;
 
 @protocol FeedItemDelegate <NSObject>
 

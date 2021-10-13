@@ -8,6 +8,7 @@
 
 import Foundation
 import PureLayout
+import CoreData
 
 class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var didSetupConstraints = false;
@@ -259,10 +260,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         mapDelegate.locations = Locations.init(for: user);
         
         if (currentUserIsMe) {
-            let locations: [GPSLocation] = GPSLocation.fetchLastXGPSLocations(1)
+            let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
             if (locations.count != 0) {
                 let location: GPSLocation = locations[0]
-                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
+                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.geometry);
                 let dictionary: [String : Any] = location.properties as! [String : Any];
                 userLastLocation = CLLocation(
                     coordinate: CLLocationCoordinate2D(

@@ -10,7 +10,7 @@
 #import "MagicalRecord+MAGE.h"
 #import "GPKGGeoPackageManager.h"
 #import "GPKGGeoPackageFactory.h"
-#import "MageInitializer.h"
+#import "MAGE-Swift.h"
 
 @interface TestingAppDelegate ()
 @property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;

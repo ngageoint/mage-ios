@@ -21,7 +21,7 @@ class ObservationBottomSheetTests: KIFSpec {
         
         describe("ObservationBottomSheetTests") {
             var window: UIWindow?;
-            var viewController: ObservationBottomSheetController?;
+            var viewController: MageBottomSheetViewController?;
             var view: UIView?;
             var navigationController: UINavigationController?;
             
@@ -78,7 +78,7 @@ class ObservationBottomSheetTests: KIFSpec {
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 let delegate = MockObservationActionsDelegate();
                 
-                viewController = ObservationBottomSheetController(observation: observation, actionsDelegate: delegate, scheme: MAGEScheme.scheme())
+                viewController = MageBottomSheetViewController(items: [BottomSheetItem(item: observation, actionDelegate: delegate, annotationView: nil)], scheme: MAGEScheme.scheme(), bottomSheetDelegate: nil);
                 viewController?.preferredContentSize = CGSize(width: viewController?.preferredContentSize.width ?? 0.0,
                                                               height: observation.isImportant() ? 260 : 220);
                 
