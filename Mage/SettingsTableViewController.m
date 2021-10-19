@@ -6,7 +6,6 @@
 
 #import "SettingsTableViewController.h"
 #import "MAGE-Swift.h"
-#import "User.h"
 #import "LocationService.h"
 #import "Server.h"
 #import "MageServer.h"

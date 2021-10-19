@@ -16,16 +16,17 @@ import CoreData
         let manager = MageSessionManager.shared();
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             MagicalRecord.save { localContext in
-                let localUser = User.fetchCurrentUser(in: localContext);
+                let localUser = User.fetchCurrentUser(context: localContext);
                 var eventsReturned: [NSNumber] = []
                 
                 guard let events = responseObject as? [[AnyHashable : Any]] else {
+                    success?(task, nil);
                     return;
                 }
                 for eventJson in events {
                     if let eventId = eventJson["id"] as? NSNumber, let event = Event.mr_findFirst(byAttribute: "remoteId", withValue: eventId, in: localContext) {
                         event.updateEvent(json: eventJson, context: localContext);
-                        if let recentEventIds = localUser.recentEventIds as? [NSNumber], let remoteId = event.remoteId {
+                        if let recentEventIds = localUser?.recentEventIds as? [NSNumber], let remoteId = event.remoteId {
                             event.recentSortOrder = NSNumber(value: recentEventIds.firstIndex(of: remoteId) ?? 0)
                         }
                         if let remoteId = event.remoteId {
@@ -33,7 +34,7 @@ import CoreData
                         }
                     } else {
                         if let event = Event.insertEvent(json: eventJson, context: localContext) {
-                            if let recentEventIds = localUser.recentEventIds as? [NSNumber], let remoteId = event.remoteId {
+                            if let recentEventIds = localUser?.recentEventIds as? [NSNumber], let remoteId = event.remoteId {
                                 event.recentSortOrder = NSNumber(value: recentEventIds.firstIndex(of: remoteId) ?? 0)
                             }
                             if let remoteId = event.remoteId {
@@ -64,7 +65,9 @@ import CoreData
     }
     
     @objc public static func sendRecentEvent() {
-        let u = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
+        guard let u = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
+            return;
+        }
         let manager = MageSessionManager.shared();
         guard let task: URLSessionDataTask = manager?.post_TASK("\(MageServer.baseURL().absoluteURL)/api/users/\(u.remoteId ?? "")/events/\(Server.currentEventId())/recent", parameters: nil, progress: nil, success: { task, response in
             
@@ -99,10 +102,8 @@ import CoreData
     }
     
     static func insertEvent(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Event? {
-        guard let event = Event.mr_createEntity(in: context) else {
-            return nil;
-        }
-        event.updateEvent(json: json, context: context);
+        let event = Event.mr_createEntity(in: context)
+        event?.updateEvent(json: json, context: context);
         return event;
     }
     
@@ -123,14 +124,15 @@ import CoreData
                     }
                     return false;
                 }) as? Team {
-                    team.update(forJson: teamJson, in: context);
+                    team.update(json: teamJson, context: context);
                 } else {
                     if let teamId = teamJson["id"] as? String, let team = Team.mr_findFirst(byAttribute: "remoteId", withValue: teamId, in: context) {
-                        team.update(forJson: teamJson, in: context);
+                        team.update(json: teamJson, context: context);
                         self.addToTeams(team);
                     } else {
-                        let team = Team.insert(forJson: teamJson, in: context);
-                        self.addToTeams(team);
+                        if let team = Team.insert(json: teamJson, context: context) {
+                            self.addToTeams(team);
+                        }
                     }
                 }
             }

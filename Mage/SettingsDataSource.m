@@ -46,7 +46,7 @@ static const NSInteger LEGAL_SECTION = 8;
         self.scheme = containerScheme;
         self.event = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
         
-        User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         NSArray *recentEventIds = [user.recentEventIds filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", self.event.remoteId]];
 
         NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
@@ -434,7 +434,7 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSDictionary *) aboutSection {
-    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     

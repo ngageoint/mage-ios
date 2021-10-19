@@ -141,19 +141,23 @@
     <entity name="StaticLayer" representedClassName="StaticLayer" parentEntity="Layer" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
     </entity>
-    <entity name="Team" representedClassName="Team" syncable="YES">
+    <entity name="Team" representedClassName=".Team" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamDescription" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="teams" inverseEntity="User" syncable="YES"/>
     </entity>
-    <entity name="User" representedClassName="User" syncable="YES">
+    <entity name="User" representedClassName=".User" syncable="YES">
         <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="avatarUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="currentUser" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="iconColor" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="iconText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="iconUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recentEventIds" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
@@ -180,7 +184,7 @@
         <element name="Role" positionX="-2268" positionY="-486" width="128" height="74"/>
         <element name="Server" positionX="-2493" positionY="-1143" width="128" height="44"/>
         <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="44"/>
-        <element name="Team" positionX="-2529" positionY="-441" width="128" height="120"/>
-        <element name="User" positionX="-1622" positionY="-516" width="128" height="239"/>
+        <element name="Team" positionX="-2529" positionY="-441" width="128" height="104"/>
+        <element name="User" positionX="-1622" positionY="-516" width="128" height="299"/>
     </elements>
 </model>

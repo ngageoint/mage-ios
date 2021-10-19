@@ -3,8 +3,6 @@
 //  mage-ios-sdk
 //
 
-#import "User.h"
-
 typedef NS_ENUM(NSInteger, AuthenticationStatus) {
     AUTHENTICATION_SUCCESS,
     AUTHENTICATION_ERROR,

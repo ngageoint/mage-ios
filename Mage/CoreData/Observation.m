@@ -10,7 +10,6 @@
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"
 #import "Attachment.h"
-#import "User.h"
 #import "Role.h"
 #import "Server.h"
 #import "MageSessionManager.h"
@@ -74,7 +73,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     [properties setObject:[[NSMutableArray alloc] init] forKey:@"forms"];
 
     [observation setProperties:properties];
-    [observation setUser:[User fetchCurrentUserInManagedObjectContext:mangedObjectContext]];
+    [observation setUser:[User fetchCurrentUserWithContext:mangedObjectContext]];
     [observation setGeometry:geometry];
     [observation setDirty:[NSNumber numberWithBool:NO]];
     [observation setState:[NSNumber numberWithInt:(int)[@"active" StateEnumFromString]]];
@@ -1130,7 +1129,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 }
 
 - (Boolean) currentUserCanUpdateImportant {
-    User *currentUser = [User fetchCurrentUserInManagedObjectContext:self.managedObjectContext];
+    User *currentUser = [User fetchCurrentUserWithContext:self.managedObjectContext];
     
     // if the user has update on the event
     Event *event = [self event];
@@ -1154,7 +1153,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 
 - (Boolean) isDeletableByCurrentUser {
         
-    User *currentUser = [User fetchCurrentUserInManagedObjectContext:self.managedObjectContext];
+    User *currentUser = [User fetchCurrentUserWithContext:self.managedObjectContext];
     
     // if the user has update on the event
     Event *event = [self event];
@@ -1217,7 +1216,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         Observation *localObservation = [weakSelf MR_inContext:localContext];
 
-        User *user = [User fetchCurrentUserInManagedObjectContext:localContext];
+        User *user = [User fetchCurrentUserWithContext:localContext];
         ObservationFavorite *favorite = [[localObservation getFavoritesMap] objectForKey:user.remoteId];
 
         if (favorite && favorite.favorite) {
@@ -1262,7 +1261,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     __weak typeof(self) weakSelf = self;
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         Observation *localObservation = [weakSelf MR_inContext:localContext];
-        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
+        User *currentUser = [User fetchCurrentUserWithContext:localContext];
 
         ObservationImportant *important = weakSelf.observationImportant;
         if (!important) {
@@ -1297,7 +1296,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         
         Observation *localObservation = [weakSelf MR_inContext:localContext];
-        User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
+        User *currentUser = [User fetchCurrentUserWithContext:localContext];
         
         ObservationImportant *important = weakSelf.observationImportant;
         if (!important) {
@@ -1321,7 +1320,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 
 + (NSDate *) fetchLastObservationDateInContext:(NSManagedObjectContext *) context {
     NSDate *date = nil;
-    User *user = [User fetchCurrentUserInManagedObjectContext:context];
+    User *user = [User fetchCurrentUserWithContext:context];
     Observation *observation = [Observation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND user.remoteId != %@", [Server currentEventId], user.remoteId]
                                                              sortedBy:@"lastModified"
                                                             ascending:NO inContext:context];

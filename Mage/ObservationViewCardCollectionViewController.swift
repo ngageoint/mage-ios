@@ -93,8 +93,8 @@ import MaterialComponents.MDCContainerScheme;
         scrollView.addSubview(stackView);
         view.addSubview(editFab);
         
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
-        editFab.isHidden = !user.hasEditPermission()
+        let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default())
+        editFab.isHidden = !(user?.hasEditPermission ?? false)
         
         view.setNeedsUpdateConstraints();
     }

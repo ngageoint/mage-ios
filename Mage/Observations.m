@@ -8,6 +8,7 @@
 #import "Observation+Section.h"
 #import "Server.h"
 #import "TimeFilter.h"
+#import "MAGE-Swift.h"
 
 @implementation Observations
 
@@ -54,7 +55,7 @@ NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
     }
     
     if ([Observations getFavoritesFilter]) {
-        User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         [predicates addObject:[NSPredicate predicateWithFormat:@"favorites.favorite CONTAINS %@ AND favorites.userId CONTAINS %@", [NSNumber numberWithBool:YES], currentUser.remoteId]];
     }
     

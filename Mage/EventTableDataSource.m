@@ -5,7 +5,6 @@
 //
 
 #import "EventTableDataSource.h"
-#import "User.h"
 #import "Server.h"
 #import "EventChooserController.h"
 #import "Observation.h"
@@ -61,7 +60,7 @@
 }
 
 - (void) refreshEventData {
-    User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    User *current = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
     NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
     [self updateOtherFetchedResultsControllerWithRecentEvents:recentEventIds];
     [self updateRecentFetchedResultsControllerWithRecentEvents:recentEventIds];

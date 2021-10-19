@@ -20,7 +20,7 @@
     return self;
 }
 
-- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme {
     if (self.iconUrl == nil) {
         return [self defaultAnnotationView:mapView];
     } else {

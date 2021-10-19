@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import CoreData
+import Kingfisher
 
 class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var didSetupConstraints = false;
@@ -96,10 +97,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return border;
     }()
     
-    private lazy var avatarImage: UIImageView = {
-        let avatarImage = UIImageView(forAutoLayout: ());
-        avatarImage.contentMode = .scaleAspectFit;
-        avatarImage.image = UIImage(named: "portrait");
+    private lazy var avatarImage: UserAvatarUIImageView = {
+        let avatarImage = UserAvatarUIImageView(image: nil);
         return avatarImage;
     }()
     
@@ -319,13 +318,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         emailLabel.text = user.email;
         emailView.isHidden = user.email == nil ? true : false;
         
-        if let avatarUrl = user.avatarUrl {
-            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
-                let avatarFile: String = (documentsDirectories[0] as NSString).appendingPathComponent(avatarUrl);
-                avatarImage.image = UIImage(contentsOfFile: avatarFile);
-            }
-        }
+        self.avatarImage.kf.indicatorType = .activity;
+        avatarImage.setUser(user: user);
+        let cacheOnly = DataConnectionUtilities.shouldFetchAvatars();
+        avatarImage.showImage(cacheOnly: cacheOnly);
     }
     
     func zoomAndCenterMap(location: CLLocation) {
@@ -410,37 +406,26 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             }
             var image: UIImage? = UIImage(named: "me")
             if let iconUrl = self.user?.iconUrl {
-                if (iconUrl.lowercased().hasPrefix("http")) {
-                    let token = StoredPassword.retrieveStoredToken();
-                    do {
-                        try image = UIImage(data: Data(contentsOf: URL(string: "\(iconUrl)?access_token=\(token ?? "")")!))
-                    } catch {
-                        // whatever
+                let lastUpdated = String(format:"%.0f", (self.user?.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
+                let url = URL(string: "\(iconUrl)?_lastUpdated=\(lastUpdated)")!;
+
+                KingfisherManager.shared.retrieveImage(with: url, options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]) { result in
+                    switch result {
+                    case .success(let value):
+                        let scale = value.image.size.width / 37;
+                        image = UIImage(cgImage: value.image.cgImage!, scale: scale, orientation: value.image.imageOrientation);
+                    case .failure(_):
+                        image = UIImage.init(named: "me")?.withRenderingMode(.alwaysTemplate);
                     }
-                } else {
-                    do {
-                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(iconUrl)")))
-                    } catch {
-                        // whatever
-                    }
+                    NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: self.user))
                 }
-                let scale = image?.size.width ?? 0.0 / 37;
-                image = UIImage(cgImage: image!.cgImage!, scale: scale, orientation: image!.imageOrientation);
-            }
-            
-            if let nvc: UINavigationController = self.navigationController?.tabBarController?.viewControllers?.filter( {
-                vc in
-                if let navController = vc as? UINavigationController {
-                    return navController.viewControllers[0] is MapViewController
-                }
-                return false;
-            }).first as? UINavigationController {
-                nvc.popToRootViewController(animated: false);
-                self.navigationController?.tabBarController?.selectedViewController = nvc;
-                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
-                    mvc.mapDelegate.userToNavigateTo = self.user;
-                    mvc.mapDelegate.startStraightLineNavigation(location, image: image);
-                }
+            } else {
+                NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: self.user))
             }
         }))
         
@@ -461,14 +446,12 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
     
     func presentAvatar() {
         if let avatarUrl = user?.avatarUrl {
-            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
-                let fullAvatarUrl = URL(fileURLWithPath: "\(documentsDirectories[0])/\(avatarUrl)")
-                if let saveNavigationController = navigationController {
-                    let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: saveNavigationController, url: fullAvatarUrl, contentType: "image", delegate: nil, scheme: scheme);
-                    childCoordinators.append(coordinator);
-                    coordinator.start();
-                }
+            let lastUpdated = String(format:"%.0f", (user?.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
+            let url = URL(string: "\(avatarUrl)?_lastUpdated=\(lastUpdated)")!;
+            if let saveNavigationController = navigationController {
+                let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: saveNavigationController, url: url, contentType: "image", delegate: nil, scheme: scheme);
+                childCoordinators.append(coordinator);
+                coordinator.start();
             }
         }
     }
@@ -540,7 +523,12 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
                 }, error: nil) as URLRequest? {
                 
                     if let uploadTask: URLSessionUploadTask = manager?.uploadTask(withStreamedRequest: request, progress: nil, completionHandler: { (response, responseObject, error) in
-                        
+                        // store the image data for the updated avatar in the cache here
+                        if let avatarUrl = (responseObject as? [AnyHashable: Any])?["avatarUrl"], let image = UIImage(data: imageData) {
+                            let lastUpdated = String(format:"%.0f", (self.user?.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
+                            let url = URL(string: "\(avatarUrl)?_lastUpdated=\(lastUpdated)")!;
+                            ImageCache.default.store(image, original:imageData, forKey: url.absoluteString)
+                        }
                     }) as URLSessionUploadTask? {
                         manager?.addTask(uploadTask);
                     }

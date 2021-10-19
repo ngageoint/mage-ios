@@ -6,7 +6,6 @@
 
 #import "AppDelegate.h"
 #import "Mage.h"
-#import "User.h"
 #import "Canary.h"
 #import <CoreLocation/CoreLocation.h>
 #import "UserUtility.h"

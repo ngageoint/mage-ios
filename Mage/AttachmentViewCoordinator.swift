@@ -8,6 +8,7 @@
 
 import AVKit;
 import MagicalRecord;
+import Kingfisher
 
 @objc protocol AttachmentViewDelegate {
     @objc func doneViewing(coordinator: NSObject);
@@ -87,7 +88,9 @@ import MagicalRecord;
                 self.hasPushedViewController = true;
             }
         } else if let urlToLoad = self.urlToLoad {
-            if (urlToLoad.isFileURL == true || DataConnectionUtilities.shouldFetchAvatars()) {
+            if (urlToLoad.isFileURL == true || DataConnectionUtilities.shouldFetchAvatars() ||
+                ImageCache.default.isCached(forKey: urlToLoad.absoluteString)
+            ) {
                 return self.loadURL(animated: animated);
             } else {
                 let vc: AskToDownloadViewController = AskToDownloadViewController(url: urlToLoad, delegate: self);

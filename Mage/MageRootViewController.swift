@@ -47,8 +47,10 @@ import Kingfisher
         return nc;
     }()
     
-    private lazy var meTab: UINavigationController = {
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
+    private lazy var meTab: UINavigationController? = {
+        guard let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
+            return nil
+        }
         let uvc = UserViewController(user: user, scheme: self.scheme);
         let nc = UINavigationController(rootViewController: uvc);
         nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "me"), tag: 3);
@@ -141,7 +143,9 @@ import Kingfisher
         var allTabs: [UIViewController] = self.viewControllers ?? [];
         allTabs.append(mapTab);
         allTabs.append(settingsTabItem);
-        allTabs.append(meTab);
+        if let meTab = meTab {
+            allTabs.append(meTab);
+        }
         allTabs.append(locationsTab);
         allTabs.append(observationsTab);
         

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "AnnotationDragCallback.h"
+@import MaterialComponents;
 
 /**
  *  Common map annotation
@@ -23,8 +24,8 @@
 
 -(id)init;
 -(NSNumber *) getIdAsNumber;
--(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView;
--(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback;
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme;
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback scheme: (id<MDCContainerScheming>) scheme;
 -(void) hidden: (BOOL) hidden;
 
 @end

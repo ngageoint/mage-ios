@@ -12,7 +12,6 @@
 #import "ServerAuthentication.h"
 #import "MageSessionManager.h"
 #import "AppDelegate.h"
-#import "User.h"
 #import "DBZxcvbn.h"
 #import "MAGE-Swift.h"
 
@@ -210,7 +209,7 @@
     [MageServer serverWithURL: url
     success:^(MageServer *mageServer) {
         weakSelf.usernameField.enabled = !weakSelf.loggedIn;
-        User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         weakSelf.usernameField.text = user.username;
         weakSelf.changePasswordView.hidden = NO;
         weakSelf.informationView.hidden = YES;

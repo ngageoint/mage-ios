@@ -8,7 +8,7 @@
 
 @implementation AreaAnnotation
 
-- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme {
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"areaAnnotation"];
     
     if (annotationView == nil) {

@@ -140,9 +140,10 @@ class ObservationListActionsView: UIView {
         currentUserFavorited = false;
         var favoriteCounter = 0;
         if let favorites = observation.favorites {
-            let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
-            currentUserFavorited = favorites.contains { (favorite) -> Bool in
-                return favorite.userId == user.remoteId && favorite.favorite;
+            if let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
+                currentUserFavorited = favorites.contains { (favorite) -> Bool in
+                    return favorite.userId == user.remoteId && favorite.favorite;
+                }
             }
             if (currentUserFavorited) {
                 favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);

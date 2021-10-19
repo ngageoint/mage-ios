@@ -9,12 +9,12 @@
 @import DateTools;
 
 #import "Location.h"
-#import "User.h"
 #import "Server.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
 #import "NSDate+Iso8601.h"
 #import "SFGeometryUtils.h"
+#import "MAGE-Swift.h"
 
 @implementation Location
 
@@ -97,8 +97,8 @@
             }
         }
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-            NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[allUserLocations count]);
-            User *currentUser = [User fetchCurrentUserInManagedObjectContext:localContext];
+            NSLog(@"Fetched %lu locations from the server, saving to location storage", (unsigned long)[((NSArray *)allUserLocations) count]);
+            User *currentUser = [User fetchCurrentUserWithContext:localContext];
             
             // Get the user ids to query
             NSMutableArray *userIds = [[NSMutableArray alloc] init];
@@ -127,7 +127,7 @@
                                                      @"displayName": @"unknown"
                                                      };
                     
-                    user = [User insertUserForJson:userDictionary inManagedObjectContext:localContext];
+                    user = [User insertWithJson:userDictionary context:localContext];
                 };
                 if ([currentUser.remoteId isEqualToString:user.remoteId]) continue;
                 
@@ -146,9 +146,7 @@
             
             if (newUserFound) {
                 // For now if we find at least one new user let just go grab the users again
-                [User operationToFetchUsersWithSuccess:^{
-                } failure:^(NSError * error) {
-                }];
+                [User operationToFetchUsersWithSuccess:nil failure:nil];
             }
         } completion:^(BOOL contextDidSave, NSError *error) {
             if (error) {

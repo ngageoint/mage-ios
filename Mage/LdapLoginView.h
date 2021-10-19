@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "User.h"
+#import "MAGE-Swift.h"
 #import "LoginViewController.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
 

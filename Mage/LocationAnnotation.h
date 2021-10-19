@@ -7,14 +7,14 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 #import "MapAnnotation.h"
-#import "User.h"
 #import "Location.h"
-#import "MAGE-Swift.h"
+
+@class GPSLocation;
 
 @interface LocationAnnotation : MapAnnotation
 
 @property (strong, nonatomic) CLLocation *location;
-@property (nonatomic, weak) User *user;
+@property (nonatomic, strong) User *user;
 @property (nonatomic) NSDate *timestamp;
 
 @property (nonatomic) NSString *name;

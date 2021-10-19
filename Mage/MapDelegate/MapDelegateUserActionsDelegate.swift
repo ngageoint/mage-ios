@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kingfisher
 
 extension MapDelegate : UserActionsDelegate {
     
@@ -15,12 +16,6 @@ extension MapDelegate : UserActionsDelegate {
         self.mageBottomSheet.dismiss(animated: true, completion: {
             self.mapCalloutDelegate.calloutTapped(user);
         });
-    }
-    
-    func getDocumentsDirectory() -> NSString {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentsDirectory = paths[0]
-        return documentsDirectory as NSString
     }
 
     func getDirectionsToUser(_ user: User, sourceView: UIView?) {
@@ -38,25 +33,27 @@ extension MapDelegate : UserActionsDelegate {
                 
                 var image: UIImage? = UIImage(named: "me")
                 if let iconUrl = user.iconUrl {
-                    if (iconUrl.lowercased().hasPrefix("http")) {
-                        let token = StoredPassword.retrieveStoredToken();
-                        do {
-                            try image = UIImage(data: Data(contentsOf: URL(string: "\(iconUrl)?access_token=\(token ?? "")")!))
-                        } catch {
-                            // whatever
+                    let lastUpdated = String(format:"%.0f", (user.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
+                    let url = URL(string: "\(iconUrl)?_lastUpdated=\(lastUpdated)")!;
+                    
+                    KingfisherManager.shared.retrieveImage(with: url, options: [
+                        .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                        .scaleFactor(UIScreen.main.scale),
+                        .transition(.fade(1)),
+                        .cacheOriginalImage
+                    ]) { result in
+                        switch result {
+                        case .success(let value):
+                            let scale = value.image.size.width / 37;
+                            image = UIImage(cgImage: value.image.cgImage!, scale: scale, orientation: value.image.imageOrientation);
+                        case .failure(_):
+                            image = UIImage.init(named: "me")?.withRenderingMode(.alwaysTemplate);
                         }
-                    } else {
-                        do {
-                            try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(iconUrl)")))
-                        } catch {
-                            // whatever
-                        }
+                        self.startStraightLineNavigation(location, image: image);
                     }
-                    let scale = image?.size.width ?? 0.0 / 37;
-                    image = UIImage(cgImage: image!.cgImage!, scale: scale, orientation: image!.imageOrientation);
+                } else {
+                    self.startStraightLineNavigation(location, image: image);
                 }
-                
-                self.startStraightLineNavigation(location, image: image);
             }));
             ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: user.name ?? "User", viewController: self.navigationController, extraActions: extraActions, sourceView: nil);
         });

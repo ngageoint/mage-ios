@@ -8,7 +8,6 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import "AppDelegate.h"
-#import "User.h"
 #import "Location.h"
 #import "LocationAnnotation.h"
 #import "LocationService.h"
@@ -204,7 +203,7 @@
     
     [self setupListeners];
     Event *currentEvent = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
-    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEventWithUser:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
+    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEventWithUser:[User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupMapSettingsButton];
     
     // Start the timer for updating the circles
@@ -439,7 +438,7 @@
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserInManagedObjectContext:context]]];
+        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserWithContext:context]]];
     } else if ([kObservationTimeFilterKey isEqualToString:keyPath] || [kObservationTimeFilterUnitKey isEqualToString:keyPath] || [kObservationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observationsForMap];
         [self setNavBarTitle];
@@ -504,7 +503,7 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-    BOOL inEvent = [[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserInManagedObjectContext:context]];
+    BOOL inEvent = [[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserWithContext:context]];
     if (!inEvent) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Not In Event"
                                                                         message:@"You cannot report your location for an event you are not part of."

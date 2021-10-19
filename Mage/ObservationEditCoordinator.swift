@@ -56,8 +56,8 @@ protocol ObservationCommonPropertiesListener: AnyObject {
         return eventForms;
     }()
     
-    private lazy var user: User = {
-        return User.fetchCurrentUser(in: self.managedObjectContext);
+    private lazy var user: User? = {
+        return User.fetchCurrentUser(context: self.managedObjectContext);
     }()
     
     @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
@@ -77,10 +77,13 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     }
     
     @objc public func start() {
-        guard let event = event else {
+        guard let event = event, let user = user else {
+            let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create or edit observations for an event you are not part of.", preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
+            self.rootViewController?.present(alert, animated: true, completion: nil);
             return
         }
-
+        
         if (!event.isUserInEvent(user: user)) {
             let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create or edit observations for an event you are not part of.", preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
@@ -100,7 +103,10 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     }
     
     @objc public func startFormReorder() {
-        guard let event = event else {
+        guard let event = event, let user = user else {
+            let alert = UIAlertController(title: "You are not part of this event", message: "You cannot edit this observation.", preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
+            self.rootViewController?.present(alert, animated: true, completion: nil);
             return
         }
 
@@ -216,7 +222,9 @@ extension ObservationEditCoordinator: FieldSelectionDelegate {
 extension ObservationEditCoordinator: ObservationFormReorderDelegate {
     func formsReordered(observation: Observation) {
         self.observation = observation;
-        self.observation!.userId = user.remoteId;
+        if let user = user {
+            self.observation!.userId = user.remoteId;
+        }
 
         if let observationEditController = self.observationEditController {
             observationEditController.formsReordered(observation: self.observation!);
@@ -268,7 +276,9 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     
     func saveObservation(observation: Observation) {
         print("Save observation");
-        self.observation!.userId = user.remoteId;
+        if let user = user {
+            self.observation!.userId = user.remoteId;
+        }
         self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
             if (!contextDidSave) {
                 print("Error saving observation to persistent store, context did not save");

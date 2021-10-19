@@ -45,8 +45,8 @@ class ObservationActionsSheetController: UITableViewController {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.delegate = delegate;
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
-        self.userHasEditPermissions = user.hasEditPermission();
+        let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default());
+        self.userHasEditPermissions = user?.hasEditPermission ?? false;
     }
     
     func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {

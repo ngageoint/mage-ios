@@ -5,7 +5,6 @@
 //
 
 #import "Authentication.h"
-#import "User.h"
 
 @interface LocalAuthentication : NSObject<Authentication>
 

@@ -10,7 +10,6 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ObservationImage.h"
-#import "User.h"
 #import "Location.h"
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
@@ -236,37 +235,53 @@
     }
 }
 
-- (NSArray <BottomSheetItem *>*) createBottomSheetItemsFromAnnotations: (NSSet<id<MKAnnotation>> *) annotations {
-    NSMutableArray<BottomSheetItem *> *items = [NSMutableArray array];
+- (NSArray <BottomSheetItem *>*) createBottomSheetItemsFromAnnotations: (NSSet<id<MKAnnotation>> *) annotations dedup: (NSMutableSet *) dedup {
+//    NSMutableSet *dedup = [NSMutableSet set];
+    NSMutableSet<BottomSheetItem *> *items = [NSMutableSet set];
     
     for (id<MKAnnotation> mkannotation in annotations) {
         if ([mkannotation isKindOfClass:[LocationAnnotation class]]) {
             LocationAnnotation *annotation = mkannotation;
             User *user = annotation.user;
-            
-            BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:user actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
-            [items addObject:bottomSheetItem];
+            if (![dedup containsObject:user]) {
+                [dedup addObject:user];
+                BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:user actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+                [items addObject:bottomSheetItem];
+            }
         } else if ([mkannotation isKindOfClass:[ObservationAnnotation class]]) {
             ObservationAnnotation *annotation = mkannotation;
             Observation *observation = annotation.observation;
-            BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:observation actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
-            [items addObject:bottomSheetItem];
+            if (![dedup containsObject:observation]) {
+                [dedup addObject:observation];
+                BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:observation actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+                [items addObject:bottomSheetItem];
+            }
         } else if ([mkannotation isKindOfClass:[StaticPointAnnotation class]]) {
             StaticPointAnnotation *annotation = mkannotation;
             
             FeatureItem *featureItem = [[FeatureItem alloc] initWithAnnotation:annotation];
-            BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
-            [items addObject:item];
+            if (![dedup containsObject:featureItem]) {
+                [dedup addObject:featureItem];
+                BottomSheetItem *item = [[BottomSheetItem alloc] initWithItem:featureItem actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+                [items addObject:item];
+            }
         } else if ([mkannotation isKindOfClass:[FeedItem class]]) {
             FeedItem *item = (FeedItem *)mkannotation;
-            BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:item actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
-            [items addObject: bottomSheetItem];
+            if (![dedup containsObject:item]) {
+                [dedup addObject:item];
+                BottomSheetItem *bottomSheetItem = [[BottomSheetItem alloc] initWithItem:item actionDelegate:self annotationView:[self.mapView viewForAnnotation:mkannotation]];
+                [items addObject: bottomSheetItem];
+            }
+        } else if ([mkannotation isKindOfClass:[MKClusterAnnotation class]]) {
+            MKClusterAnnotation *cluster = (MKClusterAnnotation *)mkannotation;
+            
+            [items addObjectsFromArray:[self createBottomSheetItemsFromAnnotations:[NSSet setWithArray:cluster.memberAnnotations] dedup:dedup]];
         } else {
             NSLog(@"Annotation is a %@", [mkannotation class]);
         }
     }
 
-    return items;
+    return [items allObjects];
 }
 
 -(void)mapTap: (CGPoint) tapPoint {
@@ -287,7 +302,7 @@
     
     NSSet<id<MKAnnotation>> * annotationsTapped = [self.mapView annotationsInMapRect:MKMapRectMake(mapPoint.x - (tolerance / 2), mapPoint.y - (tolerance / 2), tolerance, tolerance)];
 
-    NSMutableArray<BottomSheetItem *> *bottomSheetItems = [NSMutableArray arrayWithArray: [self createBottomSheetItemsFromAnnotations:annotationsTapped]];
+    NSMutableArray<BottomSheetItem *> *bottomSheetItems = [NSMutableArray arrayWithArray: [self createBottomSheetItemsFromAnnotations:annotationsTapped dedup:[NSMutableSet set]]];
     
     MapShapeObservation *mapShapeObservation = [self.mapObservations clickedShapeAtLocation:tapCoord];
     if (mapShapeObservation != nil) {
@@ -382,10 +397,13 @@
                 double accuracy = annotation.location.horizontalAccuracy;
                 self.selectedUserAccuracy = [LocationAccuracy locationAccuracyWithCenterCoordinate:annotation.location.coordinate radius:accuracy timestamp:annotation.timestamp];
                 [self.mapView addOverlay:self.selectedUserAccuracy];
-                
+                // this keeps the marker pinned where it is supposed to be when it grows
+                item.annotationView.layer.anchorPoint = CGPointMake(0.5, 0.75);
+
                 [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+
                     item.annotationView.transform = CGAffineTransformScale(item.annotationView.transform, 2.0, 2.0);
-                    item.annotationView.centerOffset = CGPointMake(0, -(item.annotationView.image.size.height) + 14);
+//                    item.annotationView.centerOffset = CGPointMake(0, -(item.annotationView.image.size.height));
                     self.enlargedPin = item.annotationView;
                 } completion:nil];
             } else if ([item.annotationView.annotation isKindOfClass:[ObservationAnnotation class]]) {
@@ -1379,7 +1397,7 @@
 - (MKAnnotationView *)mapView:(MKMapView *) mapView viewForAnnotation:(id <MKAnnotation>)annotation {
     if ([annotation isKindOfClass:[LocationAnnotation class]]) {
 		LocationAnnotation *locationAnnotation = annotation;
-        MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView];
+        MKAnnotationView *annotationView = [locationAnnotation viewForAnnotationOnMapView:self.mapView scheme: self.scheme];
         // adjiust the center offset if this is the enlargedPin
         if (annotationView == self.enlargedPin) {
             annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height));
@@ -1392,7 +1410,7 @@
         return annotationView;
     } else if ([annotation isKindOfClass:[ObservationAnnotation class]]) {
         ObservationAnnotation *observationAnnotation = annotation;
-        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.mapView];
+        MKAnnotationView *annotationView = [observationAnnotation viewForAnnotationOnMapView:self.mapView scheme: self.scheme];
         // adjiust the center offset if this is the enlargedPin
         if (annotationView == self.enlargedPin) {
             annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height));
@@ -1406,10 +1424,10 @@
     }
     else if ([annotation isKindOfClass:[StaticPointAnnotation class]]) {
         StaticPointAnnotation *staticAnnotation = annotation;
-        return [staticAnnotation viewForAnnotationOnMapView:self.mapView];
+        return [staticAnnotation viewForAnnotationOnMapView:self.mapView scheme: self.scheme];
     } else if ([annotation isKindOfClass:[AreaAnnotation class]]) {
         AreaAnnotation *areaAnnotation = annotation;
-        return [areaAnnotation viewForAnnotationOnMapView:self.mapView];
+        return [areaAnnotation viewForAnnotationOnMapView:self.mapView scheme: self.scheme];
     } else if ([annotation isKindOfClass:[MKPointAnnotation class]]) {
         MKPointAnnotation *pointAnnotation = (MKPointAnnotation *)annotation;
         MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinAnnotation"];
@@ -1695,7 +1713,6 @@
         MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         annotationView.layer.zPosition = [location.timestamp timeIntervalSinceReferenceDate];
         [annotation setCoordinate:[location location].coordinate];
-        [annotationView setImageForUser:annotation.user];
     }
 }
 
@@ -1714,7 +1731,6 @@
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
         [annotation setCoordinate:coordinate];
-        [annotationView setImageForUser:user];
     }
 }
 
@@ -1793,7 +1809,8 @@
             }
             [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.enlargedPin.transform = CGAffineTransformScale(self.enlargedPin.transform, 0.5, 0.5);
-                self.enlargedPin.centerOffset = CGPointMake(0, -(self.enlargedPin.image.size.height / 2.0) + 7);
+                // put the anchor point back where it is supposed to be after the shrink
+                self.enlargedPin.layer.anchorPoint = CGPointMake(0.5, 0.5);
                 self.enlargedPin = nil;
             } completion:nil];
         } else {

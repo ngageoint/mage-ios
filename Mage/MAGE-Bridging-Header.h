@@ -69,6 +69,7 @@
 
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"
+#import "LocationAnnotation.h"
 
 #pragma mark - Core Data Entities
 #import "Attachment.h"
@@ -79,5 +80,4 @@
 
 #import "Form.h"
 #import "Location.h"
-#import "Team.h"
 #import "Role.h"
