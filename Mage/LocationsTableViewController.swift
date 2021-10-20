@@ -212,9 +212,8 @@ extension LocationsTableViewController: UserActionsDelegate {
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             
             var image: UIImage? = UIImage(named: "me")
-            if let iconUrl = user.iconUrl {
-                let lastUpdated = String(format:"%.0f", (user.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
-                let url = URL(string: "\(iconUrl)?_lastUpdated=\(lastUpdated)")!;
+            if let cacheIconUrl = user.cacheIconUrl {
+                let url = URL(string: cacheIconUrl)!;
                 
                 KingfisherManager.shared.retrieveImage(with: url, options: [
                     .requestModifier(ImageCacheProvider.shared.accessTokenModifier),

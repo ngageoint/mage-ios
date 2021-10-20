@@ -47,10 +47,9 @@ import Kingfisher
     }
     
     @objc public static func setImageForAnnotation(annotation: MKAnnotationView, user: User) {
-        if let iconUrl = user.iconUrl {
+        if let iconUrl = user.cacheIconUrl {
             KingfisherManager.shared.retrieveImage(with: URL(string: iconUrl)!, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-//                .scaleFactor(UIScreen.main.scale),
                 .transition(.fade(1)),
                 .cacheOriginalImage
             ]) { result in
@@ -92,7 +91,7 @@ import Kingfisher
             if let iconColor = user.iconColor {
                 self.markerTintColor = UIColor(hex: iconColor);
                 self.glyphText = user.iconText;
-            } else if let iconUrl = user.iconUrl {
+            } else if let iconUrl = user.cacheIconUrl {
                 KingfisherManager.shared.retrieveImage(with: URL(string: iconUrl)!, options: [
                     .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                     .scaleFactor(UIScreen.main.scale),

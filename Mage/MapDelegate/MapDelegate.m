@@ -13,7 +13,6 @@
 #import "Location.h"
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "MKAnnotationView+PersonIcon.h"
 #import "StaticLayer.h"
 #import "StaticPointAnnotation.h"
 #import "StyledPolygon.h"

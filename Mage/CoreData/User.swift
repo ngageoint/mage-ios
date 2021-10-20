@@ -12,6 +12,26 @@ import Kingfisher
 
 @objc public class User: NSManagedObject {
     
+    @objc public var cacheAvatarUrl: String? {
+        get {
+            let lastUpdated = String(format:"%.0f", (self.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
+            if let avatarUrl = self.avatarUrl {
+                return  "\(avatarUrl)?_lastUpdated=\(lastUpdated)"
+            }
+            return nil;
+        }
+    }
+    
+    @objc public var cacheIconUrl: String? {
+        get {
+            let lastUpdated = String(format:"%.0f", (self.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
+            if let iconUrl = self.iconUrl {
+                return  "\(iconUrl)?_lastUpdated=\(lastUpdated)"
+            }
+            return nil;
+        }
+    }
+    
     @discardableResult
     @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> User? {
         let user = User.mr_createEntity(in: context);
@@ -190,8 +210,7 @@ import Kingfisher
     }
     
     func prefetchIconAndAvatar() {
-        let lastUpdated = String(format:"%.0f", (self.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
-        if let iconUrl = self.iconUrl, let url = URL(string: "\(iconUrl)?_lastUpdated=\(lastUpdated)") {
+        if let cacheIconUrl = cacheIconUrl, let url = URL(string: cacheIconUrl) {
             let prefetcher = ImagePrefetcher(urls: [url], options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                 .diskCacheExpiration(.never)
@@ -200,7 +219,7 @@ import Kingfisher
             }
             prefetcher.start()
         }
-        if let avatarUrl = self.avatarUrl, let url = URL(string: "\(avatarUrl)?_lastUpdated=\(lastUpdated)") {
+        if let cacheAvatarUrl = self.cacheAvatarUrl, let url = URL(string: cacheAvatarUrl) {
             print("caching avatar \(url)")
             let prefetcher = ImagePrefetcher(urls: [url], options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)

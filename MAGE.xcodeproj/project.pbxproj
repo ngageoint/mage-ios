@@ -79,7 +79,6 @@
 		2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */; };
 		2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */; };
 		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
-		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */; };
 		2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FCB1AC81DDA439700A63C71 /* Users.storyboard */; };
 		2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */; };
@@ -662,8 +661,6 @@
 		2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeatureDetail.xib; sourceTree = "<group>"; };
 		2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailViewController.h; sourceTree = "<group>"; };
 		2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailViewController.m; sourceTree = "<group>"; };
-		2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+PersonIcon.h"; sourceTree = "<group>"; };
-		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FC8BB8C2602421400F73B0E /* AuthenticationCoordinator_Server5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator_Server5.h; sourceTree = "<group>"; };
 		2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCoordinator_Server5.m; sourceTree = "<group>"; };
 		2FCB1AC81DDA439700A63C71 /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
@@ -1547,8 +1544,6 @@
 		4C2A38ED19745C0D00E7470A /* People */ = {
 			isa = PBXGroup;
 			children = (
-				2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */,
-				2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */,
 				F795ED0624B8F15D0028FBFC /* UserViewController.swift */,
 				F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */,
 				F7E40A6726939B4100E50E26 /* UserSummaryView.swift */,
@@ -3077,7 +3072,6 @@
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
-				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,

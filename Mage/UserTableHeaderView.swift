@@ -405,9 +405,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                 return;
             }
             var image: UIImage? = UIImage(named: "me")
-            if let iconUrl = self.user?.iconUrl {
-                let lastUpdated = String(format:"%.0f", (self.user?.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
-                let url = URL(string: "\(iconUrl)?_lastUpdated=\(lastUpdated)")!;
+            if let cacheIconUrl = self.user?.cacheIconUrl {
+                let url = URL(string: cacheIconUrl)!;
 
                 KingfisherManager.shared.retrieveImage(with: url, options: [
                     .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
@@ -445,9 +444,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
 extension UserTableHeaderView : UIImagePickerControllerDelegate {
     
     func presentAvatar() {
-        if let avatarUrl = user?.avatarUrl {
-            let lastUpdated = String(format:"%.0f", (user?.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
-            let url = URL(string: "\(avatarUrl)?_lastUpdated=\(lastUpdated)")!;
+        if let cacheAvatarUrl = user?.cacheAvatarUrl {
+            let url = URL(string: cacheAvatarUrl)!;
             if let saveNavigationController = navigationController {
                 let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: saveNavigationController, url: url, contentType: "image", delegate: nil, scheme: scheme);
                 childCoordinators.append(coordinator);
@@ -524,10 +522,12 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
                 
                     if let uploadTask: URLSessionUploadTask = manager?.uploadTask(withStreamedRequest: request, progress: nil, completionHandler: { (response, responseObject, error) in
                         // store the image data for the updated avatar in the cache here
-                        if let avatarUrl = (responseObject as? [AnyHashable: Any])?["avatarUrl"], let image = UIImage(data: imageData) {
-                            let lastUpdated = String(format:"%.0f", (self.user?.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
-                            let url = URL(string: "\(avatarUrl)?_lastUpdated=\(lastUpdated)")!;
-                            ImageCache.default.store(image, original:imageData, forKey: url.absoluteString)
+                        if let avatarUrl = (responseObject as? [AnyHashable: Any])?["avatarUrl"] as? String, let image = UIImage(data: imageData) {
+                            self.user?.avatarUrl = avatarUrl;
+                            if let cacheAvatarUrl = self.user?.cacheAvatarUrl {
+                                let url = URL(string: cacheAvatarUrl)!;
+                                ImageCache.default.store(image, original:imageData, forKey: url.absoluteString)
+                            }
                         }
                     }) as URLSessionUploadTask? {
                         manager?.addTask(uploadTask);

@@ -48,12 +48,10 @@ import Kingfisher
     }
 
     func getAvatarUrl() -> URL? {
-        guard let user = self.user, let avatarUrl = self.user?.avatarUrl else {
+        guard let user = self.user, let cacheAvatarUrl = user.cacheAvatarUrl else {
             return nil;
         }
-        
-        let lastUpdated = String(format:"%.0f", (user.lastUpdated?.timeIntervalSince1970.rounded() ?? 0))
-        return URL(string: "\(avatarUrl)?_lastUpdated=\(lastUpdated)");
+        return URL(string: cacheAvatarUrl);
     }
     
     public func setImage(url: URL?,

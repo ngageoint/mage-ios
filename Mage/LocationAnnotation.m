@@ -8,9 +8,9 @@
 @import MaterialComponents;
 
 #import "LocationAnnotation.h"
-#import "MKAnnotationView+PersonIcon.h"
 #import "SFGeometryUtils.h"
 #import <PureLayout.h>
+#import "MAGE-Swift.h"
 
 @implementation LocationAnnotation
 
