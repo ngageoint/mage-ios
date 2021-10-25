@@ -17,8 +17,8 @@
     if(self != nil){
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [self setLineWidth:[defaults floatForKey:@"fill_default_line_width"]];
-        [self setStrokeColor:[UIColor colorWithHexString:[defaults stringForKey:@"line_default_color"] alpha:[defaults integerForKey:@"line_default_color_alpha"] / 255.0]];
-        [self setFillColor:[UIColor colorWithHexString:[defaults stringForKey:@"fill_default_color"] alpha:[defaults integerForKey:@"fill_default_color_alpha"] / 255.0]];
+        [self setStrokeColor:[UIColor hx_colorWithHexRGBAString:[defaults stringForKey:@"line_default_color"] alpha:[defaults integerForKey:@"line_default_color_alpha"] / 255.0]];
+        [self setFillColor:[UIColor hx_colorWithHexRGBAString:[defaults stringForKey:@"fill_default_color"] alpha:[defaults integerForKey:@"fill_default_color_alpha"] / 255.0]];
     }
     return self;
 }

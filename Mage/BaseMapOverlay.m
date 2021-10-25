@@ -8,7 +8,7 @@
 
 #import "BaseMapOverlay.h"
 #import <GPKGImageConverter.h>
-#import <HexColor.h>
+#import <HexColors.h>
 
 @implementation BaseMapOverlay
 
@@ -27,9 +27,9 @@
     CGPathAddLineToPoint(tilePath, NULL, 0, 0);
     CGPathCloseSubpath(tilePath);
     if (self.darkTheme) {
-        CGContextSetFillColorWithColor(context, [UIColor colorWithHexString:@"#354566"].CGColor);
+        CGContextSetFillColorWithColor(context, [UIColor hx_colorWithHexRGBAString:@"#354566"].CGColor);
     } else {
-        CGContextSetFillColorWithColor(context, [UIColor colorWithHexString:@"#a4dded"].CGColor);
+        CGContextSetFillColorWithColor(context, [UIColor hx_colorWithHexRGBAString:@"#a4dded"].CGColor);
     }
     CGContextAddPath(context, tilePath);
     CGPathDrawingMode tileMode = kCGPathFill;
