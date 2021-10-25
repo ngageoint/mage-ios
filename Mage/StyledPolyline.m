@@ -40,13 +40,13 @@
 
 - (void) lineColorWithHexString: (NSString *) hex andAlpha: (CGFloat) alpha {
     if (hex) {
-        _lineColor = [UIColor colorWithHexString:hex alpha:alpha];
+        _lineColor = [UIColor hx_colorWithHexRGBAString:hex alpha:alpha];
     }
 }
 
 - (void) lineColorWithHexString: (NSString *) hex {
     if (hex) {
-        _lineColor = [UIColor colorWithHexString:hex];
+        _lineColor = [UIColor hx_colorWithHexRGBAString:hex];
     }
 }
 
