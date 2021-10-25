@@ -137,7 +137,7 @@ class UserActionsView: UIView {
         }
         
         if (user.location != nil) {
-            let geometry = user.location?.getGeometry();
+            let geometry = user.location?.geometry;
             if let point: SFPoint = geometry?.centroid() {
                 if (UserDefaults.standard.showMGRS) {
                     latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);

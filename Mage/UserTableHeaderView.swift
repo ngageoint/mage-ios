@@ -277,16 +277,18 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             
         }
         if (userLastLocation == nil) {
-            if let locations = mapDelegate.locations.fetchedResultsController.fetchedObjects {
+            if let controller = mapDelegate.locations.fetchedResultsController as? NSFetchedResultsController<Location>, let locations = controller.fetchedObjects {
                 if (locations.count != 0) {
                     let location: Location = locations[0] as Location
                     let dictionary: [String : Any] = location.properties as! [String : Any];
-                    userLastLocation = CLLocation(
-                        coordinate: location.location().coordinate,
-                        altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
-                        horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
-                        verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
-                        timestamp: location.timestamp!);
+                    if let coordinate = location.location?.coordinate {
+                        userLastLocation = CLLocation(
+                            coordinate: coordinate,
+                            altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
+                            horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                            verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                            timestamp: location.timestamp!);
+                    }
                 }
             }
             mapDelegate.locations.fetchedResultsController.delegate = self;
@@ -401,7 +403,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             }
         }
         alert.addAction(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            guard let location: CLLocationCoordinate2D = self.user?.location?.location().coordinate else {
+            guard let location: CLLocationCoordinate2D = self.user?.location?.location?.coordinate else {
                 return;
             }
             var image: UIImage? = UIImage(named: "me")
@@ -541,10 +543,10 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
 
 extension UserTableHeaderView : NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        if let locations: [Location] = mapDelegate.locations.fetchedResultsController.fetchedObjects {
+        if let controller = mapDelegate.locations.fetchedResultsController as? NSFetchedResultsController<Location>, let locations: [Location] = controller.fetchedObjects {
             self.mapDelegate.updateLocations(locations);
             if (locations.count != 0) {
-                let centroid: SFPoint = SFGeometryUtils.centroid(of: locations[0].getGeometry());
+                let centroid: SFPoint = SFGeometryUtils.centroid(of: locations[0].geometry);
                 let location: CLLocation = CLLocation(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees);
                 zoomAndCenterMap(location: location);
             }

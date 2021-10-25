@@ -5,9 +5,9 @@
 //
 
 #import "Locations.h"
-#import "Location.h"
 #import "Server.h"
 #import "TimeFilter.h"
+#import "MAGE-Swift.h"
 
 @implementation Locations
 

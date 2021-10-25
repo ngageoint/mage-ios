@@ -5,10 +5,10 @@
 //
 
 #import "LocationFetchService.h"
-#import "Location.h"
 #import "MageSessionManager.h"
 #import "UserUtility.h"
 #import "DataConnectionUtilities.h"
+#import "MAGE-Swift.h"
 
 NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
@@ -65,12 +65,12 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 
 - (void) pullLocations{
     if ([DataConnectionUtilities shouldFetchLocations]) {
-        NSURLSessionDataTask *locationFetchTask = [Location operationToPullLocationsWithSuccess: ^{
+        NSURLSessionDataTask *locationFetchTask = [Location operationToPullLocationsWithSuccess:^(NSURLSessionDataTask * _Nonnull task, id _Nullable response) {
             if (![[UserUtility singleton] isTokenExpired]) {
                 NSLog(@"Scheduling the location fetch timer");
                 [self scheduleTimer];
             }
-        } failure:^(NSError* error) {
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"Failed to pull locations, scheduling the timer again");
             [self scheduleTimer];
         }];

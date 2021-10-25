@@ -86,7 +86,7 @@ import CoreData
     @objc public func populate(json: [AnyHashable : Any], feed: Feed) {
         self.remoteId = json["id"] as? String
         
-        let geometry = GeometryDeserializer.parseGeometry(json["geometry"] as? [AnyHashable : Any])
+        let geometry = GeometryDeserializer.parseGeometry(json: json["geometry"] as? [AnyHashable : Any])
         self.simpleFeature = geometry;
         self.properties = json["properties"] as? [AnyHashable : Any]
         if let temporalProperty = feed.itemTemporalProperty, let temporalValue = (self.properties as? [AnyHashable : Any])?[temporalProperty] as? NSNumber {

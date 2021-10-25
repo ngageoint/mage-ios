@@ -177,15 +177,16 @@ class LocationsTableViewController: UITableViewController {
     
     @objc func refreshLocations() {
         refreshControl?.beginRefreshing();
-        let locationFetchTask: URLSessionDataTask = Location.operationToPullLocations {
+        let locationFetchTask: URLSessionDataTask? = Location.operationToPullLocations {_,_ in
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing();
             }
-        } failure: { (_) in
+        } failure: { (_,_)  in
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing();
             }
         }
+        
         MageSessionManager.shared()?.addTask(locationFetchTask);
     }
     
@@ -205,7 +206,7 @@ extension LocationsTableViewController: UserActionsDelegate {
     }
     
     func getDirectionsToUser(_ user: User, sourceView: UIView?) {
-        guard let location: CLLocationCoordinate2D = user.location?.location().coordinate else {
+        guard let location: CLLocationCoordinate2D = user.location?.location?.coordinate else {
             return;
         }
         var extraActions: [UIAlertAction] = [];

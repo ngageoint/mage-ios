@@ -17,7 +17,6 @@
 #import "NSDate+Iso8601.h"
 #import "NSDate+display.h"
 #import "MageServer.h"
-#import "GeometryDeserializer.h"
 #import "SFGeometry.h"
 #import "GeometrySerializer.h"
 #import "SFPolygon.h"
@@ -208,7 +207,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     if ([@"geometry" isEqualToString:type]) {
         SFGeometry *geometry = nil;
         if ([value isKindOfClass:[NSDictionary class]]) {
-            geometry = [GeometryDeserializer parseGeometry:value];
+            geometry = [GeometryDeserializer parseGeometryWithJson:value];
         } else {
             geometry = value;
         }
@@ -407,7 +406,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     [self setState:[NSNumber numberWithInt:(int) state]];
 
     @try {
-    SFGeometry * geometry = [GeometryDeserializer parseGeometry:[json valueForKeyPath:@"geometry"]];
+    SFGeometry * geometry = [GeometryDeserializer parseGeometryWithJson:[json valueForKeyPath:@"geometry"]];
         [self setGeometry:geometry];
     }
     @catch (NSException *e){
@@ -434,7 +433,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
                     // TODO: deserialize attachments properly
                     if ([[field objectForKey:@"type"] isEqualToString:@"geometry"]) {
                         @try {
-                            SFGeometry * geometry = [GeometryDeserializer parseGeometry:value];
+                            SFGeometry * geometry = [GeometryDeserializer parseGeometryWithJson:value];
                             [parsedFormProperties setObject:geometry forKey:formKey];
                         }
                         @catch (NSException *e){

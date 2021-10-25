@@ -7,7 +7,6 @@
 //
 
 #import "LocationAccuracy.h"
-#import "Location.h"
 
 @implementation LocationAccuracy
 

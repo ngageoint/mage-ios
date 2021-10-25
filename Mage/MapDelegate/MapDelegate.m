@@ -10,7 +10,6 @@
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
 #import "ObservationImage.h"
-#import "Location.h"
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "StaticLayer.h"

@@ -25,7 +25,7 @@ extension MapDelegate : UserActionsDelegate {
         self.feedItemToNavigateTo = nil;
         self.resetEnlargedPin();
         self.mageBottomSheet.dismiss(animated: true, completion: {
-            guard let location: CLLocationCoordinate2D = user.location?.location().coordinate else {
+            guard let location: CLLocationCoordinate2D = user.location?.location?.coordinate else {
                 return;
             }
             var extraActions: [UIAlertAction] = [];

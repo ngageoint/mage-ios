@@ -22,21 +22,3 @@ extension GPSLocation {
     @NSManaged var properties: [AnyHashable : Any]?;
     @NSManaged var timestamp: Date?;
 }
-
-//#import "GPSLocation+CoreDataProperties.h"
-
-//@implementation GPSLocation (CoreDataProperties)
-//
-//@dynamic eventId;
-//@dynamic geometryData;
-//@dynamic properties;
-//@dynamic timestamp;
-
-/**
- @property (nullable, nonatomic, retain) NSNumber *eventId;
- @property (nullable, nonatomic, retain) NSData *geometryData;
- @property (nullable, nonatomic, retain) id properties;
- @property (nullable, nonatomic, retain) NSDate *timestamp;
- */
-
-//@end

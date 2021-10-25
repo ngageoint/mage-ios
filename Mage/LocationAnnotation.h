@@ -7,8 +7,9 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 #import "MapAnnotation.h"
-#import "Location.h"
 
+@class User;
+@class Location;
 @class GPSLocation;
 
 @interface LocationAnnotation : MapAnnotation

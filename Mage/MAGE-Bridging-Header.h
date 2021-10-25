@@ -63,7 +63,6 @@
 #import "UINavigationItem+Subtitle.h"
 #import "ObservationFilterTableViewController.h"
 #import "ObservationTableHeaderView.h"
-#import "GeometryDeserializer.h"
 #import "StaticPointAnnotation.h"
 #import "LocationFilterTableViewController.h"
 
@@ -79,5 +78,4 @@
 #import "Layer.h"
 
 #import "Form.h"
-#import "Location.h"
 #import "Role.h"

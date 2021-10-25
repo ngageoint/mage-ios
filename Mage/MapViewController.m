@@ -8,7 +8,6 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import "AppDelegate.h"
-#import "Location.h"
 #import "LocationAnnotation.h"
 #import "LocationService.h"
 #import "ObservationAnnotation.h"

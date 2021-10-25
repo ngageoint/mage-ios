@@ -27,7 +27,7 @@ import sf_ios
         guard let gpsLocation = GPSLocation.mr_createEntity(in: context) else {
             return nil;
         }
-//    @objc public static func gpsLocation(location: CLLocation, context: NSManagedObjectContext) -> GPSLocation {
+        
         let device = UIDevice.current
         device.isBatteryMonitoringEnabled = true;
         var batteryState = "";

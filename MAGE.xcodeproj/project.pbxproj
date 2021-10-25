@@ -175,7 +175,7 @@
 		F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */; };
 		F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */; };
 		F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42502694B60300F9AC3B /* ServerAuthentication.m */; };
-		F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */; };
+		F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */; };
 		F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */; };
 		F72D42E72694B60300F9AC3B /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42532694B60300F9AC3B /* ObservationImage.m */; };
 		F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */; };
@@ -194,7 +194,7 @@
 		F72D42F52694B60300F9AC3B /* TaskSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42732694B60300F9AC3B /* TaskSessionManager.m */; };
 		F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42772694B60300F9AC3B /* StoredPassword.m */; };
 		F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42782694B60300F9AC3B /* LocationFetchService.m */; };
-		F72D42F82694B60300F9AC3B /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42792694B60300F9AC3B /* Location.m */; };
+		F72D42F82694B60300F9AC3B /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42792694B60300F9AC3B /* Location.swift */; };
 		F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */; };
 		F72D42FA2694B60300F9AC3B /* ObservationPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427C2694B60300F9AC3B /* ObservationPushService.m */; };
 		F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427D2694B60300F9AC3B /* Feed.swift */; };
@@ -224,7 +224,7 @@
 		F72D43132694B60300F9AC3B /* ImageryLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A72694B60300F9AC3B /* ImageryLayer.m */; };
 		F72D43142694B60300F9AC3B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A92694B60300F9AC3B /* Event.swift */; };
 		F72D43152694B60300F9AC3B /* Form.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AB2694B60300F9AC3B /* Form.m */; };
-		F72D43162694B60300F9AC3B /* GeometryDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */; };
+		F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */; };
 		F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */; };
 		F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */; };
 		F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */; };
@@ -811,7 +811,7 @@
 		F72D424E2694B60300F9AC3B /* Role+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Role+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D424F2694B60300F9AC3B /* ObservationImportant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportant.h; sourceTree = "<group>"; };
 		F72D42502694B60300F9AC3B /* ServerAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerAuthentication.m; sourceTree = "<group>"; };
-		F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Location+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model1To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42532694B60300F9AC3B /* ObservationImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImage.m; sourceTree = "<group>"; };
 		F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model15To16.xcmappingmodel; sourceTree = "<group>"; };
@@ -823,7 +823,6 @@
 		F72D425A2694B60300F9AC3B /* Canary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canary.m; sourceTree = "<group>"; };
 		F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+MAGE.m"; sourceTree = "<group>"; };
 		F72D425C2694B60300F9AC3B /* Form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Form.h; sourceTree = "<group>"; };
-		F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryDeserializer.h; sourceTree = "<group>"; };
 		F72D425E2694B60300F9AC3B /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F72D42602694B60300F9AC3B /* ImageryLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageryLayer.h; sourceTree = "<group>"; };
 		F72D42612694B60300F9AC3B /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
@@ -847,7 +846,7 @@
 		F72D42762694B60300F9AC3B /* Layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layer.h; sourceTree = "<group>"; };
 		F72D42772694B60300F9AC3B /* StoredPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoredPassword.m; sourceTree = "<group>"; };
 		F72D42782694B60300F9AC3B /* LocationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFetchService.m; sourceTree = "<group>"; };
-		F72D42792694B60300F9AC3B /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		F72D42792694B60300F9AC3B /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model7To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D427B2694B60300F9AC3B /* Attachment+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D427C2694B60300F9AC3B /* ObservationPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPushService.m; sourceTree = "<group>"; };
@@ -893,7 +892,7 @@
 		F72D42A82694B60300F9AC3B /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		F72D42A92694B60300F9AC3B /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		F72D42AB2694B60300F9AC3B /* Form.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Form.m; sourceTree = "<group>"; };
-		F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryDeserializer.m; sourceTree = "<group>"; };
+		F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryDeserializer.swift; sourceTree = "<group>"; };
 		F72D42AD2694B60300F9AC3B /* Canary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canary.h; sourceTree = "<group>"; };
 		F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+MAGE.h"; sourceTree = "<group>"; };
 		F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LdapAuthentication.m; sourceTree = "<group>"; };
@@ -901,11 +900,9 @@
 		F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42B32694B60300F9AC3B /* ObservationImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImage.h; sourceTree = "<group>"; };
 		F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model6To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42B52694B60300F9AC3B /* Location+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Location+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42B62694B60300F9AC3B /* ServerAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAuthentication.h; sourceTree = "<group>"; };
 		F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F72D42B92694B60300F9AC3B /* ObservationPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPushService.h; sourceTree = "<group>"; };
-		F72D42BA2694B60300F9AC3B /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
 		F72D42BB2694B60300F9AC3B /* LocationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFetchService.h; sourceTree = "<group>"; };
 		F72D42BC2694B60300F9AC3B /* StoredPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoredPassword.h; sourceTree = "<group>"; };
 		F72D42BD2694B60300F9AC3B /* Layer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layer.m; sourceTree = "<group>"; };
@@ -1827,8 +1824,7 @@
 				F72D422D2694B60300F9AC3B /* Authentication.m */,
 				F72D425C2694B60300F9AC3B /* Form.h */,
 				F72D42AB2694B60300F9AC3B /* Form.m */,
-				F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */,
-				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */,
+				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */,
 				F72D42932694B60300F9AC3B /* GeometrySerializer.h */,
 				F72D42C92694B60300F9AC3B /* GeometrySerializer.m */,
 				F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */,
@@ -2276,10 +2272,8 @@
 				F72D42BD2694B60300F9AC3B /* Layer.m */,
 				F72D42992694B60300F9AC3B /* Layer+CoreDataProperties.h */,
 				F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */,
-				F72D42BA2694B60300F9AC3B /* Location.h */,
-				F72D42792694B60300F9AC3B /* Location.m */,
-				F72D42B52694B60300F9AC3B /* Location+CoreDataProperties.h */,
-				F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */,
+				F72D42792694B60300F9AC3B /* Location.swift */,
+				F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */,
 				F72D428C2694B60300F9AC3B /* Observation.h */,
 				F72D42D02694B60300F9AC3B /* Observation.m */,
 				F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */,
@@ -3101,7 +3095,7 @@
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m in Sources */,
-				F72D42F82694B60300F9AC3B /* Location.m in Sources */,
+				F72D42F82694B60300F9AC3B /* Location.swift in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */,
@@ -3271,7 +3265,7 @@
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
-				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.m in Sources */,
+				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
 				F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
@@ -3326,7 +3320,7 @@
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */,
 				F72D43252694B60300F9AC3B /* Role.m in Sources */,
-				F72D43162694B60300F9AC3B /* GeometryDeserializer.m in Sources */,
+				F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.m in Sources */,
