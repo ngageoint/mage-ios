@@ -53,7 +53,7 @@
     }
     
     if ([strategy objectForKey:@"buttonColor"] != NULL) {
-        self.buttonColor = [UIColor colorWithHexString:[strategy valueForKey:@"buttonColor"] alpha:1.0];
+        self.buttonColor = [UIColor hx_colorWithHexRGBAString:[strategy valueForKey:@"buttonColor"] alpha:1.0];
     } else {
         self.buttonColor = self.scheme ? self.scheme.colorScheme.surfaceColor : UIColor.whiteColor;
     }
@@ -62,7 +62,7 @@
     [self setButtonBackgroundColor:self.buttonColor];
 
     if ([strategy objectForKey:@"textColor"] != NULL) {
-        self.loginButtonLabel.textColor = [UIColor colorWithHexString:[strategy valueForKey:@"textColor"] alpha:1.0];
+        self.loginButtonLabel.textColor = [UIColor hx_colorWithHexRGBAString:[strategy valueForKey:@"textColor"] alpha:1.0];
     } else {
         self.loginButtonLabel.textColor = self.scheme ? self.scheme.colorScheme.onSurfaceColor : [UIColor labelColor];
     }

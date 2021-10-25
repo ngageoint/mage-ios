@@ -8,7 +8,7 @@
 
 #import "EventInformationController.h"
 #import "EventInformationView.h"
-#import <HexColor.h>
+#import <HexColors.h>
 
 @interface EventInformationController ()
 @property (strong, nonatomic) NSArray* forms;
@@ -87,7 +87,7 @@ static const NSInteger FORMS_SECTION = 0;
     cell.detailTextLabel.text = [form valueForKey:@"description"];
     cell.imageView.image = [UIImage imageNamed:@"form"];
     if ([form valueForKey:@"color"] != nil) {
-        cell.imageView.tintColor = [UIColor colorWithHexString:[form valueForKey:@"color"]];
+        cell.imageView.tintColor = [UIColor hx_colorWithHexRGBAString:[form valueForKey:@"color"]];
     } else {
         cell.imageView.tintColor = self.scheme.colorScheme.primaryColor;
     }
