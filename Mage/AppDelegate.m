@@ -77,6 +77,7 @@
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
     self.window.backgroundColor = [UIColor blackColor];
+    self.window.overrideUserInterfaceStyle = [[NSUserDefaults standardUserDefaults] integerForKey:@"themeOverride"];
     
     [self createLoadingView];
     

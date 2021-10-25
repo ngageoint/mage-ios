@@ -24,6 +24,7 @@
 #import "DisclaimerViewController.h"
 #import "LocationDisplayTableViewController.h"
 #import "TimeSettingsTableViewController.h"
+#import "ThemeTableViewController.h"
 #import "DataSynchronizationSettingsTableViewController.h"
 #import "LocationServicesSettingsTableViewController.h"
 #import "ObservationServicesSettingsTableViewController.h"
@@ -135,6 +136,12 @@
         }
         case kDataSynchronization: {
             DataSynchronizationSettingsTableViewController *viewController = [[DataSynchronizationSettingsTableViewController alloc] initWithScheme: self.scheme];
+            [self showSetting:viewController];
+            break;
+        }
+        case kTheme: {
+            ThemeTableViewController *viewController = [[ThemeTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }

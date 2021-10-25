@@ -292,6 +292,7 @@
 		F755B55B25E41BFF008E8D41 /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
 		F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F75A10F12048B037002F9906 /* TableSectionHeader.xib */; };
+		F75BF90D272762BC00D913D2 /* ThemeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F75BF90C272762BC00D913D2 /* ThemeTableViewController.m */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
@@ -981,6 +982,8 @@
 		F755B55A25E41BFF008E8D41 /* testRecording.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testRecording.mp4; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
 		F75A10F12048B037002F9906 /* TableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
+		F75BF90B272762BC00D913D2 /* ThemeTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThemeTableViewController.h; sourceTree = "<group>"; };
+		F75BF90C272762BC00D913D2 /* ThemeTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemeTableViewController.m; sourceTree = "<group>"; };
 		F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 19.xcdatamodel"; sourceTree = "<group>"; };
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
@@ -1653,6 +1656,8 @@
 				F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */,
 				F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */,
 				F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */,
+				F75BF90B272762BC00D913D2 /* ThemeTableViewController.h */,
+				F75BF90C272762BC00D913D2 /* ThemeTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -3171,6 +3176,7 @@
 				F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */,
 				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
+				F75BF90D272762BC00D913D2 /* ThemeTableViewController.m in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,

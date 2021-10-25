@@ -338,10 +338,33 @@ static const NSInteger LEGAL_SECTION = 8;
 
 - (NSDictionary *) displaySection {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
+    NSString *themeString = @"";
+    switch ([UIWindow getInterfaceStyle]) {
+        case UIUserInterfaceStyleUnspecified:
+            themeString = @"Follow system theme";
+            break;
+        case UIUserInterfaceStyleDark:
+            themeString = @"Dark theme";
+            break;
+        case UIUserInterfaceStyleLight:
+            themeString = @"Light theme";
+            break;
+        default:
+            themeString = @"Follow system theme";
+            break;
+    }
     return [@{
         @"header": @"Display Settings",
-        @"rows": @[@{
+        @"rows": @[
+            @{
+                     @"type": [NSNumber numberWithInteger:kTheme],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                     @"image": @"brightness_medium",
+                     @"textLabel": @"Theme",
+                     @"detailTextLabel": themeString,
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                     },
+            @{
                        @"type": [NSNumber numberWithInteger:kTimeDisplay],
                        @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
                        @"image": @"access_time",
@@ -408,14 +431,6 @@ static const NSInteger LEGAL_SECTION = 8;
     return [@{
       @"header": @"Settings",
       @"rows": @[
-//            @{
-//                     @"type": [NSNumber numberWithInteger:kTheme],
-//                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-//                     @"image": @"brightness_medium",
-//                     @"textLabel": @"Theme",
-//                     @"detailTextLabel": [[[ThemeManager sharedManager] curentThemeDefinition] displayName],
-//                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
-//                     },
                  @{
                      @"type": [NSNumber numberWithInteger:kChangePassword],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],

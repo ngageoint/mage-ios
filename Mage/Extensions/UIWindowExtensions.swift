@@ -16,4 +16,20 @@ extension UIWindow {
             .interfaceOrientation
             .isLandscape ?? false
     }
+
+    @objc static func forceDarkMode() {
+        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.overrideUserInterfaceStyle = .dark;
+    }
+    
+    @objc static func forceLightMode() {
+        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.overrideUserInterfaceStyle = .light;
+    }
+    
+    @objc static func followSystemColors() {
+        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.overrideUserInterfaceStyle = .unspecified;
+    }
+    
+    @objc static func getInterfaceStyle() -> UIUserInterfaceStyle {
+        return (UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.overrideUserInterfaceStyle) ?? .unspecified;
+    }
 }
