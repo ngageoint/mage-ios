@@ -189,11 +189,11 @@ import Kingfisher
         if let userRole = json["role"] as? [AnyHashable : Any] {
             if let roleId = userRole["id"] as? String, let role = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleId, in: context) {
                 self.role = role;
-                role.addUsersObject(self);
+                role.addToUsers(self);
             } else {
-                let role = Role.insert(forJson: userRole, in: context);
+                let role = Role.insert(json: userRole, context: context);
                 self.role = role;
-                role.addUsersObject(self);
+                role?.addToUsers(self);
             }
         }
     }

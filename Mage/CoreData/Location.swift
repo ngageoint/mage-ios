@@ -15,7 +15,10 @@ import sf_ios
     
     @objc public var geometry: SFGeometry? {
         get {
-            SFGeometryUtils.decodeGeometry(self.geometryData);
+            if let geometryData = self.geometryData {
+                return SFGeometryUtils.decodeGeometry(geometryData);
+            }
+            return nil
         }
         set {
             self.geometryData = SFGeometryUtils.encode(newValue);
@@ -24,7 +27,7 @@ import sf_ios
     
     @objc public var location: CLLocation? {
         get {
-            if let centroid = SFGeometryUtils.centroid(of: self.geometry) {
+            if let geometry = geometry, let centroid = SFGeometryUtils.centroid(of: geometry) {
                 return CLLocation(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue);
             }
             return CLLocation(latitude: 0, longitude: 0);
@@ -57,8 +60,12 @@ import sf_ios
         }
         self.timestamp = date;
         
-        if let geometry = json["goemetry"] as? [AnyHashable: Any], let parsed = GeometryDeserializer.parseGeometry(json: geometry) {
-            self.geometry = parsed;
+        // not quite sure why i have to do this, instead of having this on the same line as the if let...
+        let jsonGeometry = json["geometry"] as? [AnyHashable : Any];
+        if let jsonGeometry = jsonGeometry {
+            if let parsed = GeometryDeserializer.parseGeometry(json: jsonGeometry) {
+                self.geometry = parsed;
+            }
         }
     }
     

@@ -308,7 +308,7 @@ import MaterialComponents.MDCCard
         if (MageServer.isServerVersion5()) {
             if let observation = observation {
                 let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: observation, attachmentSelectionDelegate: self, viewController: self);
-                let attachmentHeader: CardHeader = CardHeader();
+                let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
                 attachmentCard.applyTheme(withScheme: scheme);
                 attachmentHeader.applyTheme(withScheme: scheme);
                 stackView.addArrangedSubview(attachmentHeader);

@@ -10,7 +10,6 @@
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"
 #import "Attachment.h"
-#import "Role.h"
 #import "Server.h"
 #import "MageSessionManager.h"
 #import "MageEnums.h"

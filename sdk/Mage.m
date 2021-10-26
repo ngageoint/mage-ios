@@ -11,7 +11,6 @@
 #import "ObservationFetchService.h"
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"
-#import "Role.h"
 #import "MAGE-Swift.h"
 #import "Form.h"
 #import "Layer.h"
