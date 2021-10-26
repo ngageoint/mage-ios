@@ -93,11 +93,6 @@
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleProminent;
     self.searchController.searchBar.translucent = YES;
-    
-    if (@available(iOS 13.0, *)) {
-    } else {
-        self.searchController.searchBar.barStyle = UIBarStyleBlack;
-    }
 
     self.navigationItem.searchController = self.searchController;
     [self applyThemeWithContainerScheme:self.scheme];

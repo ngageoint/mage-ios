@@ -26,11 +26,7 @@ import Foundation
     @objc public init(scheme: MDCContainerScheming?) {
         self.scheme = scheme;
         super.init(style: .grouped)
-        if #available(iOS 14.0, *) {
-            tableView.register(cellClass: ColorPickerCell.self)
-        } else {
-            tableView.register(cellClass: ColorPickerCelliOS13.self)
-        }
+        tableView.register(cellClass: ColorPickerCell.self)
     }
     
     public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
@@ -91,25 +87,14 @@ import Foundation
             cell.detailTextLabel?.textColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
             return cell;
         }
-        if #available(iOS 14.0, *) {
-            let colorCell: ColorPickerCell = tableView.dequeue(cellClass: ColorPickerCell.self, forIndexPath: indexPath)
-            if (indexPath.row == 0) {
-                colorCell.colorPreference = #keyPath(UserDefaults.bearingTargetColor)
-            }
-            if (indexPath.row == 1) {
-                colorCell.colorPreference = #keyPath(UserDefaults.headingColor)
-            }
-            cell = colorCell
-        } else {
-            let colorCell: ColorPickerCelliOS13 = tableView.dequeue(cellClass: ColorPickerCelliOS13.self, forIndexPath: indexPath)
-            if (indexPath.row == 0) {
-                colorCell.colorPreference = #keyPath(UserDefaults.bearingTargetColor)
-            }
-            if (indexPath.row == 1) {
-                colorCell.colorPreference = #keyPath(UserDefaults.headingColor)
-            }
-            cell = colorCell
+        let colorCell: ColorPickerCell = tableView.dequeue(cellClass: ColorPickerCell.self, forIndexPath: indexPath)
+        if (indexPath.row == 0) {
+            colorCell.colorPreference = #keyPath(UserDefaults.bearingTargetColor)
         }
+        if (indexPath.row == 1) {
+            colorCell.colorPreference = #keyPath(UserDefaults.headingColor)
+        }
+        cell = colorCell
         
         if (indexPath.row == 0) {
             cell.textLabel?.text = "Relative Bearing Line Color";
@@ -136,22 +121,6 @@ import Foundation
         if (indexPath.row == 2) {
             UserDefaults.standard.showHeading = !UserDefaults.standard.showHeading
             tableView.reloadData()
-        }
-        if #available(iOS 14.0, *) {
-
-        } else {
-            // delete this after ios13 support is dropped
-            tableView.deselectRow(at: indexPath, animated: true);
-            if (indexPath.row == 0) {
-                ios13ColorPicker.preferenceTitle = "Relative Bearing Line Color"
-                ios13ColorPicker.colorPreference = #keyPath(UserDefaults.bearingTargetColor);
-                present(ios13ColorPicker, animated: true, completion: nil);
-            }
-            if (indexPath.row == 1) {
-                ios13ColorPicker.preferenceTitle = "Heading Line Color"
-                ios13ColorPicker.colorPreference = #keyPath(UserDefaults.headingColor);
-                present(ios13ColorPicker, animated: true, completion: nil);
-            }
         }
     }
     

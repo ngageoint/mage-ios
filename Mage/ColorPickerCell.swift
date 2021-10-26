@@ -8,7 +8,6 @@
 
 import Foundation
 
-@available(iOS 14.0, *)
 class ColorPickerCell: UITableViewCell {
     
     let colorWell = UIColorWell(forAutoLayout: ())
