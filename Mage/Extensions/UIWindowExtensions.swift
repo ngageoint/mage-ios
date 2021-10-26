@@ -18,15 +18,27 @@ extension UIWindow {
     }
 
     @objc static func forceDarkMode() {
-        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.overrideUserInterfaceStyle = .dark;
+        if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+            UIView.transition (with: window, duration: 0.4, options: .transitionCrossDissolve, animations: {
+                window.overrideUserInterfaceStyle = .dark
+            }, completion: nil)
+        }
     }
     
     @objc static func forceLightMode() {
-        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.overrideUserInterfaceStyle = .light;
+        if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+            UIView.transition (with: window, duration: 0.4, options: .transitionCrossDissolve, animations: {
+                window.overrideUserInterfaceStyle = .light
+            }, completion: nil)
+        }
     }
     
     @objc static func followSystemColors() {
-        UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.overrideUserInterfaceStyle = .unspecified;
+        if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+            UIView.transition (with: window, duration: 0.4, options: .transitionCrossDissolve, animations: {
+                window.overrideUserInterfaceStyle = .unspecified
+            }, completion: nil)
+        }
     }
     
     @objc static func getInterfaceStyle() -> UIUserInterfaceStyle {
