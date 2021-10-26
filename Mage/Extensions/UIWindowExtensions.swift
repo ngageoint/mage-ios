@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension UIWindow {
     @objc static var isLandscape: Bool {
@@ -37,6 +38,14 @@ extension UIWindow {
         if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
             UIView.transition (with: window, duration: 0.4, options: .transitionCrossDissolve, animations: {
                 window.overrideUserInterfaceStyle = .unspecified
+            }, completion: nil)
+        }
+    }
+    
+    @objc static func updateThemeFromPreferences() {
+        if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+            UIView.transition (with: window, duration: 0.4, options: .transitionCrossDissolve, animations: {
+                window.overrideUserInterfaceStyle = UIUserInterfaceStyle(rawValue: UserDefaults.standard.themeOverride) ?? .unspecified
             }, completion: nil)
         }
     }

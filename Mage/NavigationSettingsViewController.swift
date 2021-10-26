@@ -12,13 +12,6 @@ import Foundation
     
     var scheme: MDCContainerScheming?;
     
-    // delete this when ios13 is not needed
-    private lazy var ios13ColorPicker: ColorPickerViewController = {
-        let ios13ColorPicker = ColorPickerViewController(containerScheme: self.scheme);
-        ios13ColorPicker.modalPresentationStyle = .pageSheet;
-        return ios13ColorPicker;
-    }()
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -46,18 +39,17 @@ import Foundation
         tableView.estimatedRowHeight = 72
         
         self.navigationItem.title = "Navigation Settings"
+        self.navigationItem.largeTitleDisplayMode = .never
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = false
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.bearingTargetColor), options: .new, context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.headingColor), options: .new, context: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
         UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.bearingTargetColor))
         UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.headingColor))
     }

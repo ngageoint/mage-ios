@@ -154,7 +154,7 @@ extension Notification.Name {
         }
     }
     
-    var theme: Int {
+    var themeOverride: Int {
         get {
             return integer(forKey: #function)
         }
