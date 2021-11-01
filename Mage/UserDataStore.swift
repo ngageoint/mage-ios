@@ -26,7 +26,7 @@ class UserDataStore: NSObject {
         self.tableView.delegate = self;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
     }
     

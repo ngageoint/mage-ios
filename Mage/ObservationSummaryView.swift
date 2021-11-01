@@ -71,8 +71,8 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         fatalError("This class does not support NSCoding")
     }
     
-    override init(imageOverride: UIImage? = nil) {
-        super.init(imageOverride: imageOverride);
+    override init(imageOverride: UIImage? = nil, hideImage: Bool = false) {
+        super.init(imageOverride: imageOverride, hideImage: hideImage);
         self.addSubview(errorBadge);
         self.addSubview(syncBadge);
     }
@@ -127,11 +127,11 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         }
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
         super.applyTheme(withScheme: scheme);
-        errorShapeLayer.fillColor = scheme.colorScheme.errorColor.cgColor
+        errorShapeLayer.fillColor = scheme?.colorScheme.errorColor.cgColor
         exclamation.tintColor = UIColor.white;
-        syncShapeLayer.fillColor = scheme.colorScheme.secondaryColor.cgColor;
+        syncShapeLayer.fillColor = scheme?.colorScheme.secondaryColor.cgColor;
         sync.tintColor = UIColor.white;
     }
 }

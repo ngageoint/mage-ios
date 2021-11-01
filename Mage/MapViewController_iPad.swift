@@ -68,8 +68,9 @@ import PureLayout
     }
     
     @objc func profileButtonTapped(_ sender: UIView) {
-        let user: User = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
-        delegate?.viewUser?(user);
+        if let user: User = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
+            delegate?.viewUser?(user);
+        }
     }
     
     @objc func mapSettingsTapped(_ sender: UIView) {

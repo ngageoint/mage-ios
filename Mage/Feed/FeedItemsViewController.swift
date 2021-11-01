@@ -19,7 +19,7 @@ import Kingfisher
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
         
         // Configure Fetch Request
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "temporalSortValue", ascending: false), NSSortDescriptor(key: "remoteId", ascending: true)]
         
         // Create Fetched Results Controller
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
@@ -50,29 +50,13 @@ import Kingfisher
         tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.tableView.separatorStyle = .none;
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
@@ -100,9 +84,7 @@ import Kingfisher
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
+        applyTheme(withContainerScheme: scheme);
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -201,7 +183,7 @@ extension FeedItemsViewController: FeedItemActionsDelegate {
                 }
             }
             
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: feedItem.coordinate))
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: feedItem.coordinate, feedItem: feedItem))
         }));
         ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }

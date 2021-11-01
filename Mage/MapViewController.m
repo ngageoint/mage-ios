@@ -8,8 +8,6 @@
 
 #import "UINavigationItem+Subtitle.h"
 #import "AppDelegate.h"
-#import "User.h"
-#import "Location.h"
 #import "LocationAnnotation.h"
 #import "LocationService.h"
 #import "ObservationAnnotation.h"
@@ -21,8 +19,6 @@
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
 #import "ObservationAnnotation.h"
-#import "Event.h"
-#import "GPSLocation.h"
 #import "MageFilter.h"
 #import "SFPoint.h"
 #import "ObservationAnnotationView.h"
@@ -92,28 +88,6 @@
         self.scheme = containerScheme;
     }
     
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
-    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
-    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    
-    self.navigationController.navigationBar.standardAppearance = appearance;
-    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    
-    
     self.trackingButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.trackingButton.tintColor = self.scheme.colorScheme.primaryColor;
     self.reportLocationButton.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -182,6 +156,11 @@
     [self applyThemeWithContainerScheme:self.scheme];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    // this will force the offline map to update
+    [self.mapDelegate setupMapType];
+}
+
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     self.mapDelegate.trackViewState = true;
@@ -222,8 +201,8 @@
     [self setNavBarTitle];
     
     [self setupListeners];
-    Event *currentEvent = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
-    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEvent:[User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]]]];
+    Event *currentEvent = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
+    [self setupReportLocationButtonWithTrackingState:[[defaults objectForKey:kReportLocationKey] boolValue] userInEvent:[currentEvent isUserInEventWithUser:[User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]]]];
     [self setupMapSettingsButton];
     
     // Start the timer for updating the circles
@@ -381,9 +360,9 @@
 
 - (void) setNavBarTitle {
     if ([[MageFilter getFilterString] length] != 0 || [[MageFilter getLocationFilterString] length] != 0) {
-        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
+        [self setNavBarTitle:[Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:@"Showing filtered results."];
     } else {
-        [self setNavBarTitle:[Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:nil];
+        [self setNavBarTitle:[Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]].name andSubtitle:nil];
     }
 }
 
@@ -458,7 +437,7 @@
         self.mapDelegate.hideLocations = [object boolForKey:keyPath];
     } else if ([kReportLocationKey isEqualToString:keyPath] && self.mapView) {
         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]]];
+        [self setupReportLocationButtonWithTrackingState:[object boolForKey:keyPath] userInEvent:[[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserWithContext:context]]];
     } else if ([kObservationTimeFilterKey isEqualToString:keyPath] || [kObservationTimeFilterUnitKey isEqualToString:keyPath] || [kObservationTimeFilterNumberKey isEqualToString:keyPath]) {
         self.mapDelegate.observations = [Observations observationsForMap];
         [self setNavBarTitle];
@@ -523,7 +502,7 @@
     NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
     BOOL newState =![[defaults objectForKey:kReportLocationKey] boolValue];
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-    BOOL inEvent = [[Event getCurrentEventInContext:context] isUserInEvent:[User fetchCurrentUserInManagedObjectContext:context]];
+    BOOL inEvent = [[Event getCurrentEventWithContext:context] isUserInEventWithUser:[User fetchCurrentUserWithContext:context]];
     if (!inEvent) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Not In Event"
                                                                         message:@"You cannot report your location for an event you are not part of."
@@ -560,11 +539,11 @@
         circle.tag = 998;
         circle.layer.cornerRadius = 10;
         circle.layer.borderWidth = .5;
-        circle.layer.borderColor = [[self.scheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.6] CGColor];
+        circle.layer.borderColor = [[self.scheme.colorScheme.onSecondaryColor colorWithAlphaComponent:0.6] CGColor];
         [circle setBackgroundColor:self.scheme.colorScheme.primaryColorVariant];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"download"]];
         [imageView setFrame:CGRectMake(3, 2, 14, 15)];
-        [imageView setTintColor:self.scheme.colorScheme.onPrimaryColor];
+        [imageView setTintColor:self.scheme.colorScheme.onSecondaryColor];
         [circle addSubview:imageView];
         [self.mapSettingsButton addSubview:circle];
     } else {
@@ -639,7 +618,7 @@
 -(void) singleTapGesture:(UITapGestureRecognizer *) tapGestureRecognizer {
     if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded){
         CGPoint cgPoint = [tapGestureRecognizer locationInView:self.mapView];
-        [self.mapDelegate mapClickAtPoint:cgPoint];
+        [self.mapDelegate mapTap:cgPoint];
     }
 }
 

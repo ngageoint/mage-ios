@@ -51,7 +51,11 @@ class FeedItemActionsView: UIView {
     }()
     
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
@@ -66,9 +70,7 @@ class FeedItemActionsView: UIView {
         self.configureForAutoLayout();
         layoutView();
         populate(feedItem: feedItem, delegate: actionsDelegate);
-        if let safeScheme = self.scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     func layoutView() {
@@ -91,7 +93,7 @@ class FeedItemActionsView: UIView {
         self.feedItem = feedItem;
         self.actionsDelegate = delegate;
         
-        if let coordinate = self.feedItem?.coordinate {
+        if let coordinate = self.feedItem?.coordinate, CLLocationCoordinate2DIsValid(coordinate) {
             if (UserDefaults.standard.showMGRS) {
                 latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(coordinate), for: .normal);
             } else {
@@ -103,9 +105,7 @@ class FeedItemActionsView: UIView {
             latitudeLongitudeButton.isHidden = true;
         }
         
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     @objc func getDirectionsToFeature(_ sender: UIButton) {

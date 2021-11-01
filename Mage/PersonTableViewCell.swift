@@ -60,7 +60,11 @@ class PersonTableViewCell : UITableViewCell {
         }
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.backgroundColor;
         card.applyTheme(withScheme: scheme);
@@ -85,9 +89,7 @@ class PersonTableViewCell : UITableViewCell {
             userSummaryView.populate(item: user);
             actionsView.populate(user: user, delegate: actionsDelegate);
         }
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     override func updateConstraints() {

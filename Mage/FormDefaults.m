@@ -7,10 +7,8 @@
 //
 
 #import "FormDefaults.h"
-#import "Event.h"
 #import "GeometrySerializer.h"
-#import "GeometryDeserializer.h"
-
+#import "MAGE-Swift.h"
 @interface FormDefaults()
 @property (assign, nonatomic) NSInteger eventId;
 @property (assign, nonatomic) NSInteger formId;
@@ -95,7 +93,7 @@ static NSString *FORM_DEFAULTS_FORMAT = @"EVENT_%ld_FORM_%ld";
 - (void) deserializeGeometryForField:(NSMutableDictionary *) field {
     id geometryJson = [field objectForKey:@"value"];
     if (geometryJson) {
-        SFGeometry *geometry = [GeometryDeserializer parseGeometry:geometryJson];
+        SFGeometry *geometry = [GeometryDeserializer parseGeometryWithJson:geometryJson];
         [field setObject:geometry forKey:@"value"];
     }
 }

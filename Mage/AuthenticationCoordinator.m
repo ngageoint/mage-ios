@@ -24,6 +24,7 @@
 #import "Authentication.h"
 #import "UIColor+Hex.h"
 #import "ContactInfo.h"
+#import "MAGE-Swift.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
@@ -188,7 +189,7 @@ BOOL signingIn = YES;
 
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
     self.server = mageServer;
-    User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.loginView animated:NO];
@@ -212,7 +213,7 @@ BOOL signingIn = YES;
 }
 
 - (BOOL) didUserChange: (NSString *) username {
-    User *currentUser = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 
@@ -232,7 +233,7 @@ BOOL signingIn = YES;
                                                                             preferredStyle:UIAlertControllerStyleAlert];
                     alert.accessibilityLabel = @"Loss of Unsaved Data";
                     [alert addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                        [MagicalRecord deleteAndSetupMageCoreDataStack];
+                        [MageInitializer clearServerSpecificData];
                         [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
                     }]];
                     
@@ -242,7 +243,7 @@ BOOL signingIn = YES;
                     
                     [weakSelf.navigationController presentViewController:alert animated:YES completion:nil];
                 } else {
-                    [MagicalRecord deleteAndSetupMageCoreDataStack];
+                    [MageInitializer clearServerSpecificData];
                     [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
                 }
                 

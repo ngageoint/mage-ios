@@ -14,7 +14,7 @@ import MaterialComponents.MDCCard;
     private var constructed = false;
     private var didSetUpConstraints = false;
     private var observation: Observation?;
-    private var actionsDelegate: ObservationActionsDelegate?;
+    private weak var actionsDelegate: ObservationActionsDelegate?;
     
     private lazy var card: MDCCard = {
         let card = MDCCard(forAutoLayout: ());
@@ -37,17 +37,21 @@ import MaterialComponents.MDCCard;
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.backgroundColor = scheme.colorScheme.backgroundColor;
         card.applyTheme(withScheme: scheme);
         compactView.applyTheme(withScheme: scheme);
     }
     
     @objc func tap(_ card: MDCCard) {
-        if let safeObservation = observation {
+        if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewObservation?(safeObservation);
+                self.actionsDelegate?.viewObservation?(observation);
             }
         }
     }
@@ -59,9 +63,7 @@ import MaterialComponents.MDCCard;
         
         compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
         
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     override func updateConstraints() {

@@ -8,6 +8,8 @@
 
 import Foundation
 import PureLayout
+import CoreData
+import Kingfisher
 
 class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var didSetupConstraints = false;
@@ -18,7 +20,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     var currentUserIsMe: Bool = false;
     var childCoordinators: [Any] = [];
     weak var navigationController: UINavigationController?;
-    var scheme: MDCContainerScheming!;
+    var scheme: MDCContainerScheming?;
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
@@ -46,25 +48,28 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         super.updateConstraints();
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
-        self.backgroundColor = self.scheme.colorScheme.backgroundColor;
+        guard let scheme = self.scheme else {
+            return
+        }
+        self.backgroundColor = scheme.colorScheme.backgroundColor;
         
-        avatarBorder.backgroundColor = self.scheme.colorScheme.backgroundColor;
-        avatarImage.tintColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        nameField.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        avatarBorder.backgroundColor = scheme.colorScheme.backgroundColor;
+        avatarImage.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        nameField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         
-        locationIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        locationLabel.textColor = self.scheme.colorScheme.primaryColor;
-        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        locationIcon.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        locationLabel.textColor = scheme.colorScheme.primaryColor;
+        locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
         
-        emailIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        emailLabel.textColor = self.scheme.colorScheme.primaryColor;
-        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        emailIcon.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        emailLabel.textColor = scheme.colorScheme.primaryColor;
+        emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
         
-        phoneIcon.textColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        phoneLabel.textColor = self.scheme.colorScheme.primaryColor;
-        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.primaryColor];
+        phoneIcon.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        phoneLabel.textColor = scheme.colorScheme.primaryColor;
+        phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
     }
     
     private lazy var mapDelegate: MapDelegate = {
@@ -92,10 +97,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return border;
     }()
     
-    private lazy var avatarImage: UIImageView = {
-        let avatarImage = UIImageView(forAutoLayout: ());
-        avatarImage.contentMode = .scaleAspectFit;
-        avatarImage.image = UIImage(named: "portrait");
+    private lazy var avatarImage: UserAvatarUIImageView = {
+        let avatarImage = UserAvatarUIImageView(image: nil);
         return avatarImage;
     }()
     
@@ -222,7 +225,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return emailLabel;
     }()
     
-    @objc public convenience init(user: User, scheme: MDCContainerScheming) {
+    @objc public convenience init(user: User, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.configureForAutoLayout();
@@ -256,10 +259,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         mapDelegate.locations = Locations.init(for: user);
         
         if (currentUserIsMe) {
-            let locations: [GPSLocation] = GPSLocation.fetchLastXGPSLocations(1)
+            let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
             if (locations.count != 0) {
                 let location: GPSLocation = locations[0]
-                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.getGeometry());
+                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.geometry);
                 let dictionary: [String : Any] = location.properties as! [String : Any];
                 userLastLocation = CLLocation(
                     coordinate: CLLocationCoordinate2D(
@@ -274,16 +277,18 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             
         }
         if (userLastLocation == nil) {
-            if let locations = mapDelegate.locations.fetchedResultsController.fetchedObjects {
+            if let controller = mapDelegate.locations.fetchedResultsController as? NSFetchedResultsController<Location>, let locations = controller.fetchedObjects {
                 if (locations.count != 0) {
                     let location: Location = locations[0] as Location
                     let dictionary: [String : Any] = location.properties as! [String : Any];
-                    userLastLocation = CLLocation(
-                        coordinate: location.location().coordinate,
-                        altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
-                        horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
-                        verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
-                        timestamp: location.timestamp!);
+                    if let coordinate = location.location?.coordinate {
+                        userLastLocation = CLLocation(
+                            coordinate: coordinate,
+                            altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
+                            horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                            verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                            timestamp: location.timestamp!);
+                    }
                 }
             }
             mapDelegate.locations.fetchedResultsController.delegate = self;
@@ -315,13 +320,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         emailLabel.text = user.email;
         emailView.isHidden = user.email == nil ? true : false;
         
-        if let avatarUrl = user.avatarUrl {
-            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
-                let avatarFile: String = (documentsDirectories[0] as NSString).appendingPathComponent(avatarUrl);
-                avatarImage.image = UIImage(contentsOfFile: avatarFile);
-            }
-        }
+        self.avatarImage.kf.indicatorType = .activity;
+        avatarImage.setUser(user: user);
+        let cacheOnly = DataConnectionUtilities.shouldFetchAvatars();
+        avatarImage.showImage(cacheOnly: cacheOnly);
     }
     
     func zoomAndCenterMap(location: CLLocation) {
@@ -332,8 +334,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     }
     
     @objc public func updateUserDefaults(notification: Notification) {
-        if let safeLocation = userLastLocation {
-            setLocationText(userLastLocation: safeLocation);
+        if let userLastLocation = userLastLocation {
+            setLocationText(userLastLocation: userLastLocation);
         }
     }
 
@@ -344,8 +346,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let accuracyFont = UIFont.systemFont(ofSize: 11);
         
         let locationText = NSMutableAttributedString();
-        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.primaryColor]));
-        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]));
+        locationText.append(NSAttributedString(string: location, attributes: [NSAttributedString.Key.font:locationFont, NSAttributedString.Key.foregroundColor: self.scheme?.colorScheme.primaryColor ?? .label]));
+        locationText.append(NSAttributedString(string: String(format: "  GPS +/- %.02fm", userLastLocation.horizontalAccuracy), attributes: [NSAttributedString.Key.font:accuracyFont, NSAttributedString.Key.foregroundColor: (self.scheme?.colorScheme.onSurfaceColor ?? .label).withAlphaComponent(0.6)]));
         
         self.locationLabel.attributedText = locationText;
     }
@@ -369,8 +371,8 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         if (urlMap.count > 1) {
             presentMapsActionSheetForURLs(urlMap: urlMap);
         } else {
-            if let safeUrl = urlMap["Apple Maps"] {
-                UIApplication.shared.open(safeUrl!, options: [:]) { (success) in
+            if let url = urlMap["Apple Maps"] {
+                UIApplication.shared.open(url!, options: [:]) { (success) in
                     print("Opened \(success)")
                 }
             }
@@ -392,51 +394,39 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             }
         }));
         for (app, url) in urlMap {
-            if let safeUrl = url {
+            if let url = url {
                 alert.addAction(UIAlertAction(title: app, style: .default, handler: { (action) in
-                    UIApplication.shared.open(safeUrl, options: [:]) { (success) in
+                    UIApplication.shared.open(url, options: [:]) { (success) in
                         print("Opened \(success)")
                     }
                 }));
             }
         }
         alert.addAction(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            guard let location: CLLocationCoordinate2D = self.user?.location?.location().coordinate else {
+            guard let location: CLLocationCoordinate2D = self.user?.location?.location?.coordinate else {
                 return;
             }
             var image: UIImage? = UIImage(named: "me")
-            if let safeIconUrl = self.user?.iconUrl {
-                if (safeIconUrl.lowercased().hasPrefix("http")) {
-                    let token = StoredPassword.retrieveStoredToken();
-                    do {
-                        try image = UIImage(data: Data(contentsOf: URL(string: "\(safeIconUrl)?access_token=\(token ?? "")")!))
-                    } catch {
-                        // whatever
+            if let cacheIconUrl = self.user?.cacheIconUrl {
+                let url = URL(string: cacheIconUrl)!;
+
+                KingfisherManager.shared.retrieveImage(with: url, options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]) { result in
+                    switch result {
+                    case .success(let value):
+                        let scale = value.image.size.width / 37;
+                        image = UIImage(cgImage: value.image.cgImage!, scale: scale, orientation: value.image.imageOrientation);
+                    case .failure(_):
+                        image = UIImage.init(named: "me")?.withRenderingMode(.alwaysTemplate);
                     }
-                } else {
-                    do {
-                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(safeIconUrl)")))
-                    } catch {
-                        // whatever
-                    }
+                    NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: self.user))
                 }
-                let scale = image?.size.width ?? 0.0 / 37;
-                image = UIImage(cgImage: image!.cgImage!, scale: scale, orientation: image!.imageOrientation);
-            }
-            
-            if let nvc: UINavigationController = self.navigationController?.tabBarController?.viewControllers?.filter( {
-                vc in
-                if let navController = vc as? UINavigationController {
-                    return navController.viewControllers[0] is MapViewController
-                }
-                return false;
-            }).first as? UINavigationController {
-                nvc.popToRootViewController(animated: false);
-                self.navigationController?.tabBarController?.selectedViewController = nvc;
-                if let mvc: MapViewController = nvc.viewControllers[0] as? MapViewController {
-                    mvc.mapDelegate.userToNavigateTo = self.user;
-                    mvc.mapDelegate.startStraightLineNavigation(location, image: image);
-                }
+            } else {
+                NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: self.user))
             }
         }))
         
@@ -456,15 +446,12 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
 extension UserTableHeaderView : UIImagePickerControllerDelegate {
     
     func presentAvatar() {
-        if let avatarUrl = user?.avatarUrl {
-            let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
-                let fullAvatarUrl = URL(fileURLWithPath: "\(documentsDirectories[0])/\(avatarUrl)")
-                if let saveNavigationController = navigationController {
-                    let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: saveNavigationController, url: fullAvatarUrl, contentType: "image", delegate: nil, scheme: scheme);
-                    childCoordinators.append(coordinator);
-                    coordinator.start();
-                }
+        if let cacheAvatarUrl = user?.cacheAvatarUrl {
+            let url = URL(string: cacheAvatarUrl)!;
+            if let saveNavigationController = navigationController {
+                let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: saveNavigationController, url: url, contentType: "image", delegate: nil, scheme: scheme);
+                childCoordinators.append(coordinator);
+                coordinator.start();
             }
         }
     }
@@ -536,7 +523,14 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
                 }, error: nil) as URLRequest? {
                 
                     if let uploadTask: URLSessionUploadTask = manager?.uploadTask(withStreamedRequest: request, progress: nil, completionHandler: { (response, responseObject, error) in
-                        
+                        // store the image data for the updated avatar in the cache here
+                        if let avatarUrl = (responseObject as? [AnyHashable: Any])?["avatarUrl"] as? String, let image = UIImage(data: imageData) {
+                            self.user?.avatarUrl = avatarUrl;
+                            if let cacheAvatarUrl = self.user?.cacheAvatarUrl {
+                                let url = URL(string: cacheAvatarUrl)!;
+                                ImageCache.default.store(image, original:imageData, forKey: url.absoluteString)
+                            }
+                        }
                     }) as URLSessionUploadTask? {
                         manager?.addTask(uploadTask);
                     }
@@ -549,10 +543,10 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
 
 extension UserTableHeaderView : NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        if let locations: [Location] = mapDelegate.locations.fetchedResultsController.fetchedObjects {
+        if let controller = mapDelegate.locations.fetchedResultsController as? NSFetchedResultsController<Location>, let locations: [Location] = controller.fetchedObjects {
             self.mapDelegate.updateLocations(locations);
             if (locations.count != 0) {
-                let centroid: SFPoint = SFGeometryUtils.centroid(of: locations[0].getGeometry());
+                let centroid: SFPoint = SFGeometryUtils.centroid(of: locations[0].geometry);
                 let location: CLLocation = CLLocation(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees);
                 zoomAndCenterMap(location: location);
             }

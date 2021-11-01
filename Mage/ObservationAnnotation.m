@@ -49,11 +49,11 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
     return self;
 }
 
-- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView {
-    return [self viewForAnnotationOnMapView:mapView withDragCallback:nil];
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme {
+    return [self viewForAnnotationOnMapView:mapView withDragCallback:nil scheme:scheme];
 }
 
--(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback scheme: (id<MDCContainerScheming>) scheme{
     UIImage *image = [ObservationImage imageForObservation:self.observation];
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:OBSERVATION_ANNOTATION_VIEW_REUSE_ID];
     
@@ -79,6 +79,9 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
     
     [annotationView setAccessibilityLabel:@"Observation"];
     [annotationView setAccessibilityValue:@"Observation"];
+//    annotationView.clusteringIdentifier = @"observationAnnotation";
+    annotationView.displayPriority = MKFeatureDisplayPriorityRequired;
+//    annotationView.collisionMode = MKAnnotationViewCollisionModeNone;
     return annotationView;
 }
 

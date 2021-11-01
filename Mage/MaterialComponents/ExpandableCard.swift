@@ -112,7 +112,11 @@ class ExpandableCard: MDCCard {
         return expandableView;
     }()
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         thumbnail.tintColor = self.imageTint ?? scheme.colorScheme.primaryColor;
         expandAction.applyTextTheme(withScheme: scheme);
@@ -190,9 +194,9 @@ class ExpandableCard: MDCCard {
     }
     
     func configure(header: String?, subheader: String?, imageName: String?, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView?) {
-        if let safeImageName = imageName {
-            self.thumbnail.image  = UIImage(named: safeImageName)
-            self.thumbnail.accessibilityLabel = safeImageName;
+        if let imageName = imageName {
+            self.thumbnail.image  = UIImage(named: imageName)
+            self.thumbnail.accessibilityLabel = imageName;
         }
         self.header = header;
         self.subheader = subheader;

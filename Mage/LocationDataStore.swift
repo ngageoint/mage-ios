@@ -24,7 +24,7 @@ class LocationDataStore: NSObject {
         self.tableView.delegate = self;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
     }
     
@@ -72,7 +72,8 @@ extension LocationDataStore: UITableViewDataSource {
     }
     
     func configure(cell: PersonTableViewCell, at indexPath: IndexPath) {
-        if let location: Location = self.locations?.fetchedResultsController.object(at: indexPath) {
+        if let controller = self.locations?.fetchedResultsController as? NSFetchedResultsController<Location> {
+            let location: Location = controller.object(at: indexPath)
             cell.configure(location: location, actionsDelegate: actionsDelegate, scheme: scheme);
         }
     }

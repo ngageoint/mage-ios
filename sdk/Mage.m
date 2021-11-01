@@ -11,9 +11,7 @@
 #import "ObservationFetchService.h"
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"
-#import "User.h"
-#import "Role.h"
-#import "Event.h"
+#import "MAGE-Swift.h"
 #import "Form.h"
 #import "Layer.h"
 #import "MageServer.h"
@@ -39,12 +37,11 @@
     [[LocationService singleton] start];
 
     NSURLSessionDataTask *rolesPullTask = [Role operationToFetchRolesWithSuccess:nil failure:nil];
-    
-    NSURLSessionDataTask *usersPullTask = [User operationToFetchUsersWithSuccess:^{
+    NSURLSessionDataTask *usersPullTask = [User operationToFetchUsersWithSuccess:^(NSURLSessionDataTask * _Nonnull task, id _Nullable response) {
         NSLog(@"Done with the initial user fetch, start location and observation services");
         [[LocationFetchService singleton] start];
         [[ObservationFetchService singleton] startAsInitial:initial];
-    } failure:^(NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Failed to pull users");
     }];
     
@@ -68,23 +65,23 @@
 
 - (void) fetchEvents {
     MageSessionManager *manager = [MageSessionManager sharedManager];
-    NSURLSessionDataTask *myselfTask = [User operationToFetchMyselfWithSuccess:^{
-        
-        NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^{
+    NSURLSessionDataTask *myselfTask = [User operationToFetchMyselfWithSuccess:^(NSURLSessionDataTask * _Nonnull task, id _Nullable response) {
+        NSURLSessionDataTask *eventTask = [Event operationToFetchEventsWithSuccess:^(NSURLSessionDataTask *task, id response){
             NSArray *events = [Event MR_findAll];
             [self fetchFormAndStaticLayerForEvents: events];
-        } failure:^(NSError *error) {
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
             NSLog(@"Failure to pull events");
-            [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MAGEEventsFetched" object:nil];
             NSArray *events = [Event MR_findAll];
             [self fetchFormAndStaticLayerForEvents: events];
         }];
         [manager addTask:eventTask];
-    } failure:^(NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:MAGEEventsFetched object:nil];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MAGEEventsFetched" object:nil];
         NSArray *events = [Event MR_findAll];
         [self fetchFormAndStaticLayerForEvents: events];
     }];
+    
     [manager addTask:myselfTask];
 }
 

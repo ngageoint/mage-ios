@@ -98,27 +98,37 @@ class ObservationFormTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
-        formNameLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        formNameLabel.font = scheme.typographyScheme.overline;
-        primaryLabel.textColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
-        primaryLabel.font = scheme.typographyScheme.headline6;
-        secondaryLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        secondaryLabel.font = scheme.typographyScheme.subtitle2;
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        formNameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        formNameLabel.font = scheme?.typographyScheme.overline;
+        primaryLabel.textColor = scheme?.colorScheme.primaryColor.withAlphaComponent(0.87);
+        primaryLabel.font = scheme?.typographyScheme.headline6;
+        secondaryLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        secondaryLabel.font = scheme?.typographyScheme.subtitle2;
     }
     
     func configure(observationForm: [String : Any], eventForm: [String: Any], scheme: MDCContainerScheming?) {
+        let fields: [[String: Any]] = eventForm[FormKey.fields.key] as? [[String: Any]] ?? [];
+        
         var formPrimaryValue: String? = nil;
-        if let primaryField = eventForm[FormKey.primaryFeedField.key] as! String? {
-            if let obsfield = observationForm[primaryField] as? String? {
-                formPrimaryValue = obsfield;
+        var formSecondaryValue: String? = nil;
+        if let primaryFieldName = eventForm[FormKey.primaryFeedField.key] as? String {
+            if let primaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == primaryFieldName
+            }) {
+                if let obsfield = observationForm[primaryFieldName] {
+                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                }
             }
         }
         
-        var formSecondaryValue: String? = nil;
-        if let secondaryField = eventForm[FormKey.secondaryFeedField.key] as! String? {
-            if let obsfield = observationForm[secondaryField] as? String? {
-                formSecondaryValue = obsfield;
+        if let secondaryFieldName = eventForm[FormKey.secondaryFeedField.key] as? String {
+            if let secondaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+            }) {
+                if let obsfield = observationForm[secondaryFieldName] {
+                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                }
             }
         }
         
@@ -127,15 +137,15 @@ class ObservationFormTableViewCell: UITableViewCell {
         primary = formPrimaryValue;
         secondary = formSecondaryValue;
         var tintColor: UIColor? = nil;
-        if let safeColor = eventForm["color"] as? String {
-            tintColor = UIColor(hex: safeColor);
+        if let color = eventForm["color"] as? String {
+            tintColor = UIColor(hex: color);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
         
-        if let safeScheme = scheme {
-            thumbnail.tintColor = tintColor ?? safeScheme.colorScheme.primaryColor;
-            applyTheme(withScheme: safeScheme)
+        if let scheme = scheme {
+            thumbnail.tintColor = tintColor ?? scheme.colorScheme.primaryColor;
+            applyTheme(withScheme: scheme)
         }
     }
     

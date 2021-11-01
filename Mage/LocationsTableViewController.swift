@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Kingfisher
 import MaterialComponents.MaterialSnackbar
 
 class LocationsTableViewController: UITableViewController {
@@ -53,34 +54,14 @@ class LocationsTableViewController: UITableViewController {
         self.userIds = userIds;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.tableView.separatorStyle = .none;
-        
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        
-        self.navigationItem.titleLabel?.textColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationItem.subtitleLabel?.textColor = containerScheme.colorScheme.onPrimaryColor;
-        
-        self.navigationController?.navigationBar.prefersLargeTitles = false;
         
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh users", attributes: [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onBackgroundColor])
         refreshControl?.tintColor = containerScheme.colorScheme.onBackgroundColor;
@@ -196,15 +177,16 @@ class LocationsTableViewController: UITableViewController {
     
     @objc func refreshLocations() {
         refreshControl?.beginRefreshing();
-        let locationFetchTask: URLSessionDataTask = Location.operationToPullLocations {
+        let locationFetchTask: URLSessionDataTask? = Location.operationToPullLocations {_,_ in
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing();
             }
-        } failure: { (_) in
+        } failure: { (_,_)  in
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing();
             }
         }
+        
         MageSessionManager.shared()?.addTask(locationFetchTask);
     }
     
@@ -218,45 +200,40 @@ class LocationsTableViewController: UITableViewController {
 
 extension LocationsTableViewController: UserActionsDelegate {
     
-    func getDocumentsDirectory() -> NSString {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentsDirectory = paths[0]
-        return documentsDirectory as NSString
-    }
-    
     func viewUser(_ user: User) {
         let uvc = UserViewController(user: user, scheme: self.scheme!);
         self.navigationController?.pushViewController(uvc, animated: true);
     }
     
     func getDirectionsToUser(_ user: User, sourceView: UIView?) {
-        guard let location: CLLocationCoordinate2D = user.location?.location().coordinate else {
+        guard let location: CLLocationCoordinate2D = user.location?.location?.coordinate else {
             return;
         }
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             
             var image: UIImage? = UIImage(named: "me")
-            if let safeIconUrl = user.iconUrl {
-                if (safeIconUrl.lowercased().hasPrefix("http")) {
-                    let token = StoredPassword.retrieveStoredToken();
-                    do {
-                        try image = UIImage(data: Data(contentsOf: URL(string: "\(safeIconUrl)?access_token=\(token ?? "")")!))
-                    } catch {
-                        // whatever
+            if let cacheIconUrl = user.cacheIconUrl {
+                let url = URL(string: cacheIconUrl)!;
+                
+                KingfisherManager.shared.retrieveImage(with: url, options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]) { result in
+                    switch result {
+                    case .success(let value):
+                        let scale = value.image.size.width / 37;
+                        image = UIImage(cgImage: value.image.cgImage!, scale: scale, orientation: value.image.imageOrientation);
+                    case .failure(_):
+                        image = UIImage.init(named: "me")?.withRenderingMode(.alwaysTemplate);
                     }
-                } else {
-                    do {
-                        try image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: "\(self.getDocumentsDirectory())/\(safeIconUrl)")))
-                    } catch {
-                        // whatever
-                    }
+                    NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: user))
                 }
-                let scale = image?.size.width ?? 0.0 / 37;
-                image = UIImage(cgImage: image!.cgImage!, scale: scale, orientation: image!.imageOrientation);
+            } else {
+                NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: user))
             }
-            
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: user))
         }));
         ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: user.name ?? "User", viewController: self.navigationController!, extraActions: extraActions, sourceView: sourceView);
     }

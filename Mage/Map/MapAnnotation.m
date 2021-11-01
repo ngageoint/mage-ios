@@ -23,13 +23,13 @@ static NSUInteger idCounter = 0;
     return [NSNumber numberWithInteger:self.id];
 }
 
--(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView{
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView  scheme: (id<MDCContainerScheming>) scheme {
     [NSException raise:@"No Implementation" format:@"Implementation must be provided by an extending map annotation type"];
     return nil;
 }
 
--(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback{
-    return [self viewForAnnotationOnMapView:mapView];
+-(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback scheme: (id<MDCContainerScheming>) scheme {
+    return [self viewForAnnotationOnMapView:mapView scheme:scheme];
 }
 
 -(void) hidden: (BOOL) hidden{

@@ -12,7 +12,7 @@ import Foundation
     let user : User
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
-    var scheme : MDCContainerScheming!;
+    var scheme : MDCContainerScheming?;
     
     private lazy var observationDataStore: ObservationDataStore = {
         let observationDataStore: ObservationDataStore = ObservationDataStore(tableView: self.tableView, observationActionsDelegate: self, attachmentSelectionDelegate: self, scheme: self.scheme);
@@ -29,7 +29,7 @@ import Foundation
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(user:User, scheme: MDCContainerScheming) {
+    @objc public init(user:User, scheme: MDCContainerScheming?) {
         self.user = user
         self.scheme = scheme;
         super.init(style: .grouped)
@@ -39,28 +39,13 @@ import Foundation
         self.tableView.separatorStyle = .none;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
-        
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
     }
     
     override func viewDidLoad() {

@@ -7,7 +7,6 @@
 #import "MapSettings.h"
 #import "MapTypeTableViewCell.h"
 #import "ObservationTableHeaderView.h"
-#import "Feed.h"
 #import "Server.h"
 #import "MAGE-Swift.h"
 
@@ -42,27 +41,6 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         self.scheme = containerScheme;
     }
     
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
-    self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
-    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    
-    self.navigationController.navigationBar.standardAppearance = appearance;
-    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    
     self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     
     [self.tableView reloadData];
@@ -84,7 +62,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _feeds = [Feed getMappableFeeds:[Server currentEventId]];
+    _feeds = [Feed getMappableFeedsWithEventId:[Server currentEventId]];
 }
 
 - (void) setMapsToDownloadCount:(NSUInteger)mapsToDownloadCount {
@@ -126,7 +104,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
                 NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
             } forState:UIControlStateNormal];
             [cell.mapTypeSegmentedControl setTitleTextAttributes:@{
-                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor
             } forState:UIControlStateSelected];
             cell.mapTypeSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColorVariant;
             cell.cellTitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];

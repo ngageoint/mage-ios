@@ -35,9 +35,7 @@ import Kingfisher
         for view in self.imageView.subviews{
             view.removeFromSuperview()
         }
-        if let safeButton = button {
-            safeButton.removeFromSuperview();
-        }
+        button?.removeFromSuperview();
     }
     
     func getAttachmentUrl(attachment: Attachment) -> URL {
@@ -115,10 +113,10 @@ import Kingfisher
         }
         
         
-        if let safeButton = button {
-            self.addSubview(safeButton);
-            safeButton.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
-            safeButton.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
+        if let button = button {
+            self.addSubview(button);
+            button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
+            button.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
         }
     }
     
@@ -188,10 +186,10 @@ import Kingfisher
             self.imageView.contentMode = .scaleAspectFit;
         }
         
-        if let safeButton = button {
-            self.addSubview(safeButton);
-            safeButton.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
-            safeButton.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
+        if let button = button {
+            self.addSubview(button);
+            button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
+            button.autoPinEdge(.right, to: .right, of: self.imageView, withOffset: -8);
         }
     }
 }

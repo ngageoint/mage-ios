@@ -29,6 +29,7 @@ import Foundation
         for (key, _) in feedTimers {
             stopPullingFeedItems(feedId: key);
         }
+        feedFetchedResultsController = nil;
     }
     
     public func isStopped() -> Bool {
@@ -54,12 +55,12 @@ import Foundation
         for feed: Feed in feedFetchedResultsController!.fetchedObjects! {
             print("Pulling feed items for feed \(feed.remoteId ?? "nil") in event \(feed.eventId ?? -1)");
             if let remoteId = feed.remoteId, let eventId = feed.eventId {
-                Feed.pullFeedItems(forFeed: remoteId, inEvent: eventId, success: {
+                Feed.pullFeedItems(feedId: remoteId, eventId: eventId, success: {_,_ in
                     self.scheduleTimerToPullFeedItems(feedId: remoteId, eventId: eventId, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
-
-                }) { (Error) in
+                    
+                }) { (task, error) in
                     self.scheduleTimerToPullFeedItems(feedId: remoteId, eventId: eventId, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
-
+                    
                 }
             }
         }
@@ -84,9 +85,9 @@ import Foundation
             if (feedTimers[feedId] == nil) { return }
             if let eventId: NSNumber = context["eventId"] as? NSNumber {
                 print("Pulling feed items for feed", feedId);
-                Feed.pullFeedItems(forFeed: feedId, inEvent: eventId, success: {
+                Feed.pullFeedItems(feedId: feedId, eventId: eventId, success: {_,_ in
                     self.scheduleTimerToPullFeedItems(feedId: feedId, eventId: eventId, pullFrequency: context["pullFrequency"] as? NSNumber ?? self.defaultPullFrequency);
-                }) { (Error) in
+                }) { (task, error) in
                     self.scheduleTimerToPullFeedItems(feedId: feedId, eventId: eventId, pullFrequency: context["pullFrequency"] as? NSNumber ?? self.defaultPullFrequency);
                 }
             }

@@ -220,13 +220,11 @@ class CompassView: UIView {
         
         layoutView(heading: 0.0);
         
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
-        self.backgroundColor = scheme.colorScheme.surfaceColor;
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        self.backgroundColor = scheme?.colorScheme.surfaceColor;
     }
     
     func layoutView(heading: Double, destinationBearing: Double) {

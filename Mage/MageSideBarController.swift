@@ -61,7 +61,11 @@ class SidebarUIButton: UIButton {
         return rail;
     }()
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         navigationRail.backgroundColor = containerScheme.colorScheme.surfaceColor;
         view.backgroundColor = containerScheme.colorScheme.backgroundColor;
@@ -128,10 +132,10 @@ class SidebarUIButton: UIButton {
         button.sidebarType = sidebarType;
         button.title = title;
         
-        if let safeUrl: URL = iconUrl {
+        if let iconUrl: URL = iconUrl {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size));
             button.kf.setImage(
-                with: safeUrl,
+                with: iconUrl,
                 for: .normal,
                 placeholder: UIImage(named: "rss"),
                 options: [
@@ -149,8 +153,8 @@ class SidebarUIButton: UIButton {
                         print(error);
                     }
                 })
-        } else if let safeImageName: String = imageName {
-            button.setImage(UIImage(named: safeImageName), for: .normal);
+        } else if let imageName: String = imageName {
+            button.setImage(UIImage(named: imageName), for: .normal);
         }
         
         return button;
@@ -193,7 +197,7 @@ class SidebarUIButton: UIButton {
     }
     
     func createFeedRailView(feed: Feed) -> SidebarUIButton {
-        let feedButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.feed, title: feed.title, iconUrl: feed.iconURL(), imageName: "rss");
+        let feedButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.feed, title: feed.title, iconUrl: feed.iconURL, imageName: "rss");
         feedButton.feed = feed;
         feedButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
         let feedItemsViewController: FeedItemsViewController = FeedItemsViewController(feed: feed, selectionDelegate: delegate, scheme: self.scheme);
@@ -202,8 +206,8 @@ class SidebarUIButton: UIButton {
     }
     
     @objc func activateButton(button: SidebarUIButton) {
-        if let safeButton = activeButton {
-            safeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        if let activeButton = activeButton {
+            activeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         }
         button.tintColor = self.scheme?.colorScheme.primaryColor;
         activeButton = button;

@@ -20,8 +20,9 @@ import MaterialComponents.MaterialBottomSheet
     @objc func editComplete(_ observation: Observation, coordinator: NSObject);
 }
 
-protocol ObservationCommonPropertiesListener {
+protocol ObservationCommonPropertiesListener: AnyObject {
     func geometryUpdated(_ geometry: SFGeometry?, accuracy: String?, delta: Double?, provider: String?);
+    func timestampUpdated(_ date: Date?);
 }
 
 @objc class ObservationEditCoordinator: NSObject {
@@ -46,20 +47,20 @@ protocol ObservationCommonPropertiesListener {
         return managedObjectContext;
     } ()
     
-    private lazy var event: Event = {
-        return Event.getCurrentEvent(in: self.managedObjectContext);
+    private lazy var event: Event? = {
+        return Event.getCurrentEvent(context: self.managedObjectContext);
     } ()
     
     private lazy var eventForms: [[String: AnyHashable]] = {
-        let eventForms = event.forms as? [[String: AnyHashable]] ?? [];
+        let eventForms = event?.forms as? [[String: AnyHashable]] ?? [];
         return eventForms;
     }()
     
-    private lazy var user: User = {
-        return User.fetchCurrentUser(in: self.managedObjectContext);
+    private lazy var user: User? = {
+        return User.fetchCurrentUser(context: self.managedObjectContext);
     }()
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
     }
     
@@ -76,39 +77,51 @@ protocol ObservationCommonPropertiesListener {
     }
     
     @objc public func start() {
-        if (!self.event.isUser(inEvent: user)) {
+        guard let event = event, let user = user else {
+            let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create or edit observations for an event you are not part of.", preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
+            self.rootViewController?.present(alert, animated: true, completion: nil);
+            return
+        }
+        
+        if (!event.isUserInEvent(user: user)) {
             let alert = UIAlertController(title: "You are not part of this event", message: "You cannot create or edit observations for an event you are not part of.", preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
             self.rootViewController?.present(alert, animated: true, completion: nil);
         } else {
-            if let safeNav = navigationController {
-                safeNav.modalPresentationStyle = .custom;
-                safeNav.modalTransitionStyle = .crossDissolve;
-                self.rootViewController?.present(safeNav, animated: true, completion: nil);
+            if let navigationController = navigationController {
+                navigationController.modalPresentationStyle = .custom;
+                navigationController.modalTransitionStyle = .crossDissolve;
+                self.rootViewController?.present(navigationController, animated: true, completion: nil);
                 observationEditController = ObservationEditCardCollectionViewController(delegate: self, observation: observation!, newObservation: newObservation, containerScheme: self.scheme);
-                safeNav.pushViewController(observationEditController!, animated: true);
-                if let safeScheme = self.scheme {
-                    observationEditController?.applyTheme(withContainerScheme: safeScheme);
+                navigationController.pushViewController(observationEditController!, animated: true);
+                if let scheme = self.scheme {
+                    observationEditController?.applyTheme(withContainerScheme: scheme);
                 }
             }
         }
     }
     
     @objc public func startFormReorder() {
-        if (!self.event.isUser(inEvent: user)) {
+        guard let event = event, let user = user else {
+            let alert = UIAlertController(title: "You are not part of this event", message: "You cannot edit this observation.", preferredStyle: .alert);
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
+            self.rootViewController?.present(alert, animated: true, completion: nil);
+            return
+        }
+
+        if (!event.isUserInEvent(user: user)) {
             let alert = UIAlertController(title: "You are not part of this event", message: "You cannot edit this observation.", preferredStyle: .alert);
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil));
             self.rootViewController?.present(alert, animated: true, completion: nil);
         } else {
-            if let safeNav = navigationController {
-                safeNav.modalPresentationStyle = .custom;
-                safeNav.modalTransitionStyle = .crossDissolve;
-                self.rootViewController?.present(safeNav, animated: true, completion: nil);
+            if let navigationController = navigationController {
+                navigationController.modalPresentationStyle = .custom;
+                navigationController.modalTransitionStyle = .crossDissolve;
+                self.rootViewController?.present(navigationController, animated: true, completion: nil);
                 observationFormReorder = ObservationFormReorder(observation: observation!, delegate: self, containerScheme: self.scheme);
-                safeNav.pushViewController(self.observationFormReorder!, animated: true);
-                if let safeScheme = self.scheme {
-                    self.observationFormReorder!.applyTheme(withContainerScheme: safeScheme);
-                }
+                navigationController.pushViewController(self.observationFormReorder!, animated: true);
+                self.observationFormReorder!.applyTheme(withContainerScheme: scheme);
             }
         }
     }
@@ -164,11 +177,11 @@ protocol ObservationCommonPropertiesListener {
     func addFormToObservation(observation: Observation, form: [String: AnyHashable]) {
         var observationProperties: [String: Any] = [ObservationKey.forms.key:[]];
         var observationForms: [[String: Any]] = [];
-        if let safeProperties = observation.properties as? [String: Any] {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
+        if let properties = observation.properties as? [String: Any] {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = properties[ObservationKey.forms.key] as! [[String: Any]];
             }
-            observationProperties = safeProperties;
+            observationProperties = properties;
         }
         observationForms.append(setupFormWithDefaults(observation: observation, form: form));
         observationProperties[ObservationKey.forms.key] = observationForms;
@@ -209,10 +222,12 @@ extension ObservationEditCoordinator: FieldSelectionDelegate {
 extension ObservationEditCoordinator: ObservationFormReorderDelegate {
     func formsReordered(observation: Observation) {
         self.observation = observation;
-        self.observation!.userId = user.remoteId;
+        if let user = user {
+            self.observation!.userId = user.remoteId;
+        }
 
-        if let safeObservationEditController = self.observationEditController {
-            safeObservationEditController.formsReordered(observation: self.observation!);
+        if let observationEditController = self.observationEditController {
+            observationEditController.formsReordered(observation: self.observation!);
             self.navigationController?.popViewController(animated: true);
 
         } else {
@@ -249,7 +264,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     }
     
     func addForm() {
-        let forms: [[String: AnyHashable]] = (event.forms as! [[String : AnyHashable]]).filter { form in
+        let forms: [[String: AnyHashable]] = (event?.forms as! [[String : AnyHashable]]).filter { form in
             return !(form[FormKey.archived.rawValue] as? Bool ?? false)
         };
         let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, observation: observation, scheme: self.scheme);
@@ -261,7 +276,9 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     
     func saveObservation(observation: Observation) {
         print("Save observation");
-        self.observation!.userId = user.remoteId;
+        if let user = user {
+            self.observation!.userId = user.remoteId;
+        }
         self.managedObjectContext.mr_saveToPersistentStore { [self] (contextDidSave, error) in
             if (!contextDidSave) {
                 print("Error saving observation to persistent store, context did not save");

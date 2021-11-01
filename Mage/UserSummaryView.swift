@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreImage
+import Kingfisher
 
 class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
     
@@ -17,6 +19,7 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
     lazy var avatarImage: UIImageView = {
         let avatarImage = UserAvatarUIImageView(image: nil);
         avatarImage.configureForAutoLayout();
+        avatarImage.autoSetDimensions(to: CGSize(width: 48, height: 48));
         return avatarImage;
     }()
     
@@ -29,9 +32,19 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
         fatalError("This class does not support NSCoding")
     }
     
-    override init(imageOverride: UIImage? = nil) {
-        super.init(imageOverride: imageOverride);
+    override init(imageOverride: UIImage? = nil, hideImage: Bool = false) {
+        super.init(imageOverride: imageOverride, hideImage: hideImage);
         isUserInteractionEnabled = false;
+    }
+    
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        super.applyTheme(withScheme: scheme);
+
+        guard let scheme = scheme else {
+            return
+        }
+        
+        avatarImage.tintColor = scheme.colorScheme.primaryColor;
     }
     
     override func populate(item: User, actionsDelegate: UserActionsDelegate? = nil) {
@@ -43,7 +56,8 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
         } else {
             self.avatarImage.kf.indicatorType = .activity;
             (avatarImage as! UserAvatarUIImageView).setUser(user: item);
-            (avatarImage as! UserAvatarUIImageView).showImage();
+            let cacheOnly = DataConnectionUtilities.shouldFetchAvatars();
+            (avatarImage as! UserAvatarUIImageView).showImage(cacheOnly: cacheOnly);
         }
         
         primaryField.text = item.name;

@@ -58,34 +58,14 @@ class ObservationTableViewController: UITableViewController {
         self.scheme = scheme;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.tableView.separatorStyle = .none;
-        
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        
-        self.navigationItem.titleLabel?.textColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationItem.subtitleLabel?.textColor = containerScheme.colorScheme.onPrimaryColor;
-        
-        self.navigationController?.navigationBar.prefersLargeTitles = false;
         
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh observations", attributes: [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onBackgroundColor])
         refreshControl?.tintColor = containerScheme.colorScheme.onBackgroundColor;
@@ -226,14 +206,14 @@ class ObservationTableViewController: UITableViewController {
         var accuracy: CLLocationAccuracy = 0;
         var delta: Double = 0.0;
         
-        if let safeLocation = location {
-            if (safeLocation.altitude != 0) {
-                point = SFPoint(x: NSDecimalNumber(value: safeLocation.coordinate.longitude), andY: NSDecimalNumber(value: safeLocation.coordinate.latitude), andZ: NSDecimalNumber(value: safeLocation.altitude));
+        if let location = location {
+            if (location.altitude != 0) {
+                point = SFPoint(x: NSDecimalNumber(value: location.coordinate.longitude), andY: NSDecimalNumber(value: location.coordinate.latitude), andZ: NSDecimalNumber(value: location.altitude));
             } else {
-                point = SFPoint(x: NSDecimalNumber(value: safeLocation.coordinate.longitude), andY: NSDecimalNumber(value: safeLocation.coordinate.latitude));
+                point = SFPoint(x: NSDecimalNumber(value: location.coordinate.longitude), andY: NSDecimalNumber(value: location.coordinate.latitude));
             }
-            accuracy = safeLocation.horizontalAccuracy;
-            delta = safeLocation.timestamp.timeIntervalSinceNow * -1000;
+            accuracy = location.horizontalAccuracy;
+            delta = location.timestamp.timeIntervalSinceNow * -1000;
         }
         
         let edit: ObservationEditCoordinator = ObservationEditCoordinator(rootViewController: self, delegate: self, location: point, accuracy: accuracy, provider: provider, delta: delta);

@@ -23,8 +23,16 @@ class ObservationFormReorder: UITableViewController {
     var observationProperties: [String: Any] = [ : ];
     var scheme: MDCContainerScheming?;
     
-    private lazy var eventForms: [[String: Any]] = {
-        let eventForms = Event.getById(self.observation.eventId as Any, in: (self.observation.managedObjectContext)!).forms as? [[String: Any]] ?? [];
+    private lazy var event: Event? = {
+        guard let eventId = observation.eventId, let context = observation.managedObjectContext else {
+            return nil
+        }
+        
+        return Event.getEvent(eventId: eventId, context: context)
+    }()
+    
+    private lazy var eventForms: [[String: Any]]? = {
+        let eventForms = event?.forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     
@@ -55,40 +63,25 @@ class ObservationFormReorder: UITableViewController {
         self.title = "Reorder Forms";
         self.view.accessibilityLabel = "Reorder Forms";
         tableView.register(cellClass: ObservationFormTableViewCell.self)
-        if let safeProperties = self.observation.properties as? [String: Any] {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
+        if let properties = self.observation.properties as? [String: Any] {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = properties[ObservationKey.forms.key] as! [[String: Any]];
             }
-            self.observationProperties = safeProperties;
+            self.observationProperties = properties;
         } else {
             self.observationProperties = [ObservationKey.forms.key:[]];
             observationForms = [];
         }
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
-        
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
         
         self.descriptionHeaderView.font = containerScheme.typographyScheme.overline;
         self.descriptionHeaderView.textColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
@@ -109,9 +102,7 @@ class ObservationFormReorder: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
+        applyTheme(withContainerScheme: scheme);
     }
     
     override func viewWillLayoutSubviews() {
@@ -158,7 +149,7 @@ class ObservationFormReorder: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let formCell : ObservationFormTableViewCell = tableView.dequeue(cellClass: ObservationFormTableViewCell.self, forIndexPath: indexPath);
         let observationForm = observationForms[indexPath.row];
-        if let eventForm: [String: Any] = self.eventForms.first(where: { (form) -> Bool in
+        if let eventForm: [String: Any] = self.eventForms?.first(where: { (form) -> Bool in
             return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }) {
             formCell.configure(observationForm: observationForm, eventForm: eventForm, scheme: self.scheme);

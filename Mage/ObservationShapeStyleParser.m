@@ -7,7 +7,6 @@
 //
 @import HexColors;
 #import "ObservationShapeStyleParser.h"
-#import "Event.h"
 #import "Server.h"
 
 @implementation ObservationShapeStyleParser
@@ -64,11 +63,11 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
         [style setLineWidth:strokeWidth];
         
         // Create and set the stroke color
-        UIColor *strokeColor = [UIColor colorWithHexString:stroke alpha:strokeOpacity];
+        UIColor *strokeColor = [UIColor hx_colorWithHexRGBAString:stroke alpha:strokeOpacity];
         [style setStrokeColor:strokeColor];
         
         // Create and set the fill color
-        UIColor *fillColor = [UIColor colorWithHexString:fill alpha:fillOpacity];
+        UIColor *fillColor = [UIColor hx_colorWithHexRGBAString:fill alpha:fillOpacity];
         [style setFillColor:fillColor];
     }
     

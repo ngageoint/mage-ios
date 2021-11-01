@@ -84,7 +84,11 @@ import Foundation
     
     let titleLabel = UILabel(forAutoLayout: ());
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         view.backgroundColor = self.scheme?.colorScheme.surfaceColor;
         doneButton.applyTextTheme(withScheme: containerScheme);
@@ -252,9 +256,7 @@ import Foundation
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
+        applyTheme(withContainerScheme: scheme);
     }
     
     init(frame: CGRect) {
@@ -275,8 +277,8 @@ import Foundation
     }
     
     @objc func colorSet() {
-        if let safeColorPreference = colorPreference {
-            UserDefaults.standard.set(tempColor, forKey: safeColorPreference)
+        if let colorPreference = colorPreference {
+            UserDefaults.standard.set(tempColor, forKey: colorPreference)
         }
         self.presentingViewController?.dismiss(animated: true, completion: nil);
     }

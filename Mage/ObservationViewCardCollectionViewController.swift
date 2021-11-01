@@ -25,11 +25,19 @@ import MaterialComponents.MDCContainerScheme;
     var bottomSheet: MDCBottomSheetController?;
     var scheme: MDCContainerScheming?;
     var attachmentCard: ObservationAttachmentCard?;
-    let attachmentHeader: AttachmentHeader = AttachmentHeader();
+    let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
     let formsHeader = FormsHeader(forAutoLayout: ());
     
+    private lazy var event: Event? = {
+        guard let observation = observation, let eventId = observation.eventId, let context = observation.managedObjectContext else {
+            return nil
+        }
+        
+        return Event.getEvent(eventId: eventId, context: context)
+    }()
+    
     private lazy var eventForms: [[String: Any]] = {
-        let eventForms = Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!).forms as? [[String: Any]] ?? [];
+        let eventForms = event?.forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     
@@ -64,28 +72,11 @@ import MaterialComponents.MDCContainerScheme;
         return syncStatusView;
     }()
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: containerScheme.colorScheme.primaryColorVariant
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+        guard let containerScheme = containerScheme else {
+            return;
+        }
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
         self.syncStatusView.applyTheme(withScheme: containerScheme);
         headerCard?.applyTheme(withScheme: containerScheme);
@@ -102,8 +93,8 @@ import MaterialComponents.MDCContainerScheme;
         scrollView.addSubview(stackView);
         view.addSubview(editFab);
         
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
-        editFab.isHidden = !user.hasEditPermission()
+        let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default())
+        editFab.isHidden = !(user?.hasEditPermission ?? false)
         
         view.setNeedsUpdateConstraints();
     }
@@ -125,7 +116,7 @@ import MaterialComponents.MDCContainerScheme;
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(observation: Observation, scheme: MDCContainerScheming) {
+    @objc convenience public init(observation: Observation, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.scheme = scheme;
@@ -146,8 +137,8 @@ import MaterialComponents.MDCContainerScheme;
         super.viewWillAppear(animated);
         ObservationPushService.singleton()?.add(self);
         setupObservation();
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
+        if let scheme = self.scheme {
+            applyTheme(withContainerScheme: scheme);
         }
     }
     
@@ -169,11 +160,11 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     func setupObservation() {
-        self.title = observation?.primaryFeedFieldText();
+        self.title = "Observation";
 
-        if let safeProperties = self.observation?.properties as? [String: Any] {
-            if (safeProperties.keys.contains("forms")) {
-                observationForms = safeProperties["forms"] as! [[String: Any]];
+        if let properties = self.observation?.properties as? [String: Any] {
+            if (properties.keys.contains("forms")) {
+                observationForms = properties["forms"] as! [[String: Any]];
             }
         } else {
             observationForms = [];
@@ -255,27 +246,40 @@ import MaterialComponents.MDCContainerScheme;
             return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }
         
+        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+        
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?[FormKey.primaryFeedField.key] as! String? {
-            if let obsfield = observationForm[primaryField] as! String? {
-                formPrimaryValue = obsfield;
+
+        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
+            if let primaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == primaryFieldName
+            }) {
+                if let obsfield = observationForm[primaryFieldName] {
+                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                }
             }
         }
-        if let secondaryField = eventForm?[FormKey.secondaryFeedField.key] as! String? {
-            if let obsfield = observationForm[secondaryField] as! String? {
-                formSecondaryValue = obsfield;
+        
+        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
+            if let secondaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+            }) {
+                if let obsfield = observationForm[secondaryFieldName] {
+                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                }
             }
         }
+        
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, attachmentSelectionDelegate: self, observationActionsDelegate: self);
-        if let safeScheme = self.scheme {
-            formView.applyTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            formView.applyTheme(withScheme: scheme);
         }
         var formSpacerView: UIView?;
         if (!formView.isEmpty()) {
             formSpacerView = UIView(forAutoLayout: ());
             let divider = UIView(forAutoLayout: ());
-            divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
+            divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12);
             divider.autoSetDimension(.height, toSize: 1);
             formSpacerView?.addSubview(divider);
             formSpacerView?.addSubview(formView);
@@ -283,14 +287,14 @@ import MaterialComponents.MDCContainerScheme;
             formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
         }
         var tintColor: UIColor? = nil;
-        if let safeColor = eventForm?[FormKey.color.key] as? String {
-            tintColor = UIColor(hex: safeColor);
+        if let color = eventForm?[FormKey.color.key] as? String {
+            tintColor = UIColor(hex: color);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
         let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?[EventKey.name.key] as? String, imageTint: tintColor, expandedView: formSpacerView);
-        if let safeScheme = self.scheme {
-            card.applyTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            card.applyTheme(withScheme: scheme);
         }
         stackView.addArrangedSubview(card);
         cards.append(card);
@@ -298,9 +302,12 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     @objc func startObservationEditCoordinator() {
-        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
+        guard let observation = self.observation else {
+            return;
+        }
+        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
         observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
-        observationEditCoordinator!.start();
+        observationEditCoordinator?.start();
     }
 }
 
@@ -309,12 +316,18 @@ extension ObservationViewCardCollectionViewController: AttachmentSelectionDelega
         if (attachment.url == nil) {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: unsentAttachment["contentType"] as! String, delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: unsentAttachment["contentType"] as! String, delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
     
@@ -322,7 +335,10 @@ extension ObservationViewCardCollectionViewController: AttachmentSelectionDelega
         if (attachment.url == nil) {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
 }
@@ -418,7 +434,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         bottomSheet?.dismiss(animated: true, completion: nil);
         observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
         observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
-        observationEditCoordinator!.startFormReorder();
+        observationEditCoordinator?.startFormReorder();
     }
     
     func deleteObservation(_ observation: Observation) {
@@ -446,7 +462,10 @@ extension ObservationViewCardCollectionViewController: ObservationEditDelegate {
     
     func editComplete(_ observation: Observation, coordinator: NSObject) {
         observationEditCoordinator = nil;
-        self.observation!.managedObjectContext?.refresh(self.observation!, mergeChanges: false);
+        guard let observation = self.observation else {
+            return;
+        }
+        self.observation!.managedObjectContext?.refresh(observation, mergeChanges: false);
         // reload the observation
         setupObservation();
     }

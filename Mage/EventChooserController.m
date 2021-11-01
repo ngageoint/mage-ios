@@ -5,7 +5,7 @@
 //
 
 #import "EventChooserController.h"
-#import "Event.h"
+#import "MAGE-Swift.h"
 #import "Form.h"
 #import "Mage.h"
 #import "Server.h"
@@ -52,7 +52,7 @@
     self.eventsFetched = NO;
     self.checkForms = NO;
     
-    self.allEventsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+    self.allEventsController = [Event caseInsensitiveSortFetchAllWithSortTerm:@"name" ascending:true predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] groupBy:nil context:[NSManagedObjectContext MR_defaultContext]];
     self.allEventsController.delegate = self;
     NSError *error;
     
@@ -71,16 +71,16 @@
 
     self.view.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.loadingView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    self.chooseEventTitle.textColor = self.scheme.colorScheme.onPrimaryColor;
-    self.eventInstructions.textColor = [self.scheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.87];
+    self.chooseEventTitle.textColor = self.scheme.colorScheme.onSecondaryColor;
+    self.eventInstructions.textColor = [self.scheme.colorScheme.onSecondaryColor colorWithAlphaComponent:0.87];
     self.actionButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.loadingLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.activityIndicator.color = self.scheme.colorScheme.primaryColorVariant;
     self.tableView.backgroundColor = self.scheme.colorScheme.surfaceColor;
     self.refreshingButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.refreshingView.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.refreshingButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.refreshingStatus.textColor = self.scheme.colorScheme.onPrimaryColor;
+    self.refreshingButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
+    self.refreshingStatus.textColor = self.scheme.colorScheme.onSecondaryColor;
     
     self.searchController.searchBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.searchController.searchBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
@@ -163,7 +163,7 @@
     __weak typeof(self) weakSelf = self;
 
     // verify the user is still in this event
-    Event *fetchedEvent = [Event getEventById:event.remoteId inContext:[NSManagedObjectContext MR_defaultContext]];
+    Event *fetchedEvent = [Event getEventWithEventId:event.remoteId context:[NSManagedObjectContext MR_defaultContext]];
     if (fetchedEvent == nil) {
     
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unauthorized"

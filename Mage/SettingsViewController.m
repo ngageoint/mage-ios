@@ -58,26 +58,7 @@
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
-    self.masterViewController.navigationBar.translucent = NO;
-    self.masterViewController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.masterViewController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-    self.masterViewController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
-    self.masterViewController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
-    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.titleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
-        NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-    };
-    
-    self.masterViewController.navigationBar.standardAppearance = appearance;
-    self.masterViewController.navigationBar.scrollEdgeAppearance = appearance;
-    self.masterViewController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.masterViewController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+
     self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.settingsDetailView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.settingsDetailImageView.tintColor = [self.scheme.colorScheme.primaryColor colorWithAlphaComponent:0.87];

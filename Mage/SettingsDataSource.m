@@ -44,9 +44,9 @@ static const NSInteger LEGAL_SECTION = 8;
     
     if (self) {
         self.scheme = containerScheme;
-        self.event = [Event getCurrentEventInContext:[NSManagedObjectContext MR_defaultContext]];
+        self.event = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
         
-        User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         NSArray *recentEventIds = [user.recentEventIds filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", self.event.remoteId]];
 
         NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
@@ -338,10 +338,33 @@ static const NSInteger LEGAL_SECTION = 8;
 
 - (NSDictionary *) displaySection {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
+    NSString *themeString = @"";
+    switch ([UIWindow getInterfaceStyle]) {
+        case UIUserInterfaceStyleUnspecified:
+            themeString = @"Follow system theme";
+            break;
+        case UIUserInterfaceStyleDark:
+            themeString = @"Dark theme";
+            break;
+        case UIUserInterfaceStyleLight:
+            themeString = @"Light theme";
+            break;
+        default:
+            themeString = @"Follow system theme";
+            break;
+    }
     return [@{
         @"header": @"Display Settings",
-        @"rows": @[@{
+        @"rows": @[
+            @{
+                     @"type": [NSNumber numberWithInteger:kTheme],
+                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                     @"image": @"brightness_medium",
+                     @"textLabel": @"Theme",
+                     @"detailTextLabel": themeString,
+                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                     },
+            @{
                        @"type": [NSNumber numberWithInteger:kTimeDisplay],
                        @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
                        @"image": @"access_time",
@@ -408,14 +431,6 @@ static const NSInteger LEGAL_SECTION = 8;
     return [@{
       @"header": @"Settings",
       @"rows": @[
-//            @{
-//                     @"type": [NSNumber numberWithInteger:kTheme],
-//                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-//                     @"image": @"brightness_medium",
-//                     @"textLabel": @"Theme",
-//                     @"detailTextLabel": [[[ThemeManager sharedManager] curentThemeDefinition] displayName],
-//                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
-//                     },
                  @{
                      @"type": [NSNumber numberWithInteger:kChangePassword],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
@@ -434,7 +449,7 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSDictionary *) aboutSection {
-    User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     

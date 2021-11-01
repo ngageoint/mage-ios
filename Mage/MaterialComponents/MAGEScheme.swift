@@ -8,6 +8,56 @@
 
 import Foundation
 import MaterialComponents
+import UIKit
+
+func applicationAppearance(scheme: MDCContainerScheming?) {
+    guard let scheme = scheme else {
+        return
+    }
+
+    let appearance = UINavigationBarAppearance()
+    appearance.configureWithOpaqueBackground();
+    appearance.backgroundColor = scheme.colorScheme.primaryColorVariant;
+    appearance.titleTextAttributes = [
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+    ];
+    appearance.largeTitleTextAttributes = [
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+    ];
+    
+    UINavigationBar.appearance().barTintColor = scheme.colorScheme.primaryColorVariant;
+    UINavigationBar.appearance().isTranslucent = false;
+    UINavigationBar.appearance().tintColor = scheme.colorScheme.onSecondaryColor;
+    
+    UINavigationBar.appearance().standardAppearance = appearance;
+    UINavigationBar.appearance().scrollEdgeAppearance = appearance;
+    UINavigationBar.appearance().compactAppearance = appearance;
+    if #available(iOS 15.0, *) {
+        UINavigationBar.appearance().compactScrollEdgeAppearance = appearance
+    }
+    
+    let tabBarAppearance = UITabBarAppearance();
+    tabBarAppearance.selectionIndicatorTintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+    tabBarAppearance.backgroundColor = scheme.colorScheme.surfaceColor
+    setTabBarItemColors(tabBarAppearance.stackedLayoutAppearance, scheme: scheme)
+    setTabBarItemColors(tabBarAppearance.inlineLayoutAppearance, scheme: scheme)
+    setTabBarItemColors(tabBarAppearance.compactInlineLayoutAppearance, scheme: scheme)
+    
+    UITabBar.appearance().standardAppearance = tabBarAppearance;
+    if #available(iOS 15.0, *) {
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    }
+}
+
+private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance, scheme: MDCContainerScheming) {
+    itemAppearance.normal.iconColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+    itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]
+    
+    itemAppearance.selected.iconColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+    itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.primaryColor.withAlphaComponent(0.87)]
+}
 
 func globalContainerScheme() -> MDCContainerScheming {
     let containerScheme = MDCContainerScheme();
@@ -21,7 +71,7 @@ func globalContainerScheme() -> MDCContainerScheming {
     containerScheme.colorScheme.backgroundColor = UIColor.systemGroupedBackground;
     containerScheme.colorScheme.onBackgroundColor = UIColor.label;
     containerScheme.colorScheme.errorColor = .systemRed;
-    containerScheme.colorScheme.onPrimaryColor = .white;
+    containerScheme.colorScheme.onPrimaryColor = UIColor(named: "onPrimary") ?? .white;
     
     return containerScheme;
 }
@@ -60,6 +110,7 @@ func globalDisabledScheme() -> MDCContainerScheming {
 // This is for access in Objective-c land
 @objc class MAGEScheme: NSObject {
     @objc class func scheme() -> MDCContainerScheming { return globalContainerScheme() }
+    @objc class func setupApplicationAppearance(scheme : MDCContainerScheming?) { return applicationAppearance(scheme: scheme) }
 }
 
 // This is for access in Objective-c land

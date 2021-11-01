@@ -5,11 +5,12 @@
 //
 
 @import DateTools;
+@import MaterialComponents;
 
 #import "LocationAnnotation.h"
-#import "User.h"
-#import "MKAnnotationView+PersonIcon.h"
 #import "SFGeometryUtils.h"
+#import <PureLayout.h>
+#import "MAGE-Swift.h"
 
 @implementation LocationAnnotation
 
@@ -37,7 +38,7 @@
 
 -(id) initWithGPSLocation: (GPSLocation *) gpsLocation user: (User *) user {
     if ((self = [super init])) {
-        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:[gpsLocation getGeometry]];
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:gpsLocation.geometry];
         _location = [[CLLocation alloc] initWithCoordinate:(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]))
                                                   altitude:[[gpsLocation.properties valueForKey:@"altitude"] doubleValue]
                                         horizontalAccuracy:[[gpsLocation.properties valueForKey:@"accuracy"] doubleValue]
@@ -58,22 +59,34 @@
     return self;
 }
 
-- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView; {
-    MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
-    if (annotationView == nil) {
-        annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"locationAnnotation"];
-        annotationView.enabled = YES;
-        
-        UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-//        rightButton.tintColor = [UIColor mageBlue];
-        annotationView.rightCalloutAccessoryView = rightButton;
+- (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme {
+    MKAnnotationView *annotationView = nil;
+    if (self.user.iconColor || self.user.iconUrl == nil) {
+        PersonAnnotationView *personAnnotationView = (PersonAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
+        if (personAnnotationView == nil) {
+            personAnnotationView = [[PersonAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"locationAnnotation"];
+            personAnnotationView.scheme = scheme;
+            personAnnotationView.enabled = YES;
+        } else {
+            personAnnotationView.annotation = self;
+        }
+        annotationView = personAnnotationView;
     } else {
-        annotationView.annotation = self;
+        annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"userIconAnnotation"];
+        if (annotationView == nil) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"userIconAnnotation"];
+            annotationView.enabled = YES;
+            
+            UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+            annotationView.rightCalloutAccessoryView = rightButton;
+        } else {
+            annotationView.annotation = self;
+        }
+
+        [PersonAnnotationView setImageForAnnotationWithAnnotation:annotationView user:self.user];
     }
-    
-    [annotationView setImageForUser:self.user];
-    
-    annotationView.centerOffset = CGPointMake(0, -(annotationView.image.size.height/2.0f) + 7);
+    annotationView.displayPriority = MKFeatureDisplayPriorityRequired;
+    annotationView.collisionMode = MKAnnotationViewCollisionModeNone;
     return annotationView;
 }
 

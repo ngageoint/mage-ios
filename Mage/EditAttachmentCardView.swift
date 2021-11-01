@@ -47,7 +47,11 @@ class EditAttachmentCardView: MDCCard {
         self.accessibilityLabel = "Edit Attachment Card"
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         self.scheme = scheme;
         attachmentView.applyTheme(withScheme: scheme);

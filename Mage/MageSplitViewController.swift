@@ -33,7 +33,11 @@ import Foundation
         self.scheme = containerScheme;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         
         if let masterViewController = self.masterViewController {

@@ -12,7 +12,6 @@
 #import "ServerAuthentication.h"
 #import "MageSessionManager.h"
 #import "AppDelegate.h"
-#import "User.h"
 #import "DBZxcvbn.h"
 #import "MAGE-Swift.h"
 
@@ -70,9 +69,9 @@
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.cancelButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.cancelButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
     self.changeButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.changeButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.changeButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
     self.showCurrentPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
     self.showNewPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
     self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
@@ -210,7 +209,7 @@
     [MageServer serverWithURL: url
     success:^(MageServer *mageServer) {
         weakSelf.usernameField.enabled = !weakSelf.loggedIn;
-        User *user = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+        User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         weakSelf.usernameField.text = user.username;
         weakSelf.changePasswordView.hidden = NO;
         weakSelf.informationView.hidden = YES;

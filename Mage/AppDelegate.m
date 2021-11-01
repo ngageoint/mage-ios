@@ -6,7 +6,6 @@
 
 #import "AppDelegate.h"
 #import "Mage.h"
-#import "User.h"
 #import "Canary.h"
 #import <CoreLocation/CoreLocation.h>
 #import "UserUtility.h"
@@ -42,7 +41,6 @@
 #import "TransitionViewController.h"
 #import "Layer.h"
 #import "MageConstants.h"
-#import "MageInitializer.h"
 #import "MAGE-Swift.h"
 #import <SSZipArchive/SSZipArchive.h>
 
@@ -79,6 +77,7 @@
     self.window = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
     self.window.backgroundColor = [UIColor blackColor];
+    self.window.overrideUserInterfaceStyle = [[NSUserDefaults standardUserDefaults] integerForKey:@"themeOverride"];
     
     [self createLoadingView];
     
@@ -87,11 +86,6 @@
     if (protectedDataAvailable) {
         [self setupMageApplication:application];
         [self startMageApp];
-    }
-    
-    if (@available(iOS 13.0, *)) {
-    } else {
-        [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[UIColor whiteColor]];
     }
 
 	return YES;
@@ -182,6 +176,7 @@
 }
 
 - (void) createLoadingView {
+    [MAGEScheme setupApplicationAppearanceWithScheme:[MAGEScheme scheme]];
     self.rootViewController = [[UINavigationController alloc] init];
     self.rootViewController.navigationBarHidden = YES;
     [self.window setRootViewController:self.rootViewController];
@@ -565,7 +560,7 @@
                 minZoom = MIN(minZoom, (int)MAGE_FEATURES_MAX_ZOOM);
             }
             GeoPackageFeatureTableCacheOverlay * tableCache = [[GeoPackageFeatureTableCacheOverlay alloc] initWithName:featureTable andGeoPackage:name andCacheName:tableCacheName andCount:count andMinZoom:minZoom andIndexed:indexed andGeometryType:geometryType];
-            
+
             // If indexed, check for linked tile tables
             if(indexed){
                 NSArray<NSString *> * linkedTileTables = [linker tileTablesForFeatureTable:featureTable];
@@ -692,6 +687,20 @@
         imported = [manager importGeoPackageFromPath:path withName:name andOverride:overwrite andMove:true];
         NSLog(@"Imported local Geopackage %d", imported);
         if (imported && !alreadyImported) {
+            // index any feature tables that were not indexed already
+            GPKGGeoPackage *geoPackage = [manager open:name];
+            NSArray * featureTables = [geoPackage featureTables];
+            for(NSString * featureTable in featureTables){
+                
+                GPKGFeatureDao * featureDao = [geoPackage featureDaoWithTableName:featureTable];
+                GPKGFeatureTableIndex * featureTableIndex = [[GPKGFeatureTableIndex alloc] initWithGeoPackage:geoPackage andFeatureDao:featureDao];
+                if(![featureTableIndex isIndexed]){
+                    NSLog(@"Indexing the feature table %@", featureTable);
+                    [featureTableIndex index];
+                    NSLog(@"done indexing the feature table %@", featureTable);
+                }
+            }
+            
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Layer *l = [Layer MR_createEntityInContext:localContext];
                 l.name = name;
@@ -699,6 +708,8 @@
                 l.type = @"GeoPackage";
                 l.eventId = [NSNumber numberWithInt:-1];
                 [self updateSelectedCaches:name];
+            } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+                NSLog(@"Saved the local GeoPackage %@ with error %@", contextDidSave ? @"YES" : @"NO", error);
             }];
         }
     }

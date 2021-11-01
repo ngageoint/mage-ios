@@ -7,9 +7,9 @@
 #import "StoredPassword.h"
 #import "MageSessionManager.h"
 #import "MageServer.h"
-#import "User.h"
 #import "UserUtility.h"
 #import "NSDate+Iso8601.h"
+#import "MAGE-Swift.h"
 
 @interface ServerAuthentication()
 @property (strong, nonatomic) NSDictionary *parameters;
@@ -150,11 +150,11 @@
     NSString *userId = [userJson objectForKey:@"id"];
     
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        User *user = [User fetchUserForId:userId inManagedObjectContext:localContext];
+        User *user = [User fetchUserWithUserId:userId context:localContext];
         if (!user) {
-            [User insertUserForJson:userJson inManagedObjectContext:localContext];
+            [User insertWithJson:userJson context:localContext];
         } else {
-            [user updateUserForJson:userJson];
+            [user updateWithJson:userJson context:localContext];
         }
     } completion:^(BOOL contextDidSave, NSError *error) {
         NSString *token = [self.response objectForKey:@"token"];

@@ -13,7 +13,7 @@ extension MapDelegate : FeedItemDelegate {
     public func add(_ feedItem: FeedItem!) {
         if (feedItem.isMappable) {
             self.mapView.addAnnotation(feedItem);
-            if (self.feedItemToNavigateTo.remoteId == feedItem.remoteId) {
+            if (self.feedItemToNavigateTo?.remoteId == feedItem.remoteId) {
                 self.updateStraightLineNavigationDestination(feedItem.coordinate);
             }
         }

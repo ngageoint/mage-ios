@@ -66,13 +66,13 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
                                                             groupBy:nil
                                                            delegate:self
                                                           inContext:[NSManagedObjectContext MR_defaultContext]];
-    
+    __weak typeof(self) weakSelf = self;
     [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.pushTasks = [NSMutableArray arrayWithArray:[uploadTasks valueForKeyPath:@"taskIdentifier"]];
+            weakSelf.pushTasks = [NSMutableArray arrayWithArray:[uploadTasks valueForKeyPath:@"taskIdentifier"]];
             
-            [self pushAttachments:self.fetchedResultsController.fetchedObjects];
-            [self scheduleTimer];
+            [weakSelf pushAttachments:weakSelf.fetchedResultsController.fetchedObjects];
+            [weakSelf scheduleTimer];
         });
     }];
 }
@@ -91,8 +91,10 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
 
 
 - (void) scheduleTimer {
+    __weak typeof(self) weakSelf = self;
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.attachmentPushTimer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(onTimerFire) userInfo:nil repeats:YES];
+        weakSelf.attachmentPushTimer = [NSTimer scheduledTimerWithTimeInterval:weakSelf.interval target:weakSelf selector:@selector(onTimerFire) userInfo:nil repeats:YES];
     });
 }
 

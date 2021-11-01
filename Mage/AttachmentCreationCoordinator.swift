@@ -14,7 +14,7 @@ import PhotosUI
     @objc func recordingAvailable(recording: Recording);
 }
 
-protocol AttachmentCreationCoordinatorDelegate {
+protocol AttachmentCreationCoordinatorDelegate: AnyObject {
     // can be removed after server 5
     func attachmentCreated(attachment: Attachment);
     
@@ -31,7 +31,7 @@ class AttachmentCreationCoordinator: NSObject {
     var observation: Observation;
     var fieldName: String?;
     var observationFormId: String?;
-    var delegate: AttachmentCreationCoordinatorDelegate?;
+    weak var delegate: AttachmentCreationCoordinatorDelegate?;
     var pickerController: UIImagePickerController?;
     var audioRecorderViewController: AudioRecorderViewController?;
     var workingOverlayController: AttachmentProgressViewController?;
@@ -54,7 +54,7 @@ class AttachmentCreationCoordinator: NSObject {
         self.scheme = scheme;
     }
     
-    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
     }
     
@@ -166,28 +166,17 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     func presentGallery() {
         DispatchQueue.main.async {
             print("Present the gallery")
-            if #available(iOS 14, *) {
-                var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-                configuration.filter = .images;
-                configuration.selectionLimit = 1;
-                
-                let photoPicker = PHPickerViewController(configuration: configuration);
-                photoPicker.delegate = self;
-                self.rootViewController?.present(photoPicker, animated: true, completion: nil);
-            } else {
-                // Fallback on earlier versions
-                self.pickerController = UIImagePickerController();
-                self.pickerController!.delegate = self;
-                self.pickerController!.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
-                self.pickerController!.sourceType = .photoLibrary;
-                self.pickerController!.videoQuality = .typeHigh;
-                self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
-            }
+            var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+            configuration.filter = .images;
+            configuration.selectionLimit = 1;
+            
+            let photoPicker = PHPickerViewController(configuration: configuration);
+            photoPicker.delegate = self;
+            self.rootViewController?.present(photoPicker, animated: true, completion: nil);
         }
     }
 }
 
-@available(iOS 14, *)
 extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
@@ -273,8 +262,6 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         let mediaType = info[.mediaType] as? String;
         if (mediaType == kUTTypeImage as String && picker.sourceType == .camera) {
             handleCameraImage(picker: picker, info: info);
-        } else if (mediaType == kUTTypeImage as String && picker.sourceType != .camera) {
-            handleSavedImage_iOS13(picker: picker, info: info);
         } else if (mediaType == kUTTypeMovie as String) {
             handleMovie(picker: picker, info: info);
         }
@@ -287,79 +274,6 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         locationManager?.stopUpdatingLocation();
         photoHeadings.removeAll();
         photoLocations.removeAll();
-    }
-    
-    func handleSavedImage_iOS13(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
-        self.workingOverlayController = AttachmentProgressViewController();
-        self.workingOverlayController?.modalPresentationStyle = .fullScreen;
-        self.rootViewController?.present(self.workingOverlayController!, animated: false, completion: nil);
-        if let scheme = self.scheme {
-            self.workingOverlayController?.applyTheme(withContainerScheme: scheme);
-        }
-        
-        let dateFormatter = DateFormatter();
-        dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
-        
-        if let chosenImage = info[.originalImage] as? UIImage,
-           let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            DispatchQueue.global(qos: .userInitiated).async { [self] in
-                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
-                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
-                do {
-                    try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                    DispatchQueue.main.async {
-                        self.workingOverlayController?.setProgressMessage(message: "Scaling image...")
-                    }
-//                    let finalImage = chosenImage.qualityScaled();
-                    guard let imageData = chosenImage.qualityScaled() else { return };
-                    DispatchQueue.main.async {
-                        self.workingOverlayController?.setProgressMessage(message: "Writing metadata into image...")
-                    }
-                    guard let finalData = writeMetadataIntoImageData(imagedata: imageData, metadata: info[.mediaMetadata] as? NSMutableDictionary) else { return };
-                    do {
-                        DispatchQueue.main.async {
-                            self.workingOverlayController?.setProgressMessage(message: "Saving image...")
-                        }
-                        try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
-                        addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
-                        DispatchQueue.main.async {
-                            workingOverlayController?.dismiss(animated: true, completion: nil);
-                        }
-                    } catch {
-                        print("Unable to write image to file \(fileToWriteTo): \(error)")
-                        DispatchQueue.main.async {
-                            workingOverlayController?.dismiss(animated: true, completion: nil);
-                        }
-                    }
-                } catch {
-                    print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
-                    DispatchQueue.main.async {
-                        workingOverlayController?.dismiss(animated: true, completion: nil);
-                    }
-                }
-            }
-        } else {
-            // The user selected certain photos to share with MAGE and this wasn't one of them
-            // prompt the user to pick more photos to share, on iOS 13, send them to the privacy settings
-            print("Cannot access asset")
-            
-            let alert = UIAlertController(title: "Permission Denied", message: "MAGE is unable to access the photo you have chosen.  Please update the photos MAGE is allowed to access and try again.", preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "Update allowed photos", style: .default , handler:{ (UIAlertAction)in
-                guard let url = URL(string: UIApplication.openSettingsURLString),
-                      UIApplication.shared.canOpenURL(url) else {
-                    assertionFailure("Not able to open App privacy settings")
-                    return
-                }
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            if let rootViewController = self.rootViewController {
-                rootViewController.present(alert, animated: true, completion: nil)
-            }
-        }
-        
     }
     
     func handleCameraImage(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
@@ -430,27 +344,27 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
     }
     
     func createGpsExifFromLocation(location: CLLocation?, heading: CLHeading?) -> [AnyHashable : Any]? {
-        guard let safeLocation: CLLocation = location else {
+        guard let location: CLLocation = location else {
             return nil;
         }
         
-        let metersPerSecondMeasurement = Measurement(value: safeLocation.speed, unit: UnitSpeed.metersPerSecond);
+        let metersPerSecondMeasurement = Measurement(value: location.speed, unit: UnitSpeed.metersPerSecond);
         
         var gpsDictionary: [AnyHashable : Any] = [
-            kCGImagePropertyGPSLatitude: safeLocation.coordinate.latitude,
-            kCGImagePropertyGPSLongitude: safeLocation.coordinate.longitude,
+            kCGImagePropertyGPSLatitude: location.coordinate.latitude,
+            kCGImagePropertyGPSLongitude: location.coordinate.longitude,
             kCGImagePropertyGPSSpeed: metersPerSecondMeasurement.converted(to: UnitSpeed.kilometersPerHour),
             kCGImagePropertyGPSSpeedRef: "K",
-            kCGImagePropertyGPSTrack: safeLocation.course,
+            kCGImagePropertyGPSTrack: location.course,
             kCGImagePropertyGPSTrackRef: "T",
-            kCGImagePropertyGPSAltitude: safeLocation.altitude,
+            kCGImagePropertyGPSAltitude: location.altitude,
             kCGImagePropertyGPSAltitudeRef: 0
         ];
         
-        if let safeHeading: CLHeading = heading {
-            gpsDictionary[kCGImagePropertyGPSImgDirection] = safeHeading.trueHeading;
+        if let heading: CLHeading = heading {
+            gpsDictionary[kCGImagePropertyGPSImgDirection] = heading.trueHeading;
             gpsDictionary[kCGImagePropertyGPSImgDirectionRef] = "T";
-            gpsDictionary[kCGImagePropertyGPSDestBearing] = safeHeading.trueHeading;
+            gpsDictionary[kCGImagePropertyGPSDestBearing] = heading.trueHeading;
             gpsDictionary[kCGImagePropertyGPSDestBearingRef] = "T";
         }
         return gpsDictionary;

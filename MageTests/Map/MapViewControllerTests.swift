@@ -95,7 +95,7 @@ class MapViewControllerTests: KIFSpec {
                     let feedIds: [String] = ["0","1","2","3"];
                     let feeds = MageCoreDataFixtures.parseJsonFile(jsonFile: "feeds");
                     MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                        let remoteIds: [String] = Feed.populateFeeds(fromJson: feeds as! [Any], inEventId: 1, in: localContext) as! [String]
+                        let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable : Any]], eventId: 1, context: localContext)
                         expect(remoteIds) == feedIds;
                     })
 

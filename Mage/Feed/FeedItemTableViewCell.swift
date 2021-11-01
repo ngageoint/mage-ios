@@ -59,7 +59,11 @@ class FeedItemTableViewCell : UITableViewCell {
         }
     }
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.backgroundColor;
         card.applyTheme(withScheme: scheme);
@@ -77,9 +81,7 @@ class FeedItemTableViewCell : UITableViewCell {
         card.accessibilityLabel = "feed item card \(feedItem.title ?? "")"
         feedItemView.populate(item: feedItem, actionsDelegate: actionsDelegate);
         actionsView.populate(feedItem: feedItem, delegate: actionsDelegate);
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     override func updateConstraints() {

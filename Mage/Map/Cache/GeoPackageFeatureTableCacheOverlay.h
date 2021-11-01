@@ -10,6 +10,8 @@
 #import "GPKGFeatureOverlayQuery.h"
 #import "GPKGMapShape.h"
 #import "GeoPackageTileTableCacheOverlay.h"
+#import "MAGE-Swift.h"
+
 
 extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 
@@ -91,5 +93,6 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 -(NSArray<GeoPackageTileTableCacheOverlay *> *) getLinkedTileTables;
 
 -(GPKGFeatureTableData *) getFeatureTableDataWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView;
+- (NSArray<GeoPackageFeatureItem *> *) getFeaturesNearTap: (CLLocationCoordinate2D) tapLocation andMap: (MKMapView *) mapView;
 
 @end

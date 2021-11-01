@@ -5,7 +5,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "User.h"
 #import <MapKit/MapKit.h>
 
 @protocol UserSelectionDelegate <NSObject>

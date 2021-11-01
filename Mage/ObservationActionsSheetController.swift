@@ -45,11 +45,15 @@ class ObservationActionsSheetController: UITableViewController {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.delegate = delegate;
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
-        self.userHasEditPermissions = user.hasEditPermission();
+        let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default());
+        self.userHasEditPermissions = user?.hasEditPermission ?? false;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
         cancelButton.applyTextTheme(withScheme: containerScheme);
@@ -94,12 +98,10 @@ class ObservationActionsSheetController: UITableViewController {
             }
             return cell
         }()
-        if let safeScheme = scheme {
-            cell.imageView?.tintColor = safeScheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-            cell.textLabel?.textColor = safeScheme.colorScheme.onSurfaceColor;
-            cell.backgroundColor = safeScheme.colorScheme.surfaceColor;
-            cell.textLabel?.font = safeScheme.typographyScheme.subtitle1;
-        }
+        cell.imageView?.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor;
+        cell.backgroundColor = scheme?.colorScheme.surfaceColor;
+        cell.textLabel?.font = scheme?.typographyScheme.subtitle1;
         cell.accessoryType = .none;
         
         var correctedRow = indexPath.row + (userHasEditPermissions ? 0 : 3);
@@ -108,10 +110,8 @@ class ObservationActionsSheetController: UITableViewController {
             cell.accessibilityLabel = "Delete Observation";
             cell.imageView?.image = UIImage(named: "trash")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.tag = ObservationActionsSheetController.DELETE_CELL_TAG
-            if let safeScheme = scheme {
-                cell.textLabel?.textColor = safeScheme.colorScheme.errorColor;
-                cell.imageView?.tintColor = safeScheme.colorScheme.errorColor;
-            }
+            cell.textLabel?.textColor = scheme?.colorScheme.errorColor;
+            cell.imageView?.tintColor = scheme?.colorScheme.errorColor;
             return cell;
         }
         
@@ -170,8 +170,8 @@ class ObservationActionsSheetController: UITableViewController {
         
         if (tag == ObservationActionsSheetController.USER_CELL_TAG) {
             // show the user page
-            if let safeUser = observation.user {
-                delegate?.viewUser?(safeUser)
+            if let user = observation.user {
+                delegate?.viewUser?(user)
             }
         }
         

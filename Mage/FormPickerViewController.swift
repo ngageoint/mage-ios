@@ -23,7 +23,6 @@ import MaterialComponents.MDCButton;
     
     private lazy var divider: UIView = {
         let divider = UIView(forAutoLayout: ());
-        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
         divider.autoSetDimension(.height, toSize: 1);
         return divider;
     }()
@@ -68,14 +67,15 @@ import MaterialComponents.MDCButton;
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        if let safeScheme = scheme {
-            self.scheme = safeScheme;
+        guard let scheme = scheme else {
+            return
         }
-        if let safeScheme = self.scheme {
-            self.tableView.backgroundColor = safeScheme.colorScheme.surfaceColor;
-            cancelButton.applyTextTheme(withScheme: safeScheme);
-            titleLabel.font = safeScheme.typographyScheme.body1
-        }
+
+        self.scheme = scheme;
+        self.tableView.backgroundColor = scheme.colorScheme.surfaceColor;
+        cancelButton.applyTextTheme(withScheme: scheme);
+        titleLabel.font = scheme.typographyScheme.body1
+        divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
     }
     
     init(frame: CGRect) {
@@ -93,10 +93,10 @@ import MaterialComponents.MDCButton;
         self.observation = observation;
         self.scheme = scheme;
         applyTheme(withScheme: scheme);
-        if let safeObservation = self.observation, let safeProperties = safeObservation.properties {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                let observationForms: [[String: Any]] = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
-                let formsToBeDeleted = observation?.getFormsToBeDeleted() ?? IndexSet();
+        if let observation = self.observation, let properties = observation.properties {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as! [[String: Any]];
+                let formsToBeDeleted = observation.getFormsToBeDeleted();
                 for (index, form) in observationForms.enumerated() {
                     if (!formsToBeDeleted.contains(index)) {
                         let formId = form[EventKey.formId.key] as! Int;
@@ -141,28 +141,28 @@ extension FormPickerViewController: UITableViewDataSource {
         }()
         cell.backgroundColor = scheme?.colorScheme.surfaceColor;
 
-        if let safeForm = self.forms?[indexPath.row] {
-            cell.accessibilityLabel = safeForm["name"] as? String;
-            cell.textLabel?.text = safeForm["name"] as? String;
-            cell.detailTextLabel?.text = safeForm["description"] as? String;
+        if let form = self.forms?[indexPath.row] {
+            cell.accessibilityLabel = form["name"] as? String;
+            cell.textLabel?.text = form["name"] as? String;
+            cell.detailTextLabel?.text = form["description"] as? String;
             cell.imageView?.image = UIImage(named: "description")?.aspectResize(to: CGSize(width: 40, height: 40)).withRenderingMode(.alwaysTemplate);
             
-            let formCount = formIdCount[safeForm["id"] as! Int] ?? 0;
-            let safeFormMin: Int = (safeForm["min"] as? Int) ?? 0;
-            let safeFormMax: Int = (safeForm["max"] as? Int) ?? Int.max;
+            let formCount = formIdCount[form["id"] as! Int] ?? 0;
+            let formMin: Int = (form["min"] as? Int) ?? 0;
+            let formMax: Int = (form["max"] as? Int) ?? Int.max;
             
-            if (formCount < safeFormMin) {
+            if (formCount < formMin) {
                 cell.textLabel?.text = "\(cell.textLabel?.text ?? "")*";
             }
             
-            if (formCount >= safeFormMax) {
+            if (formCount >= formMax) {
                 cell.imageView?.tintColor = globalDisabledScheme().colorScheme.onSurfaceColor
                 cell.textLabel?.textColor = globalDisabledScheme().colorScheme.onSurfaceColor
                 cell.detailTextLabel?.textColor = globalDisabledScheme().colorScheme.onSurfaceColor;
                 cell.backgroundColor = globalDisabledScheme().colorScheme.surfaceColor;
             } else {
-                if let safeColor = safeForm["color"] as? String {
-                    cell.imageView?.tintColor = UIColor(hex: safeColor);
+                if let color = form["color"] as? String {
+                    cell.imageView?.tintColor = UIColor(hex: color);
                 } else {
                     cell.imageView?.tintColor = scheme?.colorScheme.primaryColor
                 }
@@ -178,8 +178,8 @@ extension FormPickerViewController: UITableViewDataSource {
 
 extension FormPickerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let safeForm = self.forms?[indexPath.row] {
-            if (safeForm["description"] != nil) {
+        if let form = self.forms?[indexPath.row] {
+            if (form["description"] != nil) {
                 return 72.0
             } else {
                 return 56.0
@@ -189,20 +189,20 @@ extension FormPickerViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let safeForm = self.forms?[indexPath.row] {
+        if let form = self.forms?[indexPath.row] {
             
-            let formCount = formIdCount[safeForm["id"] as! Int] ?? 0;
-            let safeFormMax: Int = (safeForm["max"] as? Int) ?? Int.max;
+            let formCount = formIdCount[form["id"] as! Int] ?? 0;
+            let formMax: Int = (form["max"] as? Int) ?? Int.max;
             
-            if (formCount >= safeFormMax) {
+            if (formCount >= formMax) {
                 // max amount of this form have already been added
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(safeForm["name"] ?? "") form cannot be included in an observation more than \(safeFormMax) time\(safeFormMax == 1 ? "" : "s")");
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(form["name"] ?? "") form cannot be included in an observation more than \(formMax) time\(formMax == 1 ? "" : "s")");
                 let messageAction = MDCSnackbarMessageAction();
                 messageAction.title = "OK";
                 message.action = messageAction;
                 MDCSnackbarManager.default.show(message);
             } else {
-                delegate?.formPicked(form: safeForm);
+                delegate?.formPicked(form: form);
             }
         }
     }

@@ -7,7 +7,6 @@
 #import <MapKit/MapKit.h>
 #import "Observation.h"
 #import "MapAnnotation.h"
-#import "Event.h"
 
 @interface ObservationAnnotation :  MapAnnotation
 

@@ -14,7 +14,7 @@
 
 + (UNNotificationRequest *) buildObservationNotificationRequest: (Observation *) observation {
     UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
-    Event *event = [Event getEventById:observation.eventId inContext:observation.managedObjectContext];
+    Event *event = [Event getEventWithEventId:observation.eventId context:observation.managedObjectContext];
     
     NSString *body = @"";
     if ([observation primaryFeedFieldText] != nil) {

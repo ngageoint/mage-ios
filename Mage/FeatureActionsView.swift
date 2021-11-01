@@ -51,7 +51,11 @@ class FeatureActionsView: UIView {
         return directionsButton;
     }()
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
@@ -67,9 +71,7 @@ class FeatureActionsView: UIView {
         self.configureForAutoLayout();
         layoutView();
         populate(location: location, title: title, delegate: featureActionsDelegate);
-        if let safeScheme = self.scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     func layoutView() {
@@ -89,23 +91,24 @@ class FeatureActionsView: UIView {
         super.updateConstraints();
     }
     
-    public func populate(location: CLLocationCoordinate2D?, title: String?, delegate: FeatureActionsDelegate?) {
+    public func populate(location: CLLocationCoordinate2D? = kCLLocationCoordinate2DInvalid, title: String?, delegate: FeatureActionsDelegate?) {
         self.location = location;
         self.title = title;
         self.featureActionsDelegate = delegate;
         
-        if let location = location {
+        if let location = location, CLLocationCoordinate2DIsValid(location) {
             if (UserDefaults.standard.showMGRS) {
                 latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(location), for: .normal);
             } else {
                 latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", location.latitude, location.longitude), for: .normal);
             }
             latitudeLongitudeButton.isEnabled = true;
+            latitudeLongitudeButton.isHidden = false;
+        } else {
+            latitudeLongitudeButton.isHidden = true;
         }
         
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     @objc func getDirectionsToFeature(_ sender: UIButton) {

@@ -39,12 +39,16 @@ import MaterialComponents.MDCCard
     private var keyboardHelper: KeyboardHelper?;
     private var bottomConstraint: NSLayoutConstraint?;
     
-    private lazy var event: Event = {
-        return Event.getById(self.observation?.eventId as Any, in: (self.observation?.managedObjectContext)!);
+    private lazy var event: Event? = {
+        guard let observation = observation, let eventId = observation.eventId, let context = observation.managedObjectContext else {
+            return nil
+        }
+
+        return Event.getEvent(eventId: eventId, context: context)
     }()
         
-    private lazy var eventForms: [[String: Any]] = {
-        let eventForms = event.forms as? [[String: Any]] ?? [];
+    private lazy var eventForms: [[String: Any]]? = {
+        let eventForms = event?.forms as? [[String: Any]] ?? [];
         return eventForms;
     }()
     
@@ -103,30 +107,15 @@ import MaterialComponents.MDCCard
         ])
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+        guard let containerScheme = containerScheme else {
+            return
+        }
+
         self.scheme = containerScheme;
         addFormFAB.applySecondaryTheme(withScheme: containerScheme);
         
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
-        
-        self.navigationController?.navigationBar.isTranslucent = false;
-        self.navigationController?.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : containerScheme.colorScheme.onPrimaryColor];
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: containerScheme.colorScheme.onPrimaryColor
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor:  containerScheme.colorScheme.onPrimaryColor
-        ];
-        
-        self.navigationController?.navigationBar.standardAppearance = appearance;
-        self.navigationController?.navigationBar.scrollEdgeAppearance = appearance;
-        self.navigationController?.navigationBar.standardAppearance.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
         
         formsHeader.applyTheme(withScheme: containerScheme);
     }
@@ -230,9 +219,7 @@ import MaterialComponents.MDCCard
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        if let safeScheme = self.scheme {
-            applyTheme(withContainerScheme: safeScheme);
-        }
+        applyTheme(withContainerScheme: scheme);
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -240,7 +227,7 @@ import MaterialComponents.MDCCard
         // If there are forms and this is a new observation call addForm
         // It is expected that the delegate will add the form if only one exists
         // and prompt the user if more than one exists
-        if (!alreadyPromptedToAddForm && newObservation && eventForms.count != 0 && observationForms.isEmpty) {
+        if (!alreadyPromptedToAddForm && newObservation && eventForms?.count != 0 && observationForms.isEmpty) {
             alreadyPromptedToAddForm = true;
             self.delegate?.addForm();
         }
@@ -265,15 +252,17 @@ import MaterialComponents.MDCCard
     func setupFormDependentButtons() {
         addFormFAB.isEnabled = true;
         addFormFAB.isHidden = false;
-        if let safeScheme = self.scheme {
-            addFormFAB.applySecondaryTheme(withScheme: safeScheme);
+        if let scheme = self.scheme {
+            addFormFAB.applySecondaryTheme(withScheme: scheme);
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
-        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms.count == 0) {
+        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms?.filter({ form in
+            return !(form[FormKey.archived.key] as? Bool ?? false)
+        }).count == 0) {
             addFormFAB.isHidden = true;
         }
-        if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+        if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             addFormFAB.applySecondaryTheme(withScheme: globalDisabledScheme())
         }
         formsHeader.reorderButton.isHidden = realFormCount <= 1;
@@ -281,11 +270,11 @@ import MaterialComponents.MDCCard
     
     func setupObservation(observation: Observation) {
         self.observation = observation;
-        if let safeProperties = self.observation?.properties as? [String: Any] {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                observationForms = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
+        if let properties = self.observation?.properties as? [String: Any] {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                observationForms = properties[ObservationKey.forms.key] as! [[String: Any]];
             }
-            self.observationProperties = safeProperties;
+            self.observationProperties = properties;
         } else {
             self.observationProperties = [ObservationKey.forms.key:[]];
             observationForms = [];
@@ -301,11 +290,9 @@ import MaterialComponents.MDCCard
     }
     
     func addCommonFields(stackView: UIStackView) {
-         if let safeObservation = observation {
-            commonFieldView = CommonFieldsView(observation: safeObservation, fieldSelectionDelegate: delegate, commonPropertiesListener: self);
-            if let safeScheme = scheme {
-                commonFieldView!.applyTheme(withScheme: safeScheme);
-            }
+         if let observation = observation {
+            commonFieldView = CommonFieldsView(observation: observation, fieldSelectionDelegate: delegate, commonPropertiesListener: self);
+            commonFieldView!.applyTheme(withScheme: scheme);
             stackView.addArrangedSubview(commonFieldView!);
          }
     }
@@ -319,13 +306,11 @@ import MaterialComponents.MDCCard
     // for legacy servers add the attachment field to common
     func addLegacyAttachmentCard(stackView: UIStackView) {
         if (MageServer.isServerVersion5()) {
-            if let safeObservation = observation {
-                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: safeObservation, attachmentSelectionDelegate: self, viewController: self);
-                let attachmentHeader: AttachmentHeader = AttachmentHeader();
-                if let safeScheme = self.scheme {
-                    attachmentCard.applyTheme(withScheme: safeScheme);
-                    attachmentHeader.applyTheme(withScheme: safeScheme);
-                }
+            if let observation = observation {
+                let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: observation, attachmentSelectionDelegate: self, viewController: self);
+                let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
+                attachmentCard.applyTheme(withScheme: scheme);
+                attachmentHeader.applyTheme(withScheme: scheme);
                 stackView.addArrangedSubview(attachmentHeader);
                 stackView.addArrangedSubview(attachmentCard);
             }
@@ -335,33 +320,43 @@ import MaterialComponents.MDCCard
     func addFormViews(stackView: UIStackView) {
         for (index, form) in self.observationForms.enumerated() {
             let card:ExpandableCard = addObservationFormView(observationForm: form, index: index);
-            if let safeScheme = scheme {
-                card.applyTheme(withScheme: safeScheme);
-            }
+            card.applyTheme(withScheme: scheme);
             card.expanded = newObservation || index == 0;
         }
     }
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-        let eventForm: [String: Any]? = self.eventForms.first { (form) -> Bool in
+        let eventForm: [String: Any]? = self.eventForms?.first { (form) -> Bool in
             return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
         }
         
+        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+        
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?[FormKey.primaryFeedField.key] as! String? {
-            if let obsfield = observationForm[primaryField] as! String? {
-                formPrimaryValue = obsfield;
+        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
+            if let primaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == primaryFieldName
+            }) {
+                if let obsfield = observationForm[primaryFieldName] {
+                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                }
             }
         }
-        if let secondaryField = eventForm?[FormKey.secondaryFeedField.key] as! String? {
-            if let obsfield = observationForm[secondaryField] as! String? {
-                formSecondaryValue = obsfield;
+        
+        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
+            if let secondaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+            }) {
+                if let obsfield = observationForm[secondaryFieldName] {
+                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                }
             }
         }
+        
         let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, viewController: self, observationFormListener: self, delegate: delegate, attachmentSelectionDelegate: self);
-        if let safeScheme = scheme {
-            formView.applyTheme(withScheme: safeScheme);
+        if let scheme = scheme {
+            formView.applyTheme(withScheme: scheme);
         }
         let formSpacerView = UIView(forAutoLayout: ());
         formSpacerView.addSubview(formView);
@@ -374,7 +369,7 @@ import MaterialComponents.MDCCard
         button.tag = index;
 
         let divider = UIView(forAutoLayout: ());
-        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
+        divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12);
         divider.autoSetDimension(.height, toSize: 1);
         formSpacerView.addSubview(divider);
         divider.autoPinEdge(toSuperviewEdge: .left);
@@ -387,8 +382,8 @@ import MaterialComponents.MDCCard
         button.applyTextTheme(withScheme: globalErrorContainerScheme())
         
         var tintColor: UIColor? = nil;
-        if let safeColor = eventForm?[FormKey.color.key] as? String {
-            tintColor = UIColor(hex: safeColor);
+        if let color = eventForm?[FormKey.color.key] as? String {
+            tintColor = UIColor(hex: color);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
@@ -405,8 +400,8 @@ import MaterialComponents.MDCCard
         // or reorder remove the form so the user is not distracted with a refresh
         observation?.addForm(toBeDeleted: sender.tag);
         cards[sender.tag].isHidden = true;
-        if let safeObservation = self.observation {
-            self.commonFieldView?.setObservation(observation: safeObservation);
+        if let observation = self.observation {
+            self.commonFieldView?.setObservation(observation: observation);
         }
         
         setupFormDependentButtons();
@@ -418,8 +413,8 @@ import MaterialComponents.MDCCard
             self.cards[sender.tag].isHidden = false;
             self.observation?.removeForm(toBeDeleted: sender.tag);
             self.setupFormDependentButtons();
-            if let safeObservation = self.observation {
-                self.commonFieldView?.setObservation(observation: safeObservation);
+            if let observation = self.observation {
+                self.commonFieldView?.setObservation(observation: observation);
             }
         }
         messageAction.handler = actionHandler;
@@ -428,22 +423,35 @@ import MaterialComponents.MDCCard
     }
     
     func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
-        let eventForm: [String: Any]? = self.eventForms.first { (eventForm) -> Bool in
+        let eventForm: [String: Any]? = self.eventForms?.first { (eventForm) -> Bool in
             return eventForm[FormKey.id.key] as? Int == form[EventKey.formId.key] as? Int
         }
+        
+        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryField = eventForm?[FormKey.primaryField.key] as! String? {
-            if let obsfield = form[primaryField] as? String {
-                formPrimaryValue = obsfield;
+        
+        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
+            if let primaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == primaryFieldName
+            }) {
+                if let obsfield = form[primaryFieldName] {
+                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                }
             }
         }
-        if let secondaryField = eventForm?[FormKey.secondaryField.key] as! String? {
-            // TODO: handle non strings
-            if let obsfield = form[secondaryField] as! String? {
-                formSecondaryValue = obsfield;
+        
+        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
+            if let secondaryField = fields.first(where: { field in
+                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+            }) {
+                if let obsfield = form[secondaryFieldName] {
+                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                }
             }
         }
+        
         cards[index].header = formPrimaryValue;
         cards[index].subheader = formSecondaryValue;
     }
@@ -452,19 +460,19 @@ import MaterialComponents.MDCCard
         // allow MDCButton ink ripple
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
             removeDeletedForms();
-            guard let safeObservation = self.observation else {
+            guard let observation = self.observation else {
                 return
             }
-            self.delegate?.reorderForms(observation: safeObservation);
+            self.delegate?.reorderForms(observation: observation);
         }
     }
     
     @objc func addForm(sender: UIButton) {
         let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
 
-        if (realFormCount >= (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+        if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // max amount of forms for this event have been added
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
@@ -480,16 +488,16 @@ import MaterialComponents.MDCCard
     
     @objc func saveObservation(sender: UIBarButtonItem) {
         removeDeletedForms();
-        guard let safeObservation = self.observation else { return }
+        guard let observation = self.observation else { return }
         if (checkObservationValidity()) {
-            self.delegate?.saveObservation(observation: safeObservation);
+            self.delegate?.saveObservation(observation: observation);
         }
     }
     
     func checkObservationValidity() -> Bool {
         var valid: Bool = false;
-        if let safeCommonFieldView = commonFieldView {
-            valid = safeCommonFieldView.checkValidity(enforceRequired: true)
+        if let commonFieldView = commonFieldView {
+            valid = commonFieldView.checkValidity(enforceRequired: true)
         } else {
             valid = true;
         }
@@ -502,7 +510,7 @@ import MaterialComponents.MDCCard
         
         // if this is a legacy server and the event has forms, there needs to be 1
         if (MageServer.isServerVersion5()) {
-            if (eventForms.count > 0 && realFormCount == 0) {
+            if ((eventForms?.count ?? 0) > 0 && realFormCount == 0) {
                 let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "One form must be added to this observation");
                 let messageAction = MDCSnackbarMessageAction();
                 messageAction.title = "OK";
@@ -522,18 +530,18 @@ import MaterialComponents.MDCCard
         }
         // end legacy check
         
-        if (realFormCount > (event.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
+        if (realFormCount > (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // too many forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation cannot be more than \(event?.maxObservationForms ?? NSNumber(value: NSIntegerMax))");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
             MDCSnackbarManager.default.show(message);
             return false;
         }
-        if (realFormCount < (event.minObservationForms ?? NSNumber(value: 0)) as! Int) {
+        if (realFormCount < (event?.minObservationForms ?? NSNumber(value: 0)) as! Int) {
             // not enough forms
-            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least \(event.minObservationForms ?? 0)");
+            let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "Total number of forms in an observation must be at least \(event?.minObservationForms ?? 0)");
             let messageAction = MDCSnackbarMessageAction();
             messageAction.title = "OK";
             message.action = messageAction;
@@ -543,40 +551,43 @@ import MaterialComponents.MDCCard
         
         // check each form for min max
         var formIdCount: [Int : Int] = [ : ];
-        if let safeObservation = self.observation, let safeProperties = safeObservation.properties {
-            if (safeProperties.keys.contains(ObservationKey.forms.key)) {
-                let observationForms: [[String: Any]] = safeProperties[ObservationKey.forms.key] as! [[String: Any]];
-                let formsToBeDeleted = observation?.getFormsToBeDeleted() ?? IndexSet();
-                for (index, form) in observationForms.enumerated() {
-                    if (!formsToBeDeleted.contains(index)) {
-                        let formId = form[EventKey.formId.key] as! Int;
-                        formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
+        if let observation = self.observation, let properties = observation.properties {
+            if (properties.keys.contains(ObservationKey.forms.key)) {
+                if let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as? [[String: Any]] {
+                    let formsToBeDeleted = observation.getFormsToBeDeleted();
+                    for (index, form) in observationForms.enumerated() {
+                        if (!formsToBeDeleted.contains(index)) {
+                            let formId = form[EventKey.formId.key] as! Int;
+                            formIdCount[formId] = (formIdCount[formId] ?? 0) + 1;
+                        }
                     }
                 }
             }
         }
         
-        for eventForm in eventForms {
-            let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
-            let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
-            let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
-            if (formCount < eventFormMin) {
-                // not enough of this form
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
-            }
-            if (formCount > eventFormMax) {
-                // too many of this form
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
-                let messageAction = MDCSnackbarMessageAction();
-                messageAction.title = "OK";
-                message.action = messageAction;
-                MDCSnackbarManager.default.show(message);
-                return false;
+        if let eventForms = eventForms {
+            for eventForm in eventForms {
+                let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
+                let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
+                let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
+                if (formCount < eventFormMin) {
+                    // not enough of this form
+                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
+                    let messageAction = MDCSnackbarMessageAction();
+                    messageAction.title = "OK";
+                    message.action = messageAction;
+                    MDCSnackbarManager.default.show(message);
+                    return false;
+                }
+                if (formCount > eventFormMax) {
+                    // too many of this form
+                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
+                    let messageAction = MDCSnackbarMessageAction();
+                    messageAction.title = "OK";
+                    message.action = messageAction;
+                    MDCSnackbarManager.default.show(message);
+                    return false;
+                }
             }
         }
         
@@ -638,8 +649,8 @@ import MaterialComponents.MDCCard
         self.observation?.properties = observationProperties;
         let previousStackViewHeight = stackView.bounds.size.height;
         let card:ExpandableCard = addObservationFormView(observationForm: newForm, index: observationForms.count - 1);
-        if let safeScheme = scheme {
-            card.applyTheme(withScheme: safeScheme);
+        if let scheme = scheme {
+            card.applyTheme(withScheme: scheme);
         }
         card.expanded = true;
         // scroll the view down to the form they just added but not quite all the way down because then it looks like you
@@ -667,8 +678,8 @@ extension ObservationEditCardCollectionViewController: ObservationFormListener {
         observationProperties[ObservationKey.forms.key] = observationForms;
         observation?.properties = observationProperties;
         setExpandableCardHeaderInformation(form: form, index: index);
-        if let safeObservation = self.observation {
-            commonFieldView?.setObservation(observation: safeObservation);
+        if let observation = self.observation {
+            commonFieldView?.setObservation(observation: observation);
         }
     }
 }
@@ -680,8 +691,22 @@ extension ObservationEditCardCollectionViewController: ObservationCommonProperti
         observationProperties[ObservationKey.provider.key] = provider;
         observation?.properties = observationProperties;
         observation?.setGeometry(geometry);
-        if let safeObservation = self.observation {
-            commonFieldView?.setObservation(observation: safeObservation);
+        if let observation = self.observation {
+            commonFieldView?.setObservation(observation: observation);
+        }
+    }
+    
+    func timestampUpdated(_ date: Date?) {
+        let formatter = ISO8601DateFormatter();
+        formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
+        if let date = date {
+            let formatter = ISO8601DateFormatter();
+            formatter.formatOptions =  [.withInternetDateTime, .withFractionalSeconds]
+            observationProperties[ObservationKey.timestamp.key] = formatter.string(from:date);
+            observation?.timestamp = date;
+        } else {
+            observationProperties.removeValue(forKey: ObservationKey.timestamp.key)
+            observation?.timestamp = nil;
         }
     }
 }
@@ -723,12 +748,18 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         if (attachment.url == nil) {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: (unsentAttachment["contentType"] as! String), delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: (unsentAttachment["contentType"] as! String), delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
     
@@ -736,7 +767,10 @@ extension ObservationEditCardCollectionViewController: AttachmentSelectionDelega
         if (attachment.url == nil) {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
         attachmentViewCoordinator?.start();
     }
 }

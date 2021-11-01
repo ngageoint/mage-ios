@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "MageServer.h"
-#import "User.h"
 #import "ContactInfo.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
+
+@class User;
 
 @protocol LoginDelegate
 

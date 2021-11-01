@@ -8,14 +8,13 @@
 
 import Foundation
 
-@available(iOS 14.0, *)
 class ColorPickerCell: UITableViewCell {
     
     let colorWell = UIColorWell(forAutoLayout: ())
     var colorPreference: String? {
         didSet {
-            if let safeColorPreference = colorPreference {
-                colorWell.selectedColor = UserDefaults.standard.color(forKey: safeColorPreference)
+            if let colorPreference = colorPreference {
+                colorWell.selectedColor = UserDefaults.standard.color(forKey: colorPreference)
             }
         }
     }
@@ -38,8 +37,8 @@ class ColorPickerCell: UITableViewCell {
     }
     
     @objc func colorWellChanged(_ sender: Any) {
-        if let safeColorPreference = colorPreference {
-            UserDefaults.standard.set(colorWell.selectedColor, forKey: safeColorPreference)
+        if let colorPreference = colorPreference {
+            UserDefaults.standard.set(colorWell.selectedColor, forKey: colorPreference)
         }
     }
 }

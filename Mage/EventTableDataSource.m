@@ -5,7 +5,6 @@
 //
 
 #import "EventTableDataSource.h"
-#import "User.h"
 #import "Server.h"
 #import "EventChooserController.h"
 #import "Observation.h"
@@ -28,7 +27,7 @@
 
 - (void) updateOtherFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
     if (!self.otherFetchedResultsController) {
-        self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+        self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAllWithSortTerm:@"name" ascending:true predicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil context:[NSManagedObjectContext MR_defaultContext]];
         self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
     }
     NSError *error;
@@ -61,7 +60,7 @@
 }
 
 - (void) refreshEventData {
-    User *current = [User fetchCurrentUserInManagedObjectContext:[NSManagedObjectContext MR_defaultContext]];
+    User *current = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
     NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
     [self updateOtherFetchedResultsControllerWithRecentEvents:recentEventIds];
     [self updateRecentFetchedResultsControllerWithRecentEvents:recentEventIds];
@@ -175,7 +174,7 @@
         return;
     }
     if (!self.filteredFetchedResultsController) {
-        self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAll:@"name" ascending:YES withPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil inContext:[NSManagedObjectContext MR_defaultContext]];
+        self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAllWithSortTerm:@"name" ascending:true predicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil context:[NSManagedObjectContext MR_defaultContext]];
         self.filteredFetchedResultsController.delegate = delegate;
     
         self.filteredFetchedResultsController.accessibilityLabel = @"Filtered";

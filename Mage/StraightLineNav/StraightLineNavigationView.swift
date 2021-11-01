@@ -99,20 +99,20 @@ import PureLayout
         return view;
     }();
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
-        self.backgroundColor = scheme.colorScheme.surfaceColor;
-        headingLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        speedLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        speedMarkerView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        targetMarkerView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        distanceToTargetLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        relativeBearingToTargetLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
-        cancelButton.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        self.backgroundColor = scheme?.colorScheme.surfaceColor;
+        headingLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        speedLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        speedMarkerView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        targetMarkerView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        distanceToTargetLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        relativeBearingToTargetLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+        cancelButton.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         
-        headingLabel.font = scheme.typographyScheme.overline;
-        speedLabel.font = scheme.typographyScheme.overline;
-        distanceToTargetLabel.font = scheme.typographyScheme.headline6;
-        relativeBearingToTargetLabel.font = scheme.typographyScheme.headline6;
+        headingLabel.font = scheme?.typographyScheme.overline;
+        speedLabel.font = scheme?.typographyScheme.overline;
+        distanceToTargetLabel.font = scheme?.typographyScheme.headline6;
+        relativeBearingToTargetLabel.font = scheme?.typographyScheme.headline6;
         
         compassView?.applyTheme(withScheme: scheme);
     }
@@ -128,9 +128,7 @@ import PureLayout
         self.delegate = delegate;
         layoutView();
         
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     override func updateConstraints() {

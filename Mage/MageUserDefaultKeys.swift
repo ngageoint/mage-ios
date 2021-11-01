@@ -10,6 +10,7 @@ import Foundation
 
 extension Notification.Name {
     public static let StartStraightLineNavigation = Notification.Name("StartStraightLineNavigation")
+    public static let MAGEEventsFetched = Notification.Name("MAGEEventsFetched")
 }
 
 @objc extension UserDefaults {
@@ -108,6 +109,33 @@ extension Notification.Name {
         }
     }
     
+    var mapShowTraffic: Bool {
+        get {
+            return bool(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var selectedStaticLayers: [String: Any]? {
+        get {
+            return dictionary(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
+    var selectedOnlineLayers: [String: Any]? {
+        get {
+            return dictionary(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
     var serverMajorVersion: Int {
         get {
             return integer(forKey: #function)
@@ -126,7 +154,7 @@ extension Notification.Name {
         }
     }
     
-    var theme: Int {
+    var themeOverride: Int {
         get {
             return integer(forKey: #function)
         }
@@ -231,6 +259,43 @@ extension Notification.Name {
         }
         set {
             set(newValue.rawValue, forKey: "timeFilterKey");
+        }
+    }
+    
+    // MARK: GeoPackage keys
+    var geoPackageFeatureTilesMaxPointsPerTile: Int {
+        get {
+            return integer(forKey: "geopackage_feature_tiles_max_points_per_tile");
+        }
+        set {
+            set(newValue, forKey: "geopackage_feature_tiles_max_points_per_tile");
+        }
+    }
+    
+    var geoPackageFeatureTilesMaxFeaturesPerTile: Int {
+        get {
+            return integer(forKey: "geopackage_feature_tiles_max_features_per_tile");
+        }
+        set {
+            set(newValue, forKey: "geopackage_feature_tiles_max_features_per_tile");
+        }
+    }
+    
+    var geoPackageFeaturesMaxPointsPerTable: Int {
+        get {
+            return integer(forKey: "geopackage_features_max_points_per_table");
+        }
+        set {
+            set(newValue, forKey: "geopackage_features_max_points_per_table");
+        }
+    }
+    
+    var geoPackageFeaturesMaxFeaturesPerTable: Int {
+        get {
+            return integer(forKey: "geopackage_features_max_features_per_table");
+        }
+        set {
+            set(newValue, forKey: "geopackage_features_max_features_per_table");
         }
     }
 }

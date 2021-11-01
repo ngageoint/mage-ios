@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 3.0.4
+
+##### Bug Fixes
+* Primary and secondary fields which are not strings now work properly
+
 ## 3.0.3
 
 ##### Bug Fixes

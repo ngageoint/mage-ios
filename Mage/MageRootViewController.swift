@@ -11,7 +11,7 @@ import Kingfisher
     var profileTabBarItem: UITabBarItem?;
     var moreTabBarItem: UITabBarItem?;
     var moreTableViewDelegate: UITableViewDelegate?;
-    var scheme: MDCContainerScheming!;
+    var scheme: MDCContainerScheming?;
     var feedViewControllers: [UINavigationController] = [];
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
@@ -47,8 +47,10 @@ import Kingfisher
         return nc;
     }()
     
-    private lazy var meTab: UINavigationController = {
-        let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default())
+    private lazy var meTab: UINavigationController? = {
+        guard let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
+            return nil
+        }
         let uvc = UserViewController(user: user, scheme: self.scheme);
         let nc = UINavigationController(rootViewController: uvc);
         nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "me"), tag: 3);
@@ -59,7 +61,7 @@ import Kingfisher
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc public init(containerScheme: MDCContainerScheming) {
+    @objc public init(containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
         super.init(nibName: nil, bundle: nil);
     }
@@ -69,56 +71,21 @@ import Kingfisher
     }
     
     @objc public func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        if (scheme != nil) {
-            self.scheme = scheme!;
+        guard let scheme = scheme else {
+            return
         }
-        self.tabBar.barTintColor = self.scheme.colorScheme.surfaceColor;
-        self.tabBar.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
-        self.tabBar.unselectedItemTintColor = self.scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        self.view.tintColor = self.scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
-        
-        setNavigationControllerAppearance(nc: self.moreNavigationController);
-        setNavigationControllerAppearance(nc: mapTab);
-        setNavigationControllerAppearance(nc: observationsTab);
-        setNavigationControllerAppearance(nc: locationsTab);
-        setNavigationControllerAppearance(nc: meTab);
-        setNavigationControllerAppearance(nc: settingsTabItem);
-        for navigationController in feedViewControllers {
-            setNavigationControllerAppearance(nc: navigationController);
-        }
+
+        self.scheme = scheme;
+        self.view.tintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87);
         
         if let topViewController = self.moreNavigationController.topViewController {
             if let tableView = topViewController.view as? UITableView {
-                tableView.tintColor = self.scheme.colorScheme.primaryColor
-                tableView.backgroundColor = self.scheme.colorScheme.backgroundColor
+                tableView.tintColor = scheme.colorScheme.primaryColor
+                tableView.backgroundColor = scheme.colorScheme.backgroundColor
             }
         }
         
-        self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
-
-    }
-    
-    func setNavigationControllerAppearance(nc: UINavigationController?) {
-        nc?.navigationBar.isTranslucent = false;
-        nc?.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-        nc?.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-        nc?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : self.scheme.colorScheme.onPrimaryColor];
-        nc?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor];
-        let appearance = UINavigationBarAppearance();
-        appearance.configureWithOpaqueBackground();
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
-        ];
-        appearance.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: self.scheme.colorScheme.onPrimaryColor,
-            NSAttributedString.Key.backgroundColor: self.scheme.colorScheme.primaryColorVariant
-        ];
-        
-        nc?.navigationBar.standardAppearance = appearance;
-        nc?.navigationBar.scrollEdgeAppearance = appearance;
-        nc?.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-        nc?.navigationBar.scrollEdgeAppearance?.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+        self.view.backgroundColor = scheme.colorScheme.backgroundColor;
     }
     
     override func viewDidLoad() {
@@ -132,7 +99,7 @@ import Kingfisher
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        applyTheme();
+        applyTheme(withScheme: self.scheme);
         if let moreTableView = moreNavigationController.topViewController?.view as? UITableView {
             if let proxyDelegate = moreTableView.delegate {
                 moreTableViewDelegate = MoreTableViewDelegate(proxyDelegate: proxyDelegate, containerScheme: scheme)
@@ -143,14 +110,14 @@ import Kingfisher
         setServerConnectionStatus();
         UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
         
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { notification in
+        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { [weak self]  notification in
             guard let notificationObject: StraightLineNavigationNotification = notification.object as? StraightLineNavigationNotification else {
                 return;
             }
-            self.mapTab.popToRootViewController(animated: false);
-            self.selectedViewController = self.mapTab;
+            self?.mapTab.popToRootViewController(animated: false);
+            self?.selectedViewController = self?.mapTab;
             
-            if let mvc: MapViewController = self.mapTab.viewControllers[0] as? MapViewController {
+            if let mvc: MapViewController = self?.mapTab.viewControllers[0] as? MapViewController {
                 mvc.mapDelegate.feedItemToNavigateTo = nil;
                 mvc.mapDelegate.userToNavigateTo = nil;
                 if let user = notificationObject.user {
@@ -176,11 +143,13 @@ import Kingfisher
         var allTabs: [UIViewController] = self.viewControllers ?? [];
         allTabs.append(mapTab);
         allTabs.append(settingsTabItem);
-        allTabs.append(meTab);
+        if let meTab = meTab {
+            allTabs.append(meTab);
+        }
         allTabs.append(locationsTab);
         allTabs.append(observationsTab);
         
-        for feed in Feed.getEventFeeds(Server.currentEventId()) {
+        for feed in Feed.getEventFeeds(eventId: Server.currentEventId()) {
             let nc = createFeedViewController(feed: feed);
             allTabs.append(nc);
             feedViewControllers.append(nc);
@@ -210,7 +179,7 @@ import Kingfisher
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
         nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));
 
-        if let url: URL = feed.iconURL() {
+        if let url: URL = feed.iconURL {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
             KingfisherManager.shared.retrieveImage(with: url, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),

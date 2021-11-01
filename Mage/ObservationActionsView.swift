@@ -46,7 +46,6 @@ class ObservationActionsView: UIView {
     
     private lazy var divider: UIView = {
         let divider = UIView(forAutoLayout: ());
-        divider.backgroundColor = UIColor.black.withAlphaComponent(0.12);
         divider.autoSetDimension(.height, toSize: 1);
         return divider;
     }()
@@ -202,8 +201,14 @@ class ObservationActionsView: UIView {
         return importantWrapperView;
     }()
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
+        divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
+
         favoriteButton.applyTextTheme(withScheme: scheme);
         importantButton.applyTextTheme(withScheme: scheme);
         directionsButton.applyTextTheme(withScheme: scheme);
@@ -219,6 +224,7 @@ class ObservationActionsView: UIView {
 
         cancelOrRemoveButton.applyTextTheme(withScheme: scheme);
         setImportantButton.applyContainedTheme(withScheme: scheme);
+        self.backgroundColor = scheme.colorScheme.surfaceColor
     }
     
     public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -231,9 +237,7 @@ class ObservationActionsView: UIView {
         if let observation = observation {
             populate(observation: observation);
         }
-        if let scheme = self.scheme {
-            applyTheme(withScheme: scheme);
-        }
+        applyTheme(withScheme: scheme);
         self.accessibilityLabel = "actions";
     }
     
@@ -268,8 +272,7 @@ class ObservationActionsView: UIView {
         importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant() ?? false);
         
         currentUserFavorited = false;
-        if let favorites = observation.favorites {
-            let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
+        if let favorites = observation.favorites, let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
             currentUserFavorited = favorites.contains { (favorite) -> Bool in
                 favoriteCountButton.isHidden = !(!favoriteCountButton.isHidden || favorite.favorite);
                 return favorite.userId == user.remoteId && favorite.favorite;
@@ -306,8 +309,8 @@ class ObservationActionsView: UIView {
                 cancelOrRemoveButton.setTitle("Remove", for: .normal);
             }
         }
-        if let safeScheme = scheme {
-            applyTheme(withScheme: safeScheme);
+        if let scheme = scheme {
+            applyTheme(withScheme: scheme);
         }
     }
     

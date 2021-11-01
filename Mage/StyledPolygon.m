@@ -58,25 +58,25 @@
 
 - (void) fillColorWithHexString: (NSString *) hex andAlpha: (CGFloat) alpha {
     if (hex) {
-        _fillColor = [UIColor colorWithHexString:hex alpha:alpha];
+        _fillColor = [UIColor hx_colorWithHexRGBAString:hex alpha:alpha];
     }
 }
 
 - (void) fillColorWithHexString: (NSString *) hex {
     if (hex) {
-        _fillColor = [UIColor colorWithHexString:hex];
+        _fillColor = [UIColor hx_colorWithHexRGBAString:hex];
     }
 }
 
 - (void) lineColorWithHexString: (NSString *) hex andAlpha: (CGFloat) alpha {
     if (hex) {
-        _lineColor = [UIColor colorWithHexString:hex alpha:alpha];
+        _lineColor = [UIColor hx_colorWithHexRGBAString:hex alpha:alpha];
     }
 }
 
 - (void) lineColorWithHexString: (NSString *) hex {
     if (hex) {
-        _lineColor = [UIColor colorWithHexString:hex];
+        _lineColor = [UIColor hx_colorWithHexRGBAString:hex];
     }
 }
 

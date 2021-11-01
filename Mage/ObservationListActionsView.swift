@@ -13,7 +13,7 @@ import MaterialComponents.MDCPalettes
 class ObservationListActionsView: UIView {
     var didSetupConstraints = false;
     var observation: Observation?;
-    var observationActionsDelegate: ObservationActionsDelegate?;
+    weak var observationActionsDelegate: ObservationActionsDelegate?;
     internal var currentUserFavorited: Bool = false;
     internal var isImportant: Bool = false;
     var bottomSheet: MDCBottomSheetController?;
@@ -64,7 +64,11 @@ class ObservationListActionsView: UIView {
         return directionsButton;
     }()
     
-    func applyTheme(withScheme scheme: MDCContainerScheming) {
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         self.scheme = scheme;
         favoriteCount.textColor = currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         favoriteCount.font = scheme.typographyScheme.overline;
@@ -75,6 +79,7 @@ class ObservationListActionsView: UIView {
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
 
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
+        self.backgroundColor = scheme.colorScheme.surfaceColor;
     }
     
     public convenience init(observation: Observation?, observationActionsDelegate: ObservationActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -84,12 +89,10 @@ class ObservationListActionsView: UIView {
         self.observationActionsDelegate = observationActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
-        if let safeObservation = observation {
-            populate(observation: safeObservation, delegate: observationActionsDelegate);
+        if let observation = observation {
+            populate(observation: observation, delegate: observationActionsDelegate);
         }
-        if let safeScheme = self.scheme {
-            applyTheme(withScheme: safeScheme);
-        }
+        applyTheme(withScheme: scheme);
     }
     
     func layoutView() {
@@ -137,9 +140,10 @@ class ObservationListActionsView: UIView {
         currentUserFavorited = false;
         var favoriteCounter = 0;
         if let favorites = observation.favorites {
-            let user = User.fetchCurrentUser(in: NSManagedObjectContext.mr_default());
-            currentUserFavorited = favorites.contains { (favorite) -> Bool in
-                return favorite.userId == user.remoteId && favorite.favorite;
+            if let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
+                currentUserFavorited = favorites.contains { (favorite) -> Bool in
+                    return favorite.userId == user.remoteId && favorite.favorite;
+                }
             }
             if (currentUserFavorited) {
                 favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);

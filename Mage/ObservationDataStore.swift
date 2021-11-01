@@ -13,8 +13,8 @@ class ObservationDataStore: NSObject {
     var tableView: UITableView;
     var scheme: MDCContainerScheming?;
     var observations: Observations?;
-    var observationActionsDelegate: ObservationActionsDelegate?;
-    var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    weak var observationActionsDelegate: ObservationActionsDelegate?;
+    weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     
     public init(tableView: UITableView, observationActionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?, scheme: MDCContainerScheming?) {
         self.scheme = scheme;
@@ -26,7 +26,7 @@ class ObservationDataStore: NSObject {
         self.tableView.delegate = self;
     }
     
-    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming!) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
     }
     

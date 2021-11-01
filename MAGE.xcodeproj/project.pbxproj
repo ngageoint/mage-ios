@@ -79,7 +79,6 @@
 		2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */; };
 		2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */; };
 		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
-		2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */; };
 		2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */; };
 		2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FCB1AC81DDA439700A63C71 /* Users.storyboard */; };
 		2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */; };
@@ -149,6 +148,7 @@
 		F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */; };
 		F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F717E56F1F62FFD000211D0D /* TransitionScreen.xib */; };
 		F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F717E5721F63053B00211D0D /* FadeTransitionSegue.m */; };
+		F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */; };
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
 		F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */; };
 		F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */; };
@@ -169,7 +169,7 @@
 		F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */; };
 		F72C175F2523B82500682052 /* MageUserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */; };
 		F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422D2694B60300F9AC3B /* Authentication.m */; };
-		F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.m */; };
+		F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */; };
 		F72D42DD2694B60300F9AC3B /* LocalAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422F2694B60300F9AC3B /* LocalAuthentication.m */; };
 		F72D42DE2694B60300F9AC3B /* Mage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42302694B60300F9AC3B /* Mage.m */; };
 		F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */; };
@@ -178,16 +178,16 @@
 		F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */; };
 		F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */; };
 		F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42502694B60300F9AC3B /* ServerAuthentication.m */; };
-		F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */; };
+		F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */; };
 		F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */; };
 		F72D42E72694B60300F9AC3B /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42532694B60300F9AC3B /* ObservationImage.m */; };
 		F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */; };
 		F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */; };
 		F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */; };
-		F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42592694B60300F9AC3B /* Event+CoreDataProperties.m */; };
+		F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42592694B60300F9AC3B /* Event+CoreDataProperties.swift */; };
 		F72D42EC2694B60300F9AC3B /* Canary.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425A2694B60300F9AC3B /* Canary.m */; };
 		F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */; };
-		F72D42EE2694B60300F9AC3B /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425E2694B60300F9AC3B /* User.m */; };
+		F72D42EE2694B60300F9AC3B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D425E2694B60300F9AC3B /* User.swift */; };
 		F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42612694B60300F9AC3B /* NSDate+display.m */; };
 		F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */; };
 		F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */; };
@@ -197,23 +197,23 @@
 		F72D42F52694B60300F9AC3B /* TaskSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42732694B60300F9AC3B /* TaskSessionManager.m */; };
 		F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42772694B60300F9AC3B /* StoredPassword.m */; };
 		F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42782694B60300F9AC3B /* LocationFetchService.m */; };
-		F72D42F82694B60300F9AC3B /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42792694B60300F9AC3B /* Location.m */; };
+		F72D42F82694B60300F9AC3B /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42792694B60300F9AC3B /* Location.swift */; };
 		F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */; };
 		F72D42FA2694B60300F9AC3B /* ObservationPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427C2694B60300F9AC3B /* ObservationPushService.m */; };
-		F72D42FB2694B60300F9AC3B /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427D2694B60300F9AC3B /* Feed.m */; };
-		F72D42FC2694B60300F9AC3B /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.m */; };
+		F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427D2694B60300F9AC3B /* Feed.swift */; };
+		F72D42FC2694B60300F9AC3B /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.swift */; };
 		F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */; };
-		F72D42FE2694B60300F9AC3B /* FeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42812694B60300F9AC3B /* FeedItem.m */; };
+		F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42812694B60300F9AC3B /* FeedItem.swift */; };
 		F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42822694B60300F9AC3B /* ObservationFetchService.m */; };
 		F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */; };
 		F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */; };
 		F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42892694B60300F9AC3B /* MAGERoutes.m */; };
 		F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D428D2694B60300F9AC3B /* IdpAuthentication.m */; };
 		F72D43042694B60300F9AC3B /* LocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D428E2694B60300F9AC3B /* LocationService.m */; };
-		F72D43052694B60300F9AC3B /* User+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42902694B60300F9AC3B /* User+CoreDataProperties.m */; };
+		F72D43052694B60300F9AC3B /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */; };
 		F72D43062694B60300F9AC3B /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42922694B60300F9AC3B /* Server.m */; };
 		F72D43072694B60300F9AC3B /* ObservationImportant.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42942694B60300F9AC3B /* ObservationImportant.m */; };
-		F72D43082694B60300F9AC3B /* Role+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.m */; };
+		F72D43082694B60300F9AC3B /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
 		F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42962694B60300F9AC3B /* AttachmentRoutes.m */; };
 		F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42972694B60300F9AC3B /* Model8To15.xcmappingmodel */; };
 		F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42982694B60300F9AC3B /* NSString+Contains.m */; };
@@ -221,13 +221,13 @@
 		F72D430D2694B60300F9AC3B /* Model5To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D429B2694B60300F9AC3B /* Model5To15.xcmappingmodel */; };
 		F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429D2694B60300F9AC3B /* ObservationRoutes.m */; };
 		F72D430F2694B60300F9AC3B /* UserUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429E2694B60300F9AC3B /* UserUtility.m */; };
-		F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */; };
+		F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */; };
 		F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */; };
 		F72D43122694B60300F9AC3B /* MageServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.m */; };
 		F72D43132694B60300F9AC3B /* ImageryLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A72694B60300F9AC3B /* ImageryLayer.m */; };
-		F72D43142694B60300F9AC3B /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A92694B60300F9AC3B /* Event.m */; };
+		F72D43142694B60300F9AC3B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A92694B60300F9AC3B /* Event.swift */; };
 		F72D43152694B60300F9AC3B /* Form.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AB2694B60300F9AC3B /* Form.m */; };
-		F72D43162694B60300F9AC3B /* GeometryDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */; };
+		F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */; };
 		F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */; };
 		F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */; };
 		F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */; };
@@ -235,26 +235,26 @@
 		F72D431B2694B60300F9AC3B /* Layer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BD2694B60300F9AC3B /* Layer.m */; };
 		F72D431C2694B60300F9AC3B /* MageEnums.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BE2694B60300F9AC3B /* MageEnums.m */; };
 		F72D431D2694B60300F9AC3B /* StaticLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BF2694B60300F9AC3B /* StaticLayer.m */; };
-		F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */; };
+		F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */; };
 		F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */; };
 		F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C22694B60300F9AC3B /* NotificationRequester.m */; };
 		F72D43212694B60300F9AC3B /* StaticLayer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */; };
 		F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C42694B60300F9AC3B /* Model11To15.xcmappingmodel */; };
 		F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */; };
-		F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */; };
-		F72D43252694B60300F9AC3B /* Role.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C72694B60300F9AC3B /* Role.m */; };
+		F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
+		F72D43252694B60300F9AC3B /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C72694B60300F9AC3B /* Role.swift */; };
 		F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */; };
 		F72D43272694B60300F9AC3B /* GeometrySerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.m */; };
 		F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */ = {isa = PBXBuildFile; fileRef = F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */; };
 		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
 		F72D432A2694B60300F9AC3B /* Observation.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.m */; };
 		F72D432B2694B60300F9AC3B /* ObservationFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D12694B60300F9AC3B /* ObservationFavorite.m */; };
-		F72D432C2694B60300F9AC3B /* GPSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.m */; };
+		F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.swift */; };
 		F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */; };
 		F72D432E2694B60300F9AC3B /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D62694B60300F9AC3B /* Attachment.m */; };
 		F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */; };
 		F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */; };
-		F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* AttachmentHeader.swift */; };
+		F730B94B2683D273004AD64A /* CardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* CardHeader.swift */; };
 		F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */; };
 		F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */; };
 		F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */; };
@@ -263,6 +263,12 @@
 		F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1226541C2300D645AC /* ColorPickerViewController.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
 		F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */; };
+		F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */; };
+		F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */; };
+		F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */; };
+		F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */; };
+		F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */; };
+		F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607E126FA1256008CF824 /* BottomSheetView.swift */; };
 		F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886C625894CEA00EDA036 /* KeyboardHelper.swift */; };
 		F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */; };
 		F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */; };
@@ -289,6 +295,7 @@
 		F755B55B25E41BFF008E8D41 /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
 		F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F75A10F12048B037002F9906 /* TableSectionHeader.xib */; };
+		F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
 		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
@@ -305,7 +312,7 @@
 		F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */; };
 		F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */; };
 		F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F76FAE851A5C797400BD8443 /* CoreAudio.framework */; };
-		F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */; };
+		F76FFBE6261D0D6900532330 /* ObservationBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */; };
 		F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */; };
 		F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */; };
 		F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */; };
@@ -340,7 +347,7 @@
 		F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */; };
 		F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */; };
 		F7911623249125230043A529 /* MageRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911622249125230043A529 /* MageRootViewTests.swift */; };
-		F79116262491414B0043A529 /* MageInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F79116252491414B0043A529 /* MageInitializer.m */; };
+		F79116262491414B0043A529 /* MageInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79116252491414B0043A529 /* MageInitializer.swift */; };
 		F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911627249154130043A529 /* MageCoreDataFixtures.swift */; };
 		F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */; };
 		F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */; };
@@ -430,10 +437,10 @@
 		F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */; };
 		F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */; };
 		F7D43BDA269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BD9269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift */; };
-		F7D43BDC269E0DF900561A8F /* FeatureBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BDB269E0DF900561A8F /* FeatureBottomSheetController.swift */; };
+		F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BDB269E0DF900561A8F /* FeatureBottomSheetView.swift */; };
 		F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */; };
 		F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BDF269E0FEB00561A8F /* FeatureActionsView.swift */; };
-		F7D43BE2269F329D00561A8F /* FeedItemBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE1269F329D00561A8F /* FeedItemBottomSheetController.swift */; };
+		F7D43BE2269F329D00561A8F /* FeedItemBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE1269F329D00561A8F /* FeedItemBottomSheetView.swift */; };
 		F7D43BE4269F357200561A8F /* FeedItemActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE3269F357200561A8F /* FeedItemActionsView.swift */; };
 		F7D43BE6269F3C1800561A8F /* FeedItemActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */; };
 		F7D43BE8269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE7269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift */; };
@@ -465,7 +472,7 @@
 		F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */; };
 		F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */; };
 		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
-		F7E40A6626939A4200E50E26 /* UserBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */; };
+		F7E40A6626939A4200E50E26 /* UserBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */; };
 		F7E40A6826939B4100E50E26 /* UserSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6726939B4100E50E26 /* UserSummaryView.swift */; };
 		F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */; };
 		F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */; };
@@ -658,8 +665,6 @@
 		2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeatureDetail.xib; sourceTree = "<group>"; };
 		2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailViewController.h; sourceTree = "<group>"; };
 		2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailViewController.m; sourceTree = "<group>"; };
-		2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+PersonIcon.h"; sourceTree = "<group>"; };
-		2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+PersonIcon.m"; sourceTree = "<group>"; };
 		2FC8BB8C2602421400F73B0E /* AuthenticationCoordinator_Server5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator_Server5.h; sourceTree = "<group>"; };
 		2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCoordinator_Server5.m; sourceTree = "<group>"; };
 		2FCB1AC81DDA439700A63C71 /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
@@ -753,6 +758,7 @@
 		F717E56F1F62FFD000211D0D /* TransitionScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransitionScreen.xib; sourceTree = "<group>"; };
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
+		F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonAnnotationView.swift; sourceTree = "<group>"; };
 		F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecorderViewController.h; sourceTree = "<group>"; };
 		F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderViewController.m; sourceTree = "<group>"; };
 		F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderViewController.xib; sourceTree = "<group>"; };
@@ -782,11 +788,10 @@
 		F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageUserDefaultKeys.swift; sourceTree = "<group>"; };
 		F72D422C2694B60300F9AC3B /* MageServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageServer.h; sourceTree = "<group>"; };
 		F72D422D2694B60300F9AC3B /* Authentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Authentication.m; sourceTree = "<group>"; };
-		F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D422F2694B60300F9AC3B /* LocalAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAuthentication.m; sourceTree = "<group>"; };
 		F72D42302694B60300F9AC3B /* Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mage.m; sourceTree = "<group>"; };
 		F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model13To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42322694B60300F9AC3B /* GPSLocation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GPSLocation+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42332694B60300F9AC3B /* UserUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserUtility.h; sourceTree = "<group>"; };
 		F72D42342694B60300F9AC3B /* ObservationRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationRoutes.h; sourceTree = "<group>"; };
 		F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 6.xcdatamodel"; sourceTree = "<group>"; };
@@ -813,10 +818,9 @@
 		F72D424B2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ImageryLayer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D424C2694B60300F9AC3B /* AttachmentRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentRoutes.h; sourceTree = "<group>"; };
 		F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model2To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D424E2694B60300F9AC3B /* Role+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Role+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D424F2694B60300F9AC3B /* ObservationImportant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImportant.h; sourceTree = "<group>"; };
 		F72D42502694B60300F9AC3B /* ServerAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerAuthentication.m; sourceTree = "<group>"; };
-		F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Location+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model1To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42532694B60300F9AC3B /* ObservationImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImage.m; sourceTree = "<group>"; };
 		F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model15To16.xcmappingmodel; sourceTree = "<group>"; };
@@ -824,22 +828,17 @@
 		F72D42562694B60300F9AC3B /* LdapAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LdapAuthentication.h; sourceTree = "<group>"; };
 		F72D42572694B60300F9AC3B /* ObservationImportant+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObservationImportant+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model10To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42592694B60300F9AC3B /* Event+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42592694B60300F9AC3B /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D425A2694B60300F9AC3B /* Canary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Canary.m; sourceTree = "<group>"; };
 		F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+MAGE.m"; sourceTree = "<group>"; };
 		F72D425C2694B60300F9AC3B /* Form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Form.h; sourceTree = "<group>"; };
-		F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryDeserializer.h; sourceTree = "<group>"; };
-		F72D425E2694B60300F9AC3B /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		F72D425F2694B60300F9AC3B /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		F72D425E2694B60300F9AC3B /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F72D42602694B60300F9AC3B /* ImageryLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageryLayer.h; sourceTree = "<group>"; };
 		F72D42612694B60300F9AC3B /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
 		F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Server+CoreDataProperties.m"; sourceTree = "<group>"; };
-		F72D42632694B60300F9AC3B /* Role.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Role.h; sourceTree = "<group>"; };
-		F72D42642694B60300F9AC3B /* Feed+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Feed+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42652694B60300F9AC3B /* NotificationRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationRequester.h; sourceTree = "<group>"; };
 		F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StaticLayer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42672694B60300F9AC3B /* NSDate+Iso8601.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Iso8601.h"; sourceTree = "<group>"; };
-		F72D42682694B60300F9AC3B /* FeedItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FeedItem+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42692694B60300F9AC3B /* StaticLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLayer.h; sourceTree = "<group>"; };
 		F72D426B2694B60300F9AC3B /* MageSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSessionManager.h; sourceTree = "<group>"; };
 		F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataConnectionUtilities.m; sourceTree = "<group>"; };
@@ -855,15 +854,15 @@
 		F72D42762694B60300F9AC3B /* Layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layer.h; sourceTree = "<group>"; };
 		F72D42772694B60300F9AC3B /* StoredPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoredPassword.m; sourceTree = "<group>"; };
 		F72D42782694B60300F9AC3B /* LocationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFetchService.m; sourceTree = "<group>"; };
-		F72D42792694B60300F9AC3B /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		F72D42792694B60300F9AC3B /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model7To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D427B2694B60300F9AC3B /* Attachment+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D427C2694B60300F9AC3B /* ObservationPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPushService.m; sourceTree = "<group>"; };
-		F72D427D2694B60300F9AC3B /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feed.m; sourceTree = "<group>"; };
+		F72D427D2694B60300F9AC3B /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObservationFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
-		F72D427F2694B60300F9AC3B /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		F72D427F2694B60300F9AC3B /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model9To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42812694B60300F9AC3B /* FeedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedItem.m; sourceTree = "<group>"; };
+		F72D42812694B60300F9AC3B /* FeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		F72D42822694B60300F9AC3B /* ObservationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchService.m; sourceTree = "<group>"; };
 		F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model4To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42842694B60300F9AC3B /* Canary+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Canary+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -872,16 +871,15 @@
 		F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes_Server5.m; sourceTree = "<group>"; };
 		F72D42892694B60300F9AC3B /* MAGERoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAGERoutes.m; sourceTree = "<group>"; };
 		F72D428A2694B60300F9AC3B /* ObservationFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFavorite.h; sourceTree = "<group>"; };
-		F72D428B2694B60300F9AC3B /* GPSLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSLocation.h; sourceTree = "<group>"; };
 		F72D428C2694B60300F9AC3B /* Observation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observation.h; sourceTree = "<group>"; };
 		F72D428D2694B60300F9AC3B /* IdpAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdpAuthentication.m; sourceTree = "<group>"; };
 		F72D428E2694B60300F9AC3B /* LocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationService.m; sourceTree = "<group>"; };
 		F72D428F2694B60300F9AC3B /* AttachmentPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentPushService.h; sourceTree = "<group>"; };
-		F72D42902694B60300F9AC3B /* User+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42922694B60300F9AC3B /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
 		F72D42932694B60300F9AC3B /* GeometrySerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometrySerializer.h; sourceTree = "<group>"; };
 		F72D42942694B60300F9AC3B /* ObservationImportant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImportant.m; sourceTree = "<group>"; };
-		F72D42952694B60300F9AC3B /* Role+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Role+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Role+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42962694B60300F9AC3B /* AttachmentRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes.m; sourceTree = "<group>"; };
 		F72D42972694B60300F9AC3B /* Model8To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model8To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42982694B60300F9AC3B /* NSString+Contains.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Contains.m"; sourceTree = "<group>"; };
@@ -891,67 +889,58 @@
 		F72D429C2694B60300F9AC3B /* RouteMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteMethod.h; sourceTree = "<group>"; };
 		F72D429D2694B60300F9AC3B /* ObservationRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationRoutes.m; sourceTree = "<group>"; };
 		F72D429E2694B60300F9AC3B /* UserUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserUtility.m; sourceTree = "<group>"; };
-		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GPSLocation+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GPSLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42A12694B60300F9AC3B /* Mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mage.h; sourceTree = "<group>"; };
 		F72D42A22694B60300F9AC3B /* LocalAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthentication.h; sourceTree = "<group>"; };
-		F72D42A32694B60300F9AC3B /* Team+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42A42694B60300F9AC3B /* MageServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServer.m; sourceTree = "<group>"; };
 		F72D42A52694B60300F9AC3B /* Authentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Authentication.h; sourceTree = "<group>"; };
 		F72D42A62694B60300F9AC3B /* Server+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Server+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42A72694B60300F9AC3B /* ImageryLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageryLayer.m; sourceTree = "<group>"; };
 		F72D42A82694B60300F9AC3B /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
-		F72D42A92694B60300F9AC3B /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
-		F72D42AA2694B60300F9AC3B /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		F72D42A92694B60300F9AC3B /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		F72D42AB2694B60300F9AC3B /* Form.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Form.m; sourceTree = "<group>"; };
-		F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryDeserializer.m; sourceTree = "<group>"; };
+		F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryDeserializer.swift; sourceTree = "<group>"; };
 		F72D42AD2694B60300F9AC3B /* Canary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canary.h; sourceTree = "<group>"; };
 		F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+MAGE.h"; sourceTree = "<group>"; };
 		F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LdapAuthentication.m; sourceTree = "<group>"; };
 		F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationImportant+CoreDataProperties.m"; sourceTree = "<group>"; };
-		F72D42B12694B60300F9AC3B /* Event+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Event+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42B32694B60300F9AC3B /* ObservationImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImage.h; sourceTree = "<group>"; };
 		F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model6To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42B52694B60300F9AC3B /* Location+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Location+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42B62694B60300F9AC3B /* ServerAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAuthentication.h; sourceTree = "<group>"; };
-		F72D42B72694B60300F9AC3B /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feed.h; sourceTree = "<group>"; };
 		F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Attachment+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F72D42B92694B60300F9AC3B /* ObservationPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPushService.h; sourceTree = "<group>"; };
-		F72D42BA2694B60300F9AC3B /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
 		F72D42BB2694B60300F9AC3B /* LocationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFetchService.h; sourceTree = "<group>"; };
 		F72D42BC2694B60300F9AC3B /* StoredPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoredPassword.h; sourceTree = "<group>"; };
 		F72D42BD2694B60300F9AC3B /* Layer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Layer.m; sourceTree = "<group>"; };
 		F72D42BE2694B60300F9AC3B /* MageEnums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageEnums.m; sourceTree = "<group>"; };
 		F72D42BF2694B60300F9AC3B /* StaticLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLayer.m; sourceTree = "<group>"; };
-		F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FeedItem+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FeedItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To16.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42C22694B60300F9AC3B /* NotificationRequester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationRequester.m; sourceTree = "<group>"; };
 		F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StaticLayer+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F72D42C42694B60300F9AC3B /* Model11To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model11To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Iso8601.m"; sourceTree = "<group>"; };
-		F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Feed+CoreDataProperties.m"; sourceTree = "<group>"; };
-		F72D42C72694B60300F9AC3B /* Role.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Role.m; sourceTree = "<group>"; };
+		F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Feed+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		F72D42C72694B60300F9AC3B /* Role.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Role.swift; sourceTree = "<group>"; };
 		F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model12To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42C92694B60300F9AC3B /* GeometrySerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometrySerializer.m; sourceTree = "<group>"; };
 		F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "preferences-sdk.plist"; sourceTree = "<group>"; };
 		F72D42CB2694B60300F9AC3B /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
-		F72D42CC2694B60300F9AC3B /* User+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentPushService.m; sourceTree = "<group>"; };
 		F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdpAuthentication.h; sourceTree = "<group>"; };
 		F72D42CF2694B60300F9AC3B /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
 		F72D42D02694B60300F9AC3B /* Observation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observation.m; sourceTree = "<group>"; };
 		F72D42D12694B60300F9AC3B /* ObservationFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFavorite.m; sourceTree = "<group>"; };
-		F72D42D22694B60300F9AC3B /* GPSLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSLocation.m; sourceTree = "<group>"; };
+		F72D42D22694B60300F9AC3B /* GPSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocation.swift; sourceTree = "<group>"; };
 		F72D42D32694B60300F9AC3B /* MAGERoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGERoutes.h; sourceTree = "<group>"; };
 		F72D42D42694B60300F9AC3B /* ObservationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchService.h; sourceTree = "<group>"; };
 		F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Canary+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F72D42D62694B60300F9AC3B /* Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attachment.m; sourceTree = "<group>"; };
-		F72D42D72694B60300F9AC3B /* FeedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItem.h; sourceTree = "<group>"; };
 		F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model3To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42D92694B60300F9AC3B /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
-		F730B94A2683D273004AD64A /* AttachmentHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeader.swift; sourceTree = "<group>"; };
+		F730B94A2683D273004AD64A /* CardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeader.swift; sourceTree = "<group>"; };
 		F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormReorderTests.swift; sourceTree = "<group>"; };
 		F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormReorderDelegate.swift; sourceTree = "<group>"; };
 		F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSettingsViewController.swift; sourceTree = "<group>"; };
@@ -961,6 +950,12 @@
 		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
 		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
+		F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummaryView.swift; sourceTree = "<group>"; };
+		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageBottomSheetViewController.swift; sourceTree = "<group>"; };
+		F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureItem.swift; sourceTree = "<group>"; };
+		F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetView.swift; sourceTree = "<group>"; };
+		F73607E126FA1256008CF824 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
 		F73886C625894CEA00EDA036 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
 		F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewController.swift; sourceTree = "<group>"; };
@@ -994,6 +989,8 @@
 		F755B55A25E41BFF008E8D41 /* testRecording.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testRecording.mp4; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
 		F75A10F12048B037002F9906 /* TableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
+		F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewController.swift; sourceTree = "<group>"; };
+		F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 19.xcdatamodel"; sourceTree = "<group>"; };
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
 		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
@@ -1017,7 +1014,7 @@
 		F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldView.swift; sourceTree = "<group>"; };
 		F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFieldViewTests.swift; sourceTree = "<group>"; };
 		F76FAE851A5C797400BD8443 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetController.swift; sourceTree = "<group>"; };
+		F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetView.swift; sourceTree = "<group>"; };
 		F76FFC2A262471FF00532330 /* MapDelegateObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateObservationActionsDelegate.swift; sourceTree = "<group>"; };
 		F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineNavigationView.swift; sourceTree = "<group>"; };
 		F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAttachmentCard.swift; sourceTree = "<group>"; };
@@ -1060,8 +1057,7 @@
 		F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldView.swift; sourceTree = "<group>"; };
 		F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldViewTests.swift; sourceTree = "<group>"; };
 		F7911622249125230043A529 /* MageRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageRootViewTests.swift; sourceTree = "<group>"; };
-		F79116242491414B0043A529 /* MageInitializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MageInitializer.h; sourceTree = "<group>"; };
-		F79116252491414B0043A529 /* MageInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MageInitializer.m; sourceTree = "<group>"; };
+		F79116252491414B0043A529 /* MageInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageInitializer.swift; sourceTree = "<group>"; };
 		F7911627249154130043A529 /* MageCoreDataFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageCoreDataFixtures.swift; sourceTree = "<group>"; };
 		F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsViewTests.swift; sourceTree = "<group>"; };
 		F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFieldDelegate.swift; sourceTree = "<group>"; };
@@ -1174,10 +1170,10 @@
 		F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIImagePickerController.swift; sourceTree = "<group>"; };
 		F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
 		F7D43BD9269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateFeatureActionsDelegate.swift; sourceTree = "<group>"; };
-		F7D43BDB269E0DF900561A8F /* FeatureBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureBottomSheetController.swift; sourceTree = "<group>"; };
+		F7D43BDB269E0DF900561A8F /* FeatureBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureBottomSheetView.swift; sourceTree = "<group>"; };
 		F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureActionsDelegate.swift; sourceTree = "<group>"; };
 		F7D43BDF269E0FEB00561A8F /* FeatureActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureActionsView.swift; sourceTree = "<group>"; };
-		F7D43BE1269F329D00561A8F /* FeedItemBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemBottomSheetController.swift; sourceTree = "<group>"; };
+		F7D43BE1269F329D00561A8F /* FeedItemBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemBottomSheetView.swift; sourceTree = "<group>"; };
 		F7D43BE3269F357200561A8F /* FeedItemActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemActionsView.swift; sourceTree = "<group>"; };
 		F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemActionsDelegate.swift; sourceTree = "<group>"; };
 		F7D43BE7269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDelegateFeedItemActionsDelegate.swift; sourceTree = "<group>"; };
@@ -1217,7 +1213,7 @@
 		F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldSelectionDelegate.swift; sourceTree = "<group>"; };
 		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
 		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
-		F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBottomSheetController.swift; sourceTree = "<group>"; };
+		F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBottomSheetView.swift; sourceTree = "<group>"; };
 		F7E40A6726939B4100E50E26 /* UserSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSummaryView.swift; sourceTree = "<group>"; };
 		F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarUIImageView.swift; sourceTree = "<group>"; };
 		F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsView.swift; sourceTree = "<group>"; };
@@ -1374,10 +1370,10 @@
 				2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */,
 				2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */,
 				2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */,
-				F7D43BDB269E0DF900561A8F /* FeatureBottomSheetController.swift */,
 				F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */,
 				F7D43BDF269E0FEB00561A8F /* FeatureActionsView.swift */,
 				F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */,
+				F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */,
 			);
 			name = Feature;
 			sourceTree = "<group>";
@@ -1400,6 +1396,7 @@
 				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
 				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
 				F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */,
+				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1553,11 +1550,8 @@
 		4C2A38ED19745C0D00E7470A /* People */ = {
 			isa = PBXGroup;
 			children = (
-				2FC7FD9F1A61CA98007E22AB /* MKAnnotationView+PersonIcon.h */,
-				2FC7FDA01A61CA98007E22AB /* MKAnnotationView+PersonIcon.m */,
 				F795ED0624B8F15D0028FBFC /* UserViewController.swift */,
 				F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */,
-				F7E40A6526939A4200E50E26 /* UserBottomSheetController.swift */,
 				F7E40A6726939B4100E50E26 /* UserSummaryView.swift */,
 				F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */,
 				F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */,
@@ -1631,6 +1625,7 @@
 				F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */,
 				F7929C7423C66CD000396D11 /* BaseMapOverlay.h */,
 				F7929C7523C66CD000396D11 /* BaseMapOverlay.m */,
+				F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -1667,6 +1662,7 @@
 				F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */,
 				F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */,
 				F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */,
+				F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1743,7 +1739,6 @@
 				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
 				F7C812E825C1B37200D4332B /* ObservationDataStore.swift */,
 				F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */,
-				F76FFBE5261D0D6900532330 /* ObservationBottomSheetController.swift */,
 				F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */,
 			);
 			name = Observation;
@@ -1844,60 +1839,23 @@
 		F72D422B2694B60300F9AC3B /* sdk */ = {
 			isa = PBXGroup;
 			children = (
-				F72D42852694B60300F9AC3B /* Attachment.h */,
-				F72D42D62694B60300F9AC3B /* Attachment.m */,
-				F72D427B2694B60300F9AC3B /* Attachment+CoreDataProperties.h */,
-				F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.m */,
 				F72D428F2694B60300F9AC3B /* AttachmentPushService.h */,
 				F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */,
 				F72D424C2694B60300F9AC3B /* AttachmentRoutes.h */,
 				F72D42962694B60300F9AC3B /* AttachmentRoutes.m */,
 				F72D42A52694B60300F9AC3B /* Authentication.h */,
 				F72D422D2694B60300F9AC3B /* Authentication.m */,
-				F72D42AD2694B60300F9AC3B /* Canary.h */,
-				F72D425A2694B60300F9AC3B /* Canary.m */,
-				F72D42842694B60300F9AC3B /* Canary+CoreDataProperties.h */,
-				F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */,
-				F72D425F2694B60300F9AC3B /* Event.h */,
-				F72D42A92694B60300F9AC3B /* Event.m */,
-				F72D42B12694B60300F9AC3B /* Event+CoreDataProperties.h */,
-				F72D42592694B60300F9AC3B /* Event+CoreDataProperties.m */,
-				F72D42B72694B60300F9AC3B /* Feed.h */,
-				F72D427D2694B60300F9AC3B /* Feed.m */,
-				F72D42642694B60300F9AC3B /* Feed+CoreDataProperties.h */,
-				F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.m */,
-				F72D42D72694B60300F9AC3B /* FeedItem.h */,
-				F72D42812694B60300F9AC3B /* FeedItem.m */,
-				F72D42682694B60300F9AC3B /* FeedItem+CoreDataProperties.h */,
-				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.m */,
 				F72D425C2694B60300F9AC3B /* Form.h */,
 				F72D42AB2694B60300F9AC3B /* Form.m */,
-				F72D425D2694B60300F9AC3B /* GeometryDeserializer.h */,
-				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.m */,
+				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */,
 				F72D42932694B60300F9AC3B /* GeometrySerializer.h */,
 				F72D42C92694B60300F9AC3B /* GeometrySerializer.m */,
-				F72D428B2694B60300F9AC3B /* GPSLocation.h */,
-				F72D42D22694B60300F9AC3B /* GPSLocation.m */,
-				F72D42322694B60300F9AC3B /* GPSLocation+CoreDataProperties.h */,
-				F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.m */,
 				F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */,
 				F72D428D2694B60300F9AC3B /* IdpAuthentication.m */,
-				F72D42602694B60300F9AC3B /* ImageryLayer.h */,
-				F72D42A72694B60300F9AC3B /* ImageryLayer.m */,
-				F72D424B2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.h */,
-				F72D429A2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.m */,
-				F72D42762694B60300F9AC3B /* Layer.h */,
-				F72D42BD2694B60300F9AC3B /* Layer.m */,
-				F72D42992694B60300F9AC3B /* Layer+CoreDataProperties.h */,
-				F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */,
 				F72D42562694B60300F9AC3B /* LdapAuthentication.h */,
 				F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */,
 				F72D42A22694B60300F9AC3B /* LocalAuthentication.h */,
 				F72D422F2694B60300F9AC3B /* LocalAuthentication.m */,
-				F72D42BA2694B60300F9AC3B /* Location.h */,
-				F72D42792694B60300F9AC3B /* Location.m */,
-				F72D42B52694B60300F9AC3B /* Location+CoreDataProperties.h */,
-				F72D42512694B60300F9AC3B /* Location+CoreDataProperties.m */,
 				F72D42BB2694B60300F9AC3B /* LocationFetchService.h */,
 				F72D42782694B60300F9AC3B /* LocationFetchService.m */,
 				F72D42CF2694B60300F9AC3B /* LocationService.h */,
@@ -1938,54 +1896,22 @@
 				F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */,
 				F72D42492694B60300F9AC3B /* NSString+Contains.h */,
 				F72D42982694B60300F9AC3B /* NSString+Contains.m */,
-				F72D428C2694B60300F9AC3B /* Observation.h */,
-				F72D42D02694B60300F9AC3B /* Observation.m */,
-				F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */,
-				F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */,
-				F72D428A2694B60300F9AC3B /* ObservationFavorite.h */,
-				F72D42D12694B60300F9AC3B /* ObservationFavorite.m */,
-				F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */,
-				F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */,
 				F72D42D42694B60300F9AC3B /* ObservationFetchService.h */,
 				F72D42822694B60300F9AC3B /* ObservationFetchService.m */,
 				F72D42B32694B60300F9AC3B /* ObservationImage.h */,
 				F72D42532694B60300F9AC3B /* ObservationImage.m */,
-				F72D424F2694B60300F9AC3B /* ObservationImportant.h */,
-				F72D42942694B60300F9AC3B /* ObservationImportant.m */,
-				F72D42572694B60300F9AC3B /* ObservationImportant+CoreDataProperties.h */,
-				F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */,
 				F72D42B92694B60300F9AC3B /* ObservationPushService.h */,
 				F72D427C2694B60300F9AC3B /* ObservationPushService.m */,
 				F72D42342694B60300F9AC3B /* ObservationRoutes.h */,
 				F72D429D2694B60300F9AC3B /* ObservationRoutes.m */,
 				F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */,
-				F72D42632694B60300F9AC3B /* Role.h */,
-				F72D42C72694B60300F9AC3B /* Role.m */,
-				F72D424E2694B60300F9AC3B /* Role+CoreDataProperties.h */,
-				F72D42952694B60300F9AC3B /* Role+CoreDataProperties.m */,
 				F72D429C2694B60300F9AC3B /* RouteMethod.h */,
 				F72D42482694B60300F9AC3B /* RouteMethod.m */,
-				F72D42CB2694B60300F9AC3B /* Server.h */,
-				F72D42922694B60300F9AC3B /* Server.m */,
-				F72D42A62694B60300F9AC3B /* Server+CoreDataProperties.h */,
-				F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */,
 				F72D42862694B60300F9AC3B /* Server5 */,
 				F72D42B62694B60300F9AC3B /* ServerAuthentication.h */,
 				F72D42502694B60300F9AC3B /* ServerAuthentication.m */,
-				F72D42692694B60300F9AC3B /* StaticLayer.h */,
-				F72D42BF2694B60300F9AC3B /* StaticLayer.m */,
-				F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */,
-				F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */,
 				F72D42BC2694B60300F9AC3B /* StoredPassword.h */,
 				F72D42772694B60300F9AC3B /* StoredPassword.m */,
-				F72D42D92694B60300F9AC3B /* Team.h */,
-				F72D427F2694B60300F9AC3B /* Team.m */,
-				F72D42A32694B60300F9AC3B /* Team+CoreDataProperties.h */,
-				F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.m */,
-				F72D42AA2694B60300F9AC3B /* User.h */,
-				F72D425E2694B60300F9AC3B /* User.m */,
-				F72D42CC2694B60300F9AC3B /* User+CoreDataProperties.h */,
-				F72D42902694B60300F9AC3B /* User+CoreDataProperties.m */,
 				F72D42332694B60300F9AC3B /* UserUtility.h */,
 				F72D429E2694B60300F9AC3B /* UserUtility.m */,
 				F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */,
@@ -2017,6 +1943,21 @@
 				F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */,
 			);
 			path = Server5;
+			sourceTree = "<group>";
+		};
+		F73607DA26F90C41008CF824 /* BottomSheets */ = {
+			isa = PBXGroup;
+			children = (
+				F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */,
+				F7D43BDB269E0DF900561A8F /* FeatureBottomSheetView.swift */,
+				F7D43BE1269F329D00561A8F /* FeedItemBottomSheetView.swift */,
+				F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */,
+				F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */,
+				F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */,
+				F73607E126FA1256008CF824 /* BottomSheetView.swift */,
+				F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */,
+			);
+			path = BottomSheets;
 			sourceTree = "<group>";
 		};
 		F73886CA258A6BF700EDA036 /* View */ = {
@@ -2082,7 +2023,7 @@
 				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
 				F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */,
 				F7F4753025B73C3E006634F7 /* FormsHeader.swift */,
-				F730B94A2683D273004AD64A /* AttachmentHeader.swift */,
+				F730B94A2683D273004AD64A /* CardHeader.swift */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -2327,6 +2268,65 @@
 			path = Fields;
 			sourceTree = "<group>";
 		};
+		F7A5A336270CE20F00961CAA /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				F72D42852694B60300F9AC3B /* Attachment.h */,
+				F72D42D62694B60300F9AC3B /* Attachment.m */,
+				F72D427B2694B60300F9AC3B /* Attachment+CoreDataProperties.h */,
+				F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.m */,
+				F72D42AD2694B60300F9AC3B /* Canary.h */,
+				F72D425A2694B60300F9AC3B /* Canary.m */,
+				F72D42842694B60300F9AC3B /* Canary+CoreDataProperties.h */,
+				F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */,
+				F72D42A92694B60300F9AC3B /* Event.swift */,
+				F72D42592694B60300F9AC3B /* Event+CoreDataProperties.swift */,
+				F72D427D2694B60300F9AC3B /* Feed.swift */,
+				F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */,
+				F72D42812694B60300F9AC3B /* FeedItem.swift */,
+				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */,
+				F72D42D22694B60300F9AC3B /* GPSLocation.swift */,
+				F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */,
+				F72D42602694B60300F9AC3B /* ImageryLayer.h */,
+				F72D42A72694B60300F9AC3B /* ImageryLayer.m */,
+				F72D424B2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.h */,
+				F72D429A2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.m */,
+				F72D42762694B60300F9AC3B /* Layer.h */,
+				F72D42BD2694B60300F9AC3B /* Layer.m */,
+				F72D42992694B60300F9AC3B /* Layer+CoreDataProperties.h */,
+				F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */,
+				F72D42792694B60300F9AC3B /* Location.swift */,
+				F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */,
+				F72D428C2694B60300F9AC3B /* Observation.h */,
+				F72D42D02694B60300F9AC3B /* Observation.m */,
+				F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */,
+				F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */,
+				F72D428A2694B60300F9AC3B /* ObservationFavorite.h */,
+				F72D42D12694B60300F9AC3B /* ObservationFavorite.m */,
+				F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */,
+				F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */,
+				F72D424F2694B60300F9AC3B /* ObservationImportant.h */,
+				F72D42942694B60300F9AC3B /* ObservationImportant.m */,
+				F72D42572694B60300F9AC3B /* ObservationImportant+CoreDataProperties.h */,
+				F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */,
+				F72D42C72694B60300F9AC3B /* Role.swift */,
+				F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */,
+				F72D42CB2694B60300F9AC3B /* Server.h */,
+				F72D42922694B60300F9AC3B /* Server.m */,
+				F72D42A62694B60300F9AC3B /* Server+CoreDataProperties.h */,
+				F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */,
+				F72D42692694B60300F9AC3B /* StaticLayer.h */,
+				F72D42BF2694B60300F9AC3B /* StaticLayer.m */,
+				F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */,
+				F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.m */,
+				F72D427F2694B60300F9AC3B /* Team.swift */,
+				F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */,
+				F72D425E2694B60300F9AC3B /* User.swift */,
+				F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
@@ -2378,6 +2378,8 @@
 			isa = PBXGroup;
 			children = (
 				8474FD9426FB8AFE0041891A /* Contact */,
+				F7A5A336270CE20F00961CAA /* CoreData */,
+				F73607DA26F90C41008CF824 /* BottomSheets */,
 				F7B1C473267404A80005FCE4 /* ViewLoader */,
 				F7154ABF260CE136002C8617 /* Navigation */,
 				F743008A2547759C00DCE050 /* Extensions */,
@@ -2426,8 +2428,7 @@
 				F73CD0841F7E941E00B4124D /* TransitionViewController.m */,
 				F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */,
 				F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */,
-				F79116242491414B0043A529 /* MageInitializer.h */,
-				F79116252491414B0043A529 /* MageInitializer.m */,
+				F79116252491414B0043A529 /* MageInitializer.swift */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -2592,7 +2593,6 @@
 				F7098F2D24980DD000313703 /* FeedItemRetriever.swift */,
 				F71446EC249928AD005A5EC1 /* FeedItemCard.swift */,
 				2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */,
-				F7D43BE1269F329D00561A8F /* FeedItemBottomSheetController.swift */,
 				F7D43BE3269F357200561A8F /* FeedItemActionsView.swift */,
 				F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */,
 			);
@@ -3088,7 +3088,6 @@
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
-				2FC7FDA11A61CA98007E22AB /* MKAnnotationView+PersonIcon.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
@@ -3118,7 +3117,7 @@
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m in Sources */,
-				F72D42F82694B60300F9AC3B /* Location.m in Sources */,
+				F72D42F82694B60300F9AC3B /* Location.swift in Sources */,
 				F7E297151A8E7634000F62C6 /* PopAndGoSegue.m in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */,
@@ -3130,7 +3129,7 @@
 				8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */,
 				F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */,
 				F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */,
-				F72D42FB2694B60300F9AC3B /* Feed.m in Sources */,
+				F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */,
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
@@ -3138,13 +3137,14 @@
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
+				F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */,
 				F72D432E2694B60300F9AC3B /* Attachment.m in Sources */,
 				F72D43042694B60300F9AC3B /* LocationService.m in Sources */,
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
-				F7E40A6626939A4200E50E26 /* UserBottomSheetController.swift in Sources */,
+				F7E40A6626939A4200E50E26 /* UserBottomSheetView.swift in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
@@ -3152,7 +3152,11 @@
 				8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */,
 				F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.m in Sources */,
 				F72D43082694B60300F9AC3B /* Role+CoreDataProperties.m in Sources */,
+				F72D42FC2694B60300F9AC3B /* Team.swift in Sources */,
+				F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.swift in Sources */,
+				F72D43082694B60300F9AC3B /* Role+CoreDataProperties.swift in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
+				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
 				F72D43132694B60300F9AC3B /* ImageryLayer.m in Sources */,
 				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
@@ -3161,24 +3165,24 @@
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
 				F72D43062694B60300F9AC3B /* Server.m in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
-				F72D432C2694B60300F9AC3B /* GPSLocation.m in Sources */,
+				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,
 				F7D43BDA269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift in Sources */,
 				F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */,
-				F79116262491414B0043A529 /* MageInitializer.m in Sources */,
+				F79116262491414B0043A529 /* MageInitializer.swift in Sources */,
 				F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */,
 				F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */,
 				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.m in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
-				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.m in Sources */,
+				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
 				F72D42E72694B60300F9AC3B /* ObservationImage.m in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
 				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
 				F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */,
-				F72D42EE2694B60300F9AC3B /* User.m in Sources */,
-				F76FFBE6261D0D6900532330 /* ObservationBottomSheetController.swift in Sources */,
+				F72D42EE2694B60300F9AC3B /* User.swift in Sources */,
+				F76FFBE6261D0D6900532330 /* ObservationBottomSheetView.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
@@ -3194,6 +3198,7 @@
 				F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */,
 				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
+				F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
@@ -3222,6 +3227,7 @@
 				F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */,
 				F7F4754525BA357E006634F7 /* ObservationListCardCell.swift in Sources */,
 				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
+				F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */,
 				F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */,
 				F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */,
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */,
@@ -3230,7 +3236,7 @@
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
-				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetController.swift in Sources */,
+				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
 				F7D43BE8269F3C9600561A8F /* MapDelegateFeedItemActionsDelegate.swift in Sources */,
 				F778224B2146C8B400850815 /* LocationDisplayTableViewController.m in Sources */,
 				F76A15D31A96536700F2BDF1 /* UIImageView+IB.m in Sources */,
@@ -3257,7 +3263,7 @@
 				F72D43072694B60300F9AC3B /* ObservationImportant.m in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
-				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.m in Sources */,
+				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
@@ -3268,7 +3274,7 @@
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
 				F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */,
-				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.m in Sources */,
+				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */,
@@ -3282,33 +3288,35 @@
 				F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */,
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
-				F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.m in Sources */,
+				F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.swift in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */,
 				04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */,
 				043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */,
 				F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */,
-				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.m in Sources */,
+				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
-				F72D42FE2694B60300F9AC3B /* FeedItem.m in Sources */,
+				F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
 				F7F8B4B726CE88B500DACCC7 /* AttachmentProgressViewController.swift in Sources */,
-				F730B94B2683D273004AD64A /* AttachmentHeader.swift in Sources */,
+				F730B94B2683D273004AD64A /* CardHeader.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */,
+				F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */,
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */,
 				F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */,
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
-				F72D43142694B60300F9AC3B /* Event.m in Sources */,
+				F72D43142694B60300F9AC3B /* Event.swift in Sources */,
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
 				F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */,
 				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
+				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */,
@@ -3340,9 +3348,10 @@
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				F76FFC2B262471FF00532330 /* MapDelegateObservationActionsDelegate.swift in Sources */,
-				F72D43252694B60300F9AC3B /* Role.m in Sources */,
-				F72D43162694B60300F9AC3B /* GeometryDeserializer.m in Sources */,
+				F72D43252694B60300F9AC3B /* Role.swift in Sources */,
+				F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */,
 				2F0323AA2463666700D2866B /* ObservationAccuracyRenderer.m in Sources */,
+				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.m in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.m in Sources */,
@@ -3352,13 +3361,13 @@
 				F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
-				F72D43052694B60300F9AC3B /* User+CoreDataProperties.m in Sources */,
+				F72D43052694B60300F9AC3B /* User+CoreDataProperties.swift in Sources */,
 				F7D43BE4269F357200561A8F /* FeedItemActionsView.swift in Sources */,
 				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
 				F7081DB42627696F004B89D4 /* CompassView.swift in Sources */,
-				F7D43BE2269F329D00561A8F /* FeedItemBottomSheetController.swift in Sources */,
+				F7D43BE2269F329D00561A8F /* FeedItemBottomSheetView.swift in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
@@ -3377,6 +3386,7 @@
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
+				F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */,
 				F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3607,8 +3617,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
-				MARKETING_VERSION = 3.0.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 3.0.4;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
@@ -3641,8 +3651,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
 				INFOPLIST_FILE = "Mage/MAGE-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
-				MARKETING_VERSION = 3.0.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 3.0.4;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
@@ -3713,7 +3723,7 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/zxcvbn-ios/zxcvbn_ios.framework/Headers\"",
 				);
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
@@ -3762,7 +3772,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = MAGETests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
@@ -3819,6 +3829,7 @@
 		F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */,
 				F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */,
 				F72D42372694B60300F9AC3B /* mage-ios-sdk 16.xcdatamodel */,
 				F72D42382694B60300F9AC3B /* mage-ios-sdk 13.xcdatamodel */,
@@ -3838,7 +3849,7 @@
 				F72D42462694B60300F9AC3B /* mage-ios-sdk 11.xcdatamodel */,
 				F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */,
 			);
-			currentVersion = F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */;
+			currentVersion = F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */;
 			path = "mage-ios-sdk.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

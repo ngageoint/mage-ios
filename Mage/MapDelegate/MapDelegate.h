@@ -10,19 +10,16 @@
 #import "UserSelectionDelegate.h"
 #import "Locations.h"
 #import "Observations.h"
-#import "GPSLocation.h"
 #import "CacheOverlayListener.h"
 #import "MapObservations.h"
 #import "MapCalloutTapped.h"
-#import "FeedItem.h"
 #import <MaterialComponents/MDCContainerScheme.h>
 #import "FeatureDetailViewController.h"
 
 @class StraightLineNavigation;
-@class ObservationBottomSheetController;
-@class UserBottomSheetController;
-@class FeatureBottomSheetController;
-@class FeedItemBottomSheetController;
+@class MageBottomSheetViewController;
+@class FeedItem;
+@class GPSLocation;
 
 @protocol FeedItemDelegate <NSObject>
 
@@ -75,10 +72,7 @@
 @property (nonatomic, weak) UIViewController *navigationController;
 @property (nonatomic, weak) UIStackView *mapStack;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
-@property (strong, nonatomic) ObservationBottomSheetController *obsBottomSheet;
-@property (strong, nonatomic) UserBottomSheetController *userBottomSheet;
-@property (strong, nonatomic) FeatureBottomSheetController *featureBottomSheet;
-@property (strong, nonatomic) FeedItemBottomSheetController *feedItemBottomSheet;
+@property (strong, nonatomic) MageBottomSheetViewController *mageBottomSheet;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) User *userToNavigateTo;
 @property (strong, nonatomic) Observation *observationToNavigateTo;
@@ -94,7 +88,8 @@
 - (void) updateGPSLocation:(GPSLocation *) location forUser: (User *) user;
 - (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
 - (void) setMapView:(MKMapView *)mapView;
-- (void) mapClickAtPoint: (CGPoint) point;
+- (void) setupMapType;
+- (void) mapTap: (CGPoint) tapPoint;
 - (void) cleanup;
 - (void) ensureMapLayout;
 - (void) setupListeners;

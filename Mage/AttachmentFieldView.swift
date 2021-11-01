@@ -18,8 +18,8 @@ import MaterialComponents.MDCButton;
 
 class AttachmentFieldView : BaseFieldView {
     private var attachments: Set<Attachment>?;
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
+    private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
     
     private var unsentAttachments: [[String: AnyHashable]] = []
@@ -116,7 +116,11 @@ class AttachmentFieldView : BaseFieldView {
         return button;
     }()
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         audioButton.applyTextTheme(withScheme: scheme);
         audioButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
@@ -219,17 +223,17 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     func addAttachment(_ attachment: Attachment) {
-        var safeAttachments = self.attachments ?? Set(minimumCapacity: 0);
-        safeAttachments.insert(attachment);
-        self.attachments = safeAttachments
-        setCollectionData(attachments: safeAttachments);
+        var attachments = self.attachments ?? Set(minimumCapacity: 0);
+        attachments.insert(attachment);
+        self.attachments = attachments
+        setCollectionData(attachments: attachments);
     }
     
     func removeAttachment(_ attachment: Attachment) {
-        if var safeAttachments = self.attachments {
-            safeAttachments.remove(attachment);
-            self.attachments = safeAttachments
-            setCollectionData(attachments: safeAttachments);
+        if var attachments = self.attachments {
+            attachments.remove(attachment);
+            self.attachments = attachments
+            setCollectionData(attachments: attachments);
         }
     }
     
@@ -266,11 +270,11 @@ class AttachmentFieldView : BaseFieldView {
 
     override func setValid(_ valid: Bool) {
         errorLabel.isHidden = valid;
-        if let safeScheme = scheme {
+        if let scheme = scheme {
             if (valid) {
-                applyTheme(withScheme: safeScheme);
+                applyTheme(withScheme: scheme);
             } else {
-                fieldNameLabel.textColor = safeScheme.colorScheme.errorColor;
+                fieldNameLabel.textColor = scheme.colorScheme.errorColor;
             }
         }
     }

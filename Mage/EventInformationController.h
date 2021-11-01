@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Event+CoreDataProperties.h"
+#import "MAGE-Swift.h"
 #import <MaterialComponents/MDCContainerScheme.h>
 
 NS_ASSUME_NONNULL_BEGIN

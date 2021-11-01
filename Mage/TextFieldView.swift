@@ -109,7 +109,11 @@ class TextFieldView : BaseFieldView {
         super.updateConstraints();
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         if (multiline) {
             multilineTextField.applyTheme(withScheme: scheme);
@@ -172,13 +176,13 @@ class TextFieldView : BaseFieldView {
         if (valid) {
             if (multiline) {
                 multilineTextField.leadingAssistiveLabel.text = " ";
-                if let safeScheme = scheme {
-                    multilineTextField.applyTheme(withScheme: safeScheme);
+                if let scheme = scheme {
+                    multilineTextField.applyTheme(withScheme: scheme);
                 }
             } else {
                 textField.leadingAssistiveLabel.text = " ";
-                if let safeScheme = scheme {
-                    textField.applyTheme(withScheme: safeScheme);
+                if let scheme = scheme {
+                    textField.applyTheme(withScheme: scheme);
                 }
             }
         } else {

@@ -748,8 +748,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Save");
                 expect(delegate.saveObservationCalled).to(beTrue());
                 expect(delegate.observationSaved).toNot(beNil());
-                if let safeObservation: Observation = delegate.observationSaved {
-                    let properties: [String: Any] = safeObservation.properties as! [String: Any];
+                if let observation: Observation = delegate.observationSaved {
+                    let properties: [String: Any] = observation.properties as! [String: Any];
                     let forms: [[String: Any]] = properties["forms"] as! [[String: Any]];
                     expect(forms[0]).toNot(beNil());
                     let firstForm = forms[0]

@@ -35,7 +35,11 @@ class MultiDropdownFieldView : BaseFieldView {
         self.addFieldView();
     }
     
-    override func applyTheme(withScheme scheme: MDCContainerScheming) {
+    override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+
         super.applyTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
@@ -80,8 +84,8 @@ class MultiDropdownFieldView : BaseFieldView {
         super.setValid(valid);
         if (valid) {
             textField.leadingAssistiveLabel.text = " ";
-            if let safeScheme = scheme {
-                textField.applyTheme(withScheme: safeScheme);
+            if let scheme = scheme {
+                textField.applyTheme(withScheme: scheme);
             }
         } else {
             textField.applyErrorTheme(withScheme: globalErrorContainerScheme());

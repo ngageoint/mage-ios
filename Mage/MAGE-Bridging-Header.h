@@ -13,11 +13,12 @@
 
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"
+#import "GPKGFeatureRowData.h"
+
 #import "FadeTransitionSegue.h"
 #import "MediaLoader.h"
 #import "MageServer.h"
 #import "Mage.h"
-#import "MageInitializer.h"
 #import "Server.h"
 #import <MGRS.h>
 #import "MagicalRecord+MAGE.h"
@@ -62,25 +63,18 @@
 #import "UINavigationItem+Subtitle.h"
 #import "ObservationFilterTableViewController.h"
 #import "ObservationTableHeaderView.h"
-#import "GeometryDeserializer.h"
 #import "StaticPointAnnotation.h"
 #import "LocationFilterTableViewController.h"
 
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"
+#import "LocationAnnotation.h"
 
 #pragma mark - Core Data Entities
-#import "Feed.h"
-#import "FeedItem.h"
 #import "Attachment.h"
-#import "Event.h"
 #import "Observation.h"
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"
 #import "Layer.h"
 
 #import "Form.h"
-#import "Location.h"
-#import "GPSLocation.h"
-#import "Team.h"
-#import "Role.h"
