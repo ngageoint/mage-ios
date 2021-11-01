@@ -15,6 +15,7 @@ import Kingfisher
 import MagicalRecord
 
 @testable import MAGE
+import UIKit
 
 @available(iOS 13.0, *)
 
@@ -414,11 +415,10 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
-                tester().waitForTappableView(withAccessibilityLabel: "Login Failed");
-                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
-                expect(alert.title).to(equal("Login Failed"));
-                expect(alert.message).to(equal("Failed to get a token"));
-                tester().tapView(withAccessibilityLabel: "OK");
+                tester().waitForView(withAccessibilityLabel: "Login Failed");
+                let view: UITextView = (viewTester().usingLabel("Login Failed")?.view as! UITextView);
+                expect(view.isHidden).to(beFalse());
+                expect(view.attributedText.string).to(contain("Failed to get a token"));
             }
             
             it("should not be able to log in offline with no stored password") {
@@ -629,11 +629,11 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
-                tester().waitForTappableView(withAccessibilityLabel: "Registration Sent");
-                let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
-                expect(alert.title).to(equal("Registration Sent"));
-                expect(alert.message).to(contain("Your device has been registered.  \nAn administrator has been notified to approve this device."));
-                tester().tapView(withAccessibilityLabel: "OK");
+                tester().waitForView(withAccessibilityLabel: "Registration Sent");
+                let view: UITextView = (viewTester().usingLabel("Registration Sent")?.view as! UITextView);
+                expect(view.isHidden).to(beFalse());
+                expect(view.attributedText.string).to(contain("Your device has been registered."));
+                expect(view.attributedText.string).to(contain("An administrator has been notified to approve this device."));
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }

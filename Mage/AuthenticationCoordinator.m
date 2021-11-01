@@ -23,6 +23,7 @@
 #import "AppDelegate.h"
 #import "Authentication.h"
 #import "UIColor+Hex.h"
+#import "ContactInfo.h"
 #import "MAGE-Swift.h"
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
@@ -277,14 +278,10 @@ BOOL signingIn = YES;
 
 - (void) failedToAuthenticate:(NSString *) message {
     NSString *error = [message isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : message;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Login Failed"
-                                                                   message:error
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    alert.accessibilityLabel = @"Login Failed";
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-
     
-    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
+            
+    [self.loginView  setContactInfo:info];
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
@@ -380,17 +377,11 @@ BOOL signingIn = YES;
 }
 
 - (void) registrationWasSuccessful {
-    UIAlertController * alert = [UIAlertController
-                                 alertControllerWithTitle:@"Registration Sent"
-                                 message:@"Your device has been registered.  \nAn administrator has been notified to approve this device."
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    alert.accessibilityLabel = @"Registration Sent";
+    NSString * error =@"Your device has been registered.  \nAn administrator has been notified to approve this device.";
     
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    if (![[self.navigationController topViewController] isKindOfClass:[LoginViewController class]]) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    [self.navigationController presentViewController:alert animated:YES completion:nil];
+    ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Registration Sent" andMessage:error];
+    
+    [self.loginView  setContactInfo:info];
     
 }
 

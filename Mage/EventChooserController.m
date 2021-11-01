@@ -10,6 +10,7 @@
 #import "Mage.h"
 #import "Server.h"
 #import "UserUtility.h"
+#import "ContactInfo.h"
 
 @interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
@@ -217,16 +218,20 @@
     
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 20, self.tableView.bounds.size.width - 32, 0)];
-        messageLabel.text = @"You are not in any events.  You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
-        messageLabel.numberOfLines = 0;
-        messageLabel.textAlignment = NSTextAlignmentCenter;
-        messageLabel.font = [UIFont systemFontOfSize:20];
-        messageLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-        [messageLabel sizeToFit];
+        NSString * error =  @"You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
+        
+        ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"You are not in any events" andMessage:error];
+        
+        UITextView *messageText = [[UITextView alloc] initWithFrame:CGRectMake(16, 20, self.tableView.bounds.size.width - 32, 0)];
+        messageText.attributedText = info.messageWithContactInfo;
+        messageText.textAlignment = NSTextAlignmentCenter;
+        messageText.font = self.scheme.typographyScheme.body1;
+        messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        messageText.scrollEnabled = false;
+        [messageText sizeToFit];
         
         UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
-        [messageView addSubview:messageLabel];
+        [messageView addSubview:messageText];
         
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.backgroundView = messageView;

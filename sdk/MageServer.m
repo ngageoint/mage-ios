@@ -183,6 +183,12 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
             [defaults setObject:[disclaimer valueForKeyPath:@"title"] forKey:@"disclaimerTitle"];
         }
         
+        NSDictionary *contactinfo = [response valueForKey:@"contactinfo"];
+        if (contactinfo) {
+            [defaults setObject:[contactinfo valueForKeyPath:@"email"] forKey:@"contactinfoEmail"];
+            [defaults setObject:[contactinfo valueForKeyPath:@"phone"] forKey:@"contactinfoPhone"];
+        }
+        
         if (![response valueForKeyPath:@"authenticationStrategies"]) {
             failure([NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadURL userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat: @"Invalid response from the MAGE server. %@", response] forKey:NSLocalizedDescriptionKey]]);
             return;
