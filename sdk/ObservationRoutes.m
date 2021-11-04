@@ -7,7 +7,6 @@
 //
 
 #import "ObservationRoutes.h"
-#import "ObservationImportant.h"
 #import "MageServer.h"
 #import "NSDate+Iso8601.h"
 #import "MAGE-Swift.h"
@@ -60,7 +59,7 @@
 
 - (RouteMethod *) pushImportant: (ObservationImportant *) important {
     RouteMethod *method = [[RouteMethod alloc] init];
-    method.method = [important.important isEqualToNumber:[NSNumber numberWithBool:YES]] ? @"PUT" : @"DELETE";
+    method.method = important.important ? @"PUT" : @"DELETE";
     method.route = [NSString stringWithFormat:@"%@/api/events/%@/observations/%@/important", [MageServer baseURL], important.observation.eventId, important.observation.remoteId];
     method.parameters = @{@"description":important.reason};
     return method;

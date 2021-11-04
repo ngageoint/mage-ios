@@ -6,7 +6,6 @@
 
 #import "ObservationPushService.h"
 #import "MageSessionManager.h"
-#import "ObservationImportant.h"
 #import "Attachment.h"
 #import "UserUtility.h"
 #import "DataConnectionUtilities.h"
@@ -353,7 +352,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationImportant *localImportant = [important MR_inContext:localContext];
                 BOOL serverImportant = response[@"important"] != nil;
-                if ([localImportant.important isEqualToNumber:[NSNumber numberWithBool:serverImportant]]) {
+                if (localImportant.important == serverImportant) {
                     localImportant.dirty = false;
                 } else {
                     // force a push again

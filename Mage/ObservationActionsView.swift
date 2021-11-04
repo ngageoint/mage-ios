@@ -298,7 +298,7 @@ class ObservationActionsView: UIView {
         cancelOrRemoveButton.setTitle("Cancel", for: .normal);
         cancelOrRemoveButton.isEnabled = true;
         if let important = observation.observationImportant {
-            if (important.important == NSNumber(booleanLiteral: true)) {
+            if (important.important) {
                 isImportant = true;
                 importantButton.setImage(UIImage(named: "flag"), for: .normal);
                 importantInputView.text = important.reason;

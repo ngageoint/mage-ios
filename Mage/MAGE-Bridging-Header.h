@@ -75,7 +75,6 @@
 
 #pragma mark - Core Data Entities
 #import "Attachment.h"
-#import "ObservationImportant.h"
 #import "Layer.h"
 
 #import "Form.h"

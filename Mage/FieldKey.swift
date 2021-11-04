@@ -94,6 +94,16 @@ public enum ObservationKey : String {
     }
 }
 
+public enum ObservationImportantKey : String {
+    case userId
+    case timestamp
+    case description
+    
+    var key : String {
+        return self.rawValue;
+    }
+}
+
 public enum AttachmentKey : String {
     case contentType
     case name

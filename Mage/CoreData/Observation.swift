@@ -163,9 +163,9 @@ enum State: Int, CustomStringConvertible {
         
         let manager = MageSessionManager.shared();
         
-        if (important.important == 1) {
+        if (important.important) {
             let parameters: [String : String?] = [
-                "description" : important.reason
+                ObservationImportantKey.description.key : important.reason
             ]
             return manager?.put_TASK(url, parameters: parameters, success: success, failure: failure);
         } else {
@@ -460,10 +460,11 @@ enum State: Int, CustomStringConvertible {
                     existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context);
                 }
                 
-                if let importantJson = feature[ObservationKey.important.key] as? [AnyHashable : Any] {
-                    let important = ObservationImportant(forJson: importantJson, in: context);
-                    important.observation = existingObservation;
-                    existingObservation.observationImportant = important;
+                if let importantJson = feature[ObservationKey.important.key] as? [String : Any] {
+                    if let important = ObservationImportant.important(json: importantJson, context: context) {
+                        important.observation = existingObservation;
+                        existingObservation.observationImportant = important;
+                    }
                 } else if let existingObservationImportant = existingObservation.observationImportant {
                     existingObservationImportant.mr_deleteEntity(in: context);
                     existingObservation.observationImportant = nil;
@@ -523,10 +524,11 @@ enum State: Int, CustomStringConvertible {
                         observation.user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context);
                     }
                     
-                    if let importantJson = feature[ObservationKey.important.key] as? [AnyHashable : Any] {
-                        let important = ObservationImportant(forJson: importantJson, in: context);
-                        important.observation = observation;
-                        observation.observationImportant = important;
+                    if let importantJson = feature[ObservationKey.important.key] as? [String : Any] {
+                        if let important = ObservationImportant.important(json: importantJson, context: context) {
+                            important.observation = observation;
+                            observation.observationImportant = important;
+                        }
                     }
                     
                     if let favoriteUserIds = feature[ObservationKey.favoriteUserIds.key] as? [String] {
@@ -724,7 +726,7 @@ enum State: Int, CustomStringConvertible {
     
     @objc public var isImportant: Bool {
         get {
-            if let observationImportant = self.observationImportant, let important = observationImportant.important, important == 1 {
+            if let observationImportant = self.observationImportant, observationImportant.important {
                 return true;
             }
             return false;

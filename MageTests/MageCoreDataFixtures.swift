@@ -186,8 +186,8 @@ class MageCoreDataFixtures {
             var observation: Observation? = nil;
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 observation = Observation.create(feature: observationJson, context: localContext);
-                if let importantJson: [AnyHashable : Any] = observationJson["important"] as? [AnyHashable : Any] {
-                    let important: ObservationImportant = ObservationImportant(forJson: importantJson, in: localContext);
+                if let importantJson: [String : Any] = observationJson["important"] as? [String : Any] {
+                    let important: ObservationImportant = ObservationImportant.important(json: importantJson, context: localContext)!
                     important.observation = observation;
                     observation?.observationImportant = important;
                 }

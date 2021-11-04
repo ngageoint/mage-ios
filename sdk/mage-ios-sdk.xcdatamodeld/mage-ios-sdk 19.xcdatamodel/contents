@@ -122,7 +122,7 @@
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" inverseName="favorites" inverseEntity="Observation" syncable="YES"/>
     </entity>
-    <entity name="ObservationImportant" representedClassName="ObservationImportant" syncable="YES">
+    <entity name="ObservationImportant" representedClassName=".ObservationImportant" syncable="YES">
         <attribute name="dirty" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="important" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="reason" optional="YES" attributeType="String" syncable="YES"/>
@@ -180,7 +180,7 @@
         <element name="Location" positionX="-2108" positionY="-612" width="128" height="134"/>
         <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="284"/>
         <element name="ObservationFavorite" positionX="-2313" positionY="-999" width="128" height="89"/>
-        <element name="ObservationImportant" positionX="-2124" positionY="-792" width="128" height="135"/>
+        <element name="ObservationImportant" positionX="-2124" positionY="-792" width="128" height="119"/>
         <element name="Role" positionX="-2268" positionY="-486" width="128" height="74"/>
         <element name="Server" positionX="-2493" positionY="-1143" width="128" height="44"/>
         <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="44"/>
