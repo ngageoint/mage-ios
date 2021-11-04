@@ -19,8 +19,8 @@ extension Team {
     @NSManaged var name: String?
     @NSManaged var remoteId: String?
     @NSManaged var teamDescription: String?
-    @NSManaged var events: NSSet?
-    @NSManaged var users: NSSet?
+    @NSManaged var events: Set<Event>?
+    @NSManaged var users: Set<User>?
 }
 
 // MARK: Generated accessors for events
@@ -33,10 +33,10 @@ extension Team {
     @NSManaged public func removeFromEvents(_ value: Event)
     
     @objc(addEvents:)
-    @NSManaged public func addToEvents(_ values: NSSet)
+    @NSManaged public func addToEvents(_ values: Set<Event>)
     
     @objc(removeEvents:)
-    @NSManaged public func removeFromEvents(_ values: NSSet)
+    @NSManaged public func removeFromEvents(_ values: Set<Event>)
 }
 
 // MARK: Generated accessors for users
@@ -49,8 +49,8 @@ extension Team {
     @NSManaged public func removeFromUsers(_ value: User)
     
     @objc(addUsers:)
-    @NSManaged public func addToUsers(_ values: NSSet)
+    @NSManaged public func addToUsers(_ values: Set<User>)
     
     @objc(removeUsers:)
-    @NSManaged public func removeFromUsers(_ values: NSSet)
+    @NSManaged public func removeFromUsers(_ values: Set<User>)
 }

@@ -22,21 +22,21 @@ import CoreData
         self.name = json["name"] as? String
         self.teamDescription = json["description"] as? String
         
-        var teamUsers: [User] = [];
+        var teamUsers: Set<User> = Set<User>()
         
         if let userIds = json["userIds"] as? [String] {
             for userId in userIds {
                 if let user = User.mr_findFirst(byAttribute: "remoteId", withValue: userId, in: context) {
-                    teamUsers.append(user);
+                    teamUsers.insert(user);
                 } else {
                     if let user = User.mr_createEntity(in: context) {
                         user.remoteId = userId;
-                        teamUsers.append(user)
+                        teamUsers.insert(user);
                     }
                 }
             }
         }
         
-        self.users = NSSet(array: teamUsers);
+        self.users = teamUsers
     }
 }

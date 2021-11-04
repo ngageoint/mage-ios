@@ -32,9 +32,9 @@ extension User {
     @NSManaged var lastUpdated: Date?
     @NSManaged var createdAt: Date?
     @NSManaged var location: Location?
-    @NSManaged var observations: NSSet?
+    @NSManaged var observations: Set<Observation>?
     @NSManaged var role: Role?
-    @NSManaged var teams: NSSet?
+    @NSManaged var teams: Set<Team>?
 }
 
 // MARK: Generated accessors for teams
@@ -47,10 +47,10 @@ extension User {
     @NSManaged public func removeFromTeams(_ value: Team)
     
     @objc(addTeams:)
-    @NSManaged public func addToTeams(_ values: NSSet)
+    @NSManaged public func addToTeams(_ values: Set<Team>)
     
     @objc(removeTeams:)
-    @NSManaged public func removeFromTeams(_ values: NSSet)
+    @NSManaged public func removeFromTeams(_ values: Set<Team>)
 }
 
 // MARK: Generated accessors for observations
@@ -63,8 +63,8 @@ extension User {
     @NSManaged public func removeFromObservations(_ value: Observation)
     
     @objc(addObservations:)
-    @NSManaged public func addToObservations(_ values: NSSet)
+    @NSManaged public func addToObservations(_ values: Set<Observation>)
     
     @objc(removeObservations:)
-    @NSManaged public func removeFromObservations(_ values: NSSet)
+    @NSManaged public func removeFromObservations(_ values: Set<Observation>)
 }

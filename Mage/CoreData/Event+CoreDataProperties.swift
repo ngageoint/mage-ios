@@ -24,8 +24,8 @@ extension Event {
     @NSManaged var remoteId: NSNumber?
     @NSManaged var maxObservationForms: NSNumber?
     @NSManaged var minObservationForms: NSNumber?
-    @NSManaged var teams: NSSet?
-    @NSManaged var feeds: NSSet?
+    @NSManaged var teams: Set<Team>?
+    @NSManaged var feeds: Set<Feed>?
     @NSManaged var acl:[AnyHashable : Any]?
 }
 
@@ -39,10 +39,10 @@ extension Event {
     @NSManaged public func removeFromTeams(_ value: Team)
     
     @objc(addTeams:)
-    @NSManaged public func addToTeams(_ values: NSSet)
+    @NSManaged public func addToTeams(_ values: Set<Team>)
     
     @objc(removeTeams:)
-    @NSManaged public func removeFromTeams(_ values: NSSet)
+    @NSManaged public func removeFromTeams(_ values: Set<Team>)
 }
 
 // MARK: Generated accessors for feeds
@@ -55,10 +55,10 @@ extension Event {
     @NSManaged public func removeFromFeeds(_ value: Feed)
     
     @objc(addFeeds:)
-    @NSManaged public func addToFeeds(_ values: NSSet)
+    @NSManaged public func addToFeeds(_ values: Set<Feed>)
     
     @objc(removeFeeds:)
-    @NSManaged public func removeFromFeeds(_ values: NSSet)
+    @NSManaged public func removeFromFeeds(_ values: Set<Feed>)
 }
 
 //#import "Event+CoreDataProperties.h"

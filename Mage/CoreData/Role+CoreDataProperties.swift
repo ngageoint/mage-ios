@@ -18,7 +18,7 @@ extension Role {
     }
     @NSManaged var permissions: [String]?
     @NSManaged var remoteId: String?
-    @NSManaged var users: NSSet?
+    @NSManaged var users: Set<User>?
 }
 
 // MARK: Generated accessors for users
@@ -31,8 +31,8 @@ extension Role {
     @NSManaged public func removeFromUsers(_ value: User)
     
     @objc(addUsers:)
-    @NSManaged public func addToUsers(_ values: NSSet)
+    @NSManaged public func addToUsers(_ values: Set<User>)
     
     @objc(removeUsers:)
-    @NSManaged public func removeFromUsers(_ values: NSSet)
+    @NSManaged public func removeFromUsers(_ values: Set<User>)
 }
