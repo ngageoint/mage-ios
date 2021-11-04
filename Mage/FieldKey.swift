@@ -277,6 +277,7 @@ public enum FeedItemKey : String {
     case geometry
     case properties
     case id
+    case remoteId
     
     var key : String {
         return self.rawValue

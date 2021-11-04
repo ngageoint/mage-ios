@@ -249,12 +249,12 @@
 		F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */ = {isa = PBXBuildFile; fileRef = F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */; };
 		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
 		F72D432A2694B60300F9AC3B /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.swift */; };
-		F72D432B2694B60300F9AC3B /* ObservationFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D12694B60300F9AC3B /* ObservationFavorite.m */; };
+		F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D12694B60300F9AC3B /* ObservationFavorite.swift */; };
 		F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.swift */; };
 		F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */; };
 		F72D432E2694B60300F9AC3B /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D62694B60300F9AC3B /* Attachment.m */; };
 		F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */; };
-		F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */; };
+		F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.swift */; };
 		F730B94B2683D273004AD64A /* CardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94A2683D273004AD64A /* CardHeader.swift */; };
 		F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */; };
 		F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */; };
@@ -861,7 +861,6 @@
 		F72D427B2694B60300F9AC3B /* Attachment+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Attachment+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D427C2694B60300F9AC3B /* ObservationPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPushService.m; sourceTree = "<group>"; };
 		F72D427D2694B60300F9AC3B /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
-		F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObservationFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D427F2694B60300F9AC3B /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model9To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42812694B60300F9AC3B /* FeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
@@ -872,7 +871,6 @@
 		F72D42872694B60300F9AC3B /* AttachmentRoutes_Server5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentRoutes_Server5.h; sourceTree = "<group>"; };
 		F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes_Server5.m; sourceTree = "<group>"; };
 		F72D42892694B60300F9AC3B /* MAGERoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAGERoutes.m; sourceTree = "<group>"; };
-		F72D428A2694B60300F9AC3B /* ObservationFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFavorite.h; sourceTree = "<group>"; };
 		F72D428D2694B60300F9AC3B /* IdpAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdpAuthentication.m; sourceTree = "<group>"; };
 		F72D428E2694B60300F9AC3B /* LocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationService.m; sourceTree = "<group>"; };
 		F72D428F2694B60300F9AC3B /* AttachmentPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentPushService.h; sourceTree = "<group>"; };
@@ -932,14 +930,14 @@
 		F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdpAuthentication.h; sourceTree = "<group>"; };
 		F72D42CF2694B60300F9AC3B /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
 		F72D42D02694B60300F9AC3B /* Observation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
-		F72D42D12694B60300F9AC3B /* ObservationFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFavorite.m; sourceTree = "<group>"; };
+		F72D42D12694B60300F9AC3B /* ObservationFavorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationFavorite.swift; sourceTree = "<group>"; };
 		F72D42D22694B60300F9AC3B /* GPSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocation.swift; sourceTree = "<group>"; };
 		F72D42D32694B60300F9AC3B /* MAGERoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGERoutes.h; sourceTree = "<group>"; };
 		F72D42D42694B60300F9AC3B /* ObservationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchService.h; sourceTree = "<group>"; };
 		F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Canary+CoreDataProperties.m"; sourceTree = "<group>"; };
 		F72D42D62694B60300F9AC3B /* Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attachment.m; sourceTree = "<group>"; };
 		F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model3To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ObservationFavorite+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F730B94A2683D273004AD64A /* CardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeader.swift; sourceTree = "<group>"; };
 		F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormReorderTests.swift; sourceTree = "<group>"; };
 		F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormReorderDelegate.swift; sourceTree = "<group>"; };
@@ -2300,10 +2298,8 @@
 				F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */,
 				F72D42D02694B60300F9AC3B /* Observation.swift */,
 				F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.swift */,
-				F72D428A2694B60300F9AC3B /* ObservationFavorite.h */,
-				F72D42D12694B60300F9AC3B /* ObservationFavorite.m */,
-				F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */,
-				F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m */,
+				F72D42D12694B60300F9AC3B /* ObservationFavorite.swift */,
+				F72D42DA2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.swift */,
 				F72D424F2694B60300F9AC3B /* ObservationImportant.h */,
 				F72D42942694B60300F9AC3B /* ObservationImportant.m */,
 				F72D42572694B60300F9AC3B /* ObservationImportant+CoreDataProperties.h */,
@@ -3189,7 +3185,7 @@
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
-				F72D432B2694B60300F9AC3B /* ObservationFavorite.m in Sources */,
+				F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */,
 				F72D42FA2694B60300F9AC3B /* ObservationPushService.m in Sources */,
 				F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
@@ -3319,7 +3315,7 @@
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
-				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.m in Sources */,
+				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.swift in Sources */,
 				F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */,
 				2F8A2C0F2200FC2C007FE473 /* EventInformationCoordinator.m in Sources */,
 				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,

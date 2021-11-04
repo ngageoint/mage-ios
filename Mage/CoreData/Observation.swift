@@ -473,9 +473,10 @@ enum State: Int, CustomStringConvertible {
                 let favoriteUserIds = (feature[ObservationKey.favoriteUserIds.key] as? [String]) ?? []
                 for favoriteUserId in favoriteUserIds {
                     if favoritesMap[favoriteUserId] == nil {
-                        let favorite = ObservationFavorite(forUserId: favoriteUserId, in: context);
-                        favorite.observation = existingObservation;
-                        existingObservation.addToFavorites(favorite);
+                        if let favorite = ObservationFavorite.favorite(userId: favoriteUserId, context: context) {
+                            favorite.observation = existingObservation;
+                            existingObservation.addToFavorites(favorite);
+                        }
                     }
                 }
                 
@@ -530,9 +531,10 @@ enum State: Int, CustomStringConvertible {
                     
                     if let favoriteUserIds = feature[ObservationKey.favoriteUserIds.key] as? [String] {
                         for favoriteUserId in favoriteUserIds {
-                            let favorite = ObservationFavorite(forUserId: favoriteUserId, in: context);
-                            favorite.observation = observation;
-                            observation.addToFavorites(favorite);
+                            if let favorite = ObservationFavorite.favorite(userId: favoriteUserId, context: context) {
+                                favorite.observation = observation;
+                                observation.addToFavorites(favorite);
+                            }
                         }
                     }
                     

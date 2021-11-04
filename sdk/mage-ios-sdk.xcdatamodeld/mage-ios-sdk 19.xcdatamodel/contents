@@ -116,7 +116,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="ObservationFavorite" representedClassName="ObservationFavorite" syncable="YES">
+    <entity name="ObservationFavorite" representedClassName=".ObservationFavorite" syncable="YES">
         <attribute name="dirty" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
@@ -179,7 +179,7 @@
         <element name="Layer" positionX="-2243" positionY="-1035" width="128" height="179"/>
         <element name="Location" positionX="-2108" positionY="-612" width="128" height="134"/>
         <element name="Observation" positionX="-1926" positionY="-1024" width="128" height="284"/>
-        <element name="ObservationFavorite" positionX="-2313" positionY="-999" width="128" height="105"/>
+        <element name="ObservationFavorite" positionX="-2313" positionY="-999" width="128" height="89"/>
         <element name="ObservationImportant" positionX="-2124" positionY="-792" width="128" height="135"/>
         <element name="Role" positionX="-2268" positionY="-486" width="128" height="74"/>
         <element name="Server" positionX="-2493" positionY="-1143" width="128" height="44"/>

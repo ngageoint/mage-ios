@@ -6,7 +6,6 @@
 
 #import "ObservationPushService.h"
 #import "MageSessionManager.h"
-#import "ObservationFavorite.h"
 #import "ObservationImportant.h"
 #import "Attachment.h"
 #import "UserUtility.h"

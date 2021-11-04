@@ -7,7 +7,6 @@
 //
 
 #import "ObservationRoutes.h"
-#import "ObservationFavorite.h"
 #import "ObservationImportant.h"
 #import "MageServer.h"
 #import "NSDate+Iso8601.h"
