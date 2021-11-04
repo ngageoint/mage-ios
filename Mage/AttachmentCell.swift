@@ -38,20 +38,22 @@ import Kingfisher
         button?.removeFromSuperview();
     }
     
-    func getAttachmentUrl(attachment: Attachment) -> URL {
-        if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
-            return URL(fileURLWithPath: attachment.localPath!);
-        } else {
-            return URL(string: attachment.url!)!;
+    func getAttachmentUrl(attachment: Attachment) -> URL? {
+        if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
+            return URL(fileURLWithPath: localPath);
+        } else if let url = attachment.url {
+            return URL(string: url);
         }
+        return nil;
     }
 
-    func getAttachmentUrl(size: Int, attachment: Attachment) -> URL {
-        if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
-            return URL(fileURLWithPath: attachment.localPath!);
-        } else {
-            return URL(string: String(format: "%@?size=%ld", attachment.url!, size))!;
+    func getAttachmentUrl(size: Int, attachment: Attachment) -> URL? {
+        if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
+            return URL(fileURLWithPath: localPath);
+        } else if let url = attachment.url {
+            return URL(string: String(format: "%@?size=%ld", url, size));
         }
+        return nil;
     }
     
     override func removeFromSuperview() {
@@ -140,7 +142,12 @@ import Kingfisher
                                                 }
                                             });
         } else if (attachment.contentType?.hasPrefix("video") ?? false) {
-            let url = self.getAttachmentUrl(attachment: attachment);
+            guard let url = self.getAttachmentUrl(attachment: attachment) else {
+                self.imageView.contentMode = .scaleAspectFit;
+                self.imageView.image = UIImage(named: "upload");
+                self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
+                return;
+            }
             var localPath: String? = nil;
             if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
                 localPath = attachment.localPath;
