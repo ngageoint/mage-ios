@@ -18,15 +18,15 @@ import CoreData
     }
     
     @objc public func update(json: [AnyHashable : Any], context: NSManagedObjectContext) {
-        self.remoteId = json["id"] as? String
-        self.name = json["name"] as? String
-        self.teamDescription = json["description"] as? String
+        self.remoteId = json[TeamKey.id.key] as? String
+        self.name = json[TeamKey.name.key] as? String
+        self.teamDescription = json[TeamKey.description.key] as? String
         
         var teamUsers: Set<User> = Set<User>()
         
-        if let userIds = json["userIds"] as? [String] {
+        if let userIds = json[TeamKey.userIds.key] as? [String] {
             for userId in userIds {
-                if let user = User.mr_findFirst(byAttribute: "remoteId", withValue: userId, in: context) {
+                if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context) {
                     teamUsers.insert(user);
                 } else {
                     if let user = User.mr_createEntity(in: context) {

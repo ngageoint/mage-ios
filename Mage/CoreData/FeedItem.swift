@@ -14,7 +14,7 @@ import CoreData
     @objc public var simpleFeature: SFGeometry? {
         get {
             if let geometry = self.geometry {
-                return SFGeometryUtils.decodeGeometry(self.geometry);
+                return SFGeometryUtils.decodeGeometry(geometry);
             }
             return nil;
         }
@@ -78,22 +78,22 @@ import CoreData
     }
 
     @objc public static func getFeedItems(feedId: String, eventId: Int) -> [FeedItem]? {
-        if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %d)", feedId, eventId)) {
+        if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)", feedId, eventId)) {
             return FeedItem.mr_findAll(with: NSPredicate(format: "(feed == %@)", feed)) as? [FeedItem];
         }
         return [];
     }
     
     @objc public static func feedItemIdFromJson(json: [AnyHashable: Any]) -> String? {
-        return json["id"] as? String;
+        return json[FeedItemKey.id.key] as? String;
     }
     
     @objc public func populate(json: [AnyHashable : Any], feed: Feed) {
-        self.remoteId = json["id"] as? String
+        self.remoteId = json[FeedItemKey.id.key] as? String
         
-        let geometry = GeometryDeserializer.parseGeometry(json: json["geometry"] as? [AnyHashable : Any])
+        let geometry = GeometryDeserializer.parseGeometry(json: json[FeedItemKey.geometry.key] as? [AnyHashable : Any])
         self.simpleFeature = geometry;
-        self.properties = json["properties"] as? [AnyHashable : Any]
+        self.properties = json[FeedItemKey.properties.key] as? [AnyHashable : Any]
         if let temporalProperty = feed.itemTemporalProperty, let temporalValue = (self.properties as? [AnyHashable : Any])?[temporalProperty] as? NSNumber {
             self.temporalSortValue = temporalValue
         }
@@ -109,9 +109,9 @@ import CoreData
             return nil;
         }
         
-        if let feed = self.feed, let itemPropertiesSchema = feed.itemPropertiesSchema, let properties = itemPropertiesSchema["properties"] as? [AnyHashable : Any], let keySchema = properties[key] as? [AnyHashable : Any], let type = keySchema["type"] as? String {
-            if (type == "number") {
-                if let numberValue = value as? NSNumber, let format = keySchema["format"] as? String, format == "date" {
+        if let feed = self.feed, let itemPropertiesSchema = feed.itemPropertiesSchema, let properties = itemPropertiesSchema[FeedItemPropertiesSchemaKey.properties.key] as? [AnyHashable : Any], let keySchema = properties[key] as? [AnyHashable : Any], let type = keySchema[FeedItemPropertiesSchemaKey.type.key] as? String {
+            if (type == FeedItemPropertiesSchemaKey.number.key) {
+                if let numberValue = value as? NSNumber, let format = keySchema[FeedItemPropertiesSchemaKey.format.key] as? String, format == FeedItemPropertiesSchemaKey.date.key {
                     let dateDisplayFormatter = DateFormatter();
                     dateDisplayFormatter.dateFormat = "yyyy-MM-dd";
                     dateDisplayFormatter.timeZone = TimeZone(secondsFromGMT: 0);

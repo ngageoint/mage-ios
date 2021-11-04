@@ -13,11 +13,11 @@ import CoreData
 @objc public class Feed: NSManagedObject {
     
     @objc public static func getMappableFeeds(eventId: NSNumber) -> [Feed] {
-        return Feed.mr_findAll(with: NSPredicate(format: "(itemsHaveSpatialDimension == 1 AND eventId == %@)", eventId)) as? [Feed] ?? [];
+        return Feed.mr_findAll(with: NSPredicate(format: "(\(FeedKey.itemsHaveSpatialDimension.key) == 1 AND \(FeedKey.eventId.key) == %@)", eventId)) as? [Feed] ?? [];
     }
     
     @objc public static func getEventFeeds(eventId: NSNumber) -> [Feed] {
-        return Feed.mr_findAll(with: NSPredicate(format: "(eventId == %@)", eventId)) as? [Feed] ?? [];
+        return Feed.mr_findAll(with: NSPredicate(format: "(\(FeedKey.eventId.key) == %@)", eventId)) as? [Feed] ?? [];
     }
     
     @objc public static func populateFeeds(feeds: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [String] {
@@ -27,7 +27,7 @@ import CoreData
         for feed in feeds {
             if let remoteFeedId = Feed.feedIdFromJson(json: feed) {
                 feedRemoteIds.append(remoteFeedId);
-                if let f = Feed.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %@)", remoteFeedId, eventId), in: context) {
+                if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
                     f.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
                 } else {
                     let f = Feed.mr_createEntity(in: context);
@@ -53,7 +53,7 @@ import CoreData
             return nil;
         }
         
-        if let f = Feed.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %@)", remoteFeedId, eventId), in: context) {
+        if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
             f.populate(json: json, eventId: eventId, tag: NSNumber(value: count));
         } else {
             let f = Feed.mr_createEntity(in: context);
@@ -66,23 +66,23 @@ import CoreData
     
     @discardableResult @objc public static func populateFeedItems(feedItems: [[AnyHashable : Any]], feedId: String, eventId: NSNumber, context: NSManagedObjectContext) -> [String] {
         var feedItemRemoteIds: [String] = [];
-        guard let feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId), in: context) else {
+        guard let feed = Feed.mr_findFirst(with: NSPredicate(format: "\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@", feedId, eventId), in: context) else {
             return feedItemRemoteIds;
         }
         for feedItem in feedItems {
             if let remoteFeedItemId = FeedItem.feedItemIdFromJson(json: feedItem) {
                 feedItemRemoteIds.append(remoteFeedItemId)
-                let fi = FeedItem.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND feed == %@)", remoteFeedItemId, feed), in: context) ?? FeedItem.mr_createEntity(in: context);
+                let fi = FeedItem.mr_findFirst(with: NSPredicate(format: "(\(FeedItemKey.remoteId.key) == %@ AND feed == %@)", remoteFeedItemId, feed), in: context) ?? FeedItem.mr_createEntity(in: context);
                 fi?.populate(json: feedItem, feed: feed);
             }
         }
         
-        FeedItem.mr_deleteAll(matching: NSPredicate(format: "(NOT (remoteId IN %@)) AND feed == %@", feedItemRemoteIds, feed), in: context);
+        FeedItem.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedItemKey.remoteId.key) IN %@)) AND feed == %@", feedItemRemoteIds, feed), in: context);
         return feedItemRemoteIds;
     }
     
     @objc public static func feedIdFromJson(json: [AnyHashable: Any]) -> String? {
-        return json["id"] as? String;
+        return json[FeedKey.id.key] as? String;
     }
     
     @objc public static func operationToPullFeeds(eventId: NSNumber, success: ((URLSessionDataTask?, Any?) -> Void)?, failure: ((Error) -> Void)?) -> URLSessionDataTask? {
@@ -102,9 +102,9 @@ import CoreData
                         }
                     } else if let success = success {
                         MagicalRecord.save({ localContext in
-                            Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (remoteId IN %@)) AND eventId == %@", feedRemoteIds), in: localContext);
+                            Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds), in: localContext);
                         }, completion: { contextDidSave, error in
-                            if let feeds = Feed.mr_findAll(with: NSPredicate(format: "eventId == %@", eventId)) as? [Feed] {
+                            if let feeds = Feed.mr_findAll(with: NSPredicate(format: "\(FeedKey.eventId.key) == %@", eventId)) as? [Feed] {
                                 for feed in feeds {
                                     if let remoteId = feed.remoteId {
                                         Feed.pullFeedItems(feedId: remoteId, eventId: eventId, success: nil, failure: nil);
@@ -128,7 +128,7 @@ import CoreData
         let manager = MageSessionManager.shared();
         let task = manager?.post_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             MagicalRecord.save { localContext in
-                if let json = responseObject as? [AnyHashable : Any], let items = json["items"] as? [AnyHashable : Any], let features = items["features"] as? [[AnyHashable : Any]] {
+                if let json = responseObject as? [AnyHashable : Any], let items = json[FeedKey.items.key] as? [AnyHashable : Any], let features = items[FeedKey.features.key] as? [[AnyHashable : Any]] {
                     Feed.populateFeedItems(feedItems: features, feedId: feedId, eventId: eventId, context: localContext);
                 }
             } completion: { contextDidSave, error in
@@ -162,28 +162,28 @@ import CoreData
     }
     
     @objc public var iconURL: URL? {
-        if let mapStyle = self.mapStyle as? [AnyHashable : Any], let icon = mapStyle["icon"] as? [AnyHashable : Any], let iconId = icon["id"] as? String {
+        if let mapStyle = self.mapStyle, let icon = mapStyle[FeedMapStyleKey.icon.key] as? [AnyHashable : Any], let iconId = icon[FeedMapStyleKey.id.key] as? String {
             return URL(string: "\(MageServer.baseURL().absoluteString)/api/icons/\(iconId)/content")
         }
         return nil;
     }
     
     @objc public func populate(json: [AnyHashable : Any], eventId: NSNumber, tag: NSNumber) {
-        self.remoteId = json["id"] as? String
+        self.remoteId = json[FeedKey.id.key] as? String
         self.tag = tag
-        self.title = json["title"] as? String
-        self.summary = json["summary"] as? String
-        self.constantParams = json["constantParams"]
-        self.variableParams = json["variableParams"]
-        self.updateFrequency = (json["updateFrequency"] as? [AnyHashable : Any])?["seconds"] as? NSNumber
-        self.pullFrequency = (json["updateFrequency"] as? [AnyHashable : Any])?["seconds"] as? NSNumber
-        self.mapStyle = json["mapStyle"] as? [AnyHashable : Any]
-        self.itemPropertiesSchema = json["itemPropertiesSchema"] as? [AnyHashable : Any]
-        self.itemPrimaryProperty = json["itemPrimaryProperty"] as? String
-        self.itemSecondaryProperty = json["itemSecondaryProperty"] as? String
-        self.itemTemporalProperty = json["itemTemporalProperty"] as? String
-        self.itemsHaveIdentity = (json["itemsHaveIdentity"] as? Bool) ?? false
-        self.itemsHaveSpatialDimension = (json["itemsHaveSpatialDimension"] as? Bool) ?? false
+        self.title = json[FeedKey.title.key] as? String
+        self.summary = json[FeedKey.summary.key] as? String
+        self.constantParams = json[FeedKey.constantParams.key]
+        self.variableParams = json[FeedKey.variableParams.key]
+        self.updateFrequency = (json[FeedKey.updateFrequency.key] as? [AnyHashable : Any])?["seconds"] as? NSNumber
+        self.pullFrequency = (json[FeedKey.updateFrequency.key] as? [AnyHashable : Any])?["seconds"] as? NSNumber
+        self.mapStyle = json[FeedKey.mapStyle.key] as? [AnyHashable : Any]
+        self.itemPropertiesSchema = json[FeedKey.itemPropertiesSchema.key] as? [AnyHashable : Any]
+        self.itemPrimaryProperty = json[FeedKey.itemPrimaryProperty.key] as? String
+        self.itemSecondaryProperty = json[FeedKey.itemSecondaryProperty.key] as? String
+        self.itemTemporalProperty = json[FeedKey.itemTemporalProperty.key] as? String
+        self.itemsHaveIdentity = (json[FeedKey.itemsHaveIdentity.key] as? Bool) ?? false
+        self.itemsHaveSpatialDimension = (json[FeedKey.itemsHaveSpatialDimension.key] as? Bool) ?? false
         self.eventId = eventId;
     }
     

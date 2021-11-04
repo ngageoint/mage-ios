@@ -24,9 +24,9 @@ import CoreData
                     return;
                 }
                 for eventJson in events {
-                    if let eventId = eventJson["id"] as? NSNumber, let event = Event.mr_findFirst(byAttribute: "remoteId", withValue: eventId, in: localContext) {
+                    if let eventId = eventJson[EventKey.id.key] as? NSNumber, let event = Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: eventId, in: localContext) {
                         event.updateEvent(json: eventJson, context: localContext);
-                        if let recentEventIds = localUser?.recentEventIds as? [NSNumber], let remoteId = event.remoteId {
+                        if let recentEventIds = localUser?.recentEventIds, let remoteId = event.remoteId {
                             event.recentSortOrder = NSNumber(value: recentEventIds.firstIndex(of: remoteId) ?? 0)
                         }
                         if let remoteId = event.remoteId {
@@ -34,7 +34,7 @@ import CoreData
                         }
                     } else {
                         if let event = Event.insertEvent(json: eventJson, context: localContext) {
-                            if let recentEventIds = localUser?.recentEventIds as? [NSNumber], let remoteId = event.remoteId {
+                            if let recentEventIds = localUser?.recentEventIds, let remoteId = event.remoteId {
                                 event.recentSortOrder = NSNumber(value: recentEventIds.firstIndex(of: remoteId) ?? 0)
                             }
                             if let remoteId = event.remoteId {
@@ -43,7 +43,7 @@ import CoreData
                         }
                     }
                 }
-                Event.mr_deleteAll(matching: NSPredicate(format: "NOT (remoteId IN %@)", eventsReturned), in: localContext);
+                Event.mr_deleteAll(matching: NSPredicate(format: "NOT (\(EventKey.remoteId.key) IN %@)", eventsReturned), in: localContext);
             } completion: { contextDidSave, error in
                 NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
 
@@ -80,11 +80,11 @@ import CoreData
     }
     
     @objc public static func getCurrentEvent(context: NSManagedObjectContext) -> Event? {
-        return Event.mr_findFirst(byAttribute: "remoteId", withValue: Server.currentEventId(), in: context);
+        return Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: Server.currentEventId(), in: context);
     }
     
     @objc public static func getEvent(eventId: NSNumber, context: NSManagedObjectContext) -> Event? {
-        return Event.mr_findFirst(byAttribute: "remoteId", withValue: eventId, in: context);
+        return Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: eventId, in: context);
     }
     
     @objc public static func caseInsensitiveSortFetchAll(sortTerm: String?, ascending: Bool, predicate: NSPredicate?, groupBy: String?, context: NSManagedObjectContext) -> NSFetchedResultsController<Event>? {
@@ -108,25 +108,22 @@ import CoreData
     }
     
     func updateEvent(json: [AnyHashable : Any], context: NSManagedObjectContext) {
-        self.remoteId = json["id"] as? NSNumber
-        self.name = json["name"] as? String
-        self.maxObservationForms = json["maxObservationForms"] as? NSNumber
-        self.minObservationForms = json["minObservationForms"] as? NSNumber
-        self.eventDescription = json["description"] as? String
-        self.acl = AFJSONObjectByRemovingKeysWithNullValues(json["acl"] ?? [:], .allowFragments) as? [AnyHashable : Any]
-        self.forms = AFJSONObjectByRemovingKeysWithNullValues(json["forms"] ?? [[:]], .allowFragments) as? [[AnyHashable : Any]]
+        self.remoteId = json[EventKey.id.key] as? NSNumber
+        self.name = json[EventKey.name.key] as? String
+        self.maxObservationForms = json[EventKey.maxObservationForms.key] as? NSNumber
+        self.minObservationForms = json[EventKey.minObservationForms.key] as? NSNumber
+        self.eventDescription = json[EventKey.description.key] as? String
+        self.acl = AFJSONObjectByRemovingKeysWithNullValues(json[EventKey.acl.key] ?? [:], .allowFragments) as? [AnyHashable : Any]
+        self.forms = AFJSONObjectByRemovingKeysWithNullValues(json[EventKey.forms.key] ?? [[:]], .allowFragments) as? [[AnyHashable : Any]]
         
-        if let responseTeams = json["teams"] as? [[AnyHashable : Any]] {
+        if let responseTeams = json[EventKey.teams.key] as? [[AnyHashable : Any]] {
             for teamJson in responseTeams {
                 if let team = self.teams?.first(where: { team in
-                    if let team = team as? Team {
-                        return team.remoteId == teamJson["id"] as? String
-                    }
-                    return false;
-                }) as? Team {
+                    return team.remoteId == teamJson[TeamKey.id.key] as? String
+                }) {
                     team.update(json: teamJson, context: context);
                 } else {
-                    if let teamId = teamJson["id"] as? String, let team = Team.mr_findFirst(byAttribute: "remoteId", withValue: teamId, in: context) {
+                    if let teamId = teamJson[TeamKey.id.key] as? String, let team = Team.mr_findFirst(byAttribute: TeamKey.remoteId.key, withValue: teamId, in: context) {
                         team.update(json: teamJson, context: context);
                         self.addToTeams(team);
                     } else {
@@ -137,7 +134,7 @@ import CoreData
                 }
             }
         }
-        if let layers = json["layers"] as? [Any], let remoteId = remoteId {
+        if let layers = json[EventKey.layers.key] as? [Any], let remoteId = remoteId {
             Layer.populateLayers(fromJson: layers, inEventId: remoteId, in: context);
         }
         if let remoteId = remoteId {
@@ -149,7 +146,7 @@ import CoreData
         guard let teams = teams else {
             return false;
         }
-        for case let team as Team in teams {
+        for team in teams {
             if let users = team.users {
                 if users.contains(user) {
                     return true;
@@ -169,7 +166,7 @@ import CoreData
             return nil
         }
         for form in forms {
-            if form["id"] as? NSNumber == id {
+            if form[FormKey.id.key] as? NSNumber == id {
                 return form;
             }
         }
@@ -179,7 +176,7 @@ import CoreData
     @objc public var nonArchivedForms: [[AnyHashable : Any]]? {
         get {
             return self.forms?.filter({ form in
-                return (form["archived"] as? NSNumber) == 0
+                return (form[FormKey.archived.key] as? NSNumber) == 0
             })
         }
     }

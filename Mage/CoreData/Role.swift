@@ -18,10 +18,8 @@ import CoreData
     }
     
     @objc public func update(json: [AnyHashable : Any], context: NSManagedObjectContext) {
-        self.remoteId = json["id"] as? String
-        self.permissions = json["permissions"] as? [String]
-        //    [self setRemoteId:[json objectForKey:@"id"]];
-        //    [self setPermissions:[json objectForKey:@"permissions"]];
+        self.remoteId = json[RoleKey.id.key] as? String
+        self.permissions = json[RoleKey.permissions.key] as? [String]
     }
     
     @objc public static func operationToFetchRoles(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
@@ -47,12 +45,12 @@ import CoreData
                 // Get the role ids to query
                 var roleIds: [String] = [];
                 for roleJson in roles {
-                    if let roleId = roleJson["id"] as? String {
+                    if let roleId = roleJson[RoleKey.id.key] as? String {
                         roleIds.append(roleId);
                     }
                 }
 
-                let rolesMatchingIDs: [Role] = Role.mr_findAll(with: NSPredicate(format: "(remoteId IN %@)", roleIds), in: localContext) as? [Role] ?? [];
+                let rolesMatchingIDs: [Role] = Role.mr_findAll(with: NSPredicate(format: "(\(RoleKey.remoteId.key) IN %@)", roleIds), in: localContext) as? [Role] ?? [];
                 var roleIdMap: [String : Role] = [:];
                 for role in rolesMatchingIDs {
                     if let remoteId = role.remoteId {
@@ -62,7 +60,7 @@ import CoreData
                 
                 for roleJson in roles {
                     // pull from query map
-                    guard let roleId = roleJson["id"] as? String else {
+                    guard let roleId = roleJson[RoleKey.id.key] as? String else {
                         continue;
                     }
                     if let role = roleIdMap[roleId] {

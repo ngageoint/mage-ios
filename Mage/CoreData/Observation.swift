@@ -284,28 +284,28 @@ enum State: Int, CustomStringConvertible {
         var observationJson: [AnyHashable : Any] = [:]
         
         if let remoteId = self.remoteId {
-            observationJson["id"] = remoteId;
+            observationJson[ObservationKey.id.key] = remoteId;
         }
         if let userId = self.userId {
-            observationJson["userId"] = userId;
+            observationJson[ObservationKey.userId.key] = userId;
         }
         if let deviceId = self.deviceId {
-            observationJson["deviceId"] = deviceId;
+            observationJson[ObservationKey.deviceId.key] = deviceId;
         }
         if let url = self.url {
-            observationJson["url"] = url;
+            observationJson[ObservationKey.url.key] = url;
         }
-        observationJson["type"] = "Feature";
+        observationJson[ObservationKey.type.key] = "Feature";
         
         let state = self.state?.intValue ?? State.Active.rawValue
-        observationJson["state"] = ["name":(State(rawValue: state) ?? .Active).description]
+        observationJson[ObservationKey.state.key] = ["name":(State(rawValue: state) ?? .Active).description]
         
         if let geometry = self.geometry {
-            observationJson["geometry"] = GeometrySerializer.serializeGeometry(geometry);
+            observationJson[ObservationKey.geometry.key] = GeometrySerializer.serializeGeometry(geometry);
         }
         
         if let timestamp = self.timestamp {
-            observationJson["timestamp"] = ISO8601DateFormatter.string(from: timestamp, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone]);
+            observationJson[ObservationKey.timestamp.key] = ISO8601DateFormatter.string(from: timestamp, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone]);
         }
         
         var jsonProperties : [AnyHashable : Any] = self.properties ?? [:]
@@ -334,16 +334,16 @@ enum State: Int, CustomStringConvertible {
             }
         }
         
-        let forms = jsonProperties["forms"] as? [[String: Any]]
+        let forms = jsonProperties[ObservationKey.forms.key] as? [[String: Any]]
         var formArray: [Any] = [];
         
         if let forms = forms {
             for form in forms {
                 var formProperties: [String: Any] = form;
                 for (key, value) in form {
-                    if let formId = form["formId"] as? NSNumber {
+                    if let formId = form[FormKey.formId.key] as? NSNumber {
                         if let field = self.fieldNameToField(formId: formId)?[key] {
-                            if let fieldType = field["type"] as? String, fieldType == "geometry" {
+                            if let fieldType = field[FieldKey.type.key] as? String, fieldType == FieldType.geometry.key {
                                 if let fieldGeometry = value as? SFGeometry {
                                     formProperties[key] = GeometrySerializer.serializeGeometry(fieldGeometry);
                                 }
@@ -353,7 +353,7 @@ enum State: Int, CustomStringConvertible {
                 }
                 
                 // check for deleted attachments and add them to the proper field
-                if let formId = form["id"] as? String, let attachmentsToDeleteForForm = attachmentsToDelete[formId] {
+                if let formId = form[FormKey.id.key] as? String, let attachmentsToDeleteForForm = attachmentsToDelete[formId] {
                     for (field, attachmentsToDeleteForField) in attachmentsToDeleteForForm {
                         var newAttachments: [[AnyHashable : Any]] = [];
                         if let value = form[field] as? [[AnyHashable : Any]] {
@@ -362,8 +362,8 @@ enum State: Int, CustomStringConvertible {
                         for a in attachmentsToDeleteForField {
                             if let remoteId = a.remoteId {
                                 newAttachments.append([
-                                    "id": remoteId,
-                                    "action": "delete"
+                                    AttachmentKey.id.key: remoteId,
+                                    AttachmentKey.action.key: "delete"
                                 ])
                             }
                         }
@@ -373,8 +373,8 @@ enum State: Int, CustomStringConvertible {
                 formArray.append(formProperties);
             }
         }
-        jsonProperties["forms"] = formArray;
-        observationJson["properties"] = jsonProperties;
+        jsonProperties[ObservationKey.forms.key] = formArray;
+        observationJson[ObservationKey.properties.key] = jsonProperties;
         
         return observationJson;
     }
@@ -382,7 +382,7 @@ enum State: Int, CustomStringConvertible {
     @objc public static func fetchLastObservationDate(context: NSManagedObjectContext) -> Date? {
         let user = User.fetchCurrentUser(context: context);
         if let userRemoteId = user?.remoteId {
-            let observation = Observation.mr_findFirst(with: NSPredicate(format: "eventId == %@ AND user.remoteId != %@", Server.currentEventId(), userRemoteId), sortedBy: "lastModified", ascending: false, in:context);
+            let observation = Observation.mr_findFirst(with: NSPredicate(format: "\(ObservationKey.eventId.key) == %@ AND user.\(UserKey.remoteId.key) != %@", Server.currentEventId(), userRemoteId), sortedBy: ObservationKey.lastModified.key, ascending: false, in:context);
             return observation?.lastModified;
         }
         return nil;
@@ -397,16 +397,16 @@ enum State: Int, CustomStringConvertible {
         observation.timestamp = observationDate;
         
         var properties: [AnyHashable : Any] = [:];
-        properties["timestamp"] = ISO8601DateFormatter.string(from: observationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
+        properties[ObservationKey.timestamp.key] = ISO8601DateFormatter.string(from: observationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
         if let geometry = geometry, let provider = provider {
-            properties["provider"] = provider;
+            properties[ObservationKey.provider.key] = provider;
             if (provider != "manual") {
-                properties["accuracy"] = accuracy;
-                properties["delta"] = delta;
+                properties[ObservationKey.accuracy.key] = accuracy;
+                properties[ObservationKey.delta.key] = delta;
             }
             observation.geometry = geometry;
         }
-        properties["forms"] = [];
+        properties[ObservationKey.forms.key] = [];
         observation.properties = properties;
         observation.user = User.fetchCurrentUser(context: context);
         observation.dirty = false;
@@ -420,7 +420,7 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func stateFromJson(json: [AnyHashable : Any]) -> State {
-        if let stateJson = json["state"] as? [AnyHashable : Any], let stateName = stateJson["name"] as? String {
+        if let stateJson = json[ObservationKey.state.key] as? [AnyHashable : Any], let stateName = stateJson["name"] as? String {
             if stateName == State.Archive.description {
                 return State.Archive
             } else {
@@ -457,7 +457,7 @@ enum State: Int, CustomStringConvertible {
                 
                 existingObservation.populate(json: feature);
                 if let userId = existingObservation.userId {
-                    existingObservation.user = User.mr_findFirst(byAttribute: "remoteId", withValue: userId, in: context);
+                    existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context);
                 }
                 
                 if let importantJson = feature[ObservationKey.important.key] as? [AnyHashable : Any] {
@@ -489,7 +489,7 @@ enum State: Int, CustomStringConvertible {
                 if let attachmentsJson = feature[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
                     for attachmentJson in attachmentsJson {
                         var attachmentFound = false;
-                        if let remoteId = attachmentJson["id"] as? String, let attachments = existingObservation.attachments as? Set<Attachment> {
+                        if let remoteId = attachmentJson[AttachmentKey.id.key] as? String, let attachments = existingObservation.attachments {
                             
                             for attachment in attachments {
                                 if remoteId == attachment.remoteId {
@@ -1018,7 +1018,7 @@ enum State: Int, CustomStringConvertible {
     @objc public var favoritesMap: [String : ObservationFavorite] {
         get {
             var favoritesMap: [String:ObservationFavorite] = [:]
-            if let favorites = self.favorites as? Set<ObservationFavorite> {
+            if let favorites = self.favorites {
                 for favorite in favorites {
                     if let userId = favorite.userId {
                         favoritesMap[userId] = favorite

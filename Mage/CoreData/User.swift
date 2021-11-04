@@ -40,11 +40,11 @@ import Kingfisher
     }
     
     @objc public static func fetchUser(userId: String, context:NSManagedObjectContext) -> User? {
-        return User.mr_findFirst(byAttribute: "remoteId", withValue: userId, in: context);
+        return User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context);
     }
     
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
-        return User.mr_findFirst(byAttribute: "remoteId", withValue: UserDefaults.standard.currentUserId ?? "", in: context);
+        return User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: UserDefaults.standard.currentUserId ?? "", in: context);
     }
     
     @objc public static func operationToFetchMyself(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
@@ -108,12 +108,12 @@ import Kingfisher
                 // Get the user ids to query
                 var userIds: [String] = [];
                 for userJson in users {
-                    if let userId = userJson["id"] as? String {
+                    if let userId = userJson[UserKey.id.key] as? String {
                         userIds.append(userId);
                     }
                 }
                                 
-                let usersMatchingIDs: [User] = User.mr_findAll(with: NSPredicate(format: "(remoteId IN %@)", userIds), in: localContext) as? [User] ?? [];
+                let usersMatchingIDs: [User] = User.mr_findAll(with: NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds), in: localContext) as? [User] ?? [];
                 var userIdMap: [String : User] = [:];
                 for user in usersMatchingIDs {
                     if let remoteId = user.remoteId {
@@ -123,7 +123,7 @@ import Kingfisher
                 
                 for userJson in users {
                     // pull from query map
-                    guard let userId = userJson["id"] as? String else {
+                    guard let userId = userJson[UserKey.id.key] as? String else {
                         continue;
                     }
                     if let user = userIdMap[userId] {
@@ -155,20 +155,20 @@ import Kingfisher
     }
     
     @objc public func update(json: [AnyHashable : Any], context: NSManagedObjectContext) {
-        self.remoteId = json["id"] as? String
-        self.username = json["username"] as? String
-        self.email = json["email"] as? String
-        self.name = json["displayName"] as? String
-        if let phones = json["phones"] as? [[AnyHashable : Any]], phones.count > 0 {
-            self.phone = phones[0]["number"] as? String
+        self.remoteId = json[UserKey.id.key] as? String
+        self.username = json[UserKey.username.key] as? String
+        self.email = json[UserKey.email.key] as? String
+        self.name = json[UserKey.displayName.key] as? String
+        if let phones = json[UserKey.phones.key] as? [[AnyHashable : Any]], phones.count > 0 {
+            self.phone = phones[0][UserPhoneKey.number.key] as? String
         }
-        self.iconUrl = json["iconUrl"] as? String
-        if let icon = json["icon"] as? [AnyHashable : Any] {
-            self.iconText = icon["text"] as? String
-            self.iconColor = icon["color"] as? String
+        self.iconUrl = json[UserKey.iconUrl.key] as? String
+        if let icon = json[UserKey.icon.key] as? [AnyHashable : Any] {
+            self.iconText = icon[UserIconKey.text.key] as? String
+            self.iconColor = icon[UserIconKey.color.key] as? String
         }
-        self.avatarUrl = json["avatarUrl"] as? String
-        self.recentEventIds = json["recentEventIds"] as? [NSNumber]
+        self.avatarUrl = json[UserKey.avatarUrl.key] as? String
+        self.recentEventIds = json[UserKey.recentEventIds.key] as? [NSNumber]
         
         let dateFormat = DateFormatter();
         dateFormat.timeZone = TimeZone(secondsFromGMT: 0);
@@ -176,18 +176,18 @@ import Kingfisher
         let posix = Locale(identifier: "en_US_POSIX");
         dateFormat.locale = posix;
         
-        if let createdAtString = json["createdAt"] as? String {
+        if let createdAtString = json[UserKey.createdAt.key] as? String {
             self.createdAt = dateFormat.date(from: createdAtString)
         }
         
-        if let lastUpdatedString = json["lastUpdated"] as? String {
+        if let lastUpdatedString = json[UserKey.lastUpdated.key] as? String {
             self.lastUpdated = dateFormat.date(from: lastUpdatedString)
         }
         // go pull their icon and avatar if they got one using the image cache which will decide if we need to pull
         self.prefetchIconAndAvatar();
         
-        if let userRole = json["role"] as? [AnyHashable : Any] {
-            if let roleId = userRole["id"] as? String, let role = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleId, in: context) {
+        if let userRole = json[UserKey.role.key] as? [AnyHashable : Any] {
+            if let roleId = userRole[RoleKey.id.key] as? String, let role = Role.mr_findFirst(byAttribute: RoleKey.remoteId.key, withValue: roleId, in: context) {
                 self.role = role;
                 role.addToUsers(self);
             } else {
@@ -200,9 +200,9 @@ import Kingfisher
     
     @objc public var hasEditPermission: Bool {
         get {
-            if let permissions = self.role?.permissions as? [String] {
+            if let permissions = self.role?.permissions {
                 return permissions.contains { permission in
-                    return permission == "UPDATE_OBSERVATION_ALL" || permission == "UPDATE_OBSERVATION_EVENT";
+                    return permission == PermissionsKey.UPDATE_OBSERVATION_ALL.key || permission == PermissionsKey.UPDATE_OBSERVATION_EVENT.key;
                 }
             }
             return false;

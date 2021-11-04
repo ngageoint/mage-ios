@@ -49,13 +49,13 @@ import MagicalRecord
     }
     
     @objc public func populate(json: [AnyHashable : Any]) {
-        self.remoteId = json["id"] as? String
-        self.type = json["type"] as? String
-        self.eventId = json["eventId"] as? NSNumber
+        self.remoteId = json[LocationKey.id.key] as? String
+        self.type = json[LocationKey.type.key] as? String
+        self.eventId = json[LocationKey.eventId.key] as? NSNumber
         
-        self.properties = json["properties"] as? [AnyHashable : Any]
+        self.properties = json[LocationKey.properties.key] as? [AnyHashable : Any]
         var date = Date();
-        if let locationTimestamp = self.properties?["timestamp"] as? String {
+        if let locationTimestamp = self.properties?[LocationKey.timestamp.key] as? String {
             let formatter = ISO8601DateFormatter()
             formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
             formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
@@ -64,7 +64,7 @@ import MagicalRecord
         self.timestamp = date;
         
         // not quite sure why i have to do this, instead of having this on the same line as the if let...
-        let jsonGeometry = json["geometry"] as? [AnyHashable : Any];
+        let jsonGeometry = json[LocationKey.geometry.key] as? [AnyHashable : Any];
         if let jsonGeometry = jsonGeometry {
             if let parsed = GeometryDeserializer.parseGeometry(json: jsonGeometry) {
                 self.geometry = parsed;
@@ -100,12 +100,12 @@ import MagicalRecord
                 var userIds: [String] = [];
 
                 for user in allUserLocations {
-                    if let userId = user["id"] as? String {
+                    if let userId = user[UserKey.id.key] as? String {
                         userIds.append(userId);
                     }
                 }
                 
-                let usersMatchingIDs: [User] = User.mr_findAll(with: NSPredicate(format: "(remoteId IN %@)", userIds), in: localContext) as? [User] ?? [];
+                let usersMatchingIDs: [User] = User.mr_findAll(with: NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds), in: localContext) as? [User] ?? [];
 
                 var userIdMap: [String : User] = [:];
                 for user in usersMatchingIDs {
@@ -117,7 +117,7 @@ import MagicalRecord
                 
                 for userJson in allUserLocations {
                     // pull from query map
-                    guard let userId = userJson["id"] as? String, let locations = userJson["locations"] as? [[AnyHashable : Any]] else {
+                    guard let userId = userJson[UserKey.id.key] as? String, let locations = userJson[UserKey.locations.key] as? [[AnyHashable : Any]] else {
                         continue;
                     }
                     if (currentUser?.remoteId == userId) {
@@ -139,14 +139,14 @@ import MagicalRecord
                             newUserFound = true;
                             var displayName = "unknown";
                             var username = userId
-                            if let userFromJson = userJson["user"] as? [AnyHashable : Any] {
-                                displayName = (userFromJson["displayName"] as? String) ?? "unknown"
-                                username = (userFromJson["username"] as? String) ?? userId;
+                            if let userFromJson = userJson[LocationKey.user.key] as? [AnyHashable : Any] {
+                                displayName = (userFromJson[UserKey.displayName.key] as? String) ?? "unknown"
+                                username = (userFromJson[UserKey.username.key] as? String) ?? userId;
                             }
                             let userDicationary: [AnyHashable : Any] = [
-                                "id": userId,
-                                "username": username,
-                                "displayName": displayName
+                                UserKey.id.key: userId,
+                                UserKey.username.key: username,
+                                UserKey.displayName.key: displayName
                             ]
                             _ = User.insert(json: userDicationary, context: localContext);
                         }
@@ -172,7 +172,7 @@ import MagicalRecord
     }
     
     static func fetchLastLocationDate() -> Date? {
-        let location = Location.mr_findFirst(with: NSPredicate(format: "eventId == %@", Server.currentEventId()), sortedBy: "timestamp", ascending: false);
+        let location = Location.mr_findFirst(with: NSPredicate(format: "\(LocationKey.eventId.key) == %@", Server.currentEventId()), sortedBy: LocationKey.timestamp.key, ascending: false);
         
         return location?.timestamp
     }

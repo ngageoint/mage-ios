@@ -17,7 +17,7 @@ import sf_ios
     @objc public var geometry: SFGeometry? {
         get {
             if let geometryData = self.geometryData {
-                return SFGeometryUtils.decodeGeometry(self.geometryData);
+                return SFGeometryUtils.decodeGeometry(geometryData);
             }
             return nil;
         }
@@ -70,37 +70,37 @@ import sf_ios
         for key in radioTechDict.keys {
             let carrier = carrierInfoDict[key];
             carrierInformations.append([
-                "carrier_name": carrier?.carrierName ?? "No carrier",
-                "country_code": carrier?.isoCountryCode ?? "Airplane mode, no sim or out of range",
-                "mobile_country_code": carrier?.mobileCountryCode ?? "No sim or out of range"
+                GPSLocationKey.carrier_name.key: carrier?.carrierName ?? "No carrier",
+                GPSLocationKey.country_code.key: carrier?.isoCountryCode ?? "Airplane mode, no sim or out of range",
+                GPSLocationKey.mobile_country_code.key: carrier?.mobileCountryCode ?? "No sim or out of range"
                 ]);
         }
         
         gpsLocation.properties = [
-            "altitude": location.altitude,
-            "accuracy": location.horizontalAccuracy,
-            "verticalAccuracy": location.verticalAccuracy,
-            "bearing": location.course,
-            "speed": location.speed,
-            "millis": location.timestamp.timeIntervalSince1970,
-            "timestamp": ISO8601DateFormatter.string(from: location.timestamp, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone]),
-            "battery_level": device.batteryLevel * 100,
-            "battery_state": batteryState,
-            "telephone_network": telephonyInfo.serviceCurrentRadioAccessTechnology ?? "Unknown",
-            "carrier_information": carrierInformations,
-            "network": manager.localizedNetworkReachabilityStatusString(),
-            "mage_version": "\(appVersion ?? "")-\(buildNumber ?? "")",
-            "provider": "gps",
-            "system_version": device.systemVersion,
-            "system_name": device.systemName,
-            "device_name": device.name,
-            "device_model": device.model
+            GPSLocationKey.altitude.key: location.altitude,
+            GPSLocationKey.accuracy.key: location.horizontalAccuracy,
+            GPSLocationKey.verticalAccuracy.key: location.verticalAccuracy,
+            GPSLocationKey.bearing.key: location.course,
+            GPSLocationKey.speed.key: location.speed,
+            GPSLocationKey.millis.key: location.timestamp.timeIntervalSince1970,
+            GPSLocationKey.timestamp.key: ISO8601DateFormatter.string(from: location.timestamp, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone]),
+            GPSLocationKey.battery_level.key: device.batteryLevel * 100,
+            GPSLocationKey.battery_state.key: batteryState,
+            GPSLocationKey.telephone_network.key: telephonyInfo.serviceCurrentRadioAccessTechnology ?? "Unknown",
+            GPSLocationKey.carrier_information.key: carrierInformations,
+            GPSLocationKey.network.key: manager.localizedNetworkReachabilityStatusString(),
+            GPSLocationKey.mage_version.key: "\(appVersion ?? "")-\(buildNumber ?? "")",
+            GPSLocationKey.provider.key: "gps",
+            GPSLocationKey.system_version.key: device.systemVersion,
+            GPSLocationKey.system_name.key: device.systemName,
+            GPSLocationKey.device_name.key: device.name,
+            GPSLocationKey.device_model.key: device.model
         ];
         return gpsLocation;
     }
     
     @objc public static func fetchGPSLocations(limit: NSNumber?, context: NSManagedObjectContext) -> [GPSLocation] {
-        let fetchRequest = GPSLocation.mr_requestAllSorted(by: "timestamp", ascending: true);
+        let fetchRequest = GPSLocation.mr_requestAllSorted(by: GPSLocationKey.timestamp.key, ascending: true);
         if let limit = limit {
             fetchRequest.fetchLimit = limit.intValue;
         }
