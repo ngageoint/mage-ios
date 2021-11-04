@@ -78,7 +78,7 @@ extension ObservationAttachmentCard: ObservationFormFieldListener {
         
         if (field[FieldKey.name.key] as! String == attachmentField[FieldKey.name.key] as! String) {
             if let attachments = value as? Set<Attachment> {
-                self.observation?.addToAttachments(NSSet(set: attachments));
+                self.observation?.addToAttachments(attachments);
             }
         }
         self.observation?.properties = newProperties;

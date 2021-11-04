@@ -86,7 +86,7 @@ extension EditAttachmentCardView: ObservationFormFieldListener {
         let newProperties = self.observation.properties as? [String: Any];
         
         if (field[FieldKey.name.key] as! String == attachmentField[FieldKey.name.key] as! String) {
-            self.observation.addToAttachments(NSSet(set: value as! Set<Attachment>));
+            self.observation.addToAttachments(value as! Set<Attachment>);
         }
         self.observation.properties = newProperties;
     }
