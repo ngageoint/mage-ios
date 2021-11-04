@@ -9,6 +9,8 @@
 import Foundation
 import MagicalRecord
 
+@testable import MAGE
+
 class ObservationBuilder {
     static func createBlankObservation(_ eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
         var observation: Observation!;
@@ -45,7 +47,7 @@ class ObservationBuilder {
         }
         
         let observation = createBlankObservation(eventId);
-        observation.populateObject(fromJson: jsonDictionaryObservation);
+        observation.populate(json: jsonDictionaryObservation);
         return observation;
     }
     
@@ -55,7 +57,7 @@ class ObservationBuilder {
         if (jsonFileName != nil) {
             observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId, context: context);
         }
-        observation.setGeometry(geometry);
+        observation.geometry = geometry;
         return observation;
     }
     
@@ -115,7 +117,7 @@ class ObservationBuilder {
     static func addAttachmentToObservation(observation: Observation) -> Attachment{
         let attachment: Attachment = createAttachment(eventId: observation.eventId!, name: "name\(observation.attachments?.count ?? 0)", remoteId: "remoteid\(observation.attachments?.count ?? 0)", observationRemoteId: observation.remoteId);
         
-        observation.addAttachmentsObject(attachment);
+        observation.addToAttachments(attachment);
         return attachment;
     }
     

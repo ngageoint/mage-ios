@@ -143,11 +143,13 @@ class FeedTests: KIFSpec {
             }
             
             it("should populate feed items from json all new") {
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
                 var feedItemIds: [String] = ["0","2","3","4","5","6","7","8"];
 
                 let feedItems = loadFeedItemsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     let remoteIds = Feed.populateFeedItems(feedItems: feedItems as! [[AnyHashable:Any]], feedId: "1", eventId: 1, context: localContext)
+                    print("Remote ids \(remoteIds)")
                     expect(remoteIds as? [String]) == feedItemIds;
                 })
 
@@ -160,7 +162,7 @@ class FeedTests: KIFSpec {
             }
             
             it("should populate feed items from json removing old") {
-
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
 
                 var feedItemIds: [String] = ["0","2","3","4","5","6","7","8"];
@@ -180,7 +182,7 @@ class FeedTests: KIFSpec {
             }
             
             it("should get feed items for feed") {
-
+                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "2", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593441445])
 

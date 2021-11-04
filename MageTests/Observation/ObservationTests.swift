@@ -13,6 +13,7 @@ import Kingfisher
 import OHHTTPStubs
 
 @testable import MAGE
+import CoreData
 
 class ObservationTests: KIFSpec {
     
@@ -44,17 +45,17 @@ class ObservationTests: KIFSpec {
             }
             
             it("should create an observation with geometry") {
-                let observation = Observation(geometry: SFPoint(x: 15, andY: 20), andAccuracy: 4.5, andProvider: "gps", andDelta: 2, in: NSManagedObjectContext.mr_default());
+                let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 expect(observation).toNot(beNil());
                 expect(observation.eventId).to(equal(1));
                 expect(observation.user?.username).to(equal("userabc"));
-                expect(observation.dirty).to(equal(0));
+                expect(observation.dirty).to(equal(false));
                 expect(observation.state).to(equal(1));
-                expect(observation.getGeometry()).to(equal(SFPoint(x: 15, andY: 20)));
+                expect(observation.geometry).to(equal(SFPoint(x: 15, andY: 20)));
                 let observationProperties = observation.properties!;
                 expect(observationProperties["provider"] as? String).to(equal("gps"));
                 expect(observationProperties["accuracy"] as? NSNumber).to(equal(4.5));
-                expect(observationProperties["delta"] as? Int).to(equal(2));
+                expect(observationProperties["delta"] as? Double).to(equal(2));
                 expect(observationProperties["forms"]).toNot(beNil());
             }
         }
@@ -88,7 +89,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.getPrimaryField()).to(equal("testfield"))
+                expect(observation.primaryField).to(equal("testfield"))
             }
             
             it("should get the secondary field name") {
@@ -106,7 +107,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.getSecondaryField()).to(equal("testfield"))
+                expect(observation.secondaryField).to(equal("testfield"))
             }
             
             it("should get text for text field") {
@@ -125,7 +126,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("Hi"))
+                expect(observation.primaryFieldText).to(equal("Hi"))
             }
             
             it("should get text for multiselectdropdown field") {
@@ -144,7 +145,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("Purple, Blue"))
+                expect(observation.primaryFieldText).to(equal("Purple, Blue"))
             }
             
             it("should get text for dropdown field") {
@@ -163,7 +164,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("Parade Event"))
+                expect(observation.primaryFieldText).to(equal("Parade Event"))
             }
             
             it("should get text for textarea field") {
@@ -182,7 +183,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("text area field"))
+                expect(observation.primaryFieldText).to(equal("text area field"))
             }
             
             it("should get text for date field") {
@@ -201,7 +202,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("2017-02-10 03:20 MST"))
+                expect(observation.primaryFieldText).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for email field") {
@@ -220,7 +221,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("test@example.com"))
+                expect(observation.primaryFieldText).to(equal("test@example.com"))
             }
             
             it("should get text for number field") {
@@ -239,7 +240,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("8"))
+                expect(observation.primaryFieldText).to(equal("8"))
             }
             
             it("should get text for password field") {
@@ -258,7 +259,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("secret"))
+                expect(observation.primaryFieldText).to(equal("secret"))
             }
             
             it("should get text for radio field") {
@@ -277,7 +278,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("blue"))
+                expect(observation.primaryFieldText).to(equal("blue"))
             }
             
             it("should get text for checkbox field") {
@@ -296,7 +297,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("YES"))
+                expect(observation.primaryFieldText).to(equal("YES"))
             }
             
             it("should get text for location field") {
@@ -315,7 +316,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.primaryFieldText).to(equal("39.627295, -104.899002"))
             }
             
             it("should get text for location field set as SFGeometry") {
@@ -330,11 +331,11 @@ class ObservationTests: KIFSpec {
                 observation.properties!["forms"] = [
                     [
                         "formId": 26,
-                        "field22": GeometryDeserializer.parseGeometry(["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
+                        "field22": GeometryDeserializer.parseGeometry(json: ["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
                     ]
                 ]
                 
-                expect(observation.primaryFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.primaryFieldText).to(equal("39.627295, -104.899002"))
             }
             
             it("should get text for text secondary field") {
@@ -353,7 +354,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("Hi"))
+                expect(observation.secondaryFieldText).to(equal("Hi"))
             }
             
             it("should get text for multiselectdropdown secondary field") {
@@ -372,7 +373,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("Purple, Blue"))
+                expect(observation.secondaryFieldText).to(equal("Purple, Blue"))
             }
             
             it("should get text for dropdown secondary field") {
@@ -391,7 +392,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("Parade Event"))
+                expect(observation.secondaryFieldText).to(equal("Parade Event"))
             }
             
             it("should get text for textarea secondary field") {
@@ -410,7 +411,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("text area field"))
+                expect(observation.secondaryFieldText).to(equal("text area field"))
             }
             
             it("should get text for date secondary field") {
@@ -429,7 +430,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("2017-02-10 03:20 MST"))
+                expect(observation.secondaryFieldText).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for email secondary field") {
@@ -448,7 +449,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("test@example.com"))
+                expect(observation.secondaryFieldText).to(equal("test@example.com"))
             }
             
             it("should get text for number secondary field") {
@@ -467,7 +468,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("8"))
+                expect(observation.secondaryFieldText).to(equal("8"))
             }
             
             it("should get text for password secondary field") {
@@ -486,7 +487,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("secret"))
+                expect(observation.secondaryFieldText).to(equal("secret"))
             }
             
             it("should get text for radio secondary field") {
@@ -505,7 +506,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("blue"))
+                expect(observation.secondaryFieldText).to(equal("blue"))
             }
             
             it("should get text for checkbox secondary field") {
@@ -524,7 +525,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("YES"))
+                expect(observation.secondaryFieldText).to(equal("YES"))
             }
             
             it("should get text for location secondary field") {
@@ -543,7 +544,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.secondaryFieldText).to(equal("39.627295, -104.899002"))
             }
             
             it("should get text for location secondary field set as SFGeometry") {
@@ -558,11 +559,11 @@ class ObservationTests: KIFSpec {
                 observation.properties!["forms"] = [
                     [
                         "formId": 26,
-                        "field22": GeometryDeserializer.parseGeometry(["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
+                        "field22": GeometryDeserializer.parseGeometry(json: ["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
                     ]
                 ]
                 
-                expect(observation.secondaryFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.secondaryFieldText).to(equal("39.627295, -104.899002"))
             }
             
             it("should get text for text feed field") {
@@ -581,7 +582,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("Hi"))
+                expect(observation.primaryFeedFieldText).to(equal("Hi"))
             }
             
             it("should get text for multiselectdropdown feed field") {
@@ -600,7 +601,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("Purple, Blue"))
+                expect(observation.primaryFeedFieldText).to(equal("Purple, Blue"))
             }
             
             it("should get text for dropdown feed field") {
@@ -619,7 +620,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("Parade Event"))
+                expect(observation.primaryFeedFieldText).to(equal("Parade Event"))
             }
             
             it("should get text for textarea feed field") {
@@ -638,7 +639,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("text area field"))
+                expect(observation.primaryFeedFieldText).to(equal("text area field"))
             }
             
             it("should get text for date feed field") {
@@ -657,7 +658,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("2017-02-10 03:20 MST"))
+                expect(observation.primaryFeedFieldText).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for email feed field") {
@@ -676,7 +677,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("test@example.com"))
+                expect(observation.primaryFeedFieldText).to(equal("test@example.com"))
             }
             
             it("should get text for number feed field") {
@@ -695,7 +696,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("8"))
+                expect(observation.primaryFeedFieldText).to(equal("8"))
             }
             
             it("should get text for password feed field") {
@@ -714,7 +715,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("secret"))
+                expect(observation.primaryFeedFieldText).to(equal("secret"))
             }
             
             it("should get text for radio feed field") {
@@ -733,7 +734,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("blue"))
+                expect(observation.primaryFeedFieldText).to(equal("blue"))
             }
             
             it("should get text for checkbox feed field") {
@@ -752,7 +753,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("YES"))
+                expect(observation.primaryFeedFieldText).to(equal("YES"))
             }
             
             it("should get text for location feed field") {
@@ -771,7 +772,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.primaryFeedFieldText).to(equal("39.627295, -104.899002"))
             }
             
             it("should get text for location feed field set as SFGeometry") {
@@ -786,11 +787,11 @@ class ObservationTests: KIFSpec {
                 observation.properties!["forms"] = [
                     [
                         "formId": 26,
-                        "field22": GeometryDeserializer.parseGeometry(["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
+                        "field22": GeometryDeserializer.parseGeometry(json: ["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.primaryFeedFieldText).to(equal("39.627295, -104.899002"))
             }
             
             it("should get text for text feed field that is not set") {
@@ -808,7 +809,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for multiselectdropdown feed field that is not set") {
@@ -826,7 +827,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for dropdown feed field that is not set") {
@@ -844,7 +845,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for textarea feed field that is not set") {
@@ -862,7 +863,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for date feed field that is not set") {
@@ -880,7 +881,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for email feed field that is not set") {
@@ -898,7 +899,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for number feed field that is not set") {
@@ -916,7 +917,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for password feed field that is not set") {
@@ -934,7 +935,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for radio feed field that is not set") {
@@ -952,7 +953,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for checkbox feed field that is not set") {
@@ -970,7 +971,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for a location feed field that is not set") {
@@ -988,7 +989,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.primaryFeedFieldText()).to(equal(""))
+                expect(observation.primaryFeedFieldText).to(equal(""))
             }
             
             it("should get text for secondary text feed field") {
@@ -1007,7 +1008,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("Hi"))
+                expect(observation.secondaryFeedFieldText).to(equal("Hi"))
             }
             
             it("should get text for secondary multiselectdropdown feed field") {
@@ -1026,7 +1027,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("Purple, Blue"))
+                expect(observation.secondaryFeedFieldText).to(equal("Purple, Blue"))
             }
             
             it("should get text for secondary dropdown feed field") {
@@ -1045,7 +1046,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("Parade Event"))
+                expect(observation.secondaryFeedFieldText).to(equal("Parade Event"))
             }
             
             it("should get text for secondary textarea feed field") {
@@ -1064,7 +1065,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("text area field"))
+                expect(observation.secondaryFeedFieldText).to(equal("text area field"))
             }
             
             it("should get text for secondary date feed field") {
@@ -1083,7 +1084,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("2017-02-10 03:20 MST"))
+                expect(observation.secondaryFeedFieldText).to(equal("2017-02-10 03:20 MST"))
             }
             
             it("should get text for secondary email feed field") {
@@ -1102,7 +1103,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("test@example.com"))
+                expect(observation.secondaryFeedFieldText).to(equal("test@example.com"))
             }
             
             it("should get text for secondary number feed field") {
@@ -1121,7 +1122,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("8"))
+                expect(observation.secondaryFeedFieldText).to(equal("8"))
             }
             
             it("should get text for secondary password feed field") {
@@ -1140,7 +1141,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("secret"))
+                expect(observation.secondaryFeedFieldText).to(equal("secret"))
             }
             
             it("should get text for secondary radio feed field") {
@@ -1159,7 +1160,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("blue"))
+                expect(observation.secondaryFeedFieldText).to(equal("blue"))
             }
             
             it("should get text for secondary checkbox feed field") {
@@ -1178,7 +1179,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("YES"))
+                expect(observation.secondaryFeedFieldText).to(equal("YES"))
             }
             
             it("should get text for secondary location feed field") {
@@ -1197,7 +1198,7 @@ class ObservationTests: KIFSpec {
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.secondaryFeedFieldText).to(equal("39.627295, -104.899002"))
             }
             
             it("should get text for secondary location feed field set as SFGeometry") {
@@ -1212,11 +1213,11 @@ class ObservationTests: KIFSpec {
                 observation.properties!["forms"] = [
                     [
                         "formId": 26,
-                        "field22": GeometryDeserializer.parseGeometry(["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
+                        "field22": GeometryDeserializer.parseGeometry(json: ["type": "Point", "coordinates": [-104.89900236793747, 39.6272948483364]])!
                     ]
                 ]
                 
-                expect(observation.secondaryFeedFieldText()).to(equal("39.627295, -104.899002"))
+                expect(observation.secondaryFeedFieldText).to(equal("39.627295, -104.899002"))
             }
         }
         
@@ -1516,12 +1517,12 @@ class ObservationTests: KIFSpec {
                 
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     let localObservation = observation.mr_(in: localContext);
-                    localObservation?.dirty = 1;
+                    localObservation?.dirty = true;
                 })
                 
                 expect(updateStubCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Update never called")
 
-                expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())?.dirty).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Did not find observation");
+                expect((Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())!.dirty)).toEventually(equal(false), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Did not find observation");
             }
             
             it("should tell the server to add an observation favorite") {
@@ -1532,6 +1533,7 @@ class ObservationTests: KIFSpec {
                         isScheme("https") &&
                         isPath("/api/events/1/observations/observationabctest/favorite")
                 ) { (request) -> HTTPStubsResponse in
+                    print("stub called")
                     let response: [String: Any] = [:];
                     stubCalled = true;
                     return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
@@ -1550,9 +1552,12 @@ class ObservationTests: KIFSpec {
                     return;
                 }
                 print("Observation \(observation.remoteId)")
-                observation.toggleFavorite(completion: nil);
+                observation.toggleFavorite(completion: { success, error in
+                    expect(success).to(beTrue());
+                    print("success")
+                })
 
-                expect(stubCalled).toEventually(beTrue());
+                expect(stubCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "stub not called");
             }
             
             it("should tell the server to delete an observation favorite") {
@@ -1587,8 +1592,8 @@ class ObservationTests: KIFSpec {
                 
                 expect(stubCalled).toEventually(beTrue());
                 
-                expect(Observation.mr_findFirst()!.favorites!.first!.favorite).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                expect(Observation.mr_findFirst()!.favorites!.first!.dirty).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+                expect(((Observation.mr_findFirst()!.favorites as! Set<ObservationFavorite>).first! as ObservationFavorite).favorite).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+                expect(((Observation.mr_findFirst()!.favorites as! Set<ObservationFavorite>).first! as ObservationFavorite).dirty).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(ObservationPushService.singleton().isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
@@ -1622,10 +1627,10 @@ class ObservationTests: KIFSpec {
                 
                 expect(localObservation).toNot(beNil());
                 expect(localObservation.isImportant).to(beFalse());
-                localObservation.flagImportant(withDescription: "new important")
+                localObservation.flagImportant(description: "new important", completion: nil)
                 
                 expect(stubCalled).toEventually(beTrue());
-                expect(Observation.mr_findFirst()!.isImportant()).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+                expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
@@ -1659,7 +1664,7 @@ class ObservationTests: KIFSpec {
                 
                 let localObservation = observation.mr_(in: NSManagedObjectContext.mr_default())!;
                 expect(localObservation).toNot(beNil());
-                expect(localObservation.isImportant()).to(beTrue());
+                expect(localObservation.isImportant).to(beTrue());
 
                 var importantRemoved = false;
                 localObservation.removeImportant { success, error in

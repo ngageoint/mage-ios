@@ -116,7 +116,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments as! Set<Attachment>);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -148,7 +148,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments);
+                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments as! Set<Attachment>);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -188,7 +188,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -234,7 +234,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -293,7 +293,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -361,7 +361,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -755,7 +755,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -807,7 +807,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>, attachmentSelectionDelegate: attachmentSelectionDelegate);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)

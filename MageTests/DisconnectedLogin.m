@@ -17,7 +17,6 @@
 #import "DisclaimerViewController.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
-#import "Event.h"
 #import "Authentication.h"
 #import "UserUtility.h"
 #import "MAGE-Swift.h"

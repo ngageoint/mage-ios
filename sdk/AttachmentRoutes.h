@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RouteMethod.h"
 #import "Attachment.h"
-#import "Observation.h"
-
+@class Observation;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AttachmentRoutes : NSObject

@@ -79,7 +79,7 @@ class ObservationListCardCellTests: KIFSpec {
                 expect(viewController?.observationDataStore.numberOfSections(in: (viewController?.tableView)!)).to(equal(1));
                 expect(viewController?.tableView.numberOfRows(inSection: 0)).to(equal(1));
                 
-                tester().waitForView(withAccessibilityLabel: "attachment \(observation.attachments?.first?.name ?? "") loaded")
+                tester().waitForView(withAccessibilityLabel: "attachment \((observation.attachments as? Set<Attachment>)?.first!.name ?? "") loaded")
 
                 view = viewTester().usingLabel("observation card \(observation.objectID.uriRepresentation().absoluteString)").view
 //                if (!recordSnapshots) {

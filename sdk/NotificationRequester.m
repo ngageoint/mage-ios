@@ -9,6 +9,7 @@
 #import "NotificationRequester.h"
 #import <UserNotifications/UserNotifications.h>
 #import "ObservationImage.h"
+#import "MAGE-Swift.h"
 
 @implementation NotificationRequester
 

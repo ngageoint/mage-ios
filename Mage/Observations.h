@@ -5,8 +5,8 @@
 //
 
 #import <CoreData/CoreData.h>
-#import "Observation.h"
 
+@class Observation;
 @class User;
 
 @interface Observations : NSObject

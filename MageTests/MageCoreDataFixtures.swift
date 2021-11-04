@@ -54,10 +54,10 @@ class MageCoreDataFixtures {
                 let locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
                 let user: User = User.mr_findFirst(in: localContext)!;
                 if let location: Location = user.location {
-                    location.populateLocation(fromJson: locations);
+                    location.populate(json: locations[0]);
                 } else {
                     let location: Location = Location.mr_createEntity(in: localContext)!;
-                    location.populateLocation(fromJson: locations);
+                    location.populate(json: locations[0]);
                     user.location = location;
                 }
                 
@@ -68,10 +68,10 @@ class MageCoreDataFixtures {
                 let locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
                 let user: User = User.mr_findFirst(in: localContext)!;
                 if let location: Location = user.location {
-                    location.populateLocation(fromJson: locations);
+                    location.populate(json: locations[0]);
                 } else {
                     let location: Location = Location.mr_createEntity(in: localContext)!;
-                    location.populateLocation(fromJson: locations);
+                    location.populate(json: locations[0]);
                     user.location = location;
                 }
                 
@@ -84,13 +84,13 @@ class MageCoreDataFixtures {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation(location: location, context: localContext);
+                let gpsLocation = GPSLocation.gpsLocation(location: location, context: localContext);
             })
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation(location: location, context: localContext);
+                let gpsLocation = GPSLocation.gpsLocation(location: location, context: localContext);
             }, completion: completion)
         }
     }
@@ -123,13 +123,13 @@ class MageCoreDataFixtures {
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
                 if (existingRole == nil) {
-                    existingRole = Role.insert(forJson: roleJson, in: localContext);
+                    existingRole = Role.insert(json: roleJson, context: localContext);
                     print("inserting a role");
                 } else {
                     print("role already existed")
                 }
                 print("inserting a user")
-                let u: User = User.insert(forJson: jsonDictionary, in: localContext)
+                let u: User = User.insert(json: jsonDictionary, context: localContext)!
                 u.remoteId = userId;
                 u.role = existingRole;
                 
@@ -139,7 +139,7 @@ class MageCoreDataFixtures {
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
                 if (existingRole == nil) {
-                    existingRole = Role.insert(forJson: roleJson, in: localContext);
+                    existingRole = Role.insert(json: roleJson, context: localContext);
                     print("inserting a role");
                 } else {
                     print("role already existed")
@@ -152,7 +152,7 @@ class MageCoreDataFixtures {
                     let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
 
                     let existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
-                    let u: User = User.insert(forJson: jsonDictionary, in: localContext)
+                    let u: User = User.insert(json: jsonDictionary, context: localContext)!
                     u.remoteId = userId;
                     u.role = existingRole;
                 }, completion: completion);
@@ -165,13 +165,17 @@ class MageCoreDataFixtures {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
                 let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                event?.teams?.first?.addUsersObject(user!);
+                if let teams = event?.teams as? Set<Team>, let team = teams.first {
+                    team.addToUsers(user!);
+                }
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
                 let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                event?.teams?.first?.addUsersObject(user!);
+                if let teams = event?.teams as? Set<Team>, let team = teams.first {
+                    team.addToUsers(user!);
+                }
             }, completion: completion);
         }
     }
@@ -181,7 +185,7 @@ class MageCoreDataFixtures {
         if (completion == nil){
             var observation: Observation? = nil;
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                observation = Observation.createObservation(observationJson, in: localContext);
+                observation = Observation.create(feature: observationJson, context: localContext);
                 if let importantJson: [AnyHashable : Any] = observationJson["important"] as? [AnyHashable : Any] {
                     let important: ObservationImportant = ObservationImportant(forJson: importantJson, in: localContext);
                     important.observation = observation;
@@ -191,7 +195,7 @@ class MageCoreDataFixtures {
             return observation;
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                Observation.createObservation(observationJson, in: localContext);
+                Observation.create(feature:observationJson, context: localContext);
             }, completion: completion)
         }
         return nil;
@@ -208,17 +212,17 @@ class MageCoreDataFixtures {
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
-                let o: Observation = Observation.createObservation(jsonDictionary[0] as! [AnyHashable : Any], in: localContext);
+                let o: Observation = Observation.create(feature: jsonDictionary[0] as! [AnyHashable : Any], context: localContext)!;
                 o.eventId = eventId;
-                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
+                o.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
                 o.user = user;
             })
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
-                let o: Observation = Observation.createObservation(jsonDictionary[0] as! [AnyHashable : Any], in: localContext);
+                let o: Observation = Observation.create(feature:jsonDictionary[0] as! [AnyHashable : Any], context: localContext)!;
                 o.eventId = eventId;
-                o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
+                o.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
                 o.user = user;
             }, completion: completion)
         }
@@ -232,7 +236,7 @@ class MageCoreDataFixtures {
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
                 if let o: Observation = Observation.mr_createEntity(in: localContext) {
                     o.eventId = eventId;
-                    o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
+                    o.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
                     o.error = [
                         "errorStatusCode" : 503,
                         "errorMessage": "failed"
@@ -245,7 +249,7 @@ class MageCoreDataFixtures {
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
                 if let o: Observation = Observation.mr_createEntity(in: localContext) {
                     o.eventId = eventId;
-                    o.populateObject(fromJson: jsonDictionary[0] as! [AnyHashable : Any])
+                    o.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
                     o.error = [
                         "errorStatusCode" : 503,
                         "errorMessage": "failed"
@@ -309,8 +313,8 @@ class MageCoreDataFixtures {
                         "name": "Team Name",
                         "description": "Team Description"
                     ]
-                    let team = Team.insert(forJson: teamJson, in: localContext);
-                    e.addTeamsObject(team);
+                    let team = Team.insert(json: teamJson, context: localContext)!;
+                    e.addToTeams(team);
                 }
             })
         } else {
@@ -327,8 +331,8 @@ class MageCoreDataFixtures {
                         "name": "Team Name",
                         "description": "Team Description"
                     ]
-                    let team = Team.insert(forJson: teamJson, in: localContext);
-                    e.addTeamsObject(team);
+                    let team = Team.insert(json: teamJson, context: localContext)!;
+                    e.addToTeams(team);
                 }
             }, completion: completion)
         }

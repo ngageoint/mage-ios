@@ -7,9 +7,9 @@
 #import "EventTableDataSource.h"
 #import "Server.h"
 #import "EventChooserController.h"
-#import "Observation.h"
 #import "EventTableViewCell.h"
 #import "EventTableHeaderView.h"
+#import "MAGE-Swift.h"
 
 @interface EventTableDataSource()
 @property (strong, nonatomic) NSDictionary *eventIdToOfflineObservationCount;

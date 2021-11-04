@@ -106,10 +106,10 @@ class ObservationHeaderView : MDCCard {
         
         if (animate) {
             UIView.animate(withDuration: 0.2) {
-                self.importantView.isHidden = !observation.isImportant()
+                self.importantView.isHidden = !observation.isImportant
             }
         } else {
-            self.importantView.isHidden = !observation.isImportant()
+            self.importantView.isHidden = !observation.isImportant
         }
         if (!ignoreGeometry) {
             geometryView.setObservation(observation: observation);

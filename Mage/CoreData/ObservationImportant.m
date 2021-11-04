@@ -7,7 +7,6 @@
 //
 
 #import "ObservationImportant.h"
-#import "Observation.h"
 #import "NSDate+Iso8601.h"
 
 @implementation ObservationImportant

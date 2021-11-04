@@ -269,7 +269,7 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    let point: SFPoint = observation.getGeometry().centroid();
+                    let point: SFPoint = observation.geometry!.centroid();
                     expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
@@ -300,7 +300,7 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    let point: SFPoint = observation.getGeometry().centroid();
+                    let point: SFPoint = observation.geometry!.centroid();
                     expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
@@ -331,7 +331,7 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    let point: SFPoint = observation.getGeometry().centroid();
+                    let point: SFPoint = observation.geometry!.centroid();
                     expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");
@@ -375,7 +375,7 @@ class GeometryViewTests: KIFSpec {
                 let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
                 XCTAssertEqual(result, .completed)
                 
-                let point: SFPoint = observation.getGeometry().centroid();
+                let point: SFPoint = observation.geometry!.centroid();
                 expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                 expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                 expect(geometryFieldView?.mapView.isHidden).to(beFalse());
@@ -392,7 +392,7 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    let point: SFPoint = observation.getGeometry().centroid();
+                    let point: SFPoint = observation.geometry!.centroid();
                     expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     expectation.fulfill()
@@ -422,7 +422,7 @@ class GeometryViewTests: KIFSpec {
                 let mockMapDelegate = MockMapViewDelegate()
                 
                 mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    let point: SFPoint = observation.getGeometry().centroid();
+                    let point: SFPoint = observation.geometry!.centroid();
                     expect(geometryFieldView?.mapView.region.center.latitude).to(beCloseTo(point.y as! CLLocationDegrees, within: 0.005));
                     expect(geometryFieldView?.mapView.region.center.longitude).to(beCloseTo(point.x as! CLLocationDegrees, within: 0.005));
                     tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())");

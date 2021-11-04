@@ -240,7 +240,7 @@ class MapViewControllerTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 let properties: [String: Any] = observation.properties! as! [String: Any];
                 let forms: [[String: Any]] = properties["forms"] as! [[String: Any]];
-                let geometry: SFGeometry = observation.getGeometry();
+                let geometry: SFGeometry = observation.geometry!;
                 let point: SFPoint = geometry as! SFPoint;
                 expect(point.x).to(beCloseTo(-105.2677));
                 expect(point.y).to(beCloseTo(40.008));
@@ -249,9 +249,9 @@ class MapViewControllerTests: KIFSpec {
                 expect(properties["provider"] as? String).to(equal("gps"));
                 expect(properties["timestamp"] as? String).toNot(beNil());
                 expect(forms).toNot(beNil());
-                expect(observation.isDirty()).to(beTrue());
+                expect(observation.isDirty).to(beTrue());
                 expect(observation.attachments).to(beEmpty());
-                expect(observation.getFavoritesMap()).to(beEmpty());
+                expect(observation.favoritesMap).to(beEmpty());
                 expect(geometry).to(beAnInstanceOf(SFPoint.self));
                 expect(observation.eventId).to(equal(1));
                 expect(observation.remoteId).to(beNil());
@@ -340,7 +340,7 @@ class MapViewControllerTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 let properties: [String: Any] = observation.properties! as! [String: Any];
                 let forms: [[String: Any]] = properties["forms"] as! [[String: Any]];
-                let geometry: SFGeometry = observation.getGeometry();
+                let geometry: SFGeometry = observation.geometry!;
                 expect(geometry).to(beAnInstanceOf(SFPoint.self));
                 let point: SFPoint = geometry as! SFPoint;
                 expect(point.x).to(beCloseTo(-105.2677));
@@ -350,9 +350,9 @@ class MapViewControllerTests: KIFSpec {
                 expect(properties["provider"] as? String).to(equal("manual"));
                 expect(properties["timestamp"] as? String).toNot(beNil());
                 expect(forms).toNot(beNil());
-                expect(observation.isDirty()).to(beTrue());
+                expect(observation.isDirty).to(beTrue());
                 expect(observation.attachments).to(beEmpty());
-                expect(observation.getFavoritesMap()).to(beEmpty());
+                expect(observation.favoritesMap).to(beEmpty());
                 expect(observation.eventId).to(equal(1));
                 expect(observation.remoteId).to(beNil());
                 
@@ -405,7 +405,7 @@ class MapViewControllerTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 let properties: [String: Any] = observation.properties! as! [String: Any];
                 let forms: [[String: Any]] = properties["forms"] as! [[String: Any]];
-                let geometry: SFGeometry = observation.getGeometry();
+                let geometry: SFGeometry = observation.geometry!;
                 expect(geometry).to(beAnInstanceOf(SFPoint.self));
                 let point: SFPoint = geometry as! SFPoint;
                 expect(point.x).to(beCloseTo(-105.2677));
@@ -415,9 +415,9 @@ class MapViewControllerTests: KIFSpec {
                 expect(properties["provider"] as? String).to(equal("manual"));
                 expect(properties["timestamp"] as? String).toNot(beNil());
                 expect(forms).toNot(beNil());
-                expect(observation.isDirty()).to(beTrue());
+                expect(observation.isDirty).to(beTrue());
                 expect(observation.attachments).to(beEmpty());
-                expect(observation.getFavoritesMap()).to(beEmpty());
+                expect(observation.favoritesMap).to(beEmpty());
                 expect(observation.eventId).to(equal(1));
                 expect(observation.remoteId).to(beNil());
                 
@@ -477,11 +477,11 @@ class MapViewControllerTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 let properties: [String: Any] = observation.properties! as! [String: Any];
                 let forms: [[String: Any]] = properties["forms"] as! [[String: Any]];
-                let geometry: SFGeometry = observation.getGeometry();
+                let geometry: SFGeometry = observation.geometry!;
                 expect(geometry).to(beAnInstanceOf(SFPolygon.self));
                 expect(properties["timestamp"] as? String).toNot(beNil());
                 expect(forms).toNot(beNil());
-                expect(observation.isDirty()).to(beFalse());
+                expect(observation.isDirty).to(beFalse());
                 expect(observation.eventId).to(equal(1));
                 expect(observation.remoteId).to(equal("observationabc"));
                 

@@ -77,9 +77,10 @@ extension UserViewController : ObservationActionsDelegate {
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
-    func favoriteObservation(_ observation: Observation) {
+    func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
         observation.toggleFavorite { (_, _) in
-            self.tableView.reloadData();
+            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+            completion?(observation);
         }
     }
     
@@ -89,11 +90,14 @@ extension UserViewController : ObservationActionsDelegate {
     }
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
+        guard let observationLocation = observation.location else {
+            return;
+        }
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(for: observation), coordinate: observation.location().coordinate))
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(for: observation), coordinate: observationLocation.coordinate))
         }));
-        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self, extraActions: extraActions, sourceView: sourceView);
+        ObservationActionHandler.getDirections(latitude: observationLocation.coordinate.latitude, longitude: observationLocation.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
 }
 

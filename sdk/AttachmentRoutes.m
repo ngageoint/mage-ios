@@ -8,7 +8,8 @@
 
 #import "AttachmentRoutes.h"
 #import "Attachment.h"
-#import "Observation.h"
+
+#import "MAGE-Swift.h"
 
 @implementation AttachmentRoutes
 

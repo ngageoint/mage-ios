@@ -28,7 +28,7 @@ class MockObservationActionsDelegate: ObservationActionsDelegate {
         observationSent = observation;
     }
     
-    func favoriteObservation(_ observation: Observation) {
+    func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
         favoriteCalled = true;
         observationSent = observation;
     }

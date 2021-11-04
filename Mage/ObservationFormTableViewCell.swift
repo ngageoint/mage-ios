@@ -117,7 +117,7 @@ class ObservationFormTableViewCell: UITableViewCell {
                 return (field[FieldKey.name.key] as? String) == primaryFieldName
             }) {
                 if let obsfield = observationForm[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
                 }
             }
         }
@@ -127,7 +127,7 @@ class ObservationFormTableViewCell: UITableViewCell {
                 return (field[FieldKey.name.key] as? String) == secondaryFieldName
             }) {
                 if let obsfield = observationForm[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
                 }
             }
         }

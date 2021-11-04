@@ -109,8 +109,8 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
             itemImage.image = ObservationImage.image(for: self.observation!);
         }
 
-        primaryField.text = observation.primaryFeedFieldText();
-        secondaryField.text = observation.secondaryFeedFieldText();
+        primaryField.text = observation.primaryFeedFieldText;
+        secondaryField.text = observation.secondaryFeedFieldText;
         // we do not want the date to word break so we replace all spaces with a non word breaking spaces
         var timeText = "";
         if let itemDate: NSDate = observation.timestamp as NSDate? {
@@ -119,8 +119,8 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         timestamp.text = "\(observation.user?.name?.uppercased() ?? "") \u{2022} \(timeText)";
         
         if (observation.error != nil) {
-            self.syncBadge.isHidden = observation.hasValidationError();
-            self.errorBadge.isHidden = !observation.hasValidationError();
+            self.syncBadge.isHidden = observation.hasValidationError;
+            self.errorBadge.isHidden = !observation.hasValidationError;
         } else {
             self.syncBadge.isHidden = true;
             self.errorBadge.isHidden = true;

@@ -119,6 +119,7 @@
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
+		F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70D1BF427299BC800B8015C /* ArrayExtensions.swift */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
@@ -179,7 +180,7 @@
 		F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */; };
 		F72D42E72694B60300F9AC3B /* ObservationImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42532694B60300F9AC3B /* ObservationImage.m */; };
 		F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */; };
-		F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */; };
+		F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.swift */; };
 		F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */; };
 		F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42592694B60300F9AC3B /* Event+CoreDataProperties.swift */; };
 		F72D42EC2694B60300F9AC3B /* Canary.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425A2694B60300F9AC3B /* Canary.m */; };
@@ -244,7 +245,7 @@
 		F72D43272694B60300F9AC3B /* GeometrySerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.m */; };
 		F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */ = {isa = PBXBuildFile; fileRef = F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */; };
 		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
-		F72D432A2694B60300F9AC3B /* Observation.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.m */; };
+		F72D432A2694B60300F9AC3B /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.swift */; };
 		F72D432B2694B60300F9AC3B /* ObservationFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D12694B60300F9AC3B /* ObservationFavorite.m */; };
 		F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.swift */; };
 		F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.m */; };
@@ -720,6 +721,7 @@
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
+		F70D1BF427299BC800B8015C /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
@@ -815,7 +817,7 @@
 		F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model1To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42532694B60300F9AC3B /* ObservationImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationImage.m; sourceTree = "<group>"; };
 		F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model15To16.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Observation+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42562694B60300F9AC3B /* LdapAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LdapAuthentication.h; sourceTree = "<group>"; };
 		F72D42572694B60300F9AC3B /* ObservationImportant+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ObservationImportant+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model10To15.xcmappingmodel; sourceTree = "<group>"; };
@@ -862,7 +864,6 @@
 		F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes_Server5.m; sourceTree = "<group>"; };
 		F72D42892694B60300F9AC3B /* MAGERoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAGERoutes.m; sourceTree = "<group>"; };
 		F72D428A2694B60300F9AC3B /* ObservationFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFavorite.h; sourceTree = "<group>"; };
-		F72D428C2694B60300F9AC3B /* Observation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observation.h; sourceTree = "<group>"; };
 		F72D428D2694B60300F9AC3B /* IdpAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdpAuthentication.m; sourceTree = "<group>"; };
 		F72D428E2694B60300F9AC3B /* LocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationService.m; sourceTree = "<group>"; };
 		F72D428F2694B60300F9AC3B /* AttachmentPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentPushService.h; sourceTree = "<group>"; };
@@ -896,7 +897,6 @@
 		F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+MAGE.h"; sourceTree = "<group>"; };
 		F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LdapAuthentication.m; sourceTree = "<group>"; };
 		F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ObservationImportant+CoreDataProperties.m"; sourceTree = "<group>"; };
-		F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Observation+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42B32694B60300F9AC3B /* ObservationImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationImage.h; sourceTree = "<group>"; };
 		F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model6To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42B62694B60300F9AC3B /* ServerAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAuthentication.h; sourceTree = "<group>"; };
@@ -922,7 +922,7 @@
 		F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentPushService.m; sourceTree = "<group>"; };
 		F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdpAuthentication.h; sourceTree = "<group>"; };
 		F72D42CF2694B60300F9AC3B /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
-		F72D42D02694B60300F9AC3B /* Observation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observation.m; sourceTree = "<group>"; };
+		F72D42D02694B60300F9AC3B /* Observation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
 		F72D42D12694B60300F9AC3B /* ObservationFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFavorite.m; sourceTree = "<group>"; };
 		F72D42D22694B60300F9AC3B /* GPSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocation.swift; sourceTree = "<group>"; };
 		F72D42D32694B60300F9AC3B /* MAGERoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGERoutes.h; sourceTree = "<group>"; };
@@ -1985,6 +1985,7 @@
 				F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */,
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 				F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */,
+				F70D1BF427299BC800B8015C /* ArrayExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2275,10 +2276,8 @@
 				F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.m */,
 				F72D42792694B60300F9AC3B /* Location.swift */,
 				F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */,
-				F72D428C2694B60300F9AC3B /* Observation.h */,
-				F72D42D02694B60300F9AC3B /* Observation.m */,
-				F72D42B22694B60300F9AC3B /* Observation+CoreDataProperties.h */,
-				F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.m */,
+				F72D42D02694B60300F9AC3B /* Observation.swift */,
+				F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.swift */,
 				F72D428A2694B60300F9AC3B /* ObservationFavorite.h */,
 				F72D42D12694B60300F9AC3B /* ObservationFavorite.m */,
 				F72D427E2694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.h */,
@@ -3023,7 +3022,7 @@
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
 				F72D43272694B60300F9AC3B /* GeometrySerializer.m in Sources */,
-				F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.m in Sources */,
+				F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.swift in Sources */,
 				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
 				F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
@@ -3134,6 +3133,7 @@
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
+				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
 				F72D43062694B60300F9AC3B /* Server.m in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
@@ -3180,7 +3180,7 @@
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */,
 				F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */,
-				F72D432A2694B60300F9AC3B /* Observation.m in Sources */,
+				F72D432A2694B60300F9AC3B /* Observation.swift in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */,
 				F72D42F52694B60300F9AC3B /* TaskSessionManager.m in Sources */,
@@ -3474,6 +3474,7 @@
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_COMPLETION_HANDLER_MISUSE = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -3530,6 +3531,7 @@
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_COMPLETION_HANDLER_MISUSE = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;

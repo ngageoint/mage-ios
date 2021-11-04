@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import CoreLocation
 import sf_ios
+import MagicalRecord
 
 @objc public class Location: NSManagedObject {
     
@@ -21,7 +22,9 @@ import sf_ios
             return nil
         }
         set {
-            self.geometryData = SFGeometryUtils.encode(newValue);
+            if let newValue = newValue {
+                self.geometryData = SFGeometryUtils.encode(newValue);
+            }
         }
     }
     
@@ -145,7 +148,7 @@ import sf_ios
                                 "username": username,
                                 "displayName": displayName
                             ]
-                            let user = User.insert(json: userDicationary, context: localContext);
+                            _ = User.insert(json: userDicationary, context: localContext);
                         }
                     }
                 }
@@ -156,18 +159,14 @@ import sf_ios
                 }
             } completion: { contextDidSave, error in
                 if let error = error {
-                    if let failure = failure {
-                        failure(task, error);
-                    }
+                    failure?(task, error);
                 } else if let success = success {
                     success(task, nil);
                 }
             }
             
         }, failure: { task, error in
-            if let failure = failure {
-                failure(task, error);
-            }
+            failure?(task, error);
         });
         return task;
     }

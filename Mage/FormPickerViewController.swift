@@ -96,7 +96,7 @@ import MaterialComponents.MDCButton;
         if let observation = self.observation, let properties = observation.properties {
             if (properties.keys.contains(ObservationKey.forms.key)) {
                 let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as! [[String: Any]];
-                let formsToBeDeleted = observation.getFormsToBeDeleted();
+                let formsToBeDeleted = observation.formsToBeDeleted;
                 for (index, form) in observationForms.enumerated() {
                     if (!formsToBeDeleted.contains(index)) {
                         let formId = form[EventKey.formId.key] as! Int;

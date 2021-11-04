@@ -7,7 +7,6 @@
 //
 
 #import "ObservationFavorite.h"
-#import "Observation.h"
 
 @implementation ObservationFavorite
 

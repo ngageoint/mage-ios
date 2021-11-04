@@ -7,8 +7,8 @@
 //
 
 #import "MageOfflineObservationManager.h"
-#import "Observation.h"
 #import "Server.h"
+#import "MAGE-Swift.h"
 
 @interface MageOfflineObservationManager()<NSFetchedResultsControllerDelegate>
 @property (assign, nonatomic) NSInteger offlineObservationCount;

@@ -256,7 +256,7 @@ import MaterialComponents.MDCCard
             addFormFAB.applySecondaryTheme(withScheme: scheme);
         }
         
-        let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
+        let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
         if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms?.filter({ form in
             return !(form[FormKey.archived.key] as? Bool ?? false)
         }).count == 0) {
@@ -339,7 +339,7 @@ import MaterialComponents.MDCCard
                 return (field[FieldKey.name.key] as? String) == primaryFieldName
             }) {
                 if let obsfield = observationForm[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
                 }
             }
         }
@@ -349,7 +349,7 @@ import MaterialComponents.MDCCard
                 return (field[FieldKey.name.key] as? String) == secondaryFieldName
             }) {
                 if let obsfield = observationForm[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
                 }
             }
         }
@@ -398,7 +398,7 @@ import MaterialComponents.MDCCard
     @objc func deleteForm(sender: UIView) {
         // save the index of the deleted form and then next time we either save
         // or reorder remove the form so the user is not distracted with a refresh
-        observation?.addForm(toBeDeleted: sender.tag);
+        observation?.addFormToBeDeleted(formIndex: sender.tag);
         cards[sender.tag].isHidden = true;
         if let observation = self.observation {
             self.commonFieldView?.setObservation(observation: observation);
@@ -411,7 +411,7 @@ import MaterialComponents.MDCCard
         messageAction.title = "UNDO";
         let actionHandler = {() in
             self.cards[sender.tag].isHidden = false;
-            self.observation?.removeForm(toBeDeleted: sender.tag);
+            self.observation?.removeFormToBeDeleted(formIndex: sender.tag);
             self.setupFormDependentButtons();
             if let observation = self.observation {
                 self.commonFieldView?.setObservation(observation: observation);
@@ -437,7 +437,7 @@ import MaterialComponents.MDCCard
                 return (field[FieldKey.name.key] as? String) == primaryFieldName
             }) {
                 if let obsfield = form[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
                 }
             }
         }
@@ -447,7 +447,7 @@ import MaterialComponents.MDCCard
                 return (field[FieldKey.name.key] as? String) == secondaryFieldName
             }) {
                 if let obsfield = form[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
                 }
             }
         }
@@ -468,7 +468,7 @@ import MaterialComponents.MDCCard
     }
     
     @objc func addForm(sender: UIButton) {
-        let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
+        let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
 
         if (realFormCount >= (event?.maxObservationForms ?? NSNumber(value: NSIntegerMax)) as! Int) {
             // max amount of forms for this event have been added
@@ -506,7 +506,7 @@ import MaterialComponents.MDCCard
             valid = valid && formValid;
         }
         
-        let realFormCount = self.observationForms.count - (self.observation?.getFormsToBeDeleted().count ?? 0);
+        let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
         
         // if this is a legacy server and the event has forms, there needs to be 1
         if (MageServer.isServerVersion5()) {
@@ -554,7 +554,7 @@ import MaterialComponents.MDCCard
         if let observation = self.observation, let properties = observation.properties {
             if (properties.keys.contains(ObservationKey.forms.key)) {
                 if let observationForms: [[String: Any]] = properties[ObservationKey.forms.key] as? [[String: Any]] {
-                    let formsToBeDeleted = observation.getFormsToBeDeleted();
+                    let formsToBeDeleted = observation.formsToBeDeleted;
                     for (index, form) in observationForms.enumerated() {
                         if (!formsToBeDeleted.contains(index)) {
                             let formId = form[EventKey.formId.key] as! Int;
@@ -602,8 +602,8 @@ import MaterialComponents.MDCCard
     }
     
     func removeDeletedForms() {
-        if let formsToBeDeleted = observation?.getFormsToBeDeleted() {
-            observationForms.remove(atOffsets: formsToBeDeleted);
+        if let formsToBeDeleted = observation?.formsToBeDeleted {
+            observationForms.remove(atOffsets: formsToBeDeleted as IndexSet);
         }
         observationProperties[ObservationKey.forms.key] = observationForms;
         self.observation?.properties = observationProperties;
@@ -690,7 +690,7 @@ extension ObservationEditCardCollectionViewController: ObservationCommonProperti
         observationProperties[ObservationKey.delta.key] = delta;
         observationProperties[ObservationKey.provider.key] = provider;
         observation?.properties = observationProperties;
-        observation?.setGeometry(geometry);
+        observation?.geometry = geometry;
         if let observation = self.observation {
             commonFieldView?.setObservation(observation: observation);
         }

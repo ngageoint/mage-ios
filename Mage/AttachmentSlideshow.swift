@@ -153,7 +153,7 @@ class AttachmentSlideShow: UIView {
     func populate(observation: Observation, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         
-        guard let attachments = observation.attachments?.filter({ attachment in
+        guard let attachments = (observation.attachments as? Set<Attachment>)?.filter({ attachment in
             return attachment.url != nil
         }) else {
             return

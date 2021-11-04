@@ -5,7 +5,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Observation.h"
+
+@class Observation;
 
 @protocol ObservationPushDelegate <NSObject>
 
@@ -16,6 +17,10 @@
 @end
 
 @interface ObservationPushService : NSObject
+
+extern NSString * const kObservationErrorStatusCode;
+extern NSString * const kObservationErrorDescription;
+extern NSString * const kObservationErrorMessage;
 
 + (instancetype) singleton;
 - (void) start;

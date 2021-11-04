@@ -16,7 +16,7 @@
 }
 
 - (NSString *) dirtySection {
-    if ([self.dirty isEqualToNumber:[NSNumber numberWithBool:YES]]) {
+    if (self.dirty) {
         return @"Observations Awaiting Sync";
     } else {
         return [self.timestamp formattedDisplayDateWithDateStyle:NSDateFormatterLongStyle andTimeStyle:NSDateFormatterNoStyle];

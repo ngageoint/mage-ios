@@ -5,8 +5,10 @@
 //
 
 #import <MapKit/MapKit.h>
-#import "Observation.h"
 #import "MapAnnotation.h"
+#import "SFGeometry.h"
+
+@class Observation;
 
 @interface ObservationAnnotation :  MapAnnotation
 

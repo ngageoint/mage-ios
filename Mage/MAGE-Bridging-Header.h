@@ -15,6 +15,9 @@
 #import "GPKGMapShapeConverter.h"
 #import "GPKGFeatureRowData.h"
 
+#import "GeometrySerializer.h"
+#import "MAGERoutes.h"
+#import "NotificationRequester.h"
 #import "FadeTransitionSegue.h"
 #import "MediaLoader.h"
 #import "MageServer.h"
@@ -72,7 +75,6 @@
 
 #pragma mark - Core Data Entities
 #import "Attachment.h"
-#import "Observation.h"
 #import "ObservationImportant.h"
 #import "ObservationFavorite.h"
 #import "Layer.h"

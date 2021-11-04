@@ -80,7 +80,7 @@ class ObservationBottomSheetTests: KIFSpec {
                 
                 viewController = MageBottomSheetViewController(items: [BottomSheetItem(item: observation, actionDelegate: delegate, annotationView: nil)], scheme: MAGEScheme.scheme(), bottomSheetDelegate: nil);
                 viewController?.preferredContentSize = CGSize(width: viewController?.preferredContentSize.width ?? 0.0,
-                                                              height: observation.isImportant() ? 260 : 220);
+                                                              height: observation.isImportant ? 260 : 220);
                 
                 view = viewController?.view
                 var bottomSheetLoaded = false;

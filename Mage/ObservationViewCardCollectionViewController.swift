@@ -217,7 +217,7 @@ import MaterialComponents.MDCContainerScheme;
                     stackView.addArrangedSubview(attachmentCard!);
                 }
                 
-                let attachmentCount = observation.attachments?.filter() { attachment in
+                let attachmentCount = (observation.attachments as? Set<Attachment>)?.filter() { attachment in
                     return !attachment.markedForDeletion
                 }.count
                 
@@ -256,7 +256,7 @@ import MaterialComponents.MDCContainerScheme;
                 return (field[FieldKey.name.key] as? String) == primaryFieldName
             }) {
                 if let obsfield = observationForm[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(obsfield, field: primaryField)
+                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
                 }
             }
         }
@@ -266,7 +266,7 @@ import MaterialComponents.MDCContainerScheme;
                 return (field[FieldKey.name.key] as? String) == secondaryFieldName
             }) {
                 if let obsfield = observationForm[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(obsfield, field: secondaryField)
+                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
                 }
             }
         }
@@ -374,7 +374,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func showFavorites(_ observation: Observation) {
         var userIds: [String] = [];
-        if let favorites = observation.favorites {
+        if let favorites = observation.favorites as? Set<ObservationFavorite> {
             for favorite in favorites {
                 if let userId = favorite.userId {
                     userIds.append(userId)
@@ -388,7 +388,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
         }
     }
     
-    func favoriteObservation(_ observation: Observation) {
+    func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
         observation.toggleFavorite() { success, error in
             observation.managedObjectContext?.refresh(observation, mergeChanges: false);
             self.headerCard?.populate(observation: observation);
@@ -402,15 +402,18 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
+        guard let location = observation.location else {
+            return;
+        }
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(for: observation), coordinate: observation.location().coordinate))
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(for: observation), coordinate: location.coordinate))
         }));
-        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self, extraActions: extraActions, sourceView: sourceView);
+        ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
     
     func makeImportant(_ observation: Observation, reason: String) {
-        observation.flagImportant(withDescription: reason) { success, error in
+        observation.flagImportant(description: reason) { success, error in
             // update the view
             observation.managedObjectContext?.refresh(observation, mergeChanges: true);
             self.headerCard?.populate(observation: observation);

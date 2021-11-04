@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MapObservation.h"
 #import "MapAnnotation.h"
-
+#import "SFGeometry.h"
 /**
  * Handles adding Observations to the map as markers or shapes
  *

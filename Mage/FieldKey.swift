@@ -35,6 +35,7 @@ public enum EventKey : String {
     case name
     case description
     case formId
+    case remoteId
     
     var key: String {
         return self.rawValue
@@ -68,6 +69,50 @@ public enum ObservationKey : String {
     case delta
     case timestamp
     case geometry
+    case important
+    case lastModified
+    case remoteId
+    case favoriteUserIds
+    case attachments
+    case userId
+    case deviceId
+    case url
+    case id
+    case properties
+    
+    var key: String {
+        return self.rawValue
+    }
+}
+
+public enum AttachmentKey : String {
+    case contentType
+    case name
+    case remotePath
+    case size
+    case url
+    case id
+    
+    var key: String {
+        return self.rawValue
+    }
+}
+
+
+public enum UserKey : String {
+    case remoteId
+    
+    var key: String {
+        return self.rawValue
+    }
+}
+
+public enum PermissionsKey: String {
+    case permissions
+    
+    case update
+    case DELETE_OBSERVATION
+    case UPDATE_EVENT
     
     var key: String {
         return self.rawValue

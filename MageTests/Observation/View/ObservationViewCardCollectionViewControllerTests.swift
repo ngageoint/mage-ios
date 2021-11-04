@@ -357,7 +357,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().tapItem(at: IndexPath(item: 0, section: 0), inCollectionViewWithAccessibilityIdentifier: "Attachment Collection");
                 expect(controller.topViewController).toEventually(beAnInstanceOf(ImageAttachmentViewController.self));
-                tester().tapView(withAccessibilityLabel: "At Venue");
+                tester().tapView(withAccessibilityLabel: "Observation");
                 expect(controller.topViewController).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
             }
             

@@ -6,7 +6,6 @@
 
 #import "AttachmentPushService.h"
 #import "Attachment.h"
-#import "Observation.h"
 #import "UserUtility.h"
 #import "NSDate+Iso8601.h"
 #import "StoredPassword.h"

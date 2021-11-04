@@ -13,10 +13,15 @@ import CoreData
 @objc public class FeedItem: NSManagedObject, MKAnnotation {
     @objc public var simpleFeature: SFGeometry? {
         get {
-            SFGeometryUtils.decodeGeometry(self.geometry);
+            if let geometry = self.geometry {
+                return SFGeometryUtils.decodeGeometry(self.geometry);
+            }
+            return nil;
         }
         set {
-            self.geometry = SFGeometryUtils.encode(newValue);
+            if let newValue = newValue {
+                self.geometry = SFGeometryUtils.encode(newValue);
+            }
         }
     }
 
@@ -73,7 +78,7 @@ import CoreData
     }
 
     @objc public static func getFeedItems(feedId: String, eventId: Int) -> [FeedItem]? {
-        if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %@", feedId, eventId)) {
+        if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %d)", feedId, eventId)) {
             return FeedItem.mr_findAll(with: NSPredicate(format: "(feed == %@)", feed)) as? [FeedItem];
         }
         return [];

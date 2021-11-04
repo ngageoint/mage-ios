@@ -172,7 +172,7 @@ class DateViewTests: KIFSpec {
                 // PLUS THE OFFSET FROM GMT OR IT WILL NOT WORK
                 // IF THIS BUG IS CLOSED YOU CAN REMOVE THIS LINE: https://github.com/kif-framework/KIF/issues/1214
 //                print("how many seconds from gmt are we \(TimeZone.current.secondsFromGMT())")
-                date.addTimeInterval(TimeInterval(-TimeZone.current.secondsFromGMT(for: date)));
+//                date.addTimeInterval(TimeInterval(-TimeZone.current.secondsFromGMT(for: date)));
                 expect(delegate.fieldChangedCalled) == true;
                 expect(delegate.newValue as? String) == formatter.string(from: date);
                 expect(dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));

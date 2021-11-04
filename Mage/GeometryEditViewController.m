@@ -19,7 +19,6 @@
 #import "MapShapePointAnnotationView.h"
 #import "SFPProjectionConstants.h"
 #import "SFGeometryEnvelopeBuilder.h"
-#import "Observation.h"
 #import "ObservationShapeStyle.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
@@ -29,6 +28,7 @@
 #import <mgrs/MGRS.h>
 #import <mgrs/mgrs-umbrella.h>
 #import <PureLayout/PureLayout.h>
+#import "MAGE-Swift.h"
 
 @import MaterialComponents;
 
@@ -889,7 +889,7 @@ static float paddingPercentage = .1;
                     for (GPKGMapPoint *point in points) {
                         [checkPoints addObject:[self.shapeConverter toPointWithMapPoint:point]];
                     }
-                    formRectangle = [Observation checkIfRectangle:checkPoints];
+                    formRectangle = [Observation isRectangleWithPoints:checkPoints];
                 }
                 if (!formRectangle) {
                     // Points currently do not form a rectangle

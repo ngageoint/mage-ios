@@ -22,7 +22,7 @@ class ObservationActionsView: UIView {
     var favoriteCountText: NSAttributedString {
         get {
             let favoriteCountText = NSMutableAttributedString();
-            if let favorites = observation?.favorites {
+            if let favorites = observation?.favorites as? Set<ObservationFavorite> {
                 let favoriteCount: Int = favorites.reduce(0) { (result, favorite) -> Int in
                     if (favorite.favorite) {
                         return result + 1;
@@ -214,7 +214,6 @@ class ObservationActionsView: UIView {
         directionsButton.applyTextTheme(withScheme: scheme);
         moreButton.applyTextTheme(withScheme: scheme);
         favoriteCountButton.applyTextTheme(withScheme: scheme);
-        
         favoriteButton.setImageTintColor(currentUserFavorited ? MDCPalette.green.accent700 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         favoriteButton.inkColor = MDCPalette.green.accent700?.withAlphaComponent(0.2);
         importantButton.setImageTintColor(isImportant ? MDCPalette.orange.accent400 : scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
@@ -269,10 +268,10 @@ class ObservationActionsView: UIView {
         self.observation = observation;
         favoriteCountButton.isHidden = true;
         favoriteCountButton.setAttributedTitle(favoriteCountText, for: .normal);
-        importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant() ?? false);
+        importantButton.isHidden = !(self.observation?.currentUserCanUpdateImportant ?? false);
         
         currentUserFavorited = false;
-        if let favorites = observation.favorites, let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
+        if let favorites = observation.favorites as? Set<ObservationFavorite>, let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
             currentUserFavorited = favorites.contains { (favorite) -> Bool in
                 favoriteCountButton.isHidden = !(!favoriteCountButton.isHidden || favorite.favorite);
                 return favorite.userId == user.remoteId && favorite.favorite;
@@ -323,7 +322,17 @@ class ObservationActionsView: UIView {
     }
     
     @objc func favoriteObservation() {
-        observationActionsDelegate?.favoriteObservation?(observation!);
+        if let observation = observation {
+            // let the ripple dissolve before transitioning otherwise it looks weird
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.observationActionsDelegate?.favoriteObservation?(observation, completion: { savedObservation in
+                    if let savedObservation = savedObservation {
+                        self.observation = savedObservation;
+                        self.populate(observation: savedObservation)
+                    }
+                });
+            }
+        }
     }
     
     @objc func getDirectionsToObservation(_ sender: UIButton) {
@@ -345,7 +354,7 @@ class ObservationActionsView: UIView {
     
     @objc func removeImportant() {
         importantInputView.resignFirstResponder();
-        if (observation?.isImportant() == true) {
+        if (observation?.isImportant == true) {
             observationActionsDelegate?.removeImportant?(observation!);
             cancelOrRemoveButton.setTitle("Removing", for: .normal);
             cancelOrRemoveButton.isEnabled = false;

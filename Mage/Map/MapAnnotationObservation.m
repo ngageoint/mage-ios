@@ -7,6 +7,7 @@
 //
 
 #import "MapAnnotationObservation.h"
+#import "MAGE-Swift.h"
 
 @interface MapAnnotationObservation ()
 

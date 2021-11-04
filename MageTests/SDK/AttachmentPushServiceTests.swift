@@ -138,7 +138,7 @@ class AttachmentPushServiceTests: QuickSpec {
                 expect(idStubCalled).toEventually(beTrue());
                 expect(createStubCalled).toEventually(beTrue());
                 
-                expect(Observation.mr_findFirst()!.dirty).toEventually(equal(0));
+                expect(Observation.mr_findFirst()!.dirty).toEventually(equal(false));
             }
         }
     }

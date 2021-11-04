@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "ObservationShapeStyle.h"
-#import "Observation.h"
+#import "MAGE-Swift.h"
 
+//@class Observation;
 /**
  * Parses the observation form json and retrieves the style
  */

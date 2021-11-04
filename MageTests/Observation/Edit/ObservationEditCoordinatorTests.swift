@@ -255,7 +255,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Done");
                 
                 
-                let obsPoint: SFPoint = coordinator.observation?.getGeometry() as! SFPoint;
+                let obsPoint: SFPoint = coordinator.observation?.geometry as! SFPoint;
                 expect(obsPoint.y).to(beCloseTo(40.1));
                 expect(obsPoint.x).to(beCloseTo(-105.26));
                 TestHelpers.printAllAccessibilityLabelsInWindows();

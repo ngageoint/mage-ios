@@ -7,9 +7,10 @@
 //
 
 #import "Attachment.h"
-#import "Observation.h"
 #import "NSDate+Iso8601.h"
 #import "StoredPassword.h"
+
+@class Observation;
 
 @implementation Attachment
 

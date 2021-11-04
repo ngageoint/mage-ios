@@ -132,17 +132,17 @@ protocol ObservationCommonPropertiesListener: AnyObject {
         self.navigationController = UINavigationController();
     }
     
-    func createObservation(location: SFGeometry?, accuracy: CLLocationAccuracy, provider: String, delta: Double) -> Observation {
+    func createObservation(location: SFGeometry?, accuracy: CLLocationAccuracy, provider: String, delta: Double) -> Observation? {
         newObservation = true;
-        let observation = Observation(geometry: location, andAccuracy: accuracy, andProvider: provider, andDelta: delta, in: managedObjectContext);
-        observation.dirty = 1;
+        let observation = Observation.create(geometry: location, accuracy: accuracy, provider: provider, delta: delta, context: managedObjectContext);
+        observation.dirty = true;
         addRequiredForms(observation: observation);
         return observation;
     }
     
     func setupObservation(observation: Observation) -> Observation? {
         let observationInContext = observation.mr_(in: self.managedObjectContext);
-        observationInContext?.dirty = 1;
+        observationInContext?.dirty = true;
         return observationInContext;
     }
     

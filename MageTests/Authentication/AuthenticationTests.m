@@ -16,7 +16,6 @@
 #import "DisclaimerViewController.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
-#import "Observation.h"
 #import "Authentication.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"
@@ -178,10 +177,10 @@
         [self waitForExpectationsWithTimeout:5 handler:^(NSError * _Nullable error) {
             XCTestExpectation* myselfResponseArrived = [self expectationWithDescription:@"response of /api/users/myself complete"];
             
-            NSURLSessionDataTask *task = [User operationToFetchMyselfWithSuccess:^{
+            NSURLSessionDataTask *task = [User operationToFetchMyselfWithSuccess:^(NSURLSessionDataTask * _Nonnull task, id _Nullable response) {
                 NSLog(@"user");
                 [myselfResponseArrived fulfill];
-            } failure:^(NSError * _Nonnull error) {
+            } failure:^(NSURLSessionDataTask * _Nullable task , NSError * _Nonnull error ) {
                 NSLog(@"error %@", error);
                 [myselfResponseArrived fulfill];
             }];
@@ -381,7 +380,7 @@
     OCMStub(ClassMethod([offlineManagerMock offlineObservationCount]))._andReturn([NSNumber numberWithInt:1]);
     
     id userMock = [OCMockObject mockForClass:[User class]];
-    [[[userMock stub] andReturn:u] fetchCurrentUserInManagedObjectContext:[OCMArg any]];
+    [[[userMock stub] andReturn:u] fetchCurrentUserWithContext:[OCMArg any]];
     
     UINavigationController *navigationController = [[UINavigationController alloc]init];
     

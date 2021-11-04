@@ -30,12 +30,12 @@ const CGFloat annotationScaleWidth = 35.0;
 + (NSString *) imageNameForObservation:(Observation *) observation {
     if (!observation) return nil;
     
-    NSString *primaryField = [observation getPrimaryField];
-    NSString *secondaryField = [observation getSecondaryField];
+    NSString *primaryField = observation.primaryField;
+    NSString *secondaryField = observation.secondaryField;
     NSMutableArray *iconProperties = [[NSMutableArray alloc] init];
-    NSDictionary *primaryObservationForm = [observation getPrimaryObservationForm];
+    NSDictionary *primaryObservationForm = observation.primaryObservationForm;
     
-    if (primaryObservationForm) {
+    if (primaryObservationForm && [primaryObservationForm objectForKey:@"formId"] != nil) {
         [iconProperties addObject:[primaryObservationForm objectForKey:@"formId"]];
     }
     

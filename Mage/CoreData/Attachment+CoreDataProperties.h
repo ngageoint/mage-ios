@@ -11,6 +11,8 @@
 
 #import "Attachment.h"
 
+@class Observation;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Attachment (CoreDataProperties)

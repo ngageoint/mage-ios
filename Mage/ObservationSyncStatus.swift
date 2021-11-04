@@ -33,10 +33,10 @@ class ObservationSyncStatus: UIView {
         self.scheme = scheme;
         self.backgroundColor = scheme.colorScheme.surfaceColor;
         syncStatusView.applyTheme(withScheme: scheme);
-        if (observation?.hasValidationError() ?? false) {
+        if (observation?.hasValidationError ?? false) {
             syncStatusView.textView.textColor = scheme.colorScheme.errorColor;
             syncStatusView.imageView.tintColor = scheme.colorScheme.errorColor;
-        } else if (!(observation?.isDirty() ?? false) && observation?.error == nil) {
+        } else if (!(observation?.isDirty ?? false) && observation?.error == nil) {
             syncStatusView.textView.textColor = MDCPalette.green.accent700;
             syncStatusView.imageView.tintColor = MDCPalette.green.accent700;
         } else if (manualSync) {
@@ -82,9 +82,9 @@ class ObservationSyncStatus: UIView {
     func setupSyncStatusView() {
         self.isHidden = false;
         // if the observation has an error
-        if (observation?.hasValidationError() ?? false) {
-            syncStatusView.textView.text = "Error Pushing Changes\n\(observation?.errorMessage() ?? "")";
-            syncStatusView.accessibilityLabel = "Error Pushing Changes\n\(observation?.errorMessage() ?? "")";
+        if (observation?.hasValidationError ?? false) {
+            syncStatusView.textView.text = "Error Pushing Changes\n\(observation?.errorMessage ?? "")";
+            syncStatusView.accessibilityLabel = "Error Pushing Changes\n\(observation?.errorMessage ?? "")";
             syncStatusView.imageView.image = UIImage(named: "error_outline");
             syncStatusView.leadingButton.isHidden = true;
             if let scheme = scheme {
@@ -95,7 +95,7 @@ class ObservationSyncStatus: UIView {
         }
         
         // if the observation is not dirty and has no error, show the push date
-        if (!(observation?.isDirty() ?? false) && observation?.error == nil) {
+        if (!(observation?.isDirty ?? false) && observation?.error == nil) {
             if let pushedDate: NSDate = observation?.lastModified as NSDate? {
                 syncStatusView.textView.text = "Pushed on \(pushedDate.formattedDisplay())";
                 syncStatusView.accessibilityLabel = "Pushed on \(pushedDate.formattedDisplay())";

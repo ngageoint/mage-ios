@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Observation.h"
-#import "MAGE-Swift.h"
+
+@class Observation;
+@class Event;
 
 @interface NotificationRequester : NSObject
 

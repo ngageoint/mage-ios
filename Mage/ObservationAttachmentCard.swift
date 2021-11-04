@@ -26,7 +26,7 @@ class ObservationAttachmentCard: MDCCard {
     }()
     
     lazy var attachmentView: AttachmentFieldView = {
-        let attachmentView = AttachmentFieldView(field: attachmentField, editMode: false, value: observation?.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate);
+        let attachmentView = AttachmentFieldView(field: attachmentField, editMode: false, value: observation?.attachments as? Set<Attachment>, attachmentSelectionDelegate: attachmentSelectionDelegate);
         return attachmentView;
     }()
     
@@ -77,7 +77,9 @@ extension ObservationAttachmentCard: ObservationFormFieldListener {
         let newProperties = self.observation?.properties as? [String: Any];
         
         if (field[FieldKey.name.key] as! String == attachmentField[FieldKey.name.key] as! String) {
-            self.observation?.addAttachments(value as! Set<Attachment>);
+            if let attachments = value as? Set<Attachment> {
+                self.observation?.addToAttachments(NSSet(set: attachments));
+            }
         }
         self.observation?.properties = newProperties;
     }

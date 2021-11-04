@@ -5,7 +5,7 @@
 //
 
 #import "ObservationFetchService.h"
-#import "Observation.h"
+#import "MAGE-Swift.h"
 #import "Layer.h"
 #import "Form.h"
 #import "MageSessionManager.h"
@@ -69,11 +69,11 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 
 - (void) pullInitialObservations {
     if ([DataConnectionUtilities shouldFetchObservations]) {
-        NSURLSessionDataTask *observationFetchTask = [Observation operationToPullInitialObservationsWithSuccess:^{
+        NSURLSessionDataTask *observationFetchTask = [Observation operationToPullInitialObservationsWithSuccess:^(NSURLSessionDataTask * _Nonnull task , id _Nullable response) {
             if (![[UserUtility singleton] isTokenExpired]) {
                 [self scheduleTimer];
             }
-        } failure:^(NSError* error) {
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             if (![[UserUtility singleton] isTokenExpired]) {
                 [self scheduleTimer];
             }
@@ -87,11 +87,11 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 
 - (void) pullObservations {
     if ([DataConnectionUtilities shouldFetchObservations]) {
-        NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^{
+        NSURLSessionDataTask *observationFetchTask = [Observation operationToPullObservationsWithSuccess:^(NSURLSessionDataTask * _Nonnull task , id _Nullable response){
             if (![[UserUtility singleton] isTokenExpired]) {
                 [self scheduleTimer];
             }
-        } failure:^(NSError* error) {
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             if (![[UserUtility singleton] isTokenExpired]) {
                 [self scheduleTimer];
             }

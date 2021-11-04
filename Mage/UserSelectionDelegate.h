@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
+@class User;
+
 @protocol UserSelectionDelegate <NSObject>
 
 @required

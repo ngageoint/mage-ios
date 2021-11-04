@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Observation.h"
+@class Observation;
 @import MapKit;
 
 /**

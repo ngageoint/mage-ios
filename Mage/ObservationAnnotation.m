@@ -11,6 +11,7 @@
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"
 #import "SFGeometryUtils.h"
+#import "MAGE-Swift.h"
 
 @interface ObservationAnnotation ()
 
@@ -23,7 +24,7 @@
 NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
 
 -(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms {
-    return [self initWithObservation:observation andEventForms: forms andGeometry:[observation getGeometry]];
+    return [self initWithObservation:observation andEventForms: forms andGeometry:observation.geometry];
 }
 
 -(id) initWithObservation:(Observation *) observation andEventForms: (NSArray *) forms andGeometry: (SFGeometry *) geometry {
@@ -37,7 +38,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
     if ((self = [super init])) {
         _observation = observation;
         [self setCoordinate:location];
-        [self setTitle:[observation primaryFeedFieldText]];
+        [self setTitle:observation.primaryFeedFieldText];
         
         if ([self.title length] == 0) {
             [self setTitle:@"Observation"];

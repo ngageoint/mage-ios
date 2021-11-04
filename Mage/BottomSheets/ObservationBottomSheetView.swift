@@ -96,7 +96,7 @@ class ObservationBottomSheetView: BottomSheetView {
         guard let observation = self.observation else {
             return .clear
         }
-        if (observation.isImportant()) {
+        if (observation.isImportant) {
             return compactView.importantView.backgroundColor;
         } else {
             return .clear;

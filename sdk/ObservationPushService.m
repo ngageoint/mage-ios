@@ -6,15 +6,18 @@
 
 #import "ObservationPushService.h"
 #import "MageSessionManager.h"
-#import "Observation.h"
 #import "ObservationFavorite.h"
 #import "ObservationImportant.h"
 #import "Attachment.h"
 #import "UserUtility.h"
 #import "DataConnectionUtilities.h"
 #import "MageServer.h"
+#import "MAGE-Swift.h"
 
 NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
+NSString * const kObservationErrorStatusCode = @"errorStatusCode";
+NSString * const kObservationErrorDescription = @"errorDescription";
+NSString * const kObservationErrorMessage = @"errorMessage";
 
 @interface ObservationPushService () <NSFetchedResultsControllerDelegate>
 @property (nonatomic) NSTimeInterval interval;
@@ -199,14 +202,15 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     MageSessionManager *manager = [MageSessionManager sharedManager];
     for (Observation *observation in [observationsToPush allValues]) {
         NSManagedObjectID *observationID = observation.objectID;
-        NSURLSessionDataTask *observationPushTask = [Observation operationToPushObservation:observation success:^(id response) {
+        NSURLSessionDataTask *observationPushTask = [Observation operationToPushObservationWithObservation:observation success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable response) {
             NSLog(@"Successfully submitted observation");
+            // TODO: handle if response is null
             // save the properties of the observation before they get overwritten so we can match the attachments later
             NSDictionary *propertiesToSave = [NSDictionary dictionaryWithDictionary:observation.properties];
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Observation *localObservation = [observation MR_inContext:localContext];
-                [localObservation populateObjectFromJson:response];
-                localObservation.dirty = [NSNumber numberWithBool:NO];
+                [localObservation populateWithJson:response];
+                localObservation.dirty = false;
                 localObservation.error = nil;
                 
                 if ([MageServer isServerVersion5]) {
@@ -249,7 +253,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                     [delegate didPushObservation:observation success:success error:error];
                 }
             }];
-        } failure:^(NSError* error) {
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * error) {
             NSLog(@"Error submitting observation");
             // TODO check for 400
             if (error == nil) {
@@ -287,8 +291,9 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
                 }
             }];
         }];
-        
-        [manager addTask:observationPushTask];
+        if (observationPushTask != nil) {
+            [manager addTask:observationPushTask];
+        }
     }
 }
 
@@ -309,7 +314,7 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     __weak typeof(self) weakSelf = self;
     MageSessionManager *manager = [MageSessionManager sharedManager];
     for (ObservationFavorite *favorite in [favoritesToPush allValues]) {
-        NSURLSessionDataTask *favoritePushTask = [Observation operationToPushFavorite:favorite success:^(id response) {
+        NSURLSessionDataTask *favoritePushTask = [Observation operationToPushFavoriteWithFavorite:favorite success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable response) {
             NSLog(@"Successfully submitted favorite");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationFavorite *localFavorite = [favorite MR_inContext:localContext];
@@ -317,11 +322,10 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             } completion:^(BOOL success, NSError *error) {
                 [weakSelf.pushingFavorites removeObjectForKey:favorite.objectID];
             }];
-        } failure:^(NSError* error) {
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"Error submitting favorite");
             [weakSelf.pushingFavorites removeObjectForKey:favorite.objectID];
         }];
-        
         [manager addTask:favoritePushTask];
     }
 }
@@ -345,13 +349,13 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
     MageSessionManager *manager = [MageSessionManager sharedManager];
     for (NSString *observationId in importantsToPush) {
         ObservationImportant *important = importantsToPush[observationId];
-        NSURLSessionDataTask *importantPushTask = [Observation operationToPushImportant:important success:^(id response) {
+        NSURLSessionDataTask *importantPushTask = [Observation operationToPushImportantWithImportant:important success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable response) {
             // verify that the current state in our data is the same as returned from the server
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationImportant *localImportant = [important MR_inContext:localContext];
                 BOOL serverImportant = response[@"important"] != nil;
                 if ([localImportant.important isEqualToNumber:[NSNumber numberWithBool:serverImportant]]) {
-                    localImportant.dirty = [NSNumber numberWithBool:NO];
+                    localImportant.dirty = false;
                 } else {
                     // force a push again
                     localImportant.timestamp = [NSDate date];
@@ -360,11 +364,10 @@ NSString * const kObservationPushFrequencyKey = @"observationPushFrequency";
             } completion:^(BOOL success, NSError *error) {
                 [weakSelf.pushingImportant removeObjectForKey:observationId];
             }];
-        } failure:^(NSError* error) {
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"Error submitting important");
             [weakSelf.pushingImportant removeObjectForKey:observationId];
         }];
-        
         [manager addTask:importantPushTask];
     }
 }

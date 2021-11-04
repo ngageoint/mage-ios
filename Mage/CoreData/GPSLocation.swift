@@ -16,10 +16,15 @@ import sf_ios
 @objc public class GPSLocation: NSManagedObject {
     @objc public var geometry: SFGeometry? {
         get {
-            SFGeometryUtils.decodeGeometry(self.geometryData);
+            if let geometryData = self.geometryData {
+                return SFGeometryUtils.decodeGeometry(self.geometryData);
+            }
+            return nil;
         }
         set {
-            self.geometryData = SFGeometryUtils.encode(newValue);
+            if let newValue = newValue {
+                self.geometryData = SFGeometryUtils.encode(newValue);
+            }
         }
     }
     

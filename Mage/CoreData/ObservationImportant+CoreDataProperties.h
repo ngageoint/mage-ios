@@ -8,6 +8,7 @@
 
 #import "ObservationImportant.h"
 
+@class Observation;
 
 NS_ASSUME_NONNULL_BEGIN
 

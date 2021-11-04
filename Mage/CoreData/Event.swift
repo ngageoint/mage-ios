@@ -160,8 +160,8 @@ import CoreData
         return false;
     }
     
-    @objc public func form(observation: Observation) -> [AnyHashable : Any] {
-        return observation.getPrimaryEventForm();
+    @objc public func form(observation: Observation) -> [AnyHashable : Any]? {
+        return observation.primaryEventForm;
     }
     
     @objc public func form(id: NSNumber) -> [AnyHashable : Any]? {

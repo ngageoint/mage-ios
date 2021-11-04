@@ -88,7 +88,7 @@ class GeometryView : BaseFieldView {
     convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, mkmapDelegate: MKMapViewDelegate? = nil) {
         let accuracy = (observation?.properties?["accuracy"]) as? Double;
         let provider = (observation?.properties?["provider"]) as? String;
-        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.getGeometry(), accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms, observationActionsDelegate: observationActionsDelegate, mkmapDelegate: mkmapDelegate);
+        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.geometry, accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms, observationActionsDelegate: observationActionsDelegate, mkmapDelegate: mkmapDelegate);
     }
     
     init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, mkmapDelegate: MKMapViewDelegate? = nil) {
@@ -149,12 +149,12 @@ class GeometryView : BaseFieldView {
         let accuracy = (observation.properties?["accuracy"]) as? Double;
         let provider = (observation.properties?["provider"]) as? String;
      
-        setValue(observation.getGeometry(), accuracy: accuracy, provider: provider);
+        setValue(observation.geometry, accuracy: accuracy, provider: provider);
         addToMapAsObservation();
     }
     
     func addToMapAsObservation() {
-        if (self.observation?.getGeometry() != nil) {
+        if (self.observation?.geometry) != nil {
             self.mapObservation?.remove(from: self.mapView);
             self.mapObservation = self.observationManager.addToMap(with: self.observation, andAnimateDrop: false);
             guard let viewRegion = self.mapObservation?.viewRegion(of: self.mapView) else { return };
@@ -261,7 +261,7 @@ class GeometryView : BaseFieldView {
             if (self.observation == nil) {
                 addToMap();
             } else {
-                self.observation?.setGeometry(value!);
+                self.observation?.geometry = value;
                 addToMapAsObservation();
             }
             

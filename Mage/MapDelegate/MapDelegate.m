@@ -41,7 +41,6 @@
 #import "SFPProjectionTransform.h"
 #import "MapShapePointAnnotationView.h"
 #import "Form.h"
-#import "Observation.h"
 #import "MapUtils.h"
 #import "ObservationAccuracy.h"
 #import "ObservationAccuracyRenderer.h"
@@ -1734,7 +1733,7 @@
 
 - (void) updateObservation: (Observation *) observation withAnimation: (BOOL) animateDrop {
     [self.mapObservations removeById:observation.objectID];
-    if ([observation getGeometry] != nil) {
+    if (observation.geometry != nil) {
         MapObservation *mapObservation = [self.mapObservationManager addToMapWithObservation:observation andAnimateDrop:animateDrop];
         [self.mapObservations addMapObservation:mapObservation];
     }

@@ -33,16 +33,12 @@ class ObservationActionsSheetController: UITableViewController {
         return cancelButton;
     }()
     
-    init(frame: CGRect) {
-        super.init(style: .plain);
-    }
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(observation: Observation, delegate: ObservationActionsDelegate) {
-        self.init(frame: CGRect.zero);
+    @objc public init(observation: Observation, delegate: ObservationActionsDelegate) {
+        super.init(style: .plain);
         self.observation = observation;
         self.delegate = delegate;
         let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default());

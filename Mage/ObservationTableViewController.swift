@@ -189,16 +189,19 @@ class ObservationTableViewController: UITableViewController {
     
     @objc func refreshObservations() {
         refreshControl?.beginRefreshing();
-        let observationFetchTask: URLSessionDataTask = Observation.operationToPullObservations {
+
+        let observationFetchTask = Observation.operationToPullObservations { (_,_) in
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing();
             }
-        } failure: { (_) in
+        } failure: { _,_ in
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing();
             }
         }
-        MageSessionManager.shared()?.addTask(observationFetchTask);
+        if let observationFetchTask = observationFetchTask {
+            MageSessionManager.shared()?.addTask(observationFetchTask);
+        }
     }
     
     func startCreateNewObservation(location: CLLocation?, provider: String) {
@@ -308,9 +311,10 @@ extension ObservationTableViewController: ObservationActionsDelegate {
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
-    func favoriteObservation(_ observation: Observation) {
+    func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
         observation.toggleFavorite { (_, _) in
-            self.tableView.reloadData();
+            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+            completion?(observation);
         }
     }
     
@@ -320,11 +324,14 @@ extension ObservationTableViewController: ObservationActionsDelegate {
     }
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView?) {
+        guard let location = observation.location else {
+            return;
+        }
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(for: observation), coordinate: observation.location().coordinate))
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(for: observation), coordinate: location.coordinate))
         }));
         
-        ObservationActionHandler.getDirections(latitude: observation.location().coordinate.latitude, longitude: observation.location().coordinate.longitude, title: observation.primaryFeedFieldText(), viewController: self, extraActions: extraActions, sourceView: sourceView);
+        ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
 }

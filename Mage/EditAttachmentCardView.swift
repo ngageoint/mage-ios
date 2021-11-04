@@ -33,7 +33,7 @@ class EditAttachmentCardView: MDCCard {
     
     lazy var attachmentView: AttachmentFieldView = {
         attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, scheme:scheme);
-        let attachmentView = AttachmentFieldView(field: attachmentField, delegate: self, value: observation.attachments, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
+        let attachmentView = AttachmentFieldView(field: attachmentField, delegate: self, value: observation.attachments as? Set<Attachment>, attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
         return attachmentView;
     }()
     
@@ -86,7 +86,7 @@ extension EditAttachmentCardView: ObservationFormFieldListener {
         let newProperties = self.observation.properties as? [String: Any];
         
         if (field[FieldKey.name.key] as! String == attachmentField[FieldKey.name.key] as! String) {
-            self.observation.addAttachments(value as! Set<Attachment>);
+            self.observation.addToAttachments(NSSet(set: value as! Set<Attachment>));
         }
         self.observation.properties = newProperties;
     }

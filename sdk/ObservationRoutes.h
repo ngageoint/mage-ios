@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "RouteMethod.h"
-#import "Observation.h"
+#import "ObservationFavorite.h"
+#import "ObservationImportant.h"
+
+@class Observation;
 
 NS_ASSUME_NONNULL_BEGIN
 

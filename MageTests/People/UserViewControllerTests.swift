@@ -85,12 +85,17 @@ class UserViewControllerTests: KIFSpec {
             
             it("user view") {
                 var completeTest = false;
-                
+                MageCoreDataFixtures.addEvent()
                 MageCoreDataFixtures.addUser()
                 MageCoreDataFixtures.addLocation()
                 MageCoreDataFixtures.addObservationToEvent()
                 
-                let user: User = User.mr_findFirst()!;
+                UserDefaults.standard.currentUserId = "userabc2";
+                
+                MageCoreDataFixtures.addUser(userId: "userabc2")
+                MageCoreDataFixtures.addUserToEvent(userId: "userabc2")
+                
+                let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")!;
                 
                 controller = UserViewController(user: user, scheme: MAGEScheme.scheme());
                 let nc = UINavigationController(rootViewController: controller);
@@ -103,7 +108,7 @@ class UserViewControllerTests: KIFSpec {
                 
                 tester().tapView(withAccessibilityLabel: "location", traits: UIAccessibilityTraits(arrayLiteral: .button));
                 tester().waitForView(withAccessibilityLabel: "Location copied to clipboard");
-
+                TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().tapView(withAccessibilityLabel: "favorite", traits: UIAccessibilityTraits(arrayLiteral: .button));
                 tester().wait(forTimeInterval: 0.5);
                 expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for:.normal)).to(be(MDCPalette.green.accent700));
@@ -114,8 +119,8 @@ class UserViewControllerTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Cancel");
 
-                let observation: Observation = (user.observations?.first!)!;
-                let attachment: Attachment = (observation.attachments?.first!)!;
+                let observation: Observation = ((user.observations as? Set<Observation>)?.first)!;
+                let attachment: Attachment = ((observation.attachments as? Set<Attachment>)?.first!)! ;
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 tester().tapView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded");

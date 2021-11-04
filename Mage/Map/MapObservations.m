@@ -8,6 +8,7 @@
 
 #import "MapObservations.h"
 #import "MapUtils.h"
+#import "MAGE-Swift.h"
 
 @interface MapObservations ()
 

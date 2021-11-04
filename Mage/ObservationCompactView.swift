@@ -83,7 +83,7 @@ class ObservationCompactView: UIView {
     @objc public func configure(observation: Observation, scheme: MDCContainerScheming?, actionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.observation = observation;
         self.actionsDelegate = actionsDelegate;
-        if (observation.isImportant()) {
+        if (observation.isImportant) {
             importantView.populate(observation: observation);
             importantView.isHidden = false;
         } else {
@@ -91,7 +91,9 @@ class ObservationCompactView: UIView {
         }
         observationSummaryView.populate(observation: observation);
         observationActionsView.populate(observation: observation, delegate: actionsDelegate);
-        if (includeAttachments && observation.attachments != nil && (observation.attachments?.count ?? 0) > 0){
+        if includeAttachments, let attachments = observation.attachments as? Set<Attachment>, attachments.filter({ attachment in
+            attachment.url != nil
+        }).count > 0 {
             attachmentSlideshow.populate(observation: observation, attachmentSelectionDelegate: attachmentSelectionDelegate);
             attachmentSlideshow.isHidden = false;
         } else {

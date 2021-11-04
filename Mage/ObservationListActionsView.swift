@@ -123,8 +123,8 @@ class ObservationListActionsView: UIView {
     public func populate(observation: Observation!, delegate: ObservationActionsDelegate?) {
         self.observation = observation;
         self.observationActionsDelegate = delegate;
-        if (self.observation?.getGeometry() != nil) {
-            if let point: SFPoint = self.observation?.getGeometry().centroid() {
+        if let geometry = self.observation?.geometry {
+            if let point: SFPoint = geometry.centroid() {
                 if (UserDefaults.standard.showMGRS) {
                     latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);
                 } else {
@@ -139,7 +139,7 @@ class ObservationListActionsView: UIView {
         
         currentUserFavorited = false;
         var favoriteCounter = 0;
-        if let favorites = observation.favorites {
+        if let favorites = observation.favorites as? Set<ObservationFavorite> {
             if let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) {
                 currentUserFavorited = favorites.contains { (favorite) -> Bool in
                     return favorite.userId == user.remoteId && favorite.favorite;
@@ -178,7 +178,17 @@ class ObservationListActionsView: UIView {
     }
     
     @objc func favoriteObservation() {
-        observationActionsDelegate?.favoriteObservation?(observation!);
+        if let observation = observation {
+            // let the ripple dissolve before transitioning otherwise it looks weird
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.observationActionsDelegate?.favoriteObservation?(observation, completion: { savedObservation in
+                    if let savedObservation = savedObservation {
+                        self.observation = savedObservation;
+                        self.populate(observation: savedObservation, delegate: self.observationActionsDelegate)
+                    }
+                });
+            }
+        }
     }
     
     @objc func getDirectionsToObservation(_ sender: UIButton) {

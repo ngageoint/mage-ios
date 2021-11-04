@@ -5,7 +5,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Observation.h"
 #import <MaterialComponents/MDCContainerScheme.h>
 #import "AttachmentSelectionDelegate.h"
 

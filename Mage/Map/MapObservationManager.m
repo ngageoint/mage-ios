@@ -39,11 +39,11 @@
 }
 
 -(MapObservation *) addToMapWithObservation:(Observation *)observation andAnimateDrop: (BOOL) animateDrop {
-    return [self addToMapWithObservation:observation withGeometry:[observation getGeometry] andHidden:NO andAnimateDrop:animateDrop];
+    return [self addToMapWithObservation:observation withGeometry:observation.geometry andHidden:NO andAnimateDrop:animateDrop];
 }
 
 -(MapObservation *) addToMapWithObservation: (Observation *) observation andHidden: (BOOL) hidden {
-    return [self addToMapWithObservation:observation withGeometry:[observation getGeometry] andHidden:hidden andAnimateDrop:YES];
+    return [self addToMapWithObservation:observation withGeometry:observation.geometry andHidden:hidden andAnimateDrop:YES];
 }
 
 -(MapObservation *) addToMapWithObservation: (Observation *) observation withGeometry: (SFGeometry *) geometry {
