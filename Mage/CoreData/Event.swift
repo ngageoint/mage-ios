@@ -69,7 +69,7 @@ import CoreData
             return;
         }
         let manager = MageSessionManager.shared();
-        guard let task: URLSessionDataTask = manager?.post_TASK("\(MageServer.baseURL().absoluteURL)/api/users/\(u.remoteId ?? "")/events/\(Server.currentEventId())/recent", parameters: nil, progress: nil, success: { task, response in
+        guard let currentEventId = Server.currentEventId(), let task: URLSessionDataTask = manager?.post_TASK("\(MageServer.baseURL().absoluteURL)/api/users/\(u.remoteId ?? "")/events/\(currentEventId)/recent", parameters: nil, progress: nil, success: { task, response in
             
         }, failure: { task, error in
             print("Error posting recent event")
@@ -80,7 +80,10 @@ import CoreData
     }
     
     @objc public static func getCurrentEvent(context: NSManagedObjectContext) -> Event? {
-        return Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: Server.currentEventId(), in: context);
+        if let currentEventId = Server.currentEventId() {
+            return Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: currentEventId, in: context);
+        }
+        return nil;
     }
     
     @objc public static func getEvent(eventId: NSNumber, context: NSManagedObjectContext) -> Event? {

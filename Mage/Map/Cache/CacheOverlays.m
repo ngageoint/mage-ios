@@ -11,7 +11,7 @@
 #import "CacheOverlayListener.h"
 #import "GeoPackageCacheOverlay.h"
 #import "Layer.h"
-#import "Server.h"
+#import "MAGE-Swift.h"
 
 @interface CacheOverlays ()
 

@@ -9,7 +9,6 @@
 #import "OnlineMapTableViewController.h"
 #import "ImageryLayer.h"
 #import "Layer.h"
-#import "Server.h"
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
 

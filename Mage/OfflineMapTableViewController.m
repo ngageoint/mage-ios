@@ -16,7 +16,6 @@
 #import "ObservationTableHeaderView.h"
 #import "StaticLayer.h"
 #import "Layer.h"
-#import "Server.h"
 #import "MAGE-Swift.h"
 
 @interface OfflineMapTableViewController () <NSFetchedResultsControllerDelegate>

@@ -6,7 +6,6 @@
 
 #import "Observations.h"
 #import "Observation+Section.h"
-#import "Server.h"
 #import "TimeFilter.h"
 #import "MAGE-Swift.h"
 

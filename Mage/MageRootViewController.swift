@@ -149,10 +149,12 @@ import Kingfisher
         allTabs.append(locationsTab);
         allTabs.append(observationsTab);
         
-        for feed in Feed.getEventFeeds(eventId: Server.currentEventId()) {
-            let nc = createFeedViewController(feed: feed);
-            allTabs.append(nc);
-            feedViewControllers.append(nc);
+        if let currentEventId = Server.currentEventId() {
+            for feed in Feed.getEventFeeds(eventId: currentEventId) {
+                let nc = createFeedViewController(feed: feed);
+                allTabs.append(nc);
+                feedViewControllers.append(nc);
+            }
         }
         
         var orderedTabs: [UIViewController] = [];

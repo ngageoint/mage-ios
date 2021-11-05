@@ -13,7 +13,7 @@
 #import "IDPCoordinator.h"
 #import "DisclaimerViewController.h"
 #import "MageServer.h"
-#import "Server.h"
+#import "MAGE-Swift.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"
 #import "UserUtility.h"

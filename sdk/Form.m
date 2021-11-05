@@ -10,7 +10,7 @@
 #import "MageSessionManager.h"
 #import "ObservationFetchService.h"
 #import "MageServer.h"
-#import "Server.h"
+#import "MAGE-Swift.h"
 #import <SSZipArchive/SSZipArchive.h>
 
 NSString * const MAGEFormFetched = @"mil.nga.giat.mage.form.fetched";

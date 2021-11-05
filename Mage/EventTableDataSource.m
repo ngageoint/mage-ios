@@ -5,7 +5,6 @@
 //
 
 #import "EventTableDataSource.h"
-#import "Server.h"
 #import "EventChooserController.h"
 #import "EventTableViewCell.h"
 #import "EventTableHeaderView.h"

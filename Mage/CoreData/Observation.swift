@@ -36,9 +36,11 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func operationToPullObservations(initial: Bool, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        let eventId = Server.currentEventId();
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(Server.currentEventId())/observations";
-        print("Fetching observations from event \(eventId)");
+        guard let currentEventId = Server.currentEventId() else {
+            return nil;
+        }
+        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(currentEventId)/observations";
+        print("Fetching observations from event \(currentEventId)");
         
         var parameters: [AnyHashable : Any] = [
             // does this work on the server?
@@ -381,8 +383,8 @@ enum State: Int, CustomStringConvertible {
     
     @objc public static func fetchLastObservationDate(context: NSManagedObjectContext) -> Date? {
         let user = User.fetchCurrentUser(context: context);
-        if let userRemoteId = user?.remoteId {
-            let observation = Observation.mr_findFirst(with: NSPredicate(format: "\(ObservationKey.eventId.key) == %@ AND user.\(UserKey.remoteId.key) != %@", Server.currentEventId(), userRemoteId), sortedBy: ObservationKey.lastModified.key, ascending: false, in:context);
+        if let userRemoteId = user?.remoteId, let currentEventId = Server.currentEventId() {
+            let observation = Observation.mr_findFirst(with: NSPredicate(format: "\(ObservationKey.eventId.key) == %@ AND user.\(UserKey.remoteId.key) != %@", currentEventId, userRemoteId), sortedBy: ObservationKey.lastModified.key, ascending: false, in:context);
             return observation?.lastModified;
         }
         return nil;

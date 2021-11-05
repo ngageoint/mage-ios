@@ -14,7 +14,6 @@
 #import "IDPCoordinator.h"
 #import "DisclaimerViewController.h"
 #import "MagicalRecord+MAGE.h"
-#import "Server.h"
 #import "MageOfflineObservationManager.h"
 #import "UserUtility.h"
 #import "FadeTransitionSegue.h"

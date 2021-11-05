@@ -22,7 +22,6 @@
 #import "SFPoint.h"
 #import "ObservationAnnotationView.h"
 #import "Layer.h"
-#import "Server.h"
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
 #import <PureLayout.h>

@@ -7,7 +7,6 @@
 //
 
 #import "MageOfflineObservationManager.h"
-#import "Server.h"
 #import "MAGE-Swift.h"
 
 @interface MageOfflineObservationManager()<NSFetchedResultsControllerDelegate>
@@ -47,13 +46,13 @@
     [self updateOfflineCount:[[self.observationFetchedResultsController fetchedObjects] count]];
     
     [[NSUserDefaults standardUserDefaults] addObserver:self
-                                            forKeyPath:kCurrentEventIdKey options:NSKeyValueObservingOptionNew
+                                            forKeyPath:@"currentEventId" options:NSKeyValueObservingOptionNew
                                                context:NULL];
 }
 
 - (void) stop {
     self.delegate = nil;
-    [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:kCurrentEventIdKey];
+    [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:@"currentEventId"];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller

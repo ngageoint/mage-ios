@@ -19,7 +19,6 @@
 #import "DataSynchronizationSettingsTableViewController.h"
 #import "LocationServicesSettingsTableViewController.h"
 #import "ObservationServicesSettingsTableViewController.h"
-#import "Server.h"
 #import "AppDelegate.h"
 #import "MAGE-Swift.h"
 #import <PureLayout/PureLayout.h>

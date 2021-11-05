@@ -172,6 +172,19 @@ extension Notification.Name {
         }
     }
     
+    var currentEventId: Any? {
+        get {
+            return object(forKey: #function);
+        }
+        set {
+            if newValue == nil {
+                removeObject(forKey: #function)
+            } else {
+                set(newValue, forKey: #function);
+            }
+        }
+    }
+    
     var loginType: String? {
         get {
             return string(forKey: #function);

@@ -39,8 +39,11 @@ import Foundation
     }
     
     @objc public func start() {
+        guard let currentEventId = Server.currentEventId() else {
+            return;
+        }
         let fetchRequest: NSFetchRequest<Feed> = Feed.fetchRequest();
-        fetchRequest.predicate = NSPredicate(format: "eventId = %@", Server.currentEventId());
+        fetchRequest.predicate = NSPredicate(format: "eventId = %@", currentEventId);
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
         feedFetchedResultsController = NSFetchedResultsController<Feed>(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
         feedFetchedResultsController?.delegate = self

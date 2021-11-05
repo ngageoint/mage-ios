@@ -135,7 +135,7 @@
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="role" inverseEntity="User" syncable="YES"/>
     </entity>
-    <entity name="Server" representedClassName="Server" syncable="YES">
+    <entity name="Server" representedClassName=".Server" syncable="YES">
         <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
     </entity>
     <entity name="StaticLayer" representedClassName="StaticLayer" parentEntity="Layer" syncable="YES">

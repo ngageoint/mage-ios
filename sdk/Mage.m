@@ -16,7 +16,6 @@
 #import "Layer.h"
 #import "MageServer.h"
 #import "StaticLayer.h"
-#import "Server.h"
 
 @implementation Mage
 

@@ -190,7 +190,7 @@
 		F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */; };
 		F72D42EE2694B60300F9AC3B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D425E2694B60300F9AC3B /* User.swift */; };
 		F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42612694B60300F9AC3B /* NSDate+display.m */; };
-		F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */; };
+		F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42622694B60300F9AC3B /* Server+CoreDataProperties.swift */; };
 		F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */; };
 		F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */; };
 		F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42702694B60300F9AC3B /* MageSessionManager.m */; };
@@ -212,7 +212,7 @@
 		F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D428D2694B60300F9AC3B /* IdpAuthentication.m */; };
 		F72D43042694B60300F9AC3B /* LocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D428E2694B60300F9AC3B /* LocationService.m */; };
 		F72D43052694B60300F9AC3B /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */; };
-		F72D43062694B60300F9AC3B /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42922694B60300F9AC3B /* Server.m */; };
+		F72D43062694B60300F9AC3B /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42922694B60300F9AC3B /* Server.swift */; };
 		F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42942694B60300F9AC3B /* ObservationImportant.swift */; };
 		F72D43082694B60300F9AC3B /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
 		F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42962694B60300F9AC3B /* AttachmentRoutes.m */; };
@@ -835,7 +835,7 @@
 		F72D425E2694B60300F9AC3B /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F72D42602694B60300F9AC3B /* ImageryLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageryLayer.h; sourceTree = "<group>"; };
 		F72D42612694B60300F9AC3B /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
-		F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Server+CoreDataProperties.m"; sourceTree = "<group>"; };
+		F72D42622694B60300F9AC3B /* Server+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Server+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42652694B60300F9AC3B /* NotificationRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationRequester.h; sourceTree = "<group>"; };
 		F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StaticLayer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42672694B60300F9AC3B /* NSDate+Iso8601.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Iso8601.h"; sourceTree = "<group>"; };
@@ -873,7 +873,7 @@
 		F72D428E2694B60300F9AC3B /* LocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationService.m; sourceTree = "<group>"; };
 		F72D428F2694B60300F9AC3B /* AttachmentPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentPushService.h; sourceTree = "<group>"; };
 		F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		F72D42922694B60300F9AC3B /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		F72D42922694B60300F9AC3B /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		F72D42932694B60300F9AC3B /* GeometrySerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometrySerializer.h; sourceTree = "<group>"; };
 		F72D42942694B60300F9AC3B /* ObservationImportant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationImportant.swift; sourceTree = "<group>"; };
 		F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Role+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -892,7 +892,6 @@
 		F72D42A22694B60300F9AC3B /* LocalAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthentication.h; sourceTree = "<group>"; };
 		F72D42A42694B60300F9AC3B /* MageServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServer.m; sourceTree = "<group>"; };
 		F72D42A52694B60300F9AC3B /* Authentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Authentication.h; sourceTree = "<group>"; };
-		F72D42A62694B60300F9AC3B /* Server+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Server+CoreDataProperties.h"; sourceTree = "<group>"; };
 		F72D42A72694B60300F9AC3B /* ImageryLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageryLayer.m; sourceTree = "<group>"; };
 		F72D42A82694B60300F9AC3B /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		F72D42A92694B60300F9AC3B /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -923,7 +922,6 @@
 		F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model12To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42C92694B60300F9AC3B /* GeometrySerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometrySerializer.m; sourceTree = "<group>"; };
 		F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "preferences-sdk.plist"; sourceTree = "<group>"; };
-		F72D42CB2694B60300F9AC3B /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentPushService.m; sourceTree = "<group>"; };
 		F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdpAuthentication.h; sourceTree = "<group>"; };
 		F72D42CF2694B60300F9AC3B /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
@@ -2302,10 +2300,8 @@
 				F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.swift */,
 				F72D42C72694B60300F9AC3B /* Role.swift */,
 				F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */,
-				F72D42CB2694B60300F9AC3B /* Server.h */,
-				F72D42922694B60300F9AC3B /* Server.m */,
-				F72D42A62694B60300F9AC3B /* Server+CoreDataProperties.h */,
-				F72D42622694B60300F9AC3B /* Server+CoreDataProperties.m */,
+				F72D42922694B60300F9AC3B /* Server.swift */,
+				F72D42622694B60300F9AC3B /* Server+CoreDataProperties.swift */,
 				F72D42692694B60300F9AC3B /* StaticLayer.h */,
 				F72D42BF2694B60300F9AC3B /* StaticLayer.m */,
 				F72D42662694B60300F9AC3B /* StaticLayer+CoreDataProperties.h */,
@@ -3087,7 +3083,7 @@
 				F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */,
 				F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */,
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
-				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.m in Sources */,
+				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
@@ -3155,7 +3151,7 @@
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
-				F72D43062694B60300F9AC3B /* Server.m in Sources */,
+				F72D43062694B60300F9AC3B /* Server.swift in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
 				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,
 				F7D43BDA269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift in Sources */,

@@ -9,7 +9,7 @@
 #import "EventChooserCoordinator.h"
 #import "EventChooserController.h"
 #import "Mage.h"
-#import "Server.h"
+#import "MAGE-Swift.h"
 #import "EventTableDataSource.h"
 #import "UserUtility.h"
 #import "FadeTransitionSegue.h"

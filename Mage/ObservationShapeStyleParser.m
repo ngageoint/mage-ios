@@ -7,7 +7,6 @@
 //
 @import HexColors;
 #import "ObservationShapeStyleParser.h"
-#import "Server.h"
 
 @class Observation;
 

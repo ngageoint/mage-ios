@@ -73,7 +73,10 @@ import MagicalRecord
     }
     
     @objc public static func operationToPullLocations(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(Server.currentEventId())/locations/users";
+        guard let currentEventId = Server.currentEventId() else {
+            return nil;
+        }
+        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(currentEventId)/locations/users";
         print("Trying to fetch locations from server \(url)")
         // we only need to get the most recent location
         var parameters: [AnyHashable : Any] = [
@@ -172,8 +175,11 @@ import MagicalRecord
     }
     
     static func fetchLastLocationDate() -> Date? {
-        let location = Location.mr_findFirst(with: NSPredicate(format: "\(LocationKey.eventId.key) == %@", Server.currentEventId()), sortedBy: LocationKey.timestamp.key, ascending: false);
-        
-        return location?.timestamp
+        if let currentEventId = Server.currentEventId() {
+            let location = Location.mr_findFirst(with: NSPredicate(format: "\(LocationKey.eventId.key) == %@", currentEventId), sortedBy: LocationKey.timestamp.key, ascending: false);
+            
+            return location?.timestamp
+        }
+        return nil;
     }
 }

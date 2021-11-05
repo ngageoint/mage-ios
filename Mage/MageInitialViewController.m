@@ -10,7 +10,7 @@
 #import "DeviceUUID.h"
 #import "LocationService.h"
 #import "Mage.h"
-#import "Server.h"
+#import "MAGE-Swift.h"
 #import "EventChooserController.h"
 #import "StoredPassword.h"
 

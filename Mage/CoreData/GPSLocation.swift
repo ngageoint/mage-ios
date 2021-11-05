@@ -108,7 +108,10 @@ import sf_ios
     }
     
     @objc public static func operationToPush(locations: [GPSLocation], success: ((URLSessionDataTask?, Any?) -> Void)?, failure: ((Error) -> Void)?) -> URLSessionDataTask? {
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(Server.currentEventId())/locations";
+        guard let currentEventId = Server.currentEventId() else {
+            return nil;
+        }
+        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(currentEventId)/locations";
         let manager = MageSessionManager.shared();
         var parameters: [Any] = [];
         for location in locations {

@@ -36,7 +36,6 @@
 #import "GPKGRelatedTablesExtension.h"
 #import "GPKGMediaDao.h"
 #import "MageOfflineObservationManager.h"
-#import "Server.h"
 #import "MageAppCoordinator.h"
 #import "TransitionViewController.h"
 #import "Layer.h"

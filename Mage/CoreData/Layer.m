@@ -11,7 +11,7 @@
 #import "MageServer.h"
 #import "StaticLayer.h"
 #import "ImageryLayer.h"
-#import "Server.h"
+#import "MAGE-Swift.h"
 
 @implementation Layer
 

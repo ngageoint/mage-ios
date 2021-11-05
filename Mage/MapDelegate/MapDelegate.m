@@ -18,7 +18,6 @@
 #import "StyledPolyline.h"
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
-#import "Server.h"
 #import "CacheOverlays.h"
 #import "XYZDirectoryCacheOverlay.h"
 #import "GPKGGeoPackageCache.h"
@@ -98,7 +97,7 @@
         if (!self.listenersRegistered) {
             @synchronized (self) {
                 if (!self.listenersRegistered) {
-                    self.listenersRegistered = [NSMutableArray arrayWithObjects:@"mapType", kCurrentEventIdKey, @"selectedOnlineLayers", [NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]], nil];
+                    self.listenersRegistered = [NSMutableArray arrayWithObjects:@"mapType", @"currentEventId", @"selectedOnlineLayers", [NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]], nil];
                     if (!self.hideStaticLayers) {
                         [self.listenersRegistered addObject:@"selectedStaticLayers"];
                     }
@@ -671,7 +670,7 @@
         [self updateStaticLayers: [object objectForKey:keyPath]];
     } else if ([@"selectedOnlineLayers" isEqualToString:keyPath] && self.mapView) {
         [self updateOnlineLayers: [object objectForKey:keyPath]];
-    } else if ([kCurrentEventIdKey isEqualToString:keyPath] && self.mapView) {
+    } else if ([@"currentEventId" isEqualToString:keyPath] && self.mapView) {
         [self updateCacheOverlaysSynchronized:[[CacheOverlays getInstance] getOverlays]];
     } else if ([@"selectedFeeds" isEqualToString:keyPath] && self.mapView) {
         

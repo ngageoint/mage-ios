@@ -7,7 +7,6 @@
 #import "MapSettings.h"
 #import "MapTypeTableViewCell.h"
 #import "ObservationTableHeaderView.h"
-#import "Server.h"
 #import "MAGE-Swift.h"
 
 @interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate>

@@ -1,5 +1,5 @@
 //
-//  Server+CoreDataProperties.h
+//  Server+CoreDataProperties.m
 //  mage-ios-sdk
 //
 //  Created by William Newman on 4/18/16.
@@ -9,14 +9,13 @@
 //  to delete and recreate this implementation file for your updated model.
 //
 
-#import "Server.h"
+import Foundation
+import CoreData
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface Server (CoreDataProperties)
-
-@property (nullable, nonatomic, retain) id properties;
-
-@end
-
-NS_ASSUME_NONNULL_END
+extension Server {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Server> {
+        return NSFetchRequest<Server>(entityName: "Server")
+    }
+    
+    @NSManaged var properties: [AnyHashable : Any]?
+}
