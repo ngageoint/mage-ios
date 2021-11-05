@@ -112,6 +112,13 @@ public enum AttachmentKey : String {
     case url
     case id
     case action
+    case remoteId
+    case observationFormId
+    case fieldName
+    case dirty
+    case localPath
+    case lastModified
+    case markedForDeletion
     
     var key: String {
         return self.rawValue

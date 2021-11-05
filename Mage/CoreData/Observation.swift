@@ -315,7 +315,7 @@ enum State: Int, CustomStringConvertible {
         var attachmentsToDelete : [String: [String : [Attachment]]] = [:]
         if (!MageServer.isServerVersion5()) {
             // check for attachments marked for deletion and be sure to add them to the form properties
-            if let attachments = attachments as? Set<Attachment> {
+            if let attachments = attachments {
                 for case let attachment in attachments where attachment.markedForDeletion {
                     var attachmentsPerForm: [String : [Attachment]] = [:]
                     if let observationFormId = attachment.observationFormId, let currentAttachmentsPerForm = attachmentsToDelete[observationFormId] {
@@ -509,8 +509,9 @@ enum State: Int, CustomStringConvertible {
                             }
                         }
                         if !attachmentFound {
-                            let attachment = Attachment(forJson: attachmentJson, in: context);
-                            existingObservation.addToAttachments(attachment);
+                            if let attachment = Attachment.attachment(json: attachmentJson, context: context) {
+                                existingObservation.addToAttachments(attachment);
+                            }
                         }
                     }
                 }
@@ -544,8 +545,9 @@ enum State: Int, CustomStringConvertible {
                     
                     if let attachmentsJson = feature[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
                         for attachmentJson in attachmentsJson {
-                            let attachment = Attachment(forJson: attachmentJson, in: context);
-                            observation.addToAttachments(attachment);
+                            if let attachment = Attachment.attachment(json: attachmentJson, context: context) {
+                                observation.addToAttachments(attachment);
+                            }
                         }
                     }
                     

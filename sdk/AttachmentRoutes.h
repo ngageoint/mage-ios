@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "RouteMethod.h"
-#import "Attachment.h"
+
+@class Attachment;
 @class Observation;
 NS_ASSUME_NONNULL_BEGIN
 

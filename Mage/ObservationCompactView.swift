@@ -91,7 +91,7 @@ class ObservationCompactView: UIView {
         }
         observationSummaryView.populate(observation: observation);
         observationActionsView.populate(observation: observation, delegate: actionsDelegate);
-        if includeAttachments, let attachments = observation.attachments as? Set<Attachment>, attachments.filter({ attachment in
+        if includeAttachments, let attachments = observation.attachments, attachments.filter({ attachment in
             attachment.url != nil
         }).count > 0 {
             attachmentSlideshow.populate(observation: observation, attachmentSelectionDelegate: attachmentSelectionDelegate);

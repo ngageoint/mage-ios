@@ -78,6 +78,7 @@ import Kingfisher
         return task;
     }
     
+    @discardableResult
     @objc public static func operationToFetchUsers(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         let url = "\(MageServer.baseURL().absoluteURL)/api/users";
         let manager = MageSessionManager.shared();

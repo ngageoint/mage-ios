@@ -7,7 +7,6 @@
 //
 
 #import "AttachmentRoutes.h"
-#import "Attachment.h"
 
 #import "MAGE-Swift.h"
 

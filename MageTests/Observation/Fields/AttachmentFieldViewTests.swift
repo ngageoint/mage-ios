@@ -924,7 +924,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     "dirty": 1
                 ]
                                 
-                let attachment = Attachment(forJson: attachmentJson, in: NSManagedObjectContext.mr_default());
+                let attachment = Attachment.attachment(json: attachmentJson, context: NSManagedObjectContext.mr_default())!;
                 coordinator.delegate?.attachmentCreated(attachment: attachment);
                 tester().waitForAnimationsToFinish(withTimeout: 0.01);
 

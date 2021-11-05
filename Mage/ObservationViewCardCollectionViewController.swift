@@ -217,7 +217,7 @@ import MaterialComponents.MDCContainerScheme;
                     stackView.addArrangedSubview(attachmentCard!);
                 }
                 
-                let attachmentCount = (observation.attachments as? Set<Attachment>)?.filter() { attachment in
+                let attachmentCount = (observation.attachments)?.filter() { attachment in
                     return !attachment.markedForDeletion
                 }.count
                 
@@ -374,7 +374,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func showFavorites(_ observation: Observation) {
         var userIds: [String] = [];
-        if let favorites = observation.favorites as? Set<ObservationFavorite> {
+        if let favorites = observation.favorites {
             for favorite in favorites {
                 if let userId = favorite.userId {
                     userIds.append(userId)

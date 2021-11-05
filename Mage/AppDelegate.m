@@ -10,7 +10,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import "UserUtility.h"
 #import <UserNotifications/UserNotifications.h>
-#import "Attachment.h"
 #import "UIImage+Thumbnail.h"
 
 #import "MageInitialViewController.h"

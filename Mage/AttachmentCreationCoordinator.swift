@@ -75,9 +75,10 @@ class AttachmentCreationCoordinator: NSObject {
             } else {
                 // this is only applicable in the server5 case, can be removed after that
                 attachmentJson["dirty"] = 1;
-                let attachment = Attachment(forJson: attachmentJson, in: (observation.managedObjectContext)!);
-                attachment.observation = observation;
-                delegate?.attachmentCreated(attachment: attachment);
+                if let attachment = Attachment.attachment(json: attachmentJson, context: (observation.managedObjectContext)!) {
+                    attachment.observation = observation;
+                    delegate?.attachmentCreated(attachment: attachment);
+                }
             }
         }
     }

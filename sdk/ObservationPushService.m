@@ -6,7 +6,6 @@
 
 #import "ObservationPushService.h"
 #import "MageSessionManager.h"
-#import "Attachment.h"
 #import "UserUtility.h"
 #import "DataConnectionUtilities.h"
 #import "MageServer.h"
@@ -231,7 +230,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
                                         NSArray *fieldAttachments = [[form objectForKey:fieldName] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", name]];
                                         if ([fieldAttachments count] != 0) {
                                             NSDictionary *fieldAttachment = fieldAttachments[0];
-                                            Attachment *attachment = [Attachment attachmentForJson:attachmentResponse inContext:localContext];
+                                            Attachment *attachment = [Attachment attachmentWithJson:attachmentResponse context:localContext];
                                             [attachment setObservation:localObservation];
                                             [attachment setObservationRemoteId: localObservation.remoteId];
                                             [attachment setDirty:[NSNumber numberWithBool:true]];

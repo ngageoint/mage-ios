@@ -73,7 +73,6 @@
 #import "LocationAnnotation.h"
 
 #pragma mark - Core Data Entities
-#import "Attachment.h"
 #import "Layer.h"
 
 #import "Form.h"

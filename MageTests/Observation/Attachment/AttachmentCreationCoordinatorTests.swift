@@ -119,7 +119,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 let createdAttachment: Attachment = delegate.createdAttachment!;
                 FileManager.default.fileExists(atPath: createdAttachment.localPath!);
                 expect(createdAttachment.lastModified).toNot(beNil());
-                expect(createdAttachment.dirty).to(equal(1));
+                expect(createdAttachment.dirty).to(beTrue());
                 expect(createdAttachment.observation).to(equal(observation));
                 expect(createdAttachment.remoteId).to(beNil());
                 expect(createdAttachment.remotePath).to(beNil());
@@ -154,7 +154,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 let createdAttachment: Attachment = delegate.createdAttachment!;
                 FileManager.default.fileExists(atPath: createdAttachment.localPath!);
                 expect(createdAttachment.lastModified).toNot(beNil());
-                expect(createdAttachment.dirty).to(equal(1));
+                expect(createdAttachment.dirty).to(beTrue());
                 expect(createdAttachment.observation).to(equal(observation));
                 expect(createdAttachment.remoteId).to(beNil());
                 expect(createdAttachment.remotePath).to(beNil());
@@ -184,7 +184,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 let createdAttachment: Attachment = delegate.createdAttachment!;
                 print("created attachment \(createdAttachment)")
                 expect(createdAttachment.lastModified).toNot(beNil());
-                expect(createdAttachment.dirty).to(equal(1));
+                expect(createdAttachment.dirty).to(beTrue());
                 expect(createdAttachment.observation).to(equal(observation));
                 expect(createdAttachment.remoteId).to(beNil());
                 expect(createdAttachment.remotePath).to(beNil());

@@ -11,6 +11,7 @@ import CoreData
 
 @objc public class Role: NSManagedObject {
     
+    @discardableResult
     @objc public static func insert(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Role? {
         let role = Role.mr_createEntity(in: context);
         role?.update(json: json, context: context);

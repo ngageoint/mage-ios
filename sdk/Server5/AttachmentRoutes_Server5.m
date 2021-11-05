@@ -7,7 +7,6 @@
 //
 
 #import "AttachmentRoutes_Server5.h"
-#import "Attachment.h"
 #import "MAGE-Swift.h"
 
 @implementation AttachmentRoutes_Server5

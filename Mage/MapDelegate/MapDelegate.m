@@ -479,7 +479,7 @@
     [self.currentFeeds filterUsingPredicate:[NSPredicate predicateWithFormat:@"NOT(self in %@)", feedIdsInEvent]];
     for (NSString *feedId in self.currentFeeds) {
         [self.feedItemRetrievers removeObjectForKey:feedId];
-        NSArray<FeedItem*> *items = [FeedItem getFeedItemsWithFeedId:feedId eventId:[Server currentEventId]];
+        NSArray<FeedItem*> *items = [FeedItem getFeedItemsWithFeedId:feedId eventId:[Server currentEventId].integerValue];
         for (FeedItem *item in items) {
             if (item.isMappable) {
                 [self.mapView removeAnnotation:item];
