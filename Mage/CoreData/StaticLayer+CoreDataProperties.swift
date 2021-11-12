@@ -16,15 +16,3 @@ extension StaticLayer {
     
     @NSManaged var data: [AnyHashable:Any]?
 }
-
-/**
- @property (nullable, nonatomic, retain) id data;
- */
-
-//#import "StaticLayer+CoreDataProperties.h"
-//
-//@implementation StaticLayer (CoreDataProperties)
-//
-//@dynamic data;
-//
-//@end

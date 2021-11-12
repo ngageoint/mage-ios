@@ -19,25 +19,3 @@ extension ImageryLayer {
     @NSManaged var options: [AnyHashable:Any]?
     @NSManaged var isSecure: Bool
 }
-
-/**
- + (NSFetchRequest<ImageryLayer *> *)fetchRequest;
- 
- @property (nullable, nonatomic, copy) NSString *format;
- @property (nullable, nonatomic, retain) NSDictionary* options;
- @property (nonatomic) BOOL isSecure;
- */
-
-//#import "ImageryLayer+CoreDataProperties.h"
-//
-//@implementation ImageryLayer (CoreDataProperties)
-//
-//+ (NSFetchRequest<ImageryLayer *> *)fetchRequest {
-//	return [NSFetchRequest fetchRequestWithEntityName:@"ImageryLayer"];
-//}
-//
-//@dynamic format;
-//@dynamic options;
-//@dynamic isSecure;
-//
-//@end
