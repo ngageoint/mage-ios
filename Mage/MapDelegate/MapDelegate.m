@@ -12,7 +12,6 @@
 #import "ObservationImage.h"
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
-#import "StaticLayer.h"
 #import "StaticPointAnnotation.h"
 #import "StyledPolygon.h"
 #import "StyledPolyline.h"
@@ -48,7 +47,6 @@
 #import "WMSTileOverlay.h"
 #import "XYZTileOverlay.h"
 #import "TMSTileOverlay.h"
-#import "ImageryLayer.h"
 #import "BaseMapOverlay.h"
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
@@ -238,6 +236,9 @@
     for (id<MKAnnotation> mkannotation in annotations) {
         if ([mkannotation isKindOfClass:[LocationAnnotation class]]) {
             LocationAnnotation *annotation = mkannotation;
+            if (self.hideLocations) {
+                continue;
+            }
             User *user = annotation.user;
             if (![dedup containsObject:user]) {
                 [dedup addObject:user];
@@ -246,6 +247,9 @@
             }
         } else if ([mkannotation isKindOfClass:[ObservationAnnotation class]]) {
             ObservationAnnotation *annotation = mkannotation;
+            if (self.hideObservations) {
+                continue;
+            }
             Observation *observation = annotation.observation;
             if (![dedup containsObject:observation]) {
                 [dedup addObject:observation];
