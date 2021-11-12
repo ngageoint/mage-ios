@@ -9,6 +9,16 @@
 import Foundation
 import CoreData
 
+public enum LayerType : String {
+    case Feature
+    case GeoPackage
+    case Imagery
+    
+    var key : String {
+        return self.rawValue;
+    }
+}
+
 @objc public class Layer : NSManagedObject {
     
     @objc public static let GeoPackageDownloaded = "mil.nga.giat.mage.geopackage.downloaded";
@@ -45,7 +55,7 @@ import CoreData
 
             MagicalRecord.save { context in
                 let layerRemoteIds = Layer.populateLayers(json: response, eventId: eventId, context: context)
-                Layer.mr_deleteAll(matching: NSPredicate(format: "(NOT (remoteId IN %@)) AND eventId == %@", layerRemoteIds, eventId), in: context);
+                Layer.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@", layerRemoteIds, eventId), in: context);
                 
                 var selectedOnlineLayers = UserDefaults.standard.selectedOnlineLayers ?? [:]
                 
@@ -64,7 +74,7 @@ import CoreData
                 UserDefaults.standard.selectedOnlineLayers = selectedOnlineLayers;
                 
                 
-                StaticLayer.mr_deleteAll(matching: NSPredicate(format: "(NOT (remoteId IN %@)) AND eventId == %@", layerRemoteIds, eventId), in: context);
+                StaticLayer.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(LayerKey.remoteId.key) IN %@)) AND \(LayerKey.eventId.key) == %@", layerRemoteIds, eventId), in: context);
                 
                 var selectedStaticLayers = UserDefaults.standard.selectedStaticLayers ?? [:]
                 
@@ -105,10 +115,10 @@ import CoreData
             }
             layerRemoteIds.append(remoteLayerId);
             
-            if let layerType = Layer.layerType(json: layer), layerType == "Feature" {
+            if let layerType = Layer.layerType(json: layer), layerType == LayerType.Feature.key {
                 StaticLayer.createOrUpdate(json: layer, eventId: eventId, context: context);
-            } else if let layerType = Layer.layerType(json: layer), layerType == "GeoPackage" {
-                var l = Layer.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId), in: context)
+            } else if let layerType = Layer.layerType(json: layer), layerType == LayerType.GeoPackage.key {
+                var l = Layer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context)
                 if l == nil {
                     l = Layer.mr_createEntity(in: context);
                     l?.loaded = NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED);
@@ -119,17 +129,17 @@ import CoreData
                 l.populate(layer, eventId: eventId);
                 
                 // If this layer already exists but for a different event, set it's downloaded status
-                if let existing = Layer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId != %@", remoteLayerId, eventId), in: context) {
+                if let existing = Layer.mr_findFirst(with: NSPredicate(format: "\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) != %@", remoteLayerId, eventId), in: context) {
                     l.loaded = existing.loaded
                 }
-            } else if let layerType = Layer.layerType(json: layer), layerType == "Imagery" {
-                var l = ImageryLayer.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId), in: context);
+            } else if let layerType = Layer.layerType(json: layer), layerType == LayerType.Imagery.key {
+                var l = ImageryLayer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
                 if l == nil {
                     l = ImageryLayer.mr_createEntity(in: context);
                 }
                 l?.populate(layer, eventId: eventId);
             } else {
-                var l = Layer.mr_findFirst(with: NSPredicate(format: "(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId), in: context);
+                var l = Layer.mr_findFirst(with: NSPredicate(format: "(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
                 if l == nil {
                     l = Layer.mr_createEntity(in: context)
                 }

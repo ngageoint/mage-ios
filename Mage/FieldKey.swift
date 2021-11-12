@@ -335,6 +335,8 @@ public enum LayerKey: String {
     case layerDescription
     case description
     case state
+    case remoteId
+    case eventId
     
     var key : String {
         return self.rawValue

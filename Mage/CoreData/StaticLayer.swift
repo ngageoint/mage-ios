@@ -22,7 +22,7 @@ import CoreData
         let task = manager.get_TASK(url.absoluteString, parameters: nil, progress: nil) { task, responseObject in
             MagicalRecord.save { context in
                 guard var dictionaryResponse = responseObject as? [AnyHashable : Any],
-                      let localLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", layerId, eventId), in: context),
+                      let localLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@", layerId, eventId), in: context),
                       let localLayerId = localLayer.remoteId
                 else {
                     return;
@@ -94,7 +94,7 @@ import CoreData
             return;
         }
         
-        var l = StaticLayer.mr_findFirst(with: NSPredicate(format:"(remoteId == %@ AND eventId == %@)", remoteLayerId, eventId), in: context);
+        var l = StaticLayer.mr_findFirst(with: NSPredicate(format:"(\(LayerKey.remoteId.key) == %@ AND \(LayerKey.eventId.key) == %@)", remoteLayerId, eventId), in: context);
         if l == nil {
             l = StaticLayer.mr_createEntity(in: context);
             l?.populate(json, eventId: eventId);

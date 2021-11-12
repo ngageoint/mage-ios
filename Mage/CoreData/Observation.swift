@@ -418,7 +418,7 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func idFromJson(json: [AnyHashable : Any]) -> String? {
-        return json["id"] as? String
+        return json[ObservationKey.id.key] as? String
     }
     
     static func stateFromJson(json: [AnyHashable : Any]) -> State {
