@@ -13,6 +13,17 @@ extension Notification.Name {
     public static let MAGEEventsFetched = Notification.Name("MAGEEventsFetched")
     public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
     public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
+    public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
+}
+
+public enum LoginParametersKey: String {
+    case acceptedConsent
+    case tokenExpirationDate
+    case agree
+    
+    var key: String {
+        return self.rawValue;
+    }
 }
 
 @objc extension UserDefaults {
@@ -192,7 +203,11 @@ extension Notification.Name {
             return string(forKey: #function);
         }
         set {
-            set(newValue, forKey: #function);
+            if newValue == nil {
+                removeObject(forKey: #function)
+            } else {
+                set(newValue, forKey: #function);
+            }
         }
     }
     

@@ -5,7 +5,6 @@
 //
 
 #import "DisclaimerViewController.h"
-#import "UserUtility.h"
 
 @interface DisclaimerViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *consentText;

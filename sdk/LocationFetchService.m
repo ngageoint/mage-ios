@@ -6,7 +6,6 @@
 
 #import "LocationFetchService.h"
 #import "MageSessionManager.h"
-#import "UserUtility.h"
 #import "DataConnectionUtilities.h"
 #import "MAGE-Swift.h"
 

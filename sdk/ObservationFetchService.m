@@ -8,7 +8,6 @@
 #import "MAGE-Swift.h"
 #import "Form.h"
 #import "MageSessionManager.h"
-#import "UserUtility.h"
 #import "DataConnectionUtilities.h"
 
 NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";

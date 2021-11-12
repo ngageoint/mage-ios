@@ -15,7 +15,6 @@
 #import "DisclaimerViewController.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
-#import "UserUtility.h"
 #import "FadeTransitionSegue.h"
 #import "MageSessionManager.h"
 #import "DeviceUUID.h"

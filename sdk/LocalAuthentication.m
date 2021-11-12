@@ -11,7 +11,7 @@
 #import "MageSessionManager.h"
 #import "MageServer.h"
 #import "StoredPassword.h"
-#import "UserUtility.h"
+#import "MAGE-Swift.h"
 
 @interface LocalAuthentication()
 

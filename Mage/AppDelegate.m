@@ -7,7 +7,6 @@
 #import "AppDelegate.h"
 #import "Mage.h"
 #import <CoreLocation/CoreLocation.h>
-#import "UserUtility.h"
 #import <UserNotifications/UserNotifications.h>
 #import "UIImage+Thumbnail.h"
 

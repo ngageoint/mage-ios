@@ -18,7 +18,6 @@
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "Authentication.h"
-#import "UserUtility.h"
 #import "MAGE-Swift.h"
 
 @interface AuthenticationCoordinator ()

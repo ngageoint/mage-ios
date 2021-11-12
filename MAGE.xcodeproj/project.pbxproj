@@ -221,7 +221,7 @@
 		F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429A2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift */; };
 		F72D430D2694B60300F9AC3B /* Model5To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D429B2694B60300F9AC3B /* Model5To15.xcmappingmodel */; };
 		F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429D2694B60300F9AC3B /* ObservationRoutes.m */; };
-		F72D430F2694B60300F9AC3B /* UserUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D429E2694B60300F9AC3B /* UserUtility.m */; };
+		F72D430F2694B60300F9AC3B /* UserUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429E2694B60300F9AC3B /* UserUtility.swift */; };
 		F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */; };
 		F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */; };
 		F72D43122694B60300F9AC3B /* MageServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.m */; };
@@ -506,6 +506,7 @@
 		F7F4754D25BB2CF0006634F7 /* ObservationListActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4754C25BB2CF0006634F7 /* ObservationListActionsView.swift */; };
 		F7F4755125BB3D77006634F7 /* AttachmentSlideshow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */; };
 		F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F475F625BF5348006634F7 /* PassThroughStackView.swift */; };
+		F7F62FA4273F186E00AF0A74 /* UserUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */; };
 		F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */; };
 		F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
 		F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */; };
@@ -799,7 +800,6 @@
 		F72D422F2694B60300F9AC3B /* LocalAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAuthentication.m; sourceTree = "<group>"; };
 		F72D42302694B60300F9AC3B /* Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mage.m; sourceTree = "<group>"; };
 		F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model13To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42332694B60300F9AC3B /* UserUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserUtility.h; sourceTree = "<group>"; };
 		F72D42342694B60300F9AC3B /* ObservationRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationRoutes.h; sourceTree = "<group>"; };
 		F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 6.xcdatamodel"; sourceTree = "<group>"; };
 		F72D42372694B60300F9AC3B /* mage-ios-sdk 16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 16.xcdatamodel"; sourceTree = "<group>"; };
@@ -880,7 +880,7 @@
 		F72D429B2694B60300F9AC3B /* Model5To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model5To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D429C2694B60300F9AC3B /* RouteMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteMethod.h; sourceTree = "<group>"; };
 		F72D429D2694B60300F9AC3B /* ObservationRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationRoutes.m; sourceTree = "<group>"; };
-		F72D429E2694B60300F9AC3B /* UserUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserUtility.m; sourceTree = "<group>"; };
+		F72D429E2694B60300F9AC3B /* UserUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserUtility.swift; sourceTree = "<group>"; };
 		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GPSLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42A12694B60300F9AC3B /* Mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mage.h; sourceTree = "<group>"; };
@@ -1242,6 +1242,7 @@
 		F7F4754C25BB2CF0006634F7 /* ObservationListActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListActionsView.swift; sourceTree = "<group>"; };
 		F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentSlideshow.swift; sourceTree = "<group>"; };
 		F7F475F625BF5348006634F7 /* PassThroughStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughStackView.swift; sourceTree = "<group>"; };
+		F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUtilityTests.swift; sourceTree = "<group>"; };
 		F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMSTileOverlay.h; sourceTree = "<group>"; };
 		F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TMSTileOverlay.m; sourceTree = "<group>"; };
 		F7F7532A2565862F00EF51FF /* testmovie.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.MOV; sourceTree = "<group>"; };
@@ -1905,8 +1906,7 @@
 				F72D42502694B60300F9AC3B /* ServerAuthentication.m */,
 				F72D42BC2694B60300F9AC3B /* StoredPassword.h */,
 				F72D42772694B60300F9AC3B /* StoredPassword.m */,
-				F72D42332694B60300F9AC3B /* UserUtility.h */,
-				F72D429E2694B60300F9AC3B /* UserUtility.m */,
+				F72D429E2694B60300F9AC3B /* UserUtility.swift */,
 				F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */,
 			);
 			path = sdk;
@@ -2494,6 +2494,7 @@
 				F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */,
 				F781609A273EB9C80055B5D2 /* GeometryDeserializerTests.swift */,
 				F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */,
+				F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -3236,7 +3237,7 @@
 				8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */,
 				F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */,
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
-				F72D430F2694B60300F9AC3B /* UserUtility.m in Sources */,
+				F72D430F2694B60300F9AC3B /* UserUtility.swift in Sources */,
 				F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
@@ -3392,6 +3393,7 @@
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
 				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
 				F7521D8F26702C4100C52318 /* PlainMapViewDelegate.swift in Sources */,
+				F7F62FA4273F186E00AF0A74 /* UserUtilityTests.swift in Sources */,
 				F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */,
 				F7CDD70F2600ED4000F3294C /* ObservationTableViewControllerTests.swift in Sources */,
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,

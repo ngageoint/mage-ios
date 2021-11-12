@@ -8,7 +8,6 @@
 
 #import "IdpAuthentication.h"
 #import "MageSessionManager.h"
-#import "UserUtility.h"
 #import "NSDate+Iso8601.h"
 #import "MageServer.h"
 #import "MagicalRecord+MAGE.h"

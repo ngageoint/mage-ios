@@ -6,7 +6,6 @@
 
 #import "ObservationPushService.h"
 #import "MageSessionManager.h"
-#import "UserUtility.h"
 #import "DataConnectionUtilities.h"
 #import "MageServer.h"
 #import "MAGE-Swift.h"

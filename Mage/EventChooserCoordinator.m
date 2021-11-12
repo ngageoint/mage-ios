@@ -11,7 +11,6 @@
 #import "Mage.h"
 #import "MAGE-Swift.h"
 #import "EventTableDataSource.h"
-#import "UserUtility.h"
 #import "FadeTransitionSegue.h"
 #import "AppDelegate.h"
 

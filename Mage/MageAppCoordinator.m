@@ -14,7 +14,6 @@
 #import "EventChooserCoordinator.h"
 
 #import <UserNotifications/UserNotifications.h>
-#import "UserUtility.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "MageServer.h"

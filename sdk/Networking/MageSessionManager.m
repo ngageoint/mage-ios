@@ -4,10 +4,10 @@
 //
 
 #import "MageSessionManager.h"
-#import "UserUtility.h"
 #import "NSString+Contains.h"
 #import "MageServer.h"
 #import "SessionTaskQueue.h"
+#import "MAGE-Swift.h"
 
 NSString * const MAGETokenExpiredNotification = @"mil.nga.giat.mage.token.expired";
 NSString * const MAGEServerContactedAfterOfflineLogin = @"mil.nga.mage.server.contacted";

@@ -16,7 +16,6 @@
 #import "MAGE-Swift.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"
-#import "UserUtility.h"
 #import "FadeTransitionSegue.h"
 #import "ServerURLController.h"
 #import "MageSessionManager.h"

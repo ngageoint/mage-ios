@@ -7,7 +7,6 @@
 //
 
 #import "LoginViewController.h"
-#import "UserUtility.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "DeviceUUID.h"
