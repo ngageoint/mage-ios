@@ -99,8 +99,25 @@ import PureLayout
         return view;
     }();
     
+    private lazy var ipadView: UIView = {
+        let view = UIView(forAutoLayout: ());
+        view.autoSetDimension(.width, toSize: 400, relation: .lessThanOrEqual);
+        
+        view.layer.cornerRadius = 20.0;
+        return view;
+    }();
+    
+    private lazy var rootView: UIView = {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            addSubview(ipadView);
+            self.backgroundColor = .clear;
+            return ipadView;
+        }
+        return self;
+    }()
+    
     func applyTheme(withScheme scheme: MDCContainerScheming?) {
-        self.backgroundColor = scheme?.colorScheme.surfaceColor;
+        rootView.backgroundColor = scheme?.colorScheme.surfaceColor;
         headingLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         speedLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         speedMarkerView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
@@ -161,6 +178,12 @@ import PureLayout
             directionArrow.autoAlignAxis(.vertical, toSameAxisOf: destinationMarkerView);
             directionArrow.autoSetDimensions(to: CGSize(width: 51, height: 51));
             
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                NSLayoutConstraint.autoSetPriority(.defaultLow) {
+                    ipadView.autoPinEdgesToSuperviewEdges()
+                }
+                ipadView.autoAlignAxis(toSuperviewAxis: .vertical)
+            }
             self.autoSetDimension(.height, toSize: 75);
             didSetupConstraints = true;
         }
@@ -217,12 +240,12 @@ import PureLayout
         compassView = CompassView(scheme: self.scheme, targetColor: self.relativeBearingColor, headingColor: self.headingColor);
         compassView?.clipsToBounds = true;
         compassView?.layer.cornerRadius = 175
-        addSubview(compassView!);
-        addSubview(destinationMarkerView);
-        addSubview(myInformationContainer);
-        addSubview(targetInformationContainer);
-        addSubview(directionArrow);
-        addSubview(cancelButton);
+        rootView.addSubview(compassView!);
+        rootView.addSubview(destinationMarkerView);
+        rootView.addSubview(myInformationContainer);
+        rootView.addSubview(targetInformationContainer);
+        rootView.addSubview(directionArrow);
+        rootView.addSubview(cancelButton);
     }
     
     @objc func cancelButtonPressed() {

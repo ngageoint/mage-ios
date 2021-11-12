@@ -21,7 +21,6 @@
 #import "MageFilter.h"
 #import "SFPoint.h"
 #import "ObservationAnnotationView.h"
-#import "Layer.h"
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
 #import <PureLayout.h>
@@ -112,7 +111,11 @@
     self.stack.distribution = UIStackViewDistributionFill;
     
     [self.view addSubview:self.stack];
-    [self.stack autoPinEdgesToSuperviewSafeAreaWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        [self.stack autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+    } else {
+        [self.stack autoPinEdgesToSuperviewSafeAreaWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+    }
     
     [self addMapButtons];
 
