@@ -6,7 +6,6 @@
 
 #import "AppDelegate.h"
 #import "Mage.h"
-#import "Canary.h"
 #import <CoreLocation/CoreLocation.h>
 #import "UserUtility.h"
 #import <UserNotifications/UserNotifications.h>
@@ -37,7 +36,6 @@
 #import "MageOfflineObservationManager.h"
 #import "MageAppCoordinator.h"
 #import "TransitionViewController.h"
-#import "Layer.h"
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
 #import <SSZipArchive/SSZipArchive.h>
@@ -93,7 +91,7 @@
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tokenDidExpire:) name: MAGETokenExpiredNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:GeoPackageDownloaded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:Layer.GeoPackageDownloaded object:nil];
     
     [MageInitializer initializePreferences];
     [MageInitializer setupCoreData];
@@ -369,7 +367,7 @@
                 if (!l) {
                     l = [Layer MR_createEntityInContext:localContext];
                     l.name = cache;
-                    l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
+                    l.loaded = [NSNumber numberWithFloat:Layer.EXTERNAL_LAYER_LOADED];
                     l.type = @"Local_XYZ";
                     l.eventId = [NSNumber numberWithInt:-1];
                 }
@@ -623,7 +621,7 @@
                 if (!l) {
                     l = [Layer MR_createEntityInContext:localContext];
                     l.name = cache;
-                    l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
+                    l.loaded = [NSNumber numberWithFloat:Layer.EXTERNAL_LAYER_LOADED];
                     l.type = @"Local_XYZ";
                     l.eventId = [NSNumber numberWithInt:-1];
                 }
@@ -702,7 +700,7 @@
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 Layer *l = [Layer MR_createEntityInContext:localContext];
                 l.name = name;
-                l.loaded = [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED];
+                l.loaded = [NSNumber numberWithFloat:Layer.EXTERNAL_LAYER_LOADED];
                 l.type = @"GeoPackage";
                 l.eventId = [NSNumber numberWithInt:-1];
                 [self updateSelectedCaches:name];
@@ -759,7 +757,7 @@
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
             NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
             for (Layer *layer in layers) {
-                layer.loaded = [NSNumber numberWithFloat: OFFLINE_LAYER_NOT_DOWNLOADED];
+                layer.loaded = [NSNumber numberWithFloat: Layer.OFFLINE_LAYER_NOT_DOWNLOADED];
                 layer.downloading = NO;
             }
         }];
@@ -768,7 +766,7 @@
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
             NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
             for (Layer *layer in layers) {
-                layer.loaded = [NSNumber numberWithInteger: OFFLINE_LAYER_LOADED];
+                layer.loaded = [NSNumber numberWithInteger: Layer.OFFLINE_LAYER_LOADED];
                 layer.downloading = NO;
             }
         } completion:^(BOOL contextDidSave, NSError * _Nullable magicalRecordError) {

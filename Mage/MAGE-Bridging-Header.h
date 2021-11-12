@@ -72,7 +72,4 @@
 #import "AttachmentPushService.h"
 #import "LocationAnnotation.h"
 
-#pragma mark - Core Data Entities
-#import "Layer.h"
-
 #import "Form.h"

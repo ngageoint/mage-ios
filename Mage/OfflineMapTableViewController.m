@@ -14,8 +14,6 @@
 #import "GeoPackageCacheOverlay.h"
 #import "GPKGGeoPackageFactory.h"
 #import "ObservationTableHeaderView.h"
-#import "StaticLayer.h"
-#import "Layer.h"
 #import "MAGE-Swift.h"
 
 @interface OfflineMapTableViewController () <NSFetchedResultsControllerDelegate>
@@ -82,7 +80,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
 - (IBAction)refreshLayers:(id)sender {
     self.refreshLayersButton.enabled = NO;
-    [Layer refreshLayersForEvent:[Server currentEventId]];
+    [Layer refreshLayersWithEventId:[Server currentEventId]];
 }
 
 -(void) cacheOverlaysUpdated: (NSArray<CacheOverlay *> *) cacheOverlays{
@@ -241,11 +239,11 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 }
 
 - (NSInteger) getSectionFromLayer: (Layer *) layer {
-    if (layer.loaded.floatValue == [NSNumber numberWithFloat:OFFLINE_LAYER_NOT_DOWNLOADED].floatValue || layer.loaded == nil) {
+    if (layer.loaded.floatValue == [NSNumber numberWithFloat:Layer.OFFLINE_LAYER_NOT_DOWNLOADED].floatValue || layer.loaded == nil) {
         return AVAILABLE_SECTION;
-    } else if (layer.loaded.floatValue  == [NSNumber numberWithFloat:OFFLINE_LAYER_LOADED].floatValue ) {
+    } else if (layer.loaded.floatValue  == [NSNumber numberWithFloat:Layer.OFFLINE_LAYER_LOADED].floatValue ) {
         return DOWNLOADED_SECTION;
-    } else if (layer.loaded.floatValue  == [NSNumber numberWithFloat:EXTERNAL_LAYER_LOADED].floatValue ) {
+    } else if (layer.loaded.floatValue  == [NSNumber numberWithFloat:Layer.EXTERNAL_LAYER_LOADED].floatValue ) {
         return MY_MAPS_SECTION;
     } else {
         return PROCESSING_SECTION;
@@ -440,9 +438,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
 - (void) retrieveLayerData: (Layer *) layer {
     if ([layer isKindOfClass:[StaticLayer class]]) {
-        [StaticLayer fetchStaticLayerData:[Server currentEventId] layer:(StaticLayer *)layer];
+        [StaticLayer fetchStaticLayerDataWithEventId:[Server currentEventId] staticLayer:(StaticLayer *)layer];
     } else {
-        [Layer cancelGeoPackageDownload: layer];
+        [Layer cancelGeoPackageDownloadWithLayer: layer];
         [self startGeoPackageDownload:layer];
     }
 }
@@ -502,14 +500,14 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         localLayer.downloading = YES;
         localLayer.downloadedBytes = 0;
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        [Layer downloadGeoPackage:layer success:^{
+        [Layer downloadGeoPackageWithLayer:layer success:^{
         } failure:^(NSError * _Nonnull error) {
         }];
     }];
 }
 
 - (void) cancelGeoPackageDownload: (Layer *) layer {
-    [Layer cancelGeoPackageDownload: layer];
+    [Layer cancelGeoPackageDownloadWithLayer: layer];
 }
 
 - (IBAction)activeChanged:(CacheActiveSwitch *)sender {

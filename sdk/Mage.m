@@ -13,9 +13,7 @@
 #import "AttachmentPushService.h"
 #import "MAGE-Swift.h"
 #import "Form.h"
-#import "Layer.h"
 #import "MageServer.h"
-#import "StaticLayer.h"
 
 @implementation Mage
 

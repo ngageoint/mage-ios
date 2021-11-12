@@ -11,6 +11,8 @@ import Foundation
 extension Notification.Name {
     public static let StartStraightLineNavigation = Notification.Name("StartStraightLineNavigation")
     public static let MAGEEventsFetched = Notification.Name("MAGEEventsFetched")
+    public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
+    public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
 }
 
 @objc extension UserDefaults {
@@ -118,18 +120,18 @@ extension Notification.Name {
         }
     }
     
-    var selectedStaticLayers: [String: Any]? {
+    var selectedStaticLayers: [String: [NSNumber]]? {
         get {
-            return dictionary(forKey: #function);
+            return dictionary(forKey: #function) as? [String: [NSNumber]];
         }
         set {
             set(newValue, forKey: #function);
         }
     }
     
-    var selectedOnlineLayers: [String: Any]? {
+    var selectedOnlineLayers: [String: [NSNumber]]? {
         get {
-            return dictionary(forKey: #function);
+            return dictionary(forKey: #function) as? [String: [NSNumber]];
         }
         set {
             set(newValue, forKey: #function);

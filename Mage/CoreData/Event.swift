@@ -137,8 +137,8 @@ import CoreData
                 }
             }
         }
-        if let layers = json[EventKey.layers.key] as? [Any], let remoteId = remoteId {
-            Layer.populateLayers(fromJson: layers, inEventId: remoteId, in: context);
+        if let layers = json[EventKey.layers.key] as? [[AnyHashable:Any]], let remoteId = remoteId {
+            Layer.populateLayers(json: layers, eventId: remoteId, context: context);
         }
         if let remoteId = remoteId {
             Feed.refreshFeeds(eventId: remoteId)

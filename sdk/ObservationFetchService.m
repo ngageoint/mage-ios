@@ -6,7 +6,6 @@
 
 #import "ObservationFetchService.h"
 #import "MAGE-Swift.h"
-#import "Layer.h"
 #import "Form.h"
 #import "MageSessionManager.h"
 #import "UserUtility.h"

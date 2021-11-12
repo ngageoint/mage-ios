@@ -9,6 +9,7 @@
 #import "CacheOverlayTableCell.h"
 #import "CacheOverlays.h"
 #import "MageConstants.h"
+#import "MAGE-Swift.h"
 
 @interface CacheOverlayTableCell()<UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;

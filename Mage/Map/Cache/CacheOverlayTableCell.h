@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "CacheActiveSwitch.h"
 #import "CacheOverlay.h"
-#import "Layer.h"
 #import <MaterialComponents/MDCContainerScheme.h>
+
+@class Layer;
 
 @interface CacheOverlayTableCell : UITableViewCell
 

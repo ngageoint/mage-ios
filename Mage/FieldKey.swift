@@ -321,3 +321,58 @@ public enum FeedMapStyleKey : String {
         return self.rawValue;
     }
 }
+
+public enum LayerKey: String {
+    case id
+    case name
+    case type
+    case url
+    case formId
+    case file
+    case wms
+    case format
+    case features
+    case layerDescription
+    case description
+    case state
+    
+    var key : String {
+        return self.rawValue
+    }
+}
+
+public enum WMSLayerOptionsKey: String {
+    case layers
+    case format
+    case styles
+    case transparent
+    case version
+    
+    var key : String {
+        return self.rawValue;
+    }
+}
+
+public enum LayerFileKey: String {
+    case name
+    case contentType
+    case size
+    
+    var key : String {
+        return self.rawValue
+    }
+}
+
+public enum StaticLayerKey: String {
+    
+    case properties
+    case style
+    case iconStyle
+    case icon
+    case href
+    case id
+    
+    var key: String {
+        return self.rawValue;
+    }
+}

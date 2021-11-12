@@ -10,7 +10,6 @@
 #import "MapSettings.h"
 #import "OfflineMapTableViewController.h"
 #import "OnlineMapTableViewController.h"
-#import "Layer.h"
 #import "MAGE-Swift.h"
 
 @interface MapSettingsCoordinator() <MapSettingsDelegate, UINavigationControllerDelegate>

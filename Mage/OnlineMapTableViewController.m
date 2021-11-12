@@ -7,8 +7,6 @@
 //
 
 #import "OnlineMapTableViewController.h"
-#import "ImageryLayer.h"
-#import "Layer.h"
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
 
@@ -54,7 +52,7 @@
 }
 
 - (IBAction)refreshLayers:(id)sender {
-    [Layer refreshLayersForEvent:[Server currentEventId]];
+    [Layer refreshLayersWithEventId:[Server currentEventId]];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate

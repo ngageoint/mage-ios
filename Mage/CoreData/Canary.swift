@@ -6,8 +6,8 @@
 //  Copyright © 2018 National Geospatial-Intelligence Agency. All rights reserved.
 //
 
-#import "Canary.h"
+import CoreData
 
-@implementation Canary
-
-@end
+@objc public class Canary : NSManagedObject {
+    
+}
