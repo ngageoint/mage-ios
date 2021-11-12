@@ -7,7 +7,6 @@
 //
 
 #import "FormDefaults.h"
-#import "GeometrySerializer.h"
 #import "MAGE-Swift.h"
 @interface FormDefaults()
 @property (assign, nonatomic) NSInteger eventId;

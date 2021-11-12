@@ -245,7 +245,7 @@
 		F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
 		F72D43252694B60300F9AC3B /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C72694B60300F9AC3B /* Role.swift */; };
 		F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */; };
-		F72D43272694B60300F9AC3B /* GeometrySerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.m */; };
+		F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */; };
 		F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */ = {isa = PBXBuildFile; fileRef = F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */; };
 		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
 		F72D432A2694B60300F9AC3B /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.swift */; };
@@ -339,6 +339,8 @@
 		F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8524647B10003666ED /* CommonFieldsView.swift */; };
 		F7813A8824647C62003666ED /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A8724647C62003666ED /* DateView.swift */; };
 		F7813A8A2466037B003666ED /* GeometryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7813A892466037B003666ED /* GeometryView.swift */; };
+		F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F781609A273EB9C80055B5D2 /* GeometryDeserializerTests.swift */; };
+		F781609E273EE1A50055B5D2 /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = F781609D273EE1A50055B5D2 /* ObjC.m */; };
 		F78391BF25A4D9A800ED9C2D /* ObservationActionsSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */; };
 		F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */; };
 		F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */; };
@@ -491,6 +493,7 @@
 		F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */; };
 		F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D191FFE99DF007BD768 /* MapTypeTableViewCell.m */; };
 		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
+		F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */; };
 		F7F118222602A1F600C7DE9A /* ObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F118212602A1F600C7DE9A /* ObservationTests.swift */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
@@ -868,7 +871,6 @@
 		F72D428F2694B60300F9AC3B /* AttachmentPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentPushService.h; sourceTree = "<group>"; };
 		F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42922694B60300F9AC3B /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
-		F72D42932694B60300F9AC3B /* GeometrySerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometrySerializer.h; sourceTree = "<group>"; };
 		F72D42942694B60300F9AC3B /* ObservationImportant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationImportant.swift; sourceTree = "<group>"; };
 		F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Role+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42962694B60300F9AC3B /* AttachmentRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes.m; sourceTree = "<group>"; };
@@ -912,7 +914,7 @@
 		F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Feed+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42C72694B60300F9AC3B /* Role.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Role.swift; sourceTree = "<group>"; };
 		F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model12To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42C92694B60300F9AC3B /* GeometrySerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometrySerializer.m; sourceTree = "<group>"; };
+		F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometrySerializer.swift; sourceTree = "<group>"; };
 		F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "preferences-sdk.plist"; sourceTree = "<group>"; };
 		F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentPushService.m; sourceTree = "<group>"; };
 		F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdpAuthentication.h; sourceTree = "<group>"; };
@@ -1030,6 +1032,9 @@
 		F7813A8524647B10003666ED /* CommonFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsView.swift; sourceTree = "<group>"; };
 		F7813A8724647C62003666ED /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
 		F7813A892466037B003666ED /* GeometryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryView.swift; sourceTree = "<group>"; };
+		F781609A273EB9C80055B5D2 /* GeometryDeserializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryDeserializerTests.swift; sourceTree = "<group>"; };
+		F781609C273EE1A50055B5D2 /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
+		F781609D273EE1A50055B5D2 /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
 		F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsSheetController.swift; sourceTree = "<group>"; };
 		F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsDelegate.swift; sourceTree = "<group>"; };
 		F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
@@ -1222,6 +1227,7 @@
 		F7ED5D2420052161007BD768 /* MAGETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MAGETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7ED5D2820052161007BD768 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7ED5D2E20052248007BD768 /* AuthenticationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationTests.m; sourceTree = "<group>"; };
+		F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometrySerializerTests.swift; sourceTree = "<group>"; };
 		F7F118212602A1F600C7DE9A /* ObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTests.swift; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
@@ -1836,8 +1842,7 @@
 				F72D425C2694B60300F9AC3B /* Form.h */,
 				F72D42AB2694B60300F9AC3B /* Form.m */,
 				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */,
-				F72D42932694B60300F9AC3B /* GeometrySerializer.h */,
-				F72D42C92694B60300F9AC3B /* GeometrySerializer.m */,
+				F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */,
 				F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */,
 				F72D428D2694B60300F9AC3B /* IdpAuthentication.m */,
 				F72D42562694B60300F9AC3B /* LdapAuthentication.h */,
@@ -1996,6 +2001,8 @@
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 				F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */,
 				F70D1BF427299BC800B8015C /* ArrayExtensions.swift */,
+				F781609C273EE1A50055B5D2 /* ObjC.h */,
+				F781609D273EE1A50055B5D2 /* ObjC.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2485,6 +2492,8 @@
 			children = (
 				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
 				F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */,
+				F781609A273EB9C80055B5D2 /* GeometryDeserializerTests.swift */,
+				F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -3027,7 +3036,7 @@
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
-				F72D43272694B60300F9AC3B /* GeometrySerializer.m in Sources */,
+				F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */,
 				F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.swift in Sources */,
 				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
 				F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */,
@@ -3071,6 +3080,7 @@
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
+				F781609E273EE1A50055B5D2 /* ObjC.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */,
@@ -3387,6 +3397,7 @@
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,
 				F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
+				F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */,
 				F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */,
 				F7521DE82672317700C52318 /* GeometryEditViewControllerTests.swift in Sources */,
 				F786492E273BFF16002D3DC2 /* LayerTests.swift in Sources */,
@@ -3446,6 +3457,7 @@
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */,
+				F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F795ED0E24B8FDE20028FBFC /* MockMapViewDelegate.swift in Sources */,
