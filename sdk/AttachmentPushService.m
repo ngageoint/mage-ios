@@ -281,12 +281,12 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
                 NSData *fileData = [NSFileManager.defaultManager contentsAtPath:attachment.localPath];
                 [ImageCacheProvider.shared cacheImageWithImage:[UIImage imageWithData:fileData] data:fileData key:attachment.url];
             }
-            NSURL *attachmentUrl = [NSURL fileURLWithPath:tmpFileLocation];
-            NSError *removeError;
-            NSLog(@"ATTACHMENT - Deleting tmp multi part file for attachment upload %@", attachmentUrl);
-            if (![[NSFileManager defaultManager] removeItemAtURL:attachmentUrl error:&removeError]) {
-                NSLog(@"ATTACHMENT - Error removing temporary attachment upload file %@", removeError);
-            }
+//            NSURL *attachmentUrl = [NSURL fileURLWithPath:tmpFileLocation];
+//            NSError *removeError;
+//            NSLog(@"ATTACHMENT - Deleting tmp multi part file for attachment upload %@", attachmentUrl);
+//            if (![[NSFileManager defaultManager] removeItemAtURL:attachmentUrl error:&removeError]) {
+//                NSLog(@"ATTACHMENT - Error removing temporary attachment upload file %@", removeError);
+//            }
         }];
     } else {
         // try again
