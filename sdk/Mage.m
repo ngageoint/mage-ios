@@ -12,7 +12,6 @@
 #import "ObservationPushService.h"
 #import "AttachmentPushService.h"
 #import "MAGE-Swift.h"
-#import "Form.h"
 #import "MageServer.h"
 
 @implementation Mage
@@ -90,13 +89,13 @@
     NSNumber *currentEventId = [Server currentEventId];
     
     for (Event *e in events) {
-        NSURLSessionTask *formTask = [Form operationToPullFormForEvent:e.remoteId
+        NSURLSessionTask *formTask = [Form operationToPullFormIconsWithEventId:e.remoteId
                                                         success: ^{
                                                             NSLog(@"Pulled form for event");
-                                                            [[NSNotificationCenter defaultCenter] postNotificationName:MAGEFormFetched object:e];
+                                                            [[NSNotificationCenter defaultCenter] postNotificationName:Form.MAGEFormFetched object:e];
                                                         } failure:^(NSError* error) {
                                                             NSLog(@"failed to pull form for event");
-                                                            [[NSNotificationCenter defaultCenter] postNotificationName:MAGEFormFetched object:e];
+                                                            [[NSNotificationCenter defaultCenter] postNotificationName:Form.MAGEFormFetched object:e];
                                                         }];
         if(currentEventId != nil && [currentEventId isEqualToNumber:e.remoteId]){
             [formTask setPriority:NSURLSessionTaskPriorityHigh];

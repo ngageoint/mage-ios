@@ -122,6 +122,8 @@
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
+		F70D19E12742C5F3006E12F8 /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70D19E02742C5F3006E12F8 /* FormTests.swift */; };
+		F70D19E32742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip in Resources */ = {isa = PBXBuildFile; fileRef = F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */; };
 		F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70D1BF427299BC800B8015C /* ArrayExtensions.swift */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
@@ -227,7 +229,7 @@
 		F72D43122694B60300F9AC3B /* MageServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.m */; };
 		F72D43132694B60300F9AC3B /* ImageryLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A72694B60300F9AC3B /* ImageryLayer.swift */; };
 		F72D43142694B60300F9AC3B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A92694B60300F9AC3B /* Event.swift */; };
-		F72D43152694B60300F9AC3B /* Form.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AB2694B60300F9AC3B /* Form.m */; };
+		F72D43152694B60300F9AC3B /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AB2694B60300F9AC3B /* Form.swift */; };
 		F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */; };
 		F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */; };
 		F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B02694B60300F9AC3B /* ObservationImportant+CoreDataProperties.swift */; };
@@ -736,6 +738,8 @@
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
+		F70D19E02742C5F3006E12F8 /* FormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
+		F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = plantsAnimalsBuildingsIcons.zip; sourceTree = "<group>"; };
 		F70D1BF427299BC800B8015C /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
@@ -835,7 +839,6 @@
 		F72D42592694B60300F9AC3B /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D425A2694B60300F9AC3B /* Canary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Canary.swift; sourceTree = "<group>"; };
 		F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+MAGE.m"; sourceTree = "<group>"; };
-		F72D425C2694B60300F9AC3B /* Form.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Form.h; sourceTree = "<group>"; };
 		F72D425E2694B60300F9AC3B /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F72D42612694B60300F9AC3B /* NSDate+display.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+display.m"; sourceTree = "<group>"; };
 		F72D42622694B60300F9AC3B /* Server+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Server+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -890,7 +893,7 @@
 		F72D42A72694B60300F9AC3B /* ImageryLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageryLayer.swift; sourceTree = "<group>"; };
 		F72D42A82694B60300F9AC3B /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
 		F72D42A92694B60300F9AC3B /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		F72D42AB2694B60300F9AC3B /* Form.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Form.m; sourceTree = "<group>"; };
+		F72D42AB2694B60300F9AC3B /* Form.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
 		F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryDeserializer.swift; sourceTree = "<group>"; };
 		F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+MAGE.h"; sourceTree = "<group>"; };
 		F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LdapAuthentication.m; sourceTree = "<group>"; };
@@ -1840,8 +1843,7 @@
 				F72D42962694B60300F9AC3B /* AttachmentRoutes.m */,
 				F72D42A52694B60300F9AC3B /* Authentication.h */,
 				F72D422D2694B60300F9AC3B /* Authentication.m */,
-				F72D425C2694B60300F9AC3B /* Form.h */,
-				F72D42AB2694B60300F9AC3B /* Form.m */,
+				F72D42AB2694B60300F9AC3B /* Form.swift */,
 				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */,
 				F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */,
 				F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */,
@@ -2080,6 +2082,7 @@
 				F7F7532A2565862F00EF51FF /* testmovie.MOV */,
 				F755B55A25E41BFF008E8D41 /* testRecording.mp4 */,
 				F7BCAC262630B62E006BE2A9 /* testResponse.html */,
+				F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */,
 				F777AFF52527D05200B88BD4 /* tokenSuccess.json */,
 				F777B00D252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json */,
 				F7CE22BF2540DF2D00D710DE /* twoForms.json */,
@@ -2167,6 +2170,7 @@
 				F7F9122824819D5D00C068B6 /* emptyForm.json */,
 				F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */,
 				F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */,
+				F70D19E02742C5F3006E12F8 /* FormTests.swift */,
 			);
 			path = Form;
 			sourceTree = "<group>";
@@ -2828,6 +2832,7 @@
 				F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */,
 				F71446F524A3FAF5005A5EC1 /* feedContent.json in Resources */,
 				F7154A982608D2A0002C8617 /* apiSuccess6NoDisclaimer.json in Resources */,
+				F70D19E32742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip in Resources */,
 				F795ED1424BD061C0028FBFC /* observations.json in Resources */,
 				F7098F262492C36700313703 /* test_marker.png in Resources */,
 				F7CDD7132601194600F3294C /* polygonObservation.json in Resources */,
@@ -3348,7 +3353,7 @@
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.swift in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
-				F72D43152694B60300F9AC3B /* Form.m in Sources */,
+				F72D43152694B60300F9AC3B /* Form.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
@@ -3398,6 +3403,7 @@
 				F7CDD70F2600ED4000F3294C /* ObservationTableViewControllerTests.swift in Sources */,
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,
 				F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */,
+				F70D19E12742C5F3006E12F8 /* FormTests.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
 				F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */,
 				F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */,

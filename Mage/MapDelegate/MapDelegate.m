@@ -38,7 +38,6 @@
 #import "SFPProjection.h"
 #import "SFPProjectionTransform.h"
 #import "MapShapePointAnnotationView.h"
-#import "Form.h"
 #import "MapUtils.h"
 #import "ObservationAccuracy.h"
 #import "ObservationAccuracyRenderer.h"
@@ -114,7 +113,7 @@
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: MAGEFormFetched object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formFetched:) name: Form.MAGEFormFetched object:nil];
         
         if (CLLocationCoordinate2DIsValid(self.locationToNavigateTo)) {
             [self startStraightLineNavigation:self.locationToNavigateTo image:self.navigationImage];
@@ -451,7 +450,7 @@
     
     [self.mapObservations clear];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:MAGEFormFetched object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:Form.MAGEFormFetched object:nil];
 
     self.locationManager.delegate = nil;
     self.locationManager = nil;
