@@ -232,7 +232,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
                                             Attachment *attachment = [Attachment attachmentWithJson:attachmentResponse context:localContext];
                                             [attachment setObservation:localObservation];
                                             [attachment setObservationRemoteId: localObservation.remoteId];
-                                            [attachment setDirty:[NSNumber numberWithBool:true]];
+                                            [attachment setDirty:true];
                                             [attachment setLocalPath:[fieldAttachment valueForKey:@"localPath"]];
                                         }
                                     }
@@ -314,7 +314,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
             NSLog(@"Successfully submitted favorite");
             [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
                 ObservationFavorite *localFavorite = [favorite MR_inContext:localContext];
-                localFavorite.dirty = NO;
+                localFavorite.dirty = false;
             } completion:^(BOOL success, NSError *error) {
                 [weakSelf.pushingFavorites removeObjectForKey:favorite.objectID];
             }];
