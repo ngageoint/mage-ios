@@ -1,0 +1,81 @@
+
+[
+    
+    {
+        "primaryFeedField": "field0",
+        "name": "Animal Sighting",
+        "color": "#59687A",
+        "primaryField": "field0",
+        "variantField": null,
+        "style": {
+            "Turkey": {
+                "strokeWidth": 2,
+                "strokeOpacity": 1,
+                "stroke": "#5278a2",
+                "fillOpacity": 0.2,
+                "fill": "#5278a2"
+            },
+            "Turtle": {
+                "strokeWidth": 2,
+                "strokeOpacity": 1,
+                "stroke": "#5278a2",
+                "fillOpacity": 0.2,
+                "fill": "#5278a2"
+            },
+            "strokeWidth": 2,
+            "strokeOpacity": 1,
+            "stroke": "#5278A2",
+            "fillOpacity": 0.2,
+            "fill": "#5278A2"
+        },
+        "fields": [
+            {
+                "name": "field0",
+                "id": 0,
+                "required": false,
+                "type": "dropdown",
+                "title": "Animal Type",
+                "allowedAttachmentTypes": [],
+                "choices": [
+                    {
+                        "value": 0,
+                        "id": 1,
+                        "title": "Turtle"
+                    },
+                    {
+                        "value": 1,
+                        "id": 2,
+                        "title": "Turkey"
+                    }
+                ]
+            }
+        ],
+        "userFields": [],
+        "archived": false,
+        "default": false,
+        "id": 162
+    },
+    {
+        "name": "Attachment",
+        "color": "#D5656C",
+        "fields": [
+            {
+                "name": "field0",
+                "id": 0,
+                "required": false,
+                "type": "attachment",
+                "title": "Attachment",
+                "allowedAttachmentTypes": [
+                    "image",
+                    "video",
+                    "audio"
+                ],
+                "choices": []
+            }
+        ],
+        "userFields": [],
+        "archived": false,
+        "default": false,
+        "id": 163
+    }
+    ]

@@ -280,6 +280,8 @@
 		F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738871C258BA22500EDA036 /* UIButtonInsets.swift */; };
 		F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388720258BB75A00EDA036 /* ObservationActionsView.swift */; };
 		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
+		F73B764627442D0B00799BBF /* attachmentFormPlusOne.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */; };
+		F73B7648274438FA00799BBF /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73CD0841F7E941E00B4124D /* TransitionViewController.m */; };
 		F74020B724917FFE00B5A8BA /* KIF+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */; };
 		F74020B92491904200B5A8BA /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
@@ -496,6 +498,7 @@
 		F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D191FFE99DF007BD768 /* MapTypeTableViewCell.m */; };
 		F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D2E20052248007BD768 /* AuthenticationTests.m */; };
 		F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */; };
+		F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */; };
 		F7F118222602A1F600C7DE9A /* ObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F118212602A1F600C7DE9A /* ObservationTests.swift */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
@@ -956,6 +959,8 @@
 		F7388720258BB75A00EDA036 /* ObservationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsView.swift; sourceTree = "<group>"; };
 		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
 		F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableDataSource.m; sourceTree = "<group>"; };
+		F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentFormPlusOne.json; sourceTree = "<group>"; };
+		F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentPushTestResponse.json; sourceTree = "<group>"; };
 		F73CD0831F7E941E00B4124D /* TransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransitionViewController.h; sourceTree = "<group>"; };
 		F73CD0841F7E941E00B4124D /* TransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransitionViewController.m; sourceTree = "<group>"; };
 		F74020B524917F8400B5A8BA /* MAGETests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGETests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1231,6 +1236,7 @@
 		F7ED5D2820052161007BD768 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7ED5D2E20052248007BD768 /* AuthenticationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationTests.m; sourceTree = "<group>"; };
 		F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometrySerializerTests.swift; sourceTree = "<group>"; };
+		F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationPushServiceTests.swift; sourceTree = "<group>"; };
 		F7F118212602A1F600C7DE9A /* ObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTests.swift; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
@@ -2092,6 +2098,8 @@
 				F795ED1524BD0B9A0028FBFC /* userabc.json */,
 				F7CE22C52540DF7600D710DE /* zeroForms.json */,
 				F786492F273C5E71002D3DC2 /* staticFeatures.geojson */,
+				F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */,
+				F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2499,6 +2507,7 @@
 				F781609A273EB9C80055B5D2 /* GeometryDeserializerTests.swift */,
 				F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */,
 				F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */,
+				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -2797,6 +2806,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7D9B822255D6D9500A76E2C /* attachmentForm.json in Resources */,
+				F73B7648274438FA00799BBF /* attachmentPushTestResponse.json in Resources */,
 				F7154AB7260BEAE3002C8617 /* observationsUpdate.json in Resources */,
 				F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */,
 				F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */,
@@ -2818,6 +2828,7 @@
 				F7D9B81E255C69A300A76E2C /* twoOneFieldForms.json in Resources */,
 				F7864930273C5E71002D3DC2 /* staticFeatures.geojson in Resources */,
 				F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */,
+				F73B764627442D0B00799BBF /* attachmentFormPlusOne.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
 				F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
@@ -3434,6 +3445,7 @@
 				F7BD2D7C267A468900A2B1D7 /* MockGeometryEditDelegate.swift in Sources */,
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */,
+				F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F77085482593F85F008903BA /* ObservationHeaderViewTests.swift in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,

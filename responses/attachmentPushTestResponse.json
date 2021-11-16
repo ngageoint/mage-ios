@@ -1,0 +1,57 @@
+
+{
+    "attachments": [
+        {
+            "contentType": "image/jpeg",
+            "fieldName": "field0",
+            "id": "attachmentabc",
+            "name": "test_marker.png",
+            "observationFormId": "observationformid2",
+            "oriented": 0
+        }
+    ],
+    "createdAt": "2021-11-16T17:53:41.344Z",
+    "deviceId": "deviceabc",
+    "eventId": 1,
+    "favoriteUserIds": [],
+    "geometry": {
+        "coordinates": [
+            "-1.1",
+            "2.1"
+        ],
+        "type": "Point"
+    },
+    "id": "observationabctest",
+    "lastModified": "2021-11-16T17:53:41.344Z",
+    "properties": {
+        "_id": "observationabctest",
+        "accuracy": "18.25859244450497",
+        "delta": "4290.646910667419",
+        "forms": [
+            {
+                "field0": "Turkey",
+                "formId": 162,
+                "id": "observationformid1"
+            },
+            {
+                "formId": 163,
+                "id": "observationformid2"
+            }
+        ],
+        "provider": "gps",
+        "timestamp": "2021-11-16T17:54:00.000Z"
+    },
+    "state": {
+        "id": "observationstateabc",
+        "name": "active",
+        "url": "https://magetest/api/events/1/observations/observationabctest/states/observationstateabc",
+        "userId": "userabc"
+    },
+    "type": "Feature",
+    "url": "https://magetest/api/events/1/observations/observationabctest",
+    "user": {
+        "displayName": "User",
+        "id": "userabc"
+    },
+    "userId": "userabc"
+}
