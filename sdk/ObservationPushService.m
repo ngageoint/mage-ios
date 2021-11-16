@@ -226,14 +226,17 @@ NSString * const kObservationErrorMessage = @"errorMessage";
                                 for (NSDictionary *form in forms) {
                                     if ([form objectForKey:fieldName] != nil) {
                                         // name will be unique because when the attachment is pulled in, we rename it to MAGE_yyyyMMdd_HHmmss.extension
-                                        NSArray *fieldAttachments = [[form objectForKey:fieldName] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", name]];
-                                        if ([fieldAttachments count] != 0) {
-                                            NSDictionary *fieldAttachment = fieldAttachments[0];
-                                            Attachment *attachment = [Attachment attachmentWithJson:attachmentResponse context:localContext];
-                                            [attachment setObservation:localObservation];
-                                            [attachment setObservationRemoteId: localObservation.remoteId];
-                                            [attachment setDirty:true];
-                                            [attachment setLocalPath:[fieldAttachment valueForKey:@"localPath"]];
+                                        NSArray *unfilteredFieldAttachments = [form objectForKey:fieldName];
+                                        if (unfilteredFieldAttachments != nil && [unfilteredFieldAttachments isKindOfClass:[NSArray class]]) {
+                                            NSArray *fieldAttachments = [unfilteredFieldAttachments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", name]];
+                                            if ([fieldAttachments count] != 0) {
+                                                NSDictionary *fieldAttachment = fieldAttachments[0];
+                                                Attachment *attachment = [Attachment attachmentWithJson:attachmentResponse context:localContext];
+                                                [attachment setObservation:localObservation];
+                                                [attachment setObservationRemoteId: localObservation.remoteId];
+                                                [attachment setDirty:true];
+                                                [attachment setLocalPath:[fieldAttachment valueForKey:@"localPath"]];
+                                            }
                                         }
                                     }
                                 }
