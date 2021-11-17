@@ -8,7 +8,6 @@
 #import "MageSessionManager.h"
 #import "DeviceUUID.h"
 #import "LocationService.h"
-#import "Mage.h"
 #import "MAGE-Swift.h"
 #import "EventChooserController.h"
 #import "StoredPassword.h"

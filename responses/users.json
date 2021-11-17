@@ -1,0 +1,75 @@
+
+[
+    {
+        "userId": {
+            "email": "user@example.com",
+            "displayName": "User Name",
+            "icon": {
+                "size": 5075,
+                "contentType": "image/png",
+                "type": "upload"
+            },
+            "phones": [
+                {
+                    "type": "Main",
+                    "number": "000-000-0000"
+                }
+            ],
+            "id": "userabc",
+            "iconUrl": "/api/users/userabc/icon"
+        },
+        "locations": [
+            {
+                "type": "Feature",
+                "eventId": 1,
+                "userId": "userabc",
+                "properties": {
+                    "deviceId": "deviceabc",
+                    "device_model": "iPhone",
+                    "altitude": 12.2,
+                    "network": "Reachable via WiFi",
+                    "accuracy": 76.18174714019557,
+                    "device_name": "iPhone (2)",
+                    "telephone_network": {
+                        "0000000100000001": "CTRadioAccessTechnologyLTE"
+                    },
+                    "verticalAccuracy": 20.834464797091904,
+                    "battery_level": 62,
+                    "millis": 1636738786.415089,
+                    "system_version": "15.1",
+                    "provider": "gps",
+                    "timestamp": "2021-11-12T17:39:46.415Z",
+                    "mage_version": "3.0.4-1733",
+                    "battery_state": "Unplugged",
+                    "bearing": 94.51093411137197,
+                    "system_name": "iOS",
+                    "speed": 0.17678844928741455
+                },
+                "_id": "locationabc",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.1,
+                        2.1
+                    ]
+                },
+                "teamIds": [
+                    "teamabc"
+                ]
+            }
+        ],
+        "user": {
+            "email": "user@example.com",
+            "displayName": "User Name",
+            "phones": [
+                {
+                    "type": "Main",
+                    "number": "000-000-0000"
+                }
+            ],
+            "id": "userabc",
+            "iconUrl": "/api/users/userabc/icon"
+        },
+        "id": "userabc"
+        }
+    ]

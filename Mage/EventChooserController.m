@@ -6,7 +6,6 @@
 
 #import "EventChooserController.h"
 #import "MAGE-Swift.h"
-#import "Mage.h"
 #import "ContactInfo.h"
 
 @interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>

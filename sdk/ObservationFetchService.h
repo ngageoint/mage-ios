@@ -15,5 +15,6 @@ extern NSString * const kObservationFetchFrequencyKey;
 
 - (void) startAsInitial: (BOOL) initial;
 - (void) stop;
+@property (nonatomic) BOOL started;
 
 @end

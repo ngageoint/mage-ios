@@ -16,5 +16,6 @@ extern NSString * const kAttachmentBackgroundSessionIdentifier;
 
 - (void) start;
 - (void) stop;
+@property (nonatomic) BOOL started;
 
 @end

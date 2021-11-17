@@ -31,6 +31,7 @@ NSInteger const kLocationPushLimit = 100;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         service = [[self alloc] init];
+        service.started = false;
     });
     return service;
 }
@@ -82,12 +83,14 @@ NSInteger const kLocationPushLimit = 100;
         [self.locationManager startUpdatingLocation];
     }
     [self pushLocations];
+    self.started = true;
 }
 
 - (void) stop {
     [self.locationManager stopUpdatingLocation];
     
     [self pushLocations];
+    self.started = false;
 }
 
 - (void) locationManager:(CLLocationManager *) manager didUpdateLocations:(NSArray *) locations {

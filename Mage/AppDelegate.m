@@ -5,7 +5,6 @@
 //
 
 #import "AppDelegate.h"
-#import "Mage.h"
 #import <CoreLocation/CoreLocation.h>
 #import <UserNotifications/UserNotifications.h>
 #import "UIImage+Thumbnail.h"
@@ -257,7 +256,7 @@
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"applicationWillEnterForeground");
     if (![[UserUtility singleton] isTokenExpired]) {
-        [[Mage singleton] startServicesAsInitial:NO];
+        [[Mage singleton] startServicesWithInitial:NO];
     }
 }
 

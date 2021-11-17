@@ -1,0 +1,89 @@
+
+{
+    "username": "userabc",
+    "active": true,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36",
+    "displayName": "User Name",
+    "createdAt": "2014-09-18T14:40:46.000Z",
+    "lastUpdated": "2021-11-17T18:45:45.198Z",
+    "email": "user@example.com",
+    "recentEventIds": [
+        1
+    ],
+    "enabled": true,
+    "icon": {
+        "size": 1764,
+        "contentType": "image/png",
+        "color": "#ff5500",
+        "text": "UN",
+        "type": "create"
+    },
+    "phones": [
+        {
+            "type": "Main",
+            "number": "000-000-0000"
+        }
+    ],
+    "id": "userabc",
+    "role": {
+        "name": "ADMIN_ROLE",
+        "description": "Administrative role, full acces to entire MAGE API.",
+        "permissions": [
+            "CREATE_DEVICE",
+            "READ_DEVICE",
+            "UPDATE_DEVICE",
+            "DELETE_DEVICE",
+            "CREATE_USER",
+            "READ_USER",
+            "UPDATE_USER",
+            "DELETE_USER",
+            "CREATE_ROLE",
+            "READ_ROLE",
+            "UPDATE_ROLE",
+            "DELETE_ROLE",
+            "CREATE_EVENT",
+            "READ_EVENT_ALL",
+            "UPDATE_EVENT",
+            "DELETE_EVENT",
+            "CREATE_LAYER",
+            "READ_LAYER_ALL",
+            "UPDATE_LAYER",
+            "DELETE_LAYER",
+            "CREATE_OBSERVATION",
+            "READ_OBSERVATION_ALL",
+            "UPDATE_OBSERVATION_ALL",
+            "DELETE_OBSERVATION",
+            "CREATE_LOCATION",
+            "READ_LOCATION_ALL",
+            "UPDATE_LOCATION_ALL",
+            "DELETE_LOCATION",
+            "CREATE_TEAM",
+            "READ_TEAM",
+            "UPDATE_TEAM",
+            "DELETE_TEAM",
+            "READ_SETTINGS",
+            "UPDATE_SETTINGS",
+            "UPDATE_USER_ROLE",
+            "READ_EXPORT",
+            "DELETE_EXPORT",
+            "READ_AUTH_CONFIG",
+            "UPDATE_AUTH_CONFIG"
+        ],
+        "id": "roleabc"
+    },
+    "authentication": {
+        "createdAt": "2020-10-05T19:20:31.124Z",
+        "lastUpdated": "2021-11-17T18:45:41.153Z",
+        "authenticationConfigurationId": "authconfigabc",
+        "type": "local",
+        "security": {
+            "numberOfTimesLocked": 0,
+            "invalidLoginAttempts": 0,
+            "locked": false
+        },
+        "previousPasswords": [],
+        "id": "authabc"
+    },
+    "avatarUrl": "https://magetest/api/users/userabc/avatar",
+    "iconUrl": "https://magetest/api/users/userabc/icon"
+}

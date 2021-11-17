@@ -14,5 +14,5 @@ extern NSString * const kLocationFetchFrequencyKey;
 + (instancetype) singleton;
 - (void) start;
 - (void) stop;
-
+@property (nonatomic) BOOL started;
 @end

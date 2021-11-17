@@ -89,7 +89,7 @@ import Kingfisher
     }
     
     override func viewDidLoad() {
-        Mage.singleton()?.startServices(asInitial: true);
+        Mage.singleton.startServices(initial: true);
         super.viewDidLoad();
         
         createOrderedTabs();
@@ -133,7 +133,7 @@ import Kingfisher
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
         mapTab.viewControllers = [];
-        Mage.singleton()?.stopServices();
+        Mage.singleton.stopServices();
         offlineObservationManager.stop();
         UserDefaults.standard.removeObserver(self, forKeyPath: "loginType", context: nil);
         NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil);

@@ -23,6 +23,7 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         fetchService = [[self alloc] init];
+        fetchService.started = false;
     });
     return fetchService;
 }
@@ -46,6 +47,7 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
     [self stop];
 
     [self pullLocations];
+    self.started = true;
 }
 
 - (void) scheduleTimer {
@@ -82,8 +84,10 @@ NSString * const kLocationFetchFrequencyKey = @"userFetchFrequency";
 }
 
 -(void) stop {
+    self.started = false;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        // TODO: if this gets run after the timer is schedule in start, it will stop fetching
         if ([weakSelf.locationFetchTimer isValid]) {
             NSLog(@"Stopping the location fetch timer");
             [weakSelf.locationFetchTimer invalidate];

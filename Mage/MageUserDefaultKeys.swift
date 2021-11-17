@@ -11,6 +11,7 @@ import Foundation
 extension Notification.Name {
     public static let StartStraightLineNavigation = Notification.Name("StartStraightLineNavigation")
     public static let MAGEEventsFetched = Notification.Name("MAGEEventsFetched")
+    public static let MAGEFormFetched = Notification.Name(Form.MAGEFormFetched)
     public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
     public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
     public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");

@@ -69,7 +69,7 @@ import Foundation
         self.preferredPrimaryColumnWidthFraction = 1.0;
         self.preferredDisplayMode = .allVisible;
         
-        Mage.singleton().startServices(asInitial: true);
+        Mage.singleton.startServices(initial: true);
         
         self.delegate = self;
         

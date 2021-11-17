@@ -23,6 +23,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         fetchService = [[self alloc] init];
+        fetchService.started = false;
     });
     return fetchService;
 }
@@ -49,6 +50,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
     } else {
         [self pullObservations];
     }
+    self.started = true;
 }
 
 - (void) scheduleTimer {
@@ -101,8 +103,10 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) stop {
+    self.started = false;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        // TODO: if this gets run after the timer is schedule in start, it will stop fetching
         if ([weakSelf.observationFetchTimer isValid]) {
             [weakSelf.observationFetchTimer invalidate];
             weakSelf.observationFetchTimer = nil;

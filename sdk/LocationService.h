@@ -20,5 +20,6 @@ extern NSString * const kLocationReportingFrequencyKey;
 - (void) stop;
 
 - (CLLocation *) location;
+@property (nonatomic) BOOL started;
 
 @end

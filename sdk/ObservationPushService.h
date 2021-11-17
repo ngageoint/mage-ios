@@ -33,4 +33,7 @@ extern NSString * const kObservationErrorMessage;
 - (BOOL) isPushingFavorites;
 - (BOOL) isPushingObservations;
 - (BOOL) isPushingImportant;
+
+@property (nonatomic) BOOL started;
+
 @end

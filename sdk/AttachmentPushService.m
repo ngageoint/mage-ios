@@ -31,6 +31,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         pushService = [[self alloc] init];
+        pushService.started = false;
     });
     return pushService;
 }
@@ -72,6 +73,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
             [weakSelf scheduleTimer];
         });
     }];
+    self.started = true;
 }
 
 - (void) stop {
@@ -84,6 +86,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
     });
     
     self.fetchedResultsController = nil;
+    self.started = false;
 }
 
 

@@ -1,0 +1,195 @@
+[
+    {
+        "description": "",
+        "name": "Animal",
+        "acl": {
+            "5d706cf4e9074e389b8778eb": {
+                "role": "MANAGER",
+                "permissions": [
+                    "read",
+                    "update"
+                ]
+            },
+            "541aef4c637b51b8045e140e": {
+                "role": "OWNER",
+                "permissions": [
+                    "read",
+                    "update",
+                    "delete"
+                ]
+            },
+            "541aeeee637b51b8045e140d": {
+                "role": "OWNER",
+                "permissions": [
+                    "read",
+                    "update",
+                    "delete"
+                ]
+            }
+        },
+        "style": {
+            "strokeWidth": 2,
+            "strokeOpacity": 1,
+            "fillOpacity": 0.2,
+            "stroke": "#5278A2",
+            "fill": "#5278A2"
+        },
+        "forms": [
+            {
+                "primaryFeedField": "field0",
+                "name": "Animal Sighting",
+                "color": "#59687A",
+                "primaryField": "field0",
+                "variantField": null,
+                "style": {
+                    "Turkey": {
+                        "strokeWidth": 2,
+                        "strokeOpacity": 1,
+                        "stroke": "#5278a2",
+                        "fillOpacity": 0.2,
+                        "fill": "#5278a2"
+                    },
+                    "Turtle": {
+                        "strokeWidth": 2,
+                        "strokeOpacity": 1,
+                        "stroke": "#5278a2",
+                        "fillOpacity": 0.2,
+                        "fill": "#5278a2"
+                    },
+                    "strokeWidth": 2,
+                    "strokeOpacity": 1,
+                    "stroke": "#5278A2",
+                    "fillOpacity": 0.2,
+                    "fill": "#5278A2"
+                },
+                "fields": [
+                    {
+                        "name": "field0",
+                        "id": 0,
+                        "required": false,
+                        "type": "dropdown",
+                        "title": "Animal Type",
+                        "allowedAttachmentTypes": [],
+                        "choices": [
+                            {
+                                "value": 0,
+                                "id": 1,
+                                "title": "Turtle"
+                            },
+                            {
+                                "value": 1,
+                                "id": 2,
+                                "title": "Turkey"
+                            }
+                        ]
+                    }
+                ],
+                "userFields": [],
+                "archived": false,
+                "default": false,
+                "id": 162
+            },
+            {
+                "name": "Attachment",
+                "color": "#D5656C",
+                "fields": [
+                    {
+                        "name": "field0",
+                        "id": 0,
+                        "required": false,
+                        "type": "attachment",
+                        "title": "Attachment",
+                        "allowedAttachmentTypes": [
+                            "image",
+                            "video",
+                            "audio"
+                        ],
+                        "choices": []
+                    }
+                ],
+                "userFields": [],
+                "archived": false,
+                "default": false,
+                "id": 163
+            }
+        ],
+        "id": 1,
+        "teams": [
+            {
+                "name": "Animal",
+                "description": "This team belongs specifically to event 'Animal' and cannot be deleted.",
+                "teamEventId": 1,
+                "acl": {
+                    "userghi": {
+                        "role": "MANAGER",
+                        "permissions": [
+                            "read",
+                            "update"
+                        ]
+                    },
+                    "userdef": {
+                        "role": "OWNER",
+                        "permissions": [
+                            "read",
+                            "update",
+                            "delete"
+                        ]
+                    },
+                    "userabc": {
+                        "role": "OWNER",
+                        "permissions": [
+                            "read",
+                            "update",
+                            "delete"
+                        ]
+                    }
+                },
+                "userIds": [
+                ],
+                "id": "teamabc"
+            }
+        ],
+        "layers": [
+            {
+                "name": "Open Street Map (NGA)",
+                "format": "XYZ",
+                "base": true,
+                "url": "https://osm.gs.mil/tiles/default/{z}/{x}/{y}.png",
+                "description": "",
+                "state": "available",
+                "type": "Imagery",
+                "wms": {},
+                "id": 1
+            },
+            {
+                "name": "Test",
+                "description": "just a test",
+                "state": "available",
+                "type": "Feature",
+                "id": 44,
+                "url": ""
+            },
+            {
+                "name": "Acorn",
+                "__v": 0,
+                "state": "available",
+                "type": "GeoPackage",
+                "tables": [
+                    {
+                        "name": "Acorn",
+                        "type": "tile",
+                        "minZoom": 0,
+                        "maxZoom": 17,
+                        "bbox": []
+                    }
+                ],
+                "file": {
+                    "name": "Acorn.gpkg",
+                    "contentType": "application/octet-stream",
+                    "size": "46395392",
+                    "relativePath": "92/layerabc.gpkg"
+                },
+                "id": 92
+            }
+        ]
+        }]

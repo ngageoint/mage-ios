@@ -34,6 +34,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         pushService = [[self alloc] init];
+        pushService.started = false;
     });
     return pushService;
 }
@@ -74,6 +75,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
 
 - (void) start {
     NSLog(@"start pushing observations");
+    self.started = true;
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     
     self.fetchedResultsController = [Observation MR_fetchAllSortedBy:@"timestamp"
@@ -384,6 +386,7 @@ NSString * const kObservationErrorMessage = @"errorMessage";
     self.fetchedResultsController = nil;
     self.importantFetchedResultsController = nil;
     self.favoritesFetchedResultsController = nil;
+    self.started = false;
 }
 
 

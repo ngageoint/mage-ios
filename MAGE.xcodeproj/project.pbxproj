@@ -174,7 +174,7 @@
 		F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422D2694B60300F9AC3B /* Authentication.m */; };
 		F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */; };
 		F72D42DD2694B60300F9AC3B /* LocalAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422F2694B60300F9AC3B /* LocalAuthentication.m */; };
-		F72D42DE2694B60300F9AC3B /* Mage.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42302694B60300F9AC3B /* Mage.m */; };
+		F72D42DE2694B60300F9AC3B /* Mage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42302694B60300F9AC3B /* Mage.swift */; };
 		F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */; };
 		F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */; };
 		F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42482694B60300F9AC3B /* RouteMethod.m */; };
@@ -500,6 +500,10 @@
 		F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */; };
 		F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */; };
 		F7F118222602A1F600C7DE9A /* ObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F118212602A1F600C7DE9A /* ObservationTests.swift */; };
+		F7F15B13274565A8008FF6C2 /* MageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F15B12274565A8008FF6C2 /* MageTests.swift */; };
+		F7F15B152745865F008FF6C2 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B142745865F008FF6C2 /* users.json */; };
+		F7F15B17274596B1008FF6C2 /* events.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B16274596B1008FF6C2 /* events.json */; };
+		F7F15B1927459A1F008FF6C2 /* myself.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B1827459A1F008FF6C2 /* myself.json */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4753025B73C3E006634F7 /* FormsHeader.swift */; };
@@ -805,7 +809,7 @@
 		F72D422D2694B60300F9AC3B /* Authentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Authentication.m; sourceTree = "<group>"; };
 		F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D422F2694B60300F9AC3B /* LocalAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAuthentication.m; sourceTree = "<group>"; };
-		F72D42302694B60300F9AC3B /* Mage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mage.m; sourceTree = "<group>"; };
+		F72D42302694B60300F9AC3B /* Mage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mage.swift; sourceTree = "<group>"; };
 		F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model13To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42342694B60300F9AC3B /* ObservationRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationRoutes.h; sourceTree = "<group>"; };
 		F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 6.xcdatamodel"; sourceTree = "<group>"; };
@@ -889,7 +893,6 @@
 		F72D429E2694B60300F9AC3B /* UserUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserUtility.swift; sourceTree = "<group>"; };
 		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GPSLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42A12694B60300F9AC3B /* Mage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mage.h; sourceTree = "<group>"; };
 		F72D42A22694B60300F9AC3B /* LocalAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthentication.h; sourceTree = "<group>"; };
 		F72D42A42694B60300F9AC3B /* MageServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServer.m; sourceTree = "<group>"; };
 		F72D42A52694B60300F9AC3B /* Authentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Authentication.h; sourceTree = "<group>"; };
@@ -1238,6 +1241,10 @@
 		F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometrySerializerTests.swift; sourceTree = "<group>"; };
 		F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationPushServiceTests.swift; sourceTree = "<group>"; };
 		F7F118212602A1F600C7DE9A /* ObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTests.swift; sourceTree = "<group>"; };
+		F7F15B12274565A8008FF6C2 /* MageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageTests.swift; sourceTree = "<group>"; };
+		F7F15B142745865F008FF6C2 /* users.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
+		F7F15B16274596B1008FF6C2 /* events.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = events.json; sourceTree = "<group>"; };
+		F7F15B1827459A1F008FF6C2 /* myself.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = myself.json; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
@@ -1863,8 +1870,7 @@
 				F72D42CF2694B60300F9AC3B /* LocationService.h */,
 				F72D428E2694B60300F9AC3B /* LocationService.m */,
 				F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */,
-				F72D42A12694B60300F9AC3B /* Mage.h */,
-				F72D42302694B60300F9AC3B /* Mage.m */,
+				F72D42302694B60300F9AC3B /* Mage.swift */,
 				F72D42752694B60300F9AC3B /* MageEnums.h */,
 				F72D42BE2694B60300F9AC3B /* MageEnums.m */,
 				F72D42D32694B60300F9AC3B /* MAGERoutes.h */,
@@ -2100,6 +2106,9 @@
 				F786492F273C5E71002D3DC2 /* staticFeatures.geojson */,
 				F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */,
 				F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */,
+				F7F15B142745865F008FF6C2 /* users.json */,
+				F7F15B16274596B1008FF6C2 /* events.json */,
+				F7F15B1827459A1F008FF6C2 /* myself.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2508,6 +2517,7 @@
 				F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */,
 				F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */,
 				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
+				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -2813,6 +2823,7 @@
 				F7C640FF257EB29100C02335 /* geometryField.json in Resources */,
 				F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */,
 				F7103F02266A5D7D000832CD /* noResponse.html in Resources */,
+				F7F15B17274596B1008FF6C2 /* events.json in Resources */,
 				F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */,
 				F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */,
 				F7CE2304254369BD00D710DE /* checkboxForm.json in Resources */,
@@ -2835,6 +2846,8 @@
 				F711241E25F69BF5008849B1 /* geometryObservations.json in Resources */,
 				F795ED1224BD04730028FBFC /* oneForm.json in Resources */,
 				F777B00E252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json in Resources */,
+				F7F15B152745865F008FF6C2 /* users.json in Resources */,
+				F7F15B1927459A1F008FF6C2 /* myself.json in Resources */,
 				F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */,
 				F76BB9F725ED8195004CFB97 /* oneFormRestricted.json in Resources */,
 				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
@@ -3230,7 +3243,7 @@
 				F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */,
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F7F4754925BA3C7D006634F7 /* ObservationSummaryView.swift in Sources */,
-				F72D42DE2694B60300F9AC3B /* Mage.m in Sources */,
+				F72D42DE2694B60300F9AC3B /* Mage.swift in Sources */,
 				04ED964B1EB7DFD500B6AD8D /* MapPolygonObservation.m in Sources */,
 				F7F4755125BB3D77006634F7 /* AttachmentSlideshow.swift in Sources */,
 				F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */,
@@ -3438,6 +3451,7 @@
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
+				F7F15B13274565A8008FF6C2 /* MageTests.swift in Sources */,
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
 				F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */,
