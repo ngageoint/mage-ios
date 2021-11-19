@@ -36,14 +36,14 @@
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.titleLabel.backgroundColor = [UIColor clearColor];
-    self.titleLabel.textColor = containerScheme.colorScheme.onPrimaryColor;
+    self.titleLabel.textColor = containerScheme.colorScheme.onSecondaryColor;
     self.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     self.titleLabel.text = title;
     [self.titleLabel sizeToFit];
     
     self.subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 22, 0, 0)];
     self.subtitleLabel.backgroundColor = [UIColor clearColor];
-    self.subtitleLabel.textColor = [containerScheme.colorScheme.onPrimaryColor colorWithAlphaComponent:0.87];
+    self.subtitleLabel.textColor = [containerScheme.colorScheme.onSecondaryColor colorWithAlphaComponent:0.87];
     
     self.subtitleLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightRegular];
     self.subtitleLabel.text = subtitle;
