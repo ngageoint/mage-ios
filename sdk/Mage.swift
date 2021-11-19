@@ -32,7 +32,7 @@ import Foundation
             tasks.append(usersPullTask)
         }
         
-        ObservationPushService.singleton().start();
+        ObservationPushService.singleton.start();
         AttachmentPushService.singleton().start();
         
         let sessionTask = SessionTask(tasks: tasks, andMaxConcurrentTasks: 1);
@@ -44,7 +44,7 @@ import Foundation
     @objc public func stopServices() {
         LocationFetchService.singleton().stop();
         ObservationFetchService.singleton().stop();
-        ObservationPushService.singleton().stop();
+        ObservationPushService.singleton.stop();
         AttachmentPushService.singleton().stop();
     }
     

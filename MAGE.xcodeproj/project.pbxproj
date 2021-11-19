@@ -202,7 +202,7 @@
 		F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42782694B60300F9AC3B /* LocationFetchService.m */; };
 		F72D42F82694B60300F9AC3B /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42792694B60300F9AC3B /* Location.swift */; };
 		F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */; };
-		F72D42FA2694B60300F9AC3B /* ObservationPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D427C2694B60300F9AC3B /* ObservationPushService.m */; };
+		F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427C2694B60300F9AC3B /* ObservationPushService.swift */; };
 		F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427D2694B60300F9AC3B /* Feed.swift */; };
 		F72D42FC2694B60300F9AC3B /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.swift */; };
 		F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */; };
@@ -471,6 +471,7 @@
 		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
 		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */; };
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
+		F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
@@ -504,6 +505,7 @@
 		F7F15B152745865F008FF6C2 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B142745865F008FF6C2 /* users.json */; };
 		F7F15B17274596B1008FF6C2 /* events.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B16274596B1008FF6C2 /* events.json */; };
 		F7F15B1927459A1F008FF6C2 /* myself.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B1827459A1F008FF6C2 /* myself.json */; };
+		F7F15B1B2745BEA7008FF6C2 /* MockObservationPushDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F15B1A2745BEA7008FF6C2 /* MockObservationPushDelegate.swift */; };
 		F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */; };
 		F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */; };
 		F7F4753125B73C3E006634F7 /* FormsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F4753025B73C3E006634F7 /* FormsHeader.swift */; };
@@ -866,7 +868,7 @@
 		F72D42782694B60300F9AC3B /* LocationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFetchService.m; sourceTree = "<group>"; };
 		F72D42792694B60300F9AC3B /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model7To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D427C2694B60300F9AC3B /* ObservationPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationPushService.m; sourceTree = "<group>"; };
+		F72D427C2694B60300F9AC3B /* ObservationPushService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationPushService.swift; sourceTree = "<group>"; };
 		F72D427D2694B60300F9AC3B /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		F72D427F2694B60300F9AC3B /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model9To15.xcmappingmodel; sourceTree = "<group>"; };
@@ -908,7 +910,6 @@
 		F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model6To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42B62694B60300F9AC3B /* ServerAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAuthentication.h; sourceTree = "<group>"; };
 		F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Attachment+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		F72D42B92694B60300F9AC3B /* ObservationPushService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationPushService.h; sourceTree = "<group>"; };
 		F72D42BB2694B60300F9AC3B /* LocationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFetchService.h; sourceTree = "<group>"; };
 		F72D42BC2694B60300F9AC3B /* StoredPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoredPassword.h; sourceTree = "<group>"; };
 		F72D42BD2694B60300F9AC3B /* Layer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
@@ -1204,6 +1205,7 @@
 		F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyleParser.h; sourceTree = "<group>"; };
 		F7DCCC231F46366F00E4C616 /* ExternalDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDevice.h; sourceTree = "<group>"; };
 		F7DCCC241F46366F00E4C616 /* ExternalDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExternalDevice.m; sourceTree = "<group>"; };
+		F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationPushDelegate.swift; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
@@ -1245,6 +1247,7 @@
 		F7F15B142745865F008FF6C2 /* users.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
 		F7F15B16274596B1008FF6C2 /* events.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = events.json; sourceTree = "<group>"; };
 		F7F15B1827459A1F008FF6C2 /* myself.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = myself.json; sourceTree = "<group>"; };
+		F7F15B1A2745BEA7008FF6C2 /* MockObservationPushDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationPushDelegate.swift; sourceTree = "<group>"; };
 		F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
 		F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFilterTableViewController.h; sourceTree = "<group>"; };
@@ -1707,6 +1710,7 @@
 				F7521DE92672336800C52318 /* MockGeometryEditCoordinator.swift */,
 				F7BD2D7B267A468900A2B1D7 /* MockGeometryEditDelegate.swift */,
 				F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */,
+				F7F15B1A2745BEA7008FF6C2 /* MockObservationPushDelegate.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1908,8 +1912,7 @@
 				F72D42822694B60300F9AC3B /* ObservationFetchService.m */,
 				F72D42B32694B60300F9AC3B /* ObservationImage.h */,
 				F72D42532694B60300F9AC3B /* ObservationImage.m */,
-				F72D42B92694B60300F9AC3B /* ObservationPushService.h */,
-				F72D427C2694B60300F9AC3B /* ObservationPushService.m */,
+				F72D427C2694B60300F9AC3B /* ObservationPushService.swift */,
 				F72D42342694B60300F9AC3B /* ObservationRoutes.h */,
 				F72D429D2694B60300F9AC3B /* ObservationRoutes.m */,
 				F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */,
@@ -1922,6 +1925,7 @@
 				F72D42772694B60300F9AC3B /* StoredPassword.m */,
 				F72D429E2694B60300F9AC3B /* UserUtility.swift */,
 				F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */,
+				F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */,
 			);
 			path = sdk;
 			sourceTree = "<group>";
@@ -3137,6 +3141,7 @@
 				F7154AD6260D18A8002C8617 /* StraightLineNavigation.swift in Sources */,
 				2FFBCA1119DB43F40033132F /* MapViewController_iPad.swift in Sources */,
 				F7081DB82629BEA6004B89D4 /* CLCoordinate2DExtensions.swift in Sources */,
+				F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */,
 				F7F4753B25B76925006634F7 /* ObservationFormTableViewCell.swift in Sources */,
 				F72D43182694B60300F9AC3B /* ObservationImportant+CoreDataProperties.swift in Sources */,
 				F72D42F82694B60300F9AC3B /* Location.swift in Sources */,
@@ -3213,7 +3218,7 @@
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
 				F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */,
-				F72D42FA2694B60300F9AC3B /* ObservationPushService.m in Sources */,
+				F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */,
 				F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
@@ -3460,6 +3465,7 @@
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */,
 				F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */,
+				F7F15B1B2745BEA7008FF6C2 /* MockObservationPushDelegate.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F77085482593F85F008903BA /* ObservationHeaderViewTests.swift in Sources */,
 				F729E9DC2034CCD100C2600D /* TestingAppDelegate.m in Sources */,

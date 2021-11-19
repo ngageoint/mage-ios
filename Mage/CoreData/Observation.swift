@@ -813,7 +813,7 @@ enum State: Int, CustomStringConvertible {
     @objc public var hasValidationError: Bool {
         get {
             if let error = self.error {
-                return error[kObservationErrorStatusCode] != nil
+                return error[ObservationPushService.ObservationErrorStatusCode] != nil
             }
             return false;
         }
@@ -822,9 +822,9 @@ enum State: Int, CustomStringConvertible {
     @objc public var errorMessage: String {
         get {
             if let error = self.error {
-                if let errorMessage = error[kObservationErrorMessage] as? String {
+                if let errorMessage = error[ObservationPushService.ObservationErrorMessage] as? String {
                     return errorMessage
-                } else if let errorMessage = error[kObservationErrorDescription] as? String {
+                } else if let errorMessage = error[ObservationPushService.ObservationErrorDescription] as? String {
                     return errorMessage
                 }
             }

@@ -34,11 +34,11 @@ class ObservationTests: KIFSpec {
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
                 NSManagedObject.mr_setDefaultBatchSize(0);
-                ObservationPushService.singleton()?.start();
+                ObservationPushService.singleton.start();
             }
             
             afterEach {
-                ObservationPushService.singleton().stop();
+                ObservationPushService.singleton.stop();
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
@@ -1253,14 +1253,14 @@ class ObservationTests: KIFSpec {
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
                 NSManagedObject.mr_setDefaultBatchSize(0);
-                ObservationPushService.singleton()?.start();
+                ObservationPushService.singleton.start();
             }
             
             afterEach {
-                ObservationPushService.singleton().stop();
-                expect(ObservationPushService.singleton().isPushingFavorites()).toEventually(beFalse());
-                expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse());
-                expect(ObservationPushService.singleton().isPushingObservations()).toEventually(beFalse());
+                ObservationPushService.singleton.stop();
+                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
+                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
+                expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse());
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
@@ -1399,7 +1399,7 @@ class ObservationTests: KIFSpec {
                 expect(stubCalled).toEventually(beTrue());
                 
                 expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())).toEventually(beNil());
-                expect(ObservationPushService.singleton().isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+                expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
             it("should tell the server to create an observation") {
@@ -1594,7 +1594,7 @@ class ObservationTests: KIFSpec {
                 
                 expect(((Observation.mr_findFirst()!.favorites as! Set<ObservationFavorite>).first! as ObservationFavorite).favorite).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(((Observation.mr_findFirst()!.favorites as! Set<ObservationFavorite>).first! as ObservationFavorite).dirty).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                expect(ObservationPushService.singleton().isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
             it("should tell the server to make the observation important") {
@@ -1631,7 +1631,7 @@ class ObservationTests: KIFSpec {
                 
                 expect(stubCalled).toEventually(beTrue());
                 expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
             it("should tell the server to remove the observation important") {
@@ -1674,7 +1674,7 @@ class ObservationTests: KIFSpec {
                 
                 expect(stubCalled).toEventually(beTrue());
 
-                expect(ObservationPushService.singleton().isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
         }
         
@@ -1708,11 +1708,11 @@ class ObservationTests: KIFSpec {
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
                 NSManagedObject.mr_setDefaultBatchSize(0);
-                ObservationPushService.singleton()?.start();
+                ObservationPushService.singleton.start();
             }
             
             afterEach {
-                ObservationPushService.singleton().stop();
+                ObservationPushService.singleton.stop();
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();

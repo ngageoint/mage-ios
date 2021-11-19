@@ -88,6 +88,7 @@ public enum ObservationKey : String {
     case type
     case state
     case eventId
+    case dirty
     
     var key: String {
         return self.rawValue

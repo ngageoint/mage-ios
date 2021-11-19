@@ -67,6 +67,5 @@
 #import "StaticPointAnnotation.h"
 #import "LocationFilterTableViewController.h"
 
-#import "ObservationPushService.h"
 #import "AttachmentPushService.h"
 #import "LocationAnnotation.h"

@@ -148,8 +148,8 @@ class ObservationSyncStatusTests: KIFSpec {
                 let observation: Observation = observations![0] as! Observation;
                 observation.dirty = true;
                 observation.error = [
-                    kObservationErrorStatusCode: 503,
-                    kObservationErrorMessage: "Something Bad"
+                    ObservationPushService.ObservationErrorStatusCode: 503,
+                    ObservationPushService.ObservationErrorMessage: "Something Bad"
                 ]
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 

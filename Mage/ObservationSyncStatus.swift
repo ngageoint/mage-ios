@@ -59,7 +59,7 @@ class ObservationSyncStatus: UIView {
     
     @objc func syncObservation() {
         manualSync = true;
-        ObservationPushService.singleton()?.pushObservations([observation!]);
+        ObservationPushService.singleton.pushObservations(observations: [observation!]);
         setupSyncStatusView();
     }
     

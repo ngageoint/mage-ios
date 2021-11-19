@@ -28,11 +28,11 @@ class AttachmentPushServiceTests: QuickSpec {
                 }
                 MageCoreDataFixtures.clearAllData();
                 UserDefaults.standard.baseServerUrl = "https://magetest";
-                ObservationPushService.singleton()?.start();
+                ObservationPushService.singleton.start();
             }
             
             afterEach {
-                ObservationPushService.singleton().stop();
+                ObservationPushService.singleton.stop();
                 HTTPStubs.removeAllStubs();
                 MageCoreDataFixtures.clearAllData();
             }

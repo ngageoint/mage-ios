@@ -293,6 +293,15 @@ public enum LoginParametersKey: String {
         }
     }
     
+    var observationPushFrequency: Int {
+        get {
+            return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     // MARK: GeoPackage keys
     var geoPackageFeatureTilesMaxPointsPerTile: Int {
         get {

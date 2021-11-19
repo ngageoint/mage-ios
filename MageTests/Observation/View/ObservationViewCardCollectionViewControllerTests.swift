@@ -86,7 +86,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 window.rootViewController = controller;
                 NSManagedObject.mr_setDefaultBatchSize(0);
                 
-                ObservationPushService.singleton().stop();
+                ObservationPushService.singleton.stop();
             }
             
             afterEach {
@@ -187,7 +187,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 view = window;
                 
                 observation.dirty = false;
-                observationViewController.didPush(observation, success: true, error: nil);
+                observationViewController.didPush(observation: observation, success: true, error: nil);
                 
 //                maybeRecordSnapshot(view, doneClosure: {
 //                    completeTest = true;
