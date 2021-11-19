@@ -8,6 +8,7 @@
 
 import Foundation
 import PureLayout
+import UIKit
 
 @objc class StraightLineNavigationView: UIView {
     var didSetupConstraints = false;
@@ -26,28 +27,13 @@ import PureLayout
     var relativeBearingToTargetLabel: UILabel = UILabel(forAutoLayout: ());
     var compassView: CompassView?;
     
-    private lazy var directionArrowLayer: CAShapeLayer = {
-        let path = CGMutablePath()
-        let heightWidth = 50
-        
-        path.move(to: CGPoint(x: heightWidth / 2, y: 0))
-        path.addLine(to: CGPoint(x:(heightWidth / 2 - 6), y:8))
-        path.addLine(to: CGPoint(x:(heightWidth / 2 - 1), y:8))
-        path.addLine(to: CGPoint(x:(heightWidth / 2 - 1), y:16))
-        path.addLine(to: CGPoint(x:(heightWidth / 2 + 1), y:16))
-        path.addLine(to: CGPoint(x:(heightWidth / 2 + 1), y:8))
-        path.addLine(to: CGPoint(x:(heightWidth / 2 + 6), y:8))
-        path.addLine(to: CGPoint(x:(heightWidth / 2), y:0))
-        
-        let shape = CAShapeLayer()
-        shape.path = path
-        
-        return shape;
-    }()
+    let navigation = UIImageView(image: UIImage(named: "navigation"))
     
     private lazy var directionArrow: UIView = {
         let view = UIView.newAutoLayout();
-        view.layer.insertSublayer(directionArrowLayer, at: 0);
+        view.addSubview(navigation);
+        navigation.autoPinEdge(toSuperviewEdge: .top);
+        navigation.autoAlignAxis(toSuperviewAxis: .vertical)
         return view;
     }()
     
@@ -220,9 +206,9 @@ import PureLayout
             relativeBearingToTargetLabel.text = "@ \(measurementFormatter.string(from: bearingToMeasurement))";
             let degreeMeasurement = Measurement(value: 360 - (headingMeasurement.value - bearingToMeasurement.value) , unit: UnitAngle.degrees);
             directionArrow.transform = CGAffineTransform(rotationAngle: CGFloat(degreeMeasurement.converted(to: .radians).value));
-            directionArrowLayer.fillColor = self.headingColor.cgColor;
             relativeBearingToTargetLabel.textColor = self.relativeBearingColor;
             headingLabel.textColor = self.headingColor;
+            navigation.tintColor = self.relativeBearingColor
         }
         
         if let speed = locationManager?.location?.speed {
