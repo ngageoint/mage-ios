@@ -135,7 +135,7 @@ import MaterialComponents.MDCContainerScheme;
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        ObservationPushService.singleton()?.add(self);
+        ObservationPushService.singleton.addDelegate(delegate: self);
         setupObservation();
         if let scheme = self.scheme {
             applyTheme(withContainerScheme: scheme);
@@ -156,7 +156,7 @@ import MaterialComponents.MDCContainerScheme;
             }
         }
         cards = [];
-        ObservationPushService.singleton()?.remove(self);
+        ObservationPushService.singleton.removeDelegate(delegate: self);
     }
     
     func setupObservation() {
@@ -350,7 +350,7 @@ extension ObservationViewCardCollectionViewController: AttachmentViewDelegate {
 }
 
 extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
-    func didPush(_ observation: Observation!, success: Bool, error: Error!) {
+    func didPush(observation: Observation, success: Bool, error: Error?) {
         if (observation.objectID != self.observation?.objectID) {
             return;
         }
@@ -423,7 +423,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     func removeImportant(_ observation: Observation) {
         observation.removeImportant() { success, error in
             // update the view
-            observation.managedObjectContext?.refresh(observation, mergeChanges: true);
+            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
             self.headerCard?.populate(observation: observation);
         }
     }
