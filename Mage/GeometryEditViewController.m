@@ -7,7 +7,6 @@
 #import "GeometryEditViewController.h"
 #import "ObservationAnnotation.h"
 #import "ObservationAnnotationView.h"
-#import "ObservationImage.h"
 #import "LocationService.h"
 #import "SFPoint.h"
 #import "SFGeometryUtils.h"

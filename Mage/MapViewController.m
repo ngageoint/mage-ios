@@ -11,7 +11,6 @@
 #import "LocationAnnotation.h"
 #import "LocationService.h"
 #import "ObservationAnnotation.h"
-#import "ObservationImage.h"
 #import <MapKit/MapKit.h>
 #import "Locations.h"
 #import "Observations.h"

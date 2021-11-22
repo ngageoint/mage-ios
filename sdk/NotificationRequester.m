@@ -8,7 +8,6 @@
 
 #import "NotificationRequester.h"
 #import <UserNotifications/UserNotifications.h>
-#import "ObservationImage.h"
 #import "MAGE-Swift.h"
 
 @implementation NotificationRequester
@@ -31,7 +30,7 @@
     content.body = body;
     
     NSMutableArray *attachments = [[NSMutableArray alloc] init];
-    NSString *imageUrl = [ObservationImage imageNameForObservation:observation];
+    NSString *imageUrl = [ObservationImage imageNameWithObservation:observation];
     
     UIImage *image = [UIImage imageWithContentsOfFile:imageUrl];
     

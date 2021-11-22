@@ -37,7 +37,7 @@ extension MapDelegate : ObservationActionsDelegate {
                 self.locationToNavigateTo = kCLLocationCoordinate2DInvalid;
                 self.userToNavigateTo = nil;
                 self.feedItemToNavigateTo = nil;
-                self.startStraightLineNavigation(location.coordinate, image: ObservationImage.image(for: observation));
+                self.startStraightLineNavigation(location.coordinate, image: ObservationImage.image(observation: observation));
             }));
             ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self.navigationController, extraActions: extraActions, sourceView: nil);
         });

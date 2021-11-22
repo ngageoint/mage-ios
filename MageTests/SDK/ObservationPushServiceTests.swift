@@ -65,10 +65,6 @@ class ObservationPushServiceTests: KIFSpec {
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
-            
-            it("should not add the same delegate twice") {
-                
-            }
 
             it("should tell the server to create an observation with an attachment") {
                 

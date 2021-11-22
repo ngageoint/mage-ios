@@ -59,7 +59,6 @@
 #import "MapSettingsCoordinator.h"
 #import "SettingsViewController.h"
 #import "TimeFilter.h"
-#import "ObservationImage.h"
 #import "MageFilter.h"
 #import "UINavigationItem+Subtitle.h"
 #import "ObservationFilterTableViewController.h"

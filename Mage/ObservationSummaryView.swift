@@ -106,7 +106,7 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         if (self.imageOverride != nil) {
             itemImage.image = self.imageOverride;
         } else {
-            itemImage.image = ObservationImage.image(for: self.observation!);
+            itemImage.image = ObservationImage.image(observation: self.observation!);
         }
 
         primaryField.text = observation.primaryFeedFieldText;

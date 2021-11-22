@@ -7,7 +7,6 @@
 @import DateTools;
 
 #import "ObservationAnnotation.h"
-#import "ObservationImage.h"
 #import "MapShapeObservation.h"
 #import "ObservationAnnotationView.h"
 #import "SFGeometryUtils.h"
@@ -55,7 +54,7 @@ NSString * OBSERVATION_ANNOTATION_VIEW_REUSE_ID = @"OBSERVATION_ICON";
 }
 
 -(MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView withDragCallback: (NSObject<AnnotationDragCallback> *) dragCallback scheme: (id<MDCContainerScheming>) scheme{
-    UIImage *image = [ObservationImage imageForObservation:self.observation];
+    UIImage *image = [ObservationImage imageWithObservation:self.observation];
     MKAnnotationView *annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:OBSERVATION_ANNOTATION_VIEW_REUSE_ID];
     
     if (annotationView == nil) {
