@@ -7,8 +7,8 @@
 //
 
 #import "MapObservation.h"
-#import "ObservationAnnotationView.h"
 
+@class ObservationAnnotationView;
 @class ObservationAnnotation;
 
 /**

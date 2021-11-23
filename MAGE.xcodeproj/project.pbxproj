@@ -57,7 +57,7 @@
 		2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */; };
 		2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */; };
 		2F52827224732B740023E974 /* IDPCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F52827124732B740023E974 /* IDPCoordinator.m */; };
-		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */; };
+		2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.swift */; };
 		2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F763C8F1DD10D2900780250 /* SettingsViewController.m */; };
 		2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2F7AB0C01D12EF91006F99FC /* set_build_number.sh */; };
 		2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D5D8B26025A9800886844 /* SignUpViewController_Server5.m */; };
@@ -644,8 +644,7 @@
 		2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightDetailSubtitleCell.xib; sourceTree = "<group>"; };
 		2F52827024732B740023E974 /* IDPCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDPCoordinator.h; sourceTree = "<group>"; };
 		2F52827124732B740023E974 /* IDPCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IDPCoordinator.m; sourceTree = "<group>"; };
-		2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationAnnotationView.h; sourceTree = "<group>"; };
-		2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationAnnotationView.m; sourceTree = "<group>"; };
+		2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationAnnotationView.swift; sourceTree = "<group>"; };
 		2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCalloutTapped.h; sourceTree = "<group>"; };
 		2F763C8E1DD10D2900780250 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		2F763C8F1DD10D2900780250 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
@@ -1594,8 +1593,7 @@
 				4C546FEA195A27F4000CF230 /* LocationAnnotation.h */,
 				4C546FEB195A27F4000CF230 /* LocationAnnotation.m */,
 				F725A9CB195CB819002A699C /* ObservationAnnotation.swift */,
-				2F5D68F21C4EC11B00E95DF6 /* ObservationAnnotationView.h */,
-				2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.m */,
+				2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.swift */,
 				2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */,
 				2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */,
 				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
@@ -3313,7 +3311,7 @@
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
 				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
-				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.m in Sources */,
+				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.swift in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */,
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,

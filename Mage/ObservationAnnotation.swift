@@ -63,7 +63,7 @@ import DateTools
         if let annotationView = annotationView {
             annotationView.annotation = self
         } else {
-            annotationView = ObservationAnnotationView(annotation: self, reuseIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID, andMapView: on, andDragCallback: with)
+            annotationView = ObservationAnnotationView(annotation: self, reuseIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID, mapView: on, dragCallback: with)
             annotationView?.isEnabled = true
         }
         

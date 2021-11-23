@@ -17,7 +17,6 @@
 #import "LocationAnnotation.h"
 #import "MageFilter.h"
 #import "SFPoint.h"
-#import "ObservationAnnotationView.h"
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
 #import <PureLayout.h>
