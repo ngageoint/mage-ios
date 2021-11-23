@@ -272,6 +272,7 @@
 		F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */; };
 		F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */; };
 		F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607E126FA1256008CF824 /* BottomSheetView.swift */; };
+		F7384FDE274D74EA00EA1A96 /* ObservationFetchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */; };
 		F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886C625894CEA00EDA036 /* KeyboardHelper.swift */; };
 		F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */; };
 		F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */; };
@@ -953,6 +954,7 @@
 		F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureItem.swift; sourceTree = "<group>"; };
 		F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetView.swift; sourceTree = "<group>"; };
 		F73607E126FA1256008CF824 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
+		F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFetchServiceTests.swift; sourceTree = "<group>"; };
 		F73886C625894CEA00EDA036 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
 		F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewController.swift; sourceTree = "<group>"; };
@@ -2521,6 +2523,7 @@
 				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
 				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
 				F7DDF46E2748023A00689550 /* ObservationImageTests.swift */,
+				F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -3424,6 +3427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */,
+				F7384FDE274D74EA00EA1A96 /* ObservationFetchServiceTests.swift in Sources */,
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
 				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
 				F7521D8F26702C4100C52318 /* PlainMapViewDelegate.swift in Sources */,

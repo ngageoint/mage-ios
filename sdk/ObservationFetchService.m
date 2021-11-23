@@ -36,7 +36,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
         
         [[NSUserDefaults standardUserDefaults] addObserver:self
                                                 forKeyPath:kObservationFetchFrequencyKey
-                                                   options:NSKeyValueObservingOptionNew
+                                                   options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld
                                                    context:NULL];
     }
 	
@@ -54,13 +54,19 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
 }
 
 - (void) scheduleTimer {
+    if (self.observationFetchTimer != nil) {
+        if ([self.observationFetchTimer isValid]) {
+            [self.observationFetchTimer invalidate];
+            self.observationFetchTimer = nil;
+        }
+    }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.observationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:weakSelf.interval target:weakSelf selector:@selector(onTimerFire) userInfo:nil repeats:NO];
+        weakSelf.observationFetchTimer = [NSTimer scheduledTimerWithTimeInterval:weakSelf.interval target:weakSelf selector:@selector(onTimerFire:) userInfo:nil repeats:NO];
     });
 }
 
-- (void) onTimerFire {
+- (void) onTimerFire: (NSTimer *) timer {
     if (![[UserUtility singleton] isTokenExpired]) {
         [self pullObservations];
     }
@@ -95,8 +101,9 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
                 [self scheduleTimer];
             }
         }];
-        
-        [[MageSessionManager sharedManager] addTask:observationFetchTask];
+        if (observationFetchTask != nil) {
+            [[MageSessionManager sharedManager] addTask:observationFetchTask];
+        }
     } else {
         [self scheduleTimer];
     }
@@ -106,6 +113,7 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
     self.started = false;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         // TODO: if this gets run after the timer is schedule in start, it will stop fetching
         if ([weakSelf.observationFetchTimer isValid]) {
             [weakSelf.observationFetchTimer invalidate];
@@ -118,8 +126,14 @@ NSString * const kObservationFetchFrequencyKey = @"observationFetchFrequency";
                        ofObject:(id)object
                          change:(NSDictionary *)change
                         context:(void *)context {
+    if ([[change objectForKey:NSKeyValueChangeNewKey] doubleValue] == _interval) {
+        // we were called but the value is the same, ignore it
+        return;
+    }
     _interval = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
-    [self startAsInitial:NO];
+    if (_started) {
+        [self startAsInitial:NO];
+    }
 }
 
 @end
