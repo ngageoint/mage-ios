@@ -56,7 +56,7 @@
     
     if(geometry.geometryType == SF_POINT){
         
-        ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andEventForms: self.forms andGeometry:geometry];
+        ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation geometry:geometry];
         annotation.view.layer.zPosition = [observation.timestamp timeIntervalSinceReferenceDate];
         annotation.animateDrop = animateDrop;
         [_mapView addAnnotation:annotation];
@@ -96,7 +96,7 @@
 }
 
 -(MapAnnotation *) addShapeAnnotationAtLocation: (CLLocationCoordinate2D) location forObservation: (Observation *) observation andHidden: (BOOL) hidden{
-    ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation andEventForms: self.forms andLocation:location];
+    ObservationAnnotation *annotation = [[ObservationAnnotation alloc] initWithObservation:observation location:location];
     [annotation setCoordinate:location];
     [self.mapView addAnnotation:annotation];
     if(hidden){

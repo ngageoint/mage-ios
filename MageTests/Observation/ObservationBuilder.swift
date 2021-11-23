@@ -97,6 +97,7 @@ class ObservationBuilder {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
         formatter.locale = Locale(identifier: "en_US_POSIX");
         ObservationBuilder.addObservationProperty(observation: observation, key: "timestamp", value: formatter.string(from: date));
+        observation.timestamp = date;
     }
     
     static func createAttachment(eventId: NSNumber, name: String? = nil, remoteId: String? = nil, observationRemoteId: String? = nil) -> Attachment {

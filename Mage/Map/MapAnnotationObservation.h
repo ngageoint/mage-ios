@@ -7,8 +7,9 @@
 //
 
 #import "MapObservation.h"
-#import "ObservationAnnotation.h"
 #import "ObservationAnnotationView.h"
+
+@class ObservationAnnotation;
 
 /**
  * Observation represented by a single Annotation on the map

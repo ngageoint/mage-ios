@@ -5,7 +5,6 @@
 //
 
 #import "GeometryEditViewController.h"
-#import "ObservationAnnotation.h"
 #import "ObservationAnnotationView.h"
 #import "LocationService.h"
 #import "SFPoint.h"

@@ -8,7 +8,6 @@
 
 #import "MapDelegate.h"
 #import "LocationAnnotation.h"
-#import "ObservationAnnotation.h"
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "StaticPointAnnotation.h"
