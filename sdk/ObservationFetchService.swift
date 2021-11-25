@@ -1,0 +1,102 @@
+//
+//  ObservationFetchService.m
+//  mage-ios-sdk
+//
+//
+
+import Foundation
+
+@objc public class ObservationFetchService: NSObject {
+    
+    @objc public static let singleton = ObservationFetchService()
+    @objc public var started = false
+    
+    var interval: TimeInterval = Double(UserDefaults.standard.observationFetchFrequency)
+    var observationFetchTimer: Timer?
+    
+    private override init() {
+        super.init()
+        UserDefaults.standard.addObserver(self, forKeyPath: "observationFetchFrequency", options: .new, context: nil)
+    }
+    
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let change = change else {
+            return
+        }
+
+        if change[NSKeyValueChangeKey.newKey] as? Double == interval {
+            // we were called but thevalue is the same, ignore it
+            return
+        }
+        if let interval = change[NSKeyValueChangeKey.newKey] as? Double {
+            self.interval = interval
+            if started {
+                start()
+            }
+        }
+    }
+    
+    @objc public func start(initial: Bool = false) {
+        stop()
+        pullObservations(initial: initial)
+        started = true
+    }
+    
+    @objc public func stop() {
+        NSLog("stop fetching observations")
+        DispatchQueue.main.async { [weak self] in
+            if let timer = self?.observationFetchTimer, timer.isValid {
+                timer.invalidate();
+                self?.observationFetchTimer = nil;
+            }
+        }
+        self.started = false;
+    }
+    
+    func pullObservations(initial: Bool = false) {
+        if !DataConnectionUtilities.shouldFetchObservations() {
+            scheduleTimer()
+            return
+        }
+        var observationFetchTask: URLSessionTask?;
+        
+        if initial {
+            observationFetchTask = Observation.operationToPullInitialObservations(success: { _, _ in
+                self.scheduleTimer()
+            }, failure: { _, _ in
+                self.scheduleTimer()
+            })
+        } else {
+            observationFetchTask = Observation.operationToPullObservations(success: { _, _ in
+                self.scheduleTimer()
+            }, failure: { _, _ in
+                self.scheduleTimer()
+            })
+        }
+        if let observationFetchTask = observationFetchTask {
+            MageSessionManager.shared().addTask(observationFetchTask);
+        }
+    }
+    
+    func scheduleTimer() {
+        if UserUtility.singleton.isTokenExpired {
+            return;
+        }
+        if let observationFetchTimer = observationFetchTimer, observationFetchTimer.isValid {
+            observationFetchTimer.invalidate()
+            self.observationFetchTimer = nil
+        }
+        DispatchQueue.main.async { [weak self] in
+            guard let fetchService = self else {
+                return
+            }
+            self?.observationFetchTimer = Timer.scheduledTimer(timeInterval: fetchService.interval, target: fetchService, selector: #selector(fetchService.onTimerFire), userInfo: nil, repeats: false)
+        }
+    }
+    
+    @objc func onTimerFire() {
+        if !UserUtility.singleton.isTokenExpired {
+            pullObservations()
+        }
+    }
+}

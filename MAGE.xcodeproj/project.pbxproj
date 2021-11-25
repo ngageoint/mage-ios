@@ -207,7 +207,7 @@
 		F72D42FC2694B60300F9AC3B /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.swift */; };
 		F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */; };
 		F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42812694B60300F9AC3B /* FeedItem.swift */; };
-		F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42822694B60300F9AC3B /* ObservationFetchService.m */; };
+		F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42822694B60300F9AC3B /* ObservationFetchService.swift */; };
 		F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */; };
 		F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */; };
 		F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42892694B60300F9AC3B /* MAGERoutes.m */; };
@@ -874,7 +874,7 @@
 		F72D427F2694B60300F9AC3B /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model9To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42812694B60300F9AC3B /* FeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
-		F72D42822694B60300F9AC3B /* ObservationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFetchService.m; sourceTree = "<group>"; };
+		F72D42822694B60300F9AC3B /* ObservationFetchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationFetchService.swift; sourceTree = "<group>"; };
 		F72D42832694B60300F9AC3B /* Model4To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model4To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42872694B60300F9AC3B /* AttachmentRoutes_Server5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentRoutes_Server5.h; sourceTree = "<group>"; };
 		F72D42882694B60300F9AC3B /* AttachmentRoutes_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentRoutes_Server5.m; sourceTree = "<group>"; };
@@ -933,7 +933,6 @@
 		F72D42D12694B60300F9AC3B /* ObservationFavorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationFavorite.swift; sourceTree = "<group>"; };
 		F72D42D22694B60300F9AC3B /* GPSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPSLocation.swift; sourceTree = "<group>"; };
 		F72D42D32694B60300F9AC3B /* MAGERoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAGERoutes.h; sourceTree = "<group>"; };
-		F72D42D42694B60300F9AC3B /* ObservationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFetchService.h; sourceTree = "<group>"; };
 		F72D42D52694B60300F9AC3B /* Canary+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Canary+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42D62694B60300F9AC3B /* Attachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model3To15.xcmappingmodel; sourceTree = "<group>"; };
@@ -1909,8 +1908,7 @@
 				F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */,
 				F72D42492694B60300F9AC3B /* NSString+Contains.h */,
 				F72D42982694B60300F9AC3B /* NSString+Contains.m */,
-				F72D42D42694B60300F9AC3B /* ObservationFetchService.h */,
-				F72D42822694B60300F9AC3B /* ObservationFetchService.m */,
+				F72D42822694B60300F9AC3B /* ObservationFetchService.swift */,
 				F72D42532694B60300F9AC3B /* ObservationImage.swift */,
 				F72D427C2694B60300F9AC3B /* ObservationPushService.swift */,
 				F72D42342694B60300F9AC3B /* ObservationRoutes.h */,
@@ -3230,7 +3228,7 @@
 				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */,
-				F72D42FF2694B60300F9AC3B /* ObservationFetchService.m in Sources */,
+				F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,

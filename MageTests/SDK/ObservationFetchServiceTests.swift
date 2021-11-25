@@ -56,7 +56,7 @@ class ObservationFetchServiceTests: KIFSpec {
             }
             
             afterEach {
-                ObservationFetchService.singleton().stop();
+                ObservationFetchService.singleton.stop();
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
@@ -66,7 +66,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -80,8 +80,8 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: true)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: true)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(observationsFetchStubCalled).toEventually(beTrue());
 
             }
@@ -91,7 +91,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -105,8 +105,8 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: true)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: true)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(observationsFetchStubCalled).toEventually(equal(1));
                 tester().wait(forTimeInterval: 1.1)
                 expect(observationsFetchStubCalled).toEventually(equal(2));
@@ -117,7 +117,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -131,8 +131,8 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 404, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: true)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: true)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(observationsFetchStubCalled).toEventually(equal(1));
                 tester().wait(forTimeInterval: 1.1)
                 expect(observationsFetchStubCalled).toEventually(equal(2));
@@ -143,7 +143,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -157,8 +157,8 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 404, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: false)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: false)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(observationsFetchStubCalled).toEventually(equal(1));
                 tester().wait(forTimeInterval: 1.1)
                 expect(observationsFetchStubCalled).toEventually(equal(2));
@@ -171,7 +171,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 // 2 is none
                 UserDefaults.standard.set(2, forKey: "observationFetchNetworkOption")
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -185,8 +185,8 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 404, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: false)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: false)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 tester().wait(forTimeInterval: 1.5)
                 // 0 is all
                 UserDefaults.standard.set(0, forKey: "observationFetchNetworkOption")
@@ -200,7 +200,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 // 2 is none
                 UserDefaults.standard.set(2, forKey: "observationFetchNetworkOption")
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -214,9 +214,9 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 404, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: true)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
-                tester().wait(forTimeInterval: 1.5)
+                ObservationFetchService.singleton.start(initial: true)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
+                tester().wait(forTimeInterval: 1.8)
                 // 0 is all
                 UserDefaults.standard.set(0, forKey: "observationFetchNetworkOption")
                 expect(observationsFetchStubCalled).toEventually(equal(1));
@@ -227,7 +227,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -241,11 +241,11 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: true)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: true)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(observationsFetchStubCalled).toEventually(equal(1));
-                ObservationFetchService.singleton().stop()
-                ObservationFetchService.singleton().start(asInitial: false)
+                ObservationFetchService.singleton.stop()
+                ObservationFetchService.singleton.start(initial: false)
                 expect(observationsFetchStubCalled).toEventually(equal(2));
             }
             
@@ -254,7 +254,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -268,8 +268,8 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: true)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: true)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(observationsFetchStubCalled).toEventually(equal(1));
                 tester().wait(forTimeInterval: 1.1)
                 expect(observationsFetchStubCalled).toEventually(equal(2));
@@ -283,7 +283,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 2
                 MageCoreDataFixtures.addEvent();
-                expect(ObservationFetchService.singleton().started).to(beFalse());
+                expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
                 
@@ -297,8 +297,8 @@ class ObservationFetchServiceTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: [], statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                ObservationFetchService.singleton().start(asInitial: true)
-                expect(ObservationFetchService.singleton().started).toEventually(beTrue());
+                ObservationFetchService.singleton.start(initial: true)
+                expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(observationsFetchStubCalled).toEventually(equal(1));
                 tester().wait(forTimeInterval: 0.1)
                 UserDefaults.standard.observationFetchFrequency = 1

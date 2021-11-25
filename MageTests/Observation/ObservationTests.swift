@@ -1279,10 +1279,10 @@ class ObservationTests: KIFSpec {
                     let stubPath = OHPathForFile("observations.json", ObservationTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
-                ObservationFetchService.singleton()?.start(asInitial: true);
+                ObservationFetchService.singleton.start(initial: true);
                 expect(stubCalled).toEventually(beTrue());
                 expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                ObservationFetchService.singleton()?.stop();
+                ObservationFetchService.singleton.stop();
             }
             
             it("should pull the observations as initial and then update one") {
@@ -1300,10 +1300,10 @@ class ObservationTests: KIFSpec {
                     let stubPath = OHPathForFile("observations.json", ObservationTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
-                ObservationFetchService.singleton()?.start(asInitial: true);
+                ObservationFetchService.singleton.start(initial: true);
                 expect(stubCalled).toEventually(beTrue());
                 expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                ObservationFetchService.singleton()?.stop();
+                ObservationFetchService.singleton.stop();
                 let firstObservation1 = Observation.mr_findFirst();
                 let forms1: [[AnyHashable : Any]] = firstObservation1?.properties!["forms"] as! [[AnyHashable : Any]];
                 expect(forms1[0]["field2"] as? String).to(equal("Test"))
@@ -1322,10 +1322,10 @@ class ObservationTests: KIFSpec {
                     let stubPath = OHPathForFile("observationsUpdate.json", ObservationTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
-                ObservationFetchService.singleton()?.start(asInitial: true);
+                ObservationFetchService.singleton.start(initial: true);
                 expect(updateStubCalled).toEventually(beTrue());
                 expect(Observation.mr_findAll()?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                ObservationFetchService.singleton()?.stop();
+                ObservationFetchService.singleton.stop();
                 let formatter = DateFormatter();
                 formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
                 formatter.timeZone = TimeZone(secondsFromGMT: 0);
