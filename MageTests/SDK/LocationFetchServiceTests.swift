@@ -20,6 +20,8 @@ class LocationFetchServiceTests: KIFSpec {
         describe("LocationFetchService Tests") {
             
             beforeEach {
+                LocationFetchService.singleton.stop();
+
                 var cleared = false;
                 while (!cleared) {
                     let clearMap = TestHelpers.clearAndSetUpStack()
@@ -53,10 +55,12 @@ class LocationFetchServiceTests: KIFSpec {
                     LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
                     LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
                 ]
+                UserUtility.singleton.resetExpiration()
             }
             
             afterEach {
                 LocationFetchService.singleton.stop();
+                expect(LocationFetchService.singleton.started).toEventually(beFalse());
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
@@ -80,7 +84,8 @@ class LocationFetchServiceTests: KIFSpec {
                 LocationFetchService.singleton.start()
                 expect(LocationFetchService.singleton.started).toEventually(beTrue());
                 expect(locationsFetchStubCalled).toEventually(beTrue());
-                
+                LocationFetchService.singleton.stop();
+                expect(LocationFetchService.singleton.started).toEventually(beFalse());
             }
             
             it("should ensure the timer fires") {
@@ -101,9 +106,9 @@ class LocationFetchServiceTests: KIFSpec {
                 
                 LocationFetchService.singleton.start()
                 expect(LocationFetchService.singleton.started).toEventually(beTrue());
-                expect(locationsFetchStubCalled).toEventually(equal(1));
+                expect(locationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called once");
                 tester().wait(forTimeInterval: 1.1)
-                expect(locationsFetchStubCalled).toEventually(equal(2));
+                expect(locationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called twice");
             }
             
             it("should ensure the timer fires after a failure to pull") {
@@ -127,9 +132,9 @@ class LocationFetchServiceTests: KIFSpec {
                 
                 LocationFetchService.singleton.start()
                 expect(LocationFetchService.singleton.started).toEventually(beTrue());
-                expect(locationsFetchStubCalled).toEventually(equal(1));
+                expect(locationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called once");
                 tester().wait(forTimeInterval: 1.1)
-                expect(locationsFetchStubCalled).toEventually(equal(2));
+                expect(locationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called twice");
             }
             
             it("should ensure the timer fires as a way to check if we should fetch") {
@@ -158,7 +163,7 @@ class LocationFetchServiceTests: KIFSpec {
                 tester().wait(forTimeInterval: 1.5)
                 // 0 is all
                 UserDefaults.standard.set(0, forKey: "locationFetchNetworkOption")
-                expect(locationsFetchStubCalled).toEventually(equal(1));
+                expect(locationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called once");
             }
             
             it("should start the timer if stop is called immediately before start") {
@@ -182,10 +187,10 @@ class LocationFetchServiceTests: KIFSpec {
                 
                 LocationFetchService.singleton.start()
                 expect(LocationFetchService.singleton.started).toEventually(beTrue());
-                expect(locationsFetchStubCalled).toEventually(equal(1));
+                expect(locationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called once");
                 LocationFetchService.singleton.stop()
                 LocationFetchService.singleton.start()
-                expect(locationsFetchStubCalled).toEventually(equal(2));
+                expect(locationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called twice");
             }
             
             it("should kick the timer if the preference changes") {
@@ -209,12 +214,12 @@ class LocationFetchServiceTests: KIFSpec {
                 
                 LocationFetchService.singleton.start()
                 expect(LocationFetchService.singleton.started).toEventually(beTrue());
-                expect(locationsFetchStubCalled).toEventually(equal(1));
-                tester().wait(forTimeInterval: 1.1)
-                expect(locationsFetchStubCalled).toEventually(equal(2));
+                expect(locationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called once");
+                tester().wait(forTimeInterval: 1.5)
+                expect(locationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called twice");
                 UserDefaults.standard.userFetchFrequency = 2
                 tester().wait(forTimeInterval: 0.5)
-                expect(locationsFetchStubCalled).toEventually(equal(3));
+                expect(locationsFetchStubCalled).toEventually(equal(3), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called three times");
             }
             
             it("should change the time and not result in two timers") {
@@ -238,14 +243,14 @@ class LocationFetchServiceTests: KIFSpec {
                 
                 LocationFetchService.singleton.start()
                 expect(LocationFetchService.singleton.started).toEventually(beTrue());
-                expect(locationsFetchStubCalled).toEventually(equal(1));
+                expect(locationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called once");
                 tester().wait(forTimeInterval: 0.1)
                 UserDefaults.standard.userFetchFrequency = 1
-                expect(locationsFetchStubCalled).toEventually(equal(2));
+                expect(locationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called twice");
+                tester().wait(forTimeInterval: 1.5)
+                expect(locationsFetchStubCalled).toEventually(equal(3), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called three times");
                 tester().wait(forTimeInterval: 1.1)
-                expect(locationsFetchStubCalled).toEventually(equal(3));
-                tester().wait(forTimeInterval: 1.1)
-                expect(locationsFetchStubCalled).to(equal(4));
+                expect(locationsFetchStubCalled).toEventually(equal(4), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations stub not called four times");
             }
         }
     }

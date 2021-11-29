@@ -20,6 +20,7 @@ class ObservationFetchServiceTests: KIFSpec {
         describe("ObservationFetchService Tests") {
             
             beforeEach {
+                ObservationFetchService.singleton.stop();
                 var cleared = false;
                 while (!cleared) {
                     let clearMap = TestHelpers.clearAndSetUpStack()
@@ -53,6 +54,7 @@ class ObservationFetchServiceTests: KIFSpec {
                     LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
                     LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
                 ]
+                UserUtility.singleton.resetExpiration()
             }
             
             afterEach {
@@ -107,9 +109,9 @@ class ObservationFetchServiceTests: KIFSpec {
                 
                 ObservationFetchService.singleton.start(initial: true)
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
                 tester().wait(forTimeInterval: 1.1)
-                expect(observationsFetchStubCalled).toEventually(equal(2));
+                expect(observationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called twice");
             }
             
             it("should ensure the timer fires after a failure to pull initial") {
@@ -133,9 +135,9 @@ class ObservationFetchServiceTests: KIFSpec {
                 
                 ObservationFetchService.singleton.start(initial: true)
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
                 tester().wait(forTimeInterval: 1.1)
-                expect(observationsFetchStubCalled).toEventually(equal(2));
+                expect(observationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called twice");
             }
             
             it("should ensure the timer fires after a failure to pull") {
@@ -159,9 +161,9 @@ class ObservationFetchServiceTests: KIFSpec {
                 
                 ObservationFetchService.singleton.start(initial: false)
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
                 tester().wait(forTimeInterval: 1.1)
-                expect(observationsFetchStubCalled).toEventually(equal(2));
+                expect(observationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called twice");
             }
             
             it("should ensure the timer fires as a way to check if we should fetch") {
@@ -190,7 +192,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 tester().wait(forTimeInterval: 1.5)
                 // 0 is all
                 UserDefaults.standard.set(0, forKey: "observationFetchNetworkOption")
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
             }
             
             it("should ensure the timer fires as a way to check if we should fetch on initial pull") {
@@ -219,7 +221,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 tester().wait(forTimeInterval: 1.8)
                 // 0 is all
                 UserDefaults.standard.set(0, forKey: "observationFetchNetworkOption")
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
             }
             
             it("should start the timer if stop is called immediately before start") {
@@ -243,10 +245,10 @@ class ObservationFetchServiceTests: KIFSpec {
                 
                 ObservationFetchService.singleton.start(initial: true)
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
                 ObservationFetchService.singleton.stop()
                 ObservationFetchService.singleton.start(initial: false)
-                expect(observationsFetchStubCalled).toEventually(equal(2));
+                expect(observationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called twice");
             }
             
             it("should kick the timer if the preference changes") {
@@ -270,12 +272,12 @@ class ObservationFetchServiceTests: KIFSpec {
                 
                 ObservationFetchService.singleton.start(initial: true)
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
                 tester().wait(forTimeInterval: 1.1)
-                expect(observationsFetchStubCalled).toEventually(equal(2));
+                expect(observationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called twice");
                 UserDefaults.standard.observationFetchFrequency = 2
                 tester().wait(forTimeInterval: 0.5)
-                expect(observationsFetchStubCalled).toEventually(equal(3));
+                expect(observationsFetchStubCalled).toEventually(equal(3), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called three times");
             }
             
             it("should change the time and not result in two timers") {
@@ -299,12 +301,12 @@ class ObservationFetchServiceTests: KIFSpec {
                 
                 ObservationFetchService.singleton.start(initial: true)
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-                expect(observationsFetchStubCalled).toEventually(equal(1));
+                expect(observationsFetchStubCalled).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called once");
                 tester().wait(forTimeInterval: 0.1)
                 UserDefaults.standard.observationFetchFrequency = 1
-                expect(observationsFetchStubCalled).toEventually(equal(2));
+                expect(observationsFetchStubCalled).toEventually(equal(2), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called twice");
                 tester().wait(forTimeInterval: 1.1)
-                expect(observationsFetchStubCalled).toEventually(equal(3));
+                expect(observationsFetchStubCalled).toEventually(equal(3), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations stub not called three times");
                 tester().wait(forTimeInterval: 1.1)
                 expect(observationsFetchStubCalled).to(equal(4));
             }
