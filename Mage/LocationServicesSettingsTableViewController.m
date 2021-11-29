@@ -180,7 +180,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
         
         cell.title.text = @"Time Interval";
         cell.subtitle.text = @"Updates to users will be fetched at this interval.  Smaller intervals will fetch users more often at the cost of battery drain.";
-        [self setPreferenceDisplayLabel:cell.detail forPreference:@"userReporting"];
+        [self setPreferenceDisplayLabel:cell.detail forPreference:@"userFetch"];
         
         cell.title.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
         cell.subtitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
@@ -219,7 +219,7 @@ static NSInteger GPS_DISTANCE_CELL_ROW = 2;
     }
     
     if (indexPath.section == USER_PULL_INTERVAL_SECTION) {
-        NSString *key = @"userReporting";
+        NSString *key = @"userFetch";
 
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSDictionary *fetchPreferences = [defaults dictionaryForKey:key];

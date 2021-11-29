@@ -24,7 +24,7 @@ class MageTests: KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 LocationService.singleton().stop();
-                LocationFetchService.singleton().stop();
+                LocationFetchService.singleton.stop();
                 ObservationFetchService.singleton.stop();
                 ObservationPushService.singleton.stop();
                 AttachmentPushService.singleton().stop();
@@ -34,7 +34,7 @@ class MageTests: KIFSpec {
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
                 LocationService.singleton().stop();
-                LocationFetchService.singleton().stop();
+                LocationFetchService.singleton.stop();
                 ObservationFetchService.singleton.stop();
                 ObservationPushService.singleton.stop();
                 AttachmentPushService.singleton().stop();
@@ -46,7 +46,7 @@ class MageTests: KIFSpec {
                 MageCoreDataFixtures.addEvent();
                 expect(ObservationPushService.singleton.started).to(beFalse());
                 expect(LocationService.singleton().started).to(beFalse());
-                expect(LocationFetchService.singleton().started).to(beFalse());
+                expect(LocationFetchService.singleton.started).to(beFalse());
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 expect(AttachmentPushService.singleton().started).to(beFalse());
                 
@@ -92,7 +92,7 @@ class MageTests: KIFSpec {
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(AttachmentPushService.singleton().started).toEventually(beTrue());
                 expect(LocationService.singleton().started).to(beTrue());
-                expect(LocationFetchService.singleton().started).to(beTrue());
+                expect(LocationFetchService.singleton.started).to(beTrue());
             }
             
             it("should fetch events") {
@@ -197,7 +197,7 @@ class MageTests: KIFSpec {
                 MageCoreDataFixtures.addEvent();
                 expect(ObservationPushService.singleton.started).to(beFalse());
                 expect(LocationService.singleton().started).to(beFalse());
-                expect(LocationFetchService.singleton().started).to(beFalse());
+                expect(LocationFetchService.singleton.started).to(beFalse());
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 expect(AttachmentPushService.singleton().started).to(beFalse());
                 Mage.singleton.startServices(initial: false);
@@ -241,14 +241,14 @@ class MageTests: KIFSpec {
                 expect(ObservationFetchService.singleton.started).toEventually(beTrue());
                 expect(AttachmentPushService.singleton().started).toEventually(beTrue());
                 expect(LocationService.singleton().started).to(beTrue());
-                expect(LocationFetchService.singleton().started).to(beTrue());
+                expect(LocationFetchService.singleton.started).to(beTrue());
                 
                 Mage.singleton.stopServices();
                 
                 expect(ObservationPushService.singleton.started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Observation Push Service still running")
                 // Location Service does not stop when all services are stopped
                 expect(LocationService.singleton().started).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Location Service still running")
-                expect(LocationFetchService.singleton().started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Location Fetch Service still running")
+                expect(LocationFetchService.singleton.started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Location Fetch Service still running")
                 expect(ObservationFetchService.singleton.started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Observation Fetch Service still running")
                 expect(AttachmentPushService.singleton().started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Attachment Push Service still running")
             }

@@ -23,7 +23,7 @@ import Foundation
         
         let usersPullTask = User.operationToFetchUsers { task, response in
             NSLog("Done with the initial user fetch, start location and observation services")
-            LocationFetchService.singleton().start();
+            LocationFetchService.singleton.start();
             ObservationFetchService.singleton.start(initial: initial);
         } failure: { task, error in
             NSLog("Failed to pull users")
@@ -42,7 +42,7 @@ import Foundation
     }
     
     @objc public func stopServices() {
-        LocationFetchService.singleton().stop();
+        LocationFetchService.singleton.stop();
         ObservationFetchService.singleton.stop();
         ObservationPushService.singleton.stop();
         AttachmentPushService.singleton().stop();

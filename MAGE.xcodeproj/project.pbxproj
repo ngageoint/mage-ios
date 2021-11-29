@@ -199,7 +199,7 @@
 		F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42722694B60300F9AC3B /* SessionTask.m */; };
 		F72D42F52694B60300F9AC3B /* TaskSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42732694B60300F9AC3B /* TaskSessionManager.m */; };
 		F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42772694B60300F9AC3B /* StoredPassword.m */; };
-		F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42782694B60300F9AC3B /* LocationFetchService.m */; };
+		F72D42F72694B60300F9AC3B /* LocationFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42782694B60300F9AC3B /* LocationFetchService.swift */; };
 		F72D42F82694B60300F9AC3B /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42792694B60300F9AC3B /* Location.swift */; };
 		F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */; };
 		F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427C2694B60300F9AC3B /* ObservationPushService.swift */; };
@@ -532,6 +532,7 @@
 		F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */; };
 		F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
+		F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
@@ -866,7 +867,7 @@
 		F72D42742694B60300F9AC3B /* SessionTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionTaskQueue.h; sourceTree = "<group>"; };
 		F72D42752694B60300F9AC3B /* MageEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageEnums.h; sourceTree = "<group>"; };
 		F72D42772694B60300F9AC3B /* StoredPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoredPassword.m; sourceTree = "<group>"; };
-		F72D42782694B60300F9AC3B /* LocationFetchService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationFetchService.m; sourceTree = "<group>"; };
+		F72D42782694B60300F9AC3B /* LocationFetchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFetchService.swift; sourceTree = "<group>"; };
 		F72D42792694B60300F9AC3B /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model7To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D427C2694B60300F9AC3B /* ObservationPushService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationPushService.swift; sourceTree = "<group>"; };
@@ -910,7 +911,6 @@
 		F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model6To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42B62694B60300F9AC3B /* ServerAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAuthentication.h; sourceTree = "<group>"; };
 		F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Attachment+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		F72D42BB2694B60300F9AC3B /* LocationFetchService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationFetchService.h; sourceTree = "<group>"; };
 		F72D42BC2694B60300F9AC3B /* StoredPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoredPassword.h; sourceTree = "<group>"; };
 		F72D42BD2694B60300F9AC3B /* Layer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		F72D42BE2694B60300F9AC3B /* MageEnums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageEnums.m; sourceTree = "<group>"; };
@@ -1276,6 +1276,7 @@
 		F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldView.swift; sourceTree = "<group>"; };
 		F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
+		F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetchServiceTests.swift; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
 		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
 		F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolygon.m; sourceTree = "<group>"; };
@@ -1869,8 +1870,7 @@
 				F72D42AF2694B60300F9AC3B /* LdapAuthentication.m */,
 				F72D42A22694B60300F9AC3B /* LocalAuthentication.h */,
 				F72D422F2694B60300F9AC3B /* LocalAuthentication.m */,
-				F72D42BB2694B60300F9AC3B /* LocationFetchService.h */,
-				F72D42782694B60300F9AC3B /* LocationFetchService.m */,
+				F72D42782694B60300F9AC3B /* LocationFetchService.swift */,
 				F72D42CF2694B60300F9AC3B /* LocationService.h */,
 				F72D428E2694B60300F9AC3B /* LocationService.m */,
 				F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */,
@@ -2522,6 +2522,7 @@
 				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
 				F7DDF46E2748023A00689550 /* ObservationImageTests.swift */,
 				F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */,
+				F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -3343,7 +3344,7 @@
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F72D43142694B60300F9AC3B /* Event.swift in Sources */,
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
-				F72D42F72694B60300F9AC3B /* LocationFetchService.m in Sources */,
+				F72D42F72694B60300F9AC3B /* LocationFetchService.swift in Sources */,
 				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
@@ -3462,6 +3463,7 @@
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
 				F7F15B13274565A8008FF6C2 /* MageTests.swift in Sources */,
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
+				F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
 				F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */,
 				F7081DB02626348F004B89D4 /* MockCLLocationManager.swift in Sources */,
