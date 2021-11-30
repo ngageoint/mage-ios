@@ -304,7 +304,6 @@
 		F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */; };
 		F75D24C0274C2B11003C0A83 /* ObservationAnnotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
-		F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FEE612035E76F00577DA4 /* MageServerTests.m */; };
 		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
 		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
 		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
@@ -539,6 +538,7 @@
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
 		F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */; };
 		F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FE8C8D258829BE00314285 /* EditAttachmentCardView.swift */; };
+		F7FED9DD275692850000915B /* apiSuccessNoAuthStrategies.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -995,7 +995,6 @@
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
 		F75FC905233AAA4100547315 /* XYZTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XYZTileOverlay.m; sourceTree = "<group>"; };
-		F75FEE612035E76F00577DA4 /* MageServerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServerTests.m; sourceTree = "<group>"; };
 		F76090FF23FDA5E5000233A6 /* signinSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signinSuccess.json; sourceTree = "<group>"; };
 		F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = authorizeLocalSuccess.json; sourceTree = "<group>"; };
 		F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkSyncOptionTetsts.m; sourceTree = "<group>"; };
@@ -1287,6 +1286,7 @@
 		F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSynchronizationSettingsTableViewController.h; sourceTree = "<group>"; };
 		F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataSynchronizationSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7FE8C8D258829BE00314285 /* EditAttachmentCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAttachmentCardView.swift; sourceTree = "<group>"; };
+		F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccessNoAuthStrategies.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2111,6 +2111,7 @@
 				F7F15B142745865F008FF6C2 /* users.json */,
 				F7F15B16274596B1008FF6C2 /* events.json */,
 				F7F15B1827459A1F008FF6C2 /* myself.json */,
+				F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2469,7 +2470,6 @@
 				F7232329251CE90C00AD168A /* Settings */,
 				F795ED0A24B8FC680028FBFC /* People */,
 				F7098F2024928E6300313703 /* Feed */,
-				F75FEE612035E76F00577DA4 /* MageServerTests.m */,
 				F729E9D82034CC3700C2600D /* TestingAppDelegate.h */,
 				F729E9D92034CC3700C2600D /* TestingAppDelegate.m */,
 				F7ED5D2820052161007BD768 /* Info.plist */,
@@ -2825,6 +2825,7 @@
 				F73B7648274438FA00799BBF /* attachmentPushTestResponse.json in Resources */,
 				F7154AB7260BEAE3002C8617 /* observationsUpdate.json in Resources */,
 				F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */,
+				F7FED9DD275692850000915B /* apiSuccessNoAuthStrategies.json in Resources */,
 				F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */,
 				F7C640FF257EB29100C02335 /* geometryField.json in Resources */,
 				F777B012252D049400B88BD4 /* signinSuccessInactiveUser.json in Resources */,
@@ -3452,7 +3453,6 @@
 				F7521DEA2672336800C52318 /* MockGeometryEditCoordinator.swift in Sources */,
 				F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */,
 				F7DDF46F2748023A00689550 /* ObservationImageTests.swift in Sources */,
-				F75FEE632035E7CC00577DA4 /* MageServerTests.m in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
 				F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */,

@@ -1,0 +1,15 @@
+{
+    "provision": {
+        "strategy":"uid"
+    },
+    "version":{
+        "major":6,
+        "minor":0,
+        "micro":0
+    },
+    "description":"Geospatial situation awareness application",
+    "name":"MAGE",
+    "disclaimer":{
+        "show":false
+    }
+}

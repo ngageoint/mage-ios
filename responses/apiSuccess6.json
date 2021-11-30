@@ -6,6 +6,15 @@
     "authenticationStrategies":{
         "local":{
             "passwordMinLength":14
+        },
+        "oauth":{
+            "name": "testoauth",
+            "type": "oauth2",
+            "title": "title",
+            "textColor": "#000000",
+            "buttonColor": "#FFFFFF",
+            "settings": {
+            }
         }
     },
     "version":{
@@ -19,5 +28,9 @@
         "text":"Disclaimer text",
         "title":"Consent to Monitoring",
         "show":true
+    },
+    "contactinfo": {
+        "phone": "000-000-0000",
+        "email": "test@nowhere"
     }
 }
