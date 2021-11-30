@@ -140,6 +140,7 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
     }
     
     MageServer *server = [[MageServer alloc] initWithURL: url];
+    // TODO: we need a way to force re-fetch the api in case strategies changed
     if ([url.absoluteString isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:kBaseServerUrlKey]] && server.authenticationModules) {
         success(server);
         return;
@@ -185,8 +186,8 @@ NSString * const kBaseServerUrlKey = @"baseServerUrl";
         
         NSDictionary *contactinfo = [response valueForKey:@"contactinfo"];
         if (contactinfo) {
-            [defaults setObject:[contactinfo valueForKeyPath:@"email"] forKey:@"contactinfoEmail"];
-            [defaults setObject:[contactinfo valueForKeyPath:@"phone"] forKey:@"contactinfoPhone"];
+            [defaults setObject:[contactinfo valueForKeyPath:@"email"] forKey:@"contactInfoEmail"];
+            [defaults setObject:[contactinfo valueForKeyPath:@"phone"] forKey:@"contactInfoPhone"];
         }
         
         if (![response valueForKeyPath:@"authenticationStrategies"]) {

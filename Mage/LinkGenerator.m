@@ -15,7 +15,7 @@
     NSString * url;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString * email = [defaults valueForKeyPath:@"contactinfoEmail"];
+    NSString * email = [defaults valueForKeyPath:@"contactInfoEmail"];
     
     if(email != nil && [email length] > 0) {
         EmailBuilder * builder = [[EmailBuilder alloc] initWithMessage:message
@@ -41,7 +41,7 @@
     NSString * url;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString * phone = [defaults valueForKeyPath:@"contactinfoPhone"];
+    NSString * phone = [defaults valueForKeyPath:@"contactInfoPhone"];
     
     if(phone != nil && [phone length] > 0) {
         NSString * encodedPhone = [phone stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];

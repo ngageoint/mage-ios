@@ -143,6 +143,11 @@
         [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
         [defaults setObject:[api valueForKeyPath:@"disclaimer.title"] forKey:@"disclaimerTitle"];
     }
+    NSDictionary *contactinfo = [api valueForKey:@"contactinfo"];
+    if (contactinfo) {
+        [defaults setObject:[contactinfo valueForKeyPath:@"email"] forKey:@"contactInfoEmail"];
+        [defaults setObject:[contactinfo valueForKeyPath:@"phone"] forKey:@"contactInfoPhone"];
+    }
     [defaults setObject:[api valueForKeyPath:@"authenticationStrategies"] forKey:@"authenticationStrategies"];
     
     NSDictionary *userJson = [self.response objectForKey:@"user"];

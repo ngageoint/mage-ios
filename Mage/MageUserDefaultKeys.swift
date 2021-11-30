@@ -320,6 +320,60 @@ public enum LoginParametersKey: String {
         }
     }
     
+    var contactInfoEmail: String? {
+        get {
+            return string(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var contactInfoPhone: String? {
+        get {
+            return string(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var showDisclaimer: Bool {
+        get {
+            return bool(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
+    var disclaimerText: String? {
+        get {
+            return string(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var disclaimerTitle: String? {
+        get {
+            return string(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var serverCompatibilities: [[String: Int]]? {
+        get {
+            return array(forKey: #function) as? [[String: Int]]
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     // MARK: GeoPackage keys
     var geoPackageFeatureTilesMaxPointsPerTile: Int {
         get {
