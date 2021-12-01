@@ -123,7 +123,7 @@
 }
 
 - (void) setupAuthentication {
-    NSArray *strategies = [self.server getStrategies];
+    NSArray *strategies = self.server.strategies;
     
     for (UIView *subview in [self.loginsStackView subviews]) {
         [subview removeFromSuperview];

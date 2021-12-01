@@ -20,7 +20,6 @@
 #import "NotificationRequester.h"
 #import "FadeTransitionSegue.h"
 #import "MediaLoader.h"
-#import "MageServer.h"
 #import <MGRS.h>
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"

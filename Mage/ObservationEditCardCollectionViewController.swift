@@ -257,7 +257,7 @@ import MaterialComponents.MDCCard
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
-        if ((MageServer.isServerVersion5() && realFormCount == 1) || eventForms?.filter({ form in
+        if ((MageServer.isServerVersion5 && realFormCount == 1) || eventForms?.filter({ form in
             return !(form[FormKey.archived.key] as? Bool ?? false)
         }).count == 0) {
             addFormFAB.isHidden = true;
@@ -305,7 +305,7 @@ import MaterialComponents.MDCCard
     
     // for legacy servers add the attachment field to common
     func addLegacyAttachmentCard(stackView: UIStackView) {
-        if (MageServer.isServerVersion5()) {
+        if (MageServer.isServerVersion5) {
             if let observation = observation {
                 let attachmentCard: EditAttachmentCardView = EditAttachmentCardView(observation: observation, attachmentSelectionDelegate: self, viewController: self);
                 let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
@@ -509,7 +509,7 @@ import MaterialComponents.MDCCard
         let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
         
         // if this is a legacy server and the event has forms, there needs to be 1
-        if (MageServer.isServerVersion5()) {
+        if (MageServer.isServerVersion5) {
             if ((eventForms?.count ?? 0) > 0 && realFormCount == 0) {
                 let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "One form must be added to this observation");
                 let messageAction = MDCSnackbarMessageAction();

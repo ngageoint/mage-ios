@@ -9,7 +9,6 @@
 @import MaterialComponents;
 
 #import "ServerURLController.h"
-#import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
 #import "MAGE-Swift.h"
 

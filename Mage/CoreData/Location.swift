@@ -73,10 +73,10 @@ import MagicalRecord
     }
     
     @objc public static func operationToPullLocations(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        guard let currentEventId = Server.currentEventId() else {
+        guard let currentEventId = Server.currentEventId(), let baseURL = MageServer.baseURL() else {
             return nil;
         }
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(currentEventId)/locations/users";
+        let url = "\(baseURL.absoluteURL)/api/events/\(currentEventId)/locations/users";
         print("Trying to fetch locations from server \(url)")
         // we only need to get the most recent location
         var parameters: [AnyHashable : Any] = [

@@ -12,7 +12,10 @@ import CoreData
 @objc public class Event: NSManagedObject {
     
     @objc public static func operationToFetchEvents(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events";
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
+        let url = "\(baseURL.absoluteURL)/api/events";
         let manager = MageSessionManager.shared();
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             MagicalRecord.save { localContext in
@@ -65,11 +68,11 @@ import CoreData
     }
     
     @objc public static func sendRecentEvent() {
-        guard let u = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
+        guard let u = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()), let baseURL = MageServer.baseURL() else {
             return;
         }
         let manager = MageSessionManager.shared();
-        guard let currentEventId = Server.currentEventId(), let task: URLSessionDataTask = manager?.post_TASK("\(MageServer.baseURL().absoluteURL)/api/users/\(u.remoteId ?? "")/events/\(currentEventId)/recent", parameters: nil, progress: nil, success: { task, response in
+        guard let currentEventId = Server.currentEventId(), let task: URLSessionDataTask = manager?.post_TASK("\(baseURL.absoluteURL)/api/users/\(u.remoteId ?? "")/events/\(currentEventId)/recent", parameters: nil, progress: nil, success: { task, response in
             
         }, failure: { task, error in
             print("Error posting recent event")

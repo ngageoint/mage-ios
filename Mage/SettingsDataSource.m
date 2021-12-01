@@ -11,7 +11,6 @@
 #import "AuthenticationCoordinator.h"
 #import <CoreLocation/CoreLocation.h>
 #import "LocationService.h"
-#import "MageServer.h"
 #import "ObservationTableHeaderView.h"
 #import "NSDate+display.h"
 #import "UITableViewCell+Setting.h"

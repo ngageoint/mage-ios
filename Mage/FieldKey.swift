@@ -376,6 +376,48 @@ public enum StaticLayerKey: String {
     case id
     
     var key: String {
+        return self.rawValue
+    }
+}
+
+public enum ApiKey: String {
+    
+    case disclaimer
+    // do not change this, lowercase i is correct
+    case contactinfo
+    case authenticationStrategies
+    
+    var key: String {
+        return self.rawValue
+    }
+}
+
+public enum DisclaimerKey: String {
+    case show
+    case text
+    case title
+    
+    var key: String {
+        return self.rawValue
+    }
+}
+
+public enum ContactInfoKey: String {
+    case email
+    case phone
+    
+    var key: String {
+        return self.rawValue
+    }
+}
+
+public enum LoginParametersKey: String {
+    case acceptedConsent
+    case tokenExpirationDate
+    case agree
+    case serverUrl
+    
+    var key: String {
         return self.rawValue;
     }
 }

@@ -11,7 +11,6 @@
 #import "SignUpViewController.h"
 #import "UINextField.h"
 #import "MageSessionManager.h"
-#import "MageServer.h"
 #import "IdpAuthentication.h"
 #import "NBAsYouTypeFormatter.h"
 #import "ServerAuthentication.h"

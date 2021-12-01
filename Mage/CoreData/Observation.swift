@@ -36,10 +36,10 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func operationToPullObservations(initial: Bool, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        guard let currentEventId = Server.currentEventId() else {
+        guard let currentEventId = Server.currentEventId(), let baseURL = MageServer.baseURL() else {
             return nil;
         }
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(currentEventId)/observations";
+        let url = "\(baseURL.absoluteURL)/api/events/\(currentEventId)/observations";
         print("Fetching observations from event \(currentEventId)");
         
         var parameters: [AnyHashable : Any] = [
@@ -141,10 +141,10 @@ enum State: Int, CustomStringConvertible {
     }
     
     @objc public static func operationToPushFavorite(favorite: ObservationFavorite, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        guard let eventId = favorite.observation?.eventId, let observationRemoteId = favorite.observation?.remoteId else {
+        guard let eventId = favorite.observation?.eventId, let observationRemoteId = favorite.observation?.remoteId, let baseURL = MageServer.baseURL() else {
             return nil;
         }
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/favorite";
+        let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/favorite";
         NSLog("Trying to push favorite to server \(url)")
 
         let manager = MageSessionManager.shared();
@@ -157,10 +157,10 @@ enum State: Int, CustomStringConvertible {
     }
     
     @objc public static func operationToPushImportant(important: ObservationImportant, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        guard let eventId = important.observation?.eventId, let observationRemoteId = important.observation?.remoteId else {
+        guard let eventId = important.observation?.eventId, let observationRemoteId = important.observation?.remoteId, let baseURL = MageServer.baseURL() else {
             return nil;
         }
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/important";
+        let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/important";
         NSLog("Trying to push favorite to server \(url)")
         
         let manager = MageSessionManager.shared();
@@ -222,7 +222,7 @@ enum State: Int, CustomStringConvertible {
         guard let context = observation.managedObjectContext, let event = Event.getCurrentEvent(context:context) else {
             return nil;
         }
-        if (MageServer.isServerVersion5()) {
+        if (MageServer.isServerVersion5) {
             if let observationUrl = observation.url {
                 return manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
             }
@@ -313,7 +313,7 @@ enum State: Int, CustomStringConvertible {
         var jsonProperties : [AnyHashable : Any] = self.properties ?? [:]
         
         var attachmentsToDelete : [String: [String : [Attachment]]] = [:]
-        if (!MageServer.isServerVersion5()) {
+        if (!MageServer.isServerVersion5) {
             // check for attachments marked for deletion and be sure to add them to the form properties
             if let attachments = attachments {
                 for case let attachment in attachments where attachment.markedForDeletion {

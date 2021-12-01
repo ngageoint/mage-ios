@@ -174,7 +174,7 @@ import MaterialComponents.MDCContainerScheme;
         addHeaderCard(stackView: stackView);
         addLegacyAttachmentCard(stackView: stackView);
         var headerViews = 2;
-        if (MageServer.isServerVersion5()) {
+        if (MageServer.isServerVersion5) {
             headerViews = 4;
         }
         if (stackView.arrangedSubviews.count > headerViews) {
@@ -203,7 +203,7 @@ import MaterialComponents.MDCContainerScheme;
     // for legacy servers add the attachment field to common
     // TODO: this can be removed once all servers are upgraded
     func addLegacyAttachmentCard(stackView: UIStackView) {
-        if (MageServer.isServerVersion5()) {
+        if (MageServer.isServerVersion5) {
             if let observation = observation {
                 if let attachmentCard = attachmentCard {
                     attachmentCard.populate(observation: observation);

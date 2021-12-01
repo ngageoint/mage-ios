@@ -48,7 +48,11 @@ import Kingfisher
     }
     
     @objc public static func operationToFetchMyself(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        let url = "\(MageServer.baseURL().absoluteURL)/api/users/myself";
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
+        
+        let url = "\(baseURL.absoluteURL)/api/users/myself";
         let manager = MageSessionManager.shared();
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             MagicalRecord.save { localContext in
@@ -80,7 +84,10 @@ import Kingfisher
     
     @discardableResult
     @objc public static func operationToFetchUsers(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        let url = "\(MageServer.baseURL().absoluteURL)/api/users";
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
+        let url = "\(baseURL.absoluteURL)/api/users";
         let manager = MageSessionManager.shared();
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             if let responseData = responseObject as? Data {

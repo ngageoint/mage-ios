@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <MaterialComponents/MaterialContainerScheme.h>
-#import "MageServer.h"
+
+@class MageServer;
 
 @protocol AuthenticationDelegate
 

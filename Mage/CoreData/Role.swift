@@ -24,8 +24,10 @@ import CoreData
     }
     
     @objc public static func operationToFetchRoles(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-      
-        let url = "\(MageServer.baseURL().absoluteURL)/api/roles";
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
+        let url = "\(baseURL.absoluteURL)/api/roles";
         let manager = MageSessionManager.shared();
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             if let responseData = responseObject as? Data {

@@ -15,7 +15,7 @@
 
 @implementation Authentication
 
-+ (id) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters {
++ (id<AuthenticationProtocol>) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters {
     if ([Authentication isLocalStrategy:strategy]) {
         return [[ServerAuthentication alloc] initWithParameters:parameters];
     } else if ([Authentication isLdapStrategy:strategy]) {

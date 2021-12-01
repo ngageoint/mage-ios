@@ -7,7 +7,6 @@
 //
 
 #import "ObservationRoutes.h"
-#import "MageServer.h"
 #import "NSDate+Iso8601.h"
 #import "MAGE-Swift.h"
 

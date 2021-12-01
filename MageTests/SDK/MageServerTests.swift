@@ -15,7 +15,7 @@ import Kingfisher
 
 @testable import MAGE
 
-class MageServerTestsSwift: QuickSpec {
+class MageServerTestsSwift: KIFSpec {
     
     override func spec() {
         
@@ -44,12 +44,12 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetUp = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     let authStrategies = UserDefaults.standard.authenticationStrategies;
                     expect(authStrategies?.count).to(equal(2));
-                    expect(server?.authenticationModules.count).to(equal(2));
+                    expect(server?.authenticationModules?.count).to(equal(2));
                     expect(server!.serverHasLocalAuthenticationStrategy).to(beTrue())
-                    let strategies: [[AnyHashable: Any]] = server?.getStrategies() as! [[AnyHashable: Any]]
+                    let strategies: [[AnyHashable: Any]] = server?.strategies as! [[AnyHashable: Any]]
                     expect(strategies.count).to(equal(2))
                     // local should always be the last one in the list
                     let local = strategies[strategies.count - 1]
@@ -58,13 +58,13 @@ class MageServerTestsSwift: QuickSpec {
                     let oauth = strategies[0]
                     expect(oauth["identifier"] as? String).to(equal("oauth"))
                     
-                    let oauthStrategies: [[AnyHashable: Any]] = server?.getOauthStrategies() as! [[AnyHashable:Any]]
+                    let oauthStrategies: [[AnyHashable: Any]] = server?.oauthStrategies as! [[AnyHashable:Any]]
                     expect(oauthStrategies.count).to(equal(1))
                     let oauthAgain = oauthStrategies[0]
                     expect(oauthAgain["identifier"] as? String).to(equal("oauth"))
                     serverSetUp = true
                 } failure: { (error) in
-                    print("Error \(error?.localizedDescription ?? "")")
+                    print("Error \(error.localizedDescription ?? "")")
                     tester().fail()
                 }
 
@@ -77,19 +77,19 @@ class MageServerTestsSwift: QuickSpec {
                 expect(UserDefaults.standard.showDisclaimer).to(beTrue())
                 
                 expect(MageServer.baseURL).to(equal(URL(string: "https://magetest")))
-                expect(MageServer.isServerVersion5()).to(beFalse())
-                expect(MageServer.isServerVersion6_0()).to(beTrue())
+                expect(MageServer.isServerVersion5).to(beFalse())
+                expect(MageServer.isServerVersion6_0).to(beTrue())
             }
             
             it("should set an invalid url") {
                 UserDefaults.standard.baseServerUrl = nil;
 
                 var serverSetUp = false
-                MageServer.server(with: URL(string: "notgood://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "notgood://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    print("Error \(error?.localizedDescription ?? "")")
-                    expect(error?.localizedDescription).to(contain("Received error unsupported URL"))
+                    print("Error \(error.localizedDescription ?? "")")
+                    expect(error.localizedDescription).to(contain("Received error unsupported URL"))
                     serverSetUp = true
                 }
                 
@@ -100,11 +100,11 @@ class MageServerTestsSwift: QuickSpec {
                 UserDefaults.standard.baseServerUrl = nil;
                 
                 var serverSetUp = false
-                MageServer.server(with: URL(string: "notgood://")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "notgood://")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    print("Error \(error?.localizedDescription ?? "")")
-                    expect(error?.localizedDescription).to(contain("Invalid URL"))
+                    print("Error \(error.localizedDescription ?? "")")
+                    expect(error.localizedDescription).to(contain("Invalid URL"))
                     serverSetUp = true
                 }
                 
@@ -123,11 +123,11 @@ class MageServerTestsSwift: QuickSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 };
                 
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    print("Error \(error?.localizedDescription ?? "")")
-                    expect(error?.localizedDescription).to(contain("Invalid response from the MAGE server."))
+                    print("Error \(error.localizedDescription ?? "")")
+                    expect(error.localizedDescription).to(contain("Invalid response from the MAGE server."))
                 }
                 
                 expect(apiCallCount).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "API pulled");
@@ -146,10 +146,10 @@ class MageServerTestsSwift: QuickSpec {
                     return response;
                 };
                 
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error?.localizedDescription).to(equal("Empty API response received from server."))
+                    expect(error.localizedDescription).to(equal("Empty API response received from server."))
                 }
                 
                 expect(apiCallCount).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "API pulled");
@@ -167,10 +167,10 @@ class MageServerTestsSwift: QuickSpec {
                     return HTTPStubsResponse.init(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "text/html"]);
                 };
                 
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error?.localizedDescription).to(contain("Invalid API response received from server. <html>"))
+                    expect(error.localizedDescription).to(contain("Invalid API response received from server. <html>"))
                 }
                 
                 expect(apiCallCount).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "API pulled");
@@ -189,10 +189,10 @@ class MageServerTestsSwift: QuickSpec {
                     return HTTPStubsResponse(jsonObject: json, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 };
                 
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error?.localizedDescription).to(contain("Invalid server response"))
+                    expect(error.localizedDescription).to(contain("Invalid server response"))
                 }
                 
                 expect(apiCallCount).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "API pulled");
@@ -211,7 +211,7 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     let authModules = server?.authenticationModules
                     expect(authModules).to(beNil())
                     expect(server!.serverHasLocalAuthenticationStrategy).to(beFalse())
@@ -244,9 +244,9 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
-                    let localAuthenticationModule = server?.authenticationModules["offline"]
-                    let serverAuthModule = server?.authenticationModules["local"]
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
+                    let localAuthenticationModule = server?.authenticationModules?["offline"]
+                    let serverAuthModule = server?.authenticationModules?["local"]
                     expect(localAuthenticationModule).toNot(beNil())
                     expect(serverAuthModule).to(beNil())
                     expect(server!.serverHasLocalAuthenticationStrategy).to(beFalse())
@@ -271,9 +271,9 @@ class MageServerTestsSwift: QuickSpec {
                 ]
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
-                    let localAuthenticationModule = server?.authenticationModules["offline"]
-                    let serverAuthModule = server?.authenticationModules["local"]
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
+                    let localAuthenticationModule = server?.authenticationModules?["offline"]
+                    let serverAuthModule = server?.authenticationModules?["local"]
                     expect(localAuthenticationModule).to(beNil())
                     expect(serverAuthModule).toNot(beNil())
                     expect(server!.serverHasLocalAuthenticationStrategy).to(beTrue())
@@ -296,9 +296,9 @@ class MageServerTestsSwift: QuickSpec {
                 ]
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
-                    let localAuthenticationModule = server?.authenticationModules["offline"]
-                    let serverAuthModule = server?.authenticationModules["local"]
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
+                    let localAuthenticationModule = server?.authenticationModules?["offline"]
+                    let serverAuthModule = server?.authenticationModules?["local"]
                     expect(localAuthenticationModule).to(beNil())
                     expect(serverAuthModule).toNot(beNil())
                     serverSetup = true
@@ -325,9 +325,9 @@ class MageServerTestsSwift: QuickSpec {
                 StoredPassword.persistPassword(toKeyChain: "fakepassword")
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
-                    let localAuthenticationModule = server?.authenticationModules["offline"]
-                    let serverAuthModule = server?.authenticationModules["local"]
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
+                    let localAuthenticationModule = server?.authenticationModules?["offline"]
+                    let serverAuthModule = server?.authenticationModules?["local"]
                     expect(localAuthenticationModule).toNot(beNil())
                     expect(serverAuthModule).toNot(beNil())
                     serverSetup = true
@@ -349,12 +349,12 @@ class MageServerTestsSwift: QuickSpec {
                     ]
                 ]
                 
-                let error: NSError = MageServer.generateCompatibilityError(server6) as NSError
+                let error: NSError = MageServer.generateServerCompatibilityError(api:server6) as NSError
                 expect(error.code).to(equal(1))
                 expect(error.domain).to(equal("MAGE"))
                 expect(error.userInfo[NSLocalizedDescriptionKey] as? String).to(equal("This version of the app is not compatible with version 6.0.0 of the server.  Please contact your MAGE administrator for more information."))
                 
-                let error2: NSError = MageServer.generateCompatibilityError([
+                let error2: NSError = MageServer.generateServerCompatibilityError(api:[
                     "test":"nope"
                 ]) as NSError
                 expect(error2.code).to(equal(1))
@@ -401,20 +401,20 @@ class MageServerTestsSwift: QuickSpec {
                     "serverMinorVersion":0
                 ]]
                 
-                expect(MageServer.checkCompatibility(server6)).to(beTrue())
-                expect(MageServer.checkCompatibility(server5)).to(beFalse())
-                expect(MageServer.checkCompatibility(server61)).to(beTrue())
-                expect(MageServer.checkCompatibility(server53)).to(beFalse())
+                expect(MageServer.checkServerCompatibility(api:server6)).to(beTrue())
+                expect(MageServer.checkServerCompatibility(api:server5)).to(beFalse())
+                expect(MageServer.checkServerCompatibility(api:server61)).to(beTrue())
+                expect(MageServer.checkServerCompatibility(api:server53)).to(beFalse())
                 
                 UserDefaults.standard.serverCompatibilities = [[
                     "serverMajorVersion":5,
                     "serverMinorVersion":4
                 ]]
                 
-                expect(MageServer.checkCompatibility(server6)).to(beFalse())
-                expect(MageServer.checkCompatibility(server5)).to(beTrue())
-                expect(MageServer.checkCompatibility(server61)).to(beFalse())
-                expect(MageServer.checkCompatibility(server53)).to(beFalse())
+                expect(MageServer.checkServerCompatibility(api:server6)).to(beFalse())
+                expect(MageServer.checkServerCompatibility(api:server5)).to(beTrue())
+                expect(MageServer.checkServerCompatibility(api:server61)).to(beFalse())
+                expect(MageServer.checkServerCompatibility(api:server53)).to(beFalse())
                 
                 UserDefaults.standard.serverCompatibilities = [[
                     "serverMajorVersion":5,
@@ -424,10 +424,10 @@ class MageServerTestsSwift: QuickSpec {
                     "serverMinorVersion":0
                 ]]
                 
-                expect(MageServer.checkCompatibility(server6)).to(beTrue())
-                expect(MageServer.checkCompatibility(server5)).to(beTrue())
-                expect(MageServer.checkCompatibility(server61)).to(beTrue())
-                expect(MageServer.checkCompatibility(server53)).to(beFalse())
+                expect(MageServer.checkServerCompatibility(api:server6)).to(beTrue())
+                expect(MageServer.checkServerCompatibility(api:server5)).to(beTrue())
+                expect(MageServer.checkServerCompatibility(api:server61)).to(beTrue())
+                expect(MageServer.checkServerCompatibility(api:server53)).to(beFalse())
             }
             
             it("should set URL hit api with no stored password") {
@@ -445,9 +445,9 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
-                    let localAuthenticationModule = server?.authenticationModules["offline"]
-                    let serverAuthModule = server?.authenticationModules["local"]
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
+                    let localAuthenticationModule = server?.authenticationModules?["offline"]
+                    let serverAuthModule = server?.authenticationModules?["local"]
                     expect(localAuthenticationModule).to(beNil())
                     expect(serverAuthModule).toNot(beNil())
                     serverSetup = true
@@ -458,8 +458,8 @@ class MageServerTestsSwift: QuickSpec {
                 expect(apiCalled).toEventually(beTrue())
                 expect(serverSetup).toEventually(beTrue())
                 
-                expect(MageServer.isServerVersion5()).to(beTrue())
-                expect(MageServer.isServerVersion6_0()).to(beFalse())
+                expect(MageServer.isServerVersion5).to(beTrue())
+                expect(MageServer.isServerVersion6_0).to(beFalse())
                 
                 StoredPassword.clear()
             }
@@ -479,10 +479,10 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error?.localizedDescription).to(contain("Failed to connect to server.  Received error Request failed: service unavailable (503)"))
+                    expect(error.localizedDescription).to(contain("Failed to connect to server.  Received error Request failed: service unavailable (503)"))
                     serverSetup = true
                 }
                 
@@ -509,9 +509,9 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
-                    let localAuthenticationModule = server?.authenticationModules["offline"]
-                    let serverAuthModule = server?.authenticationModules["local"]
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
+                    let localAuthenticationModule = server?.authenticationModules?["offline"]
+                    let serverAuthModule = server?.authenticationModules?["local"]
                     expect(localAuthenticationModule).toNot(beNil())
                     expect(serverAuthModule).toNot(beNil())
                     serverSetup = true
@@ -538,10 +538,10 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error?.localizedDescription).to(contain("Invalid server response {"))
+                    expect(error.localizedDescription).to(contain("Invalid server response {"))
                     serverSetup = true
                 }
                 
@@ -562,10 +562,10 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error?.localizedDescription).to(contain("Unknown API response received from server."))
+                    expect(error.localizedDescription).to(contain("Unknown API response received from server."))
                     serverSetup = true
                 }
                 
@@ -588,10 +588,10 @@ class MageServerTestsSwift: QuickSpec {
                 };
                 
                 var serverSetup = false
-                MageServer.server(with: URL(string: "https://magetest")) { (server: MageServer?) in
+                MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error?.localizedDescription).to(contain("Empty API response received from server."))
+                    expect(error.localizedDescription).to(contain("Empty API response received from server."))
                     serverSetup = true
                 }
                 

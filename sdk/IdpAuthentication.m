@@ -9,7 +9,6 @@
 #import "IdpAuthentication.h"
 #import "MageSessionManager.h"
 #import "NSDate+Iso8601.h"
-#import "MageServer.h"
 #import "MagicalRecord+MAGE.h"
 #import "StoredPassword.h"
 #import "MAGE-Swift.h"
@@ -188,9 +187,9 @@
         }
         
         NSDictionary *api = [responseObject objectForKey:@"api"];
-        BOOL serverCompatible = [MageServer checkServerCompatibility:api];
+        BOOL serverCompatible = [MageServer checkServerCompatibilityWithApi:api];
         if (!serverCompatible) {
-            NSError *error = [MageServer generateServerCompatibilityError:api];
+            NSError *error = [MageServer generateServerCompatibilityErrorWithApi:api];
             return complete(AUTHENTICATION_ERROR, error.localizedDescription);
         }
         self.loginParameters = loginParameters;

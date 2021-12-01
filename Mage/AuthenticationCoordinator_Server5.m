@@ -12,7 +12,6 @@
 #import "IDPLoginView.h"
 #import "IDPCoordinator.h"
 #import "DisclaimerViewController.h"
-#import "MageServer.h"
 #import "MAGE-Swift.h"
 #import "MageOfflineObservationManager.h"
 #import "MagicalRecord+MAGE.h"

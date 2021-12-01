@@ -7,7 +7,6 @@
 #import "SettingsTableViewController.h"
 #import "MAGE-Swift.h"
 #import "LocationService.h"
-#import "MageServer.h"
 #import "EventChooserController.h"
 #import "NSDate+display.h"
 #import "AppDelegate.h"

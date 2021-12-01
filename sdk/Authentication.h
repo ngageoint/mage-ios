@@ -11,7 +11,7 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
     ACCOUNT_CREATION_SUCCESS
 };
 
-@protocol Authentication <NSObject>
+@protocol AuthenticationProtocol <NSObject>
 
 @required
 - (instancetype) initWithParameters: (NSDictionary *) parameters;
@@ -22,5 +22,5 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
 @end
 
 @interface Authentication : NSObject
-+ (id) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters;
++ (id<AuthenticationProtocol>) authenticationModuleForStrategy: (NSString *) strategy parameters:(NSDictionary *) parameters;
 @end

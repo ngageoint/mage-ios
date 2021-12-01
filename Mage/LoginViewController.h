@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MageServer.h"
 #import "ContactInfo.h"
+#import "Authentication.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
 
 @class User;
+@class MageServer;
 
 @protocol LoginDelegate
 

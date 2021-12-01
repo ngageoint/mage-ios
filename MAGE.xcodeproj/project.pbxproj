@@ -226,7 +226,7 @@
 		F72D430F2694B60300F9AC3B /* UserUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429E2694B60300F9AC3B /* UserUtility.swift */; };
 		F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */; };
 		F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */; };
-		F72D43122694B60300F9AC3B /* MageServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.m */; };
+		F72D43122694B60300F9AC3B /* MageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A42694B60300F9AC3B /* MageServer.swift */; };
 		F72D43132694B60300F9AC3B /* ImageryLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A72694B60300F9AC3B /* ImageryLayer.swift */; };
 		F72D43142694B60300F9AC3B /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42A92694B60300F9AC3B /* Event.swift */; };
 		F72D43152694B60300F9AC3B /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42AB2694B60300F9AC3B /* Form.swift */; };
@@ -809,7 +809,6 @@
 		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorTests.swift; sourceTree = "<group>"; };
 		F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageUserDefaultKeys.swift; sourceTree = "<group>"; };
-		F72D422C2694B60300F9AC3B /* MageServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageServer.h; sourceTree = "<group>"; };
 		F72D422D2694B60300F9AC3B /* Authentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Authentication.m; sourceTree = "<group>"; };
 		F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D422F2694B60300F9AC3B /* LocalAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAuthentication.m; sourceTree = "<group>"; };
@@ -898,7 +897,7 @@
 		F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GPSLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42A02694B60300F9AC3B /* Model14To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42A22694B60300F9AC3B /* LocalAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAuthentication.h; sourceTree = "<group>"; };
-		F72D42A42694B60300F9AC3B /* MageServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageServer.m; sourceTree = "<group>"; };
+		F72D42A42694B60300F9AC3B /* MageServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageServer.swift; sourceTree = "<group>"; };
 		F72D42A52694B60300F9AC3B /* Authentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Authentication.h; sourceTree = "<group>"; };
 		F72D42A72694B60300F9AC3B /* ImageryLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageryLayer.swift; sourceTree = "<group>"; };
 		F72D42A82694B60300F9AC3B /* NSDate+display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+display.h"; sourceTree = "<group>"; };
@@ -1879,8 +1878,7 @@
 				F72D42BE2694B60300F9AC3B /* MageEnums.m */,
 				F72D42D32694B60300F9AC3B /* MAGERoutes.h */,
 				F72D42892694B60300F9AC3B /* MAGERoutes.m */,
-				F72D422C2694B60300F9AC3B /* MageServer.h */,
-				F72D42A42694B60300F9AC3B /* MageServer.m */,
+				F72D42A42694B60300F9AC3B /* MageServer.swift */,
 				F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */,
 				F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */,
 				F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */,
@@ -3365,7 +3363,7 @@
 				F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */,
 				F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
-				F72D43122694B60300F9AC3B /* MageServer.m in Sources */,
+				F72D43122694B60300F9AC3B /* MageServer.swift in Sources */,
 				F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */,
 				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,

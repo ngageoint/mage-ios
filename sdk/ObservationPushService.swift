@@ -156,7 +156,7 @@ import CoreData
                     localObservation.dirty = false
                     localObservation.error = nil
                     
-                    if MageServer.isServerVersion5() {
+                    if MageServer.isServerVersion5 {
                         if let attachments = localObservation.attachments {
                             for attachment in attachments {
                                 attachment.observationRemoteId = localObservation.remoteId

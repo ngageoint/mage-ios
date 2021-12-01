@@ -5,7 +5,6 @@
 
 #import "MageSessionManager.h"
 #import "NSString+Contains.h"
-#import "MageServer.h"
 #import "SessionTaskQueue.h"
 #import "MAGE-Swift.h"
 

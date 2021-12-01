@@ -8,7 +8,6 @@
 
 #import "ChangePasswordViewController.h"
 #import "UINextField.h"
-#import "MageServer.h"
 #import "ServerAuthentication.h"
 #import "MageSessionManager.h"
 #import "AppDelegate.h"
@@ -206,7 +205,7 @@
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [self.mageVersion setText:[NSString stringWithFormat:@"v%@", versionString]];
     __weak __typeof__(self) weakSelf = self;
-    [MageServer serverWithURL: url
+    [MageServer serverWithUrl: url
     success:^(MageServer *mageServer) {
         weakSelf.usernameField.enabled = !weakSelf.loggedIn;
         User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];

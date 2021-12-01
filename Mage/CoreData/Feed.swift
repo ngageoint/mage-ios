@@ -86,8 +86,11 @@ import CoreData
     }
     
     @objc public static func operationToPullFeeds(eventId: NSNumber, success: ((URLSessionDataTask?, Any?) -> Void)?, failure: ((Error) -> Void)?) -> URLSessionDataTask? {
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
         var feedRemoteIds: [String] = [];
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(eventId)/feeds";
+        let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/feeds";
         let manager = MageSessionManager.shared();
         let task = manager?.get_TASK(url, parameters: nil, progress: nil,
             success: { task, responseObject in
@@ -124,7 +127,10 @@ import CoreData
     }
     
     @objc public static func operationToPullFeedItemsForFeed(feedId: String, eventId: NSNumber, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(eventId)/feeds/\(feedId)/content";
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
+        let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/feeds/\(feedId)/content";
         let manager = MageSessionManager.shared();
         let task = manager?.post_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
             MagicalRecord.save { localContext in
@@ -162,8 +168,8 @@ import CoreData
     }
     
     @objc public var iconURL: URL? {
-        if let mapStyle = self.mapStyle, let icon = mapStyle[FeedMapStyleKey.icon.key] as? [AnyHashable : Any], let iconId = icon[FeedMapStyleKey.id.key] as? String {
-            return URL(string: "\(MageServer.baseURL().absoluteString)/api/icons/\(iconId)/content")
+        if let mapStyle = self.mapStyle, let icon = mapStyle[FeedMapStyleKey.icon.key] as? [AnyHashable : Any], let iconId = icon[FeedMapStyleKey.id.key] as? String, let baseURL = MageServer.baseURL() {
+            return URL(string: "\(baseURL.absoluteString)/api/icons/\(iconId)/content")
         }
         return nil;
     }

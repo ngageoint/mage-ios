@@ -17,16 +17,6 @@ extension Notification.Name {
     public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
 }
 
-public enum LoginParametersKey: String {
-    case acceptedConsent
-    case tokenExpirationDate
-    case agree
-    
-    var key: String {
-        return self.rawValue;
-    }
-}
-
 @objc extension UserDefaults {
     
     @objc func color(forKey key: String) -> UIColor? {
@@ -266,18 +256,18 @@ public enum LoginParametersKey: String {
         }
     }
     
-    var authenticationStrategies: [String: Any]? {
+    var authenticationStrategies: [String: [AnyHashable: Any]]? {
         get {
-            return dictionary(forKey: #function);
+            return dictionary(forKey: #function) as? [String: [AnyHashable : Any]];
         }
         set {
             set(newValue, forKey: #function);
         }
     }
     
-    var serverAuthenticationStrategies: [String: Any]? {
+    var serverAuthenticationStrategies: [String: [AnyHashable: Any]]? {
         get {
-            return dictionary(forKey: #function);
+            return dictionary(forKey: #function) as? [String: [AnyHashable : Any]]
         }
         set {
             set(newValue, forKey: #function);

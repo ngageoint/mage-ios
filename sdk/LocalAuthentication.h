@@ -6,6 +6,6 @@
 
 #import "Authentication.h"
 
-@interface LocalAuthentication : NSObject<Authentication>
+@interface LocalAuthentication : NSObject<AuthenticationProtocol>
 
 @end

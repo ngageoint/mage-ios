@@ -7,7 +7,7 @@
 //
 
 #import "MAGERoutes.h"
-#import "MageServer.h"
+#import "MAGE-Swift.h"
 
 // legacy imports
 #import "AttachmentRoutes_Server5.h"

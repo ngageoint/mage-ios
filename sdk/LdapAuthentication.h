@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LdapAuthentication : NSObject<Authentication>
+@interface LdapAuthentication : NSObject<AuthenticationProtocol>
 
 @end
 

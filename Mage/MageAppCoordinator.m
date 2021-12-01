@@ -16,7 +16,6 @@
 #import <UserNotifications/UserNotifications.h>
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
-#import "MageServer.h"
 #import "MAGE-Swift.h"
 #import "MagicalRecord+MAGE.h"
 
@@ -55,7 +54,7 @@
             return;
         } else {
             __weak __typeof__(self) weakSelf = self;
-            [MageServer serverWithURL:url success:^(MageServer *mageServer) {
+            [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
                 [weakSelf startAuthentication:mageServer];
             } failure:^(NSError *error) {
                 [weakSelf setServerURLWithError: error.localizedDescription];
@@ -108,7 +107,7 @@
 - (void) setServerURL:(NSURL *) url {
     __weak __typeof__(self) weakSelf = self;
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"baseServerUrl"];
-    [MageServer serverWithURL:url success:^(MageServer *mageServer) {
+    [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
         [MageInitializer clearServerSpecificData];
         dispatch_async(dispatch_get_main_queue(), ^{
             [FadeTransitionSegue addFadeTransitionToView:weakSelf.navigationController.view];
@@ -129,7 +128,7 @@
         return;
     } else {
         __weak __typeof__(self) weakSelf = self;
-        [MageServer serverWithURL:url success:^(MageServer *mageServer) {
+        [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
             [weakSelf startAuthentication:mageServer];
         } failure:^(NSError *error) {
             [weakSelf setServerURLWithError: error.localizedDescription];

@@ -90,12 +90,12 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!, success: { server in
                         mageServer = server;
                         done();
-                    } failure: { _ in
+                    }, failure: { _ in
                         
-                    };
+                    });
                 }
                 
                 coordinator?.start(mageServer);
@@ -120,12 +120,12 @@ class AuthenticationCoordinatorTests: KIFSpec {
                                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!, success: { server in
                         mageServer = server;
                         done();
-                    } failure: { _ in
+                    }, failure: { _ in
                         
-                    };
+                    });
                 }
                 
                 coordinator?.start(mageServer);
@@ -161,7 +161,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -202,7 +202,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -246,7 +246,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -300,7 +300,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -346,7 +346,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -395,7 +395,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -443,7 +443,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -495,7 +495,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -610,7 +610,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -654,7 +654,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -706,7 +706,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -771,7 +771,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -825,7 +825,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -868,7 +868,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in
@@ -901,7 +901,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 var mageServer: MageServer?;
                 waitUntil { done in
-                    MageServer.server(with: URL(string: "https://magetest")) { server in
+                    MageServer.server(url: URL(string: "https://magetest")!) { server in
                         mageServer = server;
                         done();
                     } failure: { _ in

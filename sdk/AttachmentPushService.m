@@ -8,7 +8,6 @@
 #import "NSDate+Iso8601.h"
 #import "StoredPassword.h"
 #import "DataConnectionUtilities.h"
-#import "MageServer.h"
 #import "RouteMethod.h"
 #import "MAGERoutes.h"
 #import "MAGE-Swift.h"

@@ -9,7 +9,6 @@
 #import <AFNetworking/AFNetworking.h>
 
 #import "MageSessionManager.h"
-#import "MageServer.h"
 #import "StoredPassword.h"
 #import "MAGE-Swift.h"
 

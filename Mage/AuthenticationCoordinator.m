@@ -174,7 +174,7 @@ BOOL signingIn = YES;
 - (void) startLoginOnly {
     NSURL *url = [MageServer baseURL];
     __weak __typeof__(self) weakSelf = self;
-    [MageServer serverWithURL:url success:^(MageServer *mageServer) {
+    [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
         [weakSelf showLoginViewForCurrentUserForServer:mageServer];
     } failure:^(NSError *error) {
         NSLog(@"failed to contact server");
@@ -216,7 +216,7 @@ BOOL signingIn = YES;
 }
 
 - (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationStrategy:(NSString *) authenticationStrategy complete:(void (^)(AuthenticationStatus, NSString *))complete {
-    id<Authentication> authenticationModule = [self.server.authenticationModules objectForKey:authenticationStrategy];
+    id<AuthenticationProtocol> authenticationModule = [self.server.authenticationModules objectForKey:authenticationStrategy];
     if (!authenticationModule) {
         authenticationModule = [self.server.authenticationModules objectForKey:@"offline"];
     }
@@ -303,7 +303,7 @@ BOOL signingIn = YES;
     }
     
     // If there is a stored password do this
-    id <Authentication> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
+    id <AuthenticationProtocol> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
     if (offlineAuthenticationModel) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Disconnected Login"
                                                                        message:@"We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"
@@ -333,7 +333,7 @@ BOOL signingIn = YES;
     __weak typeof(self) weakSelf = self;
 
     NSLog(@"work offline");
-    id<Authentication> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
+    id<AuthenticationProtocol> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
     [offlineAuthenticationModel loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf authenticationWasSuccessfulWithModule:offlineAuthenticationModel];
@@ -351,7 +351,7 @@ BOOL signingIn = YES;
     complete(UNABLE_TO_AUTHENTICATE, @"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored.");
 }
 
-- (void) authenticationWasSuccessfulWithModule: (id<Authentication>) module {
+- (void) authenticationWasSuccessfulWithModule: (id<AuthenticationProtocol>) module {
     
     [module finishLogin:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {

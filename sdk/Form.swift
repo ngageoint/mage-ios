@@ -18,7 +18,10 @@ import SSZipArchive
     }
 
     @objc public static func operationToPullFormIcons(eventId: NSNumber, success: (() -> Void)?, failure: ((Error) -> Void)?) -> URLSessionDownloadTask? {
-        let url = "\(MageServer.baseURL().absoluteURL)/api/events/\(eventId)/form/icons.zip";
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
+        let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/form/icons.zip";
         let manager = MageSessionManager.shared();
         
         let stringPath = "\(getDocumentsDirectory())/events/icons-\(eventId).zip"
