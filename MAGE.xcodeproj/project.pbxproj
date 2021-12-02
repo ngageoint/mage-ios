@@ -237,7 +237,6 @@
 		F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B42694B60300F9AC3B /* Model6To15.xcmappingmodel */; };
 		F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.swift */; };
 		F72D431B2694B60300F9AC3B /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BD2694B60300F9AC3B /* Layer.swift */; };
-		F72D431C2694B60300F9AC3B /* MageEnums.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BE2694B60300F9AC3B /* MageEnums.m */; };
 		F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42BF2694B60300F9AC3B /* StaticLayer.swift */; };
 		F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */; };
 		F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */; };
@@ -865,7 +864,6 @@
 		F72D42722694B60300F9AC3B /* SessionTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTask.m; sourceTree = "<group>"; };
 		F72D42732694B60300F9AC3B /* TaskSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskSessionManager.m; sourceTree = "<group>"; };
 		F72D42742694B60300F9AC3B /* SessionTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionTaskQueue.h; sourceTree = "<group>"; };
-		F72D42752694B60300F9AC3B /* MageEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageEnums.h; sourceTree = "<group>"; };
 		F72D42772694B60300F9AC3B /* StoredPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoredPassword.m; sourceTree = "<group>"; };
 		F72D42782694B60300F9AC3B /* LocationFetchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFetchService.swift; sourceTree = "<group>"; };
 		F72D42792694B60300F9AC3B /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -913,7 +911,6 @@
 		F72D42B82694B60300F9AC3B /* Attachment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Attachment+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42BC2694B60300F9AC3B /* StoredPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoredPassword.h; sourceTree = "<group>"; };
 		F72D42BD2694B60300F9AC3B /* Layer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
-		F72D42BE2694B60300F9AC3B /* MageEnums.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageEnums.m; sourceTree = "<group>"; };
 		F72D42BF2694B60300F9AC3B /* StaticLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticLayer.swift; sourceTree = "<group>"; };
 		F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FeedItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42C12694B60300F9AC3B /* Model14To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model14To16.xcmappingmodel; sourceTree = "<group>"; };
@@ -1883,8 +1880,6 @@
 				F72D428E2694B60300F9AC3B /* LocationService.m */,
 				F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */,
 				F72D42302694B60300F9AC3B /* Mage.swift */,
-				F72D42752694B60300F9AC3B /* MageEnums.h */,
-				F72D42BE2694B60300F9AC3B /* MageEnums.m */,
 				F72D42D32694B60300F9AC3B /* MAGERoutes.h */,
 				F72D42892694B60300F9AC3B /* MAGERoutes.m */,
 				F72D42A42694B60300F9AC3B /* MageServer.swift */,
@@ -3114,7 +3109,6 @@
 				2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */,
 				F727516A19C87B27006C63CB /* MapDelegate.m in Sources */,
 				F78391BF25A4D9A800ED9C2D /* ObservationActionsSheetController.swift in Sources */,
-				F72D431C2694B60300F9AC3B /* MageEnums.m in Sources */,
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
 				F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */,
