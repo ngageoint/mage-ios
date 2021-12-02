@@ -4,7 +4,6 @@
 #import "ObjC.h"
 
 #import "AppDelegate.h"
-#import "DataConnectionUtilities.h"
 #import "StoredPassword.h"
 
 #import "ObservationFields.h"

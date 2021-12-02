@@ -6,7 +6,6 @@
 
 #import "LocationService.h"
 #import "MageSessionManager.h"
-#import "DataConnectionUtilities.h"
 #import "MAGE-Swift.h"
 
 NSString * const kReportLocationKey = @"reportLocation";

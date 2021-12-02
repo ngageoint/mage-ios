@@ -157,6 +157,7 @@
 		F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */; };
 		F71B7251246B545F00E4CF33 /* GeometryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B724F246B53F500E4CF33 /* GeometryViewTests.swift */; };
 		F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71B7252246C412900E4CF33 /* BaseFieldView.swift */; };
+		F71EFE4C2757F824001E6134 /* DataConnectionUtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71EFE4B2757F824001E6134 /* DataConnectionUtilitiesTests.swift */; };
 		F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */; };
 		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
 		F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723232B251CE92800AD168A /* MapSettingsTests.swift */; };
@@ -193,7 +194,7 @@
 		F72D42EE2694B60300F9AC3B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D425E2694B60300F9AC3B /* User.swift */; };
 		F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42612694B60300F9AC3B /* NSDate+display.m */; };
 		F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42622694B60300F9AC3B /* Server+CoreDataProperties.swift */; };
-		F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */; };
+		F72D42F12694B60300F9AC3B /* DataConnectionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D426C2694B60300F9AC3B /* DataConnectionUtilities.swift */; };
 		F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */; };
 		F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42702694B60300F9AC3B /* MageSessionManager.m */; };
 		F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42722694B60300F9AC3B /* SessionTask.m */; };
@@ -789,6 +790,7 @@
 		F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewTests.swift; sourceTree = "<group>"; };
 		F71B724F246B53F500E4CF33 /* GeometryViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryViewTests.swift; sourceTree = "<group>"; };
 		F71B7252246C412900E4CF33 /* BaseFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFieldView.swift; sourceTree = "<group>"; };
+		F71EFE4B2757F824001E6134 /* DataConnectionUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConnectionUtilitiesTests.swift; sourceTree = "<group>"; };
 		F72088A71E73600100EBFF81 /* TimeSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSettingsTableViewController.h; sourceTree = "<group>"; };
 		F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeSettingsTableViewController.m; sourceTree = "<group>"; };
 		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
@@ -855,12 +857,11 @@
 		F72D42652694B60300F9AC3B /* NotificationRequester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationRequester.h; sourceTree = "<group>"; };
 		F72D42672694B60300F9AC3B /* NSDate+Iso8601.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Iso8601.h"; sourceTree = "<group>"; };
 		F72D426B2694B60300F9AC3B /* MageSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageSessionManager.h; sourceTree = "<group>"; };
-		F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataConnectionUtilities.m; sourceTree = "<group>"; };
+		F72D426C2694B60300F9AC3B /* DataConnectionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataConnectionUtilities.swift; sourceTree = "<group>"; };
 		F72D426D2694B60300F9AC3B /* TaskSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskSessionManager.h; sourceTree = "<group>"; };
 		F72D426E2694B60300F9AC3B /* SessionTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionTask.h; sourceTree = "<group>"; };
 		F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTaskQueue.m; sourceTree = "<group>"; };
 		F72D42702694B60300F9AC3B /* MageSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageSessionManager.m; sourceTree = "<group>"; };
-		F72D42712694B60300F9AC3B /* DataConnectionUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataConnectionUtilities.h; sourceTree = "<group>"; };
 		F72D42722694B60300F9AC3B /* SessionTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTask.m; sourceTree = "<group>"; };
 		F72D42732694B60300F9AC3B /* TaskSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskSessionManager.m; sourceTree = "<group>"; };
 		F72D42742694B60300F9AC3B /* SessionTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionTaskQueue.h; sourceTree = "<group>"; };
@@ -1804,6 +1805,14 @@
 			path = MapDelegate;
 			sourceTree = "<group>";
 		};
+		F71EFE4A2757F810001E6134 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				F71EFE4B2757F824001E6134 /* DataConnectionUtilitiesTests.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		F7232329251CE90C00AD168A /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1930,12 +1939,11 @@
 			isa = PBXGroup;
 			children = (
 				F72D426B2694B60300F9AC3B /* MageSessionManager.h */,
-				F72D426C2694B60300F9AC3B /* DataConnectionUtilities.m */,
+				F72D426C2694B60300F9AC3B /* DataConnectionUtilities.swift */,
 				F72D426D2694B60300F9AC3B /* TaskSessionManager.h */,
 				F72D426E2694B60300F9AC3B /* SessionTask.h */,
 				F72D426F2694B60300F9AC3B /* SessionTaskQueue.m */,
 				F72D42702694B60300F9AC3B /* MageSessionManager.m */,
-				F72D42712694B60300F9AC3B /* DataConnectionUtilities.h */,
 				F72D42722694B60300F9AC3B /* SessionTask.m */,
 				F72D42732694B60300F9AC3B /* TaskSessionManager.m */,
 				F72D42742694B60300F9AC3B /* SessionTaskQueue.h */,
@@ -2511,6 +2519,7 @@
 		F7BCAC1F263093E7006BE2A9 /* SDK */ = {
 			isa = PBXGroup;
 			children = (
+				F71EFE4A2757F810001E6134 /* Networking */,
 				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
 				F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */,
 				F781609A273EB9C80055B5D2 /* GeometryDeserializerTests.swift */,
@@ -3306,7 +3315,7 @@
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
-				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.m in Sources */,
+				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.swift in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
@@ -3436,6 +3445,7 @@
 				F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */,
 				F70D19E12742C5F3006E12F8 /* FormTests.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
+				F71EFE4C2757F824001E6134 /* DataConnectionUtilitiesTests.swift in Sources */,
 				F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */,
 				F75D24C0274C2B11003C0A83 /* ObservationAnnotationTests.swift in Sources */,
 				F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */,

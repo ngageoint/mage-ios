@@ -364,6 +364,87 @@ extension Notification.Name {
         }
     }
     
+    var observationPushNetworkOption: NetworkAllowType {
+        get {
+            return NetworkAllowType(rawValue: integer(forKey: #function)) ?? NetworkAllowType.all
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var observationFetchNetworkOption: NetworkAllowType {
+        get {
+            return NetworkAllowType(rawValue: integer(forKey: #function)) ?? NetworkAllowType.all
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var locationPushNetworkOption: NetworkAllowType {
+        get {
+            return NetworkAllowType(rawValue: integer(forKey: #function)) ?? NetworkAllowType.all
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var locationFetchNetworkOption: NetworkAllowType {
+        get {
+            return NetworkAllowType(rawValue: integer(forKey: #function)) ?? NetworkAllowType.all
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var attachmentPushNetworkOption: NetworkAllowType {
+        get {
+            return NetworkAllowType(rawValue: integer(forKey: #function)) ?? NetworkAllowType.all
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var attachmentFetchNetworkOption: NetworkAllowType {
+        get {
+            return NetworkAllowType(rawValue: integer(forKey: #function)) ?? NetworkAllowType.all
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var wifiNetworkRestrictionType: WIFIRestrictionType {
+        get {
+            return WIFIRestrictionType(rawValue: integer(forKey: #function)) ?? WIFIRestrictionType.NoRestrictions
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var wifiWhitelist: [String] {
+        get {
+            return array(forKey: #function) as? [String] ?? []
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var wifiBlacklist: [String] {
+        get {
+            return array(forKey: #function) as? [String] ?? []
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     // MARK: GeoPackage keys
     var geoPackageFeatureTilesMaxPointsPerTile: Int {
         get {

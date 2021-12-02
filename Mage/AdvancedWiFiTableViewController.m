@@ -8,7 +8,7 @@
 #import "ObservationTableHeaderView.h"
 #import "RightDetailSubtitleTableViewCell.h"
 #import "ValuePickerTableViewController.h"
-#import "DataConnectionUtilities.h"
+#import "MAGE-Swift.h"
 
 @interface AdvancedWiFiTableViewController ()
 
