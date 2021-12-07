@@ -107,37 +107,28 @@ class ObservationFormTableViewCell: UITableViewCell {
         secondaryLabel.font = scheme?.typographyScheme.subtitle2;
     }
     
-    func configure(observationForm: [String : Any], eventForm: [String: Any], scheme: MDCContainerScheming?) {
-        let fields: [[String: Any]] = eventForm[FormKey.fields.key] as? [[String: Any]] ?? [];
+    func configure(observationForm: [String : Any], eventForm: Form, scheme: MDCContainerScheming?) {
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryFieldName = eventForm[FormKey.primaryFeedField.key] as? String {
-            if let primaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == primaryFieldName
-            }) {
-                if let obsfield = observationForm[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
-                }
+        if let primaryField = eventForm.primaryFeedField, let primaryFieldName = primaryField[FieldKey.name.key] as? String {
+            if let obsfield = observationForm[primaryFieldName] {
+                formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
             }
         }
         
-        if let secondaryFieldName = eventForm[FormKey.secondaryFeedField.key] as? String {
-            if let secondaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == secondaryFieldName
-            }) {
-                if let obsfield = observationForm[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
-                }
+        if let secondaryField = eventForm.secondaryFeedField, let secondaryFieldName = secondaryField[FieldKey.name.key] as? String {
+            if let obsfield = observationForm[secondaryFieldName] {
+                formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
             }
         }
         
         thumbnail.image  = UIImage(named: "description")
-        formName = eventForm["name"] as? String
+        formName = eventForm.name
         primary = formPrimaryValue;
         secondary = formSecondaryValue;
         var tintColor: UIColor? = nil;
-        if let color = eventForm["color"] as? String {
+        if let color = eventForm.color {
             tintColor = UIColor(hex: color);
         } else {
             tintColor = scheme?.colorScheme.primaryColor

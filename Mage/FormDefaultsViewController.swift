@@ -15,7 +15,7 @@ class FormDefaultsViewController: UIViewController {
     var observationFormView: ObservationFormView?;
     var navController: UINavigationController!;
     var event: Event!;
-    var eventForm: [String: Any]!;
+    var eventForm: Form!;
     var scheme: MDCContainerScheming?;
     let card = MDCCard(forAutoLayout: ());
     let formNameLabel = UILabel.newAutoLayout();
@@ -69,8 +69,8 @@ class FormDefaultsViewController: UIViewController {
         stack.distribution = .fill;
         stack.axis = .vertical;
         stack.spacing = 4;
-        formNameLabel.text = eventForm[EventKey.name.key] as? String;
-        formDescriptionLabel.text = eventForm[EventKey.description.key] as? String;
+        formNameLabel.text = eventForm.name;
+        formDescriptionLabel.text = eventForm.formDescription
         formDescriptionLabel.numberOfLines = 0;
         formDescriptionLabel.lineBreakMode = .byWordWrapping;
         stack.addArrangedSubview(formNameLabel);
@@ -91,7 +91,7 @@ class FormDefaultsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(event: Event, eventForm: [String: AnyHashable], navigationController: UINavigationController, scheme: MDCContainerScheming, formDefaultsCoordinator: FormDefaultsCoordinator?) {
+    @objc convenience public init(event: Event, eventForm: Form, navigationController: UINavigationController, scheme: MDCContainerScheming, formDefaultsCoordinator: FormDefaultsCoordinator?) {
         self.init(frame: CGRect.zero);
         self.event = event;
         self.eventForm = eventForm;
@@ -121,7 +121,7 @@ class FormDefaultsViewController: UIViewController {
         defaultDescriptionLabel.font = containerScheme.typographyScheme.caption;
         observationFormView?.applyTheme(withScheme: containerScheme);
         card.applyTheme(withScheme: containerScheme);
-        if let color = eventForm[FormKey.color.key] as? String {
+        if let color = eventForm.color {
             image.tintColor = UIColor(hex: color);
         } else {
             image.tintColor = containerScheme.colorScheme.primaryColor
@@ -134,7 +134,7 @@ class FormDefaultsViewController: UIViewController {
         observationFormView?.removeFromSuperview();
         
         var newForm: [String: AnyHashable] = [:];
-        let fields: [[String : AnyHashable]] = eventForm[FormKey.fields.key] as! [[String : AnyHashable]];
+        let fields: [[String : AnyHashable]] = eventForm.fields ?? [];
         let filteredFields: [[String: AnyHashable]] = fields.filter {(($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) }
         for (_, field) in filteredFields.enumerated() {
             // grab the server default from the form fields value property
@@ -153,10 +153,10 @@ class FormDefaultsViewController: UIViewController {
     
     func buildObservationFormView() {
         var newForm: [String: AnyHashable] = [:];
-        let defaults: FormDefaults = FormDefaults(eventId: self.event.remoteId as! Int, formId: eventForm[FormKey.id.key] as! Int);
+        let defaults: FormDefaults = FormDefaults(eventId: self.event.remoteId as! Int, formId: eventForm.formId?.intValue ?? -1);
         let formDefaults: [String: AnyHashable] = defaults.getDefaults() as! [String: AnyHashable];
         
-        let fields: [[String : AnyHashable]] = eventForm[FormKey.fields.key] as! [[String : AnyHashable]];
+        let fields: [[String : AnyHashable]] = eventForm.fields ?? [];
         let filteredFields: [[String: AnyHashable]] = fields.filter {(($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) }
         if (formDefaults.count > 0) { // user defaults
             for (_, field) in filteredFields.enumerated() {

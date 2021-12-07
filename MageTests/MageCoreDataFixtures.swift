@@ -28,6 +28,7 @@ class MageCoreDataFixtures {
         let cleared = [
             String(describing: Attachment.self): Attachment.mr_truncateAll(in: localContext),
             String(describing: Event.self): Event.mr_truncateAll(in: localContext),
+            String(describing: Form.self): Form.mr_truncateAll(in: localContext),
             String(describing: Feed.self): Feed.mr_truncateAll(in: localContext),
             String(describing: FeedItem.self): FeedItem.mr_truncateAll(in: localContext),
             String(describing: GPSLocation.self): GPSLocation.mr_truncateAll(in: localContext),
@@ -305,7 +306,6 @@ class MageCoreDataFixtures {
                     e.name = name;
                     e.remoteId = remoteId;
                     e.eventDescription = "Test event description";
-                    e.forms = formsJson;
                     e.maxObservationForms = maxObservationForms;
                     e.minObservationForms = minObservationForms;
                     let teamJson: [String: Any] = [
@@ -315,6 +315,7 @@ class MageCoreDataFixtures {
                     ]
                     let team = Team.insert(json: teamJson, context: localContext)!;
                     e.addToTeams(team);
+                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
                 }
             })
         } else {
@@ -323,7 +324,6 @@ class MageCoreDataFixtures {
                     e.name = name;
                     e.remoteId = remoteId;
                     e.eventDescription = "Test event description";
-                    e.forms = formsJson;
                     e.maxObservationForms = maxObservationForms;
                     e.minObservationForms = minObservationForms;
                     let teamJson: [String: Any] = [
@@ -333,6 +333,7 @@ class MageCoreDataFixtures {
                     ]
                     let team = Team.insert(json: teamJson, context: localContext)!;
                     e.addToTeams(team);
+                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
                 }
             }, completion: completion)
         }

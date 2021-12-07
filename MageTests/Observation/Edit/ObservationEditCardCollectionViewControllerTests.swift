@@ -12,6 +12,7 @@ import Nimble
 //import Nimble_Snapshots
 
 @testable import MAGE
+import CoreData
 
 class ObservationEditCardCollectionViewControllerTests: KIFSpec {
     
@@ -93,7 +94,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     tester().tapView(withAccessibilityLabel: "Add Form")
                     expect(delegate.addFormCalled).to(beTrue());
                     if let event: Event = Event.mr_findFirst() {
-                        observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                        observationEditController.formAdded(form: (event.forms!)[0]);
                     }
                     
                     tester().waitForView(withAccessibilityLabel: "Form 1");
@@ -101,8 +102,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     // legacy server should only allow one form so add form button should be hidden
                     expect(addFormButton.isHidden).to(beTrue());
                     tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: -1.0);
-                    tester().waitForView(withAccessibilityLabel: "delete form");
-                    tester().tapView(withAccessibilityLabel: "delete form");
+                    tester().waitForView(withAccessibilityLabel: "Delete Form");
+                    tester().tapView(withAccessibilityLabel: "Delete Form");
                     
                     expect(addFormButton.isHidden).to(beFalse());
                     tester().waitForAbsenceOfView(withAccessibilityLabel: "Form 1");
@@ -113,8 +114,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     
                     // force add too many forms
                     if let event: Event = Event.mr_findFirst() {
-                        observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
-                        observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                        observationEditController.formAdded(form: (event.forms!)[0]);
+                        observationEditController.formAdded(form: (event.forms!)[0]);
                     }
                     
                     tester().tapView(withAccessibilityLabel: "Save")
@@ -256,7 +257,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
@@ -287,7 +288,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
@@ -314,13 +315,15 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
+                tester().waitForAnimationsToFinish()
+                TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().waitForView(withAccessibilityLabel: "Form 1")
                 
                 tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: -1.0);
-                tester().tapView(withAccessibilityLabel: "delete form")
+                tester().tapView(withAccessibilityLabel: "Delete Form")
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Form 1")
                 tester().waitForView(withAccessibilityLabel: "UNDO");
                 tester().tapView(withAccessibilityLabel: "UNDO");
@@ -346,22 +349,30 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
                 
-                tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: -1.0);
-                tester().tapView(withAccessibilityLabel: "delete form")
+                tester().swipeView(withAccessibilityLabel: "card scroll", in: .up)
+                tester().waitForAnimationsToFinish()
+                
+                // hide this button, b/c it is getting in the way of tapping the delete button in the tests
+                // update, still doesn't work.  Sometimes this test works, sometimes it doesn't.  I give up
+                let addFormButton: UIButton = viewTester().usingLabel("Add Form").view as! UIButton
+                addFormButton.removeFromSuperview()
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Delete Form")
+                let deleteButton: UIButton = viewTester().usingIdentifier("Delete Form").view as! UIButton;
+                tester().waitForTappableView(withAccessibilityLabel: "Delete Form")
+                deleteButton.tap()
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Form 1")
                 tester().tapView(withAccessibilityLabel: "Save");
                 expect(delegate.saveObservationCalled).to(beTrue());
                 expect(delegate.observationSaved?.properties?[ObservationKey.forms.key] as? [Any]).to(beEmpty());
             }
             
-            // this test will not properly run with the other tests
-            // TODO: make this work with the other tests, specifically it("should delete a form")
-            xit("should reorder forms") {
+            it("should reorder forms") {
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createPointObservation(eventId: 1);
@@ -380,26 +391,27 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[1] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[1]);
                 }
-                
                 tester().waitForView(withAccessibilityLabel: "Form 2")
                 
-                tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: 0.5);
-                TestHelpers.printAllAccessibilityLabelsInWindows();
-                let reorderButton: UIButton = viewTester().usingLabel("reorder").view as! UIButton;
+                tester().swipeView(withAccessibilityLabel: "card scroll", in: .down)
+                tester().waitForAnimationsToFinish()
+                
+                let reorderButton: UIButton = viewTester().usingIdentifier("reorder").view as! UIButton;
                 expect(reorderButton.isHidden).to(beFalse());
                 expect(reorderButton.isEnabled).to(beTrue());
-                viewTester().usingLabel("reorder").tap();
+                tester().waitForTappableView(withAccessibilityLabel: "reorder")
+                reorderButton.tap()
                 tester().waitForAnimationsToFinish();
                 
-                expect(delegate.reorderFormsCalled).to(beTrue());
+                expect(delegate.reorderFormsCalled).toEventually(beTrue());
                 var obsForms: [[String: Any]] = observation.properties![ObservationKey.forms.key] as! [[String : Any]];
                 obsForms.reverse();
                 observation.properties![ObservationKey.forms.key] = obsForms;
@@ -439,7 +451,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 delegate.addFormCalled = false;
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 let addFormFab: MDCFloatingButton = viewTester().usingLabel("Add Form").view as! MDCFloatingButton;
@@ -453,7 +465,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 // force add another one and save and verify the save does not succeed
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().tapView(withAccessibilityLabel: "Save")
@@ -487,7 +499,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 delegate.addFormCalled = false;
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 let addFormFab: MDCFloatingButton = viewTester().usingLabel("Add Form").view as! MDCFloatingButton;
@@ -495,7 +507,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 // force add another one and save and verify the save does not succeed
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().tapView(withAccessibilityLabel: "Save")
@@ -519,9 +531,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to Data")
                 }
                 
-                guard let forms : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
+                guard let formsJson : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
+                
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -554,9 +568,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to Data")
                 }
                 
-                guard let forms : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
+                guard let formsJson : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
+                
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -593,10 +609,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to Data")
                 }
                 
-                guard let forms : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
+                guard let formsJson : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
                 
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
                 ObservationBuilder.addFormToObservation(observation: observation, form: forms[0], values: [
@@ -633,9 +650,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     fatalError("Unable to convert \(formsJsonFile).json to Data")
                 }
                 
-                guard let forms : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
+                guard let formsJson : [[String: Any]] = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] else {
                     fatalError("Unable to convert \(formsJsonFile).json to JSON dictionary")
                 }
+                
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -670,7 +689,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
 //                expect(view).to(haveValidSnapshot(usesDrawRect: true));
@@ -694,7 +713,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().enterText("The Title", intoViewWithAccessibilityLabel: "field0");
@@ -723,7 +742,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "geometry");
@@ -778,7 +797,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "geometry");
@@ -821,7 +840,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 expect(delegate.addFormCalled).to(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
-                    observationEditController.formAdded(form: (event.forms as! [Any])[0] as! [String: Any]);
+                    observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 tester().setText("The Title", intoViewWithAccessibilityLabel: "field0")
                 tester().setText("", intoViewWithAccessibilityLabel: "field1");

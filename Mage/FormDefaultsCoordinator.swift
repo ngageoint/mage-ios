@@ -17,13 +17,13 @@
     var viewController: UIViewController?;
     var delegate: FormDefaultsDelegate;
     var event: Event!;
-    var form: [String: AnyHashable];
+    var form: Form;
     var defaults: NSMutableDictionary?;
     var scheme: MDCContainerScheming;
     
     private lazy var serverDefaults: [String: AnyHashable] = {
         // Make a mutable copy of the original form
-        var defaults = FormDefaults.mutableForm(form) as! [String : AnyHashable];
+        var defaults = FormDefaults.mutableForm(form.json?.json ?? [:]) as! [String : AnyHashable];
         
         // filter out archived and hidden fields and sort
         var fields: [[String: AnyHashable]] = defaults[FormKey.fields.key] as! [[String: AnyHashable]];
@@ -41,7 +41,7 @@
         return newForm;
     }();
     
-    @objc public init(navController: UINavigationController, event: Event, form: [String: AnyHashable], scheme: MDCContainerScheming, delegate: FormDefaultsDelegate) {
+    @objc public init(navController: UINavigationController, event: Event, form: Form, scheme: MDCContainerScheming, delegate: FormDefaultsDelegate) {
         self.navController = navController;
         self.event = event;
         self.form = form;
@@ -55,7 +55,7 @@
     }
     
     func save(defaults: [String: AnyHashable]) {
-        let formDefaults = FormDefaults(eventId: self.event.remoteId as! Int, formId: form[FormKey.id.key] as! Int);
+        let formDefaults = FormDefaults(eventId: self.event.remoteId as! Int, formId: form.formId?.intValue ?? -1);
         // Compare server defaults with defaults.  If they are the same clear the defaults
         if (defaults == serverDefaults) {
             formDefaults.clear();

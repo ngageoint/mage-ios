@@ -24,7 +24,7 @@ class ObservationFormViewTests: KIFSpec {
             var observation: Observation!;
             var formView: ObservationFormView!
             var view: UIView!
-            var eventForm: [String:Any]!
+            var eventForm: Form!
             var form: [String : Any]!
 
             beforeEach {
@@ -77,7 +77,7 @@ class ObservationFormViewTests: KIFSpec {
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
 
-                let fields = eventForm["fields"] as! [[String: Any]];
+                let fields = eventForm!.json!.json!["fields"] as! [[String: Any]];
 
                 for field in fields {
                     if let baseFieldView: BaseFieldView = formView.fieldViewForField(field: field) {
@@ -103,7 +103,7 @@ class ObservationFormViewTests: KIFSpec {
                 let fieldId = "field8";
                 let delegate = MockObservationFormListener();
                 observation = ObservationBuilder.createPointObservation();
-                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm!);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
                 print("")
@@ -134,7 +134,7 @@ class ObservationFormViewTests: KIFSpec {
                 let fieldId = "field8";
                 let delegate = MockObservationFormListener();
                 observation = ObservationBuilder.createPointObservation();
-                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm!);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, observationFormListener: delegate);
@@ -174,7 +174,7 @@ class ObservationFormViewTests: KIFSpec {
                 let fieldId = "field22";
                 let delegate = MockFieldDelegate();
                 observation = ObservationBuilder.createPointObservation();
-                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm);
+                ObservationBuilder.addFormToObservation(observation: observation, form: eventForm!);
                 let properties = observation.properties as? [String: [[String: Any]]];
                 form = properties?["forms"]?[0] ?? [ : ];
                 formView = ObservationFormView(observation: observation, form: form, eventForm: eventForm, formIndex: 1, viewController: controller, delegate: delegate);

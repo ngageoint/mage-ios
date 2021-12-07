@@ -24,7 +24,6 @@
     <entity name="Event" representedClassName=".Event" syncable="YES">
         <attribute name="acl" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="eventDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="forms" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
         <attribute name="maxObservationForms" optional="YES" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="minObservationForms" optional="YES" attributeType="Integer 64" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -59,6 +58,20 @@
         <attribute name="remoteId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="temporalSortValue" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="feed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Feed" inverseName="items" inverseEntity="Feed" syncable="YES"/>
+    </entity>
+    <entity name="Form" representedClassName=".Form" syncable="YES">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="formId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="primaryFeedField" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
+        <attribute name="primaryMapField" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
+        <attribute name="secondaryFeedField" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
+        <attribute name="secondaryMapField" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
+        <relationship name="json" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormJson" syncable="YES"/>
+    </entity>
+    <entity name="FormJson" representedClassName=".FormJson" syncable="YES">
+        <attribute name="formId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="json" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" syncable="YES"/>
     </entity>
     <entity name="GPSLocation" representedClassName=".GPSLocation" syncable="YES">
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -173,9 +186,10 @@
     <elements>
         <element name="Attachment" positionX="-1604" positionY="-1035" width="128" height="269"/>
         <element name="Canary" positionX="-2322" positionY="-1008" width="128" height="44"/>
-        <element name="Event" positionX="-2466" positionY="-973" width="128" height="179"/>
+        <element name="Event" positionX="-2466" positionY="-973" width="128" height="14"/>
         <element name="Feed" positionX="-2322" positionY="-1008" width="128" height="299"/>
         <element name="FeedItem" positionX="-2313" positionY="-999" width="128" height="104"/>
+        <element name="Form" positionX="-2322" positionY="-999" width="128" height="149"/>
         <element name="GPSLocation" positionX="-1989" positionY="-1161" width="128" height="89"/>
         <element name="ImageryLayer" positionX="-2322" positionY="-1008" width="128" height="74"/>
         <element name="Layer" positionX="-2243" positionY="-1035" width="128" height="209"/>
@@ -188,5 +202,6 @@
         <element name="StaticLayer" positionX="-2252" positionY="-1161" width="128" height="44"/>
         <element name="Team" positionX="-2529" positionY="-441" width="128" height="104"/>
         <element name="User" positionX="-1622" positionY="-516" width="128" height="299"/>
+        <element name="FormJson" positionX="-2322" positionY="-999" width="128" height="59"/>
     </elements>
 </model>

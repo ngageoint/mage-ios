@@ -17,12 +17,12 @@ import MaterialComponents.MaterialBottomSheet
 
 class MockFormPickerDelegate: FormPickedDelegate {
     var formPickedCalled = true;
-    var pickedForm: [String : AnyHashable]?;
+    var pickedForm: Form?;
     var cancelSelectionCalled = false;
     
-    func formPicked(form: [String : Any]) {
+    func formPicked(form: Form) {
         formPickedCalled = true;
-        pickedForm = form as? [String: AnyHashable];
+        pickedForm = form;
     }
     
     func cancelSelection() {
@@ -61,12 +61,14 @@ class FormPickerTests: KIFSpec {
             }
             
             it("one form") {
-                let forms: [[String: AnyHashable]] = [[
+                let formsJson: [[String: AnyHashable]] = [[
                     "name": "Suspect",
                     "description": "Information about a suspect",
                     "color": "#5278A2",
                     "id": 2
                 ]]
+                
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
                 
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -76,7 +78,7 @@ class FormPickerTests: KIFSpec {
             }
             
             it("multiple forms") {
-                let forms: [[String: AnyHashable]] = [[
+                let formsJson: [[String: AnyHashable]] = [[
                     "name": "Suspect",
                     "description": "Information about a suspect",
                     "color": "#5278A2",
@@ -102,6 +104,8 @@ class FormPickerTests: KIFSpec {
                     "id": 4
                 ]]
                 
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
@@ -110,7 +114,7 @@ class FormPickerTests: KIFSpec {
             }
             
             it("as a sheet") {
-                let forms: [[String: AnyHashable]] = [[
+                let formsJson: [[String: AnyHashable]] = [[
                     "name": "Vehicle",
                     "description": "Information about a vehicle",
                     "color": "#7852A2",
@@ -162,6 +166,8 @@ class FormPickerTests: KIFSpec {
                     "id": 2
                 ]]
                 let delegate = MockFormPickerDelegate();
+                
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
 
                 formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -186,7 +192,7 @@ class FormPickerTests: KIFSpec {
             // check constraints here
             it("should trigger the delegate") {
                 
-                let forms: [[String: AnyHashable]] = [[
+                let formsJson: [[String: AnyHashable]] = [[
                     "name": "Suspect",
                     "description": "Information about a suspect",
                     "color": "#5278A2",
@@ -215,6 +221,8 @@ class FormPickerTests: KIFSpec {
                 
                 let delegate = MockFormPickerDelegate();
                 
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+
                 formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
@@ -226,13 +234,15 @@ class FormPickerTests: KIFSpec {
             }
             
             it("cancel button cancels") {
-                let forms: [[String: AnyHashable]] = [[
+                let formsJson: [[String: AnyHashable]] = [[
                     "name": "Suspect",
                     "description": "Information about a suspect",
                     "color": "#5278A2",
                     "id": 2
                 ]]
                 
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;

@@ -19,17 +19,15 @@
 @interface MapObservationManager ()
 
 @property (nonatomic, strong) MKMapView *mapView;
-@property (nonatomic, weak) NSArray *forms;
 
 @end
 
 @implementation MapObservationManager
 
--(instancetype) initWithMapView: (MKMapView *) mapView andEventForms: (NSArray *) forms {
+-(instancetype) initWithMapView: (MKMapView *) mapView {
     self = [super init];
     if(self){
         self.mapView = mapView;
-        self.forms = forms;
     }
     return self;
 }

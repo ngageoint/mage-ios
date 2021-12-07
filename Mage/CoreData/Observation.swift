@@ -275,11 +275,11 @@ enum State: Int, CustomStringConvertible {
         return task;
     }
     
-    func fieldNameToField(formId: NSNumber) -> [String : [AnyHashable : Any]]? {
-        if let formFieldMap = formFieldMap {
-            return formFieldMap[formId]
+    func fieldNameToField(formId: NSNumber, name: String) -> [AnyHashable : Any]? {
+        if let managedObjectContext = managedObjectContext, let form : Form = Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext) {
+            return form.getFieldByName(name: name)
         }
-        return [:]
+        return nil
     }
 
     func createJsonToSubmit(event: Event) -> [AnyHashable : Any] {
@@ -344,7 +344,7 @@ enum State: Int, CustomStringConvertible {
                 var formProperties: [String: Any] = form;
                 for (key, value) in form {
                     if let formId = form[FormKey.formId.key] as? NSNumber {
-                        if let field = self.fieldNameToField(formId: formId)?[key] {
+                        if let field = self.fieldNameToField(formId: formId, name:key) {
                             if let fieldType = field[FieldKey.type.key] as? String, fieldType == FieldType.geometry.key {
                                 if let fieldGeometry = value as? SFGeometry {
                                     formProperties[key] = GeometrySerializer.serializeGeometry(fieldGeometry);
@@ -631,10 +631,9 @@ enum State: Int, CustomStringConvertible {
                 if let formsProperties = value as? [[String : Any]] {
                     for formProperties in formsProperties {
                         var parsedFormProperties:[String:Any] = formProperties;
-                        if let formId = formProperties[EventKey.formId.key] as? NSNumber {
-                            let fields = self.fieldNameToField(formId: formId);
+                        if let formId = formProperties[EventKey.formId.key] as? NSNumber, let managedObjectContext = managedObjectContext, let form : Form = Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext) {
                             for (formKey, value) in formProperties {
-                                if let field = fields?[formKey] {
+                                if let field = form.getFieldByName(name: formKey) {
                                     if let type = field[FieldKey.type.key] as? String, type == FieldType.geometry.key {
                                         if let value = value as? [String: Any] {
                                             let geometry = GeometryDeserializer.parseGeometry(json: value)
@@ -661,43 +660,6 @@ enum State: Int, CustomStringConvertible {
     }
     
     @objc public var transientAttachments: [Attachment] = [];
-
-    var _formFieldMap: [NSNumber : [String : [AnyHashable : Any]]]?
-    
-    @objc public var formFieldMap: [NSNumber : [String : [AnyHashable : Any]]]? {
-        get {
-            guard let eventId = self.eventId, let event = Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: eventId) else {
-                NSLog("nil event");
-                return [:]
-            }
-            
-            if let formFieldMap = _formFieldMap {
-                return formFieldMap
-            }
-            guard let forms = event.forms else {
-                return nil
-            }
-            var formFieldMap: [NSNumber : [String : [AnyHashable : Any]]] = [:]
-            for form in forms {
-                var fieldNameToFieldMap: [String : [AnyHashable : Any]] = [:]
-                // run through the form and map the row indexes to fields
-                guard let fields = form[FormKey.fields.key] as? [[AnyHashable : Any]] else {
-                    continue;
-                }
-                for field in fields {
-                    if let fieldName = field[FieldKey.name.key] as? String {
-                        fieldNameToFieldMap[fieldName] = field;
-                    }
-                }
-                if let formId = form[FormKey.id.key] as? NSNumber {
-                    formFieldMap[formId] = fieldNameToFieldMap
-                }
-            }
-            
-            _formFieldMap = formFieldMap;
-            return formFieldMap;
-        }
-    }
     
     @objc public var geometry: SFGeometry? {
         get {
@@ -860,12 +822,11 @@ enum State: Int, CustomStringConvertible {
         }
     }
     
-    @objc public var primaryEventForm: [AnyHashable : Any]? {
+    @objc public var primaryEventForm: Form? {
         get {
-            if let event = event, let forms = event.forms, let primaryObservationForm = primaryObservationForm, let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber, forms.count > 0 {
-                return forms.first { form in
-                    return (form[FormKey.id.key] as? NSNumber) == formId
-                }
+            
+            if let primaryObservationForm = primaryObservationForm, let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber {
+                return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext ?? NSManagedObjectContext.mr_default())
             }
             return nil;
         }
@@ -874,7 +835,7 @@ enum State: Int, CustomStringConvertible {
     @objc public var primaryField: String? {
         get {
             if let primaryEventForm = primaryEventForm {
-                return primaryEventForm[FormKey.primaryField.key] as? String
+                return primaryEventForm.primaryMapField?[FieldKey.name.key] as? String
             }
             return nil
         }
@@ -883,24 +844,15 @@ enum State: Int, CustomStringConvertible {
     @objc public var secondaryField: String? {
         get {
             if let primaryEventForm = primaryEventForm {
-                return primaryEventForm[FormKey.secondaryField.key] as? String
+                return primaryEventForm.secondaryMapField?[FieldKey.name.key] as? String
             }
             return nil
         }
     }
     
-    func getField(name: String) -> [AnyHashable : Any]? {
-        if let primaryEventForm = primaryEventForm, let fieldName = primaryEventForm[name] as? String, let fields = primaryEventForm[FormKey.fields.key] as? [[String : AnyHashable]] {
-            return fields.first { field in
-                return field[FieldKey.name.key] as? String == fieldName;
-            }
-        }
-        return nil;
-    }
-    
     @objc public var primaryFieldText: String? {
         get {
-            if let primaryField = self.getField(name: FormKey.primaryField.key), let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFieldName = primaryField[FieldKey.name.key] as? String, observationForms.count > 0 {
+            if let primaryField = primaryEventForm?.primaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFieldName = primaryField[FieldKey.name.key] as? String, observationForms.count > 0 {
                 let value = self.primaryObservationForm?[primaryFieldName]
                 return Observation.fieldValueText(value: value, field: primaryField)
             }
@@ -910,7 +862,7 @@ enum State: Int, CustomStringConvertible {
     
     @objc public var secondaryFieldText: String? {
         get {
-            if let variantField = self.getField(name: FormKey.secondaryField.key), let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let variantFieldName = variantField[FieldKey.name.key] as? String, observationForms.count > 0 {
+            if let variantField = primaryEventForm?.secondaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let variantFieldName = variantField[FieldKey.name.key] as? String, observationForms.count > 0 {
                 let value = self.primaryObservationForm?[variantFieldName]
                 return Observation.fieldValueText(value: value, field: variantField)
             }
@@ -920,7 +872,7 @@ enum State: Int, CustomStringConvertible {
     
     @objc public var primaryFeedFieldText: String? {
         get {
-            if let primaryFeedField = self.getField(name: FormKey.primaryFeedField.key), let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFeedFieldName = primaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
+            if let primaryFeedField = primaryEventForm?.primaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFeedFieldName = primaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
                 let value = primaryObservationForm?[primaryFeedFieldName]
                 return Observation.fieldValueText(value: value, field: primaryFeedField)
             }
@@ -930,7 +882,7 @@ enum State: Int, CustomStringConvertible {
     
     @objc public var secondaryFeedFieldText: String? {
         get {
-            if let secondaryFeedField = self.getField(name: FormKey.secondaryFeedField.key), let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let secondaryFeedFieldName = secondaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
+            if let secondaryFeedField = primaryEventForm?.secondaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let secondaryFeedFieldName = secondaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
                 let value = self.primaryObservationForm?[secondaryFeedFieldName]
                 return Observation.fieldValueText(value: value, field: secondaryFeedField)
             }

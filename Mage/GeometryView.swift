@@ -16,7 +16,6 @@ class GeometryView : BaseFieldView {
     private weak var mapEventDelegate: MKMapViewDelegate?;
     private weak var observationActionsDelegate: ObservationActionsDelegate?;
     private weak var observation: Observation?;
-    private var eventForms: [[String: Any]]?;
     private var mapDelegate: MapDelegate?;
     private var mkmapDelegate: MKMapViewDelegate?;
     
@@ -60,7 +59,7 @@ class GeometryView : BaseFieldView {
     }()
     
     lazy var observationManager: MapObservationManager = {
-        let observationManager: MapObservationManager = MapObservationManager(mapView: self.mapView, andEventForms: eventForms);
+        let observationManager: MapObservationManager = MapObservationManager(mapView: self.mapView);
         return observationManager;
     }()
     
@@ -85,16 +84,15 @@ class GeometryView : BaseFieldView {
         self.init(field: field, editMode: editMode, delegate: delegate, value: nil, mapEventDelegate: mapEventDelegate, observationActionsDelegate: observationActionsDelegate, mkmapDelegate: mkmapDelegate);
     }
     
-    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, eventForms: [[String : Any]]?, mapEventDelegate: MKMapViewDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, mkmapDelegate: MKMapViewDelegate? = nil) {
+    convenience init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, observation: Observation?, mapEventDelegate: MKMapViewDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, mkmapDelegate: MKMapViewDelegate? = nil) {
         let accuracy = (observation?.properties?["accuracy"]) as? Double;
         let provider = (observation?.properties?["provider"]) as? String;
-        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.geometry, accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, eventForms: eventForms, observationActionsDelegate: observationActionsDelegate, mkmapDelegate: mkmapDelegate);
+        self.init(field: field, editMode: editMode, delegate: delegate, value: observation?.geometry, accuracy: accuracy, provider: provider, mapEventDelegate: mapEventDelegate, observation: observation, observationActionsDelegate: observationActionsDelegate, mkmapDelegate: mkmapDelegate);
     }
     
-    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, eventForms: [[String : Any]]? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, mkmapDelegate: MKMapViewDelegate? = nil) {
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: SFGeometry?, accuracy: Double? = nil, provider: String? = nil, mapEventDelegate: MKMapViewDelegate? = nil, observation: Observation? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, mkmapDelegate: MKMapViewDelegate? = nil) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.observation = observation;
-        self.eventForms = eventForms;
         self.observationActionsDelegate = observationActionsDelegate;
         if (mkmapDelegate != nil) {
             self.mkmapDelegate = mkmapDelegate;

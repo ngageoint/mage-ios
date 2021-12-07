@@ -51,9 +51,8 @@ protocol ObservationCommonPropertiesListener: AnyObject {
         return Event.getCurrentEvent(context: self.managedObjectContext);
     } ()
     
-    private lazy var eventForms: [[String: AnyHashable]] = {
-        let eventForms = event?.forms as? [[String: AnyHashable]] ?? [];
-        return eventForms;
+    private lazy var eventForms: [Form] = {
+        return event?.forms ?? [];
     }()
     
     private lazy var user: User? = {
@@ -146,12 +145,15 @@ protocol ObservationCommonPropertiesListener: AnyObject {
         return observationInContext;
     }
     
-    func setupFormWithDefaults(observation: Observation, form: [String: Any]) -> [String: AnyHashable] {
-        var newForm: [String: AnyHashable] = [EventKey.formId.key: form[FieldKey.id.key] as! Int];
-        let defaults: FormDefaults = FormDefaults(eventId: observation.eventId as! Int, formId: form[FieldKey.id.key] as! Int);
+    func setupFormWithDefaults(observation: Observation, form: Form) -> [String: AnyHashable] {
+        guard let formId = form.formId?.intValue else {
+            return [:]
+        }
+        var newForm: [String: AnyHashable] = [EventKey.formId.key: formId];
+        let defaults: FormDefaults = FormDefaults(eventId: observation.eventId as! Int, formId: formId);
         let formDefaults: [String: AnyHashable] = defaults.getDefaults() as! [String: AnyHashable];
         
-        let fields: [[String : AnyHashable]] = (form[FormKey.fields.key] as! [[String : AnyHashable]]).filter { (($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) };
+        let fields: [[String : AnyHashable]] = (form.fields ?? []).filter { (($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) };
         if (formDefaults.count > 0) { // user defaults
             for (_, field) in fields.enumerated() {
                 var value: AnyHashable? = nil;
@@ -174,7 +176,7 @@ protocol ObservationCommonPropertiesListener: AnyObject {
         return newForm;
     }
     
-    func addFormToObservation(observation: Observation, form: [String: AnyHashable]) {
+    func addFormToObservation(observation: Observation, form: Form) {
         var observationProperties: [String: Any] = [ObservationKey.forms.key:[]];
         var observationForms: [[String: Any]] = [];
         if let properties = observation.properties as? [String: Any] {
@@ -190,7 +192,7 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     
     func addRequiredForms(observation: Observation) {
         for eventForm in eventForms {
-            let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
+            let eventFormMin: Int = eventForm.min ?? 0;
             if (eventFormMin > 0) {
                 for _ in 1...eventFormMin {
                     addFormToObservation(observation: observation, form: eventForm);
@@ -201,7 +203,7 @@ protocol ObservationCommonPropertiesListener: AnyObject {
 }
 
 extension ObservationEditCoordinator: FormPickedDelegate {
-    func formPicked(form: [String : Any]) {
+    func formPicked(form: Form) {
         observationEditController?.formAdded(form: form);
         bottomSheet?.dismiss(animated: true, completion: nil);
         bottomSheet = nil;
@@ -264,9 +266,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
     }
     
     func addForm() {
-        let forms: [[String: AnyHashable]] = (event?.forms as! [[String : AnyHashable]]).filter { form in
-            return !(form[FormKey.archived.rawValue] as? Bool ?? false)
-        };
+        let forms: [Form] = event?.nonArchivedForms ?? []
         let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, observation: observation, scheme: self.scheme);
         formPicker.applyTheme(withScheme: scheme);
         bottomSheet = MDCBottomSheetController(contentViewController: formPicker);

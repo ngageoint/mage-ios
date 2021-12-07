@@ -19,7 +19,7 @@ class ObservationFormView: UIStackView {
     
     var observation: Observation!;
     public weak var containingCard: ExpandableCard?;
-    private var eventForm: [String:Any]?;
+    private var eventForm: Form?;
     private var form: [String: Any]!;
     private var formIndex: Int!;
     private var fieldViews: [String: BaseFieldView] = [ : ];
@@ -35,7 +35,7 @@ class ObservationFormView: UIStackView {
     private var scheme: MDCContainerScheming?;
 
     private lazy var formFields: [[String: Any]] = {
-        let fields: [[String: Any]] = self.eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+        let fields: [[String: Any]] = self.eventForm?.fields ?? [];
         
         return fields.filter { (field) -> Bool in
             let archived: Bool = field[FieldKey.archived.key] as? Bool ?? false;
@@ -55,7 +55,7 @@ class ObservationFormView: UIStackView {
         self.spacing = 12;
     }
     
-    convenience init(observation: Observation, form: [String: Any], eventForm: [String:Any]? = nil, formIndex: Int, editMode: Bool = true, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, includeAttachmentFields: Bool = true) {
+    convenience init(observation: Observation, form: [String: Any], eventForm: Form? = nil, formIndex: Int, editMode: Bool = true, viewController: UIViewController, observationFormListener: ObservationFormListener? = nil, delegate: FieldSelectionDelegate? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, includeAttachmentFields: Bool = true) {
         self.init(frame: .zero)
         self.observation = observation;
         self.form = form;
@@ -69,7 +69,7 @@ class ObservationFormView: UIStackView {
         self.observationActionsDelegate = observationActionsDelegate;
         self.includeAttachmentFields = includeAttachmentFields;
         constructView();
-        self.accessibilityLabel = "Form \(self.eventForm?[FormKey.id.key] ?? "")";
+        self.accessibilityLabel = "Form \(self.eventForm?.formId ?? -1)";
     }
     
     override func removeFromSuperview() {
@@ -207,6 +207,6 @@ extension ObservationFormView: ObservationFormFieldListener {
         forms[0] = form;
         newProperties![ObservationKey.forms.key] = forms;
         self.observation.properties = newProperties;
-        self.observationFormListener?.formUpdated(form, eventForm: eventForm!, form: formIndex);
+        self.observationFormListener?.formUpdated(form, form: formIndex);
     }
 }

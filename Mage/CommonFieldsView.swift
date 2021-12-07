@@ -45,7 +45,7 @@ class CommonFieldsView: MDCCard {
     }()
     
     lazy var geometryView: GeometryView = {
-        let geometryView = GeometryView(field: locationField, delegate: self, observation: observation, eventForms: eventForms);
+        let geometryView = GeometryView(field: locationField, delegate: self, observation: observation);
         return geometryView;
     }()
     

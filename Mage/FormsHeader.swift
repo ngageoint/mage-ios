@@ -21,6 +21,7 @@ class FormsHeader: UIView {
     lazy var reorderButton: MDCButton = {
         let button = MDCButton();
         button.accessibilityLabel = "reorder";
+        button.accessibilityIdentifier = "reorder";
         button.setImage(UIImage(named: "reorder")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);

@@ -61,6 +61,9 @@ public enum FormKey : String {
     case archived
     case id
     case formId
+    case min
+    case max
+    case style
     
     var key: String {
         return self.rawValue

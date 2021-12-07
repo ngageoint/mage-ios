@@ -19,7 +19,7 @@ import MaterialComponents.MDCCard
 }
 
 @objc protocol ObservationFormListener {
-    func formUpdated(_ form: [String : Any], eventForm: [String : Any], form index: Int);
+    func formUpdated(_ form: [String : Any], form index: Int);
 }
 
 @objc class ObservationEditCardCollectionViewController: UIViewController {
@@ -47,15 +47,15 @@ import MaterialComponents.MDCCard
         return Event.getEvent(eventId: eventId, context: context)
     }()
         
-    private lazy var eventForms: [[String: Any]]? = {
-        let eventForms = event?.forms as? [[String: Any]] ?? [];
-        return eventForms;
+    private lazy var eventForms: [Form]? = {
+        return event?.forms
     }()
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.accessibilityIdentifier = "card scroll";
+        scrollView.accessibilityLabel = "card scroll"
         return scrollView;
     }()
     
@@ -258,7 +258,7 @@ import MaterialComponents.MDCCard
         
         let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
         if ((MageServer.isServerVersion5 && realFormCount == 1) || eventForms?.filter({ form in
-            return !(form[FormKey.archived.key] as? Bool ?? false)
+            return !form.archived
         }).count == 0) {
             addFormFAB.isHidden = true;
         }
@@ -326,31 +326,19 @@ import MaterialComponents.MDCCard
     }
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-        let eventForm: [String: Any]? = self.eventForms?.first { (form) -> Bool in
-            return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
-        }
-        
-        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+        let eventForm = event?.form(id: observationForm[EventKey.formId.key] as? NSNumber)
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
-            if let primaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == primaryFieldName
-            }) {
-                if let obsfield = observationForm[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
-                }
+        if let primaryField = eventForm?.primaryFeedField, let primaryFieldName = primaryField[FieldKey.name.key] as? String {
+            if let obsfield = observationForm[primaryFieldName] {
+                formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
             }
         }
         
-        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
-            if let secondaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == secondaryFieldName
-            }) {
-                if let obsfield = observationForm[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
-                }
+        if let secondaryField = eventForm?.secondaryFeedField, let secondaryFieldName = secondaryField[FieldKey.name.key] as? String {
+            if let obsfield = observationForm[secondaryFieldName] {
+                formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
             }
         }
         
@@ -362,10 +350,11 @@ import MaterialComponents.MDCCard
         formSpacerView.addSubview(formView);
         formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16), excludingEdge: .bottom);
         let button = MDCButton(forAutoLayout: ());
-        button.accessibilityLabel = "delete form";
+        button.accessibilityLabel = "Delete Form";
+        button.accessibilityIdentifier = "Delete Form"
         button.setTitle("Delete Form", for: .normal);
         button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
-        button.addTarget(self, action: #selector(deleteForm(sender:)), for: .touchUpInside);
+        button.addTarget(self, action: #selector(deleteForm(sender:)), for: .allTouchEvents);
         button.tag = index;
 
         let divider = UIView(forAutoLayout: ());
@@ -382,12 +371,12 @@ import MaterialComponents.MDCCard
         button.applyTextTheme(withScheme: globalErrorContainerScheme())
         
         var tintColor: UIColor? = nil;
-        if let color = eventForm?[FormKey.color.key] as? String {
+        if let color = eventForm?.color {
             tintColor = UIColor(hex: color);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?[EventKey.name.key] as? String, imageTint: tintColor, expandedView: formSpacerView)
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView)
         formView.containingCard = card;
         stackView.addArrangedSubview(card);
         cards.append(card);
@@ -423,32 +412,19 @@ import MaterialComponents.MDCCard
     }
     
     func setExpandableCardHeaderInformation(form: [String: Any], index: Int) {
-        let eventForm: [String: Any]? = self.eventForms?.first { (eventForm) -> Bool in
-            return eventForm[FormKey.id.key] as? Int == form[EventKey.formId.key] as? Int
-        }
+        let eventForm = event?.form(id: form[EventKey.formId.key] as? NSNumber)
         
-        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
-
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-        
-        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
-            if let primaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == primaryFieldName
-            }) {
-                if let obsfield = form[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
-                }
+        if let primaryField = eventForm?.primaryFeedField, let primaryFieldName = primaryField[FieldKey.name.key] as? String {
+            if let obsfield = form[primaryFieldName] {
+                formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
             }
         }
         
-        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
-            if let secondaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == secondaryFieldName
-            }) {
-                if let obsfield = form[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
-                }
+        if let secondaryField = eventForm?.secondaryFeedField, let secondaryFieldName = secondaryField[FieldKey.name.key] as? String {
+            if let obsfield = form[secondaryFieldName] {
+                formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
             }
         }
         
@@ -567,12 +543,12 @@ import MaterialComponents.MDCCard
         
         if let eventForms = eventForms {
             for eventForm in eventForms {
-                let eventFormMin: Int = (eventForm[FieldKey.min.key] as? Int) ?? 0;
-                let eventFormMax: Int = (eventForm[FieldKey.max.key] as? Int) ?? Int.max;
-                let formCount = formIdCount[eventForm[FieldKey.id.key] as! Int] ?? 0;
+                let eventFormMin: Int = eventForm.min ?? 0;
+                let eventFormMax: Int = eventForm.max ?? Int.max;
+                let formCount = formIdCount[eventForm.formId?.intValue ?? Int.min] ?? 0;
                 if (formCount < eventFormMin) {
                     // not enough of this form
-                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
+                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
                     let messageAction = MDCSnackbarMessageAction();
                     messageAction.title = "OK";
                     message.action = messageAction;
@@ -581,7 +557,7 @@ import MaterialComponents.MDCCard
                 }
                 if (formCount > eventFormMax) {
                     // too many of this form
-                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm[FieldKey.name.key] ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
+                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name) form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
                     let messageAction = MDCSnackbarMessageAction();
                     messageAction.title = "OK";
                     message.action = messageAction;
@@ -618,12 +594,15 @@ import MaterialComponents.MDCCard
         observation?.clearFormsToBeDeleted();
     }
     
-    public func formAdded(form: [String: Any]) {
-        var newForm: [String: AnyHashable] = [EventKey.formId.key: form[FieldKey.id.key] as! Int];
-        let defaults: FormDefaults = FormDefaults(eventId: self.observation?.eventId as! Int, formId: form[FieldKey.id.key] as! Int);
+    public func formAdded(form: Form) {
+        guard let formId = form.formId?.intValue else {
+            return
+        }
+        var newForm: [String: AnyHashable] = [EventKey.formId.key: formId];
+        let defaults: FormDefaults = FormDefaults(eventId: self.observation?.eventId as! Int, formId: formId);
         let formDefaults: [String: AnyHashable] = defaults.getDefaults() as! [String: AnyHashable];
 
-        let fields: [[String : AnyHashable]] = (form[FormKey.fields.key] as! [[String : AnyHashable]]).filter { (($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) };
+        let fields: [[String : AnyHashable]] = (form.fields ?? []).filter { (($0[FieldKey.archived.key] as? Bool) == nil || ($0[FieldKey.archived.key] as? Bool) == false) };
         if (formDefaults.count > 0) { // user defaults
             for (_, field) in fields.enumerated() {
                 var value: AnyHashable? = nil;
@@ -673,7 +652,7 @@ import MaterialComponents.MDCCard
 }
 
 extension ObservationEditCardCollectionViewController: ObservationFormListener {
-    func formUpdated(_ form: [String : Any], eventForm: [String : Any], form index: Int) {
+    func formUpdated(_ form: [String : Any], form index: Int) {
         observationForms[index] = form
         observationProperties[ObservationKey.forms.key] = observationForms;
         observation?.properties = observationProperties;

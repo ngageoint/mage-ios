@@ -77,7 +77,7 @@ class ObservationTests: KIFSpec {
             it("should get the primary field name") {
                 var formsJson = MageCoreDataFixtures.parseJsonFile(jsonFile: "allTheThings") as! [[AnyHashable: Any]];
                 
-                formsJson[0]["primaryField"] = "testfield";
+                formsJson[0]["primaryField"] = "field4";
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
@@ -85,17 +85,17 @@ class ObservationTests: KIFSpec {
                 observation.properties!["forms"] = [
                     [
                         "formId": 26,
-                        "testfield": "Hi"
+                        "field4": "Hi"
                     ]
                 ]
                 
-                expect(observation.primaryField).to(equal("testfield"))
+                expect(observation.primaryField).to(equal("field4"))
             }
             
             it("should get the secondary field name") {
                 var formsJson = MageCoreDataFixtures.parseJsonFile(jsonFile: "allTheThings") as! [[AnyHashable: Any]];
                 
-                formsJson[0]["variantField"] = "testfield";
+                formsJson[0]["variantField"] = "field4";
                 
                 MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
@@ -103,11 +103,11 @@ class ObservationTests: KIFSpec {
                 observation.properties!["forms"] = [
                     [
                         "formId": 26,
-                        "testfield": "Hi"
+                        "field4": "Hi"
                     ]
                 ]
                 
-                expect(observation.secondaryField).to(equal("testfield"))
+                expect(observation.secondaryField).to(equal("field4"))
             }
             
             it("should get text for text field") {

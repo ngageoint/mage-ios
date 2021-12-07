@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "DataConnectionUtilities.h"
+#import "MAGE-Swift.h"
 
 @interface NetworkSyncOptionTetsts : XCTestCase
 

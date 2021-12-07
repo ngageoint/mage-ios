@@ -552,7 +552,7 @@
     
     Event *event = [Event getCurrentEventWithContext:observations.fetchedResultsController.managedObjectContext];
     
-    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView andEventForms:event.forms];
+    _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView];
     
     [self.observationAnnotations clear];
     

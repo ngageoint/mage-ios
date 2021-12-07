@@ -13,14 +13,12 @@ import Foundation
 class MockObservationFormListener: ObservationFormListener {
     var formUpdatedCalled = false;
     var formUpdatedForm: [String : Any]? = nil;
-    var formUpdatedEventForm: [String: Any]? = nil;
     var formUpdatedIndex: Int? = nil;
     
-    func formUpdated(_ form: [String : Any], eventForm: [String : Any], form index: Int) {
+    func formUpdated(_ form: [String : Any], form index: Int) {
         print("form updated in the listener")
         formUpdatedCalled = true;
         formUpdatedForm = form;
-        formUpdatedEventForm = eventForm;
         formUpdatedIndex = index;
     }
 }

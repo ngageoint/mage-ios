@@ -122,15 +122,15 @@ class ObservationBuilder {
         return attachment;
     }
     
-    static func addFormToObservation(observation: Observation, form: [String : Any], values: [String: Any?]? = nil) {
+    static func addFormToObservation(observation: Observation, form: Form, values: [String: Any?]? = nil) {
         var newProperties: [String: Any] = observation.properties as? [String: Any] ?? [:];
         var observationForms: [Any] = newProperties["forms"] as? [Any] ?? [];
         
-        var newForm: [String: Any] = ["formId": form["id"]!];
-        let defaults: FormDefaults = FormDefaults(eventId: observation.eventId as! Int, formId: form["id"] as! Int);
+        var newForm: [String: Any] = ["formId": form.formId!];
+        let defaults: FormDefaults = FormDefaults(eventId: observation.eventId as! Int, formId: form.formId as! Int);
         let formDefaults: [String: [String: Any]] = defaults.getDefaults() as! [String : [String: Any]];
         
-        let fields: [[String : Any?]] = form["fields"] as! [[String : Any]];
+        let fields: [[String : Any?]] = form.json!.json!["fields"] as! [[String : Any]];
         if (formDefaults.count > 0) { // user defaults
             for (_, field) in fields.enumerated() {
                 var value: Any? = nil;

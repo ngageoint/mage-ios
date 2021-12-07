@@ -36,9 +36,8 @@ import MaterialComponents.MDCContainerScheme;
         return Event.getEvent(eventId: eventId, context: context)
     }()
     
-    private lazy var eventForms: [[String: Any]] = {
-        let eventForms = event?.forms as? [[String: Any]] ?? [];
-        return eventForms;
+    private lazy var eventForms: [Form] = {
+        return event?.forms ?? []
     }()
     
     private lazy var editFab : MDCFloatingButton = {
@@ -242,32 +241,49 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-        let eventForm: [String: Any]? = self.eventForms.first { (form) -> Bool in
-            return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
-        }
+//        let eventForm: Form? = self.eventForms.first { (form) -> Bool in
+//            return form.formId?.intValue == observationForm[EventKey.formId.key] as? Int
+//        }
+//
+//        let fields: [[String: Any]] = eventForm?.formJson?.[FormKey.fields.key] as? [[String: Any]] ?? [];
+//
+//        var formPrimaryValue: String? = nil;
+//        var formSecondaryValue: String? = nil;
+//
+//        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
+//            if let primaryField = fields.first(where: { field in
+//                return (field[FieldKey.name.key] as? String) == primaryFieldName
+//            }) {
+//                if let obsfield = observationForm[primaryFieldName] {
+//                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
+//                }
+//            }
+//        }
+//
+//        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
+//            if let secondaryField = fields.first(where: { field in
+//                return (field[FieldKey.name.key] as? String) == secondaryFieldName
+//            }) {
+//                if let obsfield = observationForm[secondaryFieldName] {
+//                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
+//                }
+//            }
+//        }
         
-        let fields: [[String: Any]] = eventForm?[FormKey.fields.key] as? [[String: Any]] ?? [];
+        let eventForm = event?.form(id: observationForm[EventKey.formId.key] as? NSNumber)
+        let fields: [[String: Any]] = eventForm?.fields ?? [];
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
-
-        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
-            if let primaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == primaryFieldName
-            }) {
-                if let obsfield = observationForm[primaryFieldName] {
-                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
-                }
+        if let primaryField = eventForm?.primaryFeedField, let primaryFieldName = primaryField[FieldKey.name.key] as? String {
+            if let obsfield = observationForm[primaryFieldName] {
+                formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
             }
         }
         
-        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
-            if let secondaryField = fields.first(where: { field in
-                return (field[FieldKey.name.key] as? String) == secondaryFieldName
-            }) {
-                if let obsfield = observationForm[secondaryFieldName] {
-                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
-                }
+        if let secondaryField = eventForm?.secondaryFeedField, let secondaryFieldName = secondaryField[FieldKey.name.key] as? String {
+            if let obsfield = observationForm[secondaryFieldName] {
+                formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
             }
         }
         
@@ -287,12 +303,12 @@ import MaterialComponents.MDCContainerScheme;
             formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
         }
         var tintColor: UIColor? = nil;
-        if let color = eventForm?[FormKey.color.key] as? String {
+        if let color = eventForm?.color {
             tintColor = UIColor(hex: color);
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?[EventKey.name.key] as? String, imageTint: tintColor, expandedView: formSpacerView);
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView);
         if let scheme = self.scheme {
             card.applyTheme(withScheme: scheme);
         }

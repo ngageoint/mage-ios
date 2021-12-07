@@ -18,7 +18,6 @@ extension Event {
     }
     
     @NSManaged var eventDescription: String?
-    @NSManaged var forms: [[AnyHashable : Any]]?
     @NSManaged var name: String?
     @NSManaged var recentSortOrder: NSNumber?
     @NSManaged var remoteId: NSNumber?

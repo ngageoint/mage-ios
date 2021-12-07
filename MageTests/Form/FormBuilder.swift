@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import MagicalRecord
+
+@testable import MAGE
 
 class FormBuilder {
     
-    static func createFormWithAllFieldTypes() -> [String:Any] {
+    static func createFormWithAllFieldTypes(eventId: NSNumber = 1) -> Form {
         guard let pathString = Bundle(for: FormBuilder.self).path(forResource: "allFieldTypesForm", ofType: "json") else {
             fatalError("jsonFileName not found")
         }
@@ -23,17 +26,19 @@ class FormBuilder {
             fatalError("Unable to convert jsonFileName to Data")
         }
         
-        var jsonDictionary: [String:Any] = [:];
+        var form: Form;
         
         do {
-            jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
+            let jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
+            form = Form.createForm(eventId: eventId, formJson: jsonDictionary, context: NSManagedObjectContext.mr_default())!
         } catch {
             fatalError("Unable to convert jsonFileName to JSON dictionary \(error)")
         }
-        return jsonDictionary;
+        
+        return form;
     }
     
-    static func createEmptyForm() -> [String:Any] {
+    static func createEmptyForm(eventId: NSNumber = 1) -> Form {
         guard let pathString = Bundle(for: FormBuilder.self).path(forResource: "emptyForm", ofType: "json") else {
             fatalError("jsonFileName not found")
         }
@@ -46,14 +51,16 @@ class FormBuilder {
             fatalError("Unable to convert jsonFileName to Data")
         }
         
-        var jsonDictionary: [String:Any] = [:];
-        
+        var form: Form;
+
         do {
-            jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
+            let jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
+            form = Form.createForm(eventId: eventId, formJson: jsonDictionary, context: NSManagedObjectContext.mr_default())!
         } catch {
             fatalError("Unable to convert jsonFileName to JSON dictionary \(error)")
         }
-        return jsonDictionary;
+        
+        return form;
     }
     
 }

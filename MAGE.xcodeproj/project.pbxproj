@@ -296,6 +296,8 @@
 		F7521D8F26702C4100C52318 /* PlainMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7521D8E26702C4100C52318 /* PlainMapViewDelegate.swift */; };
 		F7521DE82672317700C52318 /* GeometryEditViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7521DE72672317700C52318 /* GeometryEditViewControllerTests.swift */; };
 		F7521DEA2672336800C52318 /* MockGeometryEditCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7521DE92672336800C52318 /* MockGeometryEditCoordinator.swift */; };
+		F752B5F0275FF80C00BFA6EC /* FormJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5EF275FF80C00BFA6EC /* FormJson.swift */; };
+		F752B5F2275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */; };
 		F755B55B25E41BFF008E8D41 /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
@@ -459,6 +461,7 @@
 		F7D43BEE269F8F4D00561A8F /* LocationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */; };
 		F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */; };
 		F7D43BF226A5FCC800561A8F /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BF126A5FCC800561A8F /* UserDataStore.swift */; };
+		F7D4F58727597C25004EA263 /* Form+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4F58627597C25004EA263 /* Form+CoreDataProperties.swift */; };
 		F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */; };
 		F7D9B816255B1DB500A76E2C /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
 		F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */; };
@@ -980,6 +983,8 @@
 		F7521D8E26702C4100C52318 /* PlainMapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainMapViewDelegate.swift; sourceTree = "<group>"; };
 		F7521DE72672317700C52318 /* GeometryEditViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditViewControllerTests.swift; sourceTree = "<group>"; };
 		F7521DE92672336800C52318 /* MockGeometryEditCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGeometryEditCoordinator.swift; sourceTree = "<group>"; };
+		F752B5EF275FF80C00BFA6EC /* FormJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormJson.swift; sourceTree = "<group>"; };
+		F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormJson+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F7531EF819100E7D00CA084C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		F7531EF919100E7D00CA084C /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerObserver.swift; sourceTree = "<group>"; };
@@ -1184,6 +1189,7 @@
 		F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataStore.swift; sourceTree = "<group>"; };
 		F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTableViewCell.swift; sourceTree = "<group>"; };
 		F7D43BF126A5FCC800561A8F /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
+		F7D4F58627597C25004EA263 /* Form+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Form+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupView.xib; sourceTree = "<group>"; };
 		F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsAlternate.json; sourceTree = "<group>"; };
 		F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelPadding.swift; sourceTree = "<group>"; };
@@ -1866,7 +1872,6 @@
 				F72D42962694B60300F9AC3B /* AttachmentRoutes.m */,
 				F72D42A52694B60300F9AC3B /* Authentication.h */,
 				F72D422D2694B60300F9AC3B /* Authentication.m */,
-				F72D42AB2694B60300F9AC3B /* Form.swift */,
 				F72D42AC2694B60300F9AC3B /* GeometryDeserializer.swift */,
 				F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */,
 				F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */,
@@ -2335,6 +2340,10 @@
 				F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */,
 				F72D425E2694B60300F9AC3B /* User.swift */,
 				F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */,
+				F72D42AB2694B60300F9AC3B /* Form.swift */,
+				F7D4F58627597C25004EA263 /* Form+CoreDataProperties.swift */,
+				F752B5EF275FF80C00BFA6EC /* FormJson.swift */,
+				F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -3301,6 +3310,7 @@
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
+				F7D4F58727597C25004EA263 /* Form+CoreDataProperties.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
@@ -3390,6 +3400,7 @@
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
+				F752B5F0275FF80C00BFA6EC /* FormJson.swift in Sources */,
 				F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */,
 				F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
@@ -3411,6 +3422,7 @@
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
 				F72D43212694B60300F9AC3B /* StaticLayer+CoreDataProperties.swift in Sources */,
 				F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */,
+				F752B5F2275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift in Sources */,
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7E40A7026948C0800E50E26 /* MapDelegateUserActionsDelegate.swift in Sources */,

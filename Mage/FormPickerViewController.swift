@@ -9,14 +9,14 @@ import Foundation
 import MaterialComponents.MDCButton;
 
 @objc protocol FormPickedDelegate {
-    @objc func formPicked (form: [String: Any]);
+    @objc func formPicked (form: Form);
     @objc func cancelSelection();
 }
 
 @objc class FormPickerViewController: UIViewController {
 
     weak var delegate: FormPickedDelegate?;
-    var forms: [[String: Any]]?;
+    var forms: [Form]?;
     var scheme: MDCContainerScheming?;
     weak var observation: Observation?;
     var formIdCount: [Int : Int] = [ : ];
@@ -86,7 +86,7 @@ import MaterialComponents.MDCButton;
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(delegate: FormPickedDelegate? = nil, forms: [[String: Any]]? = nil, observation: Observation? = nil, scheme: MDCContainerScheming?) {
+    @objc public convenience init(delegate: FormPickedDelegate? = nil, forms: [Form]? = nil, observation: Observation? = nil, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.delegate = delegate;
         self.forms = forms;
@@ -142,14 +142,15 @@ extension FormPickerViewController: UITableViewDataSource {
         cell.backgroundColor = scheme?.colorScheme.surfaceColor;
 
         if let form = self.forms?[indexPath.row] {
-            cell.accessibilityLabel = form["name"] as? String;
-            cell.textLabel?.text = form["name"] as? String;
-            cell.detailTextLabel?.text = form["description"] as? String;
+            cell.accessibilityLabel = form.name;
+            cell.textLabel?.text = form.name
+            cell.detailTextLabel?.text = form.formDescription;
             cell.imageView?.image = UIImage(named: "description")?.aspectResize(to: CGSize(width: 40, height: 40)).withRenderingMode(.alwaysTemplate);
             
-            let formCount = formIdCount[form["id"] as! Int] ?? 0;
-            let formMin: Int = (form["min"] as? Int) ?? 0;
-            let formMax: Int = (form["max"] as? Int) ?? Int.max;
+            
+            let formCount = formIdCount[form.formId?.intValue ?? Int.min] ?? 0;
+            let formMin: Int = form.min ?? 0;
+            let formMax: Int = form.max ?? Int.max;
             
             if (formCount < formMin) {
                 cell.textLabel?.text = "\(cell.textLabel?.text ?? "")*";
@@ -161,7 +162,7 @@ extension FormPickerViewController: UITableViewDataSource {
                 cell.detailTextLabel?.textColor = globalDisabledScheme().colorScheme.onSurfaceColor;
                 cell.backgroundColor = globalDisabledScheme().colorScheme.surfaceColor;
             } else {
-                if let color = form["color"] as? String {
+                if let color = form.color {
                     cell.imageView?.tintColor = UIColor(hex: color);
                 } else {
                     cell.imageView?.tintColor = scheme?.colorScheme.primaryColor
@@ -179,7 +180,7 @@ extension FormPickerViewController: UITableViewDataSource {
 extension FormPickerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if let form = self.forms?[indexPath.row] {
-            if (form["description"] != nil) {
+            if (form.formDescription != nil) {
                 return 72.0
             } else {
                 return 56.0
@@ -191,12 +192,12 @@ extension FormPickerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let form = self.forms?[indexPath.row] {
             
-            let formCount = formIdCount[form["id"] as! Int] ?? 0;
-            let formMax: Int = (form["max"] as? Int) ?? Int.max;
+            let formCount = formIdCount[form.formId?.intValue ?? Int.min] ?? 0;
+            let formMax: Int = form.max ?? Int.max;
             
             if (formCount >= formMax) {
                 // max amount of this form have already been added
-                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(form["name"] ?? "") form cannot be included in an observation more than \(formMax) time\(formMax == 1 ? "" : "s")");
+                let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(form.name ?? "") form cannot be included in an observation more than \(formMax) time\(formMax == 1 ? "" : "s")");
                 let messageAction = MDCSnackbarMessageAction();
                 messageAction.title = "OK";
                 message.action = messageAction;

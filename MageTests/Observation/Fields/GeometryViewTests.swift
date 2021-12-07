@@ -246,11 +246,10 @@ class GeometryViewTests: KIFSpec {
             
             it("initial value set wtih observation without geometry") {
                 let observation: Observation = ObservationBuilder.createBlankObservation()
-                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
-                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation,  mapEventDelegate: mockMapDelegate);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)
@@ -264,7 +263,6 @@ class GeometryViewTests: KIFSpec {
             it("initial value set wtih observation") {
                 let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
                 let observation: Observation = ObservationBuilder.createPointObservation();
-                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -276,7 +274,7 @@ class GeometryViewTests: KIFSpec {
                     expectation.fulfill()
                 }
                                 
-                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, mapEventDelegate: mockMapDelegate);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)
@@ -295,7 +293,6 @@ class GeometryViewTests: KIFSpec {
                 let observation: Observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addObservationProperty(observation: observation, key: "provider", value: "gps")
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
-                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()]
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -307,7 +304,7 @@ class GeometryViewTests: KIFSpec {
                     expectation.fulfill()
                 }
                                 
-                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, mapEventDelegate: mockMapDelegate);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)
@@ -326,7 +323,6 @@ class GeometryViewTests: KIFSpec {
                 let observation: Observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
                 ObservationBuilder.addObservationProperty(observation: observation, key: "provider", value: "gps")
-                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -338,7 +334,7 @@ class GeometryViewTests: KIFSpec {
                     expectation.fulfill()
                 }
                                 
-                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, mapEventDelegate: mockMapDelegate);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)
@@ -356,7 +352,6 @@ class GeometryViewTests: KIFSpec {
                 let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
 
                 let observation: Observation = ObservationBuilder.createLineObservation();
-                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -364,7 +359,7 @@ class GeometryViewTests: KIFSpec {
                     expectation.fulfill()
                 }
                                 
-                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, mapEventDelegate: mockMapDelegate);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)
@@ -387,7 +382,6 @@ class GeometryViewTests: KIFSpec {
                 let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
 
                 let observation: Observation = ObservationBuilder.createPolygonObservation();
-                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -398,7 +392,7 @@ class GeometryViewTests: KIFSpec {
                     expectation.fulfill()
                 }
                 
-                geometryFieldView = GeometryView(field: field, observation: observation, eventForms: eventForms, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: observation, mapEventDelegate: mockMapDelegate);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)
@@ -417,7 +411,6 @@ class GeometryViewTests: KIFSpec {
                 let observation: Observation = ObservationBuilder.createPointObservation();
                 ObservationBuilder.addObservationProperty(observation: observation, key: "accuracy", value: 100.487235)
                 ObservationBuilder.addObservationProperty(observation: observation, key: "provider", value: "gps")
-                let eventForms: [[String : Any]] = [FormBuilder.createEmptyForm()];
                 
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -429,7 +422,7 @@ class GeometryViewTests: KIFSpec {
                     expectation.fulfill()
                 }
                                 
-                geometryFieldView = GeometryView(field: field, observation: nil, eventForms: eventForms , mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, observation: nil, mapEventDelegate: mockMapDelegate);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)

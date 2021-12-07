@@ -21,7 +21,7 @@ class ObservationFormReorderTests: KIFSpec {
             var observationFormReorder: ObservationFormReorder?
             var window: UIWindow!;
             var stackSetup = false;
-            var eventForm: [String:Any]!
+            var eventForm: Form!
             
             beforeEach {
                 if (!stackSetup) {

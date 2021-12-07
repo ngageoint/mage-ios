@@ -9,6 +9,7 @@
 #import "ObservationShapeStyleParser.h"
 
 @class Observation;
+@class Form;
 
 @implementation ObservationShapeStyleParser
 
@@ -23,10 +24,10 @@ static NSString * const STROKE_WIDTH_ELEMENT = @"strokeWidth";
     
     ObservationShapeStyle *style = [[ObservationShapeStyle alloc] init];
     
-    NSDictionary *form = observation.primaryEventForm;
+    Form *form = observation.primaryEventForm;
     
     // Check for a style
-    NSDictionary *styleField = [form objectForKey: STYLE_ELEMENT];
+    NSDictionary *styleField = form.style;
     if(styleField != nil && styleField.count > 0){
         
         // Found the top level style

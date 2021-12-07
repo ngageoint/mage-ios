@@ -31,9 +31,8 @@ class ObservationFormReorder: UITableViewController {
         return Event.getEvent(eventId: eventId, context: context)
     }()
     
-    private lazy var eventForms: [[String: Any]]? = {
-        let eventForms = event?.forms as? [[String: Any]] ?? [];
-        return eventForms;
+    private lazy var eventForms: [Form]? = {
+        return event?.forms
     }()
     
     private lazy var descriptionHeaderView: UILabel = {
@@ -149,8 +148,8 @@ class ObservationFormReorder: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let formCell : ObservationFormTableViewCell = tableView.dequeue(cellClass: ObservationFormTableViewCell.self, forIndexPath: indexPath);
         let observationForm = observationForms[indexPath.row];
-        if let eventForm: [String: Any] = self.eventForms?.first(where: { (form) -> Bool in
-            return form[FormKey.id.key] as? Int == observationForm[EventKey.formId.key] as? Int
+        if let eventForm: Form = self.eventForms?.first(where: { (form) -> Bool in
+            return form.formId?.intValue as? Int == observationForm[EventKey.formId.key] as? Int
         }) {
             formCell.configure(observationForm: observationForm, eventForm: eventForm, scheme: self.scheme);
         }

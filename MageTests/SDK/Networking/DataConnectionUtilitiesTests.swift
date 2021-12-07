@@ -32,7 +32,7 @@ class DataConnectionUtilitiesTests: QuickSpec {
             it("should get current wifi ssid") {
                 // this is untestable on the simulator
                 let wifiSsid = DataConnectionUtilities.getCurrentWifiSsid()
-                expect(wifiSsid).to(equal(""))
+                expect(wifiSsid).to(beNil())
             }
             
             it("should get the connection type") {

@@ -120,8 +120,11 @@ import CoreData
         self.minObservationForms = json[EventKey.minObservationForms.key] as? NSNumber
         self.eventDescription = json[EventKey.description.key] as? String
         self.acl = AFJSONObjectByRemovingKeysWithNullValues(json[EventKey.acl.key] ?? [:], .allowFragments) as? [AnyHashable : Any]
-        self.forms = AFJSONObjectByRemovingKeysWithNullValues(json[EventKey.forms.key] ?? [[:]], .allowFragments) as? [[AnyHashable : Any]]
         
+        let formsJson = AFJSONObjectByRemovingKeysWithNullValues(json[EventKey.forms.key] ?? [[:]], .allowFragments) as? [[AnyHashable : Any]]
+        if let remoteId = remoteId {
+            Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson ?? [], context: context)
+        }        
         if let responseTeams = json[EventKey.teams.key] as? [[AnyHashable : Any]] {
             for teamJson in responseTeams {
                 if let team = self.teams?.first(where: { team in
@@ -163,27 +166,32 @@ import CoreData
         return false;
     }
     
-    @objc public func form(observation: Observation) -> [AnyHashable : Any]? {
+    @objc public func form(observation: Observation) -> Form? {
         return observation.primaryEventForm;
     }
     
-    @objc public func form(id: NSNumber) -> [AnyHashable : Any]? {
-        guard let forms = forms else {
+    @objc public func form(id: NSNumber?) -> Form? {
+        guard let id = id, let managedObjectContext = self.managedObjectContext else {
             return nil
         }
-        for form in forms {
-            if form[FormKey.id.key] as? NSNumber == id {
-                return form;
-            }
-        }
-        return nil;
+        return Form.mr_findFirst(byAttribute: "formId", withValue: id, in: managedObjectContext)
     }
     
-    @objc public var nonArchivedForms: [[AnyHashable : Any]]? {
+    @objc public var forms: [Form]? {
         get {
-            return self.forms?.filter({ form in
-                return (form[FormKey.archived.key] as? NSNumber) == 0
-            })
+            guard let managedObjectContext = managedObjectContext, let remoteId = remoteId else {
+                return nil
+            }
+            return Form.mr_findAllSorted(by: "formId", ascending: true, with: NSPredicate(format: "eventId == %@", remoteId), in: managedObjectContext) as? [Form]
+        }
+    }
+    
+    @objc public var nonArchivedForms: [Form]? {
+        get {
+            guard let managedObjectContext = managedObjectContext, let remoteId = remoteId else {
+                return nil
+            }
+            return Form.mr_findAllSorted(by: "formId", ascending: true, with: NSPredicate(format: "eventId == %@ AND \(FormKey.archived.key) == false", remoteId), in: managedObjectContext) as? [Form]
         }
     }
 }
