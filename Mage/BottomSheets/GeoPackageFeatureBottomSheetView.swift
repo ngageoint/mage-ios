@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import geopackage_ios
 
 class GeoPackageFeatureBottomSheetView: BottomSheetView {
     

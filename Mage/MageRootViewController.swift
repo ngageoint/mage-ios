@@ -47,6 +47,13 @@ import Kingfisher
         return nc;
     }()
     
+    private lazy var mapTab2: UINavigationController = {
+        let mapViewController: MageMapViewController = MainMageMapViewController(scheme: self.scheme);
+        let nc = UINavigationController(rootViewController: mapViewController);
+        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: -1);
+        return nc;
+    }()
+    
     private lazy var meTab: UINavigationController? = {
         guard let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
             return nil
@@ -141,6 +148,7 @@ import Kingfisher
     
     func createOrderedTabs() {
         var allTabs: [UIViewController] = self.viewControllers ?? [];
+        allTabs.append(mapTab2)
         allTabs.append(mapTab);
         allTabs.append(settingsTabItem);
         if let meTab = meTab {

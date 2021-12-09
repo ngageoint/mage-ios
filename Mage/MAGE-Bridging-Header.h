@@ -8,8 +8,11 @@
 
 #import "ObservationFields.h"
 #import "ObservationAccuracy.h"
+#import "ObservationAccuracyRenderer.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
+#import "StyledPolygon.h"
+#import "StyledPolyline.h"
 
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"

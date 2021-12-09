@@ -298,6 +298,9 @@
 		F7521DEA2672336800C52318 /* MockGeometryEditCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7521DE92672336800C52318 /* MockGeometryEditCoordinator.swift */; };
 		F752B5F0275FF80C00BFA6EC /* FormJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5EF275FF80C00BFA6EC /* FormJson.swift */; };
 		F752B5F2275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */; };
+		F752B5F42760DD7600BFA6EC /* MageMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F32760DD7600BFA6EC /* MageMapViewController.swift */; };
+		F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F62760DDEC00BFA6EC /* GeoPackageBaseMap.swift */; };
+		F752B5F92760EB7900BFA6EC /* MageOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F82760EB7900BFA6EC /* MageOverlay.swift */; };
 		F7531EFA19100E7D00CA084C /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7531EF919100E7D00CA084C /* MapViewController.m */; };
 		F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */; };
 		F755B55B25E41BFF008E8D41 /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
@@ -364,7 +367,7 @@
 		F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */; };
 		F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */; };
 		F7929C7023C4E69600396D11 /* countries.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C6F23C4E69600396D11 /* countries.gpkg */; };
-		F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.m */; };
+		F7929C7623C66CD000396D11 /* BaseMapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.swift */; };
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
 		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
 		F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
@@ -497,6 +500,11 @@
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
 		F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.m */; };
+		F7EBAEB82760F62000650F4F /* MainMageMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEB72760F62000650F4F /* MainMageMapViewController.swift */; };
+		F7EBAEBA2760F7EE00650F4F /* FilteredObservationsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEB92760F7EE00650F4F /* FilteredObservationsMap.swift */; };
+		F7EBAEBC27615E5600650F4F /* MapMixin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEBB27615E5600650F4F /* MapMixin.swift */; };
+		F7EBAEBF2762400800650F4F /* MapNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEBE2762400800650F4F /* MapNotifications.swift */; };
+		F7EBAEC12762537100650F4F /* BottomSheetMixin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEC02762537100650F4F /* BottomSheetMixin.swift */; };
 		F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */; };
 		F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */; };
 		F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D141FFD95B5007BD768 /* MapSettingsCoordinator.m */; };
@@ -985,6 +993,9 @@
 		F7521DE92672336800C52318 /* MockGeometryEditCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGeometryEditCoordinator.swift; sourceTree = "<group>"; };
 		F752B5EF275FF80C00BFA6EC /* FormJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormJson.swift; sourceTree = "<group>"; };
 		F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormJson+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		F752B5F32760DD7600BFA6EC /* MageMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageMapViewController.swift; sourceTree = "<group>"; };
+		F752B5F62760DDEC00BFA6EC /* GeoPackageBaseMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageBaseMap.swift; sourceTree = "<group>"; };
+		F752B5F82760EB7900BFA6EC /* MageOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageOverlay.swift; sourceTree = "<group>"; };
 		F7531EF819100E7D00CA084C /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		F7531EF919100E7D00CA084C /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerObserver.swift; sourceTree = "<group>"; };
@@ -1069,8 +1080,7 @@
 		F791E229248542C500CCC6BA /* CommonFieldsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFieldsViewTests.swift; sourceTree = "<group>"; };
 		F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFieldDelegate.swift; sourceTree = "<group>"; };
 		F7929C6F23C4E69600396D11 /* countries.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries.gpkg; sourceTree = "<group>"; };
-		F7929C7423C66CD000396D11 /* BaseMapOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseMapOverlay.h; sourceTree = "<group>"; };
-		F7929C7523C66CD000396D11 /* BaseMapOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseMapOverlay.m; sourceTree = "<group>"; };
+		F7929C7523C66CD000396D11 /* BaseMapOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMapOverlay.swift; sourceTree = "<group>"; };
 		F7929C8023C8F48C00396D11 /* countries_dark.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries_dark.gpkg; sourceTree = "<group>"; };
 		F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTableHeaderView.h; sourceTree = "<group>"; };
 		F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTableHeaderView.m; sourceTree = "<group>"; };
@@ -1234,6 +1244,11 @@
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		F7E457651F61E2380082F527 /* EventChooserCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserCoordinator.h; sourceTree = "<group>"; };
 		F7E457661F61E2380082F527 /* EventChooserCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserCoordinator.m; sourceTree = "<group>"; };
+		F7EBAEB72760F62000650F4F /* MainMageMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMageMapViewController.swift; sourceTree = "<group>"; };
+		F7EBAEB92760F7EE00650F4F /* FilteredObservationsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredObservationsMap.swift; sourceTree = "<group>"; };
+		F7EBAEBB27615E5600650F4F /* MapMixin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMixin.swift; sourceTree = "<group>"; };
+		F7EBAEBE2762400800650F4F /* MapNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNotifications.swift; sourceTree = "<group>"; };
+		F7EBAEC02762537100650F4F /* BottomSheetMixin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetMixin.swift; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GondolaMage-Regular.otf"; sourceTree = "<group>"; };
 		F7ED5D131FFD95B5007BD768 /* MapSettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapSettingsCoordinator.h; sourceTree = "<group>"; };
@@ -1587,6 +1602,8 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				F7EBAEBD27623FEA00650F4F /* Notifications */,
+				F752B5F52760DDC500BFA6EC /* Mixins */,
 				F76FFC2E2624FF3200532330 /* StraightLineNav */,
 				F7154ACE260D1369002C8617 /* MapDelegate */,
 				2F0323A5246364C500D2866B /* Overlays */,
@@ -1641,9 +1658,11 @@
 				F75FC905233AAA4100547315 /* XYZTileOverlay.m */,
 				F7F711F423450DE700E01FD7 /* TMSTileOverlay.h */,
 				F7F711F523450DE700E01FD7 /* TMSTileOverlay.m */,
-				F7929C7423C66CD000396D11 /* BaseMapOverlay.h */,
-				F7929C7523C66CD000396D11 /* BaseMapOverlay.m */,
+				F7929C7523C66CD000396D11 /* BaseMapOverlay.swift */,
 				F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */,
+				F752B5F32760DD7600BFA6EC /* MageMapViewController.swift */,
+				F752B5F82760EB7900BFA6EC /* MageOverlay.swift */,
+				F7EBAEB72760F62000650F4F /* MainMageMapViewController.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -2044,6 +2063,17 @@
 				F730B94A2683D273004AD64A /* CardHeader.swift */,
 			);
 			name = Edit;
+			sourceTree = "<group>";
+		};
+		F752B5F52760DDC500BFA6EC /* Mixins */ = {
+			isa = PBXGroup;
+			children = (
+				F752B5F62760DDEC00BFA6EC /* GeoPackageBaseMap.swift */,
+				F7EBAEB92760F7EE00650F4F /* FilteredObservationsMap.swift */,
+				F7EBAEBB27615E5600650F4F /* MapMixin.swift */,
+				F7EBAEC02762537100650F4F /* BottomSheetMixin.swift */,
+			);
+			path = Mixins;
 			sourceTree = "<group>";
 		};
 		F75DD30B1A97A9B50007FA3F /* Segues */ = {
@@ -2639,6 +2669,14 @@
 			name = ExternalDevice;
 			sourceTree = "<group>";
 		};
+		F7EBAEBD27623FEA00650F4F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				F7EBAEBE2762400800650F4F /* MapNotifications.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		F7ED5D0F1FFD7F88007BD768 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -3170,6 +3208,7 @@
 				F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */,
 				F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */,
 				F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */,
+				F7EBAEBA2760F7EE00650F4F /* FilteredObservationsMap.swift in Sources */,
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
@@ -3205,6 +3244,7 @@
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
 				F72D43062694B60300F9AC3B /* Server.swift in Sources */,
+				F752B5F92760EB7900BFA6EC /* MageOverlay.swift in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
 				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,
 				F7D43BDA269E06B500561A8F /* MapDelegateFeatureActionsDelegate.swift in Sources */,
@@ -3237,17 +3277,20 @@
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
 				F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */,
+				F7EBAEBF2762400800650F4F /* MapNotifications.swift in Sources */,
 				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
+				F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
 				F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */,
 				F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */,
+				F7EBAEB82760F62000650F4F /* MainMageMapViewController.swift in Sources */,
 				F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */,
 				F72D432A2694B60300F9AC3B /* Observation.swift in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
@@ -3271,7 +3314,7 @@
 				F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */,
 				F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */,
 				F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */,
-				F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */,
+				F7929C7623C66CD000396D11 /* BaseMapOverlay.swift in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
@@ -3286,6 +3329,7 @@
 				2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */,
 				F72D430F2694B60300F9AC3B /* UserUtility.swift in Sources */,
 				F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */,
+				F752B5F42760DD7600BFA6EC /* MageMapViewController.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
 				F7154AD0260D1390002C8617 /* MapDelegateCLLocationManagerDelegate.swift in Sources */,
@@ -3360,6 +3404,7 @@
 				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
+				F7EBAEBC27615E5600650F4F /* MapMixin.swift in Sources */,
 				F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */,
 				F72D43302694B60300F9AC3B /* ObservationFavorite+CoreDataProperties.swift in Sources */,
 				F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */,
@@ -3413,6 +3458,7 @@
 				F7D43BE2269F329D00561A8F /* FeedItemBottomSheetView.swift in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
+				F7EBAEC12762537100650F4F /* BottomSheetMixin.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,

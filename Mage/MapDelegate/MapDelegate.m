@@ -44,7 +44,6 @@
 #import "WMSTileOverlay.h"
 #import "XYZTileOverlay.h"
 #import "TMSTileOverlay.h"
-#import "BaseMapOverlay.h"
 #import <PureLayout.h>
 #import "MAGE-Swift.h"
 

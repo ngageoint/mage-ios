@@ -82,6 +82,7 @@ import DateTools
             annotationView.accessibilityLabel = "Observation"
             annotationView.accessibilityValue = "Observation"
             annotationView.displayPriority = .required
+            view = annotationView
             return annotationView
         } else {
             return MKAnnotationView(annotation: self, reuseIdentifier: OBSERVATION_ANNOTATION_VIEW_REUSE_ID)

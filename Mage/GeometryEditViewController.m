@@ -19,7 +19,6 @@
 #import "ObservationShapeStyle.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
-#import "BaseMapOverlay.h"
 #import "GPKGGeoPackageFactory.h"
 #import "AppDelegate.h"
 #import <mgrs/MGRS.h>

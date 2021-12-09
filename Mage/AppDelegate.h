@@ -7,8 +7,8 @@
 #import <UIKit/UIKit.h>
 #import "LocationService.h"
 #import "AttachmentPushService.h"
-#import "BaseMapOverlay.h"
 
+@class BaseMapOverlay;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
