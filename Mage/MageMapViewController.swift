@@ -90,15 +90,17 @@ class MageMapViewController: UIViewController, GeoPackageBaseMap, MKMapViewDeleg
             return
         }
         let mapPoint = MKMapPoint(tapCoord)
-//        let mapPointAsCGP = CGPoint(x: mapPoint.x, y: mapPoint.y)
-        
         let tolerance = GPKGMapUtils.tolerance(with: tapPoint, andMapView: mapView!, andScreenPercentage: 0.02).screen
-        
-//        let tapRect = CGRect(x: mapPointAsCGP.x - (tolerance / 2), y: mapPointAsCGP.y - (tolerance / 2), width: tolerance, height: tolerance)
-        
         let annotationsTapped = mapView?.annotations(in: MKMapRect(x: mapPoint.x - (tolerance / 2), y: mapPoint.y - (tolerance / 2), width: tolerance, height: tolerance))
         
-        let notification = MapItemsTappedNotification(annotations: annotationsTapped)
+        var items: [Any] = []
+        for mixin in mapMixins {
+            if let matchedItems = mixin.items(at: tapCoord) {
+                items.append(contentsOf: matchedItems)
+            }
+        }
+
+        let notification = MapItemsTappedNotification(annotations: annotationsTapped, items: items)
         NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
     }
 }

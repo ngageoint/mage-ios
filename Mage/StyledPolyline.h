@@ -10,6 +10,7 @@
 
 @property (nonatomic) UIColor *lineColor;
 @property (nonatomic) CGFloat lineWidth;
+@property (nonatomic) NSString *observationRemoteId;
 
 + (StyledPolyline *) createWithPolyline: (MKPolyline *) polyline;
 + (StyledPolyline *) polylineWithPoints:(const MKMapPoint *)points count:(NSUInteger)count;

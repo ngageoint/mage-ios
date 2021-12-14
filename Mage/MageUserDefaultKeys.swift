@@ -17,6 +17,8 @@ extension Notification.Name {
     public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
     public static let MapItemsTapped = Notification.Name("MapItemsTapped")
     public static let MapAnnotationFocused = Notification.Name("MapAnnotationFocused")
+    public static let MapViewDisappearing = Notification.Name("MapViewDisappearing")
+    public static let ObservationUpdated = Notification.Name("ObservationUpdated")
 }
 
 @objc extension UserDefaults {
@@ -481,6 +483,15 @@ extension Notification.Name {
         }
         set {
             set(newValue, forKey: "geopackage_features_max_features_per_table");
+        }
+    }
+    
+    var shapeScreenClickPercentage: Float {
+        get {
+            return float(forKey: "shape_screen_click_percentage")
+        }
+        set {
+            set(newValue, forKey: "shape_screen_click_percentage")
         }
     }
 }

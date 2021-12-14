@@ -7,9 +7,7 @@
 //
 @import HexColors;
 #import "ObservationShapeStyleParser.h"
-
-@class Observation;
-@class Form;
+#import "MAGE-Swift.h"
 
 @implementation ObservationShapeStyleParser
 

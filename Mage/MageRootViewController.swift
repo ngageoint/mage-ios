@@ -40,14 +40,14 @@ import Kingfisher
         return nc;
     }()
     
-    private lazy var mapTab: UINavigationController = {
-        let mapViewController: MapViewController = MapViewController(scheme: self.scheme);
-        let nc = UINavigationController(rootViewController: mapViewController);
-        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
-        return nc;
-    }()
+//    private lazy var mapTab: UINavigationController = {
+//        let mapViewController: MapViewController = MapViewController(scheme: self.scheme);
+//        let nc = UINavigationController(rootViewController: mapViewController);
+//        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
+//        return nc;
+//    }()
     
-    private lazy var mapTab2: UINavigationController = {
+    private lazy var mapTab: UINavigationController = {
         let mapViewController: MageMapViewController = MainMageMapViewController(scheme: self.scheme);
         let nc = UINavigationController(rootViewController: mapViewController);
         nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: -1);
@@ -148,7 +148,7 @@ import Kingfisher
     
     func createOrderedTabs() {
         var allTabs: [UIViewController] = self.viewControllers ?? [];
-        allTabs.append(mapTab2)
+//        allTabs.append(mapTab2)
         allTabs.append(mapTab);
         allTabs.append(settingsTabItem);
         if let meTab = meTab {

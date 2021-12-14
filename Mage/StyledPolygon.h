@@ -11,6 +11,8 @@
 @property (nonatomic) UIColor * _Nullable fillColor;
 @property (nonatomic) UIColor * _Nullable lineColor;
 @property (nonatomic) CGFloat lineWidth;
+@property (nonatomic) NSString * _Nullable observationRemoteId;
+
 
 NS_ASSUME_NONNULL_BEGIN
 

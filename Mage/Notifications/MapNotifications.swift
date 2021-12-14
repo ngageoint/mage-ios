@@ -14,5 +14,10 @@ struct MapAnnotationFocusedNotification {
 
 struct MapItemsTappedNotification {
     var annotations: Set<AnyHashable>?
-    var overlays: Set<AnyHashable>?
+    var items: [Any]?
+}
+
+struct StartStraightLineNavigation {
+    var observation: Observation?
+    var user: User?
 }

@@ -181,12 +181,12 @@ class ObservationListActionsView: UIView {
         if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.observationActionsDelegate?.favoriteObservation?(observation, completion: { savedObservation in
-                    if let savedObservation = savedObservation {
-                        self.observation = savedObservation;
-                        self.populate(observation: savedObservation, delegate: self.observationActionsDelegate)
-                    }
-                });
+                
+                observation.toggleFavorite { (_, _) in
+                    observation.managedObjectContext?.refresh(observation, mergeChanges: false);
+                    self.populate(observation: observation, delegate: self.observationActionsDelegate)
+                    NotificationCenter.default.post(name: .ObservationUpdated, object: observation)
+                }
             }
         }
     }

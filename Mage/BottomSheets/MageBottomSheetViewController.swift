@@ -32,7 +32,6 @@ import UIKit
     private var rightConstraint: NSLayoutConstraint?;
     private var leftConstraint: NSLayoutConstraint?;
     var currentBottomSheetView: BottomSheetView?
-    private var bottomSheetDelegate: BottomSheetDelegate?
     
     @objc public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
@@ -139,11 +138,10 @@ import UIKit
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(items: [BottomSheetItem], scheme: MDCContainerScheming?, bottomSheetDelegate: BottomSheetDelegate? = nil) {
+    @objc public convenience init(items: [BottomSheetItem], scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.items = items;
-        self.bottomSheetDelegate = bottomSheetDelegate;
         pageControl.numberOfPages = items.count
     }
 
@@ -255,7 +253,7 @@ import UIKit
             }
             self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
             self.view.setNeedsUpdateConstraints();
-            self.bottomSheetDelegate?.bottomSheetItemShowing?(item)
+            NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation))
         }, completion: nil);
     }
     

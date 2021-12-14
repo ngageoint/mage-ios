@@ -28,9 +28,20 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
     init(mapView: MKMapView?) {
         self.mapView = mapView
     }
+    
+    deinit {
+        UserDefaults.standard.removeObserver(self, forKeyPath: "mapType")
+    }
 
     func setupMixin() {
+        UserDefaults.standard.addObserver(self, forKeyPath: "mapType", options: .new, context: nil)
         addBaseMap()
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if "mapType" == keyPath {
+            addBaseMap()
+        }
     }
     
     func addBaseMap() {
@@ -40,12 +51,17 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
                   return
               }
         
-        if UITraitCollection.current.userInterfaceStyle == .dark {
-            mapView?.removeOverlay(backgroundOverlay)
-            mapView?.addOverlay(darkBackgroundOverlay, level: .aboveRoads)
+        if UserDefaults.standard.mapType == 3 {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                mapView?.removeOverlay(backgroundOverlay)
+                mapView?.addOverlay(darkBackgroundOverlay, level: .aboveRoads)
+            } else {
+                mapView?.removeOverlay(darkBackgroundOverlay)
+                mapView?.addOverlay(backgroundOverlay, level: .aboveRoads)
+            }
         } else {
             mapView?.removeOverlay(darkBackgroundOverlay)
-            mapView?.addOverlay(backgroundOverlay, level: .aboveRoads)
+            mapView?.removeOverlay(backgroundOverlay)
         }
     }
     

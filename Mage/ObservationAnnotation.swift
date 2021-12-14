@@ -15,10 +15,21 @@ import DateTools
     
     @objc public var timestamp: Date?
     @objc public var name: String?
-    @objc public var observation: Observation?
+//    @objc public var observation: Observation?
     @objc public var selected: Bool = false
     @objc public var animateDrop: Bool = false
     var point: Bool = false
+    var observationId: String?
+    
+    @objc public var observation: Observation? {
+        get {
+            guard let observationId = observationId else {
+                return nil
+            }
+
+            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationId, in: NSManagedObjectContext.mr_default())
+        }
+    }
     
     @objc public convenience init(observation: Observation, geometry: SFGeometry? = nil) {
         
@@ -39,7 +50,8 @@ import DateTools
     
     @objc public convenience init(observation: Observation, location: CLLocationCoordinate2D) {
         self.init()
-        self.observation = observation
+        observationId = observation.remoteId
+//        self.observation = observation
         self.coordinate = location
         self.title = observation.primaryFeedFieldText
         if self.title == nil || self.title.count == 0 {

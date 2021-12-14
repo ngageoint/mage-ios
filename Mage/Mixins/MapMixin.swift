@@ -15,6 +15,7 @@ protocol MapMixin {
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?
     func traitCollectionUpdated(previous: UITraitCollection?)
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView?
+    func items(at location: CLLocationCoordinate2D) -> [Any]?
 }
 
 extension MapMixin {
@@ -26,6 +27,10 @@ extension MapMixin {
     func traitCollectionUpdated(previous: UITraitCollection?){ }
     
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
+        return nil
+    }
+    
+    func items(at location: CLLocationCoordinate2D) -> [Any]? {
         return nil
     }
 }
