@@ -281,7 +281,7 @@
     return [items allObjects];
 }
 
--(void)mapTap: (CGPoint) tapPoint {
+-(void)mapTap: (CGPoint) tapPoint gesture:(UITapGestureRecognizer *) gesture {
 
     CLLocationCoordinate2D tapCoord = [self.mapView convertPoint:tapPoint toCoordinateFromView:self.mapView];
     MKMapPoint mapPoint = MKMapPointForCoordinate(tapCoord);
@@ -296,8 +296,18 @@
     }
     
     CGRect tapRect = CGRectMake(mapPointAsCGP.x - (tolerance / 2), mapPointAsCGP.y - (tolerance / 2), tolerance, tolerance);
-    
-    NSSet<id<MKAnnotation>> * annotationsTapped = [self.mapView annotationsInMapRect:MKMapRectMake(mapPoint.x - (tolerance / 2), mapPoint.y - (tolerance / 2), tolerance, tolerance)];
+        
+    NSMutableSet<id<MKAnnotation>> *annotationsTapped = [[NSMutableSet alloc] init];
+    NSMutableSet<id<MKAnnotation>> * annotationsVisible = [[self.mapView annotationsInMapRect:self.mapView.visibleMapRect] mutableCopy];
+    if (gesture != nil) {
+        for(id<MKAnnotation> annotation in annotationsVisible) {
+            MKAnnotationView* view = [self.mapView viewForAnnotation:annotation];
+            CGPoint location = [gesture locationInView:view];
+            if(CGRectContainsPoint(view.bounds, location)) {
+                [annotationsTapped addObject:annotation];
+            }
+        }
+    }
 
     NSMutableArray<BottomSheetItem *> *bottomSheetItems = [NSMutableArray arrayWithArray: [self createBottomSheetItemsFromAnnotations:annotationsTapped dedup:[NSMutableSet set]]];
     
@@ -1782,7 +1792,7 @@
 
 - (void)mapView:(MKMapView *) mapView didSelectAnnotationView:(MKAnnotationView *) view {
     [mapView deselectAnnotation:view.annotation animated:false];
-    [self mapTap:[mapView convertCoordinate:view.annotation.coordinate toPointToView:mapView]];
+    [self mapTap:[mapView convertCoordinate:view.annotation.coordinate toPointToView:mapView] gesture: nil];
 }
 
 - (void)observationDetailSelected:(Observation *)observation {

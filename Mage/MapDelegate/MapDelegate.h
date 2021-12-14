@@ -89,7 +89,7 @@
 - (void) setUserTrackingMode:(MKUserTrackingMode) userTrackingMode animated:(BOOL) animated;
 - (void) setMapView:(MKMapView *)mapView;
 - (void) setupMapType;
-- (void) mapTap: (CGPoint) tapPoint;
+- (void) mapTap: (CGPoint) tapPoint gesture:(UITapGestureRecognizer *) gesture;
 - (void) cleanup;
 - (void) ensureMapLayout;
 - (void) setupListeners;
