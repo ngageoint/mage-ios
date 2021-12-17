@@ -44,14 +44,31 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     }
     
     deinit {
+        UserDefaults.removeObserver(self, forKeyPath: "timeFilterKey")
+        UserDefaults.removeObserver(self, forKeyPath: "timeFilterUnitKey")
+        UserDefaults.removeObserver(self, forKeyPath: "timeFilterNumberKey")
+        UserDefaults.removeObserver(self, forKeyPath: "hideObservations")
+        UserDefaults.removeObserver(self, forKeyPath: "importantFilterKey")
+        UserDefaults.removeObserver(self, forKeyPath: "favoritesFilterKey")
+        
         NotificationCenter.default.removeObserver(self, name: .MapAnnotationFocused, object: nil)
         NotificationCenter.default.removeObserver(self, name: .ViewObservation, object: nil)
     }
     
     func setupMixin() {
+        UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterKey", options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterUnitKey", options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterNumberKey", options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: "hideObservations", options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: "importantFilterKey", options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: "favoritesFilterKey", options: [.new], context: nil)
         NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             self?.focusAnnotation(annotation: (notification.object as? MapAnnotationFocusedNotification)?.annotation)
         }
+        addFilteredObservations()
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         addFilteredObservations()
     }
     
@@ -139,6 +156,12 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     }
     
     func addFilteredObservations() {
+        if let observations = observations, let fetchedObservations = observations.fetchedResultsController.fetchedObjects as? [Observation] {
+            for observation in fetchedObservations {
+                deleteObservation(observation: observation)
+            }
+        }
+        
         if let observations = observations,
            let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
             observations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: observationPredicates)
@@ -306,7 +329,6 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     }
     
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
-        print("renderer for overlay \(overlay)")
         if let overlay = overlay as? ObservationAccuracy {
             return ObservationAccuracyRenderer(overlay: overlay)
         } else if let polygon = overlay as? MKPolygon {

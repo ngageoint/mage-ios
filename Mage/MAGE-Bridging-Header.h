@@ -70,3 +70,6 @@
 
 #import "AttachmentPushService.h"
 #import "LocationAnnotation.h"
+#import "LocationAccuracy.h"
+#import "LocationAccuracyRenderer.h"
+#import "FilterTableViewController.h"

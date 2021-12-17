@@ -87,6 +87,7 @@
     }
     annotationView.displayPriority = MKFeatureDisplayPriorityRequired;
     annotationView.collisionMode = MKAnnotationViewCollisionModeNone;
+    self.view = annotationView;
     return annotationView;
 }
 

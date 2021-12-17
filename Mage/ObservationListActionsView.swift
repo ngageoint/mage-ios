@@ -192,10 +192,17 @@ class ObservationListActionsView: UIView {
     }
     
     @objc func getDirectionsToObservation(_ sender: UIButton) {
-        observationActionsDelegate?.getDirectionsToObservation?(observation!, sourceView: sender);
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
+        // let the bottom sheet dismiss
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            let notification = DirectionsToItemNotification(observation: self.observation, user: nil, feedItem: nil)
+            NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
+        }
     }
     
     @objc func copyLocation() {
-        observationActionsDelegate?.copyLocation?(latitudeLongitudeButton.currentTitle ?? "No Location");
+        UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(latitudeLongitudeButton.currentTitle ?? "No Location") copied to clipboard"))
     }
 }

@@ -8,12 +8,22 @@
 
 import UIKit
 import geopackage_ios
+import MapKit
 
-class MageMapViewController: UIViewController, GeoPackageBaseMap, MKMapViewDelegate {
+class MageMapViewController: UIViewController, GeoPackageBaseMap {
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?;
     var mapMixins: [MapMixin] = []
     var geoPackageBaseMapMixin: GeoPackageBaseMapMixin?
+    
+    lazy var mapStack: UIStackView = {
+        let mapStack = UIStackView.newAutoLayout()
+        mapStack.axis = .vertical
+        mapStack.alignment = .fill
+        mapStack.spacing = 0
+        mapStack.distribution = .fill
+        return mapStack
+    }()
 
     required init(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
@@ -36,6 +46,13 @@ class MageMapViewController: UIViewController, GeoPackageBaseMap, MKMapViewDeleg
         mapView.autoPinEdgesToSuperviewEdges()
         mapView.delegate = self
         
+        self.view.addSubview(mapStack)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            mapStack.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+        } else {
+            mapStack.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .top)
+        }
+        
         let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(singleTapGensture(tapGestureRecognizer:)))
         singleTapGestureRecognizer.numberOfTapsRequired = 1
         singleTapGestureRecognizer.delaysTouchesBegan = true
@@ -50,25 +67,6 @@ class MageMapViewController: UIViewController, GeoPackageBaseMap, MKMapViewDeleg
         for mixin in mapMixins {
             mixin.setupMixin()
         }
-    }
-    
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        for mixin in mapMixins {
-            if let renderer = mixin.renderer(overlay: overlay) {
-                return renderer
-            }
-        }
-
-        return MKTileOverlayRenderer(overlay: overlay)
-    }
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        for mixin in mapMixins {
-            if let view = mixin.viewForAnnotation(annotation: annotation, mapView: mapView){
-                return view
-            }
-        }
-        return nil
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -102,6 +100,34 @@ class MageMapViewController: UIViewController, GeoPackageBaseMap, MKMapViewDeleg
 
         let notification = MapItemsTappedNotification(annotations: annotationsTapped, items: items)
         NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+    }
+}
+
+extension MageMapViewController : MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        for mixin in mapMixins {
+            if let renderer = mixin.renderer(overlay: overlay) {
+                return renderer
+            }
+        }
+        
+        return MKTileOverlayRenderer(overlay: overlay)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        for mixin in mapMixins {
+            if let view = mixin.viewForAnnotation(annotation: annotation, mapView: mapView){
+                return view
+            }
+        }
+        return nil
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        for mixin in mapMixins {
+            mixin.regionDidChange(mapView: mapView)
+        }
     }
 }
 

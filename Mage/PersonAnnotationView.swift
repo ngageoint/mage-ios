@@ -87,7 +87,6 @@ import Kingfisher
         
         if let annotation = self.annotation as? LocationAnnotation, let user = annotation.user {
             
-            
             if let iconColor = user.iconColor {
                 self.markerTintColor = UIColor(hex: iconColor);
                 self.glyphText = user.iconText;
@@ -128,8 +127,8 @@ import Kingfisher
                 circleView.layer.zPosition = -1.0;
             }
         } else {
-        
-            self.image = UIImage(named: "people")
+            self.glyphImage = UIImage(named: "me")
+            self.markerTintColor = scheme?.colorScheme.primaryColor;
         }
     }
 }

@@ -45,7 +45,14 @@ class BottomSheetMixin: NSObject, MapMixin {
                 self?.bottomSheet = bottomSheet
                 self?.mageBottomSheet = mageBottomSheet
                 NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
-                    self?.bottomSheet?.dismiss(animated: true, completion: nil)
+                    self?.bottomSheet?.dismiss(animated: true, completion: {
+                        NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
+                    })
+                }
+                NotificationCenter.default.addObserver(forName: .DismissBottomSheet, object: nil, queue: .main) { [weak self] notification in
+                    self?.bottomSheet?.dismiss(animated: true, completion: {
+                        NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
+                    })
                 }
             }
         }
@@ -57,6 +64,9 @@ class BottomSheetMixin: NSObject, MapMixin {
             for item in items {
                 if let observation = item as? Observation {
                     let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: self, annotationView: nil)
+                    bottomSheetItems.append(bottomSheetItem)
+                } else if let location = item as? Location {
+                    let bottomSheetItem = BottomSheetItem(item: location, actionDelegate: self, annotationView: nil)
                     bottomSheetItems.append(bottomSheetItem)
                 }
             }
@@ -85,6 +95,12 @@ class BottomSheetMixin: NSObject, MapMixin {
                 if let observation = annotation.observation, !dedup.contains(observation) {
                     _ = dedup.insert(observation)
                     let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: nil, annotationView: annotation.view)
+                    items.insert(bottomSheetItem)
+                }
+            } else if let annotation = annotation as? LocationAnnotation {
+                if let user = annotation.user, !dedup.contains(user) {
+                    _ = dedup.insert(user)
+                    let bottomSheetItem = BottomSheetItem(item: user, actionDelegate: nil, annotationView: annotation.view)
                     items.insert(bottomSheetItem)
                 }
             }

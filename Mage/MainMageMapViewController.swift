@@ -8,9 +8,12 @@
 
 import UIKit
 
-class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, BottomSheetEnabled {
+class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, PersistedMapState {
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
+    var filteredUsersMapMixin: FilteredUsersMapMixin?
     var bottomSheetMixin: BottomSheetMixin?
+    var mapDirectionsMixin: MapDirectionsMixin?
+    var persistedMapStateMixin: PersistedMapStateMixin?
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: .ViewObservation, object: nil)
@@ -21,9 +24,15 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
 
         if let mapView = mapView {
             filteredObservationsMapMixin = FilteredObservationsMapMixin(mapView: mapView, scheme: scheme)
+            filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
             bottomSheetMixin = BottomSheetMixin(mapView: mapView, navigationController: self.navigationController, scheme: scheme)
+            mapDirectionsMixin = MapDirectionsMixin(mapDirections: self, viewController: self, mapStack: mapStack, scheme: scheme)
+            persistedMapStateMixin = PersistedMapStateMixin(persistedMapState: self)
             mapMixins.append(filteredObservationsMapMixin!)
+            mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
+            mapMixins.append(mapDirectionsMixin!)
+            mapMixins.append(persistedMapStateMixin!)
         }
         initiateMapMixins()
         
@@ -32,10 +41,36 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
                 self?.viewObservation(observation)
             }
         }
+        
+        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { [weak self] notification in
+            self?.tabBarController?.selectedViewController = self
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setupNavigationBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
+    }
+    
+    func setupNavigationBar() {
+        let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(filterTapped(_:)))
+        navigationItem.rightBarButtonItems = [filterButton]
+    }
+    
+    @objc func filterTapped(_ sender: UIBarButtonItem) {
+        let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil)
+        guard let vc = filterStoryboard.instantiateInitialViewController() as? UINavigationController else {
+            return
+        }
+        if let fvc: FilterTableViewController = vc.topViewController as? FilterTableViewController {
+            fvc.applyTheme(withContainerScheme: scheme)
+        }
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.barButtonItem = sender
+        present(vc, animated: true, completion: nil)
     }
 }
 

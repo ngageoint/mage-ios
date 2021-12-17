@@ -17,7 +17,8 @@ struct MapItemsTappedNotification {
     var items: [Any]?
 }
 
-struct StartStraightLineNavigation {
+struct DirectionsToItemNotification {
     var observation: Observation?
     var user: User?
+    var feedItem: FeedItem?
 }

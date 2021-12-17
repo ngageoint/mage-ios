@@ -19,6 +19,9 @@ extension Notification.Name {
     public static let MapAnnotationFocused = Notification.Name("MapAnnotationFocused")
     public static let MapViewDisappearing = Notification.Name("MapViewDisappearing")
     public static let ObservationUpdated = Notification.Name("ObservationUpdated")
+    public static let DirectionsToItem = Notification.Name("DirectionsToItem")
+    public static let DismissBottomSheet = Notification.Name("DismissBottomSheet")
+    public static let BottomSheetDismissed = Notification.Name("BottomSheetDismissed")
 }
 
 @objc extension UserDefaults {

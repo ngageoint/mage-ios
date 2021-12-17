@@ -287,6 +287,9 @@
 		F74020B724917FFE00B5A8BA /* KIF+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */; };
 		F74020B92491904200B5A8BA /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020B82491904200B5A8BA /* TestHelpers.swift */; };
 		F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74020BA2492767900B5A8BA /* FeedItemsViewController.swift */; };
+		F7402C842769395C00531613 /* MapDirectionsMixin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C832769395C00531613 /* MapDirectionsMixin.swift */; };
+		F7402C86276B80B600531613 /* FilteredUsersMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C85276B80B600531613 /* FilteredUsersMap.swift */; };
+		F7402C88276CBE9300531613 /* PersistedMapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C87276CBE9300531613 /* PersistedMapState.swift */; };
 		F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F743008B254775AB00DCE050 /* SplitLayout.swift */; };
 		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
 		F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B7B209A2F0B00EABA63 /* OrView.m */; };
@@ -979,6 +982,9 @@
 		F74020B624917FFE00B5A8BA /* KIF+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KIF+Extensions.swift"; sourceTree = "<group>"; };
 		F74020B82491904200B5A8BA /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		F74020BA2492767900B5A8BA /* FeedItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsViewController.swift; sourceTree = "<group>"; };
+		F7402C832769395C00531613 /* MapDirectionsMixin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDirectionsMixin.swift; sourceTree = "<group>"; };
+		F7402C85276B80B600531613 /* FilteredUsersMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredUsersMap.swift; sourceTree = "<group>"; };
+		F7402C87276CBE9300531613 /* PersistedMapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedMapState.swift; sourceTree = "<group>"; };
 		F743008B254775AB00DCE050 /* SplitLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitLayout.swift; sourceTree = "<group>"; };
 		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
 		F7467B7A209A2F0B00EABA63 /* OrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrView.h; sourceTree = "<group>"; };
@@ -2072,6 +2078,9 @@
 				F7EBAEB92760F7EE00650F4F /* FilteredObservationsMap.swift */,
 				F7EBAEBB27615E5600650F4F /* MapMixin.swift */,
 				F7EBAEC02762537100650F4F /* BottomSheetMixin.swift */,
+				F7402C832769395C00531613 /* MapDirectionsMixin.swift */,
+				F7402C85276B80B600531613 /* FilteredUsersMap.swift */,
+				F7402C87276CBE9300531613 /* PersistedMapState.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3216,6 +3225,7 @@
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
+				F7402C86276B80B600531613 /* FilteredUsersMap.swift in Sources */,
 				F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */,
@@ -3310,6 +3320,7 @@
 				F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */,
 				F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */,
 				F7F4754525BA357E006634F7 /* ObservationListCardCell.swift in Sources */,
+				F7402C88276CBE9300531613 /* PersistedMapState.swift in Sources */,
 				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
 				F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */,
 				F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */,
@@ -3456,6 +3467,7 @@
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
 				F7081DB42627696F004B89D4 /* CompassView.swift in Sources */,
 				F7D43BE2269F329D00561A8F /* FeedItemBottomSheetView.swift in Sources */,
+				F7402C842769395C00531613 /* MapDirectionsMixin.swift in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7EBAEC12762537100650F4F /* BottomSheetMixin.swift in Sources */,
