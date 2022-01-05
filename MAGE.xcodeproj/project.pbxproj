@@ -161,6 +161,7 @@
 		F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */; };
 		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
 		F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723232B251CE92800AD168A /* MapSettingsTests.swift */; };
+		F72329CE2784BA790036F964 /* CanReportLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72329CD2784BA790036F964 /* CanReportLocation.swift */; };
 		F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723D608253F66AC00C6BE34 /* MAGEScheme.swift */; };
 		F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F723D60C253F6D9900C6BE34 /* Colors.xcassets */; };
 		F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */; };
@@ -290,6 +291,7 @@
 		F7402C842769395C00531613 /* MapDirectionsMixin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C832769395C00531613 /* MapDirectionsMixin.swift */; };
 		F7402C86276B80B600531613 /* FilteredUsersMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C85276B80B600531613 /* FilteredUsersMap.swift */; };
 		F7402C88276CBE9300531613 /* PersistedMapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C87276CBE9300531613 /* PersistedMapState.swift */; };
+		F7402C8A276D1A9B00531613 /* HasMapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7402C89276D1A9B00531613 /* HasMapSettings.swift */; };
 		F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F743008B254775AB00DCE050 /* SplitLayout.swift */; };
 		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
 		F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B7B209A2F0B00EABA63 /* OrView.m */; };
@@ -315,6 +317,7 @@
 		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
 		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
 		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
+		F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7641CE3276D423A006225BA /* CanCreateObservation.swift */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
@@ -809,6 +812,7 @@
 		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
 		F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValuePickerTableViewController.m; sourceTree = "<group>"; };
 		F723232B251CE92800AD168A /* MapSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsTests.swift; sourceTree = "<group>"; };
+		F72329CD2784BA790036F964 /* CanReportLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanReportLocation.swift; sourceTree = "<group>"; };
 		F723D608253F66AC00C6BE34 /* MAGEScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAGEScheme.swift; sourceTree = "<group>"; };
 		F723D60C253F6D9900C6BE34 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator.h; sourceTree = "<group>"; };
@@ -985,6 +989,7 @@
 		F7402C832769395C00531613 /* MapDirectionsMixin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDirectionsMixin.swift; sourceTree = "<group>"; };
 		F7402C85276B80B600531613 /* FilteredUsersMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredUsersMap.swift; sourceTree = "<group>"; };
 		F7402C87276CBE9300531613 /* PersistedMapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedMapState.swift; sourceTree = "<group>"; };
+		F7402C89276D1A9B00531613 /* HasMapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasMapSettings.swift; sourceTree = "<group>"; };
 		F743008B254775AB00DCE050 /* SplitLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitLayout.swift; sourceTree = "<group>"; };
 		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
 		F7467B7A209A2F0B00EABA63 /* OrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrView.h; sourceTree = "<group>"; };
@@ -1018,6 +1023,7 @@
 		F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = authorizeLocalSuccess.json; sourceTree = "<group>"; };
 		F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkSyncOptionTetsts.m; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
+		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
 		F76949141AA6436000CB680B /* EventChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserController.h; sourceTree = "<group>"; };
 		F76949151AA6436000CB680B /* EventChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserController.m; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
@@ -2081,6 +2087,9 @@
 				F7402C832769395C00531613 /* MapDirectionsMixin.swift */,
 				F7402C85276B80B600531613 /* FilteredUsersMap.swift */,
 				F7402C87276CBE9300531613 /* PersistedMapState.swift */,
+				F7402C89276D1A9B00531613 /* HasMapSettings.swift */,
+				F7641CE3276D423A006225BA /* CanCreateObservation.swift */,
+				F72329CD2784BA790036F964 /* CanReportLocation.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3212,6 +3221,7 @@
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
 				F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */,
+				F7402C8A276D1A9B00531613 /* HasMapSettings.swift in Sources */,
 				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
 				8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */,
 				F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */,
@@ -3229,6 +3239,7 @@
 				F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				F72D42F32694B60300F9AC3B /* MageSessionManager.m in Sources */,
+				F72329CE2784BA790036F964 /* CanReportLocation.swift in Sources */,
 				F72D432E2694B60300F9AC3B /* Attachment.swift in Sources */,
 				F72D43042694B60300F9AC3B /* LocationService.m in Sources */,
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
@@ -3326,6 +3337,7 @@
 				F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */,
 				F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */,
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.swift in Sources */,
+				F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,

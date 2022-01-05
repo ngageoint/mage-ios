@@ -66,6 +66,13 @@ class MageMapViewController: UIViewController, GeoPackageBaseMap {
     func initiateMapMixins() {
         for mixin in mapMixins {
             mixin.setupMixin()
+            mixin.applyTheme(scheme: scheme)
+        }
+    }
+    
+    func applyTheme(scheme: MDCContainerScheming?) {
+        for mixin in mapMixins {
+            mixin.applyTheme(scheme: scheme)
         }
     }
     

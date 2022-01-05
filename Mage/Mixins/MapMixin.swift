@@ -17,6 +17,7 @@ protocol MapMixin {
     func regionDidChange(mapView: MKMapView)
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView?
     func items(at location: CLLocationCoordinate2D) -> [Any]?
+    func applyTheme(scheme: MDCContainerScheming?)
 }
 
 extension MapMixin {
@@ -34,5 +35,8 @@ extension MapMixin {
     
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         return nil
+    }
+    
+    func applyTheme(scheme: MDCContainerScheming?) {
     }
 }

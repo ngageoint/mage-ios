@@ -22,6 +22,7 @@ extension Notification.Name {
     public static let DirectionsToItem = Notification.Name("DirectionsToItem")
     public static let DismissBottomSheet = Notification.Name("DismissBottomSheet")
     public static let BottomSheetDismissed = Notification.Name("BottomSheetDismissed")
+    public static let GeoPackageImported = Notification.Name("mil.nga.giat.mage.geopackage.imported")
 }
 
 @objc extension UserDefaults {
@@ -159,6 +160,24 @@ extension Notification.Name {
     var serverMinorVersion: Int {
         get {
             return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var reportLocation: Bool {
+        get {
+            return bool(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var gpsDistanceFilter: Double {
+        get {
+            return double(forKey: #function)
         }
         set {
             set(newValue, forKey: #function)
