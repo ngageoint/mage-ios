@@ -11,9 +11,9 @@
 #import "ObservationTableHeaderView.h"
 #import "DisplaySettingsHeader.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
+#import "MAGE-Swift.h"
 
 @interface LocationDisplayTableViewController ()
-@property (assign, nonatomic) BOOL showMGRS;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (strong, nonatomic) DisplaySettingsHeader *header;
 @end
@@ -21,9 +21,6 @@
 @implementation LocationDisplayTableViewController
 
 static NSString *LOCATION_DISPLAY_REUSE_ID = @"LOCATION_DISPLAY_REUSE_ID";
-static NSString *LOCATION_DISPLAY_USER_DEFAULTS_KEY = @"showMGRS";
-static NSInteger WGS84_CELL_ROW = 0;
-static NSInteger MGRS_CELL_ROW = 1;
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     if (containerScheme != nil) {
@@ -38,11 +35,8 @@ static NSInteger MGRS_CELL_ROW = 1;
     [super viewDidLoad];
 
     self.header = [[NSBundle mainBundle] loadNibNamed:@"DisplaySettingsHeader" owner:self options:nil][0];
-    self.header.label.text = [@"All locations in the app will be entered and displayed in either latitude, longitude or MGRS." uppercaseString];
+    self.header.label.text = [@"All locations in the app will be entered and displayed in either latitude, longitude or MGRS or DMS." uppercaseString];
     self.tableView.tableHeaderView = self.header;
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.showMGRS = [defaults boolForKey:LOCATION_DISPLAY_USER_DEFAULTS_KEY];
 }
 
 - (void) viewDidLayoutSubviews {
@@ -66,7 +60,7 @@ static NSInteger MGRS_CELL_ROW = 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 3;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -79,12 +73,15 @@ static NSInteger MGRS_CELL_ROW = 1;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LOCATION_DISPLAY_REUSE_ID];
     }
     
-    if (indexPath.row == WGS84_CELL_ROW) {
+    if (indexPath.row == LocationDisplayLatlng) {
         cell.textLabel.text = @"Latitude, Longitude";
-        cell.accessoryType = self.showMGRS ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
-    } else {
+        cell.accessoryType = [NSUserDefaults standardUserDefaults].locationDisplay == LocationDisplayLatlng ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    } else if (indexPath.row == LocationDisplayMgrs) {
         cell.textLabel.text = @"MGRS";
-        cell.accessoryType = self.showMGRS ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        cell.accessoryType = [NSUserDefaults standardUserDefaults].locationDisplay == LocationDisplayMgrs ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    } else if (indexPath.row == LocationDisplayDms) {
+        cell.textLabel.text = @"Degrees Minutes Seconds";
+        cell.accessoryType = [NSUserDefaults standardUserDefaults].locationDisplay == LocationDisplayDms ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     
     cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -96,18 +93,25 @@ static NSInteger MGRS_CELL_ROW = 1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *wgs84Cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:WGS84_CELL_ROW inSection:0]];
-    UITableViewCell *mgrs4Cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:MGRS_CELL_ROW inSection:0]];
+    UITableViewCell *wgs84Cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:LocationDisplayLatlng inSection:0]];
+    UITableViewCell *mgrsCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:LocationDisplayMgrs inSection:0]];
+    UITableViewCell *dmsCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:LocationDisplayDms inSection:0]];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (indexPath.row == WGS84_CELL_ROW) {
-        [defaults setBool:NO forKey:LOCATION_DISPLAY_USER_DEFAULTS_KEY];
+    defaults.locationDisplay = indexPath.row;
+
+    if (indexPath.row == LocationDisplayLatlng) {
         wgs84Cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        mgrs4Cell.accessoryType = UITableViewCellAccessoryNone;
-    } else {
-        [defaults setBool:YES forKey:LOCATION_DISPLAY_USER_DEFAULTS_KEY];
+        mgrsCell.accessoryType = UITableViewCellAccessoryNone;
+        dmsCell.accessoryType = UITableViewCellAccessoryNone;
+    } else if (indexPath.row == LocationDisplayMgrs) {
         wgs84Cell.accessoryType = UITableViewCellAccessoryNone;
-        mgrs4Cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        mgrsCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        dmsCell.accessoryType = UITableViewCellAccessoryNone;
+    } else if (indexPath.row == LocationDisplayDms) {
+        wgs84Cell.accessoryType = UITableViewCellAccessoryNone;
+        mgrsCell.accessoryType = UITableViewCellAccessoryNone;
+        dmsCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     
     [defaults synchronize];

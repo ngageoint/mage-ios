@@ -25,6 +25,12 @@ extension Notification.Name {
     public static let GeoPackageImported = Notification.Name("mil.nga.giat.mage.geopackage.imported")
 }
 
+@objc public enum LocationDisplay : Int {
+    case latlng
+    case mgrs
+    case dms
+}
+
 @objc extension UserDefaults {
     
     @objc func color(forKey key: String) -> UIColor? {
@@ -237,12 +243,14 @@ extension Notification.Name {
         }
     }
     
-    var showMGRS: Bool {
+    var locationDisplay: LocationDisplay {
         get {
-            return bool(forKey: #function);
+            // use the key showMGRS which used to be stored as a bool, but using integer(forKey will coerce it to an int and leave
+            // the legacy value meaning intact
+            return LocationDisplay.init(rawValue: integer(forKey: "showMGRS")) ?? LocationDisplay.latlng
         }
         set {
-            set(newValue, forKey: #function);
+            set(newValue.rawValue, forKey: "showMGRS");
         }
     }
     

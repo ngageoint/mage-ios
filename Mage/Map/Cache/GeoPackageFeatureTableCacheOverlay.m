@@ -262,8 +262,6 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
                         GeoPackageFeatureItem *featureItem = [[GeoPackageFeatureItem alloc] initWithFeatureId:featureId featureRowData: featureRowData featureDataTypes: featureDataTypes coordinate:coordinate layerName: [self getName] icon:image style: style mediaRows:medias attributeRows:attributeFeatureRowData];
                         [featureItems addObject:featureItem];
                     }
-                    GPKGFeatureTableData *tableData = [self.featureOverlayQuery.featureInfoBuilder buildTableDataAndCloseWithFeatureIndexResults:results andTolerance:tolerance andPoint: [[SFPoint alloc] initWithXValue:tapLocation.longitude andYValue:tapLocation.latitude]];
-                    NSLog(@"table data is %@", tableData);
                 }
             }
             

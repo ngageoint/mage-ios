@@ -36,7 +36,7 @@ class FeedServiceTests: KIFSpec {
 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 
                 Server.setCurrentEventId(1);
                 

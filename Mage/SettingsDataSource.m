@@ -352,6 +352,18 @@ static const NSInteger LEGAL_SECTION = 8;
             themeString = @"Follow system theme";
             break;
     }
+    NSString *locationDisplayString = @"";
+    switch ([NSUserDefaults standardUserDefaults].locationDisplay) {
+        case LocationDisplayLatlng:
+            locationDisplayString = @"Latitude, Longitude";
+            break;
+        case LocationDisplayMgrs:
+            locationDisplayString = @"MGRS";
+            break;
+        case LocationDisplayDms:
+            locationDisplayString = @"Degrees Minutes Seconds";
+            break;
+    }
     return [@{
         @"header": @"Display Settings",
         @"rows": @[
@@ -376,7 +388,7 @@ static const NSInteger LEGAL_SECTION = 8;
                        @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
                        @"image": @"location_arrow_on",
                        @"textLabel": @"Location",
-                       @"detailTextLabel": [[defaults objectForKey:@"showMGRS"] boolValue] ? @"MGRS" : @"Latitude, Longitude",
+                       @"detailTextLabel": locationDisplayString,
                        @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
                    },
                    @{

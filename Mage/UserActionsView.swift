@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import MaterialComponents.MDCPalettes
+import UIKit
 
 class UserActionsView: UIView {
     var didSetupConstraints = false;
@@ -29,6 +30,7 @@ class UserActionsView: UIView {
         stack.addArrangedSubview(emailButton);
         stack.addArrangedSubview(phoneButton);
         stack.addArrangedSubview(directionsButton);
+        stack.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return stack;
     }()
     
@@ -38,6 +40,9 @@ class UserActionsView: UIView {
         button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
         button.addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.lineBreakMode = .byClipping
+        button.titleLabel?.numberOfLines = 1
         return button;
     }()
     
@@ -49,6 +54,7 @@ class UserActionsView: UIView {
         directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         directionsButton.inkMaxRippleRadius = 30;
         directionsButton.inkStyle = .unbounded;
+        directionsButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return directionsButton;
     }()
     
@@ -60,6 +66,7 @@ class UserActionsView: UIView {
         phoneButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         phoneButton.inkMaxRippleRadius = 30;
         phoneButton.inkStyle = .unbounded;
+        phoneButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return phoneButton;
     }()
     
@@ -71,6 +78,7 @@ class UserActionsView: UIView {
         emailButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         emailButton.inkMaxRippleRadius = 30;
         emailButton.inkStyle = .unbounded;
+        emailButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return emailButton;
     }()
     
@@ -114,9 +122,13 @@ class UserActionsView: UIView {
         if (!didSetupConstraints) {
             actionButtonView.autoSetDimension(.height, toSize: 56);
             actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16), excludingEdge: .left);
+            emailButton.autoSetDimension(.width, toSize: 24)
+            phoneButton.autoSetDimension(.width, toSize: 24)
+            directionsButton.autoSetDimension(.width, toSize: 24)
 
             latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
             latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
+            actionButtonView.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton, withOffset: 8, relation: .greaterThanOrEqual);
             didSetupConstraints = true;
         }
         super.updateConstraints();
@@ -139,11 +151,8 @@ class UserActionsView: UIView {
         if (user.location != nil) {
             let geometry = user.location?.geometry;
             if let point: SFPoint = geometry?.centroid() {
-                if (UserDefaults.standard.showMGRS) {
-                    latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);
-                } else {
-                    latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);
-                }
+                let coordinate = CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
+                latitudeLongitudeButton.setTitle(coordinate.toDisplay(short: true), for: .normal)
             }
             latitudeLongitudeButton.isHidden = false;
         } else {

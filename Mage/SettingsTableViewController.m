@@ -95,6 +95,9 @@
     
     [self.navigationController.navigationBar setPrefersLargeTitles:YES];
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
+    
+    [self.dataSource reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

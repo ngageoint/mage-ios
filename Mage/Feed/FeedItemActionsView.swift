@@ -94,11 +94,7 @@ class FeedItemActionsView: UIView {
         self.actionsDelegate = delegate;
         
         if let coordinate = self.feedItem?.coordinate, CLLocationCoordinate2DIsValid(coordinate) {
-            if (UserDefaults.standard.showMGRS) {
-                latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(coordinate), for: .normal);
-            } else {
-                latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", coordinate.latitude, coordinate.longitude), for: .normal);
-            }
+            latitudeLongitudeButton.setTitle(coordinate.toDisplay(short: true), for: .normal)
             latitudeLongitudeButton.isEnabled = true;
             latitudeLongitudeButton.isHidden = false;
         } else {

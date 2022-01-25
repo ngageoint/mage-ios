@@ -33,7 +33,7 @@ class GeometryEditViewControllerTests: KIFSpec {
                 window.rootViewController = navController;
                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
                 

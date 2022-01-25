@@ -34,7 +34,7 @@ class CommonFieldsViewTests: KIFSpec {
                 window.rootViewController = controller;
                                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 
 //                Nimble_Snapshots.setNimbleTolerance(0.1);
 //                Nimble_Snapshots.recordAllSnapshots()

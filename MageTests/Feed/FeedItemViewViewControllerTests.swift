@@ -60,7 +60,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 Server.setCurrentEventId(1);
@@ -120,7 +120,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with no value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value"])
                 var completeTest = false;
                 
@@ -184,7 +184,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"])
                 var completeTest = false;
                 
@@ -248,7 +248,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with secondary value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"])
                 var completeTest = false;
                 
@@ -312,7 +312,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
                 var completeTest = false;
                 
@@ -379,7 +379,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
                 var completeTest = false;
@@ -451,7 +451,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 ImageCache.default.clearDiskCache();
                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 
                 HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
                     return request.url == URL(string: "https://magetest/icon.png");
@@ -465,7 +465,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 
                 Server.setCurrentEventId(1);
                 
@@ -521,7 +521,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with no value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -585,7 +585,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -649,7 +649,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with secondary value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -713,7 +713,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
                 var completeTest = false;
                 
@@ -779,7 +779,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
-                UserDefaults.standard.showMGRS = true;
+                UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
                 var completeTest = false;

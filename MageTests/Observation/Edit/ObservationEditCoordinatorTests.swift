@@ -34,7 +34,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 window.rootViewController = controller;
                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 
                 NSDate.setDisplayGMT(true);
             }
