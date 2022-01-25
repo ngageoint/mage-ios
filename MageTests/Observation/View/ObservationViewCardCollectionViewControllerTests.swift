@@ -74,7 +74,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 UserDefaults.standard.serverMajorVersion = 5;
                 UserDefaults.standard.serverMinorVersion = 4;
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 Server.setCurrentEventId(1);
                 
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath("/api/events/1/observations/observationabc/attachments/attachmentabc")) { (request) -> HTTPStubsResponse in

@@ -97,11 +97,7 @@ class FeatureActionsView: UIView {
         self.featureActionsDelegate = delegate;
         
         if let location = location, CLLocationCoordinate2DIsValid(location) {
-            if (UserDefaults.standard.showMGRS) {
-                latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(location), for: .normal);
-            } else {
-                latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", location.latitude, location.longitude), for: .normal);
-            }
+            latitudeLongitudeButton.setTitle(location.toDisplay(short: true), for: .normal)
             latitudeLongitudeButton.isEnabled = true;
             latitudeLongitudeButton.isHidden = false;
         } else {

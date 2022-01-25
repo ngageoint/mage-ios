@@ -53,7 +53,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 
                 MageCoreDataFixtures.addEvent()
                 

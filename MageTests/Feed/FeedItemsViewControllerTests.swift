@@ -68,7 +68,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                     TestHelpers.clearAndSetUpStack();
                     
                     UserDefaults.standard.mapType = 0;
-                    UserDefaults.standard.showMGRS = false;
+                    UserDefaults.standard.locationDisplay = .latlng;
                     Server.setCurrentEventId(1);
                     
                     MageCoreDataFixtures.addEvent();
@@ -246,7 +246,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 TestHelpers.clearAndSetUpStack();
                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 Server.setCurrentEventId(1);
                 
                 MageCoreDataFixtures.addEvent();

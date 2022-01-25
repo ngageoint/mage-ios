@@ -125,11 +125,8 @@ class ObservationListActionsView: UIView {
         self.observationActionsDelegate = delegate;
         if let geometry = self.observation?.geometry {
             if let point: SFPoint = geometry.centroid() {
-                if (UserDefaults.standard.showMGRS) {
-                    latitudeLongitudeButton.setTitle(MGRS.mgrSfromCoordinate(CLLocationCoordinate2D.init(latitude: point.y as! CLLocationDegrees, longitude: point.x as! CLLocationDegrees)), for: .normal);
-                } else {
-                    latitudeLongitudeButton.setTitle(String(format: "%.5f, %.5f", point.y.doubleValue, point.x.doubleValue), for: .normal);
-                }
+                let coordinate = CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
+                latitudeLongitudeButton.setTitle(coordinate.toDisplay(short: true), for: .normal)
                 latitudeLongitudeButton.isEnabled = true;
             }
         } else {

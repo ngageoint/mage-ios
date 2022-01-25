@@ -57,7 +57,7 @@ class GeometryViewTests: KIFSpec {
                 ];
                 
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
 //                Nimble_Snapshots.setNimbleTolerance(0.1);
 //                Nimble_Snapshots.recordAllSnapshots();
             }
@@ -219,7 +219,7 @@ class GeometryViewTests: KIFSpec {
             
             it("initial value set as a point MGRS") {
                 let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
-                UserDefaults.standard.set(true, forKey: "showMGRS");
+                UserDefaults.standard.locationDisplay = .mgrs
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let mockMapDelegate = MockMapViewDelegate()

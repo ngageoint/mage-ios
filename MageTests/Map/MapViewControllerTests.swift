@@ -57,7 +57,7 @@ class MapViewControllerTests: KIFSpec {
                 window = UIWindow(frame: UIScreen.main.bounds);
                 window.makeKeyAndVisible();
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 UserDefaults.standard.synchronize();
                 
                 Server.setCurrentEventId(1);

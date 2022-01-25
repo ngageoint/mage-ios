@@ -47,7 +47,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 }
                 TestHelpers.clearAndSetUpStack();
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 Server.setCurrentEventId(1);
                 
                 controller = UINavigationController();

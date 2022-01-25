@@ -72,7 +72,7 @@ class UserTableHeaderViewTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.mapType = 0;
-                UserDefaults.standard.showMGRS = false;
+                UserDefaults.standard.locationDisplay = .latlng;
                 UserDefaults.standard.currentUserId = nil;
             }
             

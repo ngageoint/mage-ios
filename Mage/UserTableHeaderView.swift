@@ -340,7 +340,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     }
 
     func setLocationText(userLastLocation: CLLocation) {
-        let location = CoordinateDisplay.displayFromCoordinate(coordinate: userLastLocation.coordinate);
+        let location = userLastLocation.coordinate.toDisplay(short: true)
         
         let locationFont = UIFont.systemFont(ofSize: 14);
         let accuracyFont = UIFont.systemFont(ofSize: 11);
@@ -389,7 +389,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let alert = UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
         alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
             if let coordinate = self.userLastLocation?.coordinate {
-                UIPasteboard.general.string = CoordinateDisplay.displayFromCoordinate(coordinate: coordinate);
+                UIPasteboard.general.string = coordinate.toDisplay()
                 MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
             }
         }));

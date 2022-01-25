@@ -550,6 +550,7 @@
             int minZoom = 0;
             if(indexed){
                 minZoom = [featureDao zoomLevel] + (int)[defaults integerForKey:@"geopackage_feature_tiles_min_zoom_offset"];
+                [featureDao count];
                 minZoom = MAX(minZoom, 0);
                 minZoom = MIN(minZoom, (int)MAGE_FEATURES_MAX_ZOOM);
             }

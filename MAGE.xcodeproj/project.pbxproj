@@ -125,6 +125,7 @@
 		F70D19E12742C5F3006E12F8 /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70D19E02742C5F3006E12F8 /* FormTests.swift */; };
 		F70D19E32742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip in Resources */ = {isa = PBXBuildFile; fileRef = F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */; };
 		F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70D1BF427299BC800B8015C /* ArrayExtensions.swift */; };
+		F70E7B1B27888548000BBC58 /* LocationUtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70E7B1A27888548000BBC58 /* LocationUtilitiesTests.swift */; };
 		F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70EAF3C199D052D00909C8A /* MediaPlayer.framework */; };
 		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
@@ -290,6 +291,8 @@
 		F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F743008B254775AB00DCE050 /* SplitLayout.swift */; };
 		F7467B79209A2DC600EABA63 /* orView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7467B78209A2DC600EABA63 /* orView.xib */; };
 		F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7467B7B209A2F0B00EABA63 /* OrView.m */; };
+		F7489B35278E29C300A9E314 /* CoordinateField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B34278E29C300A9E314 /* CoordinateField.swift */; };
+		F7489B37279A13CE00A9E314 /* CoordinateFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */; };
 		F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */; };
 		F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */; };
 		F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = F74F025E25DF0280006BCF23 /* DisplaySettingsHeader.m */; };
@@ -368,7 +371,7 @@
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
 		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
 		F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
-		F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */; };
+		F795ED0524B8DFB80028FBFC /* LocationUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */; };
 		F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0624B8F15D0028FBFC /* UserViewController.swift */; };
 		F795ED0924B8F34D0028FBFC /* UserTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */; };
 		F795ED0C24B8FCC00028FBFC /* UserTableHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0B24B8FCC00028FBFC /* UserTableHeaderViewTests.swift */; };
@@ -756,6 +759,7 @@
 		F70D19E02742C5F3006E12F8 /* FormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
 		F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = plantsAnimalsBuildingsIcons.zip; sourceTree = "<group>"; };
 		F70D1BF427299BC800B8015C /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		F70E7B1A27888548000BBC58 /* LocationUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUtilitiesTests.swift; sourceTree = "<group>"; };
 		F70EAF3C199D052D00909C8A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
@@ -975,6 +979,8 @@
 		F7467B78209A2DC600EABA63 /* orView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orView.xib; sourceTree = "<group>"; };
 		F7467B7A209A2F0B00EABA63 /* OrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrView.h; sourceTree = "<group>"; };
 		F7467B7B209A2F0B00EABA63 /* OrView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrView.m; sourceTree = "<group>"; };
+		F7489B34278E29C300A9E314 /* CoordinateField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateField.swift; sourceTree = "<group>"; };
+		F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateFieldTests.swift; sourceTree = "<group>"; };
 		F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangePasswordView.xib; sourceTree = "<group>"; };
 		F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
 		F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
@@ -1075,7 +1081,7 @@
 		F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTableHeaderView.h; sourceTree = "<group>"; };
 		F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTableHeaderView.m; sourceTree = "<group>"; };
 		F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMageServer.swift; sourceTree = "<group>"; };
-		F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateDisplay.swift; sourceTree = "<group>"; };
+		F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUtilities.swift; sourceTree = "<group>"; };
 		F795ED0624B8F15D0028FBFC /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableHeaderView.swift; sourceTree = "<group>"; };
 		F795ED0B24B8FCC00028FBFC /* UserTableHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableHeaderViewTests.swift; sourceTree = "<group>"; };
@@ -1417,6 +1423,7 @@
 				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
 				F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */,
 				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
+				F7489B34278E29C300A9E314 /* CoordinateField.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1554,7 +1561,7 @@
 				2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */,
 				F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */,
 				F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */,
-				F795ED0424B8DFB80028FBFC /* CoordinateDisplay.swift */,
+				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1761,6 +1768,14 @@
 				F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */,
 			);
 			name = Observation;
+			sourceTree = "<group>";
+		};
+		F70E7B1927888531000BBC58 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				F70E7B1A27888548000BBC58 /* LocationUtilitiesTests.swift */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 		F710D8AC2549B34E00798D56 /* MaterialComponents */ = {
@@ -2469,6 +2484,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F70E7B1927888531000BBC58 /* Categories */,
 				F786492C273BFF02002D3DC2 /* Layer */,
 				F7BCAC1F263093E7006BE2A9 /* SDK */,
 				F7C641022581503B00C02335 /* Map */,
@@ -2498,6 +2514,7 @@
 				F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */,
 				F795ED0D24B8FDE20028FBFC /* MockMapViewDelegate.swift */,
 				F7521D8E26702C4100C52318 /* PlainMapViewDelegate.swift */,
+				F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -3220,7 +3237,7 @@
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
-				F795ED0524B8DFB80028FBFC /* CoordinateDisplay.swift in Sources */,
+				F795ED0524B8DFB80028FBFC /* LocationUtilities.swift in Sources */,
 				F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */,
 				F72D42EE2694B60300F9AC3B /* User.swift in Sources */,
 				F76FFBE6261D0D6900532330 /* ObservationBottomSheetView.swift in Sources */,
@@ -3269,6 +3286,7 @@
 				F7F4754525BA357E006634F7 /* ObservationListCardCell.swift in Sources */,
 				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
 				F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */,
+				F7489B35278E29C300A9E314 /* CoordinateField.swift in Sources */,
 				F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */,
 				F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */,
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.m in Sources */,
@@ -3439,6 +3457,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F70E7B1B27888548000BBC58 /* LocationUtilitiesTests.swift in Sources */,
 				F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */,
 				F7384FDE274D74EA00EA1A96 /* ObservationFetchServiceTests.swift in Sources */,
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
@@ -3458,6 +3477,7 @@
 				F7521DE82672317700C52318 /* GeometryEditViewControllerTests.swift in Sources */,
 				F786492E273BFF16002D3DC2 /* LayerTests.swift in Sources */,
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
+				F7489B37279A13CE00A9E314 /* CoordinateFieldTests.swift in Sources */,
 				F7C641042581504F00C02335 /* MapViewControllerTests.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* GeometryViewTests.swift in Sources */,
 				F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */,

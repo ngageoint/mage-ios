@@ -110,6 +110,12 @@
     [self applyThemeWithContainerScheme:self.scheme];
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.settingsTableViewController.dataSource reloadData];
+    [self.settingsTableViewController.tableView reloadData];
+}
+
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {
     if (splitViewController.collapsed == NO) {
         UIViewController *viewController = [splitViewController.viewControllers lastObject];
