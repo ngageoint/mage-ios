@@ -27,11 +27,11 @@ class CanReportLocationMixin: NSObject, MapMixin {
     var locationAuthorizationStatus: CLAuthorizationStatus = .notDetermined
     
     private lazy var reportLocationButton: MDCFloatingButton = {
-        let createFab = MDCFloatingButton(shape: .mini)
-        createFab.setImage(UIImage(named:"location_tracking_off"), for: .normal)
-        createFab.addTarget(self, action: #selector(reportLocationButtonPressed(_:)), for: .touchUpInside)
-        createFab.accessibilityLabel = "report location"
-        return createFab
+        let reportLocationButton = MDCFloatingButton(shape: .mini)
+        reportLocationButton.setImage(UIImage(named:"location_tracking_off"), for: .normal)
+        reportLocationButton.addTarget(self, action: #selector(reportLocationButtonPressed(_:)), for: .touchUpInside)
+        reportLocationButton.accessibilityLabel = "report location"
+        return reportLocationButton
     }()
     
     init(canReportLocation: CanReportLocation, buttonParentView: UIStackView?, indexInView: Int = 1, scheme: MDCContainerScheming?) {

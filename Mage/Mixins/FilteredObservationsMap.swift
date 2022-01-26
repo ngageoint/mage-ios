@@ -331,7 +331,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let overlay = overlay as? ObservationAccuracy {
             return ObservationAccuracyRenderer(overlay: overlay)
-        } else if let polygon = overlay as? MKPolygon {
+        } else if let polygon = overlay as? StyledPolygon {
             let renderer = MKPolygonRenderer(polygon: polygon)
             if let overlay = overlay as? StyledPolygon {
                 renderer.fillColor = overlay.fillColor
@@ -342,7 +342,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 renderer.lineWidth = 1
             }
             return renderer
-        } else if let polyline = overlay as? MKPolyline {
+        } else if let polyline = overlay as? StyledPolyline {
             let renderer = MKPolylineRenderer(polyline: polyline)
             if let overlay = overlay as? StyledPolyline {
                 renderer.strokeColor = overlay.lineColor

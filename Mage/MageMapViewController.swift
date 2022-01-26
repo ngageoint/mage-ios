@@ -133,7 +133,19 @@ extension MageMapViewController : MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         for mixin in mapMixins {
-            mixin.regionDidChange(mapView: mapView)
+            mixin.regionDidChange(mapView: mapView, animated: animated)
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        for mixin in mapMixins {
+            mixin.regionWillChange(mapView: mapView, animated: animated)
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
+        for mixin in mapMixins {
+            mixin.didChangeUserTrackingMode(mapView: mapView, animated: animated)
         }
     }
 }

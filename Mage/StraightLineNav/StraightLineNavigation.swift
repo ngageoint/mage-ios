@@ -63,6 +63,7 @@ struct StraightLineNavigationNotification {
         updateHeadingLine(manager: manager);
     }
     
+    @discardableResult
     @objc func stopHeading() -> Bool {
         if (!navigationModeEnabled && headingModeEnabled) {
             headingModeEnabled = false;
@@ -149,11 +150,11 @@ struct StraightLineNavigationNotification {
         }
     }
     
-    @objc func updateNavigationLines(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D) {
+    func updateNavigationLines(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D?) {
         guard let userCoordinate = manager.location?.coordinate else {
             return;
         }
-        if (navigationModeEnabled) {
+        if navigationModeEnabled, let destinationCoordinate = destinationCoordinate {
             let userLocationPoint = MKMapPoint(userCoordinate)
             let endCoordinate = MKMapPoint(destinationCoordinate)
             

@@ -1529,7 +1529,7 @@
 
 - (void) updateStraightLineNavigationDestination: (CLLocationCoordinate2D) destination {
     self.navigationDestinationCoordinate = destination;
-    [self.straightLineNavigation updateNavigationLinesWithManager:self.locationManager destinationCoordinate:destination];
+//    [self.straightLineNavigation updateNavigationLinesWithManager:self.locationManager destinationCoordinate:destination];
 }
 
 - (void)mapView:(MKMapView *) mapView didDeselectAnnotationView:(MKAnnotationView *) view {

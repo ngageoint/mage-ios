@@ -9,7 +9,7 @@
 import UIKit
 import MaterialComponents
 
-class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, PersistedMapState, HasMapSettings, CanCreateObservation, CanReportLocation {
+class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, PersistedMapState, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap {
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -19,6 +19,8 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     var hasMapSettingsMixin: HasMapSettingsMixin?
     var canCreateObservationMixin: CanCreateObservationMixin?
     var canReportLocationMixin: CanReportLocationMixin?
+    var userTrackingMapMixin: UserTrackingMapMixin?
+    var userHeadingDisplayMixin: UserHeadingDisplayMixin?
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -47,6 +49,8 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, navigationController: navigationController, rootView: view, scheme: scheme)
             canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, navigationController: navigationController, rootView: view, mapStackView: mapStack, scheme: scheme, locationService: nil)
             canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 1, scheme: scheme)
+            userTrackingMapMixin = UserTrackingMapMixin(userTrackingMap: self, buttonParentView: buttonStack, indexInView: 0, scheme: scheme)
+            userHeadingDisplayMixin = UserHeadingDisplayMixin(userHeadingDisplay: self, mapStack: mapStack, scheme: scheme)
             mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
@@ -55,6 +59,8 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             mapMixins.append(hasMapSettingsMixin!)
             mapMixins.append(canCreateObservationMixin!)
             mapMixins.append(canReportLocationMixin!)
+            mapMixins.append(userTrackingMapMixin!)
+            mapMixins.append(userHeadingDisplayMixin!)
         }
         
         initiateMapMixins()
@@ -89,48 +95,6 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         buttonStack.autoPinEdge(toSuperviewMargin: .left)
     }
     
-//    - (void) addMapButtons {
-//        UIStackView *buttonStack = [[UIStackView alloc] initForAutoLayout];
-//        buttonStack.alignment = UIStackViewAlignmentFill;
-//        buttonStack.distribution = UIStackViewDistributionFill;
-//        buttonStack.spacing = 10;
-//        buttonStack.axis = UILayoutConstraintAxisVertical;
-//        buttonStack.translatesAutoresizingMaskIntoConstraints = false;
-//        buttonStack.layoutMarginsRelativeArrangement = true;
-//
-//        self.mapSettingsButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-//        [self.mapSettingsButton setImage:[UIImage imageNamed:@"layers"] forState:UIControlStateNormal];
-//        [self.mapSettingsButton addTarget:self action:@selector(mapSettingsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-//
-//        self.trackingButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-//        [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_off"] forState:UIControlStateNormal];
-//        [self.trackingButton addTarget:self action:@selector(onTrackingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-//
-//        self.reportLocationButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-//        [self.reportLocationButton setImage:[UIImage imageNamed:@"location_tracking_off"] forState:UIControlStateNormal];
-//        [self.reportLocationButton addTarget:self action:@selector(onReportLocationButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-//
-//        self.createFab = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeDefault];
-//        [self.createFab setImage:[UIImage imageNamed:@"add_location"] forState:UIControlStateNormal];
-//        [self.createFab addTarget:self action:@selector(createNewObservation:) forControlEvents:UIControlEventTouchUpInside];
-//        self.createFab.accessibilityLabel = @"New";
-//
-//        [buttonStack addArrangedSubview:self.trackingButton];
-//        [buttonStack addArrangedSubview:self.reportLocationButton];
-//
-//        [self.view insertSubview:self.mapSettingsButton aboveSubview:self.mapView];
-//        [self.mapSettingsButton autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.mapView withOffset:25];
-//        [self.mapSettingsButton autoPinEdgeToSuperviewMargin:ALEdgeRight];
-//
-//        [self.view insertSubview:buttonStack aboveSubview:self.mapView];
-//        [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.mapView withOffset:25];
-//        [buttonStack autoPinEdgeToSuperviewMargin:ALEdgeLeft];
-//
-//        [self.view insertSubview:self.createFab aboveSubview:self.mapView];
-//        [self.createFab autoPinEdge:ALEdgeBottom toEdge:ALEdgeTop ofView:self.stack withOffset:-25];
-//        [self.createFab autoPinEdgeToSuperviewMargin:ALEdgeRight];
-//    }
-    
     func setupNavigationBar() {
         let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(filterTapped(_:)))
         navigationItem.rightBarButtonItems = [filterButton]
@@ -149,7 +113,6 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         present(vc, animated: true, completion: nil)
     }
 }
-
 
 extension MainMageMapViewController : ObservationActionsDelegate {
     
