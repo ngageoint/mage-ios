@@ -62,6 +62,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         addFilteredUsers()
+        NotificationCenter.default.post(name: .LocationFiltersChanged, object: nil)
     }
     
     func addFilteredUsers() {

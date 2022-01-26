@@ -8,6 +8,7 @@
 
 import UIKit
 import MaterialComponents
+import CoreData
 
 class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, PersistedMapState, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap {
 
@@ -35,6 +36,9 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: .ViewObservation, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .ObservationFiltersChanged, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .LocationFiltersChanged, object: nil)
     }
     
     override func viewDidLoad() {
@@ -75,10 +79,19 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { [weak self] notification in
             self?.tabBarController?.selectedViewController = self
         }
+        
+        NotificationCenter.default.addObserver(forName: .ObservationFiltersChanged, object:nil, queue: .main) { [weak self] notification in
+            self?.setNavBarTitle()
+        }
+        
+        NotificationCenter.default.addObserver(forName: .LocationFiltersChanged, object:nil, queue: .main) { [weak self] notification in
+            self?.setNavBarTitle()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         setupNavigationBar()
+        setNavBarTitle()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -98,6 +111,17 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     func setupNavigationBar() {
         let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(filterTapped(_:)))
         navigationItem.rightBarButtonItems = [filterButton]
+    }
+    
+    func setNavBarTitle() {
+        guard let event = Event.getCurrentEvent(context: NSManagedObjectContext.mr_default()) else {
+            return
+        }
+        if !MageFilter.getString().isEmpty || !MageFilter.getLocationFilterString().isEmpty {
+            self.navigationItem.setTitle(event.name, subtitle: "Showing filtered results.", scheme: scheme)
+        } else {
+            self.navigationItem.setTitle(event.name, subtitle: nil, scheme: scheme)
+        }
     }
     
     @objc func filterTapped(_ sender: UIBarButtonItem) {

@@ -70,6 +70,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         addFilteredObservations()
+        NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
     }
     
     func overlays(at location: CLLocationCoordinate2D) -> [MKOverlay]? {

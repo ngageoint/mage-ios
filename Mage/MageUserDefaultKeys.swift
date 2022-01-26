@@ -23,6 +23,8 @@ extension Notification.Name {
     public static let DismissBottomSheet = Notification.Name("DismissBottomSheet")
     public static let BottomSheetDismissed = Notification.Name("BottomSheetDismissed")
     public static let GeoPackageImported = Notification.Name("mil.nga.giat.mage.geopackage.imported")
+    public static let ObservationFiltersChanged = Notification.Name("ObservationFiltersChanged")
+    public static let LocationFiltersChanged = Notification.Name("LocationFiltersChanged")
 }
 
 @objc public enum LocationDisplay : Int {
