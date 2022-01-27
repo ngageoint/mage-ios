@@ -36,7 +36,7 @@ class PersistedMapStateMixin: NSObject, MapMixin {
         }
     }
     
-    func regionDidChange(mapView: MKMapView) {
+    func regionDidChange(mapView: MKMapView, animated: Bool) {
         UserDefaults.standard.mapRegion = mapView.region
     }
 }
