@@ -10,7 +10,7 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, PersistedMapState, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap {
+class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, PersistedMapState, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap {
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -22,6 +22,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     var canReportLocationMixin: CanReportLocationMixin?
     var userTrackingMapMixin: UserTrackingMapMixin?
     var userHeadingDisplayMixin: UserHeadingDisplayMixin?
+    var staticLayerMapMixin: StaticLayerMapMixin?
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -59,6 +60,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 1, scheme: scheme)
             userTrackingMapMixin = UserTrackingMapMixin(userTrackingMap: self, buttonParentView: buttonStack, indexInView: 0, scheme: scheme)
             userHeadingDisplayMixin = UserHeadingDisplayMixin(userHeadingDisplay: self, mapStack: mapStack, scheme: scheme)
+            staticLayerMapMixin = StaticLayerMapMixin(staticLayerMap: self, scheme: scheme)
             mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
@@ -69,6 +71,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             mapMixins.append(canReportLocationMixin!)
             mapMixins.append(userTrackingMapMixin!)
             mapMixins.append(userHeadingDisplayMixin!)
+            mapMixins.append(staticLayerMapMixin!)
         }
         
         initiateMapMixins()

@@ -17,6 +17,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 + (StyledPolygon *) createWithPolygon: (MKPolygon *) polygon;
++ (StyledPolygon *) generatePolygon:(NSArray *) coordinates;
 
 + (StyledPolygon *)polygonWithPoints:(const MKMapPoint *)points count:(NSUInteger)count;
 + (StyledPolygon *)polygonWithPoints:(const MKMapPoint *)points count:(NSUInteger)count interiorPolygons:(nullable NSArray<MKPolygon *> *)interiorPolygons;

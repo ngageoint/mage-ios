@@ -72,53 +72,14 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         addFilteredObservations()
         NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
     }
-    
-    func overlays(at location: CLLocationCoordinate2D) -> [MKOverlay]? {
-        var overlays: [MKOverlay] = []
-        
-        let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = (self.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
-        
-        for lineObservation in lineObservations {
-            if lineMatches(lineObservation: lineObservation, location: location, tolerance: tolerance) {
-                overlays.append(lineObservation)
-            }
-        }
-        
-        for polygonObservation in polygonObservations {
-            if polygonMatches(polygonObservation: polygonObservation, location: location) {
-                overlays.append(polygonObservation)
-            }
-        }
-        return overlays
-    }
-    
-    func polygonMatches(polygonObservation: StyledPolygon, location: CLLocationCoordinate2D) -> Bool {
-        guard let renderer = renderer(overlay: polygonObservation) as? MKPolygonRenderer else {
-            return false
-        }
-        let mapPoint = MKMapPoint.init(location)
-        let point = renderer.point(for: mapPoint)
-        
-        var onShape = renderer.path.contains(point)
-        // If not on the polygon, check the complementary polygon path in case it crosses -180 / 180 longitude
-        if !onShape {
-            if let complementaryPath: Unmanaged<CGPath> = GPKGMapUtils.complementaryWorldPath(of: polygonObservation) {
-                let retained = complementaryPath.takeRetainedValue()
-                onShape = retained.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
-            }
-        }
-        
-        return onShape
-    }
-    
+
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
         let tolerance = (self.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
         var annotations: [Any] = []
         for lineObservation in lineObservations {
-            if lineMatches(lineObservation: lineObservation, location: location, tolerance: tolerance), let observationRemoteId = lineObservation.observationRemoteId {
+            if lineHitTest(lineObservation: lineObservation, location: location, tolerance: tolerance), let observationRemoteId = lineObservation.observationRemoteId {
                 if let observation = Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId) {
                     annotations.append(observation)
                 }
@@ -126,34 +87,13 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
         
         for polygonObservation in polygonObservations {
-            if polygonMatches(polygonObservation: polygonObservation, location: location), let observationRemoteId = polygonObservation.observationRemoteId {
+            if polygonHitTest(polygonObservation: polygonObservation, location: location), let observationRemoteId = polygonObservation.observationRemoteId {
                 if let observation = Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId) {
                     annotations.append(observation)
                 }
             }
         }
         return annotations
-    }
-    
-    func lineMatches(lineObservation: StyledPolyline, location: CLLocationCoordinate2D, tolerance: Double) -> Bool {
-        guard let renderer = renderer(overlay: lineObservation) as? MKPolylineRenderer else {
-            return false
-        }
-        let mapPoint = MKMapPoint.init(location)
-        let point = renderer.point(for: mapPoint)
-        let strokedPath = renderer.path.copy(strokingWithWidth: tolerance, lineCap: .round, lineJoin: .round, miterLimit: 1)
-        
-        var onShape = strokedPath.contains(point)
-        // If not on the line, check the complementary polygon path in case it crosses -180 / 180 longitude
-        if !onShape {
-            if let complementaryPath: Unmanaged<CGPath> = GPKGMapUtils.complementaryWorldPath(of: lineObservation) {
-                let retained = complementaryPath.takeRetainedValue()
-                let complimentaryStrokedPath = retained.copy(strokingWithWidth: tolerance, lineCap: .round, lineJoin: .round, miterLimit: 1)
-                onShape = complimentaryStrokedPath.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
-            }
-        }
-        
-        return onShape
     }
     
     func addFilteredObservations() {
@@ -207,13 +147,12 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 let shapeConverter = GPKGMapShapeConverter()
                 let shape = shapeConverter?.toShape(with: geometry)
                 if let mkpolyline = shape?.shape as? MKPolyline {
-                    if let styledPolyline = StyledPolyline.create(with: mkpolyline) {
-                        styledPolyline.lineColor = style?.strokeColor ?? .black
-                        styledPolyline.lineWidth = style?.lineWidth ?? 1
-                        styledPolyline.observationRemoteId = observation.remoteId
-                        lineObservations.append(styledPolyline)
-                        mapView?.addOverlay(styledPolyline)
-                    }
+                    let styledPolyline = StyledPolyline.create(with: mkpolyline)
+                    styledPolyline.lineColor = style?.strokeColor ?? .black
+                    styledPolyline.lineWidth = style?.lineWidth ?? 1
+                    styledPolyline.observationRemoteId = observation.remoteId
+                    lineObservations.append(styledPolyline)
+                    mapView?.addOverlay(styledPolyline)
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(with: mkpolygon)
                     styledPolygon.lineColor = style?.strokeColor ?? .black
@@ -332,27 +271,6 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let overlay = overlay as? ObservationAccuracy {
             return ObservationAccuracyRenderer(overlay: overlay)
-        } else if let polygon = overlay as? StyledPolygon {
-            let renderer = MKPolygonRenderer(polygon: polygon)
-            if let overlay = overlay as? StyledPolygon {
-                renderer.fillColor = overlay.fillColor
-                renderer.strokeColor = overlay.lineColor
-                renderer.lineWidth = overlay.lineWidth
-            } else {
-                renderer.strokeColor = .black
-                renderer.lineWidth = 1
-            }
-            return renderer
-        } else if let polyline = overlay as? StyledPolyline {
-            let renderer = MKPolylineRenderer(polyline: polyline)
-            if let overlay = overlay as? StyledPolyline {
-                renderer.strokeColor = overlay.lineColor
-                renderer.lineWidth = overlay.lineWidth
-            } else {
-                renderer.strokeColor = .black
-                renderer.lineWidth = 1
-            }
-            return renderer
         }
         return nil
     }

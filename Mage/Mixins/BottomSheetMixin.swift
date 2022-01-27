@@ -62,13 +62,15 @@ class BottomSheetMixin: NSObject, MapMixin {
         var bottomSheetItems: [BottomSheetItem] = []
         if let items = items {
             for item in items {
-                if let observation = item as? Observation {
-                    let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: self, annotationView: nil)
-                    bottomSheetItems.append(bottomSheetItem)
-                } else if let location = item as? Location {
-                    let bottomSheetItem = BottomSheetItem(item: location, actionDelegate: self, annotationView: nil)
-                    bottomSheetItems.append(bottomSheetItem)
-                }
+                let bottomSheetItem = BottomSheetItem(item: item, actionDelegate: self, annotationView: nil)
+                bottomSheetItems.append(bottomSheetItem)
+//                if let observation = item as? Observation {
+//                    let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: self, annotationView: nil)
+//                    bottomSheetItems.append(bottomSheetItem)
+//                } else if let location = item as? Location {
+//                    let bottomSheetItem = BottomSheetItem(item: location, actionDelegate: self, annotationView: nil)
+//                    bottomSheetItems.append(bottomSheetItem)
+//                }
             }
         }
         return bottomSheetItems

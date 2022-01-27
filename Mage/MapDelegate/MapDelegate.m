@@ -1301,7 +1301,7 @@
                     [annotations addObject:annotation];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Polygon"]) {
                     NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
-                    StyledPolygon *polygon = [MapUtils generatePolygon:coordinates];
+                    StyledPolygon *polygon = [StyledPolygon generatePolygon:coordinates];
                     
                     CGFloat fillAlpha = 1.0f;
                     id fillOpacity = [feature valueForKeyPath:@"properties.style.polyStyle.color.opacity"];
@@ -1331,7 +1331,7 @@
                     [_mapView addOverlay:polygon];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"LineString"]) {
                     NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
-                    StyledPolyline *polyline = [MapUtils generatePolyline:coordinates];
+                    StyledPolyline *polyline = [StyledPolyline generatePolyline:coordinates];
                     
                     CGFloat alpha = 1.0f;
                     id opacity = [feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"];

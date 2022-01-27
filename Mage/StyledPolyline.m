@@ -10,6 +10,20 @@
 
 @implementation StyledPolyline
 
++ (StyledPolyline *) generatePolyline:(NSArray *) path {
+    NSUInteger numberOfSteps = path.count;
+    
+    CLLocationCoordinate2D coordinates[numberOfSteps];
+    
+    for (NSInteger index = 0; index < numberOfSteps; index++) {
+        NSNumber *y = path[index][0];
+        NSNumber *x = path[index][1];
+        coordinates[index] = CLLocationCoordinate2DMake([x doubleValue], [y doubleValue]);
+    }
+    
+    return [StyledPolyline polylineWithCoordinates:coordinates count:path.count];
+}
+
 + (StyledPolyline *) createWithPolyline: (MKPolyline *) polyline {
     StyledPolyline * styledPolyline = [StyledPolyline polylineWithPoints:[polyline points] count:polyline.pointCount];
     [styledPolyline setTitle:polyline.title];

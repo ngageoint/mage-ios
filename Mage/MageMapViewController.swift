@@ -118,7 +118,6 @@ extension MageMapViewController : MKMapViewDelegate {
                 return renderer
             }
         }
-        
         return MKTileOverlayRenderer(overlay: overlay)
     }
     

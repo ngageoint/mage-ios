@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import geopackage_ios
 
 protocol MapMixin {
     var mapView: MKMapView? { get set }
@@ -24,7 +25,70 @@ protocol MapMixin {
 
 extension MapMixin {
     
+    func polygonHitTest(polygonObservation: StyledPolygon, location: CLLocationCoordinate2D) -> Bool {
+        guard let renderer = renderer(overlay: polygonObservation) as? MKPolygonRenderer else {
+            return false
+        }
+        let mapPoint = MKMapPoint.init(location)
+        let point = renderer.point(for: mapPoint)
+        
+        var onShape = renderer.path.contains(point)
+        // If not on the polygon, check the complementary polygon path in case it crosses -180 / 180 longitude
+        if !onShape {
+            if let complementaryPath: Unmanaged<CGPath> = GPKGMapUtils.complementaryWorldPath(of: polygonObservation) {
+                let retained = complementaryPath.takeRetainedValue()
+                onShape = retained.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
+            }
+        }
+        
+        return onShape
+    }
+    
+    func lineHitTest(lineObservation: StyledPolyline, location: CLLocationCoordinate2D, tolerance: Double) -> Bool {
+        guard let renderer = renderer(overlay: lineObservation) as? MKPolylineRenderer else {
+            return false
+        }
+        let mapPoint = MKMapPoint.init(location)
+        let point = renderer.point(for: mapPoint)
+        let strokedPath = renderer.path.copy(strokingWithWidth: tolerance, lineCap: .round, lineJoin: .round, miterLimit: 1)
+        
+        var onShape = strokedPath.contains(point)
+        // If not on the line, check the complementary polygon path in case it crosses -180 / 180 longitude
+        if !onShape {
+            if let complementaryPath: Unmanaged<CGPath> = GPKGMapUtils.complementaryWorldPath(of: lineObservation) {
+                let retained = complementaryPath.takeRetainedValue()
+                let complimentaryStrokedPath = retained.copy(strokingWithWidth: tolerance, lineCap: .round, lineJoin: .round, miterLimit: 1)
+                onShape = complimentaryStrokedPath.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
+            }
+        }
+        
+        return onShape
+    }
+    
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
+        // standard renderers
+        if let polygon = overlay as? StyledPolygon {
+            let renderer = MKPolygonRenderer(polygon: polygon)
+            if let overlay = overlay as? StyledPolygon {
+                renderer.fillColor = overlay.fillColor
+                renderer.strokeColor = overlay.lineColor
+                renderer.lineWidth = overlay.lineWidth
+            } else {
+                renderer.strokeColor = .black
+                renderer.lineWidth = 1
+            }
+            return renderer
+        } else if let polyline = overlay as? StyledPolyline {
+            let renderer = MKPolylineRenderer(polyline: polyline)
+            if let overlay = overlay as? StyledPolyline {
+                renderer.strokeColor = overlay.lineColor
+                renderer.lineWidth = overlay.lineWidth
+            } else {
+                renderer.strokeColor = .black
+                renderer.lineWidth = 1
+            }
+            return renderer
+        }
         return nil
     }
     

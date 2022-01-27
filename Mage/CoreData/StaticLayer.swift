@@ -11,6 +11,54 @@ import CoreData
 
 @objc public class StaticLayer : Layer {
     
+    public var features: [[AnyHashable: Any]]? {
+        get {
+            return data?["features"] as? [[AnyHashable: Any]]
+        }
+    }
+    
+    func featureName(feature: [AnyHashable : Any]) -> String? {
+        return (feature["properties"] as? [AnyHashable : Any])?["name"] as? String
+    }
+    
+    func featureDescription(feature: [AnyHashable : Any]) -> String? {
+        return (feature["properties"] as? [AnyHashable : Any])?["description"] as? String
+    }
+    
+    func featureType(feature: [AnyHashable : Any]) -> String? {
+        return (feature["geometry"] as? [AnyHashable : Any])?["type"] as? String
+    }
+    
+    func featureCoordinates(feature: [AnyHashable : Any]) -> [Any]? {
+        return (feature["geometry"] as? [AnyHashable : Any])?["coordinates"] as? [Any]
+    }
+    
+    func featureFillOpacity(feature: [AnyHashable : Any]) -> Double {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.polyStyle.color.opacity") as? Double ?? 255.0
+    }
+    
+    func featureFillColor(feature: [AnyHashable : Any]) -> String {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.polyStyle.color.rgb") as? String ?? "#000000"
+    }
+    
+    func featureLineOpacity(feature: [AnyHashable : Any]) -> Double {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.color.opacity") as? Double ?? 255.0
+    }
+    
+    func featureLineColor(feature: [AnyHashable : Any]) -> String {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.color.rgb") as? String ?? "#000000"
+    }
+    
+    func featureLineWidth(feature: [AnyHashable : Any]) -> Double {
+        let width = (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.width")
+        if let doubleWidth = width as? Double {
+            return doubleWidth
+        } else if let stringWidth = width as? String {
+            return Double(stringWidth) ?? 1.0
+        }
+        return 1.0
+    }
+    
     @objc public static let StaticLayerLoaded = "mil.nga.giat.mage.static.layer.loaded";
     
     @objc public static func operationToFetchStaticLayerData(layer: StaticLayer, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
