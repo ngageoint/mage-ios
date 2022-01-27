@@ -73,10 +73,10 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         }
         
         if let locations = locations,
-           let locationPredicates = Locations.getPredicatesForLocations() as? [NSPredicate] {
+           let locationPredicates = Locations.getPredicatesForLocationsForMap() as? [NSPredicate] {
             locations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: locationPredicates)
         } else {
-            locations = Locations.forAllUsers()
+            locations = Locations.forMap()
             locations?.delegate = self
         }
         
@@ -145,8 +145,6 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
             annotationView.centerOffset = CGPoint(x: 0, y: -(annotationView.image?.size.height ?? 0))
         }
         annotationView.canShowCallout = false;
-        //        annotationView.hidden = self.hideLocations;
-        //        annotationView.accessibilityElementsHidden = self.hideLocations;
         annotationView.isEnabled = false;
         annotationView.accessibilityLabel = "Location Annotation \(locationAnnotation.user?.objectID.uriRepresentation().absoluteString ?? "")";
         return annotationView;
