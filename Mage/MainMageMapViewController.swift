@@ -45,6 +45,10 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         super.viewDidLoad()
 
         if let mapView = mapView {
+            self.view.insertSubview(buttonStack, aboveSubview: mapView)
+            buttonStack.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
+            buttonStack.autoPinEdge(toSuperviewMargin: .left)
+            
             filteredObservationsMapMixin = FilteredObservationsMapMixin(mapView: mapView, scheme: scheme)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
             bottomSheetMixin = BottomSheetMixin(mapView: mapView, navigationController: self.navigationController, scheme: scheme)
@@ -68,7 +72,6 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         }
         
         initiateMapMixins()
-        addMapButtons()
         
         NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
             if let observation = notification.object as? Observation {
@@ -96,16 +99,6 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
-    }
-    
-    func addMapButtons() {
-        guard let mapView = mapView else {
-            return
-        }
-        
-        self.view.insertSubview(buttonStack, aboveSubview: mapView)
-        buttonStack.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
-        buttonStack.autoPinEdge(toSuperviewMargin: .left)
     }
     
     func setupNavigationBar() {
