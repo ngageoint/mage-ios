@@ -11,6 +11,39 @@ import Kingfisher
 
 @objc class PersonAnnotationView: MKMarkerAnnotationView {
     
+    @objc override var annotation: MKAnnotation? {
+        didSet {
+            if let annotation = self.annotation as? LocationAnnotation, let user = annotation.user {
+                
+                if let iconColor = user.iconColor {
+                    self.markerTintColor = UIColor(hex: iconColor);
+                    self.glyphText = user.iconText;
+                } else {
+                    self.glyphImage = UIImage(named: "me")
+                    self.markerTintColor = scheme?.colorScheme.primaryColor;
+                }
+                
+                for subview in subviews {
+                    if subview.accessibilityLabel == "circle" {
+                        subview.removeFromSuperview()
+                    }
+                }
+                
+                if let circleImage = PersonAnnotationView.circleWithColor(color: PersonAnnotationView.colorForUser(user: user)) {
+                    let circleView = UIImageView(image: circleImage);
+                    self.addSubview(circleView);
+                    circleView.accessibilityLabel = "circle"
+                    circleView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -5);
+                    circleView.autoAlignAxis(toSuperviewAxis: .vertical);
+                    circleView.layer.zPosition = -1.0;
+                }
+            } else {
+                self.glyphImage = UIImage(named: "me")
+                self.markerTintColor = scheme?.colorScheme.primaryColor;
+            }
+        }
+    }
+    
     @objc public var scheme: MDCContainerScheming?
     
     static func circleWithColor(color: UIColor) -> UIImage? {
@@ -100,18 +133,29 @@ import Kingfisher
                     switch result {
                     case .success(let value):
                         if let cgImage = value.image.cgImage {
+                            self.glyphText = nil
                             let scale = value.image.size.width / 37;
                             let image: UIImage = UIImage(cgImage: cgImage, scale: scale, orientation: value.image.imageOrientation)
                             self.image = image;
                             self.glyphTintColor = .clear;
                             self.markerTintColor = .clear;
+                        } else if let iconColor = user.iconColor {
+                            self.markerTintColor = UIColor(hex: iconColor);
+                            self.glyphText = user.iconText;
                         } else {
+                            self.glyphText = nil
                             self.glyphImage = UIImage(named: "me")
                             self.markerTintColor = self.scheme?.colorScheme.primaryColor;
                         }
                     case .failure(_):
-                        self.glyphImage = UIImage(named: "me")
-                        self.markerTintColor = self.scheme?.colorScheme.primaryColor;
+                        if let iconColor = user.iconColor {
+                            self.markerTintColor = UIColor(hex: iconColor);
+                            self.glyphText = user.iconText;
+                        } else {
+                            self.glyphText = nil
+                            self.glyphImage = UIImage(named: "me")
+                            self.markerTintColor = self.scheme?.colorScheme.primaryColor;
+                        }
                     }
                 }
             } else {
@@ -119,9 +163,16 @@ import Kingfisher
                 self.markerTintColor = scheme?.colorScheme.primaryColor;
             }
             
+            for subview in subviews {
+                if subview.accessibilityLabel == "circle" {
+                    subview.removeFromSuperview()
+                }
+            }
+            
             if let circleImage = PersonAnnotationView.circleWithColor(color: PersonAnnotationView.colorForUser(user: user)) {
                 let circleView = UIImageView(image: circleImage);
                 self.addSubview(circleView);
+                circleView.accessibilityLabel = "circle"
                 circleView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -5);
                 circleView.autoAlignAxis(toSuperviewAxis: .vertical);
                 circleView.layer.zPosition = -1.0;
