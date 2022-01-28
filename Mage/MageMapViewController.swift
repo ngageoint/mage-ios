@@ -84,19 +84,28 @@ class MageMapViewController: UIViewController, GeoPackageBaseMap {
     
     @objc func singleTapGensture(tapGestureRecognizer: UITapGestureRecognizer) {
         if tapGestureRecognizer.state == .ended {
-            mapTap(tapPoint: tapGestureRecognizer.location(in: mapView))
+            mapTap(tapPoint: tapGestureRecognizer.location(in: mapView), gesture: tapGestureRecognizer)
         }
     }
     
-    func mapTap(tapPoint:CGPoint) {
+    func mapTap(tapPoint:CGPoint, gesture: UITapGestureRecognizer) {
         print("Map tap \(tapPoint)")
         
         guard let tapCoord = self.mapView?.convert(tapPoint, toCoordinateFrom: mapView) else {
             return
         }
-        let mapPoint = MKMapPoint(tapCoord)
-        let tolerance = GPKGMapUtils.tolerance(with: tapPoint, andMapView: mapView!, andScreenPercentage: 0.02).screen
-        let annotationsTapped = mapView?.annotations(in: MKMapRect(x: mapPoint.x - (tolerance / 2), y: mapPoint.y - (tolerance / 2), width: tolerance, height: tolerance))
+        var annotationsTapped: Set<MapAnnotation> = Set()
+        if let visibleMapRect = mapView?.visibleMapRect, let annotationsVisible = mapView?.annotations(in: visibleMapRect) {
+            
+            for annotation in annotationsVisible {
+                if let annotation = annotation as? MapAnnotation, let view = mapView?.view(for: annotation) {
+                    let location = gesture.location(in: view)
+                    if view.bounds.contains(location) {
+                        annotationsTapped.insert(annotation)
+                    }
+                }
+            }
+        }
         
         var items: [Any] = []
         for mixin in mapMixins {
