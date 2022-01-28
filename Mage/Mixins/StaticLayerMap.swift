@@ -22,6 +22,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?
     var staticLayers: [NSNumber:[Any]] = [:]
+    var enlargedAnnotationView: MKAnnotationView?
     
     init(staticLayerMap: StaticLayerMap, scheme: MDCContainerScheming?) {
         self.staticLayerMap = staticLayerMap
@@ -34,6 +35,9 @@ class StaticLayerMapMixin: NSObject, MapMixin {
     }
     
     func setupMixin() {
+        NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
+            self?.focusAnnotation(annotation: (notification.object as? MapAnnotationFocusedNotification)?.annotation)
+        }
         UserDefaults.standard.addObserver(self, forKeyPath: "selectedStaticLayers", options: [.new], context: nil)
         updateStaticLayers()
     }
@@ -154,5 +158,49 @@ class StaticLayerMapMixin: NSObject, MapMixin {
             }
         }
         return annotations
+    }
+    
+    func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
+        guard let annotation = annotation as? StaticPointAnnotation else {
+            return nil
+        }
+        
+        return annotation.viewForAnnotation(on: mapView, scheme: scheme)
+    }
+    
+    func focusAnnotation(annotation: MKAnnotation?) {
+        guard let annotation = annotation as? StaticPointAnnotation,
+              let annotationView = mapView?.view(for: annotation) else {
+                  if let enlargedAnnotationView = enlargedAnnotationView {
+                      // shrink the old focused view
+                      UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
+                          enlargedAnnotationView.transform = enlargedAnnotationView.transform.scaledBy(x: 0.5, y: 0.5)
+                          enlargedAnnotationView.centerOffset = CGPoint(x: 0, y: enlargedAnnotationView.centerOffset.y / 2.0)
+                      } completion: { success in
+                      }
+                      self.enlargedAnnotationView = nil
+                  }
+                  return
+              }
+        
+        if annotationView == enlargedAnnotationView {
+            // already focused ignore
+            return
+        } else if let enlargedLocationView = enlargedAnnotationView {
+            // shrink the old focused view
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
+                enlargedLocationView.transform = enlargedLocationView.transform.scaledBy(x: 0.5, y: 0.5)
+                enlargedLocationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y / 2.0)
+            } completion: { success in
+            }
+        }
+        
+        enlargedAnnotationView = annotationView
+        
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
+            annotationView.transform = annotationView.transform.scaledBy(x: 2.0, y: 2.0)
+            annotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y * 2.0)
+        } completion: { success in
+        }
     }
 }

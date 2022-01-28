@@ -18,7 +18,11 @@ import Kingfisher
         self.featureTitle = (annotation.feature["properties"] as? [AnyHashable : Any])?["name"] as? String
         self.layerName = annotation.layerName
         if let iconUrl = annotation.iconUrl {
-            self.iconURL = URL(string: iconUrl);
+            if iconUrl.hasPrefix("http") {
+                self.iconURL = URL(string: iconUrl)
+            } else {
+                self.iconURL = URL(fileURLWithPath: "\(FeatureItem.getDocumentsDirectory())/\(iconUrl)")
+            }
         }
     }
     
@@ -39,6 +43,12 @@ import Kingfisher
     @objc public var iconURL: URL?;
     @objc public var images: [UIImage]?;
     @objc public var layerName: String?
+    
+    static func getDocumentsDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory as String
+    }
 }
 
 class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate> {

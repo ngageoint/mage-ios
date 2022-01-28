@@ -64,13 +64,6 @@ class BottomSheetMixin: NSObject, MapMixin {
             for item in items {
                 let bottomSheetItem = BottomSheetItem(item: item, actionDelegate: self, annotationView: nil)
                 bottomSheetItems.append(bottomSheetItem)
-//                if let observation = item as? Observation {
-//                    let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: self, annotationView: nil)
-//                    bottomSheetItems.append(bottomSheetItem)
-//                } else if let location = item as? Location {
-//                    let bottomSheetItem = BottomSheetItem(item: location, actionDelegate: self, annotationView: nil)
-//                    bottomSheetItems.append(bottomSheetItem)
-//                }
             }
         }
         return bottomSheetItems
@@ -91,9 +84,6 @@ class BottomSheetMixin: NSObject, MapMixin {
 
         for annotation in annotations {
             if let annotation = annotation as? ObservationAnnotation {
-//                if self.hideObservations {
-//                    continue
-//                }
                 if let observation = annotation.observation, !dedup.contains(observation) {
                     _ = dedup.insert(observation)
                     let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: nil, annotationView: annotation.view)
@@ -103,6 +93,13 @@ class BottomSheetMixin: NSObject, MapMixin {
                 if let user = annotation.user, !dedup.contains(user) {
                     _ = dedup.insert(user)
                     let bottomSheetItem = BottomSheetItem(item: user, actionDelegate: nil, annotationView: annotation.view)
+                    items.insert(bottomSheetItem)
+                }
+            } else if let annotation = annotation as? StaticPointAnnotation {
+                let featureItem = FeatureItem(annotation: annotation)
+                if !dedup.contains(featureItem) {
+                    _ = dedup.insert(featureItem)
+                    let bottomSheetItem = BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: mapView?.view(for: annotation))
                     items.insert(bottomSheetItem)
                 }
             }

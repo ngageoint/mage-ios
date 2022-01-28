@@ -210,8 +210,6 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             annotationView.centerOffset = CGPoint(x: 0, y: -(annotationView.image?.size.height ?? 0))
         }
         annotationView.canShowCallout = false;
-//        annotationView.hidden = self.hideObservations;
-//        annotationView.accessibilityElementsHidden = self.hideObservations;
         annotationView.isEnabled = false;
         annotationView.accessibilityLabel = "Observation Annotation \(observationAnnotation.observation?.objectID.uriRepresentation().absoluteString ?? "")";
         return annotationView;
