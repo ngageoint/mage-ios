@@ -65,7 +65,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                 }
                 var annotations: [Any] = []
                 for feature in features {
-                    guard let featureType = staticLayer.featureType(feature: feature) else {
+                    guard let featureType = StaticLayer.featureType(feature: feature) else {
                         continue
                     }
                     if featureType == "Point" {
@@ -75,36 +75,36 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             annotations.append(annotation)
                         }
                     } else if featureType == "Polygon" {
-                        if let coordinates = staticLayer.featureCoordinates(feature: feature) {
+                        if let coordinates = StaticLayer.featureCoordinates(feature: feature) {
                             let polygon = StyledPolygon.generate(coordinates)
-                            let fillOpacity = staticLayer.featureFillOpacity(feature: feature)
+                            let fillOpacity = StaticLayer.featureFillOpacity(feature: feature)
                             let fillAlpha = fillOpacity / 255.0
-                            polygon.fillColor(withHexString: staticLayer.featureFillColor(feature: feature), andAlpha: fillAlpha)
+                            polygon.fillColor(withHexString: StaticLayer.featureFillColor(feature: feature), andAlpha: fillAlpha)
                             
                             let lineOpacity = staticLayer.featureLineOpacity(feature: feature)
                             let lineAlpha = lineOpacity / 255.0
-                            polygon.lineColor(withHexString: staticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
+                            polygon.lineColor(withHexString: StaticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
                             
-                            polygon.lineWidth = staticLayer.featureLineWidth(feature: feature)
+                            polygon.lineWidth = StaticLayer.featureLineWidth(feature: feature)
                             
-                            polygon.title = staticLayer.featureName(feature: feature)
-                            polygon.subtitle = staticLayer.featureDescription(feature: feature)
+                            polygon.title = StaticLayer.featureName(feature: feature)
+                            polygon.subtitle = StaticLayer.featureDescription(feature: feature)
                             
                             annotations.append(polygon)
                             mapView?.addOverlay(polygon)
                         }
                     } else if featureType == "LineString" {
-                        if let coordinates = staticLayer.featureCoordinates(feature: feature) {
+                        if let coordinates = StaticLayer.featureCoordinates(feature: feature) {
                             let polyline = StyledPolyline.generate(coordinates)
                             
                             let lineOpacity = staticLayer.featureLineOpacity(feature: feature)
                             let lineAlpha = lineOpacity / 255.0
-                            polyline.lineColor(withHexString: staticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
+                            polyline.lineColor(withHexString: StaticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
                             
-                            polyline.lineWidth = staticLayer.featureLineWidth(feature: feature)
+                            polyline.lineWidth = StaticLayer.featureLineWidth(feature: feature)
                             
-                            polyline.title = staticLayer.featureName(feature: feature)
-                            polyline.subtitle = staticLayer.featureDescription(feature: feature)
+                            polyline.title = StaticLayer.featureName(feature: feature)
+                            polyline.subtitle = StaticLayer.featureDescription(feature: feature)
                             
                             annotations.append(polyline)
                             mapView?.addOverlay(polyline)

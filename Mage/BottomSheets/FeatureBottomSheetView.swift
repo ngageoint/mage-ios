@@ -34,7 +34,18 @@ class FeatureBottomSheetView: BottomSheetView {
         textView.dataDetectorTypes = .all;
         textView.isEditable = false;
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8);
+        textView.backgroundColor = .clear
         return textView;
+    }()
+    
+    lazy var descriptionHeader: CardHeader = {
+        return CardHeader(headerText: "DESCRIPTION")
+    }()
+    
+    lazy var spacer: UIView = {
+        let spacer = UIView()
+        spacer.autoSetDimension(.height, toSize: 8)
+        return spacer
     }()
     
     private lazy var featureTitleView: UILabel = {
@@ -54,7 +65,7 @@ class FeatureBottomSheetView: BottomSheetView {
     }()
     
     private lazy var featureActionsView: FeatureActionsView = {
-        let view = FeatureActionsView(location: featureItem.coordinate, title: featureItem.featureTitle, featureActionsDelegate: actionsDelegate, scheme: scheme);
+        let view = FeatureActionsView(featureItem: featureItem, featureActionsDelegate: actionsDelegate, scheme: scheme);
         return view;
     }()
     
@@ -78,6 +89,8 @@ class FeatureBottomSheetView: BottomSheetView {
         self.backgroundColor = scheme.colorScheme.surfaceColor;
         textView.textColor = scheme.colorScheme.onSurfaceColor;
         textView.font = scheme.typographyScheme.body1;
+        spacer.backgroundColor = scheme.colorScheme.backgroundColor
+        descriptionHeader.applyTheme(withScheme: scheme)
         summaryView.applyTheme(withScheme: scheme);
         self.scheme = scheme;
     }
@@ -85,6 +98,8 @@ class FeatureBottomSheetView: BottomSheetView {
     func createView() {
         stackView.addArrangedSubview(summaryView);
         stackView.addArrangedSubview(featureActionsView);
+        stackView.addArrangedSubview(spacer)
+        stackView.addArrangedSubview(descriptionHeader)
         stackView.addArrangedSubview(textView);
         self.addSubview(stackView);
         
@@ -92,7 +107,12 @@ class FeatureBottomSheetView: BottomSheetView {
             applyTheme(withScheme: scheme);
         }
         
-        textView.attributedText = getAttributedMessage();
+        if featureItem.featureDetail != nil {
+            textView.attributedText = getAttributedMessage();
+        } else {
+            spacer.isHidden = true
+            descriptionHeader.isHidden = true
+        }
         summaryView.populate(item: featureItem);
         
         self.setNeedsUpdateConstraints();
@@ -108,19 +128,7 @@ class FeatureBottomSheetView: BottomSheetView {
     }
     
     func getAttributedMessage() -> NSAttributedString {
-        if (featureItem.featureDetail != nil) {
-            let data = Data(featureItem.featureDetail!.utf8);
-            if let attributedString = try? NSMutableAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
-                if let surfaceColor = self.scheme?.colorScheme.onSurfaceColor {
-                    attributedString.addAttribute(.foregroundColor, value: surfaceColor, range: NSMakeRange(0, attributedString.length));
-                }
-                if let font = self.scheme?.typographyScheme.body1 {
-                    attributedString.addAttribute(.font, value: font, range: NSMakeRange(0, attributedString.length));
-                }
-                return attributedString
-            }
-        }
-        return NSAttributedString(string: "");
+        return featureItem.featureDetail?.htmlAttributedString(font: self.scheme?.typographyScheme.body1, color: self.scheme?.colorScheme.onSurfaceColor) ?? NSAttributedString(string: "")
     }
     
     override func refresh() {

@@ -301,6 +301,7 @@
 		F7489B3927A09D7D00A9E314 /* UserTrackingMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B3827A09D7D00A9E314 /* UserTrackingMap.swift */; };
 		F7489B3B27A1A31000A9E314 /* UserHeadingDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B3A27A1A31000A9E314 /* UserHeadingDisplay.swift */; };
 		F7489B3F27A2FE8100A9E314 /* StaticLayerMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B3E27A2FE8100A9E314 /* StaticLayerMap.swift */; };
+		F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7489B4027A48B0D00A9E314 /* StringExtensions.swift */; };
 		F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */; };
 		F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */; };
 		F74F026025DF0280006BCF23 /* DisplaySettingsHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = F74F025E25DF0280006BCF23 /* DisplaySettingsHeader.m */; };
@@ -1006,6 +1007,7 @@
 		F7489B3827A09D7D00A9E314 /* UserTrackingMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTrackingMap.swift; sourceTree = "<group>"; };
 		F7489B3A27A1A31000A9E314 /* UserHeadingDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHeadingDisplay.swift; sourceTree = "<group>"; };
 		F7489B3E27A2FE8100A9E314 /* StaticLayerMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerMap.swift; sourceTree = "<group>"; };
+		F7489B4027A48B0D00A9E314 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangePasswordView.xib; sourceTree = "<group>"; };
 		F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
 		F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
@@ -2077,6 +2079,7 @@
 				F70D1BF427299BC800B8015C /* ArrayExtensions.swift */,
 				F781609C273EE1A50055B5D2 /* ObjC.h */,
 				F781609D273EE1A50055B5D2 /* ObjC.m */,
+				F7489B4027A48B0D00A9E314 /* StringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3405,6 +3408,7 @@
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
+				F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
 				F7D4F58727597C25004EA263 /* Form+CoreDataProperties.swift in Sources */,

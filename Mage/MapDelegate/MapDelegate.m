@@ -1524,7 +1524,7 @@
         self.straightLineNavigation = [[StraightLineNavigation alloc] initWithMapView:self.mapView locationManager:self.locationManager mapStack:self.mapStack];
     }
     [self.straightLineNavigation stopNavigation];
-    [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination delegate:self image:image scheme:self.scheme];
+    [self.straightLineNavigation startNavigationWithManager:self.locationManager destinationCoordinate:destination delegate:self image:image imageURL: nil scheme:self.scheme];
 }
 
 - (void) updateStraightLineNavigationDestination: (CLLocationCoordinate2D) destination {

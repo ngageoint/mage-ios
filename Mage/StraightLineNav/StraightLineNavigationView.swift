@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import UIKit
+import Kingfisher
 
 @objc class StraightLineNavigationView: UIView {
     var didSetupConstraints = false;
@@ -28,6 +29,39 @@ import UIKit
     var compassView: CompassView?;
     
     let navigation = UIImageView(image: UIImage(named: "navigation"))
+        
+    var destinationMarkerUrl: URL? {
+        get {
+            return nil
+        }
+        set {
+            guard let newValue = newValue else {
+                return
+            }
+            let processor = DownsamplingImageProcessor(size: CGSize(width: 40, height: 40))
+
+            destinationMarkerView.kf.indicatorType = .activity
+            destinationMarkerView.kf.setImage(
+                with: newValue,
+                options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ])
+            {
+                result in
+                
+                switch result {
+                case .success(_):
+                    self.setNeedsLayout()
+                case .failure(let error):
+                    print("Job failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
     
     private lazy var directionArrow: UIView = {
         let view = UIView.newAutoLayout();
@@ -116,6 +150,9 @@ import UIKit
         speedLabel.font = scheme?.typographyScheme.overline;
         distanceToTargetLabel.font = scheme?.typographyScheme.headline6;
         relativeBearingToTargetLabel.font = scheme?.typographyScheme.headline6;
+        
+        headingLabel.textColor = self.headingColor;
+        navigation.tintColor = self.relativeBearingColor
         
         compassView?.applyTheme(withScheme: scheme);
     }

@@ -10,6 +10,7 @@ import Foundation
 
 struct StraightLineNavigationNotification {
     var image: UIImage? = nil
+    var imageURL: URL? = nil
     var title: String? = nil
     var coordinate: CLLocationCoordinate2D
     var user: User? = nil
@@ -48,12 +49,13 @@ struct StraightLineNavigationNotification {
         self.mapStack = mapStack;
     }
     
-    @objc func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, scheme: MDCContainerScheming? = nil) {
+    @objc func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, imageURL: URL?, scheme: MDCContainerScheming? = nil) {
         navigationModeEnabled = true;
         headingModeEnabled = true;
         
         updateNavigationLines(manager: manager, destinationCoordinate: destinationCoordinate);
         navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: relativeBearingColor, bearingColor: headingColor);
+        navView?.destinationMarkerUrl = imageURL
         self.delegate = delegate;
         mapStack.addArrangedSubview(navView!);
     }

@@ -79,7 +79,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
     }()
     
     private lazy var featureActionsView: FeatureActionsView = {
-        let view = FeatureActionsView(location: nil, title: nil, featureActionsDelegate: actionsDelegate, scheme: scheme);
+        let view = FeatureActionsView(geoPackageFeatureItem: featureItem, featureActionsDelegate: actionsDelegate, scheme: scheme);
         return view;
     }()
     

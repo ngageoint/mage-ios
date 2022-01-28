@@ -78,7 +78,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
         }
         
         straightLineNavigation?.stopNavigation()
-        straightLineNavigation?.startNavigation(manager: locationManager, destinationCoordinate: notification.coordinate, delegate: self, image: notification.image, scheme: scheme)
+        straightLineNavigation?.startNavigation(manager: locationManager, destinationCoordinate: notification.coordinate, delegate: self, image: notification.image, imageURL: notification.imageURL, scheme: scheme)
     }
     
     func updateStraightLineNavigationDestination(destination: CLLocationCoordinate2D) {
@@ -98,6 +98,15 @@ class MapDirectionsMixin: NSObject, MapMixin {
             image = ObservationImage.image(observation: observation)
         }
         
+        if let notificationLocation = notification.location {
+            location = notificationLocation
+        }
+        
+        if let notificationAnnotation = notification.annotation, let coordinate = notificationAnnotation.annotation?.coordinate {
+            location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            image = notificationAnnotation.image
+        }
+                
         guard let location = location else {
             return;
         }
@@ -110,6 +119,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
             straightLineNavigationNotification.user = notification.user
             straightLineNavigationNotification.title = title
             straightLineNavigationNotification.image = image
+            straightLineNavigationNotification.imageURL = notification.imageUrl
             
             self.startStraightLineNavigation(notification: straightLineNavigationNotification)
         }));

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct MapAnnotationFocusedNotification {
     var annotation: MKAnnotation?
@@ -21,4 +22,8 @@ struct DirectionsToItemNotification {
     var observation: Observation?
     var user: User?
     var feedItem: FeedItem?
+    var location: CLLocation?
+    var annotation: MKAnnotationView?
+    var image: UIImage?
+    var imageUrl: URL?
 }

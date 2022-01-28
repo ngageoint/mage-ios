@@ -17,27 +17,38 @@ import CoreData
         }
     }
     
-    func featureName(feature: [AnyHashable : Any]) -> String? {
+    static func featureName(feature: [AnyHashable : Any]) -> String? {
         return (feature["properties"] as? [AnyHashable : Any])?["name"] as? String
     }
     
-    func featureDescription(feature: [AnyHashable : Any]) -> String? {
+    static func featureDescription(feature: [AnyHashable : Any]) -> String? {
         return (feature["properties"] as? [AnyHashable : Any])?["description"] as? String
     }
     
-    func featureType(feature: [AnyHashable : Any]) -> String? {
+    static func featureTimestamp(feature: [AnyHashable : Any]) -> Date? {
+        guard let timestamp = (feature["properties"] as? [AnyHashable : Any])?["timestamp"] as? String else {
+            return nil
+        }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withTime, .withColonSeparatorInTime, .withTimeZone];
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
+        let lastModifiedDate = formatter.date(from: timestamp) ?? Date();
+        return lastModifiedDate
+    }
+    
+    static func featureType(feature: [AnyHashable : Any]) -> String? {
         return (feature["geometry"] as? [AnyHashable : Any])?["type"] as? String
     }
     
-    func featureCoordinates(feature: [AnyHashable : Any]) -> [Any]? {
+    static func featureCoordinates(feature: [AnyHashable : Any]) -> [Any]? {
         return (feature["geometry"] as? [AnyHashable : Any])?["coordinates"] as? [Any]
     }
     
-    func featureFillOpacity(feature: [AnyHashable : Any]) -> Double {
+    static func featureFillOpacity(feature: [AnyHashable : Any]) -> Double {
         return (feature as NSDictionary).value(forKeyPath: "properties.style.polyStyle.color.opacity") as? Double ?? 255.0
     }
     
-    func featureFillColor(feature: [AnyHashable : Any]) -> String {
+    static func featureFillColor(feature: [AnyHashable : Any]) -> String {
         return (feature as NSDictionary).value(forKeyPath: "properties.style.polyStyle.color.rgb") as? String ?? "#000000"
     }
     
@@ -45,11 +56,11 @@ import CoreData
         return (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.color.opacity") as? Double ?? 255.0
     }
     
-    func featureLineColor(feature: [AnyHashable : Any]) -> String {
+    static func featureLineColor(feature: [AnyHashable : Any]) -> String {
         return (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.color.rgb") as? String ?? "#000000"
     }
     
-    func featureLineWidth(feature: [AnyHashable : Any]) -> Double {
+    static func featureLineWidth(feature: [AnyHashable : Any]) -> Double {
         let width = (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.width")
         if let doubleWidth = width as? Double {
             return doubleWidth
