@@ -209,6 +209,11 @@ class LocationUtilities: NSObject {
                 coordinateToParse = "\(coordinateToParse.dropFirst(1))"
             }
         }
+        // remove all characers except numbers and decimal points
+        charactersToKeep = CharacterSet()
+        charactersToKeep.formUnion(.decimalDigits)
+        charactersToKeep.insert(charactersIn: ".")
+        coordinateToParse = coordinate.components(separatedBy: charactersToKeep.inverted).joined()
         
         // split the numbers before the decimal seconds
         if coordinateToParse.isEmpty {
