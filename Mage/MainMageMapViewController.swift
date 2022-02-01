@@ -10,7 +10,7 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, PersistedMapState, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap {
+class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections,  HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap {
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -23,6 +23,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     var userTrackingMapMixin: UserTrackingMapMixin?
     var userHeadingDisplayMixin: UserHeadingDisplayMixin?
     var staticLayerMapMixin: StaticLayerMapMixin?
+    var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -61,6 +62,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             userTrackingMapMixin = UserTrackingMapMixin(userTrackingMap: self, buttonParentView: buttonStack, indexInView: 0, scheme: scheme)
             userHeadingDisplayMixin = UserHeadingDisplayMixin(userHeadingDisplay: self, mapStack: mapStack, scheme: scheme)
             staticLayerMapMixin = StaticLayerMapMixin(staticLayerMap: self, scheme: scheme)
+            geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
             mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
@@ -72,6 +74,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             mapMixins.append(userTrackingMapMixin!)
             mapMixins.append(userHeadingDisplayMixin!)
             mapMixins.append(staticLayerMapMixin!)
+            mapMixins.append(geoPackageLayerMapMixin!)
         }
         
         initiateMapMixins()

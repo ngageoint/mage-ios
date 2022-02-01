@@ -51,6 +51,10 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         return stackView;
     }()
     
+    lazy var attributesHeader: CardHeader = {
+        return CardHeader(headerText: "ATTRIBUTES")
+    }()
+    
     private lazy var mediaCollection: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
@@ -87,7 +91,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(geoPackageFeatureItem: GeoPackageFeatureItem, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+    init(geoPackageFeatureItem: GeoPackageFeatureItem, actionsDelegate: FeatureActionsDelegate? = nil, includeSummary: Bool = true, scheme: MDCContainerScheming?) {
         self.actionsDelegate = actionsDelegate;
         self.scheme = scheme;
         featureItem = geoPackageFeatureItem;
@@ -95,9 +99,11 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         self.translatesAutoresizingMaskIntoConstraints = false;
         
         self.addSubview(stackView)
-        stackView.addArrangedSubview(summaryView);
-        
-        stackView.addArrangedSubview(featureActionsView);
+        if includeSummary {
+            stackView.addArrangedSubview(summaryView);
+            stackView.addArrangedSubview(featureActionsView);
+        }
+            
         stackView.addArrangedSubview(mediaCollection);
         stackView.addArrangedSubview(propertyStack);
         stackView.addArrangedSubview(attributeRowStack);
@@ -112,6 +118,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         textView.textColor = scheme.colorScheme.onSurfaceColor;
         textView.font = scheme.typographyScheme.body1;
         summaryView.applyTheme(withScheme: scheme);
+        attributesHeader.applyTheme(withScheme: scheme)
         mediaCollection.backgroundColor = scheme.colorScheme.surfaceColor;
     
         self.scheme = scheme;
@@ -196,11 +203,12 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         
         for attributeRow in attributeRows {
             let separator = UIView.newAutoLayout();
-            separator.autoSetDimension(.height, toSize: 1);
-            separator.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+            separator.autoSetDimension(.height, toSize: 8);
+            separator.backgroundColor = scheme?.colorScheme.backgroundColor
             self.attributeRowStack.addArrangedSubview(separator);
-            
-            let featureItemBottomSheetView:GeoPackageFeatureBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: attributeRow, actionsDelegate: actionsDelegate, scheme: scheme);
+            self.attributeRowStack.addArrangedSubview(attributesHeader)
+
+            let featureItemBottomSheetView:GeoPackageFeatureBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: attributeRow, actionsDelegate: actionsDelegate, includeSummary: false, scheme: scheme);
             
             self.attributeRowStack.addArrangedSubview(featureItemBottomSheetView);
         }

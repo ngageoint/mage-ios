@@ -74,3 +74,5 @@
 #import "LocationAccuracyRenderer.h"
 #import "FilterTableViewController.h"
 #import "MapUtils.h"
+#import "CacheOverlays.h"
+#import "GeoPackage.h"
