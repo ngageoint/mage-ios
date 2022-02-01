@@ -152,7 +152,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
                         for (GPKGExtendedRelation *relation in mediaTables) {
                             NSArray<NSNumber *> *relatedMedia = [rte mappingsForTableName:relation.mappingTableName withBaseId:featureId];
                             GPKGMediaDao *mediaDao = [rte mediaDaoForTableName:relation.relatedTableName];
-                            [medias addObjectsFromArray: [mediaDao rowsWithIds:relatedMedia];
+                            [medias addObjectsFromArray: [mediaDao rowsWithIds:relatedMedia]];
                         }
                         
                         for (GPKGExtendedRelation *relation in attributeTables) {

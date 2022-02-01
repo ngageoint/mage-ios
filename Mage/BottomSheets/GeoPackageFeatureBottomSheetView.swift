@@ -35,7 +35,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         stackView.alignment = .fill
         stackView.spacing = 0
         stackView.distribution = .fill
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8)
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 8)
         stackView.isLayoutMarginsRelativeArrangement = true;
         return stackView;
     }()
@@ -51,18 +51,14 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         return stackView;
     }()
     
-    lazy var attributesHeader: CardHeader = {
-        return CardHeader(headerText: "ATTRIBUTES")
-    }()
-    
     private lazy var mediaCollection: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        layout.itemSize = CGSize(width: 150, height: 150)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        layout.itemSize = CGSize(width: 150, height: 170)
         layout.scrollDirection = .horizontal
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.dataSource = self;
-        collection.autoSetDimension(.height, toSize: 150);
+        collection.autoSetDimension(.height, toSize: 170);
         collection.register(UIImageCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collection.backgroundColor = .clear;
         return collection;
@@ -118,7 +114,6 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         textView.textColor = scheme.colorScheme.onSurfaceColor;
         textView.font = scheme.typographyScheme.body1;
         summaryView.applyTheme(withScheme: scheme);
-        attributesHeader.applyTheme(withScheme: scheme)
         mediaCollection.backgroundColor = scheme.colorScheme.surfaceColor;
     
         self.scheme = scheme;
@@ -206,6 +201,8 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
             separator.autoSetDimension(.height, toSize: 8);
             separator.backgroundColor = scheme?.colorScheme.backgroundColor
             self.attributeRowStack.addArrangedSubview(separator);
+            let attributesHeader = CardHeader(headerText: "ATTRIBUTES")
+            attributesHeader.applyTheme(withScheme: scheme)
             self.attributeRowStack.addArrangedSubview(attributesHeader)
 
             let featureItemBottomSheetView:GeoPackageFeatureBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: attributeRow, actionsDelegate: actionsDelegate, includeSummary: false, scheme: scheme);
@@ -226,9 +223,22 @@ extension GeoPackageFeatureBottomSheetView : UICollectionViewDataSource {
         }
         
         if let mediaRow = self.featureItem.mediaRows?[indexPath.row] {
-            cell.setupCell(image: mediaRow.dataImage());
+            
+            var title = "media"
+            if mediaRow.hasColumn(withColumnName: "title"), let titleValue = mediaRow.value(withColumnName: "title") as? String {
+                title = titleValue
+            } else if mediaRow.hasColumn(withColumnName: "name"), let nameValue = mediaRow.value(withColumnName: "name") as? String {
+                title = nameValue
+            }
+            
+            if let image = mediaRow.dataImage() {
+                cell.setupCell(image: image, title: title, scheme: scheme);
+            } else {
+                cell.setupCell(image: UIImage(named: "paperclip"), title: title, scheme: scheme);
+                cell.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.3)
+            }
         } else {
-            cell.setupCell(image: nil);
+            cell.setupCell(image: nil, title: nil, scheme: scheme);
         }
         return cell;
     }

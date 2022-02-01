@@ -36,7 +36,7 @@ import UIKit
     @objc public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
         scrollView.accessibilityIdentifier = "feature bottom sheet";
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return scrollView;
     }()
     
@@ -208,9 +208,13 @@ import UIKit
         if (!didSetUpConstraints) {
             scrollView.autoPinEdge(toSuperviewEdge: .top);
             scrollView.autoPinEdge(toSuperviewEdge: .bottom);
-            
-            stackView.autoPinEdgesToSuperviewEdges();
+
+            stackView.autoPinEdge(toSuperviewEdge: .left)
+            stackView.autoPinEdge(toSuperviewEdge: .right)
+            stackView.autoPinEdge(toSuperviewEdge: .top)
+            stackView.autoPinEdge(toSuperviewMargin: .bottom)
             stackView.autoMatch(.width, to: .width, of: scrollView);
+            stackView.autoAlignAxis(toSuperviewAxis: .vertical)
             didSetUpConstraints = true;
         }
         
