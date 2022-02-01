@@ -132,6 +132,41 @@ class CoordinateFieldTests: KIFSpec {
                 expect(delegate.changedValue).to(equal(11.5))
             }
             
+            it("should not start clearing text if multiple directions are entered") {
+                class MockCoordinateFieldDelegate: NSObject, CoordinateFieldDelegate {
+                    var fieldChangedCalled = false;
+                    var changedValue: CLLocationDegrees?
+                    var changedField: CoordinateField?
+                    func fieldValueChanged(coordinate: CLLocationDegrees, field: CoordinateField) {
+                        fieldChangedCalled = true
+                        changedValue = coordinate
+                        changedField = field
+                    }
+                }
+                
+                let delegate = MockCoordinateFieldDelegate()
+                let field = CoordinateField(latitude: true, text: nil, label: "Coordinate", delegate: delegate, scheme: MAGEScheme.scheme())
+                view.addSubview(field);
+                field.autoPinEdge(toSuperviewEdge: .left);
+                field.autoPinEdge(toSuperviewEdge: .right);
+                field.autoAlignAxis(toSuperviewAxis: .horizontal);
+                expect(field.isHidden).to(beFalse());
+                expect(field.textField.text).to(equal(""))
+                expect(field.text).to(equal(""))
+                tester().waitForView(withAccessibilityLabel: "Coordinate")
+                tester().tapView(withAccessibilityLabel: "Coordinate")
+                expect(field.isEditing).to(beTrue())
+                tester().enterText(intoCurrentFirstResponder: "113000NNNN")
+                expect(field.textField.text).to(equal("11° 30' 00\" N"))
+                expect(field.text).to(equal("11° 30' 00\" N"))
+                expect(field.textField.label.text).to(equal("Coordinate"))
+                expect(field.textField.accessibilityLabel).to(equal("Coordinate"))
+                field.resignFirstResponder()
+                expect(field.isEditing).to(beFalse())
+                expect(delegate.fieldChangedCalled).to(beTrue())
+                expect(delegate.changedValue).to(equal(11.5))
+            }
+            
             it("should paste into the field") {
                 let field = CoordinateField(latitude: true, text: "111122N", label: "Coordinate", delegate: nil, scheme: MAGEScheme.scheme())
                 view.addSubview(field);

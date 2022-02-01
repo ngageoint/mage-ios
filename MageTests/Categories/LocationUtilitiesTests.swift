@@ -151,13 +151,13 @@ class LocationUtilitiesTests: QuickSpec {
 
                 coordinates = "N 11 ° 22'30.36 \""
                 expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° 22' 30\" N"))
-                
+
                 coordinates = "112233.99N"
                 expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° 22' 34\" N"))
-                
+
                 coordinates = "11.999999N"
                 expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("12° 00' 00\" N"))
-                
+
                 coordinates = "N 11 ° 22'30.remove \""
                 expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° 22' 30\" N"))
 
@@ -214,6 +214,19 @@ class LocationUtilitiesTests: QuickSpec {
 
                 coordinates = "-15.6827"
                 expect(LocationUtilities.parseToDMSString(coordinates, addDirection: true)).to(equal("15° 40' 58\" W"))
+                
+                coordinates = "113000NNNN"
+                expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° 30' 00\" N"))
+
+            }
+            
+            it("should parse to DMS") {
+                var coordinate = "113000NNNN"
+                var parsed = LocationUtilities.parseDMS(coordinate: coordinate)
+                expect(parsed.direction).to(equal("N"))
+                expect(parsed.seconds).to(equal(0))
+                expect(parsed.minutes).to(equal(30))
+                expect(parsed.degrees).to(equal(11))
             }
             
             it("should split the coordinate string") {
@@ -280,7 +293,15 @@ class LocationUtilitiesTests: QuickSpec {
                 coordinates = "11 ° 22'30 \"N"
                 parsed = CLLocationCoordinate2D.parse(coordinates: coordinates)
                 expect(parsed.latitude.isNaN).to(beTrue())
+                // TODO: is this wrong? shouldn't this be latitude?
                 expect(parsed.longitude).to(equal(11.375))
+                
+                // future test
+                //                coordinates = "11-22-30N 015-15-45W"
+                //                parsed = CLLocationCoordinate2D.parse(coordinates: coordinates)
+                //                expect(parsed.latitude.isNaN).to(beTrue())
+                //                expect(parsed.latitude).to(equal(11.375))
+                //                expect(parsed.longitude).to(equal(-15.2625))
             }
             
             it("should validate DMS latitude input") {
@@ -290,6 +311,7 @@ class LocationUtilitiesTests: QuickSpec {
                 expect(LocationUtilities.validateLatitudeFromDMS(latitude: "ABCDEF.NS")).to(beFalse())
                 expect(LocationUtilities.validateLatitudeFromDMS(latitude: "11NSNS.1N")).to(beFalse())
                 expect(LocationUtilities.validateLatitudeFromDMS(latitude: "1111NS.1N")).to(beFalse())
+                expect(LocationUtilities.validateLatitudeFromDMS(latitude: "113000NNN")).to(beFalse())
                 
                 var validString = "112233N"
                 expect(LocationUtilities.validateLatitudeFromDMS(latitude: validString)).to(beTrue())
