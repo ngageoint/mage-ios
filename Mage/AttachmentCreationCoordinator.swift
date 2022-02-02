@@ -492,7 +492,7 @@ extension AttachmentCreationCoordinator: UINavigationControllerDelegate {
 extension AttachmentCreationCoordinator: AudioRecordingDelegate {
     func recordingAvailable(recording: Recording) {
         print("Recording available")
-        addAttachmentForSaving(location: URL(fileURLWithPath: "\(recording.filePath!)/\(recording.fileName!)"), contentType: recording.mediaType!)
+        addAttachmentForSaving(location: URL(fileURLWithPath: recording.filePath!), contentType: recording.mediaType!)
     
         self.audioRecorderViewController?.dismiss(animated: true, completion: nil);
     }

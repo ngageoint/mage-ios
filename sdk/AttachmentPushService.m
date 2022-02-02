@@ -280,7 +280,9 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
             // push local file to the image cache
             if ([NSFileManager.defaultManager fileExistsAtPath:attachment.localPath]) {
                 NSData *fileData = [NSFileManager.defaultManager contentsAtPath:attachment.localPath];
-                [ImageCacheProvider.shared cacheImageWithImage:[UIImage imageWithData:fileData] data:fileData key:attachment.url];
+                if ([attachment.contentType hasPrefix:@"image"]) {
+                    [ImageCacheProvider.shared cacheImageWithImage:[UIImage imageWithData:fileData] data:fileData key:attachment.url];
+                }
             }
             NSURL *attachmentUrl = [NSURL fileURLWithPath:tmpFileLocation];
             NSError *removeError;
