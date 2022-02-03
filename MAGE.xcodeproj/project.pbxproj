@@ -415,6 +415,10 @@
 		F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */; };
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
+		F7AA61B027A9E7B500D617B7 /* ExportableVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61AF27A9E7B500D617B7 /* ExportableVideoViewController.swift */; };
+		F7AA61B427AB237E00D617B7 /* FileViewerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */; };
+		F7AA61B627AC13B900D617B7 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B527AC13B900D617B7 /* ImageViewer.swift */; };
+		F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B727AC394800D617B7 /* DocumentViewer.swift */; };
 		F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7AA6AF8206EA810004F9437 /* idp-authView.xib */; };
 		F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */; };
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
@@ -1154,6 +1158,10 @@
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		F7AA61AF27A9E7B500D617B7 /* ExportableVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportableVideoViewController.swift; sourceTree = "<group>"; };
+		F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewerCoordinator.swift; sourceTree = "<group>"; };
+		F7AA61B527AC13B900D617B7 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
+		F7AA61B727AC394800D617B7 /* DocumentViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewer.swift; sourceTree = "<group>"; };
 		F7AA6AF8206EA810004F9437 /* idp-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "idp-authView.xib"; sourceTree = "<group>"; };
 		F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDPLoginView.h; sourceTree = "<group>"; };
 		F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IDPLoginView.m; sourceTree = "<group>"; };
@@ -2480,6 +2488,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F7AA61AE27A9E73400D617B7 /* Media */,
 				8474FD9426FB8AFE0041891A /* Contact */,
 				F7A5A336270CE20F00961CAA /* CoreData */,
 				F73607DA26F90C41008CF824 /* BottomSheets */,
@@ -2592,6 +2601,17 @@
 				F7A94D9018AD9CB000CB9EE0 /* MAGETests-Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F7AA61AE27A9E73400D617B7 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				F7AA61AF27A9E7B500D617B7 /* ExportableVideoViewController.swift */,
+				F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */,
+				F7AA61B527AC13B900D617B7 /* ImageViewer.swift */,
+				F7AA61B727AC394800D617B7 /* DocumentViewer.swift */,
+			);
+			path = Media;
 			sourceTree = "<group>";
 		};
 		F7B1C473267404A80005FCE4 /* ViewLoader */ = {
@@ -3192,6 +3212,7 @@
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
 				F770854025927E1C008903BA /* ObservationSyncStatus.swift in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
+				F7AA61B427AB237E00D617B7 /* FileViewerCoordinator.swift in Sources */,
 				F7154ACB260D0F34002C8617 /* MapDelegateFeedItemDelegate.swift in Sources */,
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
@@ -3326,6 +3347,7 @@
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
 				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
 				F72D42E72694B60300F9AC3B /* ObservationImage.swift in Sources */,
+				F7AA61B027A9E7B500D617B7 /* ExportableVideoViewController.swift in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7489B3F27A2FE8100A9E314 /* StaticLayerMap.swift in Sources */,
@@ -3412,6 +3434,7 @@
 				F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */,
 				F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */,
 				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
+				F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */,
 				F72D431B2694B60300F9AC3B /* Layer.swift in Sources */,
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */,
@@ -3468,6 +3491,7 @@
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F7ECDC9A27A5A37200D0AF92 /* GeoPackageLayerMap.swift in Sources */,
 				F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */,
+				F7AA61B627AC13B900D617B7 /* ImageViewer.swift in Sources */,
 				F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */,
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */,

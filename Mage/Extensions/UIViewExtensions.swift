@@ -8,6 +8,12 @@
 
 import Foundation
 
+extension UIResponder {
+    public var parentViewController: UIViewController? {
+        return next as? UIViewController ?? next?.parentViewController
+    }
+}
+
 extension UIView {
     var firstResponder: UIView? {
         if self.isFirstResponder {

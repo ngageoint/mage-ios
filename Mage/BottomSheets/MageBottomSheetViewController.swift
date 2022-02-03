@@ -164,6 +164,11 @@ import UIKit
         view.setNeedsUpdateConstraints();
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
         guard let scheme = scheme else {
             return;

@@ -58,6 +58,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         layout.scrollDirection = .horizontal
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.dataSource = self;
+        collection.delegate = self
         collection.autoSetDimension(.height, toSize: 170);
         collection.register(UIImageCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collection.backgroundColor = .clear;
@@ -241,6 +242,22 @@ extension GeoPackageFeatureBottomSheetView : UICollectionViewDataSource {
             cell.setupCell(image: nil, title: nil, scheme: scheme);
         }
         return cell;
+    }
+}
+
+extension GeoPackageFeatureBottomSheetView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if let pvc = parentViewController, let mediaRow = self.featureItem.mediaRows?[indexPath.row] {
+            let nav = UINavigationController()
+            nav.view.backgroundColor = .black
+            pvc.present(nav, animated: true, completion: nil)
+            
+            let fvc = FileViewerCoordinator(rootViewController: nav, data: mediaRow.data(), contentType: mediaRow.contentType(), scheme: scheme)
+            fvc.start(animated: true, withCloseButton: true)
+//            let avc = AttachmentViewCoordinator(rootViewController: nav, data: mediaRow.data(), contentType: mediaRow.contentType(), delegate: nil, scheme: scheme)
+//            avc.start(true, needsCloseButton: true)
+        }
     }
 }
 
