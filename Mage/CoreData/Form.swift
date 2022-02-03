@@ -109,7 +109,7 @@ import CoreData
         }
     }
     
-    public var color: String? {
+    @objc public var color: String? {
         get {
             return json?.json?[FormKey.color.key] as? String
         }

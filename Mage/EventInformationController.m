@@ -11,7 +11,7 @@
 #import <HexColors.h>
 
 @interface EventInformationController ()
-@property (strong, nonatomic) NSArray* forms;
+@property (strong, nonatomic) NSArray<Form *>* forms;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
@@ -82,12 +82,13 @@ static const NSInteger FORMS_SECTION = 0;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
-    NSDictionary* form = [self.forms objectAtIndex:indexPath.row];
-    cell.textLabel.text = [form valueForKey:@"name"];
-    cell.detailTextLabel.text = [form valueForKey:@"description"];
+    Form* form = [self.forms objectAtIndex:indexPath.row];
+    cell.textLabel.text = [form name];
+    cell.detailTextLabel.text = [form formDescription];
     cell.imageView.image = [UIImage imageNamed:@"form"];
-    if ([form valueForKey:@"color"] != nil) {
-        cell.imageView.tintColor = [UIColor hx_colorWithHexRGBAString:[form valueForKey:@"color"]];
+    
+    if ([form color] != nil) {
+        cell.imageView.tintColor = [UIColor hx_colorWithHexRGBAString:[form color]];
     } else {
         cell.imageView.tintColor = self.scheme.colorScheme.primaryColor;
     }
@@ -107,7 +108,7 @@ static const NSInteger FORMS_SECTION = 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *form = [self.forms objectAtIndex:indexPath.row];
+    Form *form = [self.forms objectAtIndex:indexPath.row];
     [self.delegate formSelected:form];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

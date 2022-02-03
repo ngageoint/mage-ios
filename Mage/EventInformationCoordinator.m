@@ -43,7 +43,7 @@
         [self.viewController showDetailViewController:self.eventInfomationController sender:self];
 }
 
-- (void)formSelected:(nonnull NSDictionary *)form {
+- (void)formSelected:(nonnull Form *)form {
     FormDefaultsCoordinator* coordinator = [[FormDefaultsCoordinator alloc] initWithNavController:self.eventInfomationController.navigationController event:self.eventInfomationController.event form:form scheme: self.scheme delegate:self];
     [self.childCoordinators addObject:coordinator];
     [coordinator start];

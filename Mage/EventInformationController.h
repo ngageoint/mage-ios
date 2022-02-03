@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol EventInformationControllerDelegate
-- (void) formSelected:(NSDictionary *) form;
+- (void) formSelected:(Form *) form;
 @end
 
 @interface EventInformationController : UITableViewController
