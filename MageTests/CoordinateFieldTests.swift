@@ -395,6 +395,104 @@ class CoordinateFieldTests: KIFSpec {
                 expect(delegate2.fieldChangedCalled).to(beTrue())
                 expect(delegate2.changedValue).to(equal(-15.2625))
             }
+            
+            it("should populate the fields properly for pasted in longitude field in decimal degree text which can be split") {
+                class MockCoordinateFieldDelegate: NSObject, CoordinateFieldDelegate {
+                    var fieldChangedCalled = false;
+                    var changedValue: CLLocationDegrees?
+                    var changedField: CoordinateField?
+                    func fieldValueChanged(coordinate: CLLocationDegrees, field: CoordinateField) {
+                        fieldChangedCalled = true
+                        changedValue = coordinate
+                        changedField = field
+                    }
+                }
+                
+                let delegate = MockCoordinateFieldDelegate()
+                let field = CoordinateField(latitude: true, text: nil, label: "Coordinate Latitude", delegate: delegate, scheme: MAGEScheme.scheme())
+                view.addSubview(field);
+                field.autoPinEdges(toSuperviewMarginsExcludingEdge: .bottom)
+                
+                let delegate2 = MockCoordinateFieldDelegate()
+                let longitude = CoordinateField(latitude: false, text: nil, label: "Coordinate Longitude", delegate: delegate2, scheme: MAGEScheme.scheme())
+                view.addSubview(longitude);
+                longitude.autoPinEdges(toSuperviewMarginsExcludingEdge: .top)
+                longitude.autoPinEdge(.top, to: .bottom, of: field)
+                field.linkedLongitudeField = longitude
+                longitude.linkedLatitudeField = field
+                
+                expect(field.isHidden).to(beFalse());
+                tester().waitForView(withAccessibilityLabel: "Coordinate Longitude")
+                tester().tapView(withAccessibilityLabel: "Coordinate Longitude")
+                expect(longitude.isEditing).to(beTrue())
+                tester().clearTextFromFirstResponder()
+                expect(longitude.textField(longitude.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: "11.375 -15.2625")).to(beFalse())
+                expect(field.textField.text).to(equal("11° 22' 30\" N"))
+                expect(field.text).to(equal("11° 22' 30\" N"))
+                expect(field.textField.label.text).to(equal("Coordinate Latitude"))
+                expect(field.textField.accessibilityLabel).to(equal("Coordinate Latitude"))
+                field.resignFirstResponder()
+                expect(field.isEditing).to(beFalse())
+                expect(delegate.fieldChangedCalled).to(beTrue())
+                expect(delegate.changedValue).to(equal(11.375))
+                
+                expect(longitude.textField.text).to(equal("15° 15' 45\" W"))
+                expect(longitude.text).to(equal("15° 15' 45\" W"))
+                expect(longitude.textField.label.text).to(equal("Coordinate Longitude"))
+                expect(longitude.textField.accessibilityLabel).to(equal("Coordinate Longitude"))
+                
+                expect(delegate2.fieldChangedCalled).to(beTrue())
+                expect(delegate2.changedValue).to(equal(-15.2625))
+            }
+            
+            it("should populate the fields properly for pasted in latitude field in decimal degree text which can be split") {
+                class MockCoordinateFieldDelegate: NSObject, CoordinateFieldDelegate {
+                    var fieldChangedCalled = false;
+                    var changedValue: CLLocationDegrees?
+                    var changedField: CoordinateField?
+                    func fieldValueChanged(coordinate: CLLocationDegrees, field: CoordinateField) {
+                        fieldChangedCalled = true
+                        changedValue = coordinate
+                        changedField = field
+                    }
+                }
+                
+                let delegate = MockCoordinateFieldDelegate()
+                let field = CoordinateField(latitude: true, text: nil, label: "Coordinate Latitude", delegate: delegate, scheme: MAGEScheme.scheme())
+                view.addSubview(field);
+                field.autoPinEdges(toSuperviewMarginsExcludingEdge: .bottom)
+                
+                let delegate2 = MockCoordinateFieldDelegate()
+                let longitude = CoordinateField(latitude: false, text: nil, label: "Coordinate Longitude", delegate: delegate2, scheme: MAGEScheme.scheme())
+                view.addSubview(longitude);
+                longitude.autoPinEdges(toSuperviewMarginsExcludingEdge: .top)
+                longitude.autoPinEdge(.top, to: .bottom, of: field)
+                field.linkedLongitudeField = longitude
+                longitude.linkedLatitudeField = field
+                
+                expect(field.isHidden).to(beFalse());
+                tester().waitForView(withAccessibilityLabel: "Coordinate Longitude")
+                tester().tapView(withAccessibilityLabel: "Coordinate Longitude")
+                expect(longitude.isEditing).to(beTrue())
+                tester().clearTextFromFirstResponder()
+                expect(field.textField(field.textField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: "11.375 -15.2625")).to(beFalse())
+                expect(field.textField.text).to(equal("11° 22' 30\" N"))
+                expect(field.text).to(equal("11° 22' 30\" N"))
+                expect(field.textField.label.text).to(equal("Coordinate Latitude"))
+                expect(field.textField.accessibilityLabel).to(equal("Coordinate Latitude"))
+                field.resignFirstResponder()
+                expect(field.isEditing).to(beFalse())
+                expect(delegate.fieldChangedCalled).to(beTrue())
+                expect(delegate.changedValue).to(equal(11.375))
+                
+                expect(longitude.textField.text).to(equal("15° 15' 45\" W"))
+                expect(longitude.text).to(equal("15° 15' 45\" W"))
+                expect(longitude.textField.label.text).to(equal("Coordinate Longitude"))
+                expect(longitude.textField.accessibilityLabel).to(equal("Coordinate Longitude"))
+                
+                expect(delegate2.fieldChangedCalled).to(beTrue())
+                expect(delegate2.changedValue).to(equal(-15.2625))
+            }
         }
     }
 }

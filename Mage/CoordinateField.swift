@@ -45,7 +45,7 @@ import CoreLocation
             return textField.text
         }
         set {
-            parseAndUpdateText(newText: newValue)
+            parseAndUpdateText(newText: newValue, addDirection: (newValue?.count ?? 0) > 1)
         }
     }
     
@@ -133,13 +133,13 @@ extension CoordinateField: UITextFieldDelegate {
         return parseAndUpdateText(newText: text, split: string.count > 1, addDirection: string.count > 1)
     }
     
-    func applyFieldTheme(text: String?) {
+    func applyFieldTheme(text: String?, addDirection: Bool = false) {
         if text == nil || text!.isEmpty {
             applyTheme(withScheme: self.scheme)
             return
         }
         
-        let parsedDMS: String? = LocationUtilities.parseToDMSString(text)
+        let parsedDMS: String? = LocationUtilities.parseToDMSString(text, addDirection: addDirection, latitude: latitude)
         
         let parsed = CLLocationCoordinate2D.parse(coordinate: text, enforceLatitude: latitude)
         
@@ -203,7 +203,7 @@ extension CoordinateField: UITextFieldDelegate {
         parsedDMS = LocationUtilities.parseToDMSString(text, addDirection: addDirection, latitude: latitude)
         oldParsedDMS = LocationUtilities.parseToDMSString(oldText, addDirection: addDirection, latitude: latitude)
         
-        applyFieldTheme(text: text)
+        applyFieldTheme(text: text, addDirection: addDirection)
         
         if let parsedDMS = parsedDMS, let oldParsedDMS = oldParsedDMS {
 
