@@ -8,36 +8,113 @@
 
 import Foundation
 import UIKit
+import MaterialComponents
+import QuickLook
 
 class DocumentViewer : UIViewController {
     
-//    private var imageView: UIImageView = UIImageView()
-    private var tempFile: String = NSTemporaryDirectory() + "document";
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView.newAutoLayout()
+        imageView.image = UIImage(named: "visibility_off")
+        return imageView
+    }()
+    
+    private lazy var notAvailable: UILabel = {
+        let notAvailable = UILabel.newAutoLayout()
+        notAvailable.text = "Preview Not Available"
+        notAvailable.textAlignment = .center
+        return notAvailable
+    }()
+    
+    private lazy var notAvailableDescription: UILabel = {
+        let notAvailableDescription = UILabel.newAutoLayout()
+        notAvailableDescription.text = "You may be able to view this content in another app"
+        notAvailableDescription.textAlignment = .center
+        return notAvailableDescription
+    }()
+    
+    private lazy var openInButton: MDCButton = {
+        let openInButton = MDCButton()
+        openInButton.setTitle("Open In", for: .normal)
+        openInButton.addTarget(self, action: #selector(self.presentShareSheet(_ :)), for: .touchUpInside);
+        return openInButton
+    }()
+    
+    private var tempFile: String = NSTemporaryDirectory();
     
     var documentInteractionController:UIDocumentInteractionController?
     var data: Data?
-    var info: [String : String]?
+    var info: [String : Any]?
     var contentType: String?
-    
-    public convenience init(data: Data, contentType: String, info: [String : String]?) {
+    var scheme: MDCContainerScheming?
+
+    public convenience init(data: Data, contentType: String, info: [String : Any]?, scheme: MDCContainerScheming?) {
         self.init(nibName: nil, bundle: nil);
         self.data = data
         self.info = info
         self.contentType = contentType
+        self.scheme = scheme
+        
+        if let info = info {
+            if let name = info["title"] as? String {
+                tempFile.append(name)
+                title = name
+            } else if let name = info["name"] as? String {
+                tempFile.append(name)
+                title = name
+            } else {
+                tempFile.append("media")
+            }
+        }
         
         let uttype = UTType(mimeType: contentType)
         
         if let ext = uttype?.preferredFilenameExtension {
             tempFile.append(contentsOf: ".\(ext)")
         }
+        if title == nil {
+            title = "GeoPackage Media"
+        }
+    }
+    
+    func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        guard let scheme = scheme else {
+            return
+        }
+        
+        self.scheme = scheme
+        view.backgroundColor = scheme.colorScheme.surfaceColor
+        imageView.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
+        notAvailable.font = scheme.typographyScheme.headline5
+        notAvailable.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
+        notAvailableDescription.font = scheme.typographyScheme.subtitle2
+        notAvailableDescription.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
+        openInButton.applyOutlinedTheme(withScheme: scheme)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.addSubview(imageView)
-//        imageView.autoPinEdgesToSuperviewEdges()
-//        imageView.contentMode = .scaleAspectFit
-//        showImage()
+        
+        view.addSubview(imageView)
+        view.addSubview(notAvailable)
+        view.addSubview(notAvailableDescription)
+        view.addSubview(openInButton)
+        
+        imageView.autoAlignAxis(toSuperviewAxis: .vertical)
+        imageView.autoSetDimensions(to: CGSize(width: 164, height: 164))
+        imageView.autoAlignAxis(.horizontal, toSameAxisOf: view, withOffset: -82)
+        
+        notAvailable.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
+        notAvailable.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
+        notAvailable.autoPinEdge(.top, to: .bottom, of: imageView, withOffset: 16)
+        notAvailableDescription.autoPinEdge(.top, to: .bottom, of: notAvailable, withOffset: 8)
+        notAvailableDescription.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
+        notAvailableDescription.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
+        openInButton.autoPinEdge(.top, to: .bottom, of: notAvailableDescription, withOffset: 32)
+        openInButton.autoPinEdge(toSuperviewEdge: .left, withInset: 16)
+        openInButton.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
+        
+        applyTheme(withScheme: scheme)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,26 +127,25 @@ class DocumentViewer : UIViewController {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-//    func showImage() {
-//        guard let data = data else {
-//            return
-//        }
-//        let image = UIImage(data: data)
-//        imageView.image = image
-//    }
-    
-    @objc func presentShareSheet(_ sender: UIBarButtonItem) {
+    @objc func presentShareSheet(_ sender: UIButton) {
         do {
             let imageURL: URL = URL(fileURLWithPath: tempFile)
             try data?.write(to: imageURL)
             
             documentInteractionController = UIDocumentInteractionController(url: imageURL)
             documentInteractionController?.annotation = info
-            documentInteractionController?.presentOptionsMenu(from: sender, animated: true)
-            
+            documentInteractionController?.delegate = self
+            documentInteractionController?.presentOptionsMenu(from: sender.frame, in: view, animated: true)
         } catch {
             // Prints the localized description of the error from the do block
             print("Error writing the file: \(error.localizedDescription)")
         }
+    }
+}
+
+extension DocumentViewer : UIDocumentInteractionControllerDelegate {
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return navigationController!
     }
 }

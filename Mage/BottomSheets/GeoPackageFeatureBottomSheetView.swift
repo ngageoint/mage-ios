@@ -14,6 +14,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
     private var didSetUpConstraints = false;
     private var actionsDelegate: FeatureActionsDelegate?;
     private var featureItem: GeoPackageFeatureItem;
+    private var fileViewerCoordinator: FileViewerCoordinator?
     var scheme: MDCContainerScheming?;
     
     private lazy var stackView: PassThroughStackView = {
@@ -249,12 +250,17 @@ extension GeoPackageFeatureBottomSheetView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if let pvc = parentViewController, let mediaRow = self.featureItem.mediaRows?[indexPath.row] {
-            let nav = UINavigationController()
-            nav.view.backgroundColor = .black
-            pvc.present(nav, animated: true, completion: nil)
-            
-            let fvc = FileViewerCoordinator(rootViewController: nav, data: mediaRow.data(), contentType: mediaRow.contentType(), scheme: scheme)
-            fvc.start(animated: true, withCloseButton: true)
+
+            var info: [String : Any] = [:]
+            if let columns = mediaRow.columns, let names = columns.columnNames() {
+                for name in names {
+                    if name != "data" {
+                        info[name] = mediaRow.value(withColumnName: name)
+                    }
+                }
+            }
+            fileViewerCoordinator = FileViewerCoordinator(presentingViewController: pvc, data: mediaRow.data(), contentType: mediaRow.contentType(), info: info, scheme: scheme)
+            fileViewerCoordinator?.start(animated: true, withCloseButton: true)
 //            let avc = AttachmentViewCoordinator(rootViewController: nav, data: mediaRow.data(), contentType: mediaRow.contentType(), delegate: nil, scheme: scheme)
 //            avc.start(true, needsCloseButton: true)
         }

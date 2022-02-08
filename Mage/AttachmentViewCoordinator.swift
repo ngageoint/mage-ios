@@ -9,6 +9,7 @@
 import AVKit;
 import MagicalRecord;
 import Kingfisher
+import QuickLook
 
 @objc protocol AttachmentViewDelegate {
     @objc func doneViewing(coordinator: NSObject);
@@ -25,6 +26,8 @@ import Kingfisher
     var contentType: String?
     var data: Data?
     
+    var mediaPreviewController: MediaPreviewController?
+
     var imageViewController: ImageAttachmentViewController?
     var observer: NSKeyValueObservation?
     
@@ -34,10 +37,6 @@ import Kingfisher
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     var needsCloseButton: Bool = false
-    
-    lazy var exportableVideoViewController: ExportableVideoViewController = {
-        return ExportableVideoViewController()
-    }()
     
     @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
@@ -185,7 +184,9 @@ import Kingfisher
     }
     
     func playAudioVideo() {
+        var name = "file"
         if let attachment = self.attachment {
+            name = attachment.name ?? "file"
             if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
                 print("Playing locally", localPath);
                 self.urlToLoad = URL(fileURLWithPath: localPath);
@@ -194,17 +195,13 @@ import Kingfisher
                 let token: String = StoredPassword.retrieveStoredToken();
 
                 if let url = URL(string: attachmentUrl) {
-                    if let contentType = attachment.contentType, contentType.hasPrefix("audio") {
-                        self.urlToLoad = url
+                    var urlComponents: URLComponents? = URLComponents(url: url, resolvingAgainstBaseURL: false);
+                    if (urlComponents?.queryItems) != nil {
+                        urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
                     } else {
-                        var urlComponents: URLComponents? = URLComponents(url: url, resolvingAgainstBaseURL: false);
-                        if (urlComponents?.queryItems) != nil {
-                            urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
-                        } else {
-                            urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
-                        }
-                        self.urlToLoad = (urlComponents?.url)!;
+                        urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
                     }
+                    self.urlToLoad = (urlComponents?.url)!;
                 }
             }
         }
@@ -212,15 +209,12 @@ import Kingfisher
         guard let urlToLoad = self.urlToLoad else {
             return;
         }
-        exportableVideoViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismiss(_ :)))
-        self.rootViewController.pushViewController(exportableVideoViewController, animated: false);
-        exportableVideoViewController.playAudioVideo(url: urlToLoad, contentType: self.contentType, mediaLoaderDelegate: self)
+        
+        mediaPreviewController = MediaPreviewController(fileName: name, mediaTitle: name, data: nil, url: urlToLoad, scheme: scheme)
+        self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
     }
  
     func navigationControllerObserver(_ observer: NavigationControllerObserver, didObservePopTransitionFor viewController: UIViewController) {
-//        if let player = self.playerViewController?.player {
-//            player.pause();
-//        }
         if (!self.ignoreNextDelegateCall) {
             self.delegate?.doneViewing(coordinator: self);
         }

@@ -419,6 +419,7 @@
 		F7AA61B427AB237E00D617B7 /* FileViewerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */; };
 		F7AA61B627AC13B900D617B7 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B527AC13B900D617B7 /* ImageViewer.swift */; };
 		F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B727AC394800D617B7 /* DocumentViewer.swift */; };
+		F7AA61BA27ADB19100D617B7 /* MediaPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B927ADB19100D617B7 /* MediaPreviewController.swift */; };
 		F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7AA6AF8206EA810004F9437 /* idp-authView.xib */; };
 		F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */; };
 		F7AADEFC19E6DAF4005C8F22 /* GeometryEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */; };
@@ -1162,6 +1163,7 @@
 		F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewerCoordinator.swift; sourceTree = "<group>"; };
 		F7AA61B527AC13B900D617B7 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		F7AA61B727AC394800D617B7 /* DocumentViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewer.swift; sourceTree = "<group>"; };
+		F7AA61B927ADB19100D617B7 /* MediaPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPreviewController.swift; sourceTree = "<group>"; };
 		F7AA6AF8206EA810004F9437 /* idp-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "idp-authView.xib"; sourceTree = "<group>"; };
 		F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDPLoginView.h; sourceTree = "<group>"; };
 		F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IDPLoginView.m; sourceTree = "<group>"; };
@@ -2610,6 +2612,7 @@
 				F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */,
 				F7AA61B527AC13B900D617B7 /* ImageViewer.swift */,
 				F7AA61B727AC394800D617B7 /* DocumentViewer.swift */,
+				F7AA61B927ADB19100D617B7 /* MediaPreviewController.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -3518,6 +3521,7 @@
 				F7D43BE6269F3C1800561A8F /* FeedItemActionsDelegate.swift in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
 				F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */,
+				F7AA61BA27ADB19100D617B7 /* MediaPreviewController.swift in Sources */,
 				F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F72D43122694B60300F9AC3B /* MageServer.swift in Sources */,
