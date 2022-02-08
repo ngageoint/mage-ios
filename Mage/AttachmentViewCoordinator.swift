@@ -24,7 +24,6 @@ import QuickLook
     var navigationControllerObserver: NavigationControllerObserver
     var tempFile: String?
     var contentType: String?
-    var data: Data?
     
     var mediaPreviewController: MediaPreviewController?
 
@@ -66,18 +65,6 @@ import QuickLook
         super.init();
     }
     
-    public init(rootViewController: UINavigationController, data: Data, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
-        self.rootViewController = rootViewController;
-        self.data = data;
-        self.delegate = delegate;
-        self.scheme = scheme;
-        self.contentType = contentType;
-        self.tempFile =  NSTemporaryDirectory() + "datafile";
-        
-        self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
-        super.init();
-    }
-    
     @objc public func start() {
         self.start(true);
     }
@@ -112,16 +99,6 @@ import QuickLook
                 self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
-            }
-        } else if let data = self.data, let tempFile = self.tempFile {
-            do {
-                let url = URL(fileURLWithPath: tempFile)
-                try FileManager.default.removeItem(at: url)
-                try data.write(to: url)
-                self.urlToLoad = url
-                return self.loadURL(animated: animated);
-            } catch {
-                return
             }
         }
     }
@@ -243,9 +220,9 @@ extension AttachmentViewCoordinator : AVAssetResourceLoaderDelegate {
 }
 
 extension AttachmentViewCoordinator : MediaLoaderDelegate {
-    func mediaLoadComplete(_ filePath: String, withNewFile: Bool) {
+    func mediaLoadComplete(filePath: String, newFile: Bool) {
         print("Media load complete");
-        if (withNewFile) {
+        if (newFile) {
             MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
                 if let attachment = self.attachment {
                     let localAttachment = attachment.mr_(in: localContext);

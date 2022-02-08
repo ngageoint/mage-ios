@@ -9,6 +9,7 @@
 import Foundation
 import Photos
 import PhotosUI
+import UniformTypeIdentifiers
 
 @objc public protocol AudioRecordingDelegate {
     @objc func recordingAvailable(recording: Recording);
@@ -128,7 +129,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             self.pickerController!.delegate = self;
             self.pickerController!.allowsEditing = true;
             self.pickerController!.sourceType = .camera;
-            self.pickerController!.mediaTypes = [kUTTypeMovie as String];
+            self.pickerController!.mediaTypes = [UTType.movie.identifier];
             self.pickerController!.videoQuality = .typeHigh;
             self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
         }
@@ -150,7 +151,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             self.pickerController = UIImagePickerController();
             self.pickerController!.delegate = self;
             self.pickerController!.sourceType = .camera;
-            self.pickerController!.mediaTypes = [kUTTypeImage as String];
+            self.pickerController!.mediaTypes = [UTType.image.identifier];
             self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
         }
     }
@@ -168,7 +169,7 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
         DispatchQueue.main.async {
             print("Present the gallery")
             var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-            configuration.filter = .images;
+            configuration.filter = .any(of: [.images, .videos])
             configuration.selectionLimit = 1;
             
             let photoPicker = PHPickerViewController(configuration: configuration);
@@ -179,6 +180,145 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
 }
 
 extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
+    
+    func handlePhoto(phasset: PHAsset?, utType: UTType?) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            if let phasset = phasset {
+                let dateFormatter = DateFormatter();
+                dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
+                
+                let fileType = utType?.preferredFilenameExtension ?? "jpeg"
+                let mimeType = utType?.preferredMIMEType ?? "image/jpeg"
+                
+                guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                    return;
+                }
+                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
+                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).\(fileType)");
+                
+                let manager = PHImageManager.default()
+                let requestOptions = PHImageRequestOptions()
+                requestOptions.isSynchronous = true
+                requestOptions.deliveryMode = .fastFormat
+                requestOptions.isNetworkAccessAllowed = true
+                
+                manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
+                    if let data = data,
+                       let cImage = CIImage(data: data) {
+                        do {
+                            try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                            
+                            guard let finalData = cImage.qualityScaled() else { return }
+                            
+                            do {
+                                try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
+                                self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
+                            } catch {
+                                print("Unable to write image to file \(fileToWriteTo): \(error)")
+                            }
+                            
+                        } catch {
+                            print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                        }
+                        
+                    }
+                }
+            } else {
+                galleryPermissionDenied()
+            }
+        }
+    }
+    
+    func handleVideo(phasset: PHAsset?, utType: UTType?) {
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            if let phasset = phasset {
+                
+                let dateFormatter = DateFormatter();
+                dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
+                
+                let manager = PHImageManager.default()
+                let requestOptions = PHVideoRequestOptions()
+                requestOptions.deliveryMode = .highQualityFormat
+                requestOptions.isNetworkAccessAllowed = true
+                
+                manager.requestAVAsset(forVideo: phasset, options: requestOptions) { avAsset, audioMix, info in
+                    guard let avAsset = avAsset else {
+                        return
+                    }
+                    
+                    let videoQuality: String = self.videoUploadQuality();
+                    print("video quality \(videoQuality)")
+                    let compatiblePresets: [String] = AVAssetExportSession.exportPresets(compatibleWith: avAsset);
+                    if (compatiblePresets.contains(videoQuality)) {
+                        guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: videoQuality) else {
+                            print("Export session not created")
+                            return
+                        }
+                        let fileType = utType?.preferredFilenameExtension ?? "mp4"
+                        let mimeType = utType?.preferredMIMEType ?? "video/mp4"
+                        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                            return;
+                        }
+                        let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
+                        let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).\(fileType)");
+                        
+                        do {
+                            try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                            exportSession.outputURL = fileToWriteTo;
+                            exportSession.outputFileType = .mp4;
+                            print("exporting async")
+                            exportSession.exportAsynchronously {
+                                print("export session status \(exportSession.status)")
+                                switch (exportSession.status) {
+                                case .completed:
+                                    print("Export complete")
+                                    self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
+                                case .failed:
+                                    print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
+                                case .cancelled:
+                                    print("Export cancelled");
+                                case .unknown:
+                                    print("Unknown")
+                                case .waiting:
+                                    print("Waiting")
+                                case .exporting:
+                                    print("Exporting")
+                                @unknown default:
+                                    print("Unknown")
+                                }
+                            }
+                        } catch {
+                            print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                        }
+                    }
+                }
+            } else {
+               galleryPermissionDenied()
+            }
+        }
+    
+    }
+    
+    func galleryPermissionDenied() {
+        // The user selected certain photos to share with MAGE and this wasn't one of them
+        // prompt the user to pick more photos to share
+        print("Cannot access asset")
+        let alert = UIAlertController(title: "Permission Denied", message: "MAGE is unable to access the photo you have chosen.  Please update the photos MAGE is allowed to access and try again.", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Update allowed photos", style: .default , handler:{ (UIAlertAction)in
+            let library = PHPhotoLibrary.shared()
+            library.register(self);
+            if let rootViewController = self.rootViewController {
+                library.presentLimitedLibraryPicker(from: rootViewController)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        if let rootViewController = self.rootViewController {
+            rootViewController.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
         guard !results.isEmpty else { return }
@@ -186,60 +326,23 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
         
-        let identifiers = results.compactMap(\.assetIdentifier)
-        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-        DispatchQueue.global(qos: .userInitiated).async { [self] in
-            if let phasset = fetchResult.firstObject,
-               let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-
-                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
-                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg");
-                
-                let manager = PHImageManager.default()
-                let requestOptions = PHImageRequestOptions()
-                requestOptions.isSynchronous = true
-                requestOptions.deliveryMode = .fastFormat
-                requestOptions.isNetworkAccessAllowed = true
-
-                manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
-                    if let data = data,
-                       let cImage = CIImage(data: data) {
-                        do {
-                            try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-
-                            guard let finalData = cImage.qualityScaled() else { return }
-                            
-                            do {
-                                try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
-                                addAttachmentForSaving(location: fileToWriteTo, contentType: "image/jpeg")
-                            } catch {
-                                print("Unable to write image to file \(fileToWriteTo): \(error)")
-                            }
-                        
-                        } catch {
-                            print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
-                        }
-
-                    }
-                }
-            } else {
-                // The user selected certain photos to share with MAGE and this wasn't one of them
-                // prompt the user to pick more photos to share
-                print("Cannot access asset")
-                let alert = UIAlertController(title: "Permission Denied", message: "MAGE is unable to access the photo you have chosen.  Please update the photos MAGE is allowed to access and try again.", preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: "Update allowed photos", style: .default , handler:{ (UIAlertAction)in
-                    let library = PHPhotoLibrary.shared()
-                    library.register(self);
-                    if let rootViewController = self.rootViewController {
-                        library.presentLimitedLibraryPicker(from: rootViewController)
-                    }
-                }))
-                
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                if let rootViewController = self.rootViewController {
-                    rootViewController.present(alert, animated: true, completion: nil)
-                }
+        for result in results {
+            let itemProvider = result.itemProvider
+            
+            guard let typeIdentifier = itemProvider.registeredTypeIdentifiers.first,
+                  let utType = UTType(typeIdentifier)
+            else { continue }
+            
+            if utType.conforms(to: .image), let assetIdentifier = result.assetIdentifier {
+                let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+                handlePhoto(phasset: fetchResult.firstObject, utType: utType)
+                return
+            }
+            
+            // otherwise it should be a movie
+            if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
+                let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+                handleVideo(phasset: fetchResult.firstObject, utType: utType)
             }
         }
     }
@@ -261,9 +364,9 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
         picker.dismiss(animated: true, completion: nil);
         
         let mediaType = info[.mediaType] as? String;
-        if (mediaType == kUTTypeImage as String && picker.sourceType == .camera) {
+        if (mediaType == UTType.image.identifier && picker.sourceType == .camera) {
             handleCameraImage(picker: picker, info: info);
-        } else if (mediaType == kUTTypeMovie as String) {
+        } else if (mediaType == UTType.movie.identifier) {
             handleMovie(picker: picker, info: info);
         }
     }

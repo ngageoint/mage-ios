@@ -9,6 +9,10 @@
 import Foundation
 import QuickLook
 
+protocol MediaLoaderDelegate {
+    func mediaLoadComplete(filePath: String, newFile: Bool)
+}
+
 class MediaPreviewController : QLPreviewController {
     var scheme: MDCContainerScheming?
     
@@ -19,6 +23,7 @@ class MediaPreviewController : QLPreviewController {
     var mediaTitle: String = "Media"
     var url: URL?
     var data: Data?
+    var mediaLoaderDelegate: MediaLoaderDelegate?
     
     private var previewItem : PreviewItem!
     
@@ -68,13 +73,14 @@ class MediaPreviewController : QLPreviewController {
         return openInButton
     }()
     
-    public convenience init(fileName: String, mediaTitle: String, data: Data? = nil, url: URL? = nil, scheme: MDCContainerScheming?) {
+    public convenience init(fileName: String, mediaTitle: String, data: Data? = nil, url: URL? = nil, mediaLoaderDelegate: MediaLoaderDelegate? = nil, scheme: MDCContainerScheming?) {
         self.init()
         self.scheme = scheme
         self.fileName = fileName
         self.mediaTitle = mediaTitle
         self.data = data
         self.url = url
+        self.mediaLoaderDelegate = mediaLoaderDelegate
         applyTheme(withScheme: scheme)
     }
 
@@ -202,6 +208,9 @@ class MediaPreviewController : QLPreviewController {
                         try? FileManager.default.moveItem(at: tempLocation, to: destinationUrl)
                         self.previewItem.previewItemURL = destinationUrl;
                         self.loadFile()
+                        if let mediaLoaderDelegate = self.mediaLoaderDelegate {
+                            mediaLoaderDelegate.mediaLoadComplete(filePath: destinationUrl.path, newFile: true)
+                        }
                     }
                 }).resume()
             })
@@ -249,7 +258,7 @@ extension MediaPreviewController : QLPreviewControllerDataSource {
 
 extension MediaPreviewController : QLPreviewControllerDelegate {
     func previewController(_ controller: QLPreviewController, editingModeFor previewItem: QLPreviewItem) -> QLPreviewItemEditingMode {
-        return .updateContents
+        return .disabled
     }
 }
 

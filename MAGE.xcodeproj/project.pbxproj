@@ -415,9 +415,7 @@
 		F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */; };
 		F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */; };
 		F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */; };
-		F7AA61B027A9E7B500D617B7 /* ExportableVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61AF27A9E7B500D617B7 /* ExportableVideoViewController.swift */; };
 		F7AA61B427AB237E00D617B7 /* FileViewerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */; };
-		F7AA61B627AC13B900D617B7 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B527AC13B900D617B7 /* ImageViewer.swift */; };
 		F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B727AC394800D617B7 /* DocumentViewer.swift */; };
 		F7AA61BA27ADB19100D617B7 /* MediaPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AA61B927ADB19100D617B7 /* MediaPreviewController.swift */; };
 		F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7AA6AF8206EA810004F9437 /* idp-authView.xib */; };
@@ -453,7 +451,6 @@
 		F7C812DB25C08D3C00D4332B /* ObservationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */; };
 		F7C812E925C1B37200D4332B /* ObservationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C812E825C1B37200D4332B /* ObservationDataStore.swift */; };
 		F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */; };
-		F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CC45D62440DC690054C8E1 /* MediaLoader.m */; };
 		F7CDD70F2600ED4000F3294C /* ObservationTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */; };
 		F7CDD7132601194600F3294C /* polygonObservation.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CDD7122601194600F3294C /* polygonObservation.json */; };
 		F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CDD71C260138E800F3294C /* MockMKMapViewDelegate.swift */; };
@@ -1159,9 +1156,7 @@
 		F7A94DA018ADBD5400CB9EE0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		F7A94DAA18B5100B00CB9EE0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		F7AA61AF27A9E7B500D617B7 /* ExportableVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportableVideoViewController.swift; sourceTree = "<group>"; };
 		F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewerCoordinator.swift; sourceTree = "<group>"; };
-		F7AA61B527AC13B900D617B7 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		F7AA61B727AC394800D617B7 /* DocumentViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewer.swift; sourceTree = "<group>"; };
 		F7AA61B927ADB19100D617B7 /* MediaPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPreviewController.swift; sourceTree = "<group>"; };
 		F7AA6AF8206EA810004F9437 /* idp-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "idp-authView.xib"; sourceTree = "<group>"; };
@@ -1204,8 +1199,6 @@
 		F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewController.swift; sourceTree = "<group>"; };
 		F7C812E825C1B37200D4332B /* ObservationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDataStore.swift; sourceTree = "<group>"; };
 		F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionHandler.swift; sourceTree = "<group>"; };
-		F7CC45D52440DC690054C8E1 /* MediaLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaLoader.h; sourceTree = "<group>"; };
-		F7CC45D62440DC690054C8E1 /* MediaLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaLoader.m; sourceTree = "<group>"; };
 		F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewControllerTests.swift; sourceTree = "<group>"; };
 		F7CDD7122601194600F3294C /* polygonObservation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = polygonObservation.json; sourceTree = "<group>"; };
 		F7CDD71C260138E800F3294C /* MockMKMapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMKMapViewDelegate.swift; sourceTree = "<group>"; };
@@ -2345,8 +2338,6 @@
 				F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */,
 				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
 				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
-				F7CC45D52440DC690054C8E1 /* MediaLoader.h */,
-				F7CC45D62440DC690054C8E1 /* MediaLoader.m */,
 				F7D9B829255EF6A800A76E2C /* AttachmentCreationCoordinator.swift */,
 				F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */,
 				F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */,
@@ -2608,9 +2599,7 @@
 		F7AA61AE27A9E73400D617B7 /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				F7AA61AF27A9E7B500D617B7 /* ExportableVideoViewController.swift */,
 				F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */,
-				F7AA61B527AC13B900D617B7 /* ImageViewer.swift */,
 				F7AA61B727AC394800D617B7 /* DocumentViewer.swift */,
 				F7AA61B927ADB19100D617B7 /* MediaPreviewController.swift */,
 			);
@@ -3350,7 +3339,6 @@
 				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
 				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
 				F72D42E72694B60300F9AC3B /* ObservationImage.swift in Sources */,
-				F7AA61B027A9E7B500D617B7 /* ExportableVideoViewController.swift in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7489B3F27A2FE8100A9E314 /* StaticLayerMap.swift in Sources */,
@@ -3494,7 +3482,6 @@
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F7ECDC9A27A5A37200D0AF92 /* GeoPackageLayerMap.swift in Sources */,
 				F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */,
-				F7AA61B627AC13B900D617B7 /* ImageViewer.swift in Sources */,
 				F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */,
 				F7331D0F2653EF2800D645AC /* ColorPickerCell.swift in Sources */,
 				F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */,
@@ -3564,7 +3551,6 @@
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7EBAEC12762537100650F4F /* BottomSheetMixin.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
-				F7CC45D72440DC690054C8E1 /* MediaLoader.m in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				F7D43BEA269F505A00561A8F /* CommonSummaryView.swift in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
