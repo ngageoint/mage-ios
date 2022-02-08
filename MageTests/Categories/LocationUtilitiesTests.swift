@@ -171,10 +171,10 @@ class LocationUtilitiesTests: QuickSpec {
                 expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° "))
 
                 coordinates = "11.4584"
-                expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° 27' 30\" "))
+                expect(LocationUtilities.parseToDMSString(coordinates, addDirection: true, latitude: true)).to(equal("11° 27' 30\" N"))
 
                 coordinates = "-11.4584"
-                expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° 27' 30\" "))
+                expect(LocationUtilities.parseToDMSString(coordinates, addDirection: true, latitude: true)).to(equal("11° 27' 30\" S"))
 
                 coordinates = "11.4584"
                 expect(LocationUtilities.parseToDMSString(coordinates, addDirection: true)).to(equal("11° 27' 30\" E"))
@@ -214,7 +214,7 @@ class LocationUtilitiesTests: QuickSpec {
 
                 coordinates = "-15.6827"
                 expect(LocationUtilities.parseToDMSString(coordinates, addDirection: true)).to(equal("15° 40' 58\" W"))
-                
+
                 coordinates = "113000NNNN"
                 expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("11° 30' 00\" N"))
 
