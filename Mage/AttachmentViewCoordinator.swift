@@ -187,7 +187,7 @@ import QuickLook
             return;
         }
         
-        mediaPreviewController = MediaPreviewController(fileName: name, mediaTitle: name, data: nil, url: urlToLoad, scheme: scheme)
+        mediaPreviewController = MediaPreviewController(fileName: name, mediaTitle: name, data: nil, url: urlToLoad, mediaLoaderDelegate: self, scheme: scheme)
         self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
     }
  
