@@ -94,8 +94,14 @@ class MapDirectionsMixin: NSObject, MapMixin {
         
         if let observation = notification.observation {
             location = observation.location
-            title = observation.primaryFieldText ?? ""
+            title = observation.primaryFieldText ?? "Observation"
             image = ObservationImage.image(observation: observation)
+        }
+        
+        if let user = notification.user {
+            location = user.location?.location
+            title = user.name ?? "User"
+            image = UIImage(named: "me")
         }
         
         if let notificationLocation = notification.location {

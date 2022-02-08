@@ -237,13 +237,13 @@ import UIKit
     }
     
     func populateView() {
+        let item = self.items[self.pageControl.currentPage];
         UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
             if self.currentBottomSheetView?.superview != nil {
                 self.currentBottomSheetView?.removeFromSuperview();
             }
             self.pageNumberLabel.text = "\(self.pageControl.currentPage+1) of \(self.pageControl.numberOfPages)";
             
-            let item = self.items[self.pageControl.currentPage];
             if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
                 self.currentBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
                 self.stackView.addArrangedSubview(self.currentBottomSheetView!);
@@ -262,8 +262,8 @@ import UIKit
             }
             self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
             self.view.setNeedsUpdateConstraints();
-            NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation))
         }, completion: nil);
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation))
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
