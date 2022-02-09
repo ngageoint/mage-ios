@@ -238,6 +238,8 @@ import UIKit
     
     func populateView() {
         let item = self.items[self.pageControl.currentPage];
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation))
+        
         UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
             if self.currentBottomSheetView?.superview != nil {
                 self.currentBottomSheetView?.removeFromSuperview();
@@ -262,8 +264,7 @@ import UIKit
             }
             self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
             self.view.setNeedsUpdateConstraints();
-        }, completion: nil);
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation))
+        }, completion: nil)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
