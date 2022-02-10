@@ -94,11 +94,11 @@ class MageMapViewController: UIViewController, GeoPackageBaseMap {
         guard let tapCoord = self.mapView?.convert(tapPoint, toCoordinateFrom: mapView) else {
             return
         }
-        var annotationsTapped: Set<MapAnnotation> = Set()
+        var annotationsTapped: Set<AnyHashable> = Set()
         if let visibleMapRect = mapView?.visibleMapRect, let annotationsVisible = mapView?.annotations(in: visibleMapRect) {
             
             for annotation in annotationsVisible {
-                if let annotation = annotation as? MapAnnotation, let view = mapView?.view(for: annotation) {
+                if let mkAnnotation = annotation as? MKAnnotation, let view = mapView?.view(for: mkAnnotation) {
                     let location = gesture.location(in: view)
                     if view.bounds.contains(location) {
                         annotationsTapped.insert(annotation)

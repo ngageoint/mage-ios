@@ -129,6 +129,7 @@ class FeedItemBottomSheetView: BottomSheetView {
         if let feedItem = feedItem {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                NotificationCenter.default.post(name: .ViewFeedItem, object: feedItem)
                 self.actionsDelegate?.viewFeedItem?(feedItem: feedItem)
             }
         }

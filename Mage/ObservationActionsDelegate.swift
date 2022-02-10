@@ -8,10 +8,6 @@
 
 import Foundation
 
-extension Notification.Name {
-    public static let ViewObservation = Notification.Name("ViewObservation")
-}
-
 @objc protocol ObservationActionsDelegate {
     @objc optional func viewObservation(_ observation: Observation);
     @objc optional func moreActionsTapped(_ observation: Observation);

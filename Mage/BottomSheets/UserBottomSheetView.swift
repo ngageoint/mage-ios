@@ -120,6 +120,7 @@ class UserBottomSheetView: BottomSheetView {
         if let user = user {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                NotificationCenter.default.post(name: .ViewUser, object: user)
                 self.actionsDelegate?.viewUser?(user);
             }
         }

@@ -10,7 +10,7 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections,  HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap {
+class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections,  HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap {
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -24,6 +24,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     var userHeadingDisplayMixin: UserHeadingDisplayMixin?
     var staticLayerMapMixin: StaticLayerMapMixin?
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
+    var feedsMapMixin: FeedsMapMixin?
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -63,6 +64,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             userHeadingDisplayMixin = UserHeadingDisplayMixin(userHeadingDisplay: self, mapStack: mapStack, scheme: scheme)
             staticLayerMapMixin = StaticLayerMapMixin(staticLayerMap: self, scheme: scheme)
             geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
+            feedsMapMixin = FeedsMapMixin(mapView: mapView, scheme: scheme)
             mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
@@ -75,6 +77,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             mapMixins.append(userHeadingDisplayMixin!)
             mapMixins.append(staticLayerMapMixin!)
             mapMixins.append(geoPackageLayerMapMixin!)
+            mapMixins.append(feedsMapMixin!)
         }
         
         initiateMapMixins()
@@ -82,6 +85,18 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
             if let observation = notification.object as? Observation {
                 self?.viewObservation(observation)
+            }
+        }
+        
+        NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
+            if let user = notification.object as? User {
+                self?.viewUser(user)
+            }
+        }
+        
+        NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
+            if let feedItem = notification.object as? FeedItem {
+                self?.viewFeedItem(feedItem)
             }
         }
         
@@ -134,6 +149,18 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.barButtonItem = sender
         present(vc, animated: true, completion: nil)
+    }
+    
+    func viewUser(_ user: User) {
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        let uvc = UserViewController(user: user, scheme: scheme)
+        navigationController?.pushViewController(uvc, animated: true)
+    }
+    
+    func viewFeedItem(_ feedItem: FeedItem) {
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
+        navigationController?.pushViewController(fivc, animated: true)
     }
 }
 

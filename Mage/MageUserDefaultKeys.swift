@@ -25,6 +25,9 @@ extension Notification.Name {
     public static let GeoPackageImported = Notification.Name("mil.nga.giat.mage.geopackage.imported")
     public static let ObservationFiltersChanged = Notification.Name("ObservationFiltersChanged")
     public static let LocationFiltersChanged = Notification.Name("LocationFiltersChanged")
+    public static let ViewObservation = Notification.Name("ViewObservation")
+    public static let ViewUser = Notification.Name("ViewUser")
+    public static let ViewFeedItem = Notification.Name("ViewFeedItem")
 }
 
 @objc public enum LocationDisplay : Int {
@@ -478,6 +481,15 @@ extension Notification.Name {
         }
         set {
             set(newValue, forKey: #function)
+        }
+    }
+    
+    var currentEventSelectedFeeds: [String] {
+        get {
+            return array(forKey: "selectedFeeds-\(Server.currentEventId() ?? -1)") as? [String] ?? []
+        }
+        set {
+            set(newValue, forKey: "selectedFeeds-\(Server.currentEventId() ?? -1)")
         }
     }
     

@@ -103,6 +103,12 @@ class BottomSheetMixin: NSObject, MapMixin {
                     let bottomSheetItem = BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: mapView?.view(for: annotation))
                     items.insert(bottomSheetItem)
                 }
+            } else if let annotation = annotation as? FeedItem {
+                if !dedup.contains(annotation) {
+                    _ = dedup.insert(annotation)
+                    let bottomSheetItem = BottomSheetItem(item: annotation, actionDelegate: nil, annotationView: mapView?.view(for: annotation))
+                    items.insert(bottomSheetItem)
+                }
             }
         }
         
