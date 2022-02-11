@@ -28,13 +28,13 @@ import CoreData
             if let remoteFeedId = Feed.feedIdFromJson(json: feed) {
                 feedRemoteIds.append(remoteFeedId);
                 if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
-                    f.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
+                    f.populate(json: feed, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
                 } else {
                     let f = Feed.mr_createEntity(in: context);
                     selectedFeedsForEvent.append(remoteFeedId);
                     f?.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
+                    count = count + 1;
                 }
-                count = count + 1;
             }
         }
         selectedFeedsForEvent = selectedFeedsForEvent.filter { feedRemoteId in
@@ -54,7 +54,7 @@ import CoreData
         }
         
         if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
-            f.populate(json: json, eventId: eventId, tag: NSNumber(value: count));
+            f.populate(json: json, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
         } else {
             let f = Feed.mr_createEntity(in: context);
             selectedFeedsForEvent.append(remoteFeedId);
