@@ -97,6 +97,10 @@ import CoreData
                 MagicalRecord.save({ localContext in
                     if let feedsJson = responseObject as? [[AnyHashable : Any]] {
                         feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: localContext);
+                        for feedRemoteId in feedRemoteIds {
+                            Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, success: nil, failure: nil);
+                        }
+                        Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds), in: localContext)
                     }
                 }, completion: { contextDidSave, error in
                     if let error = error {
@@ -104,18 +108,7 @@ import CoreData
                             failure(error);
                         }
                     } else if let success = success {
-                        MagicalRecord.save({ localContext in
-                            Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds), in: localContext);
-                        }, completion: { contextDidSave, error in
-                            if let feeds = Feed.mr_findAll(with: NSPredicate(format: "\(FeedKey.eventId.key) == %@", eventId)) as? [Feed] {
-                                for feed in feeds {
-                                    if let remoteId = feed.remoteId {
-                                        Feed.pullFeedItems(feedId: remoteId, eventId: eventId, success: nil, failure: nil);
-                                    }
-                                }
-                            }
-                            success(task, nil);
-                        });
+                        success(task, nil);
                     }
                 })
             }, failure: { task, error in
