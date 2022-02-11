@@ -15,6 +15,7 @@ protocol HasMapSettings {
 }
 
 class HasMapSettingsMixin: NSObject, MapMixin {
+    var geoPackageImportedObserver: Any?
     var mapView: MKMapView?
     var hasMapSettings: HasMapSettings
     var navigationController: UINavigationController?
@@ -37,7 +38,9 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .GeoPackageImported, object: nil)
+        if let geoPackageImportedObserver = geoPackageImportedObserver {
+            NotificationCenter.default.removeObserver(geoPackageImportedObserver, name: .GeoPackageImported, object: nil)
+        }
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {
@@ -58,7 +61,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
 
         applyTheme(scheme: scheme)
         
-        NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) { [weak self] notification in
+        geoPackageImportedObserver = NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) { [weak self] notification in
             self?.setupMapSettingsButton()
         }
     }

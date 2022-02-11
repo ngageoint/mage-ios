@@ -10,7 +10,10 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapViewController: MageMapViewController, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections,  HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap {
+class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap {
+    
+    var navigationController: UINavigationController?
+    var viewController: UIViewController?
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -37,28 +40,44 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         return buttonStack
     }()
     
+    public init(viewController: UIViewController?, navigationController: UINavigationController?, scheme: MDCContainerScheming?) {
+        self.viewController = viewController
+        self.navigationController = navigationController
+        super.init(scheme: scheme)
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: .ViewObservation, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .ViewUser, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .ViewFeedItem, object: nil)
         NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil)
         NotificationCenter.default.removeObserver(self, name: .ObservationFiltersChanged, object: nil)
         NotificationCenter.default.removeObserver(self, name: .LocationFiltersChanged, object: nil)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func layoutView() {
+        super.layoutView()
 
         if let mapView = mapView {
-            self.view.insertSubview(buttonStack, aboveSubview: mapView)
+            self.insertSubview(buttonStack, aboveSubview: mapView)
             buttonStack.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
             buttonStack.autoPinEdge(toSuperviewMargin: .left)
             
             filteredObservationsMapMixin = FilteredObservationsMapMixin(mapView: mapView, scheme: scheme)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
             bottomSheetMixin = BottomSheetMixin(mapView: mapView, navigationController: self.navigationController, scheme: scheme)
-            mapDirectionsMixin = MapDirectionsMixin(mapDirections: self, viewController: self, mapStack: mapStack, scheme: scheme)
+            if let viewController = viewController {
+                mapDirectionsMixin = MapDirectionsMixin(mapDirections: self, viewController: viewController, mapStack: mapStack, scheme: scheme)
+                mapMixins.append(mapDirectionsMixin!)
+            }
+            
             persistedMapStateMixin = PersistedMapStateMixin(persistedMapState: self)
-            hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, navigationController: navigationController, rootView: view, scheme: scheme)
-            canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, navigationController: navigationController, rootView: view, mapStackView: mapStack, scheme: scheme, locationService: nil)
+            hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, navigationController: navigationController, rootView: self, scheme: scheme)
+            canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, navigationController: navigationController, rootView: self, mapStackView: mapStack, scheme: scheme, locationService: nil)
             canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 1, scheme: scheme)
             userTrackingMapMixin = UserTrackingMapMixin(userTrackingMap: self, buttonParentView: buttonStack, indexInView: 0, scheme: scheme)
             userHeadingDisplayMixin = UserHeadingDisplayMixin(userHeadingDisplay: self, mapStack: mapStack, scheme: scheme)
@@ -68,7 +87,6 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
             mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
-            mapMixins.append(mapDirectionsMixin!)
             mapMixins.append(persistedMapStateMixin!)
             mapMixins.append(hasMapSettingsMixin!)
             mapMixins.append(canCreateObservationMixin!)
@@ -101,40 +119,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         }
         
         NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { [weak self] notification in
-            self?.tabBarController?.selectedViewController = self
-        }
-        
-        NotificationCenter.default.addObserver(forName: .ObservationFiltersChanged, object:nil, queue: .main) { [weak self] notification in
-            self?.setNavBarTitle()
-        }
-        
-        NotificationCenter.default.addObserver(forName: .LocationFiltersChanged, object:nil, queue: .main) { [weak self] notification in
-            self?.setNavBarTitle()
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        setupNavigationBar()
-        setNavBarTitle()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
-    }
-    
-    func setupNavigationBar() {
-        let filterButton = UIBarButtonItem(image: UIImage(named: "filter"), style: .plain, target: self, action: #selector(filterTapped(_:)))
-        navigationItem.rightBarButtonItems = [filterButton]
-    }
-    
-    func setNavBarTitle() {
-        guard let event = Event.getCurrentEvent(context: NSManagedObjectContext.mr_default()) else {
-            return
-        }
-        if !MageFilter.getString().isEmpty || !MageFilter.getLocationFilterString().isEmpty {
-            self.navigationItem.setTitle(event.name, subtitle: "Showing filtered results.", scheme: scheme)
-        } else {
-            self.navigationItem.setTitle(event.name, subtitle: nil, scheme: scheme)
+            self?.viewController?.tabBarController?.selectedViewController = self?.viewController
         }
     }
     
@@ -148,7 +133,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
         }
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.barButtonItem = sender
-        present(vc, animated: true, completion: nil)
+        viewController?.present(vc, animated: true, completion: nil)
     }
     
     func viewUser(_ user: User) {
@@ -164,7 +149,7 @@ class MainMageMapViewController: MageMapViewController, FilteredObservationsMap,
     }
 }
 
-extension MainMageMapViewController : ObservationActionsDelegate {
+extension MainMageMapView : ObservationActionsDelegate {
     
     func viewObservation(_ observation: Observation) {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)

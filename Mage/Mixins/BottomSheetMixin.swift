@@ -14,6 +14,8 @@ protocol BottomSheetEnabled {
 }
 
 class BottomSheetMixin: NSObject, MapMixin {
+    var mapItemsTappedObserver: Any?
+    var mapViewDisappearingObserver: Any?
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?
     var navigationController: UINavigationController?
@@ -26,9 +28,15 @@ class BottomSheetMixin: NSObject, MapMixin {
         self.navigationController = navigationController
     }
     
+    deinit {
+        if let mapItemsTappedObserver = mapItemsTappedObserver {
+            NotificationCenter.default.removeObserver(mapItemsTappedObserver, name: .MapItemsTapped, object: nil)
+        }
+    }
+    
     func setupMixin() {
-        NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
-            if let notification = notification.object as? MapItemsTappedNotification {
+        mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
+            if let mapView = self?.mapView, self?.isVisible(view: mapView) == true, let notification = notification.object as? MapItemsTappedNotification, notification.mapView == mapView {
                 var bottomSheetItems: [BottomSheetItem] = []
                 bottomSheetItems += self?.handleTappedAnnotations(annotations: notification.annotations) ?? []
                 bottomSheetItems += self?.handleTappedItems(items: notification.items) ?? []
@@ -36,7 +44,7 @@ class BottomSheetMixin: NSObject, MapMixin {
                     return
                 }
                 
-                let mageBottomSheet = MageBottomSheetViewController(items: bottomSheetItems, scheme: self?.scheme)
+                let mageBottomSheet = MageBottomSheetViewController(items: bottomSheetItems, mapView: mapView, scheme: self?.scheme)
                 let bottomSheetNav = UINavigationController(rootViewController: mageBottomSheet)
                 let bottomSheet = MDCBottomSheetController(contentViewController: bottomSheetNav)
                 bottomSheet.navigationController?.navigationBar.isTranslucent = true
@@ -45,10 +53,12 @@ class BottomSheetMixin: NSObject, MapMixin {
                 self?.navigationController?.present(bottomSheet, animated: true, completion: nil)
                 self?.bottomSheet = bottomSheet
                 self?.mageBottomSheet = mageBottomSheet
-                NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
-                    self?.bottomSheet?.dismiss(animated: true, completion: {
-                        NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
-                    })
+                self?.mapViewDisappearingObserver = NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
+                    if let notificationMapView = notification.object as? MKMapView, notificationMapView == self?.mapView {
+                        self?.bottomSheet?.dismiss(animated: true, completion: {
+                            NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
+                        })
+                    }
                 }
                 NotificationCenter.default.addObserver(forName: .DismissBottomSheet, object: nil, queue: .main) { [weak self] notification in
                     self?.bottomSheet?.dismiss(animated: true, completion: {
@@ -57,6 +67,18 @@ class BottomSheetMixin: NSObject, MapMixin {
                 }
             }
         }
+    }
+    
+    func isVisible(view: UIView) -> Bool {
+        func isVisible(view: UIView, inView: UIView?) -> Bool {
+            guard let inView = inView else { return true }
+            let viewFrame = inView.convert(view.bounds, from: view)
+            if viewFrame.intersects(inView.bounds) {
+                return isVisible(view: view, inView: inView.superview)
+            }
+            return false
+        }
+        return isVisible(view: view, inView: view.superview)
     }
     
     func handleTappedItems(items: [Any]?) -> [BottomSheetItem] {
@@ -123,6 +145,8 @@ extension BottomSheetMixin : BottomSheetDelegate {
 extension BottomSheetMixin : MDCBottomSheetControllerDelegate {
     func bottomSheetControllerDidDismissBottomSheet(_ controller: MDCBottomSheetController) {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .MapViewDisappearing, object: nil)
+        if let mapViewDisappearingObserver = mapViewDisappearingObserver {
+            NotificationCenter.default.removeObserver(mapViewDisappearingObserver, name: .MapViewDisappearing, object: nil)
+        }
     }
 }

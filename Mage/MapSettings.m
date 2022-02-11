@@ -318,6 +318,14 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
     }
     [defaults setObject:selectedFeedsForEvent forKey:[NSString stringWithFormat:@"selectedFeeds-%@", [Server currentEventId]]];
     [defaults synchronize];
+    
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
+        Feed *localFeed = [feed MR_inContext:localContext];
+        [localFeed setSelected:sender.on];
+    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        
+    }];
+
 }
 
 @end

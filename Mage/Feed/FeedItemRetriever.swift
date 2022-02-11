@@ -31,12 +31,10 @@ extension UIImage {
     
     @objc public static func setAnnotationImage(feedItem: FeedItem, annotationView: MKAnnotationView) {
         if let url: URL = feedItem.iconURL {
-            let size = 24;
+            let size = 35;
             
-            let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
             KingfisherManager.shared.retrieveImage(with: url, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
                 .transition(.fade(1)),
                 .cacheOriginalImage
@@ -44,8 +42,9 @@ extension UIImage {
                 switch result {
                 case .success(let value):
                     
-                    let image: UIImage = value.image.resized(to: CGSize(width: size, height: size));
+                    let image = value.image.aspectResize(to: CGSize(width: size, height: size))
                     annotationView.image = image;
+                    
                 case .failure(_):
                     annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
                 }

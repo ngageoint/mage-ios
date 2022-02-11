@@ -11,11 +11,13 @@ import MapKit
 
 struct MapAnnotationFocusedNotification {
     var annotation: MKAnnotation?
+    var mapView: MKMapView?
 }
 
 struct MapItemsTappedNotification {
     var annotations: Set<AnyHashable>?
     var items: [Any]?
+    var mapView: MKMapView?
 }
 
 struct DirectionsToItemNotification {

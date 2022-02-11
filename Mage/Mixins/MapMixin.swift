@@ -13,6 +13,7 @@ import geopackage_ios
 protocol MapMixin {
     var mapView: MKMapView? { get set }
     func setupMixin()
+    func cleanupMixin()
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?
     func traitCollectionUpdated(previous: UITraitCollection?)
     func regionDidChange(mapView: MKMapView, animated: Bool)
@@ -24,6 +25,9 @@ protocol MapMixin {
 }
 
 extension MapMixin {
+    
+    func cleanupMixin() {
+    }
     
     func polygonHitTest(polygonObservation: StyledPolygon, location: CLLocationCoordinate2D) -> Bool {
         guard let renderer = renderer(overlay: polygonObservation) as? MKPolygonRenderer else {

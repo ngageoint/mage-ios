@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 @objc protocol BottomSheetDelegate {
     @objc optional func bottomSheetItemShowing(_ item: BottomSheetItem);
@@ -32,6 +33,7 @@ import UIKit
     private var rightConstraint: NSLayoutConstraint?;
     private var leftConstraint: NSLayoutConstraint?;
     var currentBottomSheetView: BottomSheetView?
+    var mapView: MKMapView?
     
     @objc public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
@@ -138,10 +140,11 @@ import UIKit
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(items: [BottomSheetItem], scheme: MDCContainerScheming?) {
+    @objc public convenience init(items: [BottomSheetItem], mapView: MKMapView?, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.items = items;
+        self.mapView = mapView
         pageControl.numberOfPages = items.count
     }
 
@@ -238,7 +241,7 @@ import UIKit
     
     func populateView() {
         let item = self.items[self.pageControl.currentPage];
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation))
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
         
         UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
             if self.currentBottomSheetView?.superview != nil {

@@ -48,7 +48,7 @@ import Kingfisher
 //    }()
     
     private lazy var mapTab: UINavigationController = {
-        let mapViewController: MageMapViewController = MainMageMapViewController(scheme: self.scheme);
+        let mapViewController: MageMapViewController = MageMapViewController(scheme: scheme)
         let nc = UINavigationController(rootViewController: mapViewController);
         nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: -1);
         return nc;
@@ -189,7 +189,7 @@ import Kingfisher
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
         nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));
 
-        if let url: URL = feed.iconURL {
+        if let url: URL = feed.tabIconURL {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
             KingfisherManager.shared.retrieveImage(with: url, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),

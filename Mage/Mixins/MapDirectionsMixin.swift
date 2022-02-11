@@ -15,6 +15,8 @@ protocol MapDirections {
 }
 
 class MapDirectionsMixin: NSObject, MapMixin {
+    var directionsToItemObserver: Any?
+    var startStraightLineNavigationObserver: Any?
     var mapView: MKMapView?
     var mapStack: UIStackView?
     var scheme: MDCContainerScheming?
@@ -36,13 +38,13 @@ class MapDirectionsMixin: NSObject, MapMixin {
     }
     
     func setupMixin() {
-        NotificationCenter.default.addObserver(forName: .DirectionsToItem, object: nil, queue: .main) { [weak self] notification in
+        directionsToItemObserver = NotificationCenter.default.addObserver(forName: .DirectionsToItem, object: nil, queue: .main) { [weak self] notification in
             if let directionsNotification = notification.object as? DirectionsToItemNotification {
                 self?.getDirections(notification: directionsNotification)
             }
         }
         
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { [weak self] notification in
+        startStraightLineNavigationObserver = NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { [weak self] notification in
             if let straightLineNotification = notification.object as? StraightLineNavigationNotification {
                 self?.startStraightLineNavigation(notification: straightLineNotification)
             }
@@ -50,8 +52,12 @@ class MapDirectionsMixin: NSObject, MapMixin {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .DirectionsToItem, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil)
+        if let directionsToItemObserver = directionsToItemObserver {
+            NotificationCenter.default.removeObserver(directionsToItemObserver, name: .DirectionsToItem, object: nil)
+        }
+        if let startStraightLineNavigationObserver = startStraightLineNavigationObserver {
+            NotificationCenter.default.removeObserver(startStraightLineNavigationObserver, name: .StartStraightLineNavigation, object: nil)
+        }
     }
     
     func startStraightLineNavigation(notification: StraightLineNavigationNotification) {

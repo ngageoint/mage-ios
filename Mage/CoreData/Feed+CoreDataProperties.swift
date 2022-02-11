@@ -33,4 +33,6 @@ extension Feed {
     @NSManaged var itemsHaveSpatialDimension: Bool;
     @NSManaged var itemTemporalProperty: String?;
     @NSManaged var itemPropertiesSchema: [AnyHashable : Any]?;
+    @NSManaged var selected: Bool
+    @NSManaged var icon: [AnyHashable : Any]?
 }

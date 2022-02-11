@@ -287,6 +287,7 @@ public enum FeedKey : String {
     case itemSecondaryProperty
     case itemTemporalProperty
     case itemsHaveIdentity
+    case icon
     
     var key : String {
         return self.rawValue

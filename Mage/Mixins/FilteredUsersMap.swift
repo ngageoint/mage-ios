@@ -22,7 +22,7 @@ extension FilteredUsersMap {
 }
 
 class FilteredUsersMapMixin: NSObject, MapMixin {
-    
+    var mapAnnotationFocusedObserver: AnyObject?
     var filteredUsersMap: FilteredUsersMap?
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?
@@ -31,20 +31,19 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
     var selectedUserAccuracy: MKOverlay?
     
     var locations: Locations?
+    var user: User?
     
-    init(filteredUsersMap: FilteredUsersMap, scheme: MDCContainerScheming?) {
+    init(filteredUsersMap: FilteredUsersMap, user: User? = nil, scheme: MDCContainerScheming?) {
         self.filteredUsersMap = filteredUsersMap
         self.mapView = filteredUsersMap.mapView
+        self.user = user
         self.scheme = scheme
     }
     
     deinit {
-        UserDefaults.removeObserver(self, forKeyPath: "locationtimeFilterKey")
-        UserDefaults.removeObserver(self, forKeyPath: "locationtimeFilterUnitKey")
-        UserDefaults.removeObserver(self, forKeyPath: "locationtimeFilterNumberKey")
-        UserDefaults.removeObserver(self, forKeyPath: "hidePeople")
-        
-        NotificationCenter.default.removeObserver(self, name: .MapAnnotationFocused, object: nil)
+        if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
+            NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver)
+        }
     }
     
     func setupMixin() {
@@ -53,7 +52,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         UserDefaults.standard.addObserver(self, forKeyPath: "locationtimeFilterNumberKey", options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "hidePeople", options: [.new], context: nil)
         
-        NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
+        mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             self?.focusAnnotation(annotation: (notification.object as? MapAnnotationFocusedNotification)?.annotation)
         }
         
@@ -72,7 +71,10 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
             }
         }
         
-        if let locations = locations,
+        if let user = user {
+            locations = Locations(for: user)
+            locations?.delegate = self
+        } else if let locations = locations,
            let locationPredicates = Locations.getPredicatesForLocationsForMap() as? [NSPredicate] {
             locations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: locationPredicates)
         } else {

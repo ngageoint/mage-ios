@@ -33,6 +33,7 @@ import CoreData
                     let f = Feed.mr_createEntity(in: context);
                     selectedFeedsForEvent.append(remoteFeedId);
                     f?.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
+                    f?.selected = true
                     count = count + 1;
                 }
             }
@@ -59,6 +60,7 @@ import CoreData
             let f = Feed.mr_createEntity(in: context);
             selectedFeedsForEvent.append(remoteFeedId);
             f?.populate(json: json, eventId: eventId, tag: NSNumber(value: count));
+            f?.selected = true
         }
         UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
         return remoteFeedId;
@@ -167,6 +169,14 @@ import CoreData
         return nil;
     }
     
+    @objc public var tabIconURL: URL? {
+        // TODO: get the feed icon when we set it properly on the server
+//        if let icon = icon, let iconId = icon[FeedMapStyleKey.id.key] as? String, let baseURL = MageServer.baseURL() {
+//            return URL(string: "\(baseURL.absoluteString)/api/icons/\(iconId)/content")
+//        }
+        return nil;
+    }
+    
     @objc public func populate(json: [AnyHashable : Any], eventId: NSNumber, tag: NSNumber) {
         self.remoteId = json[FeedKey.id.key] as? String
         self.tag = tag
@@ -183,6 +193,7 @@ import CoreData
         self.itemTemporalProperty = json[FeedKey.itemTemporalProperty.key] as? String
         self.itemsHaveIdentity = (json[FeedKey.itemsHaveIdentity.key] as? Bool) ?? false
         self.itemsHaveSpatialDimension = (json[FeedKey.itemsHaveSpatialDimension.key] as? Bool) ?? false
+        self.icon = json[FeedKey.icon.key] as? [AnyHashable : Any]
         self.eventId = eventId;
     }
     

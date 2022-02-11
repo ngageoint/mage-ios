@@ -30,9 +30,6 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     }
     
     func setupMixin() {
-//        geoPackageManager = GPKGGeoPackageFactory.manager()
-//        geoPackageCache = GPKGGeoPackageCache(manager: geoPackageManager)
-        
         guard let mapView = mapView else {
             return
         }
@@ -51,18 +48,5 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         return geoPackage?.getFeaturesAtTap(location)
-        /**
-         for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
-         if ([cacheOverlay isKindOfClass:[GeoPackageFeatureTableCacheOverlay class]]) {
-         GeoPackageFeatureTableCacheOverlay *featureOverlay = (GeoPackageFeatureTableCacheOverlay *)cacheOverlay;
-         
-         NSArray <GeoPackageFeatureItem *> *items = [featureOverlay getFeaturesNearTap:tapCoord andMap:self.mapView];
-         for (GeoPackageFeatureItem *item in items) {
-         [bottomSheetItems addObject:[[BottomSheetItem alloc] initWithItem:item actionDelegate:self annotationView: nil]];
-         }
-         }
-         }
-         */
-//        return nil
     }
 }

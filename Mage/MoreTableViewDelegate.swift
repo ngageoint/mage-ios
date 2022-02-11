@@ -38,6 +38,9 @@ class MoreTableViewDelegate : NSObject, UITableViewDelegate {
         cell.backgroundColor = scheme?.colorScheme.surfaceColor;
         cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         cell.accessoryType = .none
+        if let scheme = scheme {
+            cell.imageView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+        }
             
         let button = UIButton(type: .custom)
         button.frame = CGRect(x: 0, y: 0, width: 11, height: 14)

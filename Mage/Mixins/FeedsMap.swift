@@ -15,9 +15,9 @@ protocol FeedsMap {
 }
 
 class FeedsMapMixin: NSObject, MapMixin {
-    
     let FEEDITEM_ANNOTATION_VIEW_REUSE_ID = "FEEDITEM_ANNOTATION"
     
+    var mapAnnotationFocusedObserver: AnyObject?
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?
 
@@ -32,8 +32,8 @@ class FeedsMapMixin: NSObject, MapMixin {
     }
     
     deinit {
-        if let currentEventId = Server.currentEventId() {
-            UserDefaults.standard.addObserver(self, forKeyPath: "selectedFeeds-\(currentEventId)", options: [.new], context: nil)
+        if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
+            NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
     }
     
@@ -41,10 +41,16 @@ class FeedsMapMixin: NSObject, MapMixin {
         if let currentEventId = Server.currentEventId() {
             UserDefaults.standard.addObserver(self, forKeyPath: "selectedFeeds-\(currentEventId)", options: [.new], context: nil)
         }
-        NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
+        mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             self?.focusAnnotation(annotation: (notification.object as? MapAnnotationFocusedNotification)?.annotation)
         }
         addFeeds()
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath?.starts(with: "selectedFeeds") == true {
+            addFeeds()
+        }
     }
     
     func addFeeds() {
@@ -55,7 +61,7 @@ class FeedsMapMixin: NSObject, MapMixin {
         let feedIdsInEvent = UserDefaults.standard.currentEventSelectedFeeds
         // remove any feeds that are no longer selected
         currentFeeds.removeAll { feedId in
-            return !feedIdsInEvent.contains(feedId)
+            return feedIdsInEvent.contains(feedId)
         }
         // current feeds is now any that used to be selected but not any more
         for feedId in currentFeeds {
@@ -144,10 +150,14 @@ class FeedsMapMixin: NSObject, MapMixin {
     
 extension FeedsMapMixin : FeedItemDelegate {
     func add(_ feedItem: FeedItem!) {
-        
+        if (feedItem.isMappable) {
+            mapView?.addAnnotation(feedItem);
+        }
     }
     
     func remove(_ feedItem: FeedItem!) {
-        
+        if (feedItem.isMappable) {
+            mapView?.removeAnnotation(feedItem);
+        }
     }
 }

@@ -17,6 +17,7 @@ protocol StaticLayerMap {
 }
 
 class StaticLayerMapMixin: NSObject, MapMixin {
+    var mapAnnotationFocusedObserver: AnyObject?
 
     var staticLayerMap: StaticLayerMap?
     var mapView: MKMapView?
@@ -31,11 +32,13 @@ class StaticLayerMapMixin: NSObject, MapMixin {
     }
     
     deinit {
-        UserDefaults.removeObserver(self, forKeyPath: "selectedStaticLayers")
+        if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
+            NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
+        }
     }
     
     func setupMixin() {
-        NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
+        mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             self?.focusAnnotation(annotation: (notification.object as? MapAnnotationFocusedNotification)?.annotation)
         }
         UserDefaults.standard.addObserver(self, forKeyPath: "selectedStaticLayers", options: [.new], context: nil)

@@ -24,10 +24,13 @@ extension FilteredObservationsMap {
 }
 
 class FilteredObservationsMapMixin: NSObject, MapMixin {
-    
+    var mapAnnotationFocusedObserver: AnyObject?
+
     var mapView: MKMapView?
     var navigationController: UINavigationController?
     var scheme: MDCContainerScheming?
+    var user: User?
+    var observation: Observation?
     
     var enlargedObservationView: MKAnnotationView?
     var selectedObservationAccuracy: MKOverlay?
@@ -37,22 +40,18 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     var lineObservations: [StyledPolyline] = []
     var polygonObservations: [StyledPolygon] = []
     
-    init(mapView: MKMapView, scheme: MDCContainerScheming?) {
+    init(mapView: MKMapView, user: User? = nil, observation: Observation? = nil, scheme: MDCContainerScheming?) {
         self.mapView = mapView
         self.scheme = scheme
+        self.user = user
+        self.observation = observation
         mapObservationManager = MapObservationManager(mapView: mapView)
     }
     
     deinit {
-        UserDefaults.removeObserver(self, forKeyPath: "timeFilterKey")
-        UserDefaults.removeObserver(self, forKeyPath: "timeFilterUnitKey")
-        UserDefaults.removeObserver(self, forKeyPath: "timeFilterNumberKey")
-        UserDefaults.removeObserver(self, forKeyPath: "hideObservations")
-        UserDefaults.removeObserver(self, forKeyPath: "importantFilterKey")
-        UserDefaults.removeObserver(self, forKeyPath: "favoritesFilterKey")
-        
-        NotificationCenter.default.removeObserver(self, name: .MapAnnotationFocused, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .ViewObservation, object: nil)
+        if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
+            NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
+        }
     }
     
     func setupMixin() {
@@ -62,7 +61,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         UserDefaults.standard.addObserver(self, forKeyPath: "hideObservations", options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "importantFilterKey", options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "favoritesFilterKey", options: [.new], context: nil)
-        NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
+        mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             self?.focusAnnotation(annotation: (notification.object as? MapAnnotationFocusedNotification)?.annotation)
         }
         addFilteredObservations()
@@ -103,7 +102,13 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
         
-        if let observations = observations,
+        if let user = user {
+            observations = Observations(for: user)
+            observations?.delegate = self
+        } else if let observation = observation {
+            observations = Observations(for: observation)
+            observations?.delegate = self
+        } else if let observations = observations,
            let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
             observations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: observationPredicates)
             

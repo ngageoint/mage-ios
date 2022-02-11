@@ -384,7 +384,7 @@
     if (bottomSheetItems.count == 0) {
         return;
     }
-    self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:bottomSheetItems scheme:self.scheme];
+    self.mageBottomSheet = [[MageBottomSheetViewController alloc] initWithItems:bottomSheetItems mapView: self.mapView scheme:self.scheme];
     self.bottomSheet = [[MDCBottomSheetController alloc] initWithContentViewController:self.mageBottomSheet];
     [self.bottomSheet.navigationController.navigationBar setTranslucent:true];
     self.bottomSheet.delegate = self;
