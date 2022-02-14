@@ -132,6 +132,10 @@ import MapKit
         return view;
     }()
     
+    deinit {
+        items.removeAll()
+    }
+    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }

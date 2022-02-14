@@ -56,11 +56,15 @@ class BottomSheetMixin: NSObject, MapMixin {
                 self?.mageBottomSheet = mageBottomSheet
                 self?.mapViewDisappearingObserver = NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
                     self?.bottomSheet?.dismiss(animated: true, completion: {
+                        self?.mageBottomSheet = nil
+                        self?.bottomSheet = nil
                         NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
                     })
                 }
                 NotificationCenter.default.addObserver(forName: .DismissBottomSheet, object: nil, queue: .main) { [weak self] notification in
                     self?.bottomSheet?.dismiss(animated: true, completion: {
+                        self?.mageBottomSheet = nil
+                        self?.bottomSheet = nil
                         NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
                     })
                 }
@@ -144,6 +148,8 @@ extension BottomSheetMixin : BottomSheetDelegate {
 extension BottomSheetMixin : MDCBottomSheetControllerDelegate {
     func bottomSheetControllerDidDismissBottomSheet(_ controller: MDCBottomSheetController) {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        mageBottomSheet = nil
+        bottomSheet = nil
         if let mapViewDisappearingObserver = mapViewDisappearingObserver {
             NotificationCenter.default.removeObserver(mapViewDisappearingObserver, name: .MapViewDisappearing, object: nil)
         }
