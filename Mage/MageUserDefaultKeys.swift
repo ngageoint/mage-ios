@@ -28,6 +28,7 @@ extension Notification.Name {
     public static let ViewObservation = Notification.Name("ViewObservation")
     public static let ViewUser = Notification.Name("ViewUser")
     public static let ViewFeedItem = Notification.Name("ViewFeedItem")
+    public static let MapRequestFocus = Notification.Name("MapRequestFocus")
 }
 
 @objc public enum LocationDisplay : Int {

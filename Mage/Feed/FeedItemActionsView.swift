@@ -109,9 +109,17 @@ class FeedItemActionsView: UIView {
             return;
         }
         actionsDelegate?.getDirectionsToFeedItem?(feedItem, sourceView: sender)
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
+        // let the bottom sheet dismiss
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            let notification = DirectionsToItemNotification(observation: nil, user: nil, feedItem: feedItem)
+            NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
+        }
     }
     
     @objc func copyLocation() {
-        actionsDelegate?.copyLocation?(latitudeLongitudeButton.currentTitle ?? "No Location");
+        UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(latitudeLongitudeButton.currentTitle ?? "No Location") copied to clipboard"))
     }
 }

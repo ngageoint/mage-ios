@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Kingfisher
 
 protocol MapDirections {
     var mapView: MKMapView? { get set }
@@ -108,6 +109,31 @@ class MapDirectionsMixin: NSObject, MapMixin {
             location = user.location?.location
             title = user.name ?? "User"
             image = UIImage(named: "me")
+        }
+        
+        if let feedItem = notification.feedItem {
+            location = CLLocation(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude)
+            title = feedItem.title ?? "Feed Item"
+            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            if let url: URL = feedItem.iconURL {
+                let size = 24;
+                
+                let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
+                KingfisherManager.shared.retrieveImage(with: url, options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]) { result in
+                    switch result {
+                    case .success(let value):
+                        image = value.image.aspectResize(to: CGSize(width: size, height: size));
+                    case .failure(_):
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                    }
+                }
+            }
         }
         
         if let notificationLocation = notification.location {

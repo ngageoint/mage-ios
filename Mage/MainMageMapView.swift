@@ -118,8 +118,8 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             }
         }
         
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { [weak self] notification in
-            self?.viewController?.tabBarController?.selectedViewController = self?.viewController
+        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { notification in
+            NotificationCenter.default.post(name: .MapRequestFocus, object: nil)
         }
     }
     

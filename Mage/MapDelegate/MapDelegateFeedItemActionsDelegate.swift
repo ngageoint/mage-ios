@@ -33,7 +33,7 @@ extension MapDelegate : FeedItemActionsDelegate {
                     ]) { result in
                         switch result {
                         case .success(let value):
-                            image = value.image.resized(to: CGSize(width: size, height: size));
+                            image = value.image.aspectResize(to: CGSize(width: size, height: size));
                         case .failure(_):
                             image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
                         }

@@ -13,6 +13,7 @@ import Kingfisher
     var moreTableViewDelegate: UITableViewDelegate?;
     var scheme: MDCContainerScheming?;
     var feedViewControllers: [UINavigationController] = [];
+    var mapRequestFocusObserver: Any?
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
         let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self);
@@ -117,23 +118,10 @@ import Kingfisher
         setServerConnectionStatus();
         UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
         
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { [weak self]  notification in
-            guard let notificationObject: StraightLineNavigationNotification = notification.object as? StraightLineNavigationNotification else {
-                return;
-            }
+        mapRequestFocusObserver = NotificationCenter.default.addObserver(forName: .MapRequestFocus, object: nil, queue: .main) { [weak self]  notification in
             self?.mapTab.popToRootViewController(animated: false);
             self?.selectedViewController = self?.mapTab;
             
-            if let mvc: MapViewController = self?.mapTab.viewControllers[0] as? MapViewController {
-                mvc.mapDelegate.feedItemToNavigateTo = nil;
-                mvc.mapDelegate.userToNavigateTo = nil;
-                if let user = notificationObject.user {
-                    mvc.mapDelegate.userToNavigateTo = user;
-                } else if let feedItem = notificationObject.feedItem {
-                    mvc.mapDelegate.feedItemToNavigateTo = feedItem;
-                }
-                mvc.mapDelegate.startStraightLineNavigation(notificationObject.coordinate, image: notificationObject.image);
-            }
         }
     }
     
@@ -142,8 +130,9 @@ import Kingfisher
         mapTab.viewControllers = [];
         Mage.singleton.stopServices();
         offlineObservationManager.stop();
-        UserDefaults.standard.removeObserver(self, forKeyPath: "loginType", context: nil);
-        NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil);
+        if let mapRequestFocusObserver = mapRequestFocusObserver {
+            NotificationCenter.default.removeObserver(mapRequestFocusObserver, name: .MapRequestFocus, object: nil);
+        }
     }
     
     func createOrderedTabs() {
