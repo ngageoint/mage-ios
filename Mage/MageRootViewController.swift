@@ -127,12 +127,18 @@ import Kingfisher
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
-        mapTab.viewControllers = [];
+        
+        mapTab.viewControllers.removeAll()
         Mage.singleton.stopServices();
         offlineObservationManager.stop();
         if let mapRequestFocusObserver = mapRequestFocusObserver {
             NotificationCenter.default.removeObserver(mapRequestFocusObserver, name: .MapRequestFocus, object: nil);
         }
+        self.viewControllers = nil
+    }
+    
+    deinit {
+        UserDefaults.standard.removeObserver(self, forKeyPath: "loginType")
     }
     
     func createOrderedTabs() {

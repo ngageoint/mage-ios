@@ -20,7 +20,7 @@ class UserTrackingMapMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var userTrackingMap: UserTrackingMap
     var scheme: MDCContainerScheming?
-    var buttonParentView: UIStackView?
+    weak var buttonParentView: UIStackView?
     var indexInView: Int = 0
     var locationManager: CLLocationManager?
     var isTrackingAnimation: Bool = false
@@ -44,6 +44,7 @@ class UserTrackingMapMixin: NSObject, MapMixin {
     
     deinit {
         locationManager?.delegate = nil
+        locationManager = nil
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {

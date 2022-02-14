@@ -16,12 +16,12 @@ protocol HasMapSettings {
 
 class HasMapSettingsMixin: NSObject, MapMixin {
     var geoPackageImportedObserver: Any?
-    var mapView: MKMapView?
+    weak var mapView: MKMapView?
     var hasMapSettings: HasMapSettings
-    var navigationController: UINavigationController?
+    weak var navigationController: UINavigationController?
     var scheme: MDCContainerScheming?
     var settingsCoordinator: MapSettingsCoordinator?
-    var rootView: UIView?
+    weak var rootView: UIView?
     
     private lazy var mapSettingsButton: MDCFloatingButton = {
         let mapSettingsButton = MDCFloatingButton(shape: .mini)
@@ -41,6 +41,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         if let geoPackageImportedObserver = geoPackageImportedObserver {
             NotificationCenter.default.removeObserver(geoPackageImportedObserver, name: .GeoPackageImported, object: nil)
         }
+        geoPackageImportedObserver = nil
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {

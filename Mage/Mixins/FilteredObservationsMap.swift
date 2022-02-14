@@ -26,8 +26,7 @@ extension FilteredObservationsMap {
 class FilteredObservationsMapMixin: NSObject, MapMixin {
     var mapAnnotationFocusedObserver: AnyObject?
 
-    var mapView: MKMapView?
-    var navigationController: UINavigationController?
+    weak var mapView: MKMapView?
     var scheme: MDCContainerScheming?
     var user: User?
     var observation: Observation?
@@ -52,6 +51,13 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
+        mapAnnotationFocusedObserver = nil
+        UserDefaults.standard.removeObserver(self, forKeyPath: "timeFilterKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "timeFilterUnitKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "timeFilterNumberKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "hideObservations")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "importantFilterKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "favoritesFilterKey")
     }
     
     func setupMixin() {

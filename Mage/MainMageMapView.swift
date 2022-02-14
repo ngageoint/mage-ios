@@ -12,8 +12,8 @@ import CoreData
 
 class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap {
     
-    var navigationController: UINavigationController?
-    var viewController: UIViewController?
+    weak var navigationController: UINavigationController?
+    weak var viewController: UIViewController?
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -28,6 +28,11 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     var staticLayerMapMixin: StaticLayerMapMixin?
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var feedsMapMixin: FeedsMapMixin?
+    
+    var viewObservationNotificationObserver: Any?
+    var viewUserNotificationObserver: Any?
+    var viewFeedItemNotificationObserver: Any?
+    var startStraightLineNavigationNotificationObserver: Any?
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -51,12 +56,37 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .ViewObservation, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .ViewUser, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .ViewFeedItem, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .ObservationFiltersChanged, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .LocationFiltersChanged, object: nil)
+        if let viewObservationNotificationObserver = viewObservationNotificationObserver {
+            NotificationCenter.default.removeObserver(viewObservationNotificationObserver, name: .ViewObservation, object: nil)
+        }
+        if let viewUserNotificationObserver = viewUserNotificationObserver {
+            NotificationCenter.default.removeObserver(viewUserNotificationObserver, name: .ViewUser, object: nil)
+        }
+        if let viewFeedItemNotificationObserver = viewFeedItemNotificationObserver {
+            NotificationCenter.default.removeObserver(viewFeedItemNotificationObserver, name: .ViewFeedItem, object: nil)
+        }
+        if let startStraightLineNavigationNotificationObserver = startStraightLineNavigationNotificationObserver {
+            NotificationCenter.default.removeObserver(startStraightLineNavigationNotificationObserver, name: .StartStraightLineNavigation, object: nil)
+        }
+        viewController = nil
+        navigationController = nil
+    }
+    
+    override func removeFromSuperview() {
+        cleanupMapMixins()
+        filteredObservationsMapMixin = nil
+        filteredUsersMapMixin = nil
+        bottomSheetMixin = nil
+        mapDirectionsMixin = nil
+        persistedMapStateMixin = nil
+        hasMapSettingsMixin = nil
+        canCreateObservationMixin = nil
+        canReportLocationMixin = nil
+        userTrackingMapMixin = nil
+        userHeadingDisplayMixin = nil
+        staticLayerMapMixin = nil
+        geoPackageLayerMapMixin = nil
+        feedsMapMixin = nil
     }
     
     override func layoutView() {
@@ -100,25 +130,25 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         
         initiateMapMixins()
         
-        NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
+        viewObservationNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
             if let observation = notification.object as? Observation {
                 self?.viewObservation(observation)
             }
         }
-        
-        NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
+
+        viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
             if let user = notification.object as? User {
                 self?.viewUser(user)
             }
         }
-        
-        NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
+
+        viewFeedItemNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
             if let feedItem = notification.object as? FeedItem {
                 self?.viewFeedItem(feedItem)
             }
         }
-        
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { notification in
+
+        startStraightLineNavigationNotificationObserver = NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { notification in
             NotificationCenter.default.post(name: .MapRequestFocus, object: nil)
         }
     }

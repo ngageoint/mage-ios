@@ -30,6 +30,7 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
     }
     
     deinit {
+        UserDefaults.standard.removeObserver(self, forKeyPath: "mapType")
     }
 
     func setupMixin() {

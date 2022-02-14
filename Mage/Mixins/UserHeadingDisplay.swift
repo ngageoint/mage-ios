@@ -22,7 +22,7 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
     var scheme: MDCContainerScheming?
     var locationManager: CLLocationManager?
     var straightLineNavigation: StraightLineNavigation?
-    var mapStack: UIStackView?
+    weak var mapStack: UIStackView?
     
     init(userHeadingDisplay: UserHeadingDisplay, mapStack: UIStackView, scheme: MDCContainerScheming?) {
         self.userHeadingDisplay = userHeadingDisplay
@@ -33,6 +33,7 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
     
     deinit {
         locationManager?.delegate = nil
+        locationManager = nil
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {

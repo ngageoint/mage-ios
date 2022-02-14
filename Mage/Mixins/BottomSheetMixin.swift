@@ -16,9 +16,9 @@ protocol BottomSheetEnabled {
 class BottomSheetMixin: NSObject, MapMixin {
     var mapItemsTappedObserver: Any?
     var mapViewDisappearingObserver: Any?
-    var mapView: MKMapView?
+    weak var mapView: MKMapView?
     var scheme: MDCContainerScheming?
-    var navigationController: UINavigationController?
+    weak var navigationController: UINavigationController?
     var mageBottomSheet: MageBottomSheetViewController?
     var bottomSheet:MDCBottomSheetController?
     
@@ -32,6 +32,7 @@ class BottomSheetMixin: NSObject, MapMixin {
         if let mapItemsTappedObserver = mapItemsTappedObserver {
             NotificationCenter.default.removeObserver(mapItemsTappedObserver, name: .MapItemsTapped, object: nil)
         }
+        mapItemsTappedObserver = nil
     }
     
     func setupMixin() {

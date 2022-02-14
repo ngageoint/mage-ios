@@ -35,6 +35,8 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
+        mapAnnotationFocusedObserver = nil
+        UserDefaults.standard.removeObserver(self, forKeyPath: "selectedStaticLayers")
     }
     
     func setupMixin() {

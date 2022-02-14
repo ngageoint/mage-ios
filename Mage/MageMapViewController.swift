@@ -22,6 +22,7 @@ class MageMapViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         mapView = MainMageMapView(viewController: self, navigationController: self.navigationController, scheme: scheme)
         view.addSubview(mapView!)
         mapView?.autoPinEdgesToSuperviewEdges()
@@ -35,12 +36,18 @@ class MageMapViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setupNavigationBar()
         setNavBarTitle()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.post(name: .MapViewDisappearing, object: mapView?.mapView)
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
+    }
+    
+    deinit {
+        mapView = nil
     }
 
     func setupNavigationBar() {

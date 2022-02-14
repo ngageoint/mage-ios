@@ -17,12 +17,12 @@ protocol CanCreateObservation {
 class CanCreateObservationMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var canCreateObservation: CanCreateObservation
-    var navigationController: UINavigationController?
+    weak var navigationController: UINavigationController?
     var scheme: MDCContainerScheming?
-    var rootView: UIView?
-    var mapStackView: UIStackView?
+    weak var rootView: UIView?
+    weak var mapStackView: UIStackView?
     var editCoordinator: ObservationEditCoordinator?
-    var locationService: LocationService?
+    weak var locationService: LocationService?
     
     private lazy var createFab: MDCFloatingButton = {
         let createFab = MDCFloatingButton(shape: .default)

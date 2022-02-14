@@ -26,6 +26,7 @@
 @property (strong, nonatomic) ImageCacheProvider *imageCacheProvider;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (strong, nonatomic) ServerURLController *urlController;
+@property (strong, nonatomic) AuthenticationCoordinator *authCoordinator;
 
 @end
 
@@ -70,15 +71,18 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
-    AuthenticationCoordinator *authCoordinator;
+    if (self.authCoordinator != nil) {
+        [_childCoordinators removeObject:self.authCoordinator];
+        self.authCoordinator = nil;
+    }
     if ([MageServer isServerVersion5]) {
-        authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
+        self.authCoordinator = [[AuthenticationCoordinator_Server5 alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
     } else {
-        authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
+        self.authCoordinator = [[AuthenticationCoordinator alloc] initWithNavigationController:self.navigationController andDelegate:self andScheme:_scheme];
     }
     
-    [_childCoordinators addObject:authCoordinator];
-    [authCoordinator start:mageServer];
+    [_childCoordinators addObject:self.authCoordinator];
+    [self.authCoordinator start:mageServer];
     [FeedService.shared stop];
 }
 

@@ -44,6 +44,12 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver)
         }
+        mapAnnotationFocusedObserver = nil
+        
+        UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterUnitKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterNumberKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "hidePeople")
     }
     
     func setupMixin() {

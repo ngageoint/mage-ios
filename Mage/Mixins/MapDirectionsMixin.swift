@@ -22,7 +22,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var mapStack: UIStackView?
     var scheme: MDCContainerScheming?
     var mapDirections: MapDirections
-    var viewController: UIViewController
+    weak var viewController: UIViewController?
     var sourceView: UIView?
     var itemToNavigateTo: Any?
     var straightLineNotification: StraightLineNavigationNotification?
@@ -56,9 +56,11 @@ class MapDirectionsMixin: NSObject, MapMixin {
         if let directionsToItemObserver = directionsToItemObserver {
             NotificationCenter.default.removeObserver(directionsToItemObserver, name: .DirectionsToItem, object: nil)
         }
+        directionsToItemObserver = nil
         if let startStraightLineNavigationObserver = startStraightLineNavigationObserver {
             NotificationCenter.default.removeObserver(startStraightLineNavigationObserver, name: .StartStraightLineNavigation, object: nil)
         }
+        startStraightLineNavigationObserver = nil
     }
     
     func startStraightLineNavigation(notification: StraightLineNavigationNotification) {
@@ -185,17 +187,18 @@ class MapDirectionsMixin: NSObject, MapMixin {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
         
         if let popoverController = alert.popoverPresentationController {
-            var view: UIView = viewController.view;
-            if let sourceView = sourceView {
-                view = sourceView;
-            } else {
-                popoverController.permittedArrowDirections = [];
+            var view: UIView? = sourceView
+            if view == nil {
+                popoverController.permittedArrowDirections = []
+                view = viewController?.view
             }
-            popoverController.sourceView = view
-            popoverController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+            if let view = view {
+                popoverController.sourceView = view
+                popoverController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+            }
         }
         
-        viewController.present(alert, animated: true, completion: nil);
+        viewController?.present(alert, animated: true, completion: nil);
     }
 }
 

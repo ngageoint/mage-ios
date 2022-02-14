@@ -20,8 +20,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var canReportLocation: CanReportLocation
     var scheme: MDCContainerScheming?
-    var buttonParentView: UIStackView?
-    var locationService: LocationService?
+    weak var buttonParentView: UIStackView?
     var indexInView: Int = 1
     var locationManager: CLLocationManager?
     var locationAuthorizationStatus: CLAuthorizationStatus = .notDetermined
@@ -44,6 +43,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
     
     deinit {
         locationManager?.delegate = nil
+        locationManager = nil
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {
