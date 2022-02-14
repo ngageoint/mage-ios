@@ -8,9 +8,10 @@
 
 import Foundation
 
-class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap {
+class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap, FollowUser {
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
+    var followUserMapMixin: FollowUserMapMixin?
 
     var user: User?
     
@@ -29,8 +30,10 @@ class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap 
         if let mapView = mapView {
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, user: user, scheme: scheme)
             filteredObservationsMapMixin = FilteredObservationsMapMixin(mapView: mapView, user: user, scheme: scheme)
+            followUserMapMixin = FollowUserMapMixin(followUser: self, user: user, scheme: scheme)
             mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
+            mapMixins.append(followUserMapMixin!)
         }
 
         initiateMapMixins()
@@ -39,6 +42,7 @@ class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap 
     override func removeFromSuperview() {
         filteredUsersMapMixin = nil
         filteredObservationsMapMixin = nil
+        followUserMapMixin = nil
     }
     
 }

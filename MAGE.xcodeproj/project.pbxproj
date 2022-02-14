@@ -376,6 +376,7 @@
 		F78D578D27B5841D003594D3 /* MageMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D578C27B5841D003594D3 /* MageMapViewController.swift */; };
 		F78D578F27B58901003594D3 /* SingleUserMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D578E27B58901003594D3 /* SingleUserMapView.swift */; };
 		F78D579327B60344003594D3 /* SingleObservationMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579227B60344003594D3 /* SingleObservationMapView.swift */; };
+		F78D579627B709D4003594D3 /* FollowUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579527B709D4003594D3 /* FollowUser.swift */; };
 		F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */; };
 		F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */; };
 		F7911623249125230043A529 /* MageRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911622249125230043A529 /* MageRootViewTests.swift */; };
@@ -1111,6 +1112,7 @@
 		F78D578E27B58901003594D3 /* SingleUserMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleUserMapView.swift; sourceTree = "<group>"; };
 		F78D579227B60344003594D3 /* SingleObservationMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleObservationMapView.swift; sourceTree = "<group>"; };
 		F78D579427B6FBCE003594D3 /* mage-ios-sdk 20.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 20.xcdatamodel"; sourceTree = "<group>"; };
+		F78D579527B709D4003594D3 /* FollowUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUser.swift; sourceTree = "<group>"; };
 		F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldView.swift; sourceTree = "<group>"; };
 		F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldViewTests.swift; sourceTree = "<group>"; };
 		F7911622249125230043A529 /* MageRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageRootViewTests.swift; sourceTree = "<group>"; };
@@ -2140,6 +2142,7 @@
 				F7489B3E27A2FE8100A9E314 /* StaticLayerMap.swift */,
 				F7ECDC9927A5A37200D0AF92 /* GeoPackageLayerMap.swift */,
 				F78D578A27B46F49003594D3 /* FeedsMap.swift */,
+				F78D579527B709D4003594D3 /* FollowUser.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3237,6 +3240,7 @@
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
+				F78D579627B709D4003594D3 /* FollowUser.swift in Sources */,
 				F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
 				2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */,
