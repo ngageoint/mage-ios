@@ -55,11 +55,9 @@ class BottomSheetMixin: NSObject, MapMixin {
                 self?.bottomSheet = bottomSheet
                 self?.mageBottomSheet = mageBottomSheet
                 self?.mapViewDisappearingObserver = NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
-                    if let notificationMapView = notification.object as? MKMapView, notificationMapView == self?.mapView {
-                        self?.bottomSheet?.dismiss(animated: true, completion: {
-                            NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
-                        })
-                    }
+                    self?.bottomSheet?.dismiss(animated: true, completion: {
+                        NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
+                    })
                 }
                 NotificationCenter.default.addObserver(forName: .DismissBottomSheet, object: nil, queue: .main) { [weak self] notification in
                     self?.bottomSheet?.dismiss(animated: true, completion: {
