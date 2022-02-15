@@ -50,33 +50,55 @@ class FollowUserMapMixin: NSObject, MapMixin {
             return
         }
         
-        let fetchRequest = Location.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "user = %@", user)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController?.delegate = self
-        do {
-            try fetchedResultsController?.performFetch()
-        } catch {
-            let fetchError = error as NSError
-            print("Unable to Perform Fetch Request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+        // This is me
+        if UserDefaults.standard.currentUserId == user.remoteId {
+            let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
+            if (locations.count != 0) {
+                let location: GPSLocation = locations[0]
+                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.geometry)
+                let dictionary: [String : Any] = location.properties as! [String : Any]
+                let cllocation = CLLocation(
+                    coordinate: CLLocationCoordinate2D(
+                        latitude: centroid.y as! CLLocationDegrees,
+                        longitude: centroid.x as! CLLocationDegrees),
+                    altitude: dictionary["altitude"] as! CLLocationDistance,
+                    horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
+                    verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
+                    timestamp: location.timestamp!)
+                zoomAndCenterMap(cllocation: cllocation)
+            }
+        } else {
+            let fetchRequest = Location.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "user = %@", user)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+            fetchedResultsController?.delegate = self
+            do {
+                try fetchedResultsController?.performFetch()
+            } catch {
+                let fetchError = error as NSError
+                print("Unable to Perform Fetch Request")
+                print("\(fetchError), \(fetchError.localizedDescription)")
+            }
+            if let fetchedObjects = fetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty {
+                zoomAndCenterMap(location: fetchedObjects[0])
+            }
         }
-        zoomAndCenterMap(location: fetchedResultsController?.fetchedObjects?[0])
     }
     
     func zoomAndCenterMap(location: Location?) {
-        if let location = location {
-            let centroid: SFPoint = SFGeometryUtils.centroid(of: location.geometry);
-            let cllocation: CLLocation = CLLocation(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees);
-            let latitudeMeters: CLLocationDistance = cllocation.horizontalAccuracy * 2.5;
-            let longitudeMeters: CLLocationDistance = cllocation.horizontalAccuracy * 2.5;
-            let centerRegion = MKCoordinateRegion(center: cllocation.coordinate, latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
-            if let region: MKCoordinateRegion = mapView?.regionThatFits(centerRegion) {
-                mapView?.setRegion(region, animated: true)
-            }
+        if let location = location, let cllocation = location.location {
+            zoomAndCenterMap(cllocation: cllocation)
         }
-        
+    }
+    
+    func zoomAndCenterMap(cllocation: CLLocation) {
+        let latitudeMeters: CLLocationDistance = cllocation.horizontalAccuracy * 2.5;
+        let longitudeMeters: CLLocationDistance = cllocation.horizontalAccuracy * 2.5;
+        let centerRegion = MKCoordinateRegion(center: cllocation.coordinate, latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
+        if let region: MKCoordinateRegion = mapView?.regionThatFits(centerRegion) {
+            mapView?.setRegion(region, animated: true)
+        }
     }
 }
 

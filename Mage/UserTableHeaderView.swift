@@ -72,17 +72,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
     }
     
-//    private lazy var mapDelegate: MapDelegate = {
-//        let mapDelegate: MapDelegate = MapDelegate();
-//        return mapDelegate;
-//    }()
-    
     private lazy var mapView: SingleUserMapView = {
         let mapView = SingleUserMapView(user: user, scheme: scheme)
-//        MKMapView(forAutoLayout: ());
         mapView.autoSetDimension(.height, toSize: 150);
-//        mapView.delegate = mapDelegate;
-//        mapDelegate.mapView = mapView;
         return mapView;
     }()
     
@@ -240,8 +232,6 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self);
         mapView.cleanupMapMixins()
-//        self.mapDelegate.cleanup();
-//        self.mapView.delegate = nil;
     }
     
     func layoutView() {
@@ -271,15 +261,16 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                     horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
                     verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
                     timestamp: location.timestamp!);
-//                self.mapDelegate.update(location, for: user);
             }
-            
+        } else {
+            if let user = user, let location = Location.mr_findFirst(with:NSPredicate(format: "user = %@", user)) {
+                userLastLocation = location.location
+            }
         }
         
         if (userLastLocation != nil) {
             setLocationText(userLastLocation: userLastLocation!);
             locationView.isHidden = false;
-            zoomAndCenterMap(location: userLastLocation!);
         } else {
             locationView.isHidden = true;
         }
@@ -306,14 +297,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let cacheOnly = DataConnectionUtilities.shouldFetchAvatars();
         avatarImage.showImage(cacheOnly: cacheOnly);
     }
-    
-    func zoomAndCenterMap(location: CLLocation) {
-        let latitudeMeters: CLLocationDistance = location.horizontalAccuracy * 2.5;
-        let longitudeMeters: CLLocationDistance = location.horizontalAccuracy * 2.5;
-//        let region: MKCoordinateRegion = mapView.regionThatFits(MKCoordinateRegion(center: location.coordinate, latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters));
-//        mapDelegate.selectedUser(self.user, region: region);
-    }
-    
+
     @objc public func updateUserDefaults(notification: Notification) {
         if let userLastLocation = userLastLocation {
             setLocationText(userLastLocation: userLastLocation);
