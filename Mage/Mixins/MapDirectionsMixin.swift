@@ -10,6 +10,10 @@ import Foundation
 import MapKit
 import Kingfisher
 
+protocol Navigable {
+    var coordinate: CLLocationCoordinate2D { get }
+}
+
 protocol MapDirections {
     var mapView: MKMapView? { get set }
     var mapDirectionsMixin: MapDirectionsMixin? { get set }
@@ -28,6 +32,9 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var straightLineNotification: StraightLineNavigationNotification?
     var straightLineNavigation: StraightLineNavigation?
     var locationManager: CLLocationManager?
+    var locationFetchedResultsController: NSFetchedResultsController<Location>?
+    var observationFetchedResultsController: NSFetchedResultsController<Observation>?
+    var feedItemFetchedResultsController: NSFetchedResultsController<FeedItem>?
     
     init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, sourceView: UIView? = nil) {
         self.mapDirections = mapDirections
@@ -67,8 +74,16 @@ class MapDirectionsMixin: NSObject, MapMixin {
         self.straightLineNotification = notification
         if let observation = notification.observation {
             itemToNavigateTo = observation
+            observationFetchedResultsController = Observation.fetchedResultsController(observation, delegate: self)
+            try? observationFetchedResultsController?.performFetch()
         } else if let user = notification.user {
             itemToNavigateTo = user
+            locationFetchedResultsController = Location.mostRecentLocationFetchedResultsController(user, delegate: self)
+            try? locationFetchedResultsController?.performFetch()
+        } else if let feedItem = notification.feedItem {
+            itemToNavigateTo = feedItem
+            feedItemFetchedResultsController = FeedItem.fetchedResultsController(feedItem, delegate: self)
+            try? feedItemFetchedResultsController?.performFetch()
         }
         
         self.locationManager = CLLocationManager()
@@ -226,5 +241,27 @@ extension MapDirectionsMixin : StraightLineNavigationDelegate {
         straightLineNavigation = nil
         locationManager?.stopUpdatingHeading()
         locationManager?.stopUpdatingLocation()
+        feedItemFetchedResultsController?.delegate = nil
+        feedItemFetchedResultsController = nil
+        observationFetchedResultsController?.delegate = nil
+        observationFetchedResultsController = nil
+        locationFetchedResultsController?.delegate = nil
+        locationFetchedResultsController = nil
+    }
+}
+
+extension MapDirectionsMixin : NSFetchedResultsControllerDelegate {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let locationManager = locationManager else {
+            return
+        }
+        
+        if type != .update {
+            return
+        }
+        
+        if let navigable = anObject as? Navigable {
+            straightLineNavigation?.updateNavigationLines(manager: locationManager, destinationCoordinate: navigable.coordinate)
+        }
     }
 }

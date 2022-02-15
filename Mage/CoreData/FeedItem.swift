@@ -10,7 +10,27 @@
 import Foundation
 import CoreData
 
-@objc public class FeedItem: NSManagedObject, MKAnnotation {
+@objc public class FeedItem: NSManagedObject, MKAnnotation, Navigable {
+    
+    static func fetchedResultsController(_ feedItem: FeedItem, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<FeedItem>? {
+        guard let remoteId = feedItem.remoteId else {
+            return nil
+        }
+        let fetchRequest = FeedItem.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        let feedItemFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        feedItemFetchedResultsController.delegate = delegate
+        do {
+            try feedItemFetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("Unable to Perform Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
+        }
+        return feedItemFetchedResultsController
+    }
+    
     @objc public var simpleFeature: SFGeometry? {
         get {
             if let geometry = self.geometry {

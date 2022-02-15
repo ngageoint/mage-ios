@@ -12,7 +12,29 @@ import CoreLocation
 import sf_ios
 import MagicalRecord
 
-@objc public class Location: NSManagedObject {
+@objc public class Location: NSManagedObject, Navigable {
+    
+    static func mostRecentLocationFetchedResultsController(_ user: User, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Location>? {
+        let fetchRequest = Location.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "user = %@", user)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        let locationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        locationFetchedResultsController.delegate = delegate
+        do {
+            try locationFetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("Unable to Perform Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
+        }
+        return locationFetchedResultsController
+    }
+    
+    var coordinate: CLLocationCoordinate2D {
+        get {
+            return location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        }
+    }
     
     @objc public var geometry: SFGeometry? {
         get {

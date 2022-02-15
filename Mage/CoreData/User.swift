@@ -10,7 +10,13 @@ import Foundation
 import CoreData
 import Kingfisher
 
-@objc public class User: NSManagedObject {
+@objc public class User: NSManagedObject, Navigable {
+    
+    var coordinate: CLLocationCoordinate2D {
+        get {
+            return location?.location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        }
+    }
     
     @objc public var cacheAvatarUrl: String? {
         get {

@@ -25,7 +25,31 @@ enum State: Int, CustomStringConvertible {
     }
 }
 
-@objc public class Observation: NSManagedObject {
+@objc public class Observation: NSManagedObject, Navigable {
+    var coordinate: CLLocationCoordinate2D {
+        get {
+            return location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        }
+    }
+    
+    static func fetchedResultsController(_ observation: Observation, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Observation>? {
+        guard let remoteId = observation.remoteId else {
+            return nil
+        }
+        let fetchRequest = Observation.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        let observationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        observationFetchedResultsController.delegate = delegate
+        do {
+            try observationFetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("Unable to Perform Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
+        }
+        return observationFetchedResultsController
+    }
     
     @objc public static func operationToPullInitialObservations(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         return Observation.operationToPullObservations(initial: true, success: success, failure: failure);
