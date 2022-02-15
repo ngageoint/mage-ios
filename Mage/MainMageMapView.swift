@@ -173,38 +173,10 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
         navigationController?.pushViewController(fivc, animated: true)
     }
-}
-
-extension MainMageMapView : ObservationActionsDelegate {
     
     func viewObservation(_ observation: Observation) {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
         navigationController?.pushViewController(ovc, animated: true)
     }
-    
-    func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
-        observation.toggleFavorite { (_, _) in
-            NotificationCenter.default.post(name: .ObservationUpdated, object: observation)
-        }
-    }
-    
-    func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
-        //        self.resetEnlargedPin();
-        //        self.mageBottomSheet.dismiss(animated: true, completion: {
-        //            guard let location = observation.location else {
-        //                return;
-        //            }
-        //            var extraActions: [UIAlertAction] = [];
-        //            extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-        //                self.observationToNavigateTo = observation;
-        //                self.locationToNavigateTo = kCLLocationCoordinate2DInvalid;
-        //                self.userToNavigateTo = nil;
-        //                self.feedItemToNavigateTo = nil;
-        //                self.startStraightLineNavigation(location.coordinate, image: ObservationImage.image(observation: observation));
-        //            }));
-        //            ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self.navigationController, extraActions: extraActions, sourceView: nil);
-        //        });
-    }
-    
 }
