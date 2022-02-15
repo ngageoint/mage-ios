@@ -131,13 +131,11 @@ import Kingfisher
         mapTab.viewControllers.removeAll()
         Mage.singleton.stopServices();
         offlineObservationManager.stop();
+        offlineObservationManager.delegate = nil
         if let mapRequestFocusObserver = mapRequestFocusObserver {
             NotificationCenter.default.removeObserver(mapRequestFocusObserver, name: .MapRequestFocus, object: nil);
         }
-        self.viewControllers = nil
-    }
-    
-    deinit {
+        self.delegate = nil
         UserDefaults.standard.removeObserver(self, forKeyPath: "loginType")
     }
     
