@@ -432,19 +432,24 @@
     
     // Add the GeoPackage caches
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
-    @try {
-        [manager importGeoPackageFromPath:countriesDarkGeoPackagePath];
-    }
-    @catch (NSException *e) {
-        // probably was already imported and that is fine
+    if (![manager exists:@"countries_dark"]) {
+        @try {
+            [manager importGeoPackageFromPath:countriesDarkGeoPackagePath];
+        }
+        @catch (NSException *e) {
+            // probably was already imported and that is fine
+        }
     }
     NSString *countriesGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries" ofType:@"gpkg"];
     NSLog(@"Countries GeoPackage path %@", countriesGeoPackagePath);
-    @try {
-        [manager importGeoPackageFromPath:countriesGeoPackagePath];
-    }
-    @catch (NSException *e) {
-        // probably was already imported and that is fine
+    
+    if (![manager exists:@"countries"]) {
+        @try {
+            [manager importGeoPackageFromPath:countriesGeoPackagePath];
+        }
+        @catch (NSException *e) {
+            // probably was already imported and that is fine
+        }
     }
     
     GPKGGeoPackage *countriesGeoPackage = [manager open:@"countries"];
