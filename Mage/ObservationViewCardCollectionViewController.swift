@@ -418,14 +418,10 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
-        guard let location = observation.location else {
-            return;
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            let notification = DirectionsToItemNotification(observation: observation, user: nil, feedItem: nil)
+            NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
-        var extraActions: [UIAlertAction] = [];
-        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(observation: observation), coordinate: location.coordinate))
-        }));
-        ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
     
     func makeImportant(_ observation: Observation, reason: String) {
