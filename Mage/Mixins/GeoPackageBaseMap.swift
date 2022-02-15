@@ -31,17 +31,17 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
     
     deinit {
         UserDefaults.standard.removeObserver(self, forKeyPath: "mapType")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "mapShowTraffic")
     }
 
     func setupMixin() {
         UserDefaults.standard.addObserver(self, forKeyPath: "mapType", options: .new, context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: "mapShowTraffic", options: .new, context: nil)
         addBaseMap()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if "mapType" == keyPath {
-            addBaseMap()
-        }
+        addBaseMap()
     }
     
     func addBaseMap() {
@@ -62,7 +62,9 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
         } else {
             mapView?.removeOverlay(darkBackgroundOverlay)
             mapView?.removeOverlay(backgroundOverlay)
+            mapView?.mapType = MKMapType(rawValue: UInt(UserDefaults.standard.mapType)) ?? .standard
         }
+        mapView?.showsTraffic = UserDefaults.standard.mapShowTraffic && mapView?.mapType != .satellite && UserDefaults.standard.mapType != 3
     }
     
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
