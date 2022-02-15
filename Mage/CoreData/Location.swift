@@ -31,7 +31,14 @@ import MagicalRecord
     @objc public var location: CLLocation? {
         get {
             if let geometry = geometry, let centroid = SFGeometryUtils.centroid(of: geometry) {
-                return CLLocation(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue);
+                
+                let dictionary: [String : Any] = self.properties as? [String : Any] ?? [:]
+                return CLLocation(
+                    coordinate: CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue),
+                    altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
+                    horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                    verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                    timestamp: timestamp ?? Date());
             }
             return CLLocation(latitude: 0, longitude: 0);
         }
