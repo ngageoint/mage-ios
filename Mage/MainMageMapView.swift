@@ -147,10 +147,6 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
                 self?.viewFeedItem(feedItem)
             }
         }
-
-        startStraightLineNavigationNotificationObserver = NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object:nil, queue: .main) { notification in
-            NotificationCenter.default.post(name: .MapRequestFocus, object: nil)
-        }
     }
     
     @objc func filterTapped(_ sender: UIBarButtonItem) {
@@ -190,9 +186,6 @@ extension MainMageMapView : ObservationActionsDelegate {
     func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
         observation.toggleFavorite { (_, _) in
             NotificationCenter.default.post(name: .ObservationUpdated, object: observation)
-            //            self.mageBottomSheet.currentBottomSheetView?.refresh();
-            //            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-            //            completion?(observation)
         }
     }
     

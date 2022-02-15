@@ -19,7 +19,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var directionsToItemObserver: Any?
     var startStraightLineNavigationObserver: Any?
     var mapView: MKMapView?
-    var mapStack: UIStackView?
+    weak var mapStack: UIStackView?
     var scheme: MDCContainerScheming?
     var mapDirections: MapDirections
     weak var viewController: UIViewController?
@@ -161,7 +161,8 @@ class MapDirectionsMixin: NSObject, MapMixin {
             straightLineNavigationNotification.image = image
             straightLineNavigationNotification.imageURL = notification.imageUrl
             
-            self.startStraightLineNavigation(notification: straightLineNavigationNotification)
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:straightLineNavigationNotification)
+            NotificationCenter.default.post(name: .MapRequestFocus, object: nil)
         }));
         
         let appleMapsQueryString = "daddr=\(location.coordinate.latitude),\(location.coordinate.longitude)&ll=\(location.coordinate.latitude),\(location.coordinate.longitude)&q=\(title ?? "")".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed);
@@ -219,8 +220,10 @@ extension MapDirectionsMixin : CLLocationManagerDelegate {
 extension MapDirectionsMixin : StraightLineNavigationDelegate {
     func cancelStraightLineNavigation() {
         itemToNavigateTo = nil
+        straightLineNotification?.imageURL = nil
         straightLineNotification = nil
         straightLineNavigation?.stopNavigation()
+        straightLineNavigation = nil
         locationManager?.stopUpdatingHeading()
         locationManager?.stopUpdatingLocation()
     }

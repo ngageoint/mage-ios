@@ -108,7 +108,6 @@ class FeedItemActionsView: UIView {
         guard let feedItem = self.feedItem else {
             return;
         }
-        actionsDelegate?.getDirectionsToFeedItem?(feedItem, sourceView: sender)
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
         // let the bottom sheet dismiss

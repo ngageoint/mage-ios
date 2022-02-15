@@ -171,6 +171,14 @@ import Kingfisher
         applyTheme(withScheme: scheme);
     }
     
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
+        self.compassView = nil
+    }
+    
     override func updateConstraints() {
         if (!didSetupConstraints) {
             compassView?.autoSetDimensions(to: CGSize(width: 350, height: 350))

@@ -24,8 +24,8 @@ struct StraightLineNavigationNotification {
 
 @objc class StraightLineNavigation: NSObject {
     var delegate: StraightLineNavigationDelegate?;
-    let mapView: MKMapView!;
-    let mapStack: UIStackView!;
+    weak var mapView: MKMapView?;
+    weak var mapStack: UIStackView?;
     var navigationModeEnabled: Bool = false
     var headingModeEnabled: Bool = false
     var navView: StraightLineNavigationView?;
@@ -49,6 +49,11 @@ struct StraightLineNavigationNotification {
         self.mapStack = mapStack;
     }
     
+    deinit {
+        navView?.removeFromSuperview();
+        navView = nil
+    }
+    
     @objc func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, imageURL: URL?, scheme: MDCContainerScheming? = nil) {
         navigationModeEnabled = true;
         headingModeEnabled = true;
@@ -57,7 +62,7 @@ struct StraightLineNavigationNotification {
         navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: relativeBearingColor, bearingColor: headingColor);
         navView?.destinationMarkerUrl = imageURL
         self.delegate = delegate;
-        mapStack.addArrangedSubview(navView!);
+        mapStack?.addArrangedSubview(navView!);
     }
     
     @objc func startHeading(manager: CLLocationManager) {
@@ -70,7 +75,7 @@ struct StraightLineNavigationNotification {
         if (!navigationModeEnabled && headingModeEnabled) {
             headingModeEnabled = false;
             if let headingPolyline = headingPolyline {
-                mapView.removeOverlay(headingPolyline);
+                mapView?.removeOverlay(headingPolyline);
             }
             return true;
         }
@@ -80,19 +85,18 @@ struct StraightLineNavigationNotification {
     @objc func stopNavigation() {
         navigationModeEnabled = false;
         if let relativeBearingPolyline = relativeBearingPolyline {
-            mapView.removeOverlay(relativeBearingPolyline);
+            mapView?.removeOverlay(relativeBearingPolyline);
         }
         if let headingPolyline = headingPolyline {
-            mapView.removeOverlay(headingPolyline);
+            mapView?.removeOverlay(headingPolyline);
         }
-        navView?.removeFromSuperview();
     }
     
     func calculateBearingPoint(startCoordinate: CLLocationCoordinate2D, bearing: CLLocationDirection) -> CLLocationCoordinate2D {
         var metersDistanceForBearing = 500000.0;
         
-        let span = mapView.region.span
-        let center = mapView.region.center
+        let span = mapView?.region.span ?? MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5)
+        let center = mapView?.region.center ?? startCoordinate
         
         let loc1 = CLLocation(latitude: center.latitude - span.latitudeDelta, longitude: center.longitude)
         let loc2 = CLLocation(latitude: center.latitude + span.latitudeDelta, longitude: center.longitude)
@@ -144,10 +148,10 @@ struct StraightLineNavigationNotification {
             let userLocationPoint = MKMapPoint(userCoordinate)
             let coordinates: [MKMapPoint] = [userLocationPoint, bearingPoint]
             if (headingPolyline != nil) {
-                mapView.removeOverlay(headingPolyline!);
+                mapView?.removeOverlay(headingPolyline!);
             }
             headingPolyline = NavigationOverlay(points: coordinates, count: 2, color: headingColor)
-            mapView.addOverlay(headingPolyline!, level: .aboveLabels);
+            mapView?.addOverlay(headingPolyline!, level: .aboveLabels);
             navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor);
         }
     }
@@ -162,10 +166,10 @@ struct StraightLineNavigationNotification {
             
             let coordinates: [MKMapPoint] = [userLocationPoint, endCoordinate]
             if (relativeBearingPolyline != nil) {
-                mapView.removeOverlay(relativeBearingPolyline!);
+                mapView?.removeOverlay(relativeBearingPolyline!);
             }
             relativeBearingPolyline = NavigationOverlay(points: coordinates, count: 2, color: relativeBearingColor)
-            mapView.addOverlay(relativeBearingPolyline!);
+            mapView?.addOverlay(relativeBearingPolyline!);
         }
         
         updateHeadingLine(manager: manager);
