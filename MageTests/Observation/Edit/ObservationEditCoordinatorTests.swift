@@ -402,6 +402,70 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "Yes, Discard");
                 tester().tapView(withAccessibilityLabel: "Yes, Discard");
             }
+            
+            it("should not add archived forms to the observation") {
+                let formsJson: [[String: AnyHashable]] = [[
+                    "name": "Suspect",
+                    "description": "Information about a suspect",
+                    "color": "#5278A2",
+                    "id": 2,
+                    "archived": true,
+                    "min": 1,
+                    "max": 1
+                ], [
+                    "name": "Vehicle",
+                    "description": "Information about a vehicle",
+                    "color": "#7852A2",
+                    "id": 3,
+                    "min": 1,
+                    "max": 1
+                ], [
+                    "name": "Evidence",
+                    "description": "Evidence form",
+                    "color": "#52A278",
+                    "id": 0
+                ], [
+                    "name": "Witness",
+                    "description": "Information gathered from a witness",
+                    "color": "#A25278",
+                    "id": 1
+                ], [
+                    "name": "Location",
+                    "description": "Detailed information about the scene",
+                    "id": 4
+                ]]
+                
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                Server.setCurrentEventId(1);
+                MageCoreDataFixtures.addUser(userId: "user")
+                UserDefaults.standard.currentUserId = "user";
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                tester().wait(forTimeInterval: 0.5);
+                MageCoreDataFixtures.addEventFromJson(formsJson: formsJson, maxObservationForms: 1, minObservationForms: 1)
+                
+                let formatter = DateFormatter();
+                formatter.dateFormat = "yyyy-MM-dd'T'HH:mmZ";
+                formatter.locale = Locale(identifier: "en_US_POSIX");
+                
+                let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
+                let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
+                
+                let coordinator = ObservationEditCoordinator(rootViewController: controller, delegate: delegate, location: point, accuracy: CLLocationAccuracy(3.2), provider: "GPS", delta: 1.2)
+                coordinator.applyTheme(withContainerScheme: MAGEScheme.scheme());
+                
+                tester().wait(forTimeInterval: 0.5);
+                
+                coordinator.start();
+                
+                tester().waitForAnimationsToFinish();
+                tester().waitForView(withAccessibilityLabel: "Save");
+                
+                tester().waitForView(withAccessibilityLabel: "VEHICLE")
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "SUSPECT")
+                
+                tester().tapView(withAccessibilityLabel: "Save")
+                expect(delegate.editCompleteCalled).to(beTrue())
+            }
         }
     }
 }

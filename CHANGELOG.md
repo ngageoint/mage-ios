@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 3.0.5
+## 3.0.6
 
 ##### Release Notes
 Degree minute second support!  Always wanted to use coordinates in the degree minute second format but couldn't?  Have we got the update for you!
@@ -16,6 +16,12 @@ You can now choose to display and enter coordinates in Latitude Longitude, MGRS,
 
 ##### Bug Fixes
 * A few lingering dark mode color bugs were tracked down
+
+## 3.0.5
+
+##### Bug Fixes
+* Fixed a bug which added archived forms to an observation
+* Fixed a bug which required archived forms to be added if their min was set
 
 ## 3.0.4
 
