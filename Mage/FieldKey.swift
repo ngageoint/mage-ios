@@ -348,6 +348,15 @@ public enum LayerKey: String {
     }
 }
 
+public enum LayerOptionsKey: String {
+    case base
+    case transparent
+    
+    var key : String {
+        return self.rawValue
+    }
+}
+
 public enum WMSLayerOptionsKey: String {
     case layers
     case format

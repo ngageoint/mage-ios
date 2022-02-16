@@ -22,6 +22,7 @@
 #import "SFPProjection.h"
 #import "SFPProjectionTransform.h"
 #import "SFPProjectionConstants.h"
+#import "XYZDirectoryCacheOverlay.h"
 
 @interface GeoPackage ()
 @property (nonatomic, strong) MKMapView *mapView;
@@ -167,7 +168,7 @@
             switch([cacheOverlay getType]){
                     
                 case XYZ_DIRECTORY:
-//                    [self addXYZDirectoryCacheOverlayWithEnabled:enabledCacheOverlays andCacheOverlay:(XYZDirectoryCacheOverlay *)cacheOverlay];
+                    [self addXYZDirectoryCacheOverlayWithEnabled:enabledCacheOverlays andCacheOverlay:(XYZDirectoryCacheOverlay *)cacheOverlay];
                     break;
                     
                 case GEOPACKAGE:
@@ -497,6 +498,50 @@
             }
         });
     }
+}
+
+-(void) addXYZDirectoryCacheOverlayWithEnabled: (NSMutableDictionary<NSString *, CacheOverlay *> *) enabledCacheOverlays andCacheOverlay: (XYZDirectoryCacheOverlay *) xyzDirectoryCacheOverlay{
+    // Retrieve the cache overlay if it already exists (and remove from cache overlays)
+    NSString * cacheName = [xyzDirectoryCacheOverlay getCacheName];
+    CacheOverlay * cacheOverlay = [self.mapCacheOverlays objectForKey:cacheName];
+    if(cacheOverlay == nil){
+        
+        // Set the cache directory path
+        NSString *cacheDirectory = [xyzDirectoryCacheOverlay getDirectory];
+        
+        // Find the image extension type
+        NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:cacheDirectory];
+        NSString * patternExtension = nil;
+        for (NSString *file in enumerator) {
+            NSString * extension = [file pathExtension];
+            if([extension caseInsensitiveCompare:@"png"] == NSOrderedSame ||
+               [extension caseInsensitiveCompare:@"jpeg"] == NSOrderedSame ||
+               [extension caseInsensitiveCompare:@"jpg"] == NSOrderedSame){
+                patternExtension = extension;
+                break;
+            }
+        }
+        
+        NSString *template = [NSString stringWithFormat:@"file://%@/{z}/{x}/{y}", cacheDirectory];
+        if(patternExtension != nil){
+            template = [NSString stringWithFormat:@"%@.%@", template, patternExtension];
+        }
+        MKTileOverlay *tileOverlay = [[MKTileOverlay alloc] initWithURLTemplate:template];
+        tileOverlay.minimumZ = xyzDirectoryCacheOverlay.minZoom;
+        tileOverlay.maximumZ = xyzDirectoryCacheOverlay.maxZoom;
+        [xyzDirectoryCacheOverlay setTileOverlay:tileOverlay];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            NSLog(@"Adding xyz cache");
+            [self.mapView addOverlay:tileOverlay level:MKOverlayLevelAboveRoads];
+        });
+        
+        cacheOverlay = xyzDirectoryCacheOverlay;
+    }else{
+        [self.mapCacheOverlays removeObjectForKey:cacheName];
+    }
+    // Add the cache overlay to the enabled cache overlays
+    [enabledCacheOverlays setObject:cacheOverlay forKey:cacheName];
+    
 }
 
 @end

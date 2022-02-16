@@ -75,3 +75,6 @@
 #import "MapUtils.h"
 #import "CacheOverlays.h"
 #import "GeoPackage.h"
+#import "WMSTileOverlay.h"
+#import "TMSTileOverlay.h"
+#import "XYZTileOverlay.h"

@@ -10,7 +10,7 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap {
+class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap, OnlineLayerMap {
     
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
@@ -28,6 +28,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     var staticLayerMapMixin: StaticLayerMapMixin?
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var feedsMapMixin: FeedsMapMixin?
+    var onlineLayerMapMixin: OnlineLayerMapMixin?
     
     var viewObservationNotificationObserver: Any?
     var viewUserNotificationObserver: Any?
@@ -87,6 +88,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         staticLayerMapMixin = nil
         geoPackageLayerMapMixin = nil
         feedsMapMixin = nil
+        onlineLayerMapMixin = nil
     }
     
     override func layoutView() {
@@ -114,6 +116,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             staticLayerMapMixin = StaticLayerMapMixin(staticLayerMap: self, scheme: scheme)
             geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
             feedsMapMixin = FeedsMapMixin(mapView: mapView, scheme: scheme)
+            onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self, scheme: scheme)
             mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
@@ -126,6 +129,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(staticLayerMapMixin!)
             mapMixins.append(geoPackageLayerMapMixin!)
             mapMixins.append(feedsMapMixin!)
+            mapMixins.append(onlineLayerMapMixin!)
         }
         
         initiateMapMixins()
