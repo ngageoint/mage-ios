@@ -191,7 +191,8 @@ protocol ObservationCommonPropertiesListener: AnyObject {
     }
     
     func addRequiredForms(observation: Observation) {
-        for eventForm in eventForms {
+        // ignore archived forms when adding required forms
+        for eventForm in eventForms where !eventForm.archived {
             let eventFormMin: Int = eventForm.min ?? 0;
             if (eventFormMin > 0) {
                 for _ in 1...eventFormMin {

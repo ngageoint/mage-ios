@@ -546,7 +546,8 @@ import MaterialComponents.MDCCard
                 let eventFormMin: Int = eventForm.min ?? 0;
                 let eventFormMax: Int = eventForm.max ?? Int.max;
                 let formCount = formIdCount[eventForm.formId?.intValue ?? Int.min] ?? 0;
-                if (formCount < eventFormMin) {
+                // ignore archived forms when checkng min
+                if (!eventForm.archived && formCount < eventFormMin) {
                     // not enough of this form
                     let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name ?? "") form must be included in an observation at least \(eventFormMin) time\(eventFormMin == 1 ? "" : "s")");
                     let messageAction = MDCSnackbarMessageAction();
@@ -557,7 +558,7 @@ import MaterialComponents.MDCCard
                 }
                 if (formCount > eventFormMax) {
                     // too many of this form
-                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name) form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
+                    let message: MDCSnackbarMessage = MDCSnackbarMessage(text: "\(eventForm.name ?? "") form cannot be included in an observation more than \(eventFormMax) time\(eventFormMax == 1 ? "" : "s")");
                     let messageAction = MDCSnackbarMessageAction();
                     messageAction.title = "OK";
                     message.action = messageAction;
