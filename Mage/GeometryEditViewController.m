@@ -708,6 +708,8 @@ static float paddingPercentage = .1;
             longitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.longitude];
             latitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.latitude];
         }
+    } else {
+        return;
     }
     
     if (self.validLocation){

@@ -22,9 +22,9 @@ PODS:
     - sf-wkt-ios (~> 2.0.0)
     - tiff-ios (~> 3.0.0)
   - HexColors (4.0.0)
-  - KIF (3.8.4):
-    - KIF/Core (= 3.8.4)
-  - KIF/Core (3.8.4)
+  - KIF (3.8.6):
+    - KIF/Core (= 3.8.6)
+  - KIF/Core (3.8.6)
   - Kingfisher (6.3.1)
   - libPhoneNumber-iOS (0.9.15)
   - MagicalRecord (2.3.2):
@@ -773,7 +773,7 @@ SPEC CHECKSUMS:
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   geopackage-ios: e7d9fe42400505f16938c9c18e8b8b8cd49882dc
   HexColors: 5f95843ef89aff6a72e1fd3a8ebabf205cc43379
-  KIF: ffa54e46ba5da0b3544cea4118b8b5faa4411184
+  KIF: e2e1bab222b6c9523a0a88caab31f8524fe82404
   Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
