@@ -11,6 +11,7 @@ import CoreData
 import sf_ios
 import UIKit
 import MagicalRecord
+import geopackage_ios
 
 enum State: Int, CustomStringConvertible {
     case Archive, Active
@@ -30,6 +31,32 @@ enum State: Int, CustomStringConvertible {
         get {
             return location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
         }
+    }
+
+    public func viewRegion(mapView: MKMapView) -> MKCoordinateRegion {
+        if let geometry = self.geometry {
+            var latitudeMeters = 2500.0
+            var longitudeMeters = 2500.0
+            if geometry is SFPoint {
+                if let properties = properties, let accuracy = properties[ObservationKey.accuracy.key] as? Double {
+                    latitudeMeters = accuracy * 2.5
+                    longitudeMeters = accuracy * 2.5
+                }
+            } else {
+                let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
+                let boundingBox = GPKGBoundingBox(envelope: envelope)
+                if let size = boundingBox?.sizeInMeters() {
+                    latitudeMeters = size.height + (2 * (size.height * 0.1))
+                    longitudeMeters = size.width + (2 * (size.width * 0.1))
+                    
+                }
+            }
+            if let centroid = geometry.centroid() {
+                return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue), latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
+            }
+        }
+        
+        return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0, longitude: 0), latitudinalMeters: 50000, longitudinalMeters: 50000)
     }
     
     static func fetchedResultsController(_ observation: Observation, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Observation>? {
