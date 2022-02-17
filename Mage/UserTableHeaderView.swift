@@ -503,20 +503,5 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
             }
         }
     }
-    
-}
-
-extension UserTableHeaderView : NSFetchedResultsControllerDelegate {
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        if let controller = mapDelegate.locations.fetchedResultsController as? NSFetchedResultsController<Location>, let locations: [Location] = controller.fetchedObjects {
-//            self.mapDelegate.updateLocations(locations);
-//            if (locations.count != 0) {
-//                let centroid: SFPoint = SFGeometryUtils.centroid(of: locations[0].geometry);
-//                let location: CLLocation = CLLocation(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees);
-//                zoomAndCenterMap(location: location);
-//            }
-//        }
-        
-    }
 }
 
