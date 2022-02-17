@@ -145,7 +145,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
     }
     
-    func updateObservation(observation: Observation, animated: Bool = false) {
+    func updateObservation(observation: Observation, animated: Bool = false, zoom: Bool = false) {
         deleteObservation(observation: observation)
         if let geometry = observation.geometry {
             if geometry.geometryType == SF_POINT {
@@ -174,6 +174,9 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     mapView?.addOverlay(styledPolygon)
                 }
             }
+        }
+        if zoom {
+            zoomAndCenterMap(observation: observation)
         }
     }
     
@@ -205,6 +208,12 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     mapView?.removeOverlay(polygon)
                 }
             }
+        }
+    }
+    
+    func zoomAndCenterMap(observation: Observation?) {
+        if let mapView = mapView, let viewRegion = observation?.viewRegion(mapView: mapView) {
+            mapView.setRegion(viewRegion, animated: true)
         }
     }
     

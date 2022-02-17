@@ -30,7 +30,7 @@ extension MapMixin {
     }
     
     func polygonHitTest(polygonObservation: StyledPolygon, location: CLLocationCoordinate2D) -> Bool {
-        guard let renderer = renderer(overlay: polygonObservation) as? MKPolygonRenderer else {
+        guard let renderer = (renderer(overlay: polygonObservation) as? MKPolygonRenderer ?? standardRenderer(overlay: polygonObservation) as? MKPolygonRenderer) else {
             return false
         }
         let mapPoint = MKMapPoint.init(location)
@@ -49,7 +49,7 @@ extension MapMixin {
     }
     
     func lineHitTest(lineObservation: StyledPolyline, location: CLLocationCoordinate2D, tolerance: Double) -> Bool {
-        guard let renderer = renderer(overlay: lineObservation) as? MKPolylineRenderer else {
+        guard let renderer = (renderer(overlay: lineObservation) as? MKPolylineRenderer ?? standardRenderer(overlay: lineObservation) as? MKPolylineRenderer) else {
             return false
         }
         let mapPoint = MKMapPoint.init(location)
@@ -70,6 +70,10 @@ extension MapMixin {
     }
     
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
+        return standardRenderer(overlay: overlay)
+    }
+    
+    func standardRenderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         // standard renderers
         if let polygon = overlay as? StyledPolygon {
             let renderer = MKPolygonRenderer(polygon: polygon)

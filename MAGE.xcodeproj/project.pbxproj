@@ -378,6 +378,7 @@
 		F78D579327B60344003594D3 /* SingleObservationMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579227B60344003594D3 /* SingleObservationMapView.swift */; };
 		F78D579627B709D4003594D3 /* FollowUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579527B709D4003594D3 /* FollowUser.swift */; };
 		F78D579827BC5E4A003594D3 /* OnlineLayerMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579727BC5E4A003594D3 /* OnlineLayerMap.swift */; };
+		F78D579A27BDA951003594D3 /* SingleFeatureMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579927BDA951003594D3 /* SingleFeatureMapView.swift */; };
 		F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */; };
 		F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */; };
 		F7911623249125230043A529 /* MageRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911622249125230043A529 /* MageRootViewTests.swift */; };
@@ -1115,6 +1116,7 @@
 		F78D579427B6FBCE003594D3 /* mage-ios-sdk 20.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 20.xcdatamodel"; sourceTree = "<group>"; };
 		F78D579527B709D4003594D3 /* FollowUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUser.swift; sourceTree = "<group>"; };
 		F78D579727BC5E4A003594D3 /* OnlineLayerMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineLayerMap.swift; sourceTree = "<group>"; };
+		F78D579927BDA951003594D3 /* SingleFeatureMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFeatureMapView.swift; sourceTree = "<group>"; };
 		F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldView.swift; sourceTree = "<group>"; };
 		F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldViewTests.swift; sourceTree = "<group>"; };
 		F7911622249125230043A529 /* MageRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageRootViewTests.swift; sourceTree = "<group>"; };
@@ -1715,6 +1717,7 @@
 				F78D578C27B5841D003594D3 /* MageMapViewController.swift */,
 				F78D578E27B58901003594D3 /* SingleUserMapView.swift */,
 				F78D579227B60344003594D3 /* SingleObservationMapView.swift */,
+				F78D579927BDA951003594D3 /* SingleFeatureMapView.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -3341,6 +3344,7 @@
 				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
 				F72D43132694B60300F9AC3B /* ImageryLayer.swift in Sources */,
 				F7F4754125B76BD2006634F7 /* UITableViewExtensions.swift in Sources */,
+				F78D579A27BDA951003594D3 /* SingleFeatureMapView.swift in Sources */,
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
