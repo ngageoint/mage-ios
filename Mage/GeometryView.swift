@@ -13,14 +13,8 @@ import MaterialComponents.MDCButton;
 class GeometryView : BaseFieldView {
     private var accuracy: Double?;
     private var provider: String?;
-    private weak var mapEventDelegate: MKMapViewDelegate?;
     private weak var observationActionsDelegate: ObservationActionsDelegate?;
     private weak var observation: Observation?;
-    private var mapDelegate: MapDelegate?;
-    private var mkmapDelegate: MKMapViewDelegate?;
-    
-    private var mapObservation: MapObservation?;
-    private var accuracyOverlay: ObservationAccuracy?;
     
     lazy var textField: MDCFilledTextField = {
         // this is just an estimated size
@@ -48,23 +42,12 @@ class GeometryView : BaseFieldView {
     
     lazy var mapView: SingleFeatureMapView = {
         let mapView = SingleFeatureMapView(observation: nil, scheme: scheme)
-//        let mapView = MKMapView(forAutoLayout: ());
-//        mapView.mapType = .standard;
         mapView.autoSetDimension(.height, toSize: editMode ? 95 : 200);
-//        mapDelegate?.mapView = mapView;
-//        mapView.delegate = mkmapDelegate;
-//        mapDelegate?.setupListeners();
-//        mapDelegate?.hideStaticLayers = true;
-//        mapDelegate?.allowEnlarge = false;
         return mapView;
     }()
     
-//    lazy var observationManager: MapObservationManager = {
-//        let observationManager: MapObservationManager = MapObservationManager(mapView: self.mapView);
-//        return observationManager;
-//    }()
-    
     override func applyTheme(withScheme scheme: MDCContainerScheming?) {
+        self.scheme = scheme
         guard let scheme = scheme else {
             return
         }
@@ -75,6 +58,7 @@ class GeometryView : BaseFieldView {
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
         textField.applyTheme(withScheme: scheme);
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        mapView.applyTheme(scheme: scheme)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -95,14 +79,6 @@ class GeometryView : BaseFieldView {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.observation = observation;
         self.observationActionsDelegate = observationActionsDelegate;
-//        if (mkmapDelegate != nil) {
-//            self.mkmapDelegate = mkmapDelegate;
-//        } else {
-//            self.mapDelegate = MapDelegate();
-//            self.mkmapDelegate = self.mapDelegate;
-//            mapDelegate?.setMapEventDelegte(mapEventDelegate);
-//        }
-        
         if (field[FieldKey.title.key] != nil) {
             fieldNameLabel.text = (field[FieldKey.title.key] as? String ?? "");
             
@@ -114,16 +90,6 @@ class GeometryView : BaseFieldView {
         buildView();
         setValue(value, accuracy: accuracy, provider: provider);
     }
-    
-//    func cleanup() {
-//        self.mapDelegate?.cleanup();
-//        self.mapDelegate = nil;
-//    }
-    
-//    deinit {
-//        self.mapDelegate?.cleanup();
-//        self.mapDelegate = nil;
-//    }
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
@@ -155,38 +121,12 @@ class GeometryView : BaseFieldView {
     func addToMapAsObservation() {
         if (self.observation?.geometry) != nil {
             mapView.observation = self.observation
-//            self.mapObservation?.remove(from: self.mapView);
-//            self.mapObservation = self.observationManager.addToMap(with: self.observation, andAnimateDrop: false);
-            guard let viewRegion = self.mapObservation?.viewRegion(of: self.mapView.mapView) else { return };
-            self.mapView.mapView?.setRegion(viewRegion, animated: true);
         }
     }
     
     func addToMap() {
-        if (self.value != nil) {
-//            let shapeConverter: GPKGMapShapeConverter = GPKGMapShapeConverter();
-//            let shape: GPKGMapShape = shapeConverter.toShape(with: (self.value as? SFGeometry));
-//            var options: GPKGMapPointOptions? = nil;
-//            if ((self.value as? SFGeometry)?.geometryType != SF_POINT) {
-//                options = GPKGMapPointOptions();
-//                options!.image = UIImage();
-//            }
-//
-//            shapeConverter.add(shape, asPointsTo: self.mapView, with: options, andPolylinePointOptions: options, andPolygonPointOptions: options, andPolygonPointHoleOptions: options, andPolylineOptions: nil, andPolygonOptions: nil);
-            setMapRegion();
-        }
-    }
-
-    func setMapRegion() {
-        if let centroid = (self.value as? SFGeometry)?.centroid() {
-            var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), span: MKCoordinateSpan(latitudeDelta: 0.03125, longitudeDelta: 0.03125));
-            if (accuracy != nil) {
-                let coordinate = CLLocationCoordinate2DMake(centroid.y as! CLLocationDegrees, centroid.x as! CLLocationDegrees);
-                region = MKCoordinateRegion(center: coordinate, latitudinalMeters: (accuracy ?? 1000) * 2.5, longitudinalMeters: (accuracy ?? 1000) * 2.5);
-            }
-            
-            guard let viewRegion = self.mapView.mapView?.regionThatFits(region) else { return }
-            self.mapView.mapView?.setRegion(viewRegion, animated: false);
+        if let sfGeometry = self.value as? SFGeometry {
+            mapView.sfgeometry = sfGeometry
         }
     }
     
@@ -224,29 +164,19 @@ class GeometryView : BaseFieldView {
     func setAccuracy(_ accuracy: Double?, provider: String?) {
         self.accuracy = accuracy;
         self.provider = provider;
-//        if self.provider == "manual" {
-//            accuracyLabel.text = "";
-//            if let accuracyOverlay = accuracyOverlay {
-//                self.mapView.removeOverlay(accuracyOverlay);
-//            }
-//            return
-//        }
-//        if let accuracy = accuracy, let provider = provider {
-//            var formattedProvider: String = "";
-//            if provider == "gps" {
-//                formattedProvider = provider.uppercased()
-//            } else {
-//                formattedProvider = provider.capitalized;
-//            }
-//            accuracyLabel.text = String(format: "%@ ± %.02fm", formattedProvider, accuracy);
-//            if let centroid = (self.value as? SFGeometry)?.centroid() {
-//                if let accuracyOverlay = accuracyOverlay {
-//                    self.mapView.removeOverlay(accuracyOverlay);
-//                }
-//                accuracyOverlay = ObservationAccuracy(center: CLLocationCoordinate2D(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees), radius: self.accuracy ?? 0)
-//                self.mapView.addOverlay(accuracyOverlay!);
-//            }
-//        }
+        if self.provider == "manual" {
+            accuracyLabel.text = "";
+            return
+        }
+        if let accuracy = accuracy, let provider = provider {
+            var formattedProvider: String = "";
+            if provider == "gps" {
+                formattedProvider = provider.uppercased()
+            } else {
+                formattedProvider = provider.capitalized;
+            }
+            accuracyLabel.text = String(format: "%@ ± %.02fm", formattedProvider, accuracy);
+        }
     }
     
     override func setValue(_ value: Any?) {
@@ -273,7 +203,6 @@ class GeometryView : BaseFieldView {
                 }
                 mapView.isHidden = false;
             }
-            mapDelegate?.ensureMapLayout();
         } else {
             if (editMode) {
                 textField.text = ""

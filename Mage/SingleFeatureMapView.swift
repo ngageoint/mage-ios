@@ -8,10 +8,11 @@
 
 import Foundation
 
-class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, FilteredObservationsMap {
+class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, SingleObservationMap, SFGeometryMap {
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var onlineLayerMapMixin: OnlineLayerMapMixin?
-    var filteredObservationsMapMixin: FilteredObservationsMapMixin?
+    var singleObservationMapMixin: SingleObservationMapMixin?
+    var sfGeometryMapMixin: SFGeometryMapMixin?
     
     var _observation: Observation?
     var observation: Observation? {
@@ -38,11 +39,13 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, Fil
     public init(observation: Observation?, scheme: MDCContainerScheming?) {
         super.init(scheme: scheme)
         self._observation = observation
+        self.scheme = scheme
     }
     
     public init(sfgeometry: SFGeometry?, scheme: MDCContainerScheming?) {
         super.init(scheme: scheme)
         self._sfgeometry = sfgeometry
+        self.scheme = scheme
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -55,10 +58,11 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, Fil
         if let mapView = self.mapView {
             onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self, scheme: scheme)
             geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
-            filteredObservationsMapMixin = FilteredObservationsMapMixin(mapView: mapView, user: nil, observation: nil, scheme: scheme)
-            mapMixins.append(geoPackageLayerMapMixin!)
+            singleObservationMapMixin = SingleObservationMapMixin(mapView: mapView, observation: nil, scheme: scheme)
+            sfGeometryMapMixin = SFGeometryMapMixin(sfGeometryMap: self, sfGeometry: sfgeometry, scheme: scheme)
             mapMixins.append(onlineLayerMapMixin!)
-            mapMixins.append(filteredObservationsMapMixin!)
+            mapMixins.append(singleObservationMapMixin!)
+            mapMixins.append(sfGeometryMapMixin!)
         }
         
         initiateMapMixins()
@@ -70,13 +74,16 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, Fil
         cleanupMapMixins()
         geoPackageLayerMapMixin = nil
         onlineLayerMapMixin = nil
+        sfGeometryMapMixin = nil
+        singleObservationMapMixin = nil
     }
     
     func addFeature() {
         if let observation = observation {
-            filteredObservationsMapMixin?.updateObservation(observation: observation, zoom: true)
+            singleObservationMapMixin?.updateObservation(observation: observation, zoom: true)
         } else if let sfgeometry = sfgeometry {
             // add the geometry to the map
+            sfGeometryMapMixin?.sfGeometry = sfgeometry
         }
     }
     

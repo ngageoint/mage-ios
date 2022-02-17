@@ -375,10 +375,11 @@
 		F78D578B27B46F49003594D3 /* FeedsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D578A27B46F49003594D3 /* FeedsMap.swift */; };
 		F78D578D27B5841D003594D3 /* MageMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D578C27B5841D003594D3 /* MageMapViewController.swift */; };
 		F78D578F27B58901003594D3 /* SingleUserMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D578E27B58901003594D3 /* SingleUserMapView.swift */; };
-		F78D579327B60344003594D3 /* SingleObservationMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579227B60344003594D3 /* SingleObservationMapView.swift */; };
 		F78D579627B709D4003594D3 /* FollowUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579527B709D4003594D3 /* FollowUser.swift */; };
 		F78D579827BC5E4A003594D3 /* OnlineLayerMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579727BC5E4A003594D3 /* OnlineLayerMap.swift */; };
 		F78D579A27BDA951003594D3 /* SingleFeatureMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579927BDA951003594D3 /* SingleFeatureMapView.swift */; };
+		F78D579C27BE9A4F003594D3 /* SFGeometryMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579B27BE9A4F003594D3 /* SFGeometryMap.swift */; };
+		F78D57A027BECFB9003594D3 /* SingleObservationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78D579F27BECFB9003594D3 /* SingleObservationMap.swift */; };
 		F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */; };
 		F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */; };
 		F7911623249125230043A529 /* MageRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7911622249125230043A529 /* MageRootViewTests.swift */; };
@@ -1112,11 +1113,12 @@
 		F78D578A27B46F49003594D3 /* FeedsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedsMap.swift; sourceTree = "<group>"; };
 		F78D578C27B5841D003594D3 /* MageMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageMapViewController.swift; sourceTree = "<group>"; };
 		F78D578E27B58901003594D3 /* SingleUserMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleUserMapView.swift; sourceTree = "<group>"; };
-		F78D579227B60344003594D3 /* SingleObservationMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleObservationMapView.swift; sourceTree = "<group>"; };
 		F78D579427B6FBCE003594D3 /* mage-ios-sdk 20.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 20.xcdatamodel"; sourceTree = "<group>"; };
 		F78D579527B709D4003594D3 /* FollowUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUser.swift; sourceTree = "<group>"; };
 		F78D579727BC5E4A003594D3 /* OnlineLayerMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineLayerMap.swift; sourceTree = "<group>"; };
 		F78D579927BDA951003594D3 /* SingleFeatureMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFeatureMapView.swift; sourceTree = "<group>"; };
+		F78D579B27BE9A4F003594D3 /* SFGeometryMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFGeometryMap.swift; sourceTree = "<group>"; };
+		F78D579F27BECFB9003594D3 /* SingleObservationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleObservationMap.swift; sourceTree = "<group>"; };
 		F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldView.swift; sourceTree = "<group>"; };
 		F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFieldViewTests.swift; sourceTree = "<group>"; };
 		F7911622249125230043A529 /* MageRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageRootViewTests.swift; sourceTree = "<group>"; };
@@ -1716,7 +1718,6 @@
 				F7EBAEB72760F62000650F4F /* MainMageMapView.swift */,
 				F78D578C27B5841D003594D3 /* MageMapViewController.swift */,
 				F78D578E27B58901003594D3 /* SingleUserMapView.swift */,
-				F78D579227B60344003594D3 /* SingleObservationMapView.swift */,
 				F78D579927BDA951003594D3 /* SingleFeatureMapView.swift */,
 			);
 			name = Map;
@@ -2149,6 +2150,8 @@
 				F78D578A27B46F49003594D3 /* FeedsMap.swift */,
 				F78D579527B709D4003594D3 /* FollowUser.swift */,
 				F78D579727BC5E4A003594D3 /* OnlineLayerMap.swift */,
+				F78D579B27BE9A4F003594D3 /* SFGeometryMap.swift */,
+				F78D579F27BECFB9003594D3 /* SingleObservationMap.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3469,6 +3472,7 @@
 				F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
+				F78D579C27BE9A4F003594D3 /* SFGeometryMap.swift in Sources */,
 				F7D4F58727597C25004EA263 /* Form+CoreDataProperties.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
@@ -3478,7 +3482,6 @@
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
-				F78D579327B60344003594D3 /* SingleObservationMapView.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.swift in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
@@ -3519,6 +3522,7 @@
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
 				F72D42F72694B60300F9AC3B /* LocationFetchService.swift in Sources */,
 				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
+				F78D57A027BECFB9003594D3 /* SingleObservationMap.swift in Sources */,
 				F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */,
 				F743008C254775AB00DCE050 /* SplitLayout.swift in Sources */,
 				F7EBAEBC27615E5600650F4F /* MapMixin.swift in Sources */,

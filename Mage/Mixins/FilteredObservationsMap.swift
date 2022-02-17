@@ -29,7 +29,6 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     weak var mapView: MKMapView?
     var scheme: MDCContainerScheming?
     var user: User?
-    var observation: Observation?
     
     var enlargedObservationView: MKAnnotationView?
     var selectedObservationAccuracy: MKOverlay?
@@ -39,11 +38,10 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     var lineObservations: [StyledPolyline] = []
     var polygonObservations: [StyledPolygon] = []
     
-    init(mapView: MKMapView, user: User? = nil, observation: Observation? = nil, scheme: MDCContainerScheming?) {
+    init(mapView: MKMapView, user: User? = nil, scheme: MDCContainerScheming?) {
         self.mapView = mapView
         self.scheme = scheme
         self.user = user
-        self.observation = observation
         mapObservationManager = MapObservationManager(mapView: mapView)
     }
     
@@ -110,9 +108,6 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         
         if let user = user {
             observations = Observations(for: user)
-            observations?.delegate = self
-        } else if let observation = observation {
-            observations = Observations(for: observation)
             observations?.delegate = self
         } else if let observations = observations,
            let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
