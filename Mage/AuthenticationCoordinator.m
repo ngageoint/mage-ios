@@ -225,6 +225,11 @@ BOOL signingIn = YES;
         authenticationModule = [self.server.authenticationModules objectForKey:@"offline"];
     }
     
+    if (!authenticationModule) {
+        [self unableToAuthenticate: parameters complete:complete]
+        return
+    }
+    
     __weak __typeof__(self) weakSelf = self;
     [authenticationModule loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *message) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
@@ -338,6 +343,11 @@ BOOL signingIn = YES;
 
     NSLog(@"work offline");
     id<AuthenticationProtocol> offlineAuthenticationModel = [self.server.authenticationModules objectForKey:@"offline"];
+    if (!offlineAuthenticationModel) {
+        [weakSelf unableToAuthenticate: parameters complete:complete];
+        return;
+    }
+    
     [offlineAuthenticationModel loginWithParameters:parameters complete:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf authenticationWasSuccessfulWithModule:offlineAuthenticationModel];

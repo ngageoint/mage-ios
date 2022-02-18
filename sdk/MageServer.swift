@@ -244,10 +244,15 @@ import Foundation
                     || error.code == NSURLErrorNotConnectedToInternet
                     || error.code == NSURLErrorTimedOut
             ) {
-                if let authentication: AuthenticationProtocol = Authentication.authenticationModule(forStrategy: "offline", parameters: nil), authentication.canHandleLogin(toURL: url.absoluteString) {
-                    server.authenticationModules = ["offline":authentication]
+                if let oldLoginParameters = UserDefaults.standard.loginParameters, let oldUrl = oldLoginParameters[LoginParametersKey.serverUrl.key] as? String, oldUrl == url.absoluteString, StoredPassword.retrieveStoredPassword() != nil {
+                    if let authentication: AuthenticationProtocol = Authentication.authenticationModule(forStrategy: "offline", parameters: nil), authentication.canHandleLogin(toURL: url.absoluteString) {
+                        server.authenticationModules = ["offline":authentication]
+                    }
+                    success?(server)
+                } else {
+                    // we can't log in offline because there are no offline credentials stored
+                    failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Failed to connect to server.  Received error \(error.localizedDescription)"]))
                 }
-                success?(server)
             } else {
                 failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Failed to connect to server.  Received error \(error.localizedDescription)"]))
             }
