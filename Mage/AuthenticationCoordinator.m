@@ -226,8 +226,8 @@ BOOL signingIn = YES;
     }
     
     if (!authenticationModule) {
-        [self unableToAuthenticate: parameters complete:complete]
-        return
+        [self unableToAuthenticate: parameters complete:complete];
+        return;
     }
     
     __weak __typeof__(self) weakSelf = self;
