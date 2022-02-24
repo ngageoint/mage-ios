@@ -23,6 +23,7 @@ You can now choose to display and enter coordinates in Latitude Longitude, MGRS,
 * Fixed a bug which added archived forms to an observation
 * Fixed a bug which required archived forms to be added if their min was set
 * Fixed a bug which presented an offline login strategy when there were no offline credentials stored
+* Fixed a bug where attachment fields could collide with other fields in other forms
 
 ## 3.0.4
 
