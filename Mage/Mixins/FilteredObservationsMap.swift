@@ -178,7 +178,11 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     func deleteObservation(observation: Observation) {
         let annotation = mapView?.annotations.first(where: { annotation in
             if let annotation = annotation as? ObservationAnnotation {
-                return annotation.observationId == observation.remoteId
+                if let observationRemoteId = annotation.observationId {
+                    return observationRemoteId == observation.remoteId
+                }
+                
+                return annotation.observation?.objectID == observation.objectID
             }
             return false
         })
