@@ -262,6 +262,14 @@ class AttachmentSlideShow: UIView {
                 imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
                 imageView.contentMode = .scaleAspectFit;
                 imageView.setAttachment(attachment: attachment);
+                
+                let label = UILabel.newAutoLayout()
+                label.text = attachment.name
+                label.font = scheme?.typographyScheme.overline
+                label.textColor = scheme?.colorScheme.onBackgroundColor
+                imageView.addSubview(label)
+                imageView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+                
                 if (attachmentSelectionDelegate != nil) {
                     imageView.isUserInteractionEnabled = true;
                     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))

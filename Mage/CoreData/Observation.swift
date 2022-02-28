@@ -50,7 +50,7 @@ enum State: Int, CustomStringConvertible {
                     } else {
                         // return the first field
                         let form = observationForms.first { form in
-                            return form[FormKey.formId.key] as? String == first.observationFormId
+                            return form[FormKey.id.key] as? String == first.observationFormId
                         }
                         
                         let firstFieldIndex = (form?[FormKey.fields.key] as? [[String: Any]])?.firstIndex { form in
@@ -64,10 +64,10 @@ enum State: Int, CustomStringConvertible {
                 } else {
                     // different forms, sort on form order
                     let firstFormIndex = observationForms.firstIndex { form in
-                        return form[FormKey.formId.key] as? String == first.observationFormId
+                        return form[FormKey.id.key] as? String == first.observationFormId
                     } ?? 0
                     let secondFormIndex = observationForms.firstIndex { form in
-                        return form[FormKey.formId.key] as? String == second.observationFormId
+                        return form[FormKey.id.key] as? String == second.observationFormId
                     } ?? 0
                     return firstFormIndex < secondFormIndex
                 }
