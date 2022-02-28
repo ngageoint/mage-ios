@@ -71,9 +71,6 @@ enum State: Int, CustomStringConvertible {
                     } ?? 0
                     return firstFormIndex < secondFormIndex
                 }
-                
-                // just return the last modified date as a fallback if somehow everything is the same which shouldn't happen
-                return (first.lastModified ?? Date()) < (second.lastModified ?? Date())
             })
         }
     }

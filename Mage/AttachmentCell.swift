@@ -112,9 +112,19 @@ import Kingfisher
             self.imageView.accessibilityLabel = "local \(localPath) loaded";
             self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
             self.imageView.contentMode = .scaleAspectFit;
+            let label = UILabel.newAutoLayout()
+            label.text = newAttachment["contentType"] as? String
+            label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+            label.font = scheme?.typographyScheme.overline
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+            label.autoSetDimension(.height, toSize: label.font.pointSize)
+            imageView.addSubview(label)
+            label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
         }
         
-        
+        self.backgroundColor = scheme?.colorScheme.backgroundColor
+
         if let button = button {
             self.addSubview(button);
             button.autoPinEdge(.bottom, to: .bottom, of: self.imageView, withOffset: -8);
@@ -191,7 +201,18 @@ import Kingfisher
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
             self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
             self.imageView.contentMode = .scaleAspectFit;
+            let label = UILabel.newAutoLayout()
+            label.text = attachment.name
+            label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+            label.font = scheme?.typographyScheme.overline
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+            label.autoSetDimension(.height, toSize: label.font.pointSize)
+            imageView.addSubview(label)
+            label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
         }
+        
+        self.backgroundColor = scheme?.colorScheme.backgroundColor
         
         if let button = button {
             self.addSubview(button);

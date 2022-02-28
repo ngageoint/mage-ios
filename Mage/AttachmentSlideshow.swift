@@ -8,6 +8,7 @@
 
 import Foundation
 import Kingfisher
+import UIKit
 
 class MDCActivityIndicatorProgress: Indicator {
     private let progressIndicatorView: IndicatorView
@@ -265,10 +266,11 @@ class AttachmentSlideShow: UIView {
                 
                 let label = UILabel.newAutoLayout()
                 label.text = attachment.name
+                label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
                 label.font = scheme?.typographyScheme.overline
-                label.textColor = scheme?.colorScheme.onBackgroundColor
+                label.autoSetDimension(.height, toSize: label.font.pointSize)
                 imageView.addSubview(label)
-                imageView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+                label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
                 
                 if (attachmentSelectionDelegate != nil) {
                     imageView.isUserInteractionEnabled = true;

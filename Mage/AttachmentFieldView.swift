@@ -17,7 +17,7 @@ import MaterialComponents.MDCButton;
 }
 
 class AttachmentFieldView : BaseFieldView {
-    private var attachments: Set<Attachment>?;
+    private var attachments: [Attachment]?;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
@@ -145,8 +145,8 @@ class AttachmentFieldView : BaseFieldView {
         fileButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         errorLabel.font = scheme.typographyScheme.caption;
         errorLabel.textColor = scheme.colorScheme.errorColor;
-        attachmentHolderView.backgroundColor = scheme.colorScheme.backgroundColor
-        attachmentCollectionView.backgroundColor = scheme.colorScheme.backgroundColor;
+        attachmentHolderView.backgroundColor = scheme.colorScheme.surfaceColor
+        attachmentCollectionView.backgroundColor = scheme.colorScheme.surfaceColor;
         if (editMode) {
             self.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
         }
@@ -157,7 +157,7 @@ class AttachmentFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [Attachment]? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.attachmentCreationCoordinator = attachmentCreationCoordinator;
@@ -232,30 +232,30 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     override func setValue(_ value: Any?) {
-        setValue(value as? Set<Attachment>);
+        setValue(value as? [Attachment]);
     }
     
-    func setValue(_ value: Set<Attachment>? = nil) {
+    func setValue(_ value: [Attachment]? = nil) {
         self.attachments = value;
         setCollectionData(attachments: self.attachments);
     }
     
     func addAttachment(_ attachment: Attachment) {
-        var attachments = self.attachments ?? Set(minimumCapacity: 0);
-        attachments.insert(attachment);
+        var attachments = self.attachments ?? [];
+        attachments.append(attachment);
         self.attachments = attachments
         setCollectionData(attachments: attachments);
     }
     
     func removeAttachment(_ attachment: Attachment) {
-        if var attachments = self.attachments {
-            attachments.remove(attachment);
+        if var attachments = self.attachments, let index = attachments.firstIndex(of: attachment) {
+            attachments.remove(at: index)
             self.attachments = attachments
             setCollectionData(attachments: attachments);
         }
     }
     
-    func setCollectionData(attachments: Set<Attachment>?) {
+    func setCollectionData(attachments: [Attachment]?) {
         attachmentCollectionDataStore.attachments = attachments;
         attachmentCollectionView.reloadData();
         setNeedsUpdateConstraints();

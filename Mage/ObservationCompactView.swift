@@ -91,6 +91,7 @@ class ObservationCompactView: UIView {
         }
         observationSummaryView.populate(observation: observation);
         observationActionsView.populate(observation: observation, delegate: actionsDelegate);
+        attachmentSlideshow.applyTheme(withScheme: scheme)
         if includeAttachments, let attachments = observation.attachments, attachments.filter({ attachment in
             attachment.url != nil
         }).count > 0 {
