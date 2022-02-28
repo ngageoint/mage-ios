@@ -19,7 +19,7 @@ import QuickLook
     var scheme: MDCContainerScheming?;
 
     var attachment: Attachment?
-    var delegate: AttachmentViewDelegate?
+    weak var delegate: AttachmentViewDelegate?
     var rootViewController: UINavigationController
     var navigationControllerObserver: NavigationControllerObserver
     var tempFile: String?
