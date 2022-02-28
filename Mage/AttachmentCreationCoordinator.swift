@@ -96,6 +96,13 @@ class AttachmentCreationCoordinator: NSObject {
 }
 
 extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
+    func addFileAttachment() {
+        print("Add file")
+        let controller = UIDocumentPickerViewController(forOpeningContentTypes: [.item])
+        controller.delegate = self
+        self.rootViewController?.present(controller, animated: true, completion: nil)
+    }
+    
     func addVoiceAttachment() {
         print("Add voice")
         ExternalDevice.checkMicrophonePermissions(for: self.rootViewController) { (permissionGranted) in
@@ -585,6 +592,15 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
             return AVAssetExportPresetMediumQuality;
         }
         return AVAssetExportPresetHighestQuality;
+    }
+}
+
+extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        for url in urls {
+            let uttype = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType
+            addAttachmentForSaving(location: url, contentType: uttype?.preferredMIMEType ?? (UTType.item.preferredMIMEType ?? ""))
+        }
     }
 }
 

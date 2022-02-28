@@ -27,6 +27,57 @@ enum State: Int, CustomStringConvertible {
 }
 
 @objc public class Observation: NSManagedObject, Navigable {
+    
+    var orderedAttachments: [Attachment]? {
+        get {
+            var observationForms: [[String: Any]] = []
+            if let properties = self.properties as? [String: Any] {
+                if (properties.keys.contains("forms")) {
+                    observationForms = properties["forms"] as! [[String: Any]];
+                }
+            }
+            
+            return attachments?.sorted(by: { first, second in
+                // return true if first comes before second, false otherwise
+                
+                if first.observationFormId == second.observationFormId {
+                    // if they are in the same form, sort on field
+                    if first.fieldName == second.fieldName {
+                        // if they are the same field return the order comparison unless they are both zero, then return the lat modified comparison
+                        let firstOrder = first.order?.intValue ?? 0
+                        let secondOrder = second.order?.intValue ?? 0
+                        return (firstOrder != secondOrder) ? (firstOrder < secondOrder) : (first.lastModified ?? Date()) < (second.lastModified ?? Date())
+                    } else {
+                        // return the first field
+                        let form = observationForms.first { form in
+                            return form[FormKey.formId.key] as? String == first.observationFormId
+                        }
+                        
+                        let firstFieldIndex = (form?[FormKey.fields.key] as? [[String: Any]])?.firstIndex { form in
+                            return form[FieldKey.name.key] as? String == first.fieldName
+                        } ?? 0
+                        let secondFieldIndex = (form?[FormKey.fields.key] as? [[String: Any]])?.firstIndex { form in
+                            return form[FieldKey.name.key] as? String == second.fieldName
+                        } ?? 0
+                        return firstFieldIndex < secondFieldIndex
+                    }
+                } else {
+                    // different forms, sort on form order
+                    let firstFormIndex = observationForms.firstIndex { form in
+                        return form[FormKey.formId.key] as? String == first.observationFormId
+                    } ?? 0
+                    let secondFormIndex = observationForms.firstIndex { form in
+                        return form[FormKey.formId.key] as? String == second.observationFormId
+                    } ?? 0
+                    return firstFormIndex < secondFormIndex
+                }
+                
+                // just return the last modified date as a fallback if somehow everything is the same which shouldn't happen
+                return (first.lastModified ?? Date()) < (second.lastModified ?? Date())
+            })
+        }
+    }
+    
     var coordinate: CLLocationCoordinate2D {
         get {
             return location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
@@ -542,7 +593,7 @@ enum State: Int, CustomStringConvertible {
                 }
                 
                 if let attachmentsJson = feature[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
-                    for attachmentJson in attachmentsJson {
+                    for (index, attachmentJson) in attachmentsJson.enumerated() {
                         var attachmentFound = false;
                         if let remoteId = attachmentJson[AttachmentKey.id.key] as? String, let attachments = existingObservation.attachments {
                             
@@ -554,13 +605,14 @@ enum State: Int, CustomStringConvertible {
                                     attachment.url = attachmentJson[AttachmentKey.url.key] as? String
                                     attachment.remotePath = attachmentJson[AttachmentKey.remotePath.key] as? String
                                     attachment.observation = existingObservation;
+                                    attachment.order = NSNumber(value: index)
                                     attachmentFound = true;
                                     break;
                                 }
                             }
                         }
                         if !attachmentFound {
-                            if let attachment = Attachment.attachment(json: attachmentJson, context: context) {
+                            if let attachment = Attachment.attachment(json: attachmentJson, order: index, context: context) {
                                 existingObservation.addToAttachments(attachment);
                             }
                         }
@@ -595,8 +647,8 @@ enum State: Int, CustomStringConvertible {
                     }
                     
                     if let attachmentsJson = feature[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
-                        for attachmentJson in attachmentsJson {
-                            if let attachment = Attachment.attachment(json: attachmentJson, context: context) {
+                        for (index, attachmentJson) in attachmentsJson.enumerated() {
+                            if let attachment = Attachment.attachment(json: attachmentJson, order: index, context: context) {
                                 observation.addToAttachments(attachment);
                             }
                         }

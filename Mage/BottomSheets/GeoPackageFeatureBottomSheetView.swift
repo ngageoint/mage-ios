@@ -261,8 +261,6 @@ extension GeoPackageFeatureBottomSheetView: UICollectionViewDelegate {
             }
             fileViewerCoordinator = FileViewerCoordinator(presentingViewController: pvc, data: mediaRow.data(), contentType: mediaRow.contentType(), info: info, scheme: scheme)
             fileViewerCoordinator?.start(animated: true, withCloseButton: true)
-//            let avc = AttachmentViewCoordinator(rootViewController: nav, data: mediaRow.data(), contentType: mediaRow.contentType(), delegate: nil, scheme: scheme)
-//            avc.start(true, needsCloseButton: true)
         }
     }
 }

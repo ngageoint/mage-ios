@@ -224,8 +224,10 @@ class MediaPreviewController : QLPreviewController {
     }
     
     func showCouldNotLoad() {
-        view.addSubview(couldNotLoad)
-        couldNotLoad.autoPinEdgesToSuperviewEdges()
+        DispatchQueue.main.async {
+            self.view.addSubview(self.couldNotLoad)
+            self.couldNotLoad.autoPinEdgesToSuperviewEdges()
+        }
     }
     
     func loadFile() {

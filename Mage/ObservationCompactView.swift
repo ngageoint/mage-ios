@@ -102,6 +102,10 @@ class ObservationCompactView: UIView {
         applyTheme(withScheme: scheme);
     }
     
+    func prepareForReuse() {
+        attachmentSlideshow.clear()
+    }
+    
     override func updateConstraints() {
         if (!didSetUpConstraints) {
             stackView.autoPinEdgesToSuperviewEdges();

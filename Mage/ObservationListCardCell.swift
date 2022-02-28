@@ -66,6 +66,10 @@ import MaterialComponents.MDCCard;
         applyTheme(withScheme: scheme);
     }
     
+    override func prepareForReuse() {
+        compactView.prepareForReuse()
+    }
+    
     override func updateConstraints() {
         if (!didSetUpConstraints) {
             card.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8));

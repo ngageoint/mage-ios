@@ -38,6 +38,23 @@ func applicationAppearance(scheme: MDCContainerScheming?) {
         UINavigationBar.appearance().compactScrollEdgeAppearance = appearance
     }
     
+    // this is used when we browse for a file to attach, even though we really use UIDocumentPickerViewController
+    let documentBrowserNavBarAppearance = UINavigationBar.appearance(whenContainedInInstancesOf: [UIDocumentBrowserViewController.self])
+    documentBrowserNavBarAppearance.isTranslucent = false
+    documentBrowserNavBarAppearance.tintColor = scheme.colorScheme.onSecondaryColor
+    documentBrowserNavBarAppearance.barTintColor = scheme.colorScheme.onSecondaryColor
+    documentBrowserNavBarAppearance.backgroundColor = scheme.colorScheme.primaryColorVariant
+    documentBrowserNavBarAppearance.titleTextAttributes = [
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+    ];
+    documentBrowserNavBarAppearance.largeTitleTextAttributes = [
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+    ];
+    
+    UITextField.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).backgroundColor = scheme.colorScheme.backgroundColor
+    
     let tabBarAppearance = UITabBarAppearance();
     tabBarAppearance.selectionIndicatorTintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
     tabBarAppearance.backgroundColor = scheme.colorScheme.surfaceColor

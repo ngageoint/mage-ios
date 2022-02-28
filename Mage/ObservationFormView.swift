@@ -105,12 +105,15 @@ class ObservationFormView: UIStackView {
                 if (value != nil) {
                     unsentAttachments = value as? [[String : AnyHashable]] ?? []
                 }
-                value = (self.observation.attachments)?.filter() { (attachment: Attachment) in
+                value = (self.observation.orderedAttachments)?.filter() { (attachment: Attachment) in
                     guard let ofi = attachment.observationFormId, let fieldName = attachment.fieldName else { return false }
                     return ofi == form[FormKey.id.key] as? String && fieldName == fieldDictionary[FieldKey.name.key] as? String &&
                         !attachment.markedForDeletion;
                 }
-                if ((value as! Set<Attachment>).count == 0) {
+                
+                if let attachmentArray = value as? [Attachment], attachmentArray.count == 0 {
+                    value = nil;
+                } else if !(value is [Attachment]) {
                     value = nil;
                 }
             } else if (!editMode && (value == nil || (value as? String) == "")) {

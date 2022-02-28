@@ -116,7 +116,7 @@ import QuickLook
     func loadURL(animated: Bool = false) {
         if let urlToLoad = self.urlToLoad, let contentType = self.contentType {
             if contentType.hasPrefix("image") {
-                let imageViewController = ImageAttachmentViewController(url: urlToLoad, needsCloseButton: true)
+                let imageViewController = ImageAttachmentViewController(url: urlToLoad)
                 imageViewController.view.backgroundColor = UIColor.black;
                 self.rootViewController.pushViewController(imageViewController, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: imageViewController, delegate: self);
@@ -133,7 +133,7 @@ import QuickLook
     func showAttachment(animated: Bool = false) {
         if let attachment = self.attachment, let contentType = attachment.contentType {
             if contentType.hasPrefix("image") {
-                let imageViewController = ImageAttachmentViewController(attachment: attachment, needsCloseButton: true);
+                let imageViewController = ImageAttachmentViewController(attachment: attachment);
                 // not sure if we still need this TODO test
                 imageViewController.view.backgroundColor = UIColor.black;
                 self.rootViewController.pushViewController(imageViewController, animated: animated);
@@ -144,6 +144,29 @@ import QuickLook
                 self.playAudioVideo();
             } else if contentType.hasPrefix("audio") {
                 self.playAudioVideo();
+            } else {
+                var url: URL?
+                if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
+                    url = URL(fileURLWithPath: localPath)
+                } else if let attachmentUrl = attachment.url {
+                    if let attachmentUrl = URL(string: attachmentUrl) {
+                        let token: String = StoredPassword.retrieveStoredToken()
+
+                        var urlComponents: URLComponents? = URLComponents(url: attachmentUrl, resolvingAgainstBaseURL: false);
+                        if (urlComponents?.queryItems) != nil {
+                            urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
+                        } else {
+                            urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
+                        }
+                        url = (urlComponents?.url)!;
+                    }
+                }
+                if let url = url {
+                    mediaPreviewController = MediaPreviewController(fileName: attachment.name ?? "file", mediaTitle: attachment.name ?? "file", data: nil, url: url, mediaLoaderDelegate: self, scheme: scheme)
+                    self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
+                } else {
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Unable to open attachment \(attachment.name ?? "file")"))
+                }
             }
         }
     }

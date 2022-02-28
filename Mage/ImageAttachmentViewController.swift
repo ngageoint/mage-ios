@@ -24,7 +24,6 @@ extension PlaceholderImage: Placeholder {}
     var attachment: Attachment? = nil;
     var url: URL? = nil;
     var imageSize: Int!
-    var needsCloseButton: Bool = false
     
     struct MyIndicator: Indicator {
         let view: UIView
@@ -45,18 +44,16 @@ extension PlaceholderImage: Placeholder {}
         }
     }
     
-    @objc public convenience init(attachment: Attachment, needsCloseButton: Bool = false) {
+    @objc public convenience init(attachment: Attachment) {
         self.init(nibName: "AttachmentView", bundle: nil);
         self.imageSize = 0;
         self.attachment = attachment;
-        self.needsCloseButton = needsCloseButton
     }
     
-    @objc public convenience init(url: URL, needsCloseButton: Bool = false) {
+    @objc public convenience init(url: URL) {
         self.init(nibName: "AttachmentView", bundle: nil);
         self.imageSize = 0;
         self.url = url;
-        self.needsCloseButton = needsCloseButton
     }
     
     override func viewDidLoad() {
@@ -71,13 +68,6 @@ extension PlaceholderImage: Placeholder {}
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveToGallery));
-        if self.needsCloseButton {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
-        }
-    }
-    
-    @objc func dismiss(_ sender: UIBarButtonItem) {
-        self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     func presentShareSheet(url: URL) {
