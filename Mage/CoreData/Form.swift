@@ -109,7 +109,13 @@ import CoreData
         }
     }
     
-    @objc public var color: String? {
+    public var isDefault: Bool {
+        get {
+            return json?.json?[FormKey.isDefault.key] as? Bool ?? false
+        }
+    }
+    
+    public var color: String? {
         get {
             return json?.json?[FormKey.color.key] as? String
         }
