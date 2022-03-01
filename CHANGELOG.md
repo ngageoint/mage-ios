@@ -17,6 +17,11 @@ You can now choose to display and enter coordinates in Latitude Longitude, MGRS,
 ##### Bug Fixes
 * A few lingering dark mode color bugs were tracked down
 
+## 3.0.7
+
+##### Bug Fixes
+* Default forms are now added to a new observation automatically 
+
 ## 3.0.6
 
 ##### Bug Fixes
