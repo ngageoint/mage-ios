@@ -26,6 +26,8 @@ class FeedsMapMixin: NSObject, MapMixin {
     var currentFeeds: [String] = []
     var enlargedAnnotationView: MKAnnotationView?
     
+    var userDefaultsEventName: String?
+    
     init(mapView: MKMapView, scheme: MDCContainerScheming?) {
         self.mapView = mapView
         self.scheme = scheme
@@ -36,14 +38,15 @@ class FeedsMapMixin: NSObject, MapMixin {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
         mapAnnotationFocusedObserver = nil
-        if let currentEventId = Server.currentEventId() {
-            UserDefaults.standard.removeObserver(self, forKeyPath: "selectedFeeds-\(currentEventId)")
+        if let userDefaultsEventName = userDefaultsEventName {
+            UserDefaults.standard.removeObserver(self, forKeyPath: userDefaultsEventName)
         }
     }
     
     func setupMixin() {
         if let currentEventId = Server.currentEventId() {
-            UserDefaults.standard.addObserver(self, forKeyPath: "selectedFeeds-\(currentEventId)", options: [.new], context: nil)
+            userDefaultsEventName = "selectedFeeds-\(currentEventId)"
+            UserDefaults.standard.addObserver(self, forKeyPath: userDefaultsEventName!, options: [.new], context: nil)
         }
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.mapView {
