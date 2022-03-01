@@ -64,6 +64,7 @@ public enum FormKey : String {
     case min
     case max
     case style
+    case isDefault = "default"
     
     var key: String {
         return self.rawValue

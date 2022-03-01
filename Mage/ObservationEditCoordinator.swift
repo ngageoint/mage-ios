@@ -198,6 +198,8 @@ protocol ObservationCommonPropertiesListener: AnyObject {
                 for _ in 1...eventFormMin {
                     addFormToObservation(observation: observation, form: eventForm);
                 }
+            } else if eventForm.isDefault {
+                addFormToObservation(observation: observation, form: eventForm);
             }
         }
     }
