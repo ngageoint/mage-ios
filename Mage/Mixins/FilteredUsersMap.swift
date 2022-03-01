@@ -154,7 +154,11 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         // adjust the center offset if this is the enlargedPin
         if (annotationView == self.enlargedLocationView) {
             annotationView.transform = annotationView.transform.scaledBy(x: 2.0, y: 2.0)
-            annotationView.centerOffset = CGPoint(x: 0, y: -(annotationView.image?.size.height ?? 0))
+            if let image = annotationView.image {
+                annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height))
+            } else {
+                annotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y * 2.0)
+            }
         }
         annotationView.canShowCallout = false;
         annotationView.isEnabled = false;
@@ -164,7 +168,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
     
     func focusAnnotation(annotation: MKAnnotation?) {
         guard let annotation = annotation as? LocationAnnotation,
-              let user = annotation.user,
+              let _ = annotation.user,
               let annotationView = annotation.view else {
                   if let selectedUserAccuracy = selectedUserAccuracy {
                       mapView?.removeOverlay(selectedUserAccuracy)
@@ -174,7 +178,11 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
                       // shrink the old focused view
                       UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
                           enlargedLocationView.transform = enlargedLocationView.transform.scaledBy(x: 0.5, y: 0.5)
-                          enlargedLocationView.centerOffset = CGPoint(x: 0, y: enlargedLocationView.centerOffset.y / 2.0)
+                          if let image = enlargedLocationView.image {
+                              enlargedLocationView.centerOffset = CGPoint(x: 0, y: -(image.size.height / 2.0))
+                          } else {
+                              enlargedLocationView.centerOffset = CGPoint(x: 0, y: enlargedLocationView.centerOffset.y / 2.0)
+                          }
                       } completion: { success in
                       }
                       self.enlargedLocationView = nil
@@ -189,7 +197,11 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
             // shrink the old focused view
             UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
                 enlargedLocationView.transform = enlargedLocationView.transform.scaledBy(x: 0.5, y: 0.5)
-                enlargedLocationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y / 2.0)
+                if let image = annotationView.image {
+                    enlargedLocationView.centerOffset = CGPoint(x: 0, y: -(image.size.height / 2.0))
+                } else {
+                    enlargedLocationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y / 2.0)
+                }
             } completion: { success in
             }
         }
@@ -206,7 +218,11 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
             annotationView.transform = annotationView.transform.scaledBy(x: 2.0, y: 2.0)
-            annotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y * 2.0)
+            if let image = annotationView.image {
+                annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height))
+            } else {
+                annotationView.centerOffset = CGPoint(x: 0, y: annotationView.centerOffset.y * 2.0)
+            }
         } completion: { success in
         }
     }

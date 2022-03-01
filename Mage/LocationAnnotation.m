@@ -61,18 +61,27 @@
 
 - (MKAnnotationView *) viewForAnnotationOnMapView: (MKMapView *) mapView scheme: (id<MDCContainerScheming>) scheme {
     MKAnnotationView *annotationView = nil;
-    PersonAnnotationView *personAnnotationView = (PersonAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
-    if (personAnnotationView == nil) {
-        personAnnotationView = [[PersonAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"locationAnnotation"];
-        personAnnotationView.scheme = scheme;
-        personAnnotationView.enabled = YES;
+    if (self.user.iconColor || self.user.iconUrl == nil) {
+        PersonAnnotationView *personAnnotationView = (PersonAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"locationAnnotation"];
+        if (personAnnotationView == nil) {
+            personAnnotationView = [[PersonAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"locationAnnotation"];
+            personAnnotationView.scheme = scheme;
+            personAnnotationView.enabled = YES;
+        } else {
+            personAnnotationView.annotation = self;
+        }
+        personAnnotationView.titleVisibility = MKFeatureVisibilityHidden;
+        annotationView = personAnnotationView;
     } else {
-        personAnnotationView.annotation = self;
-    }
-    annotationView = personAnnotationView;
-    
-    if (!self.user.iconColor && self.user.iconUrl != nil) {
-        [PersonAnnotationView setImageForAnnotationWithAnnotation:personAnnotationView user:self.user scheme:scheme];
+        annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"userIconAnnotation"];
+        if (annotationView == nil) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"userIconAnnotation"];
+            annotationView.enabled = YES;
+        } else {
+            annotationView.annotation = self;
+        }
+
+        [PersonAnnotationView setImageForAnnotationWithAnnotation:annotationView user:self.user];
     }
     annotationView.displayPriority = MKFeatureDisplayPriorityRequired;
     annotationView.collisionMode = MKAnnotationViewCollisionModeNone;
