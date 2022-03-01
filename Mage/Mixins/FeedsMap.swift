@@ -46,7 +46,11 @@ class FeedsMapMixin: NSObject, MapMixin {
             UserDefaults.standard.addObserver(self, forKeyPath: "selectedFeeds-\(currentEventId)", options: [.new], context: nil)
         }
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
-            self?.focusAnnotation(annotation: (notification.object as? MapAnnotationFocusedNotification)?.annotation)
+            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.mapView {
+                self?.focusAnnotation(annotation: notificationObject.annotation)
+            } else if notification.object == nil {
+                self?.focusAnnotation(annotation: nil)
+            }
         }
         addFeeds()
     }
