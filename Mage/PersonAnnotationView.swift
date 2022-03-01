@@ -79,7 +79,7 @@ import Kingfisher
         return .systemBlue;
     }
     
-    @objc public static func setImageForAnnotation(annotation: MKAnnotationView, user: User) {
+    @objc public static func setImageForAnnotation(annotation: MKMarkerAnnotationView, user: User, scheme: MDCContainerScheming?) {
         if let iconUrl = user.cacheIconUrl {
             KingfisherManager.shared.retrieveImage(with: URL(string: iconUrl)!, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
@@ -89,19 +89,15 @@ import Kingfisher
                 switch result {
                 case .success(let value):
                     if let cgImage = value.image.cgImage {
-                        let scale = value.image.size.width / 37;
-                        let image: UIImage = UIImage(cgImage: cgImage, scale: scale, orientation: value.image.imageOrientation)
+                        let scale = Float(cgImage.width) / 37.0
+                        let image: UIImage = UIImage(cgImage: cgImage, scale: CGFloat(scale), orientation: value.image.imageOrientation)
                         annotation.image = image;
                         annotation.centerOffset = CGPoint(x: 0, y: -(image.size.height / 2.0))
                     }
                 case .failure(_):
-                    if let image = UIImage(named: "me"), let cgImage = image.cgImage {
-                        let scale = image.size.width / 37;
-                        let image: UIImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
-                        annotation.image = image;
-                        annotation.centerOffset = CGPoint(x: 0, y: -(image.size.height / 2.0))
-//                        annotation.layer.anchorPoint = CGPoint(x: 0.5, y: 1);
-                    }
+                    annotation.glyphText = nil
+                    annotation.glyphImage = UIImage(named: "me")
+                    annotation.markerTintColor = scheme?.colorScheme.primaryColor;
                 }
             }
         }
@@ -119,7 +115,6 @@ import Kingfisher
         super.prepareForDisplay();
         
         if let annotation = self.annotation as? LocationAnnotation, let user = annotation.user {
-            
             if let iconColor = user.iconColor {
                 self.markerTintColor = UIColor(hex: iconColor);
                 self.glyphText = user.iconText;
@@ -134,8 +129,8 @@ import Kingfisher
                     case .success(let value):
                         if let cgImage = value.image.cgImage {
                             self.glyphText = nil
-                            let scale = value.image.size.width / 37;
-                            let image: UIImage = UIImage(cgImage: cgImage, scale: scale, orientation: value.image.imageOrientation)
+                            let scale = Float(cgImage.width) / 37.0
+                            let image: UIImage = UIImage(cgImage: cgImage, scale: CGFloat(scale), orientation: value.image.imageOrientation)
                             self.image = image;
                             self.glyphTintColor = .clear;
                             self.markerTintColor = .clear;
