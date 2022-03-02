@@ -9,7 +9,8 @@
 import Foundation
 
 @objc class MageSplitViewController : UISplitViewController {
-    
+    var startStraightLineNavigationObserver: AnyObject?
+
     var scheme: MDCContainerScheming?;
     var masterViewController: UINavigationController?;
     var detailViewController: UINavigationController?;
@@ -67,7 +68,7 @@ import Foundation
         super.viewDidLoad();
         self.maximumPrimaryColumnWidth = 426;
         self.preferredPrimaryColumnWidthFraction = 1.0;
-        self.preferredDisplayMode = .allVisible;
+        self.preferredDisplayMode = .oneBesideSecondary;
         
         Mage.singleton.startServices(initial: true);
         
@@ -98,29 +99,21 @@ import Foundation
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { notification in
-            guard let notificationObject: StraightLineNavigationNotification = notification.object as? StraightLineNavigationNotification else {
+        startStraightLineNavigationObserver = NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { notification in
+            guard let _: StraightLineNavigationNotification = notification.object as? StraightLineNavigationNotification else {
                 return;
             }
             self.detailViewController?.popToRootViewController(animated: false);
-            
-            if let mvc: MapViewController = self.mapViewController {
-                mvc.mapDelegate.feedItemToNavigateTo = nil;
-                mvc.mapDelegate.userToNavigateTo = nil;
-                if let user = notificationObject.user {
-                    mvc.mapDelegate.userToNavigateTo = user;
-                } else if let feedItem = notificationObject.feedItem {
-                    mvc.mapDelegate.feedItemToNavigateTo = feedItem;
-                }
-                mvc.mapDelegate.startStraightLineNavigation(notificationObject.coordinate, image: notificationObject.image);
-            }
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
         
-        NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil);
+        if let startStraightLineNavigationObserver = startStraightLineNavigationObserver {
+            NotificationCenter.default.removeObserver(startStraightLineNavigationObserver)
+        }
+        startStraightLineNavigationObserver = nil
     }
     
     func ensureButtonVisible() {
