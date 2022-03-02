@@ -13,7 +13,7 @@ class UserDataStore: NSObject {
     var tableView: UITableView;
     var scheme: MDCContainerScheming?;
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
-    var actionsDelegate: UserActionsDelegate?;
+    weak var actionsDelegate: UserActionsDelegate?;
     var userIds: [String]?;
     
     public init(tableView: UITableView, userIds: [String]? = nil, actionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {

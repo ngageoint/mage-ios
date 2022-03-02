@@ -101,6 +101,12 @@ class AttachmentSlideShow: UIView {
         self.accessibilityLabel = "attachment slideshow";
     }
     
+    deinit {
+        for subview in stackView.subviews {
+            subview.removeFromSuperview()
+        }
+    }
+    
     func getAttachmentUrl(attachment: Attachment) -> URL {
         if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
             return URL(fileURLWithPath: attachment.localPath!);

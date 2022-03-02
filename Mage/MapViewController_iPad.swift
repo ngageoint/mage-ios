@@ -10,7 +10,7 @@ import PureLayout
 @objc class MapViewController_iPad : MageMapViewController {
     
     typealias Delegate = ObservationActionsDelegate & UserActionsDelegate & FeedItemSelectionDelegate
-    var delegate: Delegate?;
+    weak var delegate: Delegate?;
     var settingsCoordinator: MapSettingsCoordinator?
     
     private lazy var profileButton : UIButton = {

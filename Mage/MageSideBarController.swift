@@ -26,7 +26,7 @@ class SidebarUIButton: UIButton {
     var scheme: MDCContainerScheming?;
     
     typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserActionsDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
-    @objc public var delegate: Delegate?;
+    @objc weak public var delegate: Delegate?;
     
     private lazy var railScroll : UIScrollView = {
         let scroll : UIScrollView = UIScrollView(forAutoLayout: ());

@@ -12,7 +12,7 @@ import MaterialComponents.MaterialSnackbar
 
 class LocationsTableViewController: UITableViewController {
     
-    var actionsDelegate: UserActionsDelegate?;
+    weak var actionsDelegate: UserActionsDelegate?;
     var scheme: MDCContainerScheming?;
     var updateTimer: Timer?;
     var listenersSetUp = false;

@@ -50,6 +50,9 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterUnitKey")
         UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterNumberKey")
         UserDefaults.standard.removeObserver(self, forKeyPath: "hidePeople")
+        
+        locations?.fetchedResultsController.delegate = nil
+        locations = nil
     }
     
     func setupMixin() {

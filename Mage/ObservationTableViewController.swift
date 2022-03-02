@@ -11,8 +11,8 @@ import MaterialComponents.MaterialSnackbar
 
 class ObservationTableViewController: UITableViewController {
     
-    var attachmentDelegate: AttachmentSelectionDelegate?;
-    var observationActionsDelegate: ObservationActionsDelegate?;
+    weak var attachmentDelegate: AttachmentSelectionDelegate?;
+    weak var observationActionsDelegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
     var childCoordinators: [NSObject] = [];
     var updateTimer: Timer?;
