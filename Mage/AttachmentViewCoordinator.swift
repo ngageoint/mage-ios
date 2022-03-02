@@ -73,6 +73,7 @@ import QuickLook
         self.needsCloseButton = needsCloseButton
         if UIDevice.current.userInterfaceIdiom == .pad {
             let navigationController = UINavigationController();
+            navigationController.view.backgroundColor = scheme?.colorScheme.surfaceColor
             self.rootViewController.present(navigationController, animated: animated, completion: nil);
             self.rootViewController = navigationController;
         }
