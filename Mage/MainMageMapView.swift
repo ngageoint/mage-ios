@@ -153,19 +153,6 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         }
     }
     
-    @objc func filterTapped(_ sender: UIBarButtonItem) {
-        let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil)
-        guard let vc = filterStoryboard.instantiateInitialViewController() as? UINavigationController else {
-            return
-        }
-        if let fvc: FilterTableViewController = vc.topViewController as? FilterTableViewController {
-            fvc.applyTheme(withContainerScheme: scheme)
-        }
-        vc.modalPresentationStyle = .popover
-        vc.popoverPresentationController?.barButtonItem = sender
-        viewController?.present(vc, animated: true, completion: nil)
-    }
-    
     func viewUser(_ user: User) {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         let uvc = UserViewController(user: user, scheme: scheme)
