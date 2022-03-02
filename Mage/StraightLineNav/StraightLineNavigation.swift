@@ -83,6 +83,9 @@ struct StraightLineNavigationNotification {
     }
     
     @objc func stopNavigation() {
+        if let navView = navView {
+            navView.removeFromSuperview()
+        }
         navigationModeEnabled = false;
         if let relativeBearingPolyline = relativeBearingPolyline {
             mapView?.removeOverlay(relativeBearingPolyline);

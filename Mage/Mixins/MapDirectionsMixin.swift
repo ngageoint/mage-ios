@@ -203,7 +203,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
         
         if let popoverController = alert.popoverPresentationController {
-            var view: UIView? = sourceView
+            var view: UIView? = notification.sourceView ?? sourceView
             if view == nil {
                 popoverController.permittedArrowDirections = []
                 view = viewController?.view

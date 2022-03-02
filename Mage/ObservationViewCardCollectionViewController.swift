@@ -419,7 +419,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            let notification = DirectionsToItemNotification(observation: observation, user: nil, feedItem: nil)
+            let notification = DirectionsToItemNotification(observation: observation, user: nil, feedItem: nil, sourceView: sourceView)
             NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
     }

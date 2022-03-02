@@ -28,4 +28,5 @@ struct DirectionsToItemNotification {
     var annotation: MKAnnotationView?
     var image: UIImage?
     var imageUrl: URL?
+    var sourceView: UIView?
 }
