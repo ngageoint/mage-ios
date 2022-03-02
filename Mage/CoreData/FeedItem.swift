@@ -18,7 +18,7 @@ import CoreData
         }
         let fetchRequest = FeedItem.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "temporalSortValue", ascending: true)]
         let feedItemFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
         feedItemFetchedResultsController.delegate = delegate
         do {
