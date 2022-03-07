@@ -11,6 +11,7 @@ import Quick
 import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
+import UniformTypeIdentifiers
 
 @testable import MAGE
 
@@ -106,7 +107,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 mockPicker.sourceType = .camera;
                 
                 let info: [UIImagePickerController.InfoKey : Any] = [
-                    .mediaType: kUTTypeImage as String,
+                    .mediaType: UTType.image,
                     .editedImage: createGradientImage(startColor: .purple, endColor: .white, size: CGSize(width: 500, height: 500)),
                     .mediaMetadata: [ "mykey": "myvalue" ]
                 ];
@@ -139,7 +140,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 print("URL is \(url)")
                 
                 let info: [UIImagePickerController.InfoKey : Any] = [
-                    .mediaType: kUTTypeMovie as String,
+                    .mediaType: UTType.movie,
                     .mediaURL: url
                 ];
                 
