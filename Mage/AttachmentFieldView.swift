@@ -240,6 +240,10 @@ class AttachmentFieldView : BaseFieldView {
         setCollectionData(attachments: self.attachments);
     }
     
+    func setValue(set: Set<Attachment>? = nil) {
+        setValue(Array(set ?? Set()))
+    }
+    
     func addAttachment(_ attachment: Attachment) {
         var attachments = self.attachments ?? [];
         attachments.append(attachment);
