@@ -107,20 +107,19 @@ class UserViewControllerTests: KIFSpec {
                 tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
                 
                 tester().tapView(withAccessibilityLabel: "location", traits: UIAccessibilityTraits(arrayLiteral: .button));
-                tester().waitForView(withAccessibilityLabel: "Location copied to clipboard");
+                tester().waitForView(withAccessibilityLabel: "Location 40.00850, -105.26780 copied to clipboard");
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().tapView(withAccessibilityLabel: "favorite", traits: UIAccessibilityTraits(arrayLiteral: .button));
                 tester().wait(forTimeInterval: 0.5);
                 expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for:.normal)).to(be(MDCPalette.green.accent700));
 
+                let directionsExpectation = self.expectation(forNotification: .DirectionsToItem, object: nil, handler: nil)
                 tester().tapView(withAccessibilityLabel: "directions", traits: UIAccessibilityTraits(arrayLiteral: .button));
-                tester().waitForView(withAccessibilityLabel: "Apple Maps");
-                tester().waitForView(withAccessibilityLabel: "Google Maps");
-                tester().waitForView(withAccessibilityLabel: "Cancel");
-                tester().tapView(withAccessibilityLabel: "Cancel");
+                let result: XCTWaiter.Result = XCTWaiter.wait(for: [directionsExpectation], timeout: 5.0)
+                XCTAssertEqual(result, .completed)
 
-                let observation: Observation = ((user.observations as? Set<Observation>)?.first)!;
-                let attachment: Attachment = ((observation.attachments as? Set<Attachment>)?.first!)! ;
+                let observation: Observation = ((user.observations)?.first)!;
+                let attachment: Attachment = ((observation.attachments)?.first!)! ;
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 tester().tapView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded");

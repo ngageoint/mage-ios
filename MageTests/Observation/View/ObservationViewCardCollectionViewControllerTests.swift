@@ -439,12 +439,12 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 controller.pushViewController(observationViewController, animated: true);
                 
                 view = window;
-                
+            
+                let directionsExpectation = self.expectation(forNotification: .DirectionsToItem, object: nil, handler: nil)
                 tester().tapView(withAccessibilityLabel: "directions");
-                
-                tester().waitForView(withAccessibilityLabel: "Apple Maps");
-                tester().waitForView(withAccessibilityLabel: "Google Maps");
-                tester().tapView(withAccessibilityLabel: "Cancel");
+
+                let result: XCTWaiter.Result = XCTWaiter.wait(for: [directionsExpectation], timeout: 5.0)
+                XCTAssertEqual(result, .completed)
             }
             
             it("update important and then remove it") {

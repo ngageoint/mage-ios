@@ -198,7 +198,7 @@ class MageServerTestsSwift: KIFSpec {
                 expect(apiCallCount).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "API pulled");
             }
             
-            it("should test set URL that has already been set without stored password or api retrieved and no connection should have no login modules") {
+            it("should test set URL that has already been set without stored password or api retrieved and no connection should have no login modules and should return a failure") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.deviceRegistered = true
                 
@@ -212,12 +212,10 @@ class MageServerTestsSwift: KIFSpec {
                 
                 var serverSetup = false
                 MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
-                    let authModules = server?.authenticationModules
-                    expect(authModules).to(beNil())
-                    expect(server!.serverHasLocalAuthenticationStrategy).to(beFalse())
-                    serverSetup = true
-                } failure: { (error) in
                     tester().fail()
+                } failure: { (error) in
+                    serverSetup = true
+                    expect(error.localizedDescription).to(contain("Failed to connect to server."))
                 }
                 
                 expect(apiCalled).toEventually(beTrue())

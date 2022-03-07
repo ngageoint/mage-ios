@@ -112,6 +112,7 @@ class ObservationBuilder {
         if (observationRemoteId != nil && remoteId != nil) {
             attachment.url = "https://magetest/observation/\(observationRemoteId ?? "")/attachments/remoteid\(remoteId ?? "")";
         }
+        attachment.lastModified = Date()
         return attachment;
     }
     
