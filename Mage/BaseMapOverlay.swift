@@ -13,6 +13,10 @@ import geopackage_ios
     var renderer: MKOverlayRenderer?
     @objc public var darkTheme = false
     
+    @objc public func cleanup() {
+        featureTiles = nil
+    }
+    
     override init!(featureTiles: GPKGFeatureTiles!) {
         super.init(featureTiles: featureTiles)
         renderer = MKTileOverlayRenderer(overlay: self)
