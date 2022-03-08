@@ -67,6 +67,9 @@ class GeoPackageBaseMapTests: KIFSpec {
                 window.rootViewController = navController;
                 
                 view = window
+                if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+                    window.overrideUserInterfaceStyle = .unspecified
+                }
             }
             
             afterEach {
@@ -77,6 +80,10 @@ class GeoPackageBaseMapTests: KIFSpec {
                     controller.dismiss(animated: false, completion: {
                         done();
                     });
+                }
+                UserDefaults.standard.themeOverride = 0
+                if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+                    window.overrideUserInterfaceStyle = .unspecified
                 }
                 window?.resignKey();
                 window.rootViewController = nil;
