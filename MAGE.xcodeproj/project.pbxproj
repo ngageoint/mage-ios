@@ -440,6 +440,7 @@
 		F7BCAC272630B62E006BE2A9 /* testResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7BCAC262630B62E006BE2A9 /* testResponse.html */; };
 		F7BD2D7C267A468900A2B1D7 /* MockGeometryEditDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BD2D7B267A468900A2B1D7 /* MockGeometryEditDelegate.swift */; };
 		F7BE036F24660A9D00D2F7C3 /* TextFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */; };
+		F7BEF68227D69DC7000E8CDE /* GeoPackageBaseMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
 		F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */; };
 		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
@@ -1191,6 +1192,7 @@
 		F7BCAC262630B62E006BE2A9 /* testResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = testResponse.html; sourceTree = "<group>"; };
 		F7BD2D7B267A468900A2B1D7 /* MockGeometryEditDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGeometryEditDelegate.swift; sourceTree = "<group>"; };
 		F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldViewTests.swift; sourceTree = "<group>"; };
+		F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageBaseMapTests.swift; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
 		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
 		F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCompactView.swift; sourceTree = "<group>"; };
@@ -2695,9 +2697,18 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		F7BEF68027D69DA1000E8CDE /* Mixins */ = {
+			isa = PBXGroup;
+			children = (
+				F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */,
+			);
+			path = Mixins;
+			sourceTree = "<group>";
+		};
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				F7BEF68027D69DA1000E8CDE /* Mixins */,
 				F7D049A226262A8900BCFCC2 /* StraightLineNav */,
 				F7C641032581504F00C02335 /* MapViewControllerTests.swift */,
 				F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */,
@@ -3612,6 +3623,7 @@
 				F7703DF026262DDB004ADC4C /* StraightLineNavigationViewTests.swift in Sources */,
 				F7384FDE274D74EA00EA1A96 /* ObservationFetchServiceTests.swift in Sources */,
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
+				F7BEF68227D69DC7000E8CDE /* GeoPackageBaseMapTests.swift in Sources */,
 				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
 				F7521D8F26702C4100C52318 /* PlainMapViewDelegate.swift in Sources */,
 				F7F62FA4273F186E00AF0A74 /* UserUtilityTests.swift in Sources */,

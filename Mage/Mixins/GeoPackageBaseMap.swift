@@ -12,14 +12,6 @@ import MapKit
 protocol GeoPackageBaseMap {
     var mapView: MKMapView? { get set }
     var geoPackageBaseMapMixin: GeoPackageBaseMapMixin? { get set }
-    func addBaseMap()
-}
-
-extension GeoPackageBaseMap {
-    
-    func addBaseMap() {
-        geoPackageBaseMapMixin?.addBaseMap()
-    }
 }
 
 class GeoPackageBaseMapMixin: NSObject, MapMixin {
@@ -50,18 +42,18 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
               let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
                   return
               }
+        mapView?.removeOverlay(darkBackgroundOverlay)
+        mapView?.removeOverlay(backgroundOverlay)
         
         if UserDefaults.standard.mapType == 3 {
-            if UITraitCollection.current.userInterfaceStyle == .dark {
-                mapView?.removeOverlay(backgroundOverlay)
+            let overrideStyle = mapView?.window?.overrideUserInterfaceStyle ?? UITraitCollection.current.userInterfaceStyle
+            let style = overrideStyle == .unspecified ? UITraitCollection.current.userInterfaceStyle : overrideStyle
+            if style == .dark {
                 mapView?.addOverlay(darkBackgroundOverlay, level: .aboveRoads)
             } else {
-                mapView?.removeOverlay(darkBackgroundOverlay)
                 mapView?.addOverlay(backgroundOverlay, level: .aboveRoads)
             }
         } else {
-            mapView?.removeOverlay(darkBackgroundOverlay)
-            mapView?.removeOverlay(backgroundOverlay)
             mapView?.mapType = MKMapType(rawValue: UInt(UserDefaults.standard.mapType)) ?? .standard
         }
         mapView?.showsTraffic = UserDefaults.standard.mapShowTraffic && mapView?.mapType != .satellite && UserDefaults.standard.mapType != 3
@@ -75,6 +67,11 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
     }
     
     func traitCollectionUpdated(previous: UITraitCollection?) {
-        addBaseMap()
+        if let previous = previous, previous.hasDifferentColorAppearance(comparedTo: UITraitCollection.current) {
+            addBaseMap()
+        } else if previous == nil {
+            addBaseMap()
+        }
     }
+    
 }
