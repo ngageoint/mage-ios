@@ -24,6 +24,7 @@
         self.orLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         self.rightLine.backgroundColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         self.leftLine.backgroundColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+        self.backgroundColor = [UIColor clearColor];
     }
 }
 

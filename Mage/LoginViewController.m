@@ -32,6 +32,7 @@
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
 @property (strong, nonatomic) IBOutlet UITextView *messageView;
+@property (strong, nonatomic) OrView *orView;
 
 @end
 
@@ -75,6 +76,9 @@
     }
     
     self.versionLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    if (self.orView) {
+        [self.orView applyThemeWithContainerScheme:self.scheme];
+    }
 }
 
 #pragma mark -
@@ -155,9 +159,9 @@
     }
     
     if (strategies.count > 1 && localAuth) {
-        OrView *view = [[[UINib nibWithNibName:@"orView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
-        [view applyThemeWithContainerScheme:_scheme];
-        [self.loginsStackView insertArrangedSubview:view atIndex:self.loginsStackView.arrangedSubviews.count-1];
+        self.orView = [[[UINib nibWithNibName:@"orView" bundle:nil] instantiateWithOwner:self options:nil] objectAtIndex:0];
+        [self.orView applyThemeWithContainerScheme:_scheme];
+        [self.loginsStackView insertArrangedSubview:self.orView atIndex:self.loginsStackView.arrangedSubviews.count-1];
     }
     
     self.messageView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginsStackView.bounds.size.width, self.loginsStackView.bounds.size.height)];
