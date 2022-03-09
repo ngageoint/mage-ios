@@ -11,8 +11,6 @@
 #import "GPKGMapShapeConverter.h"
 #import "MapShapeObservation.h"
 #import "MapAnnotationObservation.h"
-#import "StyledPolygon.h"
-#import "StyledPolyline.h"
 #import "ObservationShapeStyle.h"
 #import "ObservationShapeStyleParser.h"
 #import "MAGE-Swift.h"

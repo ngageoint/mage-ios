@@ -96,7 +96,8 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addUser(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
+    @discardableResult
+    public static func addUser(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) -> User? {
         var jsonDictionary: [AnyHashable : Any] = parseJsonFile(jsonFile: "userabc") as! [AnyHashable : Any];
         
         let stubPath: String! = OHPathForFile("icon27.png", self);
@@ -120,6 +121,7 @@ class MageCoreDataFixtures {
         jsonDictionary["avatarUrl"] = "icon27.png";
         jsonDictionary["iconUrl"] = "test_marker.png";
         if (completion == nil) {
+            var u: User?
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
@@ -130,11 +132,12 @@ class MageCoreDataFixtures {
                     print("role already existed")
                 }
                 print("inserting a user")
-                let u: User = User.insert(json: jsonDictionary, context: localContext)!
-                u.remoteId = userId;
-                u.role = existingRole;
+                u = User.insert(json: jsonDictionary, context: localContext)!
+                u?.remoteId = userId;
+                u?.role = existingRole;
                 
             })
+            return u
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
@@ -159,6 +162,7 @@ class MageCoreDataFixtures {
                 }, completion: completion);
             }
         }
+        return nil
     }
     
     public static func addUserToEvent(eventId: NSNumber = 1, userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {

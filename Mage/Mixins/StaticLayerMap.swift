@@ -85,14 +85,14 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                         }
                     } else if featureType == "Polygon" {
                         if let coordinates = StaticLayer.featureCoordinates(feature: feature) {
-                            let polygon = StyledPolygon.generate(coordinates)
+                            let polygon = StyledPolygon.generate(coordinates: coordinates as? [[[NSNumber]]] ?? [])
                             let fillOpacity = StaticLayer.featureFillOpacity(feature: feature)
                             let fillAlpha = fillOpacity / 255.0
-                            polygon.fillColor(withHexString: StaticLayer.featureFillColor(feature: feature), andAlpha: fillAlpha)
+                            polygon.setFillColor(hex: StaticLayer.featureFillColor(feature: feature), alpha: fillAlpha)
                             
                             let lineOpacity = staticLayer.featureLineOpacity(feature: feature)
                             let lineAlpha = lineOpacity / 255.0
-                            polygon.lineColor(withHexString: StaticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
+                            polygon.setLineColor(hex: StaticLayer.featureLineColor(feature: feature), alpha: lineAlpha)
                             
                             polygon.lineWidth = StaticLayer.featureLineWidth(feature: feature)
                             
@@ -104,11 +104,12 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                         }
                     } else if featureType == "LineString" {
                         if let coordinates = StaticLayer.featureCoordinates(feature: feature) {
-                            let polyline = StyledPolyline.generate(coordinates)
+                            let polyline = StyledPolyline.generate(path: coordinates as? [[NSNumber]] ?? [])
                             
                             let lineOpacity = staticLayer.featureLineOpacity(feature: feature)
                             let lineAlpha = lineOpacity / 255.0
-                            polyline.lineColor(withHexString: StaticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
+                            polyline.setLineColor(hex: StaticLayer.featureLineColor(feature: feature), alpha: lineAlpha)
+//                            polyline.lineColor(withHexString: StaticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
                             
                             polyline.lineWidth = StaticLayer.featureLineWidth(feature: feature)
                             

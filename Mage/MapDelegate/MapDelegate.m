@@ -11,8 +11,6 @@
 #import "UIImage+Resize.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
 #import "StaticPointAnnotation.h"
-#import "StyledPolygon.h"
-#import "StyledPolyline.h"
 #import "AreaAnnotation.h"
 #import <MapKit/MapKit.h>
 #import "CacheOverlays.h"
@@ -1301,21 +1299,21 @@
                     [annotations addObject:annotation];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"Polygon"]) {
                     NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
-                    StyledPolygon *polygon = [StyledPolygon generatePolygon:coordinates];
+                    StyledPolygon *polygon = [StyledPolygon generateWithCoordinates:coordinates];
                     
                     CGFloat fillAlpha = 1.0f;
                     id fillOpacity = [feature valueForKeyPath:@"properties.style.polyStyle.color.opacity"];
                     if (fillOpacity) {
                         fillAlpha = [fillOpacity floatValue] / 255.0f;
                     }
-                    [polygon fillColorWithHexString:[feature valueForKeyPath:@"properties.style.polyStyle.color.rgb"] andAlpha:fillAlpha];
+                    [polygon setFillColorWithHex:[feature valueForKeyPath:@"properties.style.polyStyle.color.rgb"] alpha:fillAlpha];
                     
                     CGFloat lineAlpha = 1.0f;
                     id lineOpacity = [feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"];
                     if (lineOpacity) {
                         lineAlpha = [lineOpacity floatValue] / 255.0f;
                     }
-                    [polygon lineColorWithHexString:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha:lineAlpha];
+                    [polygon setLineColorWithHex:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] alpha:lineAlpha];
                     
                     id lineWidth = [feature valueForKeyPath:@"properties.style.lineStyle.width"];
                     if (!lineWidth) {
@@ -1331,7 +1329,7 @@
                     [_mapView addOverlay:polygon];
                 } else if([[feature valueForKeyPath:@"geometry.type"] isEqualToString:@"LineString"]) {
                     NSMutableArray *coordinates = [NSMutableArray arrayWithArray:[feature valueForKeyPath:@"geometry.coordinates"]];
-                    StyledPolyline *polyline = [StyledPolyline generatePolyline:coordinates];
+                    StyledPolyline *polyline = [StyledPolyline generateWithPath:coordinates];
                     
                     CGFloat alpha = 1.0f;
                     id opacity = [feature valueForKeyPath:@"properties.style.lineStyle.color.opacity"];
@@ -1339,7 +1337,7 @@
                         alpha = [opacity floatValue] / 255.0f;
                     }
 
-                    [polyline lineColorWithHexString:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] andAlpha:alpha];
+                    [polyline setLineColorWithHex:[feature valueForKeyPath:@"properties.style.lineStyle.color.rgb"] alpha:alpha];
                     
                     id lineWidth = [feature valueForKeyPath:@"properties.style.lineStyle.width"];
                     if (!lineWidth) {

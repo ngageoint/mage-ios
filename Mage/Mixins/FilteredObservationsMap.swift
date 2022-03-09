@@ -58,6 +58,11 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: "favoritesFilterKey")
     }
     
+    func cleanupMixin() {
+        observations?.delegate = nil
+        observations = nil
+    }
+    
     func setupMixin() {
         UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterKey", options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterUnitKey", options: [.new], context: nil)
@@ -93,16 +98,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         
         var annotations: [Any] = []
         for lineObservation in lineObservations {
-            if lineHitTest(lineObservation: lineObservation, location: location, tolerance: tolerance), let observationRemoteId = lineObservation.observationRemoteId {
-                if let observation = Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId) {
+            if lineHitTest(lineObservation: lineObservation, location: location, tolerance: tolerance) {
+               if let observation = lineObservation.observation {
                     annotations.append(observation)
-                }
+               }
             }
         }
-        
         for polygonObservation in polygonObservations {
-            if polygonHitTest(polygonObservation: polygonObservation, location: location), let observationRemoteId = polygonObservation.observationRemoteId {
-                if let observation = Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId) {
+            if polygonHitTest(polygonObservation: polygonObservation, location: location) {
+                if let observation = polygonObservation.observation {
                     annotations.append(observation)
                 }
             }
@@ -163,21 +167,28 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 let style = ObservationShapeStyleParser.style(of: observation)
                 let shapeConverter = GPKGMapShapeConverter()
                 let shape = shapeConverter?.toShape(with: geometry)
+                
                 if let mkpolyline = shape?.shape as? MKPolyline {
-                    let styledPolyline = StyledPolyline.create(with: mkpolyline)
+                    let styledPolyline = StyledPolyline.create(polyline: mkpolyline)
                     styledPolyline.lineColor = style?.strokeColor ?? .black
                     styledPolyline.lineWidth = style?.lineWidth ?? 1
                     styledPolyline.observationRemoteId = observation.remoteId
+                    styledPolyline.observation = observation
                     lineObservations.append(styledPolyline)
-                    mapView?.addOverlay(styledPolyline)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.mapView?.addOverlay(styledPolyline)
+                    }
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
-                    let styledPolygon = StyledPolygon.create(with: mkpolygon)
+                    let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
                     styledPolygon.lineColor = style?.strokeColor ?? .black
                     styledPolygon.lineWidth = style?.lineWidth ?? 1
                     styledPolygon.fillColor = style?.fillColor ?? .clear
+                    styledPolygon.observation = observation
                     styledPolygon.observationRemoteId = observation.remoteId
                     polygonObservations.append(styledPolygon)
-                    mapView?.addOverlay(styledPolygon)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.mapView?.addOverlay(styledPolygon)
+                    }
                 }
             }
         }

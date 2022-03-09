@@ -441,6 +441,7 @@
 		F7BD2D7C267A468900A2B1D7 /* MockGeometryEditDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BD2D7B267A468900A2B1D7 /* MockGeometryEditDelegate.swift */; };
 		F7BE036F24660A9D00D2F7C3 /* TextFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */; };
 		F7BEF68227D69DC7000E8CDE /* GeoPackageBaseMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */; };
+		F7BEF68427D7C561000E8CDE /* FilteredObservationsMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BEF68327D7C561000E8CDE /* FilteredObservationsMapTests.swift */; };
 		F7BFF8CC1975C4F1004E42E2 /* MageInitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */; };
 		F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */; };
 		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
@@ -570,8 +571,8 @@
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
 		F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
-		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */; };
-		F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */; };
+		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.swift */; };
+		F7FD4DF91A80126300DAABA6 /* StyledPolyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.swift */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
 		F7FD972423D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */; };
 		F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FE8C8D258829BE00314285 /* EditAttachmentCardView.swift */; };
@@ -1193,6 +1194,7 @@
 		F7BD2D7B267A468900A2B1D7 /* MockGeometryEditDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGeometryEditDelegate.swift; sourceTree = "<group>"; };
 		F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldViewTests.swift; sourceTree = "<group>"; };
 		F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageBaseMapTests.swift; sourceTree = "<group>"; };
+		F7BEF68327D7C561000E8CDE /* FilteredObservationsMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredObservationsMapTests.swift; sourceTree = "<group>"; };
 		F7BFF8CA1975C4F1004E42E2 /* MageInitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageInitialViewController.h; sourceTree = "<group>"; };
 		F7BFF8CB1975C4F1004E42E2 /* MageInitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageInitialViewController.m; sourceTree = "<group>"; };
 		F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCompactView.swift; sourceTree = "<group>"; };
@@ -1348,10 +1350,8 @@
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
 		F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetchServiceTests.swift; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
-		F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolygon.h; sourceTree = "<group>"; };
-		F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolygon.m; sourceTree = "<group>"; };
-		F7FD4DF71A80126300DAABA6 /* StyledPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPolyline.h; sourceTree = "<group>"; };
-		F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPolyline.m; sourceTree = "<group>"; };
+		F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyledPolygon.swift; sourceTree = "<group>"; };
+		F7FD4DF81A80126300DAABA6 /* StyledPolyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyledPolyline.swift; sourceTree = "<group>"; };
 		F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaAnnotation.h; sourceTree = "<group>"; };
 		F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AreaAnnotation.m; sourceTree = "<group>"; };
 		F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSynchronizationSettingsTableViewController.h; sourceTree = "<group>"; };
@@ -1678,10 +1678,8 @@
 				F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */,
 				F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */,
 				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */,
-				F7FD4DF41A7FEBA300DAABA6 /* StyledPolygon.h */,
-				F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.m */,
-				F7FD4DF71A80126300DAABA6 /* StyledPolyline.h */,
-				F7FD4DF81A80126300DAABA6 /* StyledPolyline.m */,
+				F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.swift */,
+				F7FD4DF81A80126300DAABA6 /* StyledPolyline.swift */,
 				F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */,
 				F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */,
 				04ED963D1EB7AB8700B6AD8D /* MapObservation.h */,
@@ -2701,6 +2699,7 @@
 			isa = PBXGroup;
 			children = (
 				F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */,
+				F7BEF68327D7C561000E8CDE /* FilteredObservationsMapTests.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3498,12 +3497,12 @@
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
 				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
-				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.m in Sources */,
+				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.swift in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.swift in Sources */,
 				F78B0A971A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m in Sources */,
 				F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */,
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,
-				F7FD4DF91A80126300DAABA6 /* StyledPolyline.m in Sources */,
+				F7FD4DF91A80126300DAABA6 /* StyledPolyline.swift in Sources */,
 				F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.swift in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */,
@@ -3690,6 +3689,7 @@
 				F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */,
 				F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */,
 				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,
+				F7BEF68427D7C561000E8CDE /* FilteredObservationsMapTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 				F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */,
 				F795ED0C24B8FCC00028FBFC /* UserTableHeaderViewTests.swift in Sources */,
