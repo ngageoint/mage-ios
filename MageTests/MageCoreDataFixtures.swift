@@ -85,13 +85,13 @@ class MageCoreDataFixtures {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation.gpsLocation(location: location, context: localContext);
+                _ = GPSLocation.gpsLocation(location: location, context: localContext);
             })
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation.gpsLocation(location: location, context: localContext);
+                _ = GPSLocation.gpsLocation(location: location, context: localContext);
             }, completion: completion)
         }
     }
@@ -170,7 +170,7 @@ class MageCoreDataFixtures {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
                 let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                if let teams = event?.teams as? Set<Team>, let team = teams.first {
+                if let teams = event?.teams, let team = teams.first {
                     team.addToUsers(user!);
                 }
             });
@@ -178,7 +178,7 @@ class MageCoreDataFixtures {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
                 let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                if let teams = event?.teams as? Set<Team>, let team = teams.first {
+                if let teams = event?.teams, let team = teams.first {
                     team.addToUsers(user!);
                 }
             }, completion: completion);
@@ -469,12 +469,12 @@ class MageCoreDataFixtures {
 
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext) as! [String]
+                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext)
                 expect(remoteIds) == feedIds;
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext) as! [String]
+                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext)
                 expect(remoteIds) == feedIds;
             }, completion: completion);
         }
@@ -491,12 +491,12 @@ class MageCoreDataFixtures {
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let remoteIds = Feed.populateFeedItems(feedItems: features as! [[AnyHashable:Any]], feedId: feedId, eventId: 1, context: localContext)
-                expect(remoteIds as? [String]) == feedItemIds;
+                expect(remoteIds) == feedItemIds;
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let remoteIds = Feed.populateFeedItems(feedItems: features as! [[AnyHashable:Any]], feedId: feedId, eventId: 1, context: localContext)
-                expect(remoteIds as? [String]) == feedItemIds;
+                expect(remoteIds) == feedItemIds;
             }, completion: completion);
         }
     }

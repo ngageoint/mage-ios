@@ -9,6 +9,7 @@
 import Foundation
 import Quick
 import Nimble
+import sf_ios
 //import Nimble_Snapshots
 
 @testable import MAGE
@@ -71,9 +72,7 @@ class GeometryViewTests: KIFSpec {
                 MageCoreDataFixtures.clearAllData();
             }
             
-            it("edit mode reference image") {
-                let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
-                
+            it("edit mode reference image") {                
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let mockMapDelegate = MockMapViewDelegate()
                 
@@ -88,8 +87,6 @@ class GeometryViewTests: KIFSpec {
                 
                 expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 GPS ± 100.49m"
                 expect(geometryFieldView?.textField.label.text) == "Field Title"
-                
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
                 
             }
             

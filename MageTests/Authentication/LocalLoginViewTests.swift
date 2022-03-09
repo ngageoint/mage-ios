@@ -70,7 +70,6 @@ class LocalLoginViewTests: KIFSpec {
             var view: UIView!;
             var localLoginView: LocalLoginView!;
             var controller: UIViewController?;
-            var delegate: MockLoginDelegate!;
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
@@ -85,8 +84,6 @@ class LocalLoginViewTests: KIFSpec {
                 window = TestHelpers.getKeyWindowVisible();
                 window!.rootViewController = controller;
                 controller?.view.addSubview(view);
-                
-                delegate = MockLoginDelegate();
             }
             
             afterEach {

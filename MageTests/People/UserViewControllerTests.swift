@@ -20,12 +20,7 @@ class UserViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("UserViewController") {
-            
-            let recordSnapshots = false;
-//            Nimble_Snapshots.setNimbleTolerance(0.1);
-            
-            var userTableHeaderView: UserTableHeaderView!
-            var view: UIView!
+        
             var controller: UserViewController!
             var window: UIWindow!;
             
@@ -42,21 +37,6 @@ class UserViewControllerTests: KIFSpec {
                 guard let cgImage = image?.cgImage else { return UIImage() }
                 return UIImage(cgImage: cgImage)
             }
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.0);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot();
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
             
             beforeEach {
                 
@@ -84,7 +64,6 @@ class UserViewControllerTests: KIFSpec {
             }
             
             it("user view") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent()
                 MageCoreDataFixtures.addUser()
                 MageCoreDataFixtures.addLocation()
@@ -133,17 +112,6 @@ class UserViewControllerTests: KIFSpec {
                 expect(nc.topViewController).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
                 tester().tapView(withAccessibilityLabel: "User ABC");
                 expect(nc.topViewController).toEventually(beAnInstanceOf(UserViewController.self));
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//                
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(10), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(10), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(10), description: "Map loaded")
-//                }
             }
         }
     }

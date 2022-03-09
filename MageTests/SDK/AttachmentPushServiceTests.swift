@@ -56,7 +56,7 @@ class AttachmentPushServiceTests: QuickSpec {
                     return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
                 }
                 
-                var observationJsonRaw: [AnyHashable : Any] = [
+                let observationJsonRaw: [AnyHashable : Any] = [
                     "eventId":1,
                     "type":"Feature",
                     "geometry": [

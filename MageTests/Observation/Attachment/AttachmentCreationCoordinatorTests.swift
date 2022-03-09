@@ -38,8 +38,6 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
     override func spec() {
         
         xdescribe("AttachmentCreationCoordinatorTests") {
-            let recordSnapshots = false;
-            
             var attachmentCreationCoordinator: AttachmentCreationCoordinator!
             var view: UIView!
             var controller: UIViewController!
@@ -58,22 +56,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 guard let cgImage = image?.cgImage else { return UIImage() }
                 return UIImage(cgImage: cgImage)
             }
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = false, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.5);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
-            
+
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 

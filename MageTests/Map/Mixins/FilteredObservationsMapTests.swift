@@ -234,7 +234,7 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 it("initialize the FilteredObservationsMap filtering on last 24 hours") {
                     let longAgo = Date(timeIntervalSince1970: 1)
-                    let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                    _ = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
                     UserDefaults.standard.observationTimeFilter = .last24Hours
@@ -249,7 +249,7 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 it("initialize the FilteredObservationsMap filtering on last week") {
                     let longAgo = Date(timeIntervalSince1970: 1)
-                    let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                    _ = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
                     UserDefaults.standard.observationTimeFilter = .lastWeek
@@ -264,7 +264,7 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 it("initialize the FilteredObservationsMap filtering on last month") {
                     let longAgo = Date(timeIntervalSince1970: 1)
-                    let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                    _ = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
                     UserDefaults.standard.observationTimeFilter = .lastWeek
@@ -301,7 +301,7 @@ class FilteredObservationsMapTests: KIFSpec {
                     fomixin.setupMixin()
                     
                     let longAgo = Date(timeIntervalSince1970: 1)
-                    let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                    _ = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     expect(fomixin.mapView?.annotations.count).toEventually(equal(2))
                     
@@ -335,10 +335,10 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 it("get the observation close to the location") {
                     let longAgo = Date(timeIntervalSince1970: 1)
-                    let geometryone = SFPolygon(ring: SFLineString(points: [SFPoint(x: 16.1, andY: 21.1), SFPoint(x: 15.9, andY: 21.1), SFPoint(x: 15.9, andY: 20.9), SFPoint(x: 16.1, andY: 20.9), SFPoint(x: 16.1, andY: 21.1)]))
+                    let geometryone = SFPolygon(ring: SFLineString(points: [SFPoint(x: 16.1, andY: 21.1) as Any, SFPoint(x: 15.9, andY: 21.1) as Any, SFPoint(x: 15.9, andY: 20.9) as Any, SFPoint(x: 16.1, andY: 20.9) as Any, SFPoint(x: 16.1, andY: 21.1) as Any]))
                     let one = Observation.create(geometry: geometryone, date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                    let geometrytwo = SFPolygon(ring: SFLineString(points: [SFPoint(x: 15.1, andY: 20.1), SFPoint(x: 14.9, andY: 20.1), SFPoint(x: 14.9, andY: 19.9), SFPoint(x: 15.1, andY: 19.9), SFPoint(x: 15.1, andY: 20.1)]))
-                    let two = Observation.create(geometry: geometrytwo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                    let geometrytwo = SFPolygon(ring: SFLineString(points: [SFPoint(x: 15.1, andY: 20.1) as Any, SFPoint(x: 14.9, andY: 20.1) as Any, SFPoint(x: 14.9, andY: 19.9) as Any, SFPoint(x: 15.1, andY: 19.9) as Any, SFPoint(x: 15.1, andY: 20.1) as Any]))
+                    _ = Observation.create(geometry: geometrytwo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
                     UserDefaults.standard.observationTimeFilter = .all
                     
@@ -365,13 +365,13 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 it("get a polygon and a polyline close to the location") {
                     let longAgo = Date(timeIntervalSince1970: 1)
-                    let geometryone = SFPolygon(ring: SFLineString(points: [SFPoint(x: 16.1, andY: 21.1), SFPoint(x: 15.9, andY: 21.1), SFPoint(x: 15.9, andY: 20.9), SFPoint(x: 16.1, andY: 20.9), SFPoint(x: 16.1, andY: 21.1)]))
+                    let geometryone = SFPolygon(ring: SFLineString(points: [SFPoint(x: 16.1, andY: 21.1) as Any, SFPoint(x: 15.9, andY: 21.1) as Any, SFPoint(x: 15.9, andY: 20.9) as Any, SFPoint(x: 16.1, andY: 20.9) as Any, SFPoint(x: 16.1, andY: 21.1) as Any]))
                     let one = Observation.create(geometry: geometryone, date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                    let geometrytwo = SFLineString(points: [SFPoint(x: 15, andY: 22), SFPoint(x: 17, andY: 20)])
+                    let geometrytwo = SFLineString(points: [SFPoint(x: 15, andY: 22) as Any, SFPoint(x: 17, andY: 20) as Any])
                     let two = Observation.create(geometry: geometrytwo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
-                    let geometrythree = SFLineString(points: [SFPoint(x: 15, andY: 21.1), SFPoint(x: 17, andY: 21.1)])
-                    let three = Observation.create(geometry: geometrythree, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                    let geometrythree = SFLineString(points: [SFPoint(x: 15, andY: 21.1) as Any, SFPoint(x: 17, andY: 21.1) as Any])
+                    _ = Observation.create(geometry: geometrythree, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
                     UserDefaults.standard.observationTimeFilter = .all
                     
@@ -400,7 +400,7 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 it("zoom and center the map") {
                     let longAgo = Date(timeIntervalSince1970: 1)
-                    let geometryone = SFPolygon(ring: SFLineString(points: [SFPoint(x: 16.1, andY: 21.1), SFPoint(x: 15.9, andY: 21.1), SFPoint(x: 15.9, andY: 20.9), SFPoint(x: 16.1, andY: 20.9), SFPoint(x: 16.1, andY: 21.1)]))
+                    let geometryone = SFPolygon(ring: SFLineString(points: [SFPoint(x: 16.1, andY: 21.1) as Any, SFPoint(x: 15.9, andY: 21.1) as Any, SFPoint(x: 15.9, andY: 20.9) as Any, SFPoint(x: 16.1, andY: 20.9) as Any, SFPoint(x: 16.1, andY: 21.1) as Any]))
                     let one = Observation.create(geometry: geometryone, date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     UserDefaults.standard.observationTimeFilter = .all
                     
@@ -619,7 +619,7 @@ class FilteredObservationsMapTests: KIFSpec {
                     let one = Observation.create(geometry: geometryone, date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
                     let geometrytwo = SFPoint(x: 15, andY: 20)
-                    let two = Observation.create(geometry: geometrytwo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
+                    _ = Observation.create(geometry: geometrytwo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     UserDefaults.standard.observationTimeFilter = .all
                     
                     fomixin.mapView?.delegate = fotest

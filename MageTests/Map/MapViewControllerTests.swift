@@ -20,29 +20,9 @@ class MapViewControllerTests: KIFSpec {
     override func spec() {
         // skipping these tests until the map delegate is fixed
         xdescribe("MapViewControllerTests") {
-            let recordSnapshots = true;
-//            Nimble_Snapshots.setNimbleTolerance(0.1);
-            
             var controller: UINavigationController!
-            var view: UIView!
             var window: UIWindow!;
             var mapViewController: MapViewController!;
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = true, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.0);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
-            
             beforeEach {
                 
                 if (controller != nil) {
@@ -79,7 +59,6 @@ class MapViewControllerTests: KIFSpec {
                 window?.resignKey();
                 window.rootViewController = nil;
                 controller = nil;
-                view = nil;
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
                 NSManagedObject.mr_setDefaultBatchSize(20);
@@ -101,9 +80,7 @@ class MapViewControllerTests: KIFSpec {
 
                     mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                     controller.pushViewController(mapViewController, animated: true);
-                    
-                    view = window;
-                    
+                                        
                     tester().wait(forTimeInterval: 2);
                     
                     MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", itemId: "4", properties: ["primary": "Primary Value for item"])
@@ -114,7 +91,6 @@ class MapViewControllerTests: KIFSpec {
             }
             
             it("initialize the MapViewController") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm");
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -123,23 +99,9 @@ class MapViewControllerTests: KIFSpec {
                 mapViewController = MapViewController(scheme: MAGEScheme.scheme());
                 controller.pushViewController(mapViewController, animated: true);
                 
-                view = window;
-                
-                
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-//                }
             }
             
             it("initialize the MapViewController and create new observation") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -155,16 +117,6 @@ class MapViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "New");
                 tester().tapView(withAccessibilityLabel: "New");
                 
-                view = window;
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
                     expect(UIApplication.getTopViewController()).to(beAnInstanceOf(MDCBottomSheetController.self))
                     
                     tester().tapView(withAccessibilityLabel: "Cancel");
@@ -172,11 +124,9 @@ class MapViewControllerTests: KIFSpec {
                     tester().tapView(withAccessibilityLabel: "Cancel");
                     tester().tapView(withAccessibilityLabel: "Yes, Discard")
                     expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
-//                }
             }
             
             it("initialize the MapViewController and create new observation with no location") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -191,18 +141,8 @@ class MapViewControllerTests: KIFSpec {
                 tester().waitForTappableView(withAccessibilityLabel: "New");
                 tester().tapView(withAccessibilityLabel: "New");
             
-                view = window;
                 tester().waitForAnimationsToFinish()
 
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-                    
                     expect(UIApplication.getTopViewController()).to(beAnInstanceOf(MDCBottomSheetController.self))
                     
                     tester().tapView(withAccessibilityLabel: "Cancel");
@@ -210,11 +150,9 @@ class MapViewControllerTests: KIFSpec {
                     tester().tapView(withAccessibilityLabel: "Cancel");
                     tester().tapView(withAccessibilityLabel: "Yes, Discard")
                     expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
-//                }
             }
             
             it("initialize the MapViewController and create new empty observation") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -255,22 +193,9 @@ class MapViewControllerTests: KIFSpec {
                 expect(geometry).to(beAnInstanceOf(SFPoint.self));
                 expect(observation.eventId).to(equal(1));
                 expect(observation.remoteId).to(beNil());
-                
-                view = window;
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-//                }
             }
             
             it("initialize the MapViewController and cancel creating new observation") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -295,22 +220,9 @@ class MapViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Cancel");
                 tester().tapView(withAccessibilityLabel: "Yes, Discard");
                 expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
-                
-                view = window;
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-//                }
             }
             
             it("initialize the MapViewController and create new empty observation with long press") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -355,22 +267,9 @@ class MapViewControllerTests: KIFSpec {
                 expect(observation.favoritesMap).to(beEmpty());
                 expect(observation.eventId).to(equal(1));
                 expect(observation.remoteId).to(beNil());
-                
-                view = window;
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-//                }
             }
             
             it("initialize the MapViewController and create an observation and view it") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -431,26 +330,10 @@ class MapViewControllerTests: KIFSpec {
                 TestHelpers.printAllAccessibilityLabelsInWindows();
                 
                 expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self))
-                
-                view = window;
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-//
-//                    tester().tapView(withAccessibilityLabel: "Back");
-//                    expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MapViewController.self))
-//                }
             }
             
             it("initialize the MapViewController and view a polygon observation") {
                 Server.setCurrentEventId(1);
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "user")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
@@ -495,18 +378,6 @@ class MapViewControllerTests: KIFSpec {
                 TestHelpers.printAllAccessibilityLabelsInWindows();
 
                 tester().waitForTappableView(withAccessibilityLabel: "More Info");
-                
-                view = window;
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-//                }
             }
         }
     }

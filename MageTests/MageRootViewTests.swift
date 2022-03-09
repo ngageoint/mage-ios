@@ -23,27 +23,10 @@ class MageRootViewTests: KIFSpec {
         
         // skipping these map tests until the map delegate can be fixed
         xdescribe("MageRootView") {
-            let recordSnapshots = false;
-//            Nimble_Snapshots.setNimbleTolerance(0.01);
             
             var controller: MageRootViewController!
             var window: UIWindow!;
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.0);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot();
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
-            
+
             func loadFeedsJson() -> NSArray {
                 guard let pathString = Bundle(for: type(of: self)).path(forResource: "feeds", ofType: "json") else {
                     fatalError("feeds.json not found")
@@ -116,15 +99,9 @@ class MageRootViewTests: KIFSpec {
             }
             
             it("no feeds") {
-                var completeTest = false;
 
                 let mapDelegate: MockMapViewDelegate = MockMapViewDelegate()
                 mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-//                    maybeRecordSnapshot(controller.view, doneClosure: {
-//                        tester().waitForAnimationsToFinish();
-//
-//                        completeTest = true;
-//                    })
                 }
 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme());
@@ -142,26 +119,16 @@ class MageRootViewTests: KIFSpec {
 
                 mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(0, 0), animated: false)
 
-                tester().waitForAnimationsToFinish();
-
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+                tester().waitForAnimationsToFinish()
             }
 
             it("one feed") {
-                var completeTest = false;
 
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
 
                 let mapDelegate = MockMapViewDelegate()
                 mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-//                    maybeRecordSnapshot(controller.view, doneClosure: {
-//                        completeTest = true;
-//                    })
+
                 }
 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
@@ -174,17 +141,11 @@ class MageRootViewTests: KIFSpec {
                 mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(0, 0), animated: false)
 
                 window.rootViewController = controller;
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
 
             // when brand new feeds are added, they are automatically enabled
             it("two mappable feeds and two non mappable brand new") {
-                var completeTest = false;
 
                 MageCoreDataFixtures.populateFeedsFromJson();
                 MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0")
@@ -197,9 +158,7 @@ class MageRootViewTests: KIFSpec {
                 
                 let mapDelegate = MockMapViewDelegate()
                 mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-//                    maybeRecordSnapshot(controller.view, doneClosure: {
-//                        completeTest = true;
-//                    })
+
                 }
                 
                 let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
@@ -208,16 +167,9 @@ class MageRootViewTests: KIFSpec {
                 mapViewController?.mapView?.delegate = mapDelegate
                 mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
 
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
 
             it("two mappable feeds and two non mappable one selected") {
-                var completeTest = false;
                 
                 MageCoreDataFixtures.populateFeedsFromJson();
                 MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0")
@@ -232,9 +184,7 @@ class MageRootViewTests: KIFSpec {
                 
                 let mapDelegate = MockMapViewDelegate()
                 mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-//                    maybeRecordSnapshot(controller.view, doneClosure: {
-//                        completeTest = true;
-//                    })
+
                 }
                 
                 let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
@@ -243,16 +193,9 @@ class MageRootViewTests: KIFSpec {
                 mapViewController?.mapView?.delegate = mapDelegate
                 mapViewController?.mapView.setCenter(CLLocationCoordinate2DMake(40.0085, -104.2678), animated: false)
 
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
 
             it("two mappable feeds and two non mappable other one selected") {
-                var completeTest = false;
 
                 MageCoreDataFixtures.populateFeedsFromJson();
                 MageCoreDataFixtures.populateFeedItemsFromJson(feedId: "0")
@@ -263,9 +206,6 @@ class MageRootViewTests: KIFSpec {
                 
                 let mapDelegate = MockMapViewDelegate()
                 mapDelegate.mapDidFinishRenderingClosure = { mapView, fullRendered in
-//                    maybeRecordSnapshot(controller.view, doneClosure: {
-//                        completeTest = true;
-//                    })
                 }
                 
                 let mapViewController = (controller.viewControllers?[0] as? UINavigationController)?.viewControllers.first as? MapViewController
@@ -276,17 +216,9 @@ class MageRootViewTests: KIFSpec {
                 
 
                 UserDefaults.standard.set(["1"], forKey: "selectedFeeds-1");
-
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
 
             it("tap observations button one feed") {
-                var completeTest = false;
 
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
 
@@ -294,21 +226,10 @@ class MageRootViewTests: KIFSpec {
                 controller.selectedIndex = 1;
 
                 window.rootViewController = controller;
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
 
             it("tap more button one feed") {
-                var completeTest = false;
 
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
 
@@ -316,41 +237,18 @@ class MageRootViewTests: KIFSpec {
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");
-
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
 
             it("tap more button two feeds") {
-                var completeTest = false;
 
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed")
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "2", title: "My Second Feed")
-                let feeds = Feed.mr_findAll();
+                _ = Feed.mr_findAll();
 
                 controller = MageRootViewController(containerScheme: MAGEScheme.scheme())
                 window.rootViewController = controller;
 
                 tester().tapView(withAccessibilityLabel: "More");
-
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
         }
     }

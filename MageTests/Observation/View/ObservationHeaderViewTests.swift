@@ -19,27 +19,9 @@ class ObservationHeaderViewTests: KIFSpec {
     override func spec() {
         
         describe("ObservationHeaderViewTests") {
-            let recordSnapshots = false;
-//            Nimble_Snapshots.setNimbleTolerance(0.1);
-            
             var controller: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = true, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.0);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
             
             beforeEach {
                 if (controller != nil) {
@@ -108,16 +90,6 @@ class ObservationHeaderViewTests: KIFSpec {
                 expect(importantButton.imageTintColor(for: .normal)).to(be(MDCPalette.orange.accent400));
                 
                 tester().waitForView(withAccessibilityLabel: "Observation Annotation \(observation.objectID.uriRepresentation())")
-                
-//                maybeRecordSnapshot(view, doneClosure: {
-//                    completeTest = true;
-//                })
-//                                
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(view).toEventually(haveValidSnapshot(usesDrawRect: true), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Invalid snapshot")
-//                }
             }
             
             it("tap directions button") {
@@ -140,9 +112,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 headerView.autoPinEdge(toSuperviewEdge: .left);
                 headerView.autoPinEdge(toSuperviewEdge: .right);
                 headerView.autoAlignAxis(toSuperviewAxis: .horizontal);
-                
-                view = headerView;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "directions");
                 tester().tapView(withAccessibilityLabel: "directions");
                 
@@ -171,9 +141,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 headerView.autoPinEdge(toSuperviewEdge: .left);
                 headerView.autoPinEdge(toSuperviewEdge: .right);
                 headerView.autoAlignAxis(toSuperviewAxis: .horizontal);
-                
-                view = headerView;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "important reason");
                 tester().expect(viewTester().usingLabel("important reason").view, toContainText: "This is important")
                 tester().waitForView(withAccessibilityLabel: "FLAGGED BY USER ABC");
@@ -225,9 +193,7 @@ class ObservationHeaderViewTests: KIFSpec {
                 headerView.autoPinEdge(toSuperviewEdge: .left);
                 headerView.autoPinEdge(toSuperviewEdge: .right);
                 headerView.autoAlignAxis(toSuperviewAxis: .horizontal);
-                
-                view = headerView;
-                
+                                
                 tester().waitForView(withAccessibilityLabel: "favorite");
                 tester().tapView(withAccessibilityLabel: "favorite");
                 

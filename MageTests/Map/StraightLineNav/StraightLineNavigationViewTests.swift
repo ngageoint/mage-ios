@@ -20,9 +20,7 @@ import MagicalRecord
 class StraightLineNavigationViewTests: KIFSpec {
     
     override func spec() {
-        
-        let recordSnapshots = false;
-        
+                
         describe("StraightLineNavigationViewTests") {
             
             var straightLineNavigationView: StraightLineNavigationView!
@@ -30,14 +28,6 @@ class StraightLineNavigationViewTests: KIFSpec {
             var view: UIView!
             var controller: UIViewController!
             var window: UIWindow!;
-            
-//            func maybeSnapshot() -> Snapshot {
-//                if (recordSnapshots) {
-//                    return recordSnapshot(usesDrawRect: true)
-//                } else {
-//                    return snapshot(usesDrawRect: true)
-//                }
-//            }
             
             beforeEach {
                 window = TestHelpers.getKeyWindowVisible()
@@ -67,8 +57,6 @@ class StraightLineNavigationViewTests: KIFSpec {
                 
                 view.addSubview(straightLineNavigationView)
                 straightLineNavigationView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-                
-//                expect(view) == maybeSnapshot();
             }
         }
     }

@@ -31,7 +31,7 @@
 static float paddingPercentage = .1;
 
 
-@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate>
+@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate, CoordinateFieldDelegate>
 
 @property (strong, nonatomic) GeometryEditCoordinator *coordinator;
 @property (strong, nonatomic) SFGeometry *geometry;

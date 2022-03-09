@@ -167,7 +167,7 @@ class DateViewTests: KIFSpec {
                 formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
                 formatter.locale = Locale(identifier: "en_US_POSIX");
                 print("what time zone \(NSTimeZone.system)")
-                var date = formatter.date(from: "2020-11-02T07:00:00.000Z")!;
+                let date = formatter.date(from: "2020-11-02T07:00:00.000Z")!;
                 // IMPORTANT: THIS IS TO CORRECT FOR A BUG IN KIF, YOU MUST COMPARE AGAINST THE DATE YOU SET
                 // PLUS THE OFFSET FROM GMT OR IT WILL NOT WORK
                 // IF THIS BUG IS CLOSED YOU CAN REMOVE THIS LINE: https://github.com/kif-framework/KIF/issues/1214
@@ -323,7 +323,7 @@ class DateViewTests: KIFSpec {
                 view.addSubview(dateFieldView)
                 dateFieldView.autoPinEdgesToSuperviewEdges();
                 dateFieldView.textField.text = "";
-                dateFieldView.textFieldShouldClear(dateFieldView.textField);
+                _ = dateFieldView.textFieldShouldClear(dateFieldView.textField);
                 expect(delegate.fieldChangedCalled) == true;
                 expect(dateFieldView.textField.text) == "";
                 expect(dateFieldView.getValue()).to(beNil());

@@ -150,7 +150,7 @@ class FeedTests: KIFSpec {
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     let remoteIds = Feed.populateFeedItems(feedItems: feedItems as! [[AnyHashable:Any]], feedId: "1", eventId: 1, context: localContext)
                     print("Remote ids \(remoteIds)")
-                    expect(remoteIds as? [String]) == feedItemIds;
+                    expect(remoteIds) == feedItemIds;
                 })
 
                 for feedItem: FeedItem in FeedItem.mr_findAll()! as! [FeedItem] {
@@ -170,7 +170,7 @@ class FeedTests: KIFSpec {
                 let feedItems = loadFeedItemsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     let remoteIds = Feed.populateFeedItems(feedItems: feedItems as! [[AnyHashable:Any]], feedId: "1", eventId: 1, context: localContext)
-                    expect(remoteIds as? [String]) == feedItemIds;
+                    expect(remoteIds) == feedItemIds;
                 })
 
                 for feedItem: FeedItem in FeedItem.mr_findAll()! as! [FeedItem] {

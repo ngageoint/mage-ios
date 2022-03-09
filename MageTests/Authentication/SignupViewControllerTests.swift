@@ -173,7 +173,7 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Sign Up");
                 
                 expect(delegate?.signUpCalled).to(beTrue());
-                expect(delegate?.signupParameters as! [String: String]).to(equal([
+                expect(delegate?.signupParameters as? [String: String]).to(equal([
                     "username": "username",
                     "password": "password",
                     "passwordconfirm": "password",
@@ -271,7 +271,7 @@ class SignUpViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Sign Up")
                 
                 expect(delegate?.signUpCalled).to(beTrue());
-                expect(delegate?.signupParameters as! [String: String]).toEventually(equal([
+                expect(delegate?.signupParameters as? [String: String]).toEventually(equal([
                     "username": "username",
                     "password": "password",
                     "passwordconfirm": "password",

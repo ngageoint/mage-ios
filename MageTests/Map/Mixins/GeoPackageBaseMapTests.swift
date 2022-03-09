@@ -96,7 +96,7 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("initialize the GeoPackageBaseMap with dark map") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getBaseMap(),
                       let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
@@ -114,7 +114,7 @@ class GeoPackageBaseMapTests: KIFSpec {
             it("initialize the GeoPackageBaseMap with light map") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
                       let backgroundOverlay = appDelegate.getBaseMap(),
-                      let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
+                      let _ = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
                       }
@@ -197,8 +197,8 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("initialize the GeoPackageBaseMap with online map") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
-                      let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
+                      let _ = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
                       }
@@ -212,8 +212,8 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("initialize the GeoPackageBaseMap with online map and traffic") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
-                      let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
+                      let _ = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
                       }
@@ -227,8 +227,8 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("initialize the GeoPackageBaseMap with satelite map") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
-                      let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
+                      let _ = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
                       }
@@ -242,8 +242,8 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("initialize the GeoPackageBaseMap with satelite map and traffic") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
-                      let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
+                      let _ = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
                       }
@@ -258,8 +258,8 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("initialize the GeoPackageBaseMap with bad map type") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
-                      let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
+                      let _ = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
                       }
@@ -288,8 +288,8 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("return nil for non base map overlay when asked for renderer") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
-                      let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
+                      let _ = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return
                       }
@@ -329,7 +329,7 @@ class GeoPackageBaseMapTests: KIFSpec {
             
             it("shouldn't switch the map if the new trait collection does not have a different color appearance") {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                      let backgroundOverlay = appDelegate.getBaseMap(),
+                      let _ = appDelegate.getBaseMap(),
                       let darkBackgroundOverlay = appDelegate.getDarkBaseMap() else {
                           tester().fail()
                           return

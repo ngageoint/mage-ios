@@ -595,7 +595,6 @@ class AttachmentFieldViewTests: KIFSpec {
             }
             
             it("set one attachment with observation and two later then remove first") {
-                var attachmentLoaded = false;
                 var attachmentLoaded2 = false;
                 var attachmentLoaded3 = false;
                 
@@ -605,7 +604,6 @@ class AttachmentFieldViewTests: KIFSpec {
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
                     let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
-                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
@@ -659,7 +657,6 @@ class AttachmentFieldViewTests: KIFSpec {
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 
                 var attachmentLoaded = false;
-                var attachmentLoaded2 = false;
                 var attachmentLoaded3 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
@@ -685,7 +682,6 @@ class AttachmentFieldViewTests: KIFSpec {
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
                         let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
-                        attachmentLoaded2 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment2);

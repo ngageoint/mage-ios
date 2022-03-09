@@ -489,6 +489,7 @@ enum State: Int, CustomStringConvertible {
         return nil;
     }
     
+    @discardableResult
     @objc public static func create(geometry: SFGeometry?, date: Date? = nil, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> Observation {
         var observationDate = date ?? Date();
         observationDate = Calendar.current.date(bySetting: .second, value: 0, of: observationDate)!
@@ -531,6 +532,7 @@ enum State: Int, CustomStringConvertible {
         return State.Active;
     }
     
+    @discardableResult
     @objc public static func create(feature: [AnyHashable : Any], context:NSManagedObjectContext) -> Observation? {
         var newObservation: Observation? = nil;
         let eventId = Server.currentEventId();

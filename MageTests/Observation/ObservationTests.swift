@@ -1551,7 +1551,6 @@ class ObservationTests: KIFSpec {
                     Nimble.fail()
                     return;
                 }
-                print("Observation \(observation.remoteId)")
                 observation.toggleFavorite(completion: { success, error in
                     expect(success).to(beTrue());
                     print("success")
@@ -1592,8 +1591,8 @@ class ObservationTests: KIFSpec {
                 
                 expect(stubCalled).toEventually(beTrue());
                 
-                expect(((Observation.mr_findFirst()!.favorites as! Set<ObservationFavorite>).first! as ObservationFavorite).favorite).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                expect(((Observation.mr_findFirst()!.favorites as! Set<ObservationFavorite>).first! as ObservationFavorite).dirty).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+                expect(((Observation.mr_findFirst()!.favorites!).first! as ObservationFavorite).favorite).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
+                expect(((Observation.mr_findFirst()!.favorites!).first! as ObservationFavorite).dirty).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
@@ -1769,7 +1768,7 @@ class ObservationTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
                 }
                 
-                let observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
+                _ = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
                         Nimble.fail()
@@ -1859,8 +1858,7 @@ class ObservationTests: KIFSpec {
 //                        hasJsonBody(expectedJson)
                 ) { (request) -> HTTPStubsResponse in
                     let httpBody = request.ohhttpStubs_httpBody
-                    let jsonBody = (try? JSONSerialization.jsonObject(with: httpBody!, options: [])) as? [AnyHashable : Any]
-                    print("Json body \(jsonBody)")
+                    _ = (try? JSONSerialization.jsonObject(with: httpBody!, options: [])) as? [AnyHashable : Any]
                     let response: [String: Any] = [
                         "id" : "observationabctest",
                         "url": "https://magetest/api/events/1/observations/observationabctest"
@@ -1869,7 +1867,7 @@ class ObservationTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
                 }
                 
-                let observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
+                _ = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
                         Nimble.fail()
@@ -1948,7 +1946,7 @@ class ObservationTests: KIFSpec {
                     return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
                 }
                 
-                let observation = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
+                _ = MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson);
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
                         Nimble.fail()

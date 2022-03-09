@@ -22,7 +22,6 @@ class ObservationBottomSheetTests: KIFSpec {
         describe("ObservationBottomSheetTests") {
             var window: UIWindow?;
             var viewController: MageBottomSheetViewController?;
-            var view: UIView?;
             var navigationController: UINavigationController?;
             
             var stackSetup = false;
@@ -37,10 +36,7 @@ class ObservationBottomSheetTests: KIFSpec {
                 
                 window = TestHelpers.getKeyWindowVisible();
                 window!.rootViewController = navigationController;
-                
-//                Nimble_Snapshots.setNimbleTolerance(0.0);
-//                Nimble_Snapshots.recordAllSnapshots()
-                
+
                 MageCoreDataFixtures.clearAllData()
                 
                 MageCoreDataFixtures.addEvent();
@@ -82,7 +78,6 @@ class ObservationBottomSheetTests: KIFSpec {
                 viewController?.preferredContentSize = CGSize(width: viewController?.preferredContentSize.width ?? 0.0,
                                                               height: observation.isImportant ? 260 : 220);
                 
-                view = viewController?.view
                 var bottomSheetLoaded = false;
                 let bottomSheet = MDCBottomSheetController(contentViewController: viewController!);
                 navigationController?.present(bottomSheet, animated: false, completion: {
@@ -92,8 +87,6 @@ class ObservationBottomSheetTests: KIFSpec {
                 TestHelpers.printAllAccessibilityLabelsInWindows();
 
                 expect(UIApplication.getTopViewController()).toEventually(beAnInstanceOf(MDCBottomSheetController.self));
-                
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
         }
     }

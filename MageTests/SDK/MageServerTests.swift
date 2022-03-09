@@ -49,7 +49,7 @@ class MageServerTestsSwift: KIFSpec {
                     expect(authStrategies?.count).to(equal(2));
                     expect(server?.authenticationModules?.count).to(equal(2));
                     expect(server!.serverHasLocalAuthenticationStrategy).to(beTrue())
-                    let strategies: [[AnyHashable: Any]] = server?.strategies as! [[AnyHashable: Any]]
+                    let strategies: [[String: Any]] = server?.strategies ?? []
                     expect(strategies.count).to(equal(2))
                     // local should always be the last one in the list
                     let local = strategies[strategies.count - 1]
@@ -58,13 +58,12 @@ class MageServerTestsSwift: KIFSpec {
                     let oauth = strategies[0]
                     expect(oauth["identifier"] as? String).to(equal("oauth"))
                     
-                    let oauthStrategies: [[AnyHashable: Any]] = server?.oauthStrategies as! [[AnyHashable:Any]]
+                    let oauthStrategies: [[String: Any]] = server?.oauthStrategies ?? []
                     expect(oauthStrategies.count).to(equal(1))
                     let oauthAgain = oauthStrategies[0]
                     expect(oauthAgain["identifier"] as? String).to(equal("oauth"))
                     serverSetUp = true
                 } failure: { (error) in
-                    print("Error \(error.localizedDescription ?? "")")
                     tester().fail()
                 }
 
@@ -88,7 +87,7 @@ class MageServerTestsSwift: KIFSpec {
                 MageServer.server(url: URL(string: "notgood://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    print("Error \(error.localizedDescription ?? "")")
+                    print("Error \(error.localizedDescription )")
                     expect(error.localizedDescription).to(contain("Received error unsupported URL"))
                     serverSetUp = true
                 }
@@ -103,7 +102,7 @@ class MageServerTestsSwift: KIFSpec {
                 MageServer.server(url: URL(string: "notgood://")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    print("Error \(error.localizedDescription ?? "")")
+                    print("Error \(error.localizedDescription )")
                     expect(error.localizedDescription).to(contain("Invalid URL"))
                     serverSetUp = true
                 }
@@ -126,7 +125,7 @@ class MageServerTestsSwift: KIFSpec {
                 MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    print("Error \(error.localizedDescription ?? "")")
+                    print("Error \(error.localizedDescription )")
                     expect(error.localizedDescription).to(contain("Invalid response from the MAGE server."))
                 }
                 

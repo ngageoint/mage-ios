@@ -72,7 +72,7 @@ class TestHelpers {
     
     public static func printAllAccessibilityLabelsInWindows() {
         let labelArray = TestHelpers.getAllAccessibilityLabelsInWindows();
-        NSLog("labelArray = \(labelArray)")
+        NSLog("labelArray = \(labelArray ?? [])")
     }
     
     public static func clearImageCache() {
