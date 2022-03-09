@@ -489,8 +489,8 @@ enum State: Int, CustomStringConvertible {
         return nil;
     }
     
-    @objc public static func create(geometry: SFGeometry?, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> Observation {
-        var observationDate = Date();
+    @objc public static func create(geometry: SFGeometry?, date: Date? = nil, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> Observation {
+        var observationDate = date ?? Date();
         observationDate = Calendar.current.date(bySetting: .second, value: 0, of: observationDate)!
         observationDate = Calendar.current.date(bySetting: .nanosecond, value: 0, of: observationDate)!
         
