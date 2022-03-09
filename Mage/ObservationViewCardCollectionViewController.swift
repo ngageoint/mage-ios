@@ -241,37 +241,7 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-//        let eventForm: Form? = self.eventForms.first { (form) -> Bool in
-//            return form.formId?.intValue == observationForm[EventKey.formId.key] as? Int
-//        }
-//
-//        let fields: [[String: Any]] = eventForm?.formJson?.[FormKey.fields.key] as? [[String: Any]] ?? [];
-//
-//        var formPrimaryValue: String? = nil;
-//        var formSecondaryValue: String? = nil;
-//
-//        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
-//            if let primaryField = fields.first(where: { field in
-//                return (field[FieldKey.name.key] as? String) == primaryFieldName
-//            }) {
-//                if let obsfield = observationForm[primaryFieldName] {
-//                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
-//                }
-//            }
-//        }
-//
-//        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
-//            if let secondaryField = fields.first(where: { field in
-//                return (field[FieldKey.name.key] as? String) == secondaryFieldName
-//            }) {
-//                if let obsfield = observationForm[secondaryFieldName] {
-//                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
-//                }
-//            }
-//        }
-        
         let eventForm = event?.form(id: observationForm[EventKey.formId.key] as? NSNumber)
-        let fields: [[String: Any]] = eventForm?.fields ?? [];
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;

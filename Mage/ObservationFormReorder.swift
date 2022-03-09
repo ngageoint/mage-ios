@@ -149,7 +149,7 @@ class ObservationFormReorder: UITableViewController {
         let formCell : ObservationFormTableViewCell = tableView.dequeue(cellClass: ObservationFormTableViewCell.self, forIndexPath: indexPath);
         let observationForm = observationForms[indexPath.row];
         if let eventForm: Form = self.eventForms?.first(where: { (form) -> Bool in
-            return form.formId?.intValue as? Int == observationForm[EventKey.formId.key] as? Int
+            return form.formId?.intValue == observationForm[EventKey.formId.key] as? Int
         }) {
             formCell.configure(observationForm: observationForm, eventForm: eventForm, scheme: self.scheme);
         }

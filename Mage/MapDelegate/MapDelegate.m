@@ -554,11 +554,9 @@
 
 - (void) setObservations:(Observations *)observations withCompletion: (void (^)(void)) complete {
     _observations = observations;
-    if (!_observations) return;
+    if (!_observations) return complete();
     _observations.delegate = self;
-    
-    Event *event = [Event getCurrentEventWithContext:observations.fetchedResultsController.managedObjectContext];
-    
+        
     _mapObservationManager = [[MapObservationManager alloc] initWithMapView:self.mapView];
     
     [self.observationAnnotations clear];
@@ -567,7 +565,7 @@
     self.observations.fetchedResultsController.fetchRequest.fetchBatchSize = 0;
     if (![self.observations.fetchedResultsController performFetch:&error]) {
         NSLog(@"Failed to perform fetch in the MapDelegate for observations %@, %@", error, [error userInfo]);
-        return;
+        return complete();
     }
     
     __weak typeof(self) weakSelf = self;
@@ -1730,7 +1728,6 @@
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue])];
     } else {
-        MKAnnotationView *annotationView = [_mapView viewForAnnotation:annotation];
         SFGeometry * geometry = location.geometry;
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);

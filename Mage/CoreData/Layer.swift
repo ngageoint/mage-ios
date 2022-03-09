@@ -107,6 +107,7 @@ public enum LayerType : String {
         return task;
     }
     
+    @discardableResult
     @objc public static func populateLayers(json: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [NSNumber] {
         var layerRemoteIds: [NSNumber] = [];
         for layer in json {

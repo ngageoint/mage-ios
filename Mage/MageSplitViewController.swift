@@ -138,11 +138,11 @@ extension MageSplitViewController: AttachmentViewDelegate {
 extension MageSplitViewController: UISplitViewControllerDelegate {
     func splitViewController(_ svc: UISplitViewController, willChangeTo displayMode: UISplitViewController.DisplayMode) {
         self.masterViewButton = svc.displayModeButtonItem;
-        if (displayMode == .primaryOverlay) {
+        if (displayMode == .oneOverSecondary) {
             ensureButtonVisible();
-        } else if (displayMode == .primaryHidden) {
+        } else if (displayMode == .secondaryOnly) {
             ensureButtonVisible();
-        } else if (displayMode == .allVisible) {
+        } else if (displayMode == .oneBesideSecondary) {
             ensureButtonVisible();
         }
     }

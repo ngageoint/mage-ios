@@ -91,9 +91,6 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     // Build a bounding box to represent the click location
     GPKGBoundingBox * boundingBox = [GPKGMapUtils buildClickBoundingBoxWithLocationCoordinate:tapLocation andMapView:mapView andScreenPercentage:self.featureOverlayQuery.screenClickPercentage];
     
-    // Get the map click distance tolerance
-    GPKGMapTolerance *tolerance = [GPKGMapUtils toleranceWithLocationCoordinate:tapLocation andMapView:mapView andScreenPercentage:self.featureOverlayQuery.screenClickPercentage];
-    
     GPKGFeatureTableStyles *styles = self.featureOverlayQuery.featureTiles.featureTableStyles;
     
     // Verify the features are indexed and we are getting information

@@ -46,7 +46,7 @@ import Foundation
     @objc public var oauthStrategies: [[String: Any]] {
         get {
             var _oauthStrategies:[[String: Any]] = []
-            if let strategies = UserDefaults.standard.serverAuthenticationStrategies as? [String : [AnyHashable : Any]] {
+            if let strategies = UserDefaults.standard.serverAuthenticationStrategies {
                 strategies.forEach { key, strategy in
                     if strategy["type"] as? String == "oauth2" {
                         _oauthStrategies.append(["identifier": key, "strategy": strategy])
@@ -54,15 +54,6 @@ import Foundation
                 }
                 
             }
-            //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            //    NSDictionary *strategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
-            //    NSMutableArray *oauthStrategies = [[NSMutableArray alloc] init];
-            //    [strategies enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            //        if ([[obj objectForKey:@"type"] isEqualToString:@"oauth2"]) {
-            //            [oauthStrategies addObject:@{@"identifier": key, @"strategy": obj}];
-            //        }
-            //    }];
-            //    return oauthStrategies;
             return _oauthStrategies
         }
     }
@@ -70,7 +61,7 @@ import Foundation
     @objc public var strategies: [[String: Any]]? {
         get {
             var _strategies: [[String: Any]] = []
-            if let defaultStrategies = UserDefaults.standard.serverAuthenticationStrategies as? [String : [AnyHashable : Any]] {
+            if let defaultStrategies = UserDefaults.standard.serverAuthenticationStrategies {
                 defaultStrategies.forEach { key, strategy in
                     if key == "local" {
                         _strategies.append(["identifier": key, "strategy": strategy])
@@ -80,17 +71,6 @@ import Foundation
                 }
                 
             }
-            //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            //    NSDictionary *defaultStrategies = [defaults objectForKey:kServerAuthenticationStrategiesKey];
-            //    NSMutableArray *strategies = [[NSMutableArray alloc] init];
-            //    [defaultStrategies enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            //        if ([key isEqualToString:@"local"]) {
-            //            [strategies addObject:@{@"identifier": key, @"strategy": obj}];
-            //        } else {
-            //            [strategies insertObject:@{@"identifier": key, @"strategy": obj} atIndex:0];
-            //        }
-            //    }];
-            //    return strategies;
             return _strategies
         }
     }
@@ -116,26 +96,6 @@ import Foundation
                 return true
             }
         }
-        
-        //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        //    NSArray *serverCompatibilities  = [defaults arrayForKey:kServerCompatibilitiesKey];
-        //
-        //    for (NSDictionary *compatibility in serverCompatibilities) {
-        //        NSNumber *serverCompatibilityMajorVersion = [compatibility valueForKey:kServerMajorVersionKey];
-        //        NSNumber *serverCompatibilityMinorVersion = [compatibility valueForKey:kServerMinorVersionKey];
-        //
-        //        NSNumber *serverMajorVersion = [api valueForKeyPath:@"version.major"];
-        //        NSNumber *serverMinorVersion = [api valueForKeyPath:@"version.minor"];
-        //
-        //        if ([serverCompatibilityMajorVersion intValue] == [serverMajorVersion intValue] && [serverCompatibilityMinorVersion intValue] <= [serverMinorVersion intValue]) {
-        //            // server is compatible.  save the version
-        //            [defaults setObject:[api valueForKeyPath:@"version.major"] forKey:@"serverMajorVersion"];
-        //            [defaults setObject:[api valueForKeyPath:@"version.minor"] forKey:@"serverMinorVersion"];
-        //            [defaults synchronize];
-        //            return true;
-        //        }
-        //    }
-        //    return false;
         return false
     }
     

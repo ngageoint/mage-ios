@@ -119,6 +119,7 @@
 		F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F292497C75F00313703 /* FeedItemViewController.swift */; };
 		F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */; };
 		F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2D24980DD000313703 /* FeedItemRetriever.swift */; };
+		F70A708C27D932FE000881F5 /* FilteredUsersMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70A708B27D932FE000881F5 /* FilteredUsersMapTests.swift */; };
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
@@ -207,7 +208,6 @@
 		F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D427A2694B60300F9AC3B /* Model7To15.xcmappingmodel */; };
 		F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427C2694B60300F9AC3B /* ObservationPushService.swift */; };
 		F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427D2694B60300F9AC3B /* Feed.swift */; };
-		F72D42FC2694B60300F9AC3B /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.swift */; };
 		F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42802694B60300F9AC3B /* Model9To15.xcmappingmodel */; };
 		F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42812694B60300F9AC3B /* FeedItem.swift */; };
 		F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42822694B60300F9AC3B /* ObservationFetchService.swift */; };
@@ -219,7 +219,6 @@
 		F72D43052694B60300F9AC3B /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */; };
 		F72D43062694B60300F9AC3B /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42922694B60300F9AC3B /* Server.swift */; };
 		F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42942694B60300F9AC3B /* ObservationImportant.swift */; };
-		F72D43082694B60300F9AC3B /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
 		F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42962694B60300F9AC3B /* AttachmentRoutes.m */; };
 		F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42972694B60300F9AC3B /* Model8To15.xcmappingmodel */; };
 		F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42982694B60300F9AC3B /* NSString+Contains.m */; };
@@ -246,7 +245,6 @@
 		F72D43212694B60300F9AC3B /* StaticLayer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C32694B60300F9AC3B /* StaticLayer+CoreDataProperties.swift */; };
 		F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C42694B60300F9AC3B /* Model11To15.xcmappingmodel */; };
 		F72D43232694B60300F9AC3B /* NSDate+Iso8601.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C52694B60300F9AC3B /* NSDate+Iso8601.m */; };
-		F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
 		F72D43252694B60300F9AC3B /* Role.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C72694B60300F9AC3B /* Role.swift */; };
 		F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */; };
 		F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */; };
@@ -325,6 +323,9 @@
 		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
 		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
 		F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7641CE3276D423A006225BA /* CanCreateObservation.swift */; };
+		F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
+		F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
+		F767AC7A27D95811005684E5 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.swift */; };
 		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
@@ -785,6 +786,7 @@
 		F7098F292497C75F00313703 /* FeedItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewController.swift; sourceTree = "<group>"; };
 		F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemPropertyCell.swift; sourceTree = "<group>"; };
 		F7098F2D24980DD000313703 /* FeedItemRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetriever.swift; sourceTree = "<group>"; };
+		F70A708B27D932FE000881F5 /* FilteredUsersMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredUsersMapTests.swift; sourceTree = "<group>"; };
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
@@ -2700,6 +2702,7 @@
 			children = (
 				F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */,
 				F7BEF68327D7C561000E8CDE /* FilteredObservationsMapTests.swift */,
+				F70A708B27D932FE000881F5 /* FilteredUsersMapTests.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3229,6 +3232,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F767AC7A27D95811005684E5 /* Team.swift in Sources */,
+				F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */,
+				F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */,
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
@@ -3345,13 +3351,7 @@
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
-				F72D42FC2694B60300F9AC3B /* Team.swift in Sources */,
 				8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */,
-				F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.swift in Sources */,
-				F72D43082694B60300F9AC3B /* Role+CoreDataProperties.swift in Sources */,
-				F72D42FC2694B60300F9AC3B /* Team.swift in Sources */,
-				F72D43242694B60300F9AC3B /* Feed+CoreDataProperties.swift in Sources */,
-				F72D43082694B60300F9AC3B /* Role+CoreDataProperties.swift in Sources */,
 				F78D578F27B58901003594D3 /* SingleUserMapView.swift in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
 				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
@@ -3682,6 +3682,7 @@
 				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
 				F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,
+				F70A708C27D932FE000881F5 /* FilteredUsersMapTests.swift in Sources */,
 				F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */,
@@ -3861,6 +3862,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 3.0.7;
 				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/UIImage_Categories/UIImage-Categories.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/geopackage_ios/geopackage-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/mgrs/mgrs.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/ogc_api_features_json_ios/ogc-api-features-json-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/proj4_ios/proj4-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_geojson_ios/sf-geojson-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_ios/sf-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_proj_ios/sf-proj-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkb_ios/sf-wkb-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkt_ios/sf-wkt-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/tiff_ios/tiff-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
@@ -3976,6 +3978,7 @@
 					"\"XCTest\"",
 					"-ObjC",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -Xfrontend -warn-long-function-bodies=500 -Xfrontend -warn-long-expression-type-checking=500 -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.modulemap\" -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Nimble/Nimble.modulemap\" -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/OHHTTPStubs/OHHTTPStubs.modulemap\" -Xcc -fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/Quick/Quick.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/AFNetworking/AFNetworking.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/DateTools/DateTools.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/HexColors/HexColors.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/KIF/KIF.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFInternationalization/MDFInternationalization.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MDFTextAccessibility/MDFTextAccessibility.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MagicalRecord/MagicalRecord.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MaterialComponents/MaterialComponents.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionAnimator/MotionAnimator.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/MotionInterchange/MotionInterchange.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/OCMock/OCMock.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/PureLayout/PureLayout.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/SSZipArchive/SSZipArchive.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/UIImage_Categories/UIImage-Categories.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/geopackage_ios/geopackage-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/libPhoneNumber_iOS/libPhoneNumber-iOS.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/mgrs/mgrs.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/ogc_api_features_json_ios/ogc-api-features-json-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/proj4_ios/proj4-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_geojson_ios/sf-geojson-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_ios/sf-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_proj_ios/sf-proj-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkb_ios/sf-wkb-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/sf_wkt_ios/sf-wkt-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/tiff_ios/tiff-ios.modulemap\" -Xcc -fmodule-map-file=\"${PODS_ROOT}/Headers/Public/zxcvbn_ios/zxcvbn-ios.modulemap\"";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage.MAGETests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "MageTests/MAGETests-Bridging-Header.h";
