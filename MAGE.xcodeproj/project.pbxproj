@@ -2912,11 +2912,11 @@
 			};
 			buildConfigurationList = F7A94D6118AD9CAF00CB9EE0 /* Build configuration list for PBXProject "MAGE" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				Base,
+				en,
 			);
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
