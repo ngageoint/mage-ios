@@ -27,6 +27,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         let mapSettingsButton = MDCFloatingButton(shape: .mini)
         mapSettingsButton.setImage(UIImage(named:"layers"), for: .normal)
         mapSettingsButton.addTarget(self, action: #selector(mapSettingsButtonTapped(_:)), for: .touchUpInside)
+        mapSettingsButton.accessibilityLabel = "map_settings"
         return mapSettingsButton
     }()
     
@@ -87,6 +88,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
             circle.layer.borderWidth = 0.5
             circle.layer.borderColor = scheme?.colorScheme.onSecondaryColor.withAlphaComponent(0.6).cgColor
             circle.backgroundColor = scheme?.colorScheme.primaryColorVariant
+            circle.accessibilityLabel = "layer_download_circle"
             let imageView = UIImageView(image: UIImage(named: "download"))
             imageView.frame = CGRect(x: 3, y: 2, width: 14, height: 15)
             imageView.tintColor = scheme?.colorScheme.onSecondaryColor
