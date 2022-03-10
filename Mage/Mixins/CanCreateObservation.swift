@@ -46,9 +46,6 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         }
     }
     
-    deinit {
-    }
-    
     func applyTheme(scheme: MDCContainerScheming?) {
         guard let scheme = scheme else {
             return
