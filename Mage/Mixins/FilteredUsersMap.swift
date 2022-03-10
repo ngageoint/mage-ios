@@ -40,7 +40,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         self.scheme = scheme
     }
     
-    deinit {
+    func cleanupMixin() {
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver)
         }
@@ -121,6 +121,7 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         guard let coordinate = location.location?.coordinate else {
             return
         }
+        
         if let annotation: LocationAnnotation = mapView?.annotations.first(where: { annotation in
             if let annotation = annotation as? LocationAnnotation {
                 return annotation.user?.remoteId == location.user?.remoteId

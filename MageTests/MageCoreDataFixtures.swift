@@ -46,14 +46,26 @@ class MageCoreDataFixtures {
         return cleared;
     }
     
-    public static func addLocation(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
+    public static func addLocation(userId: String = "userabc", geometry: SFPoint? = nil, date: Date? = nil, completion: MRSaveCompletionHandler? = nil) {
         let jsonDictionary: NSArray = parseJsonFile(jsonFile: "locationsabc") as! NSArray;
         
         if (completion == nil) {
             MagicalRecord.save(blockAndWait:{ (localContext: NSManagedObjectContext) in
                 let userJson: [String: Any] = jsonDictionary[0] as! [String: Any];
-                let locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
-                let user: User = User.mr_findFirst(in: localContext)!;
+                var locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
+                locations[0]["userId"] = userId
+                if let geometry = geometry {
+                    locations[0]["geometry"] = GeometrySerializer.serializeGeometry(geometry)
+                }
+                let formatter = ISO8601DateFormatter()
+                formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
+                formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
+                if let date = date {
+                    var properties = locations[0]["properties"] as! [String: Any]
+                    properties["timestamp"] = formatter.string(from:date)
+                    locations[0]["properties"] = properties
+                }
+                let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: userId, in: localContext)!;
                 if let location: Location = user.location {
                     location.populate(json: locations[0]);
                 } else {
