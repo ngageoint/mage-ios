@@ -20,9 +20,7 @@ class PersistedMapStateMixin: NSObject, MapMixin {
     
     init(persistedMapState: PersistedMapState) {
         self.persistedMapState = persistedMapState
-    }
-    
-    deinit {
+        self.mapView = self.persistedMapState?.mapView
     }
     
     func setupMixin() {
