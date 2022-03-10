@@ -70,8 +70,8 @@ import Foundation
     }
     
     func scheduleTimerToPullFeedItems(feedId: String, eventId: NSNumber, pullFrequency: NSNumber) {
-        let context = ["feedId": feedId, "eventId": eventId] as [String : Any];
-        let timer = Timer.scheduledTimer(timeInterval: TimeInterval(exactly: pullFrequency)!, target: self, selector: #selector(fireTimer), userInfo: context, repeats: false)
+        let context = ["feedId": feedId, "eventId": eventId, "pullFrequency": pullFrequency] as [String : Any];
+        let timer = Timer.scheduledTimer(timeInterval: TimeInterval(exactly: pullFrequency)!, target: self, selector: #selector(fireTimer(timer: )), userInfo: context, repeats: false)
         feedTimers[feedId] = timer;
     }
     

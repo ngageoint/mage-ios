@@ -281,7 +281,7 @@ public enum FeedKey : String {
     case summary
     case constantParams
     case variableParams
-    case updateFrequency
+    case updateFrequencySeconds
     case mapStyle
     case itemPropertiesSchema
     case itemPrimaryProperty

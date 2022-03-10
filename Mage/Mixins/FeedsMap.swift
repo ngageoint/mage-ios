@@ -34,6 +34,7 @@ class FeedsMapMixin: NSObject, MapMixin {
     }
     
     deinit {
+        feedItemRetrievers.removeAll()
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
@@ -93,6 +94,7 @@ class FeedsMapMixin: NSObject, MapMixin {
             }() else {
                 continue
             }
+            feedItemRetrievers[feedId] = retriever
             if let items = retriever.startRetriever() {
                 for item in items where item.isMappable {
                     mapView?.addAnnotation(item)

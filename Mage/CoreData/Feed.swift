@@ -184,8 +184,8 @@ import CoreData
         self.summary = json[FeedKey.summary.key] as? String
         self.constantParams = json[FeedKey.constantParams.key]
         self.variableParams = json[FeedKey.variableParams.key]
-        self.updateFrequency = (json[FeedKey.updateFrequency.key] as? [AnyHashable : Any])?["seconds"] as? NSNumber
-        self.pullFrequency = (json[FeedKey.updateFrequency.key] as? [AnyHashable : Any])?["seconds"] as? NSNumber
+        self.updateFrequency = json[FeedKey.updateFrequencySeconds.key] as? NSNumber
+        self.pullFrequency = json[FeedKey.updateFrequencySeconds.key] as? NSNumber
         self.mapStyle = json[FeedKey.mapStyle.key] as? [AnyHashable : Any]
         self.itemPropertiesSchema = json[FeedKey.itemPropertiesSchema.key] as? [AnyHashable : Any]
         self.itemPrimaryProperty = json[FeedKey.itemPrimaryProperty.key] as? String
