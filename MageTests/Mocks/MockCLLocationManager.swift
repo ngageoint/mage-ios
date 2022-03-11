@@ -31,6 +31,27 @@ class MockCLLocationManager : CLLocationManager {
     
     var mockedLocation: CLLocation?
     var mockedHeading: CLHeading?
+    var _authorizationStatus: CLAuthorizationStatus = .authorizedAlways
+    var _delegate: CLLocationManagerDelegate?
+    
+    override var authorizationStatus: CLAuthorizationStatus {
+        get {
+            return _authorizationStatus
+        }
+        set {
+            _authorizationStatus = newValue
+        }
+    }
+    
+    override var delegate: CLLocationManagerDelegate? {
+        get {
+            return _delegate
+        }
+        set {
+            _delegate = newValue
+            _delegate?.locationManagerDidChangeAuthorization?(self)
+        }
+    }
     
     override init() {
         mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, course: 200, courseAccuracy: 12.0, speed: 254.0, speedAccuracy: 15.0, timestamp: Date());

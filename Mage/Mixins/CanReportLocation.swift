@@ -33,15 +33,16 @@ class CanReportLocationMixin: NSObject, MapMixin {
         return reportLocationButton
     }()
     
-    init(canReportLocation: CanReportLocation, buttonParentView: UIStackView?, indexInView: Int = 1, scheme: MDCContainerScheming?) {
+    init(canReportLocation: CanReportLocation, buttonParentView: UIStackView?, indexInView: Int = 1, locationManager: CLLocationManager? = CLLocationManager(), scheme: MDCContainerScheming?) {
         self.canReportLocation = canReportLocation
         self.mapView = canReportLocation.mapView
         self.scheme = scheme
         self.buttonParentView = buttonParentView
         self.indexInView = indexInView
+        self.locationManager = locationManager
     }
     
-    deinit {
+    func cleanupMixin() {
         locationManager?.delegate = nil
         locationManager = nil
     }
@@ -66,7 +67,6 @@ class CanReportLocationMixin: NSObject, MapMixin {
         
         applyTheme(scheme: scheme)
         
-        locationManager = CLLocationManager()
         locationManager?.delegate = self
         
         
@@ -114,16 +114,19 @@ class CanReportLocationMixin: NSObject, MapMixin {
         if trackingOn && inEvent && authorized {
             reportLocationButton.setImage(UIImage(named: "location_tracking_on"), for: .normal)
             reportLocationButton.tintColor = UIColor(red: 76.0/255.0, green:175.0/255.0, blue:80.0/255.0, alpha:1.0)
-        } else {
+        } else if inEvent {
             reportLocationButton.setImage(UIImage(named: "location_tracking_off"), for: .normal)
             reportLocationButton.tintColor = UIColor(red: 244.0/255.0, green:67.0/255.0, blue:54.0/255.0, alpha:1.0)
+        } else {
+            reportLocationButton.setImage(UIImage(named: "location_tracking_off"), for: .normal)
+            reportLocationButton.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.3)
         }
     }
 }
 
 extension CanReportLocationMixin: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        locationAuthorizationStatus = status
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        locationAuthorizationStatus = manager.authorizationStatus
         setupReportLocationButton()
     }
 }
