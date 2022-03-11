@@ -312,7 +312,7 @@
     [self.mapSettingsButton addTarget:self action:@selector(mapSettingsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     self.trackingButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-    [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_off"] forState:UIControlStateNormal];
+    [self.trackingButton setImage:[UIImage systemImageNamed:@"location"] forState:UIControlStateNormal];
     [self.trackingButton addTarget:self action:@selector(onTrackingButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     self.reportLocationButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
@@ -573,17 +573,17 @@
 -(void) userTrackingModeChanged:(MKUserTrackingMode) mode {
     switch (self.mapView.userTrackingMode) {
         case MKUserTrackingModeNone: {
-            [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_off.png"] forState:UIControlStateNormal];
+            [self.trackingButton setImage:[UIImage systemImageNamed:@"location"] forState:UIControlStateNormal];
             break;
         };
         case MKUserTrackingModeFollow: {
             [self.mapDelegate startHeading];
-            [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_on.png"] forState:UIControlStateNormal];
+            [self.trackingButton setImage:[UIImage systemImageNamed:@"location.fill"] forState:UIControlStateNormal];
             break;
         };
         case MKUserTrackingModeFollowWithHeading: {
             [self.mapDelegate startHeading];
-            [self.trackingButton setImage:[UIImage imageNamed:@"location_arrow_follow.png"] forState:UIControlStateNormal];
+            [self.trackingButton setImage:[UIImage systemImageNamed:@"location.north.line.fill"] forState:UIControlStateNormal];
             break;
         }
     }

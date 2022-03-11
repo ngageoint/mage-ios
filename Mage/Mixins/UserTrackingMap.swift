@@ -28,21 +28,22 @@ class UserTrackingMapMixin: NSObject, MapMixin {
 
     private lazy var trackingButton: MDCFloatingButton = {
         let trackingButton = MDCFloatingButton(shape: .mini)
-        trackingButton.setImage(UIImage(named:"location_arrow_off"), for: .normal)
+        trackingButton.setImage(UIImage(systemName: "location"), for: .normal)
         trackingButton.addTarget(self, action: #selector(onTrackingButtonPressed(_:)), for: .touchUpInside)
-        trackingButton.accessibilityLabel = "report location"
+        trackingButton.accessibilityLabel = "track location"
         return trackingButton
     }()
     
-    init(userTrackingMap: UserTrackingMap, buttonParentView: UIStackView?, indexInView: Int = 0, scheme: MDCContainerScheming?) {
+    init(userTrackingMap: UserTrackingMap, buttonParentView: UIStackView?, indexInView: Int = 0, locationManager: CLLocationManager? = CLLocationManager(), scheme: MDCContainerScheming?) {
         self.userTrackingMap = userTrackingMap
         self.mapView = userTrackingMap.mapView
         self.scheme = scheme
         self.buttonParentView = buttonParentView
         self.indexInView = indexInView
+        self.locationManager = locationManager
     }
     
-    deinit {
+    func cleanupMixin() {
         locationManager?.delegate = nil
         locationManager = nil
     }
@@ -70,7 +71,6 @@ class UserTrackingMapMixin: NSObject, MapMixin {
         
         applyTheme(scheme: scheme)
         
-        locationManager = CLLocationManager()
         locationManager?.delegate = self
         
         setupTrackingButton()
@@ -87,6 +87,7 @@ class UserTrackingMapMixin: NSObject, MapMixin {
                 }
             }))
             userTrackingMap.navigationController?.present(alert, animated: true, completion: nil)
+            return
         }
         
         guard let mapView = userTrackingMap.mapView else {
@@ -96,18 +97,16 @@ class UserTrackingMapMixin: NSObject, MapMixin {
         switch mapView.userTrackingMode {
         case .none:
             mapView.setUserTrackingMode(.follow, animated: true)
-            // startHeading()
-            trackingButton.setImage(UIImage(named: "location_arrow_on"), for: .normal)
+            trackingButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
         case .follow:
             mapView.setUserTrackingMode(.followWithHeading, animated: true)
-            // startHeading()
-            trackingButton.setImage(UIImage(named: "location_arrow_follow"), for: .normal)
+            trackingButton.setImage(UIImage(systemName: "location.north.line.fill"), for: .normal)
         case .followWithHeading:
             mapView.setUserTrackingMode(.none, animated: true)
-            trackingButton.setImage(UIImage(named: "location_arrow_off"), for: .normal)
+            trackingButton.setImage(UIImage(systemName: "location"), for: .normal)
         @unknown default:
             mapView.setUserTrackingMode(.none, animated: true)
-            trackingButton.setImage(UIImage(named: "location_arrow_off"), for: .normal)
+            trackingButton.setImage(UIImage(systemName: "location"), for: .normal)
         }
     }
     
@@ -127,8 +126,8 @@ class UserTrackingMapMixin: NSObject, MapMixin {
 }
 
 extension UserTrackingMapMixin: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        locationAuthorizationStatus = status
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        locationAuthorizationStatus = manager.authorizationStatus
         setupTrackingButton()
     }
 }
