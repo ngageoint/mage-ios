@@ -31,7 +31,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         self.scheme = scheme
     }
     
-    deinit {
+    func cleanupMixin() {
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
@@ -80,6 +80,8 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                     if featureType == "Point" {
                         if let annotation = StaticPointAnnotation(feature: feature) {
                             annotation.layerName = staticLayer.name
+                            annotation.title = StaticLayer.featureName(feature: feature)
+                            annotation.subtitle = StaticLayer.featureDescription(feature: feature)
                             mapView?.addAnnotation(annotation)
                             annotations.append(annotation)
                         }
@@ -109,8 +111,6 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             let lineOpacity = staticLayer.featureLineOpacity(feature: feature)
                             let lineAlpha = lineOpacity / 255.0
                             polyline.setLineColor(hex: StaticLayer.featureLineColor(feature: feature), alpha: lineAlpha)
-//                            polyline.lineColor(withHexString: StaticLayer.featureLineColor(feature: feature), andAlpha: lineAlpha)
-                            
                             polyline.lineWidth = StaticLayer.featureLineWidth(feature: feature)
                             
                             polyline.title = StaticLayer.featureName(feature: feature)

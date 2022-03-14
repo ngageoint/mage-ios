@@ -36,6 +36,7 @@
         annotationView.annotation = self;
     }
     
+    self.view = annotationView;
     return annotationView;
 }
 
@@ -46,7 +47,7 @@
         NSLog(@"showing icon from %@", self.iconUrl);
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:self.iconUrl];
-        annotationView.enabled = YES;
+        annotationView.enabled = NO;
         annotationView.canShowCallout = NO;
         UIImage *image = nil;
         if ([[self.iconUrl lowercaseString] hasPrefix:@"http"]) {
@@ -64,6 +65,7 @@
     } else {
         annotationView.annotation = self;
     }
+    self.view = annotationView;
     
     return annotationView;
 }

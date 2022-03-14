@@ -1404,6 +1404,141 @@
                 }
             },
             "id": "5cb352704bd2b9500b967765"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Polygon with a hole",
+                "description": "<i>This polygon has a hole</i>",
+                "style": {
+                    "iconStyle": {
+                        "scale": "1.1",
+                        "icon": {
+                            "href": "https://magetest/testkmlicon.png"
+                        }
+                    },
+                    "lineStyle": {
+                        "color": {
+                            "rgb": "#ff030ff",
+                            "opacity": 255
+                        },
+                        "width": "1"
+                    },
+                    "labelStyle": null,
+                    "polyStyle": {
+                        "color": {
+                            "rgb": "#00ffff",
+                            "opacity": 128
+                        }
+                    }
+                }
+            },
+            "id": "polygonhole",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -104.76147294044495,
+                            39.70802854969591
+                        ],
+                        [
+                            -104.76135492324829,
+                            39.70650157955788
+                        ],
+                        [
+                            -104.7590160369873,
+                            39.70646030962567
+                        ],
+                        [
+                            -104.75929498672484,
+                            39.7081193414505
+                        ],
+                        [
+                            -104.76147294044495,
+                            39.70802854969591
+                        ]
+                    ],
+                    [
+                        [
+                            -104.76067900657654,
+                            39.70761585839653
+                        ],
+                        [
+                            -104.76058244705199,
+                            39.70707935601689
+                        ],
+                        [
+                            -104.75976705551147,
+                            39.707062848185195
+                        ],
+                        [
+                            -104.75989580154419,
+                            39.70764887379133
+                        ],
+                        [
+                            -104.76067900657654,
+                            39.70761585839653
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates":
+                [
+                    -104.75,
+                    39.7
+                ]
+                
+            },
+            "properties": {
+                "name": "Point",
+                "description": "<i>It's a point</i>",
+                "style": {
+                    "iconStyle": {
+                        "scale": "1.1",
+                        "icon": {
+                            "href": "https://magetest/testkmlicon.png"
+                        }
+                    },
+                    "lineStyle": null,
+                    "labelStyle": null,
+                    "polyStyle": null
+                }
+            },
+            "id": "point"
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates":
+                [
+                    -104.76,
+                    39.71
+                ]
+                
+            },
+            "properties": {
+                "name": "Point2",
+                "description": "<i>It's a point2</i>",
+                "style": {
+                    "iconStyle": {
+                        "scale": "1.1",
+                        "icon": {
+                            "href": "https://magetest/testkmlicon.png"
+                        }
+                    },
+                    "lineStyle": null,
+                    "labelStyle": null,
+                    "polyStyle": null
+                }
+            },
+            "id": "point2"
         }
     ]
 }

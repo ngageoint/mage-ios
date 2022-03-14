@@ -426,7 +426,7 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(mixin.enlargedLocationView).toEventually(beNil())
                     if let la = mixin.mapView?.annotations[0] as? LocationAnnotation {
                         expect(la.view).to(beAKindOf(PersonAnnotationView.self))
-                        if let lav = la.view as? ObservationAnnotationView {
+                        if let lav = la.view as? PersonAnnotationView {
                             expect(lav.frame.size.height).toEventually(equal(originalHeight))
                         }
                     }
