@@ -24,14 +24,15 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
     var straightLineNavigation: StraightLineNavigation?
     weak var mapStack: UIStackView?
     
-    init(userHeadingDisplay: UserHeadingDisplay, mapStack: UIStackView, scheme: MDCContainerScheming?) {
+    init(userHeadingDisplay: UserHeadingDisplay, mapStack: UIStackView, locationManager: CLLocationManager? = CLLocationManager(), scheme: MDCContainerScheming?) {
         self.userHeadingDisplay = userHeadingDisplay
         self.mapView = userHeadingDisplay.mapView
         self.scheme = scheme
         self.mapStack = mapStack
+        self.locationManager = locationManager
     }
     
-    deinit {
+    func cleanupMixin() {
         locationManager?.delegate = nil
         locationManager = nil
     }
@@ -46,7 +47,6 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
     func setupMixin() {
         applyTheme(scheme: scheme)
         
-        locationManager = CLLocationManager()
         locationManager?.delegate = self
     }
     

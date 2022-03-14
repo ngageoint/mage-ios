@@ -531,6 +531,7 @@
 		F7E5749027DA8D21009A6E0D /* CanCreateObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5748F27DA8D21009A6E0D /* CanCreateObservationTests.swift */; };
 		F7E5749227DB91D3009A6E0D /* CanReportLocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5749127DB91D3009A6E0D /* CanReportLocationTests.swift */; };
 		F7E5749427DBDC28009A6E0D /* UserTrackingMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5749327DBDC28009A6E0D /* UserTrackingMapTests.swift */; };
+		F7E5749627DBF2A1009A6E0D /* UserHeadingDisplayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5749527DBF2A1009A6E0D /* UserHeadingDisplayTests.swift */; };
 		F7EBAEB82760F62000650F4F /* MainMageMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEB72760F62000650F4F /* MainMageMapView.swift */; };
 		F7EBAEBA2760F7EE00650F4F /* FilteredObservationsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEB92760F7EE00650F4F /* FilteredObservationsMap.swift */; };
 		F7EBAEBC27615E5600650F4F /* MapMixin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEBB27615E5600650F4F /* MapMixin.swift */; };
@@ -1308,6 +1309,7 @@
 		F7E5748F27DA8D21009A6E0D /* CanCreateObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservationTests.swift; sourceTree = "<group>"; };
 		F7E5749127DB91D3009A6E0D /* CanReportLocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanReportLocationTests.swift; sourceTree = "<group>"; };
 		F7E5749327DBDC28009A6E0D /* UserTrackingMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTrackingMapTests.swift; sourceTree = "<group>"; };
+		F7E5749527DBF2A1009A6E0D /* UserHeadingDisplayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHeadingDisplayTests.swift; sourceTree = "<group>"; };
 		F7EBAEB72760F62000650F4F /* MainMageMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMageMapView.swift; sourceTree = "<group>"; };
 		F7EBAEB92760F7EE00650F4F /* FilteredObservationsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredObservationsMap.swift; sourceTree = "<group>"; };
 		F7EBAEBB27615E5600650F4F /* MapMixin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMixin.swift; sourceTree = "<group>"; };
@@ -2718,6 +2720,7 @@
 				F7E5748F27DA8D21009A6E0D /* CanCreateObservationTests.swift */,
 				F7E5749127DB91D3009A6E0D /* CanReportLocationTests.swift */,
 				F7E5749327DBDC28009A6E0D /* UserTrackingMapTests.swift */,
+				F7E5749527DBF2A1009A6E0D /* UserHeadingDisplayTests.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3679,6 +3682,7 @@
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
 				F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
+				F7E5749627DBF2A1009A6E0D /* UserHeadingDisplayTests.swift in Sources */,
 				F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */,
 				F7081DB02626348F004B89D4 /* MockCLLocationManager.swift in Sources */,
 				F7BD2D7C267A468900A2B1D7 /* MockGeometryEditDelegate.swift in Sources */,

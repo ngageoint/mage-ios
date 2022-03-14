@@ -33,6 +33,8 @@ class MockCLLocationManager : CLLocationManager {
     var mockedHeading: CLHeading?
     var _authorizationStatus: CLAuthorizationStatus = .authorizedAlways
     var _delegate: CLLocationManagerDelegate?
+    public var updatingHeading: Bool = false
+    public var updatingLocation: Bool = false
     
     override var authorizationStatus: CLAuthorizationStatus {
         get {
@@ -65,5 +67,21 @@ class MockCLLocationManager : CLLocationManager {
     
     override var heading: CLHeading? {
         return mockedHeading;
+    }
+    
+    override func stopUpdatingHeading() {
+        updatingHeading = false
+    }
+    
+    override func startUpdatingHeading() {
+        updatingHeading = true
+    }
+    
+    override func stopUpdatingLocation() {
+        updatingLocation = false
+    }
+    
+    override func startUpdatingLocation() {
+        updatingLocation = true
     }
 }
