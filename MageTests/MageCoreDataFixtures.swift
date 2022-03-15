@@ -364,7 +364,7 @@ class MageCoreDataFixtures {
             "itemPrimaryProperty": primaryProperty,
             "itemSecondaryProperty": secondaryProperty,
             "itemsHaveSpatialDimension": true,
-            "updateFrequency": ["seconds": 1.0],
+            "updateFrequencySeconds": 1.0,
             "itemsHaveIdentity": true
         ];
         if (timestampProperty != nil) {

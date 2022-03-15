@@ -117,7 +117,7 @@ class GeoPackageLayerMapTests: KIFSpec {
                 HTTPStubs.removeAllStubs()
             }
             
-            fit("initialize the StaticLayerMap with a not loaded layer then load it but don't add to the map") {
+            it("initialize the StaticLayerMap with a not loaded layer then load it but don't add to the map") {
                 var stubCalled = false;
                 
                 stub(condition: isMethodGET() &&

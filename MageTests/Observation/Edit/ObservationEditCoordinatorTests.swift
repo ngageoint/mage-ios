@@ -436,13 +436,11 @@ class ObservationEditCoordinatorTests: KIFSpec {
                     "id": 4
                 ]]
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEventFromJson(formsJson: formsJson, maxObservationForms: 1, minObservationForms: 1)
                 Server.setCurrentEventId(1);
                 MageCoreDataFixtures.addUser(userId: "user")
                 UserDefaults.standard.currentUserId = "user";
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
-                tester().wait(forTimeInterval: 0.5);
-                MageCoreDataFixtures.addEventFromJson(formsJson: formsJson, maxObservationForms: 1, minObservationForms: 1)
                 
                 let formatter = DateFormatter();
                 formatter.dateFormat = "yyyy-MM-dd'T'HH:mmZ";

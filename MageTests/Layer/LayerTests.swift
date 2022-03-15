@@ -446,6 +446,11 @@ class LayerTests: KIFSpec {
                     } catch {}
                 }
                 
+                var staticLayerLoaded = false
+                NotificationCenter.default.addObserver(forName: .StaticLayerLoaded, object: nil, queue: .main) { notification in
+                    staticLayerLoaded = true
+                }
+                
                 Layer.refreshLayers(eventId: 1);
                 
                 expect(stubCalled).toEventually(beTrue());
@@ -462,6 +467,7 @@ class LayerTests: KIFSpec {
                 
                 expect(featuresStubCalled).toEventually(beTrue());
                 
+                expect(staticLayerLoaded).toEventually(beTrue())
                 expect(StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())?.data).toEventuallyNot(beNil(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find layer")
                 
                 let staticLayer = StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())!
@@ -470,7 +476,7 @@ class LayerTests: KIFSpec {
                 expect(iconStubCalled).toEventually(beTrue());
                 
                 let staticLayerFeatures = staticLayer.data![LayerKey.features.key] as! [[AnyHashable : Any]];
-                expect(staticLayerFeatures.count).to(equal(3));
+                expect(staticLayerFeatures.count).to(equal(6));
                 let lastFeature = staticLayerFeatures[2];
                 let href = (((((lastFeature[StaticLayerKey.properties.key] as! [AnyHashable : Any])[StaticLayerKey.style.key] as! [AnyHashable : Any])[StaticLayerKey.iconStyle.key] as! [AnyHashable : Any])[StaticLayerKey.icon.key] as! [AnyHashable : Any])[StaticLayerKey.href.key] as! String)
                 expect(href).to(equal("featureIcons/1/\(lastFeature[LayerKey.id.key] as! String)"))
@@ -551,7 +557,7 @@ class LayerTests: KIFSpec {
                 expect(iconStubCalled).toEventually(beTrue());
                 
                 let staticLayerFeatures = staticLayer.data![LayerKey.features.key] as! [[AnyHashable : Any]];
-                expect(staticLayerFeatures.count).to(equal(3));
+                expect(staticLayerFeatures.count).to(equal(6));
                 let lastFeature = staticLayerFeatures[2];
                 let href = (((((lastFeature[StaticLayerKey.properties.key] as! [AnyHashable : Any])[StaticLayerKey.style.key] as! [AnyHashable : Any])[StaticLayerKey.iconStyle.key] as! [AnyHashable : Any])[StaticLayerKey.icon.key] as! [AnyHashable : Any])[StaticLayerKey.href.key] as! String)
                 expect(href).to(equal("featureIcons/1/\(lastFeature[LayerKey.id.key] as! String)"))
@@ -656,7 +662,7 @@ class LayerTests: KIFSpec {
                 expect(staticLayer.type).to(equal("Feature"))
                 expect(staticLayer.layerDescription).to(equal("new description"))
                 let staticLayerFeatures = staticLayer.data![LayerKey.features.key] as! [[AnyHashable : Any]];
-                expect(staticLayerFeatures.count).to(equal(3));
+                expect(staticLayerFeatures.count).to(equal(6));
                 let lastFeature = staticLayerFeatures[2];
                 let href = (((((lastFeature[StaticLayerKey.properties.key] as! [AnyHashable : Any])[StaticLayerKey.style.key] as! [AnyHashable : Any])[StaticLayerKey.iconStyle.key] as! [AnyHashable : Any])[StaticLayerKey.icon.key] as! [AnyHashable : Any])[StaticLayerKey.href.key] as! String)
                 expect(href).to(equal("featureIcons/1/\(lastFeature[LayerKey.id.key] as! String)"))
