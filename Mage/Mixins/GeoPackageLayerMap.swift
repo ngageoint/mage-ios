@@ -16,6 +16,8 @@ protocol GeoPackageLayerMap {
 }
 
 class GeoPackageLayerMapMixin: NSObject, MapMixin {
+    var geopackageImportedObserver: AnyObject?
+
     var geoPackageLayerMap: GeoPackageLayerMap?
     var mapView: MKMapView?
     
@@ -35,10 +37,19 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
         }
         geoPackage = GeoPackage(mapView: mapView)
         
-        NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) { [weak self] notification in
+        CacheOverlays.getInstance().register(self)
+        geopackageImportedObserver = NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) { [weak self] notification in
             self?.updateGeoPackageLayers()
         }
         updateGeoPackageLayers()
+    }
+    
+    func cleanupMixin() {
+        CacheOverlays.getInstance().unregisterListener(self)
+        if let geopackageImportedObserver = geopackageImportedObserver {
+            NotificationCenter.default.removeObserver(geopackageImportedObserver)
+        }
+        geopackageImportedObserver = nil
     }
     
     func updateGeoPackageLayers() {
@@ -48,5 +59,11 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         return geoPackage?.getFeaturesAtTap(location)
+    }
+}
+
+extension GeoPackageLayerMapMixin : CacheOverlayListener {
+    func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay]!) {
+        updateGeoPackageLayers()
     }
 }

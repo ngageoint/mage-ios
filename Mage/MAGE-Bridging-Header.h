@@ -76,3 +76,4 @@
 #import "WMSTileOverlay.h"
 #import "TMSTileOverlay.h"
 #import "XYZTileOverlay.h"
+#import "GeoPackageImporter.h"

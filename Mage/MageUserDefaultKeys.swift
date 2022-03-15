@@ -160,6 +160,15 @@ extension Notification.Name {
         }
     }
     
+    var selectedCaches: [String]? {
+        get {
+            return array(forKey: #function) as? [String];
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
     var serverMajorVersion: Int {
         get {
             return integer(forKey: #function)

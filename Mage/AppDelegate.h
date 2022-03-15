@@ -20,5 +20,6 @@
 - (void) createRootView;
 - (BaseMapOverlay *) getBaseMap;
 - (BaseMapOverlay *) getDarkBaseMap;
++ (UIViewController*) topMostController;
 
 @end
