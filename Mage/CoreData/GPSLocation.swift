@@ -14,6 +14,26 @@ import AFNetworking
 import sf_ios
 
 @objc public class GPSLocation: NSManagedObject {
+    
+    var cllocation: CLLocation? {
+        get {
+            let centroid: SFPoint = SFGeometryUtils.centroid(of: geometry)
+            if let dictionary = properties as? [String : Any] {
+                let cllocation = CLLocation(
+                    coordinate: CLLocationCoordinate2D(
+                        latitude: centroid.y as? CLLocationDegrees ?? 0.0,
+                        longitude: centroid.x as? CLLocationDegrees ?? 0.0),
+                    altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
+                    horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                    verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
+                    timestamp: timestamp ?? Date())
+                return cllocation
+            } else {
+                return CLLocation(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue)
+            }
+        }
+    }
+    
     @objc public var geometry: SFGeometry? {
         get {
             if let geometryData = self.geometryData {

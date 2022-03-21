@@ -19,6 +19,7 @@ class FollowUserMapMixin: NSObject, MapMixin {
     var _followedUser: User?
     var scheme: MDCContainerScheming?
     var fetchedResultsController: NSFetchedResultsController<Location>?
+    var gpsFetchedResultsController: NSFetchedResultsController<GPSLocation>?
 
     var user: User? {
         get {
@@ -42,29 +43,43 @@ class FollowUserMapMixin: NSObject, MapMixin {
         }
     }
     
+    func cleanupMixin() {
+        fetchedResultsController?.delegate = nil
+        fetchedResultsController = nil
+        gpsFetchedResultsController?.delegate = nil
+        gpsFetchedResultsController = nil
+        _followedUser = nil
+    }
+    
     func followUser(user: User?) {
+        _followedUser = user
+        
         guard let user = user else {
             // stop following
             fetchedResultsController?.delegate = nil
             fetchedResultsController = nil
+            gpsFetchedResultsController?.delegate = nil
+            gpsFetchedResultsController = nil
+            _followedUser = nil
             return
         }
         
         // This is me
         if UserDefaults.standard.currentUserId == user.remoteId {
-            let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
-            if (locations.count != 0) {
-                let location: GPSLocation = locations[0]
-                let centroid: SFPoint = SFGeometryUtils.centroid(of: location.geometry)
-                let dictionary: [String : Any] = location.properties as! [String : Any]
-                let cllocation = CLLocation(
-                    coordinate: CLLocationCoordinate2D(
-                        latitude: centroid.y as! CLLocationDegrees,
-                        longitude: centroid.x as! CLLocationDegrees),
-                    altitude: dictionary["altitude"] as! CLLocationDistance,
-                    horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
-                    verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
-                    timestamp: location.timestamp!)
+            let fetchRequest = GPSLocation.fetchRequest()
+            fetchRequest.predicate = NSPredicate(value: true)
+            fetchRequest.fetchLimit = 1
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: GPSLocationKey.timestamp.key, ascending: true)]
+            gpsFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+            gpsFetchedResultsController?.delegate = self
+            do {
+                try gpsFetchedResultsController?.performFetch()
+            } catch {
+                let fetchError = error as NSError
+                print("Unable to Perform Fetch Request")
+                print("\(fetchError), \(fetchError.localizedDescription)")
+            }
+            if let fetchedObjects = gpsFetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty, let cllocation = fetchedObjects[0].cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
             }
         } else {
@@ -107,11 +122,20 @@ extension FollowUserMapMixin : NSFetchedResultsControllerDelegate {
         switch type {
         case .insert:
             print("insert")
+            if let location = anObject as? Location {
+                zoomAndCenterMap(location: location)
+            } else if let gpsLocation = anObject as? GPSLocation, let cllocation = gpsLocation.cllocation {
+                zoomAndCenterMap(cllocation: cllocation)
+            }
         case .delete:
             print("delete")
         case .update:
             print("update")
-            zoomAndCenterMap(location: anObject as? Location)
+            if let location = anObject as? Location {
+                zoomAndCenterMap(location: location)
+            } else if let gpsLocation = anObject as? GPSLocation, let cllocation = gpsLocation.cllocation {
+                zoomAndCenterMap(cllocation: cllocation)
+            }
         case .move:
             print("...")
         @unknown default:

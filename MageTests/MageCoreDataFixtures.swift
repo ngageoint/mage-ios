@@ -92,16 +92,16 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addGPSLocation(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
+    public static func addGPSLocation(userId: String = "userabc", location: CLLocation? = nil, completion: MRSaveCompletionHandler? = nil) {
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
+                let location: CLLocation = location ?? CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
                 _ = GPSLocation.gpsLocation(location: location, context: localContext);
             })
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
+                let location: CLLocation = location ?? CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
                 _ = GPSLocation.gpsLocation(location: location, context: localContext);
             }, completion: completion)
