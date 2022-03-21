@@ -44,13 +44,16 @@ extension UIImage {
                     
                     let image = value.image.aspectResize(to: CGSize(width: size, height: size))
                     annotationView.image = image;
+                    annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
                     
                 case .failure(_):
                     annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                    annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
                 }
             }
         } else {
             annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
         }
     }
     

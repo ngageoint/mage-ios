@@ -33,7 +33,7 @@ class FeedsMapMixin: NSObject, MapMixin {
         self.scheme = scheme
     }
     
-    deinit {
+    func cleanupMixin() {
         feedItemRetrievers.removeAll()
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
@@ -115,18 +115,20 @@ class FeedsMapMixin: NSObject, MapMixin {
             annotationView.canShowCallout = false
             annotationView.isEnabled = false
             annotationView.isUserInteractionEnabled = false
+            annotation.view = annotationView
             return annotationView
         }()
         
         FeedItemRetriever.setAnnotationImage(feedItem: annotation, annotationView: annotationView)
         annotationView.annotation = annotation
         annotationView.accessibilityLabel = "Feed \(annotation.feed?.remoteId ?? "") Item \(annotation.remoteId ?? "")"
+        annotation.view = annotationView
         return annotationView
     }
     
     func focusAnnotation(annotation: MKAnnotation?) {
         guard let annotation = annotation as? FeedItem,
-              let annotationView = mapView?.view(for: annotation) else {
+              let annotationView = annotation.view else {
                   if let enlargedAnnotationView = enlargedAnnotationView {
                       // shrink the old focused view
                       UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {

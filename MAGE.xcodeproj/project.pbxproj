@@ -551,6 +551,7 @@
 		F7F08E8F27E0BE3100640D89 /* gpkgWithMedia.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7F08E8E27E0BE3100640D89 /* gpkgWithMedia.gpkg */; };
 		F7F08E9127E0C04900640D89 /* GeoPackageLayerMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9027E0C04900640D89 /* GeoPackageLayerMapTests.swift */; };
 		F7F08E9427E0EB7100640D89 /* GeoPackageImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9327E0EB7100640D89 /* GeoPackageImporter.m */; };
+		F7F08E9627E8B35F00640D89 /* FeedsMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9527E8B35F00640D89 /* FeedsMapTests.swift */; };
 		F7F118222602A1F600C7DE9A /* ObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F118212602A1F600C7DE9A /* ObservationTests.swift */; };
 		F7F15B13274565A8008FF6C2 /* MageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F15B12274565A8008FF6C2 /* MageTests.swift */; };
 		F7F15B152745865F008FF6C2 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B142745865F008FF6C2 /* users.json */; };
@@ -1339,6 +1340,7 @@
 		F7F08E9027E0C04900640D89 /* GeoPackageLayerMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageLayerMapTests.swift; sourceTree = "<group>"; };
 		F7F08E9227E0EB7100640D89 /* GeoPackageImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoPackageImporter.h; sourceTree = "<group>"; };
 		F7F08E9327E0EB7100640D89 /* GeoPackageImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoPackageImporter.m; sourceTree = "<group>"; };
+		F7F08E9527E8B35F00640D89 /* FeedsMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedsMapTests.swift; sourceTree = "<group>"; };
 		F7F118212602A1F600C7DE9A /* ObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTests.swift; sourceTree = "<group>"; };
 		F7F15B12274565A8008FF6C2 /* MageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageTests.swift; sourceTree = "<group>"; };
 		F7F15B142745865F008FF6C2 /* users.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
@@ -2733,6 +2735,7 @@
 				F7E5749527DBF2A1009A6E0D /* UserHeadingDisplayTests.swift */,
 				F7E5749727DF8700009A6E0D /* StaticLayerMapTests.swift */,
 				F7F08E9027E0C04900640D89 /* GeoPackageLayerMapTests.swift */,
+				F7F08E9527E8B35F00640D89 /* FeedsMapTests.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -3740,6 +3743,7 @@
 				F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */,
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
+				F7F08E9627E8B35F00640D89 /* FeedsMapTests.swift in Sources */,
 				F730B94D2685196E004AD64A /* ObservationFormReorderTests.swift in Sources */,
 				F7E5749227DB91D3009A6E0D /* CanReportLocationTests.swift in Sources */,
 				F7E5748E27DA818A009A6E0D /* HasMapSettingsTests.swift in Sources */,

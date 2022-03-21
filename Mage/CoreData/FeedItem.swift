@@ -9,8 +9,11 @@
 
 import Foundation
 import CoreData
+import MapKit
 
 @objc public class FeedItem: NSManagedObject, MKAnnotation, Navigable {
+    
+    var view: MKAnnotationView?
     
     static func fetchedResultsController(_ feedItem: FeedItem, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<FeedItem>? {
         guard let remoteId = feedItem.remoteId else {
