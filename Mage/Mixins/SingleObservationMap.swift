@@ -13,22 +13,24 @@ import geopackage_ios
 protocol SingleObservationMap {
     var mapView: MKMapView? { get set }
     var singleObservationMapMixin: SingleObservationMapMixin? { get set }
-    func addFilteredObservations()
-}
-
-extension SingleObservationMap {
-    
-    func addFilteredObservations() {
-        singleObservationMapMixin?.addFilteredObservations()
-    }
 }
 
 class SingleObservationMapMixin: FilteredObservationsMapMixin {
-    var observation: Observation?
+    var _observation: Observation?
+    
+    var observation: Observation? {
+        get {
+            return _observation
+        }
+        set {
+            _observation = newValue
+            addFilteredObservations()
+        }
+    }
     
     init(mapView: MKMapView, observation: Observation? = nil, scheme: MDCContainerScheming?) {
         super.init(mapView: mapView, user: nil, scheme: scheme)
-        self.observation = observation
+        self._observation = observation
     }
     
     override func addFilteredObservations() {

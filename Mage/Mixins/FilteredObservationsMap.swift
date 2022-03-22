@@ -13,14 +13,6 @@ import geopackage_ios
 protocol FilteredObservationsMap {
     var mapView: MKMapView? { get set }
     var filteredObservationsMapMixin: FilteredObservationsMapMixin? { get set }
-    func addFilteredObservations()
-}
-
-extension FilteredObservationsMap {
-    
-    func addFilteredObservations() {
-        filteredObservationsMapMixin?.addFilteredObservations()
-    }
 }
 
 class FilteredObservationsMapMixin: NSObject, MapMixin {
