@@ -25,15 +25,8 @@ class SFGeometryMapMixin: NSObject, MapMixin {
             return _sfGeometry
         }
         set {
+            replaceSFGeometry(sfGeometry: newValue)
             _sfGeometry = newValue
-            if let mapView = mapView {
-                for (_, mapShape) in geometryToShape {
-                    mapShape.remove(from: mapView)
-                }
-                geometryToShape.removeAll()
-            }
-            addSFGeometry(sfGeometry: newValue)
-            setMapRegion(sfGeometry: newValue)
         }
     }
     var geometryToShape: [SFGeometry : GPKGMapShape] = [:]
@@ -65,6 +58,7 @@ class SFGeometryMapMixin: NSObject, MapMixin {
     func removeSFGeometry(sfGeometry: SFGeometry?) {
         if let sfGeometry = sfGeometry, let shape = geometryToShape[sfGeometry], let mapView = mapView {
             shape.remove(from: mapView)
+            geometryToShape.removeValue(forKey: sfGeometry)
         }
     }
     
@@ -93,10 +87,6 @@ class SFGeometryMapMixin: NSObject, MapMixin {
                 return
             }
         }
-        
-        let mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0, longitude: 0), latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
-        
-        mapView?.setRegion(mapRegion, animated: true)
     }
     
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
@@ -117,6 +107,9 @@ class SFGeometryMapMixin: NSObject, MapMixin {
             if let options = polyline.options {
                 renderer.strokeColor = options.strokeColor
                 renderer.lineWidth = options.lineWidth
+            } else {
+                renderer.strokeColor = scheme?.colorScheme.primaryColor ?? .label
+                renderer.lineWidth = 1
             }
             return renderer
         }
