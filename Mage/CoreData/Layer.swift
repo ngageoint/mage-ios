@@ -39,6 +39,7 @@ public enum LayerType : String {
         self.file = json[LayerKey.file.key] as? [AnyHashable : Any]
         self.layerDescription = json[LayerKey.description.key] as? String
         self.state = json[LayerKey.state.key] as? String
+        self.base = json[LayerKey.base.key] as? Bool ?? false
         self.eventId = eventId;
     }
     

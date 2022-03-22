@@ -26,7 +26,7 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
         self.mapView = onlineLayerMap.mapView
     }
     
-    deinit {
+    func cleanupMixin() {
         UserDefaults.standard.removeObserver(self, forKeyPath: "selectedOnlineLayers")
     }
     
@@ -86,6 +86,8 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
                             } else {
                                 nonBaseLayers.append(overlay)
                             }
+                        } else if onlineLayer.base {
+                            baseLayers.append(overlay)
                         } else {
                             nonBaseLayers.append(overlay)
                         }
