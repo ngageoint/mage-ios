@@ -45,7 +45,7 @@ class MageCoreDataFixtures {
         localContext.mr_saveToPersistentStoreAndWait();
         return cleared;
     }
-    
+        
     public static func addLocation(userId: String = "userabc", geometry: SFPoint? = nil, date: Date? = nil, completion: MRSaveCompletionHandler? = nil) {
         let jsonDictionary: NSArray = parseJsonFile(jsonFile: "locationsabc") as! NSArray;
         
@@ -175,6 +175,42 @@ class MageCoreDataFixtures {
             }
         }
         return nil
+    }
+    
+    public static func addImageryLayer(eventId: NSNumber = 1, layerId: NSNumber = 1, format: String = "XYZ", url: String = "https://magetest/xyzlayer/{z}/{x}/{y}.png", base: Bool = true, options: [String:Any]? = nil, completion: MRSaveCompletionHandler? = nil) {
+        if (completion == nil) {
+            MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                let layer = ImageryLayer.mr_createEntity(in: localContext)
+                let json: [AnyHashable : Any?] = [
+                    LayerKey.base.key: base,
+                    LayerKey.description.key: "layer description",
+                    LayerKey.format.key: format,
+                    LayerKey.id.key: layerId,
+                    LayerKey.name.key: "layer name",
+                    LayerKey.state.key: "available",
+                    LayerKey.type.key: "Imagery",
+                    LayerKey.url.key: url,
+                    LayerKey.wms.key: options
+                ]
+                layer?.populate(json, eventId: eventId)
+            });
+        } else {
+            MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+                let layer = ImageryLayer.mr_createEntity(in: localContext)
+                let json: [AnyHashable : Any?] = [
+                    LayerKey.base.key: base,
+                    LayerKey.description.key: "layer description",
+                    LayerKey.format.key: format,
+                    LayerKey.id.key: layerId,
+                    LayerKey.name.key: "layer name",
+                    LayerKey.state.key: "available",
+                    LayerKey.type.key: "Imagery",
+                    LayerKey.url.key: url,
+                    LayerKey.wms.key: options
+                ]
+                layer?.populate(json, eventId: eventId)
+            }, completion: completion);
+        }
     }
     
     public static func addUserToEvent(eventId: NSNumber = 1, userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
