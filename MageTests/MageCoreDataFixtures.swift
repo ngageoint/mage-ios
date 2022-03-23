@@ -436,8 +436,9 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addFeedItemToFeed(feedId: String = "1", itemId: String? = nil, properties: [String: Any]?, simpleFeature: SFGeometry = SFPoint(x: -105.2678, andY: 40.0085), completion: MRSaveCompletionHandler? = nil) {
+    public static func addFeedItemToFeed(feedId: String = "1", itemId: String? = nil, properties: [String: Any]? = nil, simpleFeature: SFGeometry = SFPoint(x: -105.2678, andY: 40.0085), completion: MRSaveCompletionHandler? = nil) -> FeedItem? {
         if (completion == nil) {
+            var feedItem: FeedItem?
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [feedId]), in: localContext)
                 let count = FeedItem.mr_countOfEntities();
@@ -452,8 +453,11 @@ class MageCoreDataFixtures {
                         ];
                     }
                     f.simpleFeature = simpleFeature;
+                    
+                    feedItem = f
                 }
             });
+            return feedItem?.mr_(in: NSManagedObjectContext.mr_default())
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [feedId]), in: localContext)
@@ -471,6 +475,7 @@ class MageCoreDataFixtures {
                     f.simpleFeature = simpleFeature;
                 }
             }, completion: completion)
+            return nil
         }
     }
     

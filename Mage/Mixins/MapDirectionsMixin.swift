@@ -36,13 +36,14 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var observationFetchedResultsController: NSFetchedResultsController<Observation>?
     var feedItemFetchedResultsController: NSFetchedResultsController<FeedItem>?
     
-    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, sourceView: UIView? = nil) {
+    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, locationManager: CLLocationManager? = CLLocationManager(), sourceView: UIView? = nil) {
         self.mapDirections = mapDirections
         self.mapView = mapDirections.mapView
         self.viewController = viewController
         self.mapStack = mapStack
         self.scheme = scheme
         self.sourceView = sourceView
+        self.locationManager = locationManager
     }
     
     func setupMixin() {
@@ -59,7 +60,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
         }
     }
     
-    deinit {
+    func cleanupMixin() {
         if let directionsToItemObserver = directionsToItemObserver {
             NotificationCenter.default.removeObserver(directionsToItemObserver, name: .DirectionsToItem, object: nil)
         }
@@ -68,6 +69,8 @@ class MapDirectionsMixin: NSObject, MapMixin {
             NotificationCenter.default.removeObserver(startStraightLineNavigationObserver, name: .StartStraightLineNavigation, object: nil)
         }
         startStraightLineNavigationObserver = nil
+        self.locationManager?.delegate = nil;
+        self.locationManager = nil
     }
     
     func startStraightLineNavigation(notification: StraightLineNavigationNotification) {
@@ -86,7 +89,6 @@ class MapDirectionsMixin: NSObject, MapMixin {
             try? feedItemFetchedResultsController?.performFetch()
         }
         
-        self.locationManager = CLLocationManager()
         self.locationManager?.delegate = self;
         self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager?.startUpdatingLocation()
@@ -103,12 +105,6 @@ class MapDirectionsMixin: NSObject, MapMixin {
         
         straightLineNavigation?.stopNavigation()
         straightLineNavigation?.startNavigation(manager: locationManager, destinationCoordinate: notification.coordinate, delegate: self, image: notification.image, imageURL: notification.imageURL, scheme: scheme)
-    }
-    
-    func updateStraightLineNavigationDestination(destination: CLLocationCoordinate2D) {
-        if let locationManager = locationManager {
-            straightLineNavigation?.updateNavigationLines(manager: locationManager, destinationCoordinate: destination)
-        }
     }
     
     func getDirections(notification: DirectionsToItemNotification) {
@@ -215,6 +211,13 @@ class MapDirectionsMixin: NSObject, MapMixin {
         }
         
         viewController?.present(alert, animated: true, completion: nil);
+    }
+    
+    func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
+        if let overlay = overlay as? NavigationOverlay {
+            return overlay.renderer
+        }
+        return nil
     }
 }
 

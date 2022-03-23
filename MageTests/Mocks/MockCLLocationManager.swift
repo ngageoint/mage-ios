@@ -7,15 +7,19 @@
 //
 
 import Foundation
+import CoreLocation
 
 class MockCLHeading : CLHeading {
     
+    var mockedMagneticHeading: CLLocationDirection = 212.3134
+    var mockedTrueHeading: CLLocationDirection = 231.43123
+    
     override var magneticHeading: CLLocationDirection {
-        return 212.3134;
+        return mockedMagneticHeading;
     }
     
     override var trueHeading: CLLocationDirection {
-        return 231.43123;
+        return mockedTrueHeading;
     }
     
     override init() {
@@ -59,6 +63,20 @@ class MockCLLocationManager : CLLocationManager {
         mockedLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.008, longitude: -105.2677), altitude: 1625.8, horizontalAccuracy: 5.2, verticalAccuracy: 1.3, course: 200, courseAccuracy: 12.0, speed: 254.0, speedAccuracy: 15.0, timestamp: Date());
         mockedHeading = MockCLHeading();
         super.init();
+    }
+    
+    func updateMockedLocation(location: CLLocation) {
+        mockedLocation = location
+        if updatingLocation {
+            delegate?.locationManager?(self, didUpdateLocations: [location])
+        }
+    }
+    
+    func updateMockedHeading(heading: CLHeading) {
+        mockedHeading = heading
+        if updatingHeading {
+            delegate?.locationManager?(self, didUpdateHeading: heading)
+        }
     }
 
     override var location: CLLocation? {
