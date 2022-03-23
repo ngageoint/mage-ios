@@ -108,12 +108,16 @@ enum State: Int, CustomStringConvertible {
     }
     
     static func fetchedResultsController(_ observation: Observation, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Observation>? {
-        guard let remoteId = observation.remoteId else {
-            return nil
-        }
         let fetchRequest = Observation.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+        if let remoteId = observation.remoteId {
+            fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        } else {
+            fetchRequest.predicate = NSPredicate(format: "self = %@", observation)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        }
+        
         let observationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
         observationFetchedResultsController.delegate = delegate
         do {
