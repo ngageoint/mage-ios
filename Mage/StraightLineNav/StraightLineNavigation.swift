@@ -58,9 +58,9 @@ struct StraightLineNavigationNotification {
         navigationModeEnabled = true;
         headingModeEnabled = true;
         
-        updateNavigationLines(manager: manager, destinationCoordinate: destinationCoordinate);
         navView = StraightLineNavigationView(locationManager: manager, destinationMarker: image, destinationCoordinate: destinationCoordinate, delegate: delegate, scheme: scheme, targetColor: relativeBearingColor, bearingColor: headingColor);
         navView?.destinationMarkerUrl = imageURL
+        updateNavigationLines(manager: manager, destinationCoordinate: destinationCoordinate);
         self.delegate = delegate;
         mapStack?.addArrangedSubview(navView!);
     }
@@ -135,9 +135,10 @@ struct StraightLineNavigationNotification {
                 return;
             }
             
+            // if the user is moving, use their direction of movement
             var bearing = location.course;
             let speed = location.speed;
-            // if the user is moving, use their direction of movement
+            
             if (bearing < 0 || speed <= 0) {
                 // if the user is not moving, use the heading of the phone
                 if let trueHeading = manager.heading?.trueHeading {
@@ -154,6 +155,7 @@ struct StraightLineNavigationNotification {
                 mapView?.removeOverlay(headingPolyline!);
             }
             headingPolyline = NavigationOverlay(points: coordinates, count: 2, color: headingColor)
+            headingPolyline?.accessibilityLabel = "heading"
             mapView?.addOverlay(headingPolyline!, level: .aboveLabels);
             navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor);
         }
@@ -172,7 +174,9 @@ struct StraightLineNavigationNotification {
                 mapView?.removeOverlay(relativeBearingPolyline!);
             }
             relativeBearingPolyline = NavigationOverlay(points: coordinates, count: 2, color: relativeBearingColor)
+            relativeBearingPolyline?.accessibilityLabel = "relative bearing"
             mapView?.addOverlay(relativeBearingPolyline!);
+            navView?.populate(relativeBearingColor: relativeBearingColor, headingColor: headingColor, destinationCoordinate: destinationCoordinate);
         }
         
         updateHeadingLine(manager: manager);

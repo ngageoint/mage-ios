@@ -221,7 +221,10 @@ import Kingfisher
         super.updateConstraints();
     }
     
-    @objc public func populate(relativeBearingColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
+    public func populate(relativeBearingColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed, destinationCoordinate: CLLocationCoordinate2D? = nil) {
+        if let destinationCoordinate = destinationCoordinate {
+            self.destinationCoordinate = destinationCoordinate
+        }
         self.relativeBearingColor = relativeBearingColor;
         self.headingColor = headingColor;
         let measurementFormatter = MeasurementFormatter();
@@ -242,8 +245,8 @@ import Kingfisher
             }
         }
         
-        if (bearing >= 0) {
-            let bearingTo = userLocation.coordinate.bearing(to: destinationCoordinate!);
+        if bearing >= 0, let destinationCoordinate = self.destinationCoordinate {
+            let bearingTo = userLocation.coordinate.bearing(to: destinationCoordinate);
             compassView?.updateHeading(heading: bearing, destinationBearing: bearingTo, targetColor: self.relativeBearingColor, bearingColor: self.headingColor);
             let headingMeasurement = Measurement(value: bearing, unit: UnitAngle.degrees);
             let bearingToMeasurement = Measurement(value: bearingTo, unit: UnitAngle.degrees);
