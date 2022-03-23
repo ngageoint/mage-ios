@@ -28,7 +28,7 @@ class BottomSheetMixin: NSObject, MapMixin {
         self.navigationController = navigationController
     }
     
-    deinit {
+    func cleanupMixin() {
         if let mapItemsTappedObserver = mapItemsTappedObserver {
             NotificationCenter.default.removeObserver(mapItemsTappedObserver, name: .MapItemsTapped, object: nil)
         }
@@ -95,17 +95,17 @@ class BottomSheetMixin: NSObject, MapMixin {
         return bottomSheetItems
     }
     
-    func handleTappedAnnotations(annotations: Set<AnyHashable>?) -> [BottomSheetItem] {
+    func handleTappedAnnotations(annotations: [Any]?) -> [BottomSheetItem] {
         var dedup: Set<AnyHashable> = Set()
         let bottomSheetItems: [BottomSheetItem] = createBottomSheetItems(annotations: annotations, dedup: &dedup)
         return bottomSheetItems
     }
     
-    func createBottomSheetItems(annotations: Set<AnyHashable>?, dedup: inout Set<AnyHashable>) -> [BottomSheetItem] {
-        var items: Set<BottomSheetItem> = Set()
+    func createBottomSheetItems(annotations: [Any]?, dedup: inout Set<AnyHashable>) -> [BottomSheetItem] {
+        var items: [BottomSheetItem] = []
         
         guard let annotations = annotations else {
-            return Array(items)
+            return items
         }
 
         for annotation in annotations {
@@ -113,26 +113,26 @@ class BottomSheetMixin: NSObject, MapMixin {
                 if let observation = annotation.observation, !dedup.contains(observation) {
                     _ = dedup.insert(observation)
                     let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: nil, annotationView: annotation.view)
-                    items.insert(bottomSheetItem)
+                    items.append(bottomSheetItem)
                 }
             } else if let annotation = annotation as? LocationAnnotation {
                 if let user = annotation.user, !dedup.contains(user) {
                     _ = dedup.insert(user)
                     let bottomSheetItem = BottomSheetItem(item: user, actionDelegate: nil, annotationView: annotation.view)
-                    items.insert(bottomSheetItem)
+                    items.append(bottomSheetItem)
                 }
             } else if let annotation = annotation as? StaticPointAnnotation {
                 let featureItem = FeatureItem(annotation: annotation)
                 if !dedup.contains(featureItem) {
                     _ = dedup.insert(featureItem)
                     let bottomSheetItem = BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: mapView?.view(for: annotation))
-                    items.insert(bottomSheetItem)
+                    items.append(bottomSheetItem)
                 }
             } else if let annotation = annotation as? FeedItem {
                 if !dedup.contains(annotation) {
                     _ = dedup.insert(annotation)
                     let bottomSheetItem = BottomSheetItem(item: annotation, actionDelegate: nil, annotationView: mapView?.view(for: annotation))
-                    items.insert(bottomSheetItem)
+                    items.append(bottomSheetItem)
                 }
             }
         }

@@ -15,7 +15,7 @@ struct MapAnnotationFocusedNotification {
 }
 
 struct MapItemsTappedNotification {
-    var annotations: Set<AnyHashable>?
+    var annotations: [Any]?
     var items: [Any]?
     var mapView: MKMapView?
 }
