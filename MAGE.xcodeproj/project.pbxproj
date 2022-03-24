@@ -124,7 +124,6 @@
 		F7103F02266A5D7D000832CD /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
 		F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */; };
 		F71123A425EE8826008849B1 /* ObservationEditSelectPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */; };
-		F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */; };
 		F711241E25F69BF5008849B1 /* geometryObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711241D25F69BF5008849B1 /* geometryObservations.json */; };
 		F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711248925F7B8B0008849B1 /* twoFormsObservations.json */; };
 		F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71446EC249928AD005A5EC1 /* FeedItemCard.swift */; };
@@ -785,7 +784,6 @@
 		F7103F01266A5D7D000832CD /* noResponse.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = noResponse.html; sourceTree = "<group>"; };
 		F710D8AD2549B37000798D56 /* ExpandableCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCardTests.swift; sourceTree = "<group>"; };
 		F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObservationEditSelectPickerView.xib; sourceTree = "<group>"; };
-		F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropdownChoiceCell.xib; sourceTree = "<group>"; };
 		F711241D25F69BF5008849B1 /* geometryObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryObservations.json; sourceTree = "<group>"; };
 		F711248925F7B8B0008849B1 /* twoFormsObservations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoFormsObservations.json; sourceTree = "<group>"; };
 		F71446EC249928AD005A5EC1 /* FeedItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemCard.swift; sourceTree = "<group>"; };
@@ -1456,7 +1454,6 @@
 				F7A292291FC3938F00DE5463 /* Authentication */,
 				F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */,
 				F7489B34278E29C300A9E314 /* CoordinateField.swift */,
-				F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */,
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				F7E457611F61AC770082F527 /* EventChooserView.xib */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
@@ -2916,7 +2913,6 @@
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */,
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
-				F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,

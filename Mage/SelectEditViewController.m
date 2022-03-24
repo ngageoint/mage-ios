@@ -29,6 +29,7 @@
 @end
 
 @implementation SelectEditViewController
+static NSString *DROPDOWN_CHOICE_REUSE_ID = @"DROPDOWN_CHOICE_REUSE_ID";
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     if (containerScheme != nil) {
@@ -70,9 +71,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"DropdownChoiceCell" bundle:nil] forCellReuseIdentifier:@"DropdownChoiceCell"];
-    
+        
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -81,7 +80,6 @@
     self.tableView.isAccessibilityElement = true;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 50;
 
     self.selectedLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.selectedLabel.numberOfLines = 0;
@@ -132,7 +130,10 @@
 }
 
 - (UITableViewCell *) tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DropdownChoiceCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DROPDOWN_CHOICE_REUSE_ID];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DROPDOWN_CHOICE_REUSE_ID];
+    }
     
     NSString *choice = nil;
     if (self.searchController.active && [self.searchController.searchBar.text length]) {
