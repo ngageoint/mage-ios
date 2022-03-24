@@ -426,7 +426,7 @@
 		F7B1C4722674033D0005FCE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A94D7718AD9CB000CB9EE0 /* main.m */; };
 		F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1C475267404BC0005FCE4 /* ViewLoaderAppDelegate.m */; };
 		F7B1C478267405A50005FCE4 /* ViewLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B1C477267405A50005FCE4 /* ViewLoader.swift */; };
-		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */; };
+		F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.swift */; };
 		F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */; };
 		F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B5772B245CABE600879C9C /* ExpandableCard.swift */; };
 		F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */; };
@@ -508,7 +508,6 @@
 		F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */; };
 		F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */; };
 		F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */; };
-		F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */; };
 		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
 		F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.m */; };
@@ -1179,8 +1178,7 @@
 		F7B1C474267404BC0005FCE4 /* ViewLoaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewLoaderAppDelegate.h; sourceTree = "<group>"; };
 		F7B1C475267404BC0005FCE4 /* ViewLoaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewLoaderAppDelegate.m; sourceTree = "<group>"; };
 		F7B1C477267405A50005FCE4 /* ViewLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLoader.swift; sourceTree = "<group>"; };
-		F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclaimerViewController.h; sourceTree = "<group>"; };
-		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclaimerViewController.m; sourceTree = "<group>"; };
+		F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisclaimerViewController.swift; sourceTree = "<group>"; };
 		F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCardCollectionViewController.swift; sourceTree = "<group>"; };
 		F7B5772B245CABE600879C9C /* ExpandableCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCard.swift; sourceTree = "<group>"; };
 		F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageServerTests.swift; sourceTree = "<group>"; };
@@ -1277,7 +1275,6 @@
 		F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarUIImageView.swift; sourceTree = "<group>"; };
 		F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsView.swift; sourceTree = "<group>"; };
 		F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsDelegate.swift; sourceTree = "<group>"; };
-		F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DisclaimerConsent.xib; sourceTree = "<group>"; };
 		F7E457611F61AC770082F527 /* EventChooserView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventChooserView.xib; sourceTree = "<group>"; };
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		F7E457651F61E2380082F527 /* EventChooserCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserCoordinator.h; sourceTree = "<group>"; };
@@ -2368,7 +2365,6 @@
 			children = (
 				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
 				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
-				F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */,
 				F7AA6AF8206EA810004F9437 /* idp-authView.xib */,
 				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
@@ -2502,8 +2498,7 @@
 				F7A5A336270CE20F00961CAA /* CoreData */,
 				4CF141B01992A5D900C4B70E /* DeviceUUID.h */,
 				4CF141B11992A5D900C4B70E /* DeviceUUID.m */,
-				F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */,
-				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */,
+				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.swift */,
 				F76949131AA6434A00CB680B /* Event */,
 				F743008A2547759C00DCE050 /* Extensions */,
 				F7DCCC221F46362B00E4C616 /* ExternalDevice */,
@@ -2966,7 +2961,6 @@
 				F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */,
 				F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
-				F7E457601F619CAB0082F527 /* DisclaimerConsent.xib in Resources */,
 				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
@@ -3593,7 +3587,7 @@
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
 				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
-				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.m in Sources */,
+				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
 				F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */,

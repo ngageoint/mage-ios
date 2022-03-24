@@ -34,7 +34,6 @@
 #import "MageSessionManager.h"
 #import "AuthenticationCoordinator.h"
 #import "LoginViewController.h"
-#import "DisclaimerViewController.h"
 #import "ServerURLController.h"
 #import "SignUpViewController.h"
 #import "SignUpViewController_Server5.h"

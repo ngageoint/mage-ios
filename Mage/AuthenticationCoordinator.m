@@ -12,7 +12,6 @@
 #import "SignUpViewController_Server5.h"
 #import "IDPLoginView.h"
 #import "IDPCoordinator.h"
-#import "DisclaimerViewController.h"
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "FadeTransitionSegue.h"
@@ -376,7 +375,7 @@ BOOL signingIn = YES;
                 NSLog(@"Skip the disclaimer screen");
             } else {
                 NSLog(@"Segue to the disclaimer screen");
-                DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"DisclaimerConsent" bundle:nil];
+                DisclaimerViewController *viewController = [[DisclaimerViewController alloc] init];
                 viewController.delegate = self;
                 [viewController applyThemeWithContainerScheme:self.scheme];
                 [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];

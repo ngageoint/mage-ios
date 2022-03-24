@@ -19,7 +19,6 @@
 #import "AuthenticationCoordinator.h"
 #import "EventInformationCoordinator.h"
 #import "AttributionsViewController.h"
-#import "DisclaimerViewController.h"
 #import "LocationDisplayTableViewController.h"
 #import "TimeSettingsTableViewController.h"
 #import "DataSynchronizationSettingsTableViewController.h"
@@ -200,7 +199,7 @@
             break;
         }
         case kDisclaimer: {
-            DisclaimerViewController *viewController = [[DisclaimerViewController alloc] initWithNibName:@"Disclaimer" bundle:nil];
+            DisclaimerViewController *viewController = [[DisclaimerViewController alloc] init];
             [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;
