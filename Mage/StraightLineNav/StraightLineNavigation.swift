@@ -18,11 +18,11 @@ struct StraightLineNavigationNotification {
     var observation: Observation? = nil
 }
 
-@objc protocol StraightLineNavigationDelegate {
-    @objc func cancelStraightLineNavigation();
+protocol StraightLineNavigationDelegate {
+    func cancelStraightLineNavigation();
 }
 
-@objc class StraightLineNavigation: NSObject {
+class StraightLineNavigation: NSObject {
     var delegate: StraightLineNavigationDelegate?;
     weak var mapView: MKMapView?;
     weak var mapStack: UIStackView?;
@@ -44,7 +44,7 @@ struct StraightLineNavigationNotification {
         }
     }
     
-    @objc public init(mapView: MKMapView, locationManager: CLLocationManager?, mapStack: UIStackView) {
+    init(mapView: MKMapView, locationManager: CLLocationManager?, mapStack: UIStackView) {
         self.mapView = mapView;
         self.mapStack = mapStack;
     }
@@ -54,7 +54,7 @@ struct StraightLineNavigationNotification {
         navView = nil
     }
     
-    @objc func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, imageURL: URL?, scheme: MDCContainerScheming? = nil) {
+    func startNavigation(manager: CLLocationManager, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, image: UIImage?, imageURL: URL?, scheme: MDCContainerScheming? = nil) {
         navigationModeEnabled = true;
         headingModeEnabled = true;
         
@@ -65,13 +65,13 @@ struct StraightLineNavigationNotification {
         mapStack?.addArrangedSubview(navView!);
     }
     
-    @objc func startHeading(manager: CLLocationManager) {
+    func startHeading(manager: CLLocationManager) {
         headingModeEnabled = true;
         updateHeadingLine(manager: manager);
     }
     
     @discardableResult
-    @objc func stopHeading() -> Bool {
+    func stopHeading() -> Bool {
         if (!navigationModeEnabled && headingModeEnabled) {
             headingModeEnabled = false;
             if let headingPolyline = headingPolyline {
@@ -82,7 +82,7 @@ struct StraightLineNavigationNotification {
         return false;
     }
     
-    @objc func stopNavigation() {
+    func stopNavigation() {
         if let navView = navView {
             navView.removeFromSuperview()
         }
@@ -125,7 +125,7 @@ struct StraightLineNavigationNotification {
         return CLLocationCoordinate2D(latitude: lat2 * 180 / .pi, longitude: lon2 * 180 / .pi)
     }
     
-    @objc func updateHeadingLine(manager: CLLocationManager) {
+    func updateHeadingLine(manager: CLLocationManager) {
         if (self.headingModeEnabled) {
             guard let location = manager.location else {
                 return;

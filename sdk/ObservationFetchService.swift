@@ -6,10 +6,10 @@
 
 import Foundation
 
-@objc public class ObservationFetchService: NSObject {
+public class ObservationFetchService: NSObject {
     
-    @objc public static let singleton = ObservationFetchService()
-    @objc public var started = false
+    public static let singleton = ObservationFetchService()
+    public var started = false
     
     var interval: TimeInterval = Double(UserDefaults.standard.observationFetchFrequency)
     var observationFetchTimer: Timer?
@@ -40,13 +40,13 @@ import Foundation
         }
     }
     
-    @objc public func start(initial: Bool = false) {
+    public func start(initial: Bool = false) {
         stop()
         pullObservations(initial: initial)
         started = true
     }
     
-    @objc public func stop() {
+    public func stop() {
         NSLog("stop fetching observations")
         DispatchQueue.main.async { [weak self] in
             if let timer = self?.observationFetchTimer, timer.isValid {

@@ -11,7 +11,7 @@ import PureLayout
 import UIKit
 import Kingfisher
 
-@objc class StraightLineNavigationView: UIView {
+class StraightLineNavigationView: UIView {
     var didSetupConstraints = false;
 
     var delegate: StraightLineNavigationDelegate?;
@@ -157,7 +157,7 @@ import Kingfisher
         compassView?.applyTheme(withScheme: scheme);
     }
     
-    @objc public convenience init(locationManager: CLLocationManager?, destinationMarker: UIImage?, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, scheme: MDCContainerScheming? = nil, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
+    convenience init(locationManager: CLLocationManager?, destinationMarker: UIImage?, destinationCoordinate: CLLocationCoordinate2D, delegate: StraightLineNavigationDelegate?, scheme: MDCContainerScheming? = nil, targetColor: UIColor = .systemGreen, bearingColor: UIColor = .systemRed) {
         self.init(frame: .zero);
         self.locationManager = locationManager;
         self.destinationCoordinate = destinationCoordinate;
@@ -221,7 +221,7 @@ import Kingfisher
         super.updateConstraints();
     }
     
-    public func populate(relativeBearingColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed, destinationCoordinate: CLLocationCoordinate2D? = nil) {
+    func populate(relativeBearingColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed, destinationCoordinate: CLLocationCoordinate2D? = nil) {
         if let destinationCoordinate = destinationCoordinate {
             self.destinationCoordinate = destinationCoordinate
         }

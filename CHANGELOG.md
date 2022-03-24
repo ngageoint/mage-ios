@@ -3,9 +3,10 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 3.1.0 (future release)
+## 4.0.0 (future release)
 
 ##### Release Notes
+File attachments are here.  If the attachment field allows files, you can now view and add from the Files app.
 Degree minute second support!  Always wanted to use coordinates in the degree minute second format but couldn't?  Have we got the update for you!
 You can now choose to display and enter coordinates in Latitude Longitude, MGRS, or Degree Minute Seconds.
 
@@ -13,9 +14,14 @@ You can now choose to display and enter coordinates in Latitude Longitude, MGRS,
 * You can now enter and display all coordinates in the app in Degree Minute Second format
 * General stability and test improvements
 * Forms are now their own Core Data object to improve memory usage and speed
+* significant improvements to the map system within MAGE to improve speed and reliability
+* attachment fields with file support
+* GeoPackage related media support
 
 ##### Bug Fixes
 * A few lingering dark mode color bugs were tracked down
+* base map setting for online layers is used when adding to the map
+* feed items are now sorted properly
 
 ## 3.0.7
 

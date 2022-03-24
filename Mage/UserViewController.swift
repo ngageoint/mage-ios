@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc class UserViewController : UITableViewController {
+class UserViewController : UITableViewController {
     let user : User
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
@@ -29,7 +29,7 @@ import Foundation
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(user:User, scheme: MDCContainerScheming?) {
+    init(user:User, scheme: MDCContainerScheming?) {
         self.user = user
         self.scheme = scheme;
         super.init(style: .grouped)

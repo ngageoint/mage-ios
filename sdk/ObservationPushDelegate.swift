@@ -8,6 +8,6 @@
 
 import Foundation
 
-@objc public protocol ObservationPushDelegate where Self: NSObject {
-    @objc func didPush(observation: Observation, success: Bool, error: Error?);
+protocol ObservationPushDelegate where Self: NSObject {
+    func didPush(observation: Observation, success: Bool, error: Error?);
 }

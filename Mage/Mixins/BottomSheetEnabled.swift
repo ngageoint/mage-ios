@@ -141,10 +141,6 @@ class BottomSheetMixin: NSObject, MapMixin {
     }
 }
 
-extension BottomSheetMixin : BottomSheetDelegate {
-    
-}
-
 extension BottomSheetMixin : MDCBottomSheetControllerDelegate {
     func bottomSheetControllerDidDismissBottomSheet(_ controller: MDCBottomSheetController) {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)

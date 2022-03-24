@@ -6,10 +6,10 @@
 
 import Foundation
 
-@objc public class LocationFetchService: NSObject {
+public class LocationFetchService: NSObject {
     
-    @objc public static let singleton = LocationFetchService()
-    @objc public var started = false
+    public static let singleton = LocationFetchService()
+    public var started = false
     
     var interval: TimeInterval = Double(UserDefaults.standard.userFetchFrequency)
     var locationFetchTimer: Timer?
@@ -40,13 +40,13 @@ import Foundation
         }
     }
     
-    @objc public func start() {
+    public func start() {
         stop()
         pullLocations()
         started = true
     }
     
-    @objc public func stop() {
+    public func stop() {
         NSLog("Stopping the location fetch timer")
         DispatchQueue.main.async { [weak self] in
             if let timer = self?.locationFetchTimer, timer.isValid {

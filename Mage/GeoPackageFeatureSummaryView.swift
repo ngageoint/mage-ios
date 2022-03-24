@@ -29,7 +29,7 @@ class GeoPackageFeatureSummaryView : CommonSummaryView<GeoPackageFeatureItem, Fe
         isUserInteractionEnabled = false;
     }
     
-    @objc public override func populate(item: GeoPackageFeatureItem, actionsDelegate: FeatureActionsDelegate? = nil) {
+    override func populate(item: GeoPackageFeatureItem, actionsDelegate: FeatureActionsDelegate? = nil) {
         let image = UIImage(named: "observations");
         if let icon = item.icon {
             itemImage.image = icon;

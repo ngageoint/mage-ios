@@ -9,23 +9,19 @@
 import UIKit
 import MapKit
 
-@objc protocol BottomSheetDelegate {
-    @objc optional func bottomSheetItemShowing(_ item: BottomSheetItem);
-}
-
-@objc class BottomSheetItem: NSObject {
-    @objc public var item: Any
-    @objc public var annotationView: MKAnnotationView?
-    @objc public var actionDelegate: Any?
+class BottomSheetItem: NSObject {
+    var item: Any
+    var annotationView: MKAnnotationView?
+    var actionDelegate: Any?
     
-    @objc public init(item: Any, actionDelegate: Any? = nil, annotationView: MKAnnotationView? = nil) {
+    init(item: Any, actionDelegate: Any? = nil, annotationView: MKAnnotationView? = nil) {
         self.item = item;
         self.actionDelegate = actionDelegate;
         self.annotationView = annotationView;
     }
 }
 
-@objc class MageBottomSheetViewController: UIViewController {
+class MageBottomSheetViewController: UIViewController {
     
     private var didSetUpConstraints = false;
     private var items: [BottomSheetItem] = [];
@@ -144,7 +140,7 @@ import MapKit
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(items: [BottomSheetItem], mapView: MKMapView?, scheme: MDCContainerScheming?) {
+    convenience init(items: [BottomSheetItem], mapView: MKMapView?, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.items = items;

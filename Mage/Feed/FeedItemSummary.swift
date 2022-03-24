@@ -36,7 +36,7 @@ class FeedItemSummary : CommonSummaryView<FeedItem, FeedItemActionsDelegate> {
         layoutView();
     }
     
-    @objc public override func populate(item: FeedItem, actionsDelegate: FeedItemActionsDelegate? = nil) {
+    override func populate(item: FeedItem, actionsDelegate: FeedItemActionsDelegate? = nil) {
         let processor = DownsamplingImageProcessor(size: CGSize(width: 40, height: 40))
         itemImage.tintColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0);
         let image = UIImage(named: "observations");

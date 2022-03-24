@@ -10,9 +10,9 @@ import Foundation
 import PureLayout
 import Kingfisher
 
-@objc class FeatureItem: NSObject {
+class FeatureItem: NSObject {
     
-    @objc public init(annotation: StaticPointAnnotation) {
+    init(annotation: StaticPointAnnotation) {
         self.featureDetail = StaticLayer.featureDescription(feature: annotation.feature)
         self.coordinate = annotation.coordinate
         self.featureTitle = StaticLayer.featureName(feature: annotation.feature)
@@ -27,7 +27,7 @@ import Kingfisher
         }
     }
     
-    @objc public init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, layerName: String? = nil, iconURL: URL? = nil, images: [UIImage]? = nil) {
+    init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, layerName: String? = nil, iconURL: URL? = nil, images: [UIImage]? = nil) {
         self.featureId = featureId
         self.featureDetail = featureDetail
         self.coordinate = coordinate
@@ -37,14 +37,14 @@ import Kingfisher
         self.layerName = layerName;
     }
     
-    @objc public var featureId: Int = 0;
-    @objc public var featureDetail: String?;
-    @objc public var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid;
-    @objc public var featureTitle: String?;
-    @objc public var iconURL: URL?;
-    @objc public var images: [UIImage]?;
-    @objc public var layerName: String?
-    @objc public var featureDate: Date?
+    var featureId: Int = 0;
+    var featureDetail: String?;
+    var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid;
+    var featureTitle: String?;
+    var iconURL: URL?;
+    var images: [UIImage]?;
+    var layerName: String?
+    var featureDate: Date?
     
     static func getDocumentsDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
@@ -72,7 +72,7 @@ class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate
         isUserInteractionEnabled = false;
     }
     
-    @objc public override func populate(item: FeatureItem, actionsDelegate: FeatureActionsDelegate? = nil) {
+    override func populate(item: FeatureItem, actionsDelegate: FeatureActionsDelegate? = nil) {
         let processor = DownsamplingImageProcessor(size: CGSize(width: 40, height: 40))
         itemImage.tintColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0);
         let image = UIImage(named: "observations");

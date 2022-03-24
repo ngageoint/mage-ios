@@ -12,7 +12,7 @@ import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
 import MaterialComponents.MDCContainerScheme;
 
-@objc class ObservationViewCardCollectionViewController: UIViewController {
+class ObservationViewCardCollectionViewController: UIViewController {
     
     var didSetupConstraints = false;
     
@@ -71,7 +71,7 @@ import MaterialComponents.MDCContainerScheme;
         return syncStatusView;
     }()
     
-    @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
+    func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         self.scheme = containerScheme;
         guard let containerScheme = containerScheme else {
             return;
@@ -115,7 +115,7 @@ import MaterialComponents.MDCContainerScheme;
         super.init(nibName: nil, bundle: nil);
     }
     
-    @objc convenience public init(observation: Observation, scheme: MDCContainerScheming?) {
+    convenience public init(observation: Observation, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.scheme = scheme;
