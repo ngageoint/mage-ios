@@ -73,14 +73,14 @@ class GeometryEditViewControllerTests: KIFSpec {
             }
             
             it("geometry edit coordinator launch") {
-                let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
+//                let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-                let mockMapDelegate = MockMapViewDelegate()
+                let mockMapDelegate = MockMKMapViewDelegate()
                 
-                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expectation.fulfill()
-                }
+//                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+//                    expectation.fulfill()
+//                }
                 
                 let mockGeometryEditDelegate = MockGeometryEditDelegate();
                 
@@ -88,21 +88,23 @@ class GeometryEditViewControllerTests: KIFSpec {
                 coordinator.setMapEventDelegte(mockMapDelegate);
                 coordinator.start();
                 
-                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
-                XCTAssertEqual(result, .completed)
+                expect(mockMapDelegate.finishedRendering).toEventually(beTrue())
+                
+//                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
+//                XCTAssertEqual(result, .completed)
                 
 //                expect(window.rootViewController?.view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("latitude longitude tab") {
-                let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
+//                let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-                let mockMapDelegate = MockMapViewDelegate()
+                let mockMapDelegate = MockMKMapViewDelegate()
                 
-                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expectation.fulfill()
-                }
+//                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+//                    expectation.fulfill()
+//                }
                 
                 let mockGeometryEditCoordinator = MockGeometryEditCoordinator();
                 mockGeometryEditCoordinator._fieldName = field[FieldKey.name.key] as? String;
@@ -113,21 +115,23 @@ class GeometryEditViewControllerTests: KIFSpec {
                 
                 navController.pushViewController(geometryEditViewController!, animated: false);
 
-                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
-                XCTAssertEqual(result, .completed)
+                expect(mockMapDelegate.finishedRendering).toEventually(beTrue())
+
+//                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
+//                XCTAssertEqual(result, .completed)
                 
 //                expect(window.rootViewController?.view).to(haveValidSnapshot());
             }
             
             it("switch to mgrs tab") {
-                let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
+//                let expectation: XCTestExpectation = self.expectation(description: "Wait for map rendering")
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-                let mockMapDelegate = MockMapViewDelegate()
+                let mockMapDelegate = MockMKMapViewDelegate()
                 
-                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
-                    expectation.fulfill()
-                }
+//                mockMapDelegate.mapDidFinishRenderingClosure = { mapView, fullyRendered in
+//                    expectation.fulfill()
+//                }
                 
                 let mockGeometryEditCoordinator = MockGeometryEditCoordinator();
                 mockGeometryEditCoordinator._fieldName = field[FieldKey.name.key] as? String;
@@ -138,8 +142,10 @@ class GeometryEditViewControllerTests: KIFSpec {
                 
                 navController.pushViewController(geometryEditViewController!, animated: false);
 
-                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
-                XCTAssertEqual(result, .completed)
+//                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
+//                XCTAssertEqual(result, .completed)
+                
+                expect(mockMapDelegate.finishedRendering).toEventually(beTrue())
                 
                 tester().tapView(withAccessibilityLabel: "MGRS");
                 tester().waitForTappableView(withAccessibilityLabel: "MGRS Value")

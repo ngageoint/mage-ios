@@ -18,11 +18,11 @@ class MockFeedItemDelegate: NSObject, FeedItemDelegate {
     var lastFeedItemAdded: FeedItem?;
     var lastFeedItemRemoved: FeedItem?;
     
-    func add(_ feedItem: FeedItem!) {
+    func addFeedItem(_ feedItem: FeedItem) {
         lastFeedItemAdded = feedItem;
     }
     
-    func remove(_ feedItem: FeedItem!) {
+    func removeFeedItem(_ feedItem: FeedItem) {
         lastFeedItemRemoved = feedItem;
     }
 }

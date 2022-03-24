@@ -9,6 +9,10 @@
 import Foundation
 import MapKit
 
+protocol FeedItemDelegate {
+    func addFeedItem(_ feedItem: FeedItem)
+    func removeFeedItem(_ feedItem: FeedItem)
+}
 protocol FeedsMap {
     var mapView: MKMapView? { get set }
     var feedsMapMixin: FeedsMapMixin? { get set }
@@ -164,13 +168,13 @@ class FeedsMapMixin: NSObject, MapMixin {
 }
     
 extension FeedsMapMixin : FeedItemDelegate {
-    func add(_ feedItem: FeedItem!) {
+    func addFeedItem(_ feedItem: FeedItem) {
         if (feedItem.isMappable) {
             mapView?.addAnnotation(feedItem);
         }
     }
     
-    func remove(_ feedItem: FeedItem!) {
+    func removeFeedItem(_ feedItem: FeedItem) {
         if (feedItem.isMappable) {
             mapView?.removeAnnotation(feedItem);
         }

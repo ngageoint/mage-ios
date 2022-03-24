@@ -8,7 +8,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import <UserNotifications/UserNotifications.h>
 #import "UIImage+Thumbnail.h"
-#import "MageInitialViewController.h"
 #import "LoginViewController.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import "MageSessionManager.h"

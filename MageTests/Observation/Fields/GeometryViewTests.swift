@@ -74,12 +74,12 @@ class GeometryViewTests: KIFSpec {
             
             it("edit mode reference image") {                
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-                let mockMapDelegate = MockMapViewDelegate()
+//                let mockMapDelegate = MockMapViewDelegate()
                 
-                let plainDelegate: PlainMapViewDelegate = PlainMapViewDelegate();
-                plainDelegate.mockMapViewDelegate = mockMapDelegate;
+//                let plainDelegate: PlainMapViewDelegate = PlainMapViewDelegate();
+//                plainDelegate.mockMapViewDelegate = mockMapDelegate;
                 
-                geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: mockMapDelegate);//, mkmapDelegate: plainDelegate);
+                geometryFieldView = GeometryView(field: field, value: point, accuracy: 100.487235, provider: "gps", mapEventDelegate: nil);//, mkmapDelegate: plainDelegate);
                 geometryFieldView!.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(geometryFieldView!)
@@ -91,9 +91,9 @@ class GeometryViewTests: KIFSpec {
             }
             
             it("no initial value") {
-                let mockMapDelegate: MockMapViewDelegate = MockMapViewDelegate()
+//                let mockMapDelegate: MockMapViewDelegate = MockMapViewDelegate()
 
-                geometryFieldView = GeometryView(field: field, mapEventDelegate: mockMapDelegate);
+                geometryFieldView = GeometryView(field: field, mapEventDelegate: nil);
                 geometryFieldView?.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(geometryFieldView!)

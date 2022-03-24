@@ -9,6 +9,17 @@
 import Foundation
 import Kingfisher
 
+protocol FeedItemSelectionDelegate {
+    func feedItemSelected(_ feedItem: FeedItem)
+}
+//@protocol FeedItemSelectionDelegate <NSObject>
+//
+//@required
+//
+//- (void) feedItemSelected: (FeedItem *) feedItem;
+//
+//@end
+
 @objc class FeedItemsViewController : UITableViewController {
     
     var scheme: MDCContainerScheming?;
@@ -39,7 +50,7 @@ import Kingfisher
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc public init(feed:Feed, selectionDelegate: FeedItemSelectionDelegate? = nil, scheme: MDCContainerScheming?) {
+    public init(feed:Feed, selectionDelegate: FeedItemSelectionDelegate? = nil, scheme: MDCContainerScheming?) {
         self.feed = feed
         self.scheme = scheme;
         self.selectionDelegate = selectionDelegate;

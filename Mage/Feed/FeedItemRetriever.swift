@@ -57,7 +57,7 @@ extension UIImage {
         }
     }
     
-    @objc public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+    public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
         if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
         
@@ -69,14 +69,14 @@ extension UIImage {
         return feedRetrievers;
     }
     
-    @objc public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+    public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
         if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag) {
             return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
         }
         return nil;
     }
     
-    @objc public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+    public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
         if let feed: Feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId)) {
             if (feed.itemsHaveSpatialDimension) {
                 return FeedItemRetriever(feed: feed, delegate: delegate);
@@ -85,7 +85,7 @@ extension UIImage {
         return nil;
     }
     
-    @objc public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+    public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
         if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
             
@@ -139,14 +139,17 @@ extension UIImage {
 
 extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let feedItem = anObject as? FeedItem else {
+            return
+        }
         switch type {
         case .insert:
-            delegate.add(anObject as? FeedItem);
+            delegate.addFeedItem(feedItem)
         case .delete:
-            delegate.remove(anObject as? FeedItem)
+            delegate.removeFeedItem(feedItem)
         case .update:
-            delegate.remove(anObject as? FeedItem)
-            delegate.add(anObject as? FeedItem);
+            delegate.removeFeedItem(feedItem)
+            delegate.addFeedItem(feedItem)
         case .move:
             print("...")
         @unknown default:
