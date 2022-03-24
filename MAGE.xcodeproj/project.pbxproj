@@ -1401,31 +1401,31 @@
 		043FF11D1C22F571000CA07F /* Cache */ = {
 			isa = PBXGroup;
 			children = (
-				043FF11E1C22F643000CA07F /* CacheOverlays.h */,
-				043FF11F1C22F643000CA07F /* CacheOverlays.m */,
-				043FF1211C22F6E4000CA07F /* CacheOverlay.h */,
-				043FF1221C22F6E4000CA07F /* CacheOverlay.m */,
-				043FF1241C22F875000CA07F /* CacheOverlayTypes.h */,
-				043FF1251C22F875000CA07F /* CacheOverlayTypes.m */,
-				043FF1271C2303B4000CA07F /* CacheOverlayListener.h */,
-				043FF1281C243D4D000CA07F /* XYZDirectoryCacheOverlay.h */,
-				043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */,
-				043FF12B1C2440A7000CA07F /* GeoPackageCacheOverlay.h */,
-				043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */,
-				043FF12E1C24481B000CA07F /* GeoPackageTableCacheOverlay.h */,
-				043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */,
-				043FF1311C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.h */,
-				043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */,
-				04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */,
-				04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */,
-				0450822A1C44167E00EDEB88 /* CacheOverlayTableCell.h */,
-				0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */,
 				0450822E1C44282F00EDEB88 /* CacheActiveSwitch.h */,
 				0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */,
-				045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */,
-				045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */,
+				043FF1211C22F6E4000CA07F /* CacheOverlay.h */,
+				043FF1221C22F6E4000CA07F /* CacheOverlay.m */,
+				043FF1271C2303B4000CA07F /* CacheOverlayListener.h */,
+				043FF11E1C22F643000CA07F /* CacheOverlays.h */,
+				043FF11F1C22F643000CA07F /* CacheOverlays.m */,
+				0450822A1C44167E00EDEB88 /* CacheOverlayTableCell.h */,
+				0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */,
+				043FF1241C22F875000CA07F /* CacheOverlayTypes.h */,
+				043FF1251C22F875000CA07F /* CacheOverlayTypes.m */,
 				046877F91C6D121400967470 /* CacheOverlayUpdate.h */,
 				046877FA1C6D121400967470 /* CacheOverlayUpdate.m */,
+				045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */,
+				045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */,
+				043FF12B1C2440A7000CA07F /* GeoPackageCacheOverlay.h */,
+				043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */,
+				043FF1311C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.h */,
+				043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */,
+				043FF12E1C24481B000CA07F /* GeoPackageTableCacheOverlay.h */,
+				043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */,
+				04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */,
+				04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */,
+				043FF1281C243D4D000CA07F /* XYZDirectoryCacheOverlay.h */,
+				043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */,
 			);
 			name = Cache;
 			path = Map/Cache;
@@ -1447,14 +1447,14 @@
 		2F0323A5246364C500D2866B /* Overlays */ = {
 			isa = PBXGroup;
 			children = (
-				2F0323A92463666700D2866B /* ObservationAccuracy.h */,
-				2F0323A72463666700D2866B /* ObservationAccuracy.m */,
-				2F0323A82463666700D2866B /* ObservationAccuracyRenderer.h */,
-				2F0323A62463666600D2866B /* ObservationAccuracyRenderer.m */,
 				2F0323AC246366B800D2866B /* LocationAccuracy.h */,
 				2F0323AD246366B800D2866B /* LocationAccuracy.m */,
 				2F0323AF246366CF00D2866B /* LocationAccuracyRenderer.h */,
 				2F0323B0246366CF00D2866B /* LocationAccuracyRenderer.m */,
+				2F0323A92463666700D2866B /* ObservationAccuracy.h */,
+				2F0323A72463666700D2866B /* ObservationAccuracy.m */,
+				2F0323A82463666700D2866B /* ObservationAccuracyRenderer.h */,
+				2F0323A62463666600D2866B /* ObservationAccuracyRenderer.m */,
 			);
 			name = Overlays;
 			sourceTree = "<group>";
@@ -1462,12 +1462,12 @@
 		2F2287D921F0EADE0058E527 /* Feature */ = {
 			isa = PBXGroup;
 			children = (
-				2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */,
-				2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */,
-				2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */,
-				2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */,
 				F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */,
 				F7D43BDF269E0FEB00561A8F /* FeatureActionsView.swift */,
+				2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */,
+				2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */,
+				2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */,
+				2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */,
 				F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */,
 				F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */,
 			);
@@ -1477,23 +1477,23 @@
 		2F389C931DCD24E200F05C95 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */,
 				F796E44B24193C9A005CA09C /* Attachment */,
-				F7ED5D0F1FFD7F88007BD768 /* Settings */,
-				F7A292291FC3938F00DE5463 /* Authentication */,
 				F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */,
-				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
-				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
-				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
-				F7E457611F61AC770082F527 /* EventChooserView.xib */,
-				F7E457631F61C14F0082F527 /* EventCell.xib */,
-				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
-				F75A10F12048B037002F9906 /* TableSectionHeader.xib */,
-				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
-				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
+				F7A292291FC3938F00DE5463 /* Authentication */,
 				F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */,
-				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
 				F7489B34278E29C300A9E314 /* CoordinateField.swift */,
+				F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */,
+				F7E457631F61C14F0082F527 /* EventCell.xib */,
+				F7E457611F61AC770082F527 /* EventChooserView.xib */,
+				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
+				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
+				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
+				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
+				F7ED5D0F1FFD7F88007BD768 /* Settings */,
+				F75A10F12048B037002F9906 /* TableSectionHeader.xib */,
+				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
+				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
+				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1501,15 +1501,15 @@
 		2F4E10BA220E388A001C9F12 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				2F4E10B7220E387D001C9F12 /* RightDetailSubtitleTableViewCell.h */,
-				2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */,
-				F74F025F25DF0280006BCF23 /* DisplaySettingsHeader.h */,
-				F74F025E25DF0280006BCF23 /* DisplaySettingsHeader.m */,
-				2F4E10A2220CCF39001C9F12 /* UITableViewCell+Setting.h */,
-				2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */,
 				F7331D0E2653EF2800D645AC /* ColorPickerCell.swift */,
 				F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */,
 				F7331D1226541C2300D645AC /* ColorPickerViewController.swift */,
+				F74F025F25DF0280006BCF23 /* DisplaySettingsHeader.h */,
+				F74F025E25DF0280006BCF23 /* DisplaySettingsHeader.m */,
+				2F4E10B7220E387D001C9F12 /* RightDetailSubtitleTableViewCell.h */,
+				2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */,
+				2F4E10A2220CCF39001C9F12 /* UITableViewCell+Setting.h */,
+				2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1517,16 +1517,16 @@
 		2FB41CE11DC79C5D005C18F9 /* Filter */ = {
 			isa = PBXGroup;
 			children = (
-				2FB41CE21DC79C8F005C18F9 /* ObservationFilterTableViewController.h */,
-				2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */,
-				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
-				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
-				2F99EC1F1E2982E700E0CBB6 /* MageFilter.h */,
-				2F99EC201E2982E700E0CBB6 /* MageFilter.m */,
 				F7F2EDAA1F21351B0083CD88 /* FilterTableViewController.h */,
 				F7F2EDAB1F21351B0083CD88 /* FilterTableViewController.m */,
 				F7F2EDAD1F2659510083CD88 /* LocationFilterTableViewController.h */,
 				F7F2EDAE1F2659510083CD88 /* LocationFilterTableViewController.m */,
+				2F99EC1F1E2982E700E0CBB6 /* MageFilter.h */,
+				2F99EC201E2982E700E0CBB6 /* MageFilter.m */,
+				2FB41CE21DC79C8F005C18F9 /* ObservationFilterTableViewController.h */,
+				2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */,
+				2F9F43A21CE4F68400D99AAF /* TimeFilter.h */,
+				2F9F43A31CE4F68400D99AAF /* TimeFilter.m */,
 			);
 			name = Filter;
 			sourceTree = "<group>";
@@ -1559,23 +1559,23 @@
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
+				2F52827024732B740023E974 /* IDPCoordinator.h */,
+				2F52827124732B740023E974 /* IDPCoordinator.m */,
+				F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */,
+				F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */,
 				2F38DF1522B942C800485DA4 /* LdapLoginView.h */,
 				2F38DF1622B942C800485DA4 /* LdapLoginView.m */,
 				F7C3DB9E207FECEB00154281 /* LocalLoginView.h */,
 				F7C3DB9F207FECEB00154281 /* LocalLoginView.m */,
 				2F320B6B1BEABF0200C7F66C /* LoginViewController.h */,
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
-				2F52827024732B740023E974 /* IDPCoordinator.h */,
-				2F52827124732B740023E974 /* IDPCoordinator.m */,
-				F7AA6AFA206EA9F7004F9437 /* IDPLoginView.h */,
-				F7AA6AFB206EA9F7004F9437 /* IDPLoginView.m */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
+				F7467B7B209A2F0B00EABA63 /* OrView.m */,
 				2F2F58F41BFA504B00B78993 /* ServerURLController.h */,
 				2F2F58F51BFA504B00B78993 /* ServerURLController.m */,
-				F7467B7B209A2F0B00EABA63 /* OrView.m */,
+				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
-				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -1602,10 +1602,10 @@
 		2FE24CDB19C79B850019688B /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */,
-				2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */,
 				2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */,
 				F7AC803526E7E366004B944D /* MageSplitViewController.swift */,
+				2FFDDB0419D33E530012C6A7 /* ObservationSelectionDelegate.h */,
+				2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -1615,6 +1615,7 @@
 			children = (
 				2FF4670A1A12798C00BA8357 /* CALayer+IB.h */,
 				2FF4670B1A12798C00BA8357 /* CALayer+IB.m */,
+				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
 				F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */,
 				F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */,
 				2FCDC35122C27B9C004189AD /* UIColor+Adjust.h */,
@@ -1629,7 +1630,6 @@
 				2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */,
 				F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */,
 				F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */,
-				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1645,16 +1645,16 @@
 		4C2A38ED19745C0D00E7470A /* People */ = {
 			isa = PBXGroup;
 			children = (
-				F795ED0624B8F15D0028FBFC /* UserViewController.swift */,
-				F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */,
-				F7E40A6726939B4100E50E26 /* UserSummaryView.swift */,
-				F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */,
-				F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */,
-				F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */,
-				F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */,
 				F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */,
+				F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */,
 				F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */,
+				F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */,
+				F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */,
+				F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */,
 				F7D43BF126A5FCC800561A8F /* UserDataStore.swift */,
+				F7E40A6726939B4100E50E26 /* UserSummaryView.swift */,
+				F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */,
+				F795ED0624B8F15D0028FBFC /* UserViewController.swift */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -1729,36 +1729,36 @@
 		4C6A9BBD19813C64004A6205 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				2F4E10BA220E388A001C9F12 /* Cells */,
-				F7ED5D121FFD8FCE007BD768 /* Map */,
+				F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */,
+				F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */,
 				2F81C4221C692C30006897E7 /* AttributionsViewController.h */,
 				2F81C4231C692C30006897E7 /* AttributionsViewController.m */,
 				2F81C4251C692F86006897E7 /* AttributionTableViewCell.h */,
 				2F81C4261C692F86006897E7 /* AttributionTableViewCell.m */,
+				2F4E10BA220E388A001C9F12 /* Cells */,
+				F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */,
+				F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */,
 				F77822492146C8B400850815 /* LocationDisplayTableViewController.h */,
 				F778224A2146C8B400850815 /* LocationDisplayTableViewController.m */,
 				F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */,
 				F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */,
+				F7ED5D121FFD8FCE007BD768 /* Map */,
+				F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */,
+				F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */,
+				F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */,
+				2F1069DB221C9005009F661A /* SettingsCoordinator.h */,
+				2F1069DC221C9005009F661A /* SettingsCoordinator.m */,
 				2F8A2C0A21FFA572007FE473 /* SettingsDataSource.h */,
 				2F8A2C0B21FFA572007FE473 /* SettingsDataSource.m */,
 				F783AD3318B812AC00BCED14 /* SettingsTableViewController.h */,
 				F783AD3418B812AC00BCED14 /* SettingsTableViewController.m */,
 				2F763C8E1DD10D2900780250 /* SettingsViewController.h */,
 				2F763C8F1DD10D2900780250 /* SettingsViewController.m */,
+				F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */,
 				F72088A71E73600100EBFF81 /* TimeSettingsTableViewController.h */,
 				F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */,
 				F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */,
 				F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */,
-				2F1069DB221C9005009F661A /* SettingsCoordinator.h */,
-				2F1069DC221C9005009F661A /* SettingsCoordinator.m */,
-				F7FD972223D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.h */,
-				F7FD972323D104C7003C8DF7 /* DataSynchronizationSettingsTableViewController.m */,
-				F7DBBAF323D8B7050052D86C /* ObservationServicesSettingsTableViewController.h */,
-				F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */,
-				F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */,
-				F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */,
-				F7331D0C2653137C00D645AC /* NavigationSettingsViewController.swift */,
-				F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1766,12 +1766,12 @@
 		8474FD9426FB8AFE0041891A /* Contact */ = {
 			isa = PBXGroup;
 			children = (
+				8474FD9B26FB8C410041891A /* ContactInfo.h */,
+				8474FD9C26FB8C410041891A /* ContactInfo.m */,
 				8474FD9526FB8B220041891A /* EmailBuilder.h */,
 				8474FD9626FB8B220041891A /* EmailBuilder.m */,
 				8474FD9826FB8B890041891A /* LinkGenerator.h */,
 				8474FD9926FB8B890041891A /* LinkGenerator.m */,
-				8474FD9B26FB8C410041891A /* ContactInfo.h */,
-				8474FD9C26FB8C410041891A /* ContactInfo.m */,
 			);
 			name = Contact;
 			sourceTree = "<group>";
@@ -1779,20 +1779,20 @@
 		F706B2152554365900C19BA7 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */,
-				F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */,
 				F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */,
-				F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */,
-				F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */,
-				F7C6410925817BC000C02335 /* MockLocationService.swift */,
-				F770854B2593FDD8008903BA /* MockObservationActionsDelegate.swift */,
-				F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */,
-				F7CDD71C260138E800F3294C /* MockMKMapViewDelegate.swift */,
 				F7081DAF2626348F004B89D4 /* MockCLLocationManager.swift */,
+				F791E22C2485486E00CCC6BA /* MockFieldDelegate.swift */,
 				F7521DE92672336800C52318 /* MockGeometryEditCoordinator.swift */,
 				F7BD2D7B267A468900A2B1D7 /* MockGeometryEditDelegate.swift */,
+				F7C6410925817BC000C02335 /* MockLocationService.swift */,
+				F7CDD71C260138E800F3294C /* MockMKMapViewDelegate.swift */,
+				F770854B2593FDD8008903BA /* MockObservationActionsDelegate.swift */,
+				F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */,
+				F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */,
+				F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */,
 				F730B94E268523B2004AD64A /* MockObservationFormReorderDelegate.swift */,
 				F7F15B1A2745BEA7008FF6C2 /* MockObservationPushDelegate.swift */,
+				F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1800,11 +1800,11 @@
 		F7098F2024928E6300313703 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */,
-				F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */,
-				F71446F2249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift */,
-				F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */,
 				F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */,
+				F7098F2124928E7700313703 /* FeedItemsViewControllerTests.swift */,
+				F71446F2249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift */,
+				F71446EE249A9CAC005A5EC1 /* FeedServiceTests.swift */,
+				F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -1812,31 +1812,31 @@
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
-				F770852E25915D61008903BA /* Fields */,
 				F796E4472417E146005CA09C /* Attachment */,
-				F75DD30D1A97AABD0007FA3F /* View */,
-				F7481F0219A663B100E9C56D /* Edit */,
 				F7E0380B1992948A007CCF6C /* AttachmentCell.swift */,
 				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
 				F78B0A961A1CEA6900D3AC74 /* AttachmentCollectionDataStore.m */,
 				F78B0A9E1A1E6AA300D3AC74 /* AttachmentSelectionDelegate.h */,
+				F7481F0219A663B100E9C56D /* Edit */,
+				F770852E25915D61008903BA /* Fields */,
 				F7A8C1C71E953FAA005E3CCA /* Observation+Section.h */,
 				F7A8C1C81E953FAA005E3CCA /* Observation+Section.m */,
+				F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */,
+				F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */,
+				F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */,
+				F7C812E825C1B37200D4332B /* ObservationDataStore.swift */,
 				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
 				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
+				F7F4754425BA357E006634F7 /* ObservationListCardCell.swift */,
 				F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */,
 				F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */,
 				F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */,
 				F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */,
+				F7F4754825BA3C7D006634F7 /* ObservationSummaryView.swift */,
 				F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */,
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
-				F78391C225A4F4A000ED9C2D /* ObservationActionsDelegate.swift */,
-				F7F4754425BA357E006634F7 /* ObservationListCardCell.swift */,
-				F7F4754825BA3C7D006634F7 /* ObservationSummaryView.swift */,
 				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
-				F7C812E825C1B37200D4332B /* ObservationDataStore.swift */,
-				F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */,
-				F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */,
+				F75DD30D1A97AABD0007FA3F /* View */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1860,13 +1860,13 @@
 		F714D5ED1A5C831B00B096A7 /* AudioRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				F714D5F31A5C8CAA00B096A7 /* Recording.h */,
-				F714D5F41A5C8CAA00B096A7 /* Recording.m */,
-				F714D5EE1A5C832F00B096A7 /* MediaViewController.h */,
-				F714D5EF1A5C832F00B096A7 /* MediaViewController.m */,
-				F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */,
 				F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */,
 				F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */,
+				F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */,
+				F714D5EE1A5C832F00B096A7 /* MediaViewController.h */,
+				F714D5EF1A5C832F00B096A7 /* MediaViewController.m */,
+				F714D5F31A5C8CAA00B096A7 /* Recording.h */,
+				F714D5F41A5C8CAA00B096A7 /* Recording.m */,
 			);
 			name = AudioRecorder;
 			sourceTree = "<group>";
@@ -1917,12 +1917,12 @@
 		F72C16AF25239B9B00682052 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				F7ED5D2E20052248007BD768 /* AuthenticationTests.m */,
 				F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */,
-				F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */,
-				F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */,
+				F7ED5D2E20052248007BD768 /* AuthenticationTests.m */,
 				F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */,
 				F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */,
+				F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */,
+				F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -1956,6 +1956,7 @@
 				F72D428E2694B60300F9AC3B /* LocationService.m */,
 				F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */,
 				F72D42302694B60300F9AC3B /* Mage.swift */,
+				F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */,
 				F72D42D32694B60300F9AC3B /* MAGERoutes.h */,
 				F72D42892694B60300F9AC3B /* MAGERoutes.m */,
 				F72D42A42694B60300F9AC3B /* MageServer.swift */,
@@ -1988,6 +1989,7 @@
 				F72D42982694B60300F9AC3B /* NSString+Contains.m */,
 				F72D42822694B60300F9AC3B /* ObservationFetchService.swift */,
 				F72D42532694B60300F9AC3B /* ObservationImage.swift */,
+				F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */,
 				F72D427C2694B60300F9AC3B /* ObservationPushService.swift */,
 				F72D42342694B60300F9AC3B /* ObservationRoutes.h */,
 				F72D429D2694B60300F9AC3B /* ObservationRoutes.m */,
@@ -2000,8 +2002,6 @@
 				F72D42BC2694B60300F9AC3B /* StoredPassword.h */,
 				F72D42772694B60300F9AC3B /* StoredPassword.m */,
 				F72D429E2694B60300F9AC3B /* UserUtility.swift */,
-				F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */,
-				F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */,
 			);
 			path = sdk;
 			sourceTree = "<group>";
@@ -2034,13 +2034,13 @@
 		F73607DA26F90C41008CF824 /* BottomSheets */ = {
 			isa = PBXGroup;
 			children = (
-				F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */,
+				F73607E126FA1256008CF824 /* BottomSheetView.swift */,
 				F7D43BDB269E0DF900561A8F /* FeatureBottomSheetView.swift */,
 				F7D43BE1269F329D00561A8F /* FeedItemBottomSheetView.swift */,
-				F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */,
 				F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */,
+				F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */,
+				F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */,
 				F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */,
-				F73607E126FA1256008CF824 /* BottomSheetView.swift */,
 				F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */,
 			);
 			path = BottomSheets;
@@ -2049,9 +2049,9 @@
 		F73886CA258A6BF700EDA036 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */,
-				F770854325929C9A008903BA /* ObservationSyncStatusTests.swift */,
 				F77085472593F85F008903BA /* ObservationHeaderViewTests.swift */,
+				F770854325929C9A008903BA /* ObservationSyncStatusTests.swift */,
+				F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2059,12 +2059,12 @@
 		F738870D258A997500EDA036 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F738870E258A999100EDA036 /* ObservationHeaderView.swift */,
-				F7388714258AABE800EDA036 /* ObservationImportantView.swift */,
 				F7388720258BB75A00EDA036 /* ObservationActionsView.swift */,
 				F7708526258C1A02008903BA /* ObservationAttachmentCard.swift */,
-				F770853F25927E1C008903BA /* ObservationSyncStatus.swift */,
+				F738870E258A999100EDA036 /* ObservationHeaderView.swift */,
+				F7388714258AABE800EDA036 /* ObservationImportantView.swift */,
 				F7F4754C25BB2CF0006634F7 /* ObservationListActionsView.swift */,
+				F770853F25927E1C008903BA /* ObservationSyncStatus.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -2082,21 +2082,21 @@
 		F743008A2547759C00DCE050 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				F743008B254775AB00DCE050 /* SplitLayout.swift */,
-				F77C21A5254C6E7000D9257F /* HexColor.swift */,
-				F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */,
-				F7D9B825255DC65C00A76E2C /* MageImage.swift */,
-				F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */,
-				F73886C625894CEA00EDA036 /* KeyboardHelper.swift */,
-				F738871C258BA22500EDA036 /* UIButtonInsets.swift */,
-				F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */,
-				F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */,
-				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
-				F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */,
 				F70D1BF427299BC800B8015C /* ArrayExtensions.swift */,
+				F7081DB72629BEA6004B89D4 /* CLCoordinate2DExtensions.swift */,
+				F77C21A5254C6E7000D9257F /* HexColor.swift */,
+				F73886C625894CEA00EDA036 /* KeyboardHelper.swift */,
+				F7D9B825255DC65C00A76E2C /* MageImage.swift */,
 				F781609C273EE1A50055B5D2 /* ObjC.h */,
 				F781609D273EE1A50055B5D2 /* ObjC.m */,
+				F743008B254775AB00DCE050 /* SplitLayout.swift */,
 				F7489B4027A48B0D00A9E314 /* StringExtensions.swift */,
+				F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */,
+				F738871C258BA22500EDA036 /* UIButtonInsets.swift */,
+				F7D9B819255C5E9000A76E2C /* UILabelPadding.swift */,
+				F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */,
+				F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */,
+				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2104,16 +2104,16 @@
 		F7481F0219A663B100E9C56D /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				F730B94A2683D273004AD64A /* CardHeader.swift */,
 				F7813A842463337F003666ED /* Components */,
-				F7CFC09A201FD40C003250A3 /* Geometry */,
-				2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */,
-				2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */,
-				F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */,
-				F7813A8024621237003666ED /* ObservationFormView.swift */,
-				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
 				F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */,
 				F7F4753025B73C3E006634F7 /* FormsHeader.swift */,
-				F730B94A2683D273004AD64A /* CardHeader.swift */,
+				F7CFC09A201FD40C003250A3 /* Geometry */,
+				F7B57729245C97D400879C9C /* ObservationEditCardCollectionViewController.swift */,
+				F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */,
+				F7813A8024621237003666ED /* ObservationFormView.swift */,
+				2FFF8E531CFF7B06002FD563 /* SelectEditViewController.h */,
+				2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */,
 			);
 			name = Edit;
 			sourceTree = "<group>";
@@ -2147,10 +2147,10 @@
 		F75DD30B1A97A9B50007FA3F /* Segues */ = {
 			isa = PBXGroup;
 			children = (
-				F7E297131A8E7634000F62C6 /* PopAndGoSegue.h */,
-				F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */,
 				F717E5711F63053B00211D0D /* FadeTransitionSegue.h */,
 				F717E5721F63053B00211D0D /* FadeTransitionSegue.m */,
+				F7E297131A8E7634000F62C6 /* PopAndGoSegue.h */,
+				F7E297141A8E7634000F62C6 /* PopAndGoSegue.m */,
 			);
 			name = Segues;
 			sourceTree = "<group>";
@@ -2159,8 +2159,8 @@
 			isa = PBXGroup;
 			children = (
 				F738870D258A997500EDA036 /* Components */,
-				F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */,
 				F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */,
+				F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2168,29 +2168,34 @@
 		F7614DA820068FF300676366 /* responses */ = {
 			isa = PBXGroup;
 			children = (
-				F7F08E9B27E9282400640D89 /* tile.png */,
-				F7F08E8E27E0BE3100640D89 /* gpkgWithMedia.gpkg */,
 				F7CE22FF254368B000D710DE /* allTheThings.json */,
 				F70039452006CB0700E6E660 /* apiFail.json */,
 				F7614DA92006902000676366 /* apiSuccess.json */,
 				F7154A932605391D002C8617 /* apiSuccess6.json */,
 				F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */,
+				F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */,
 				F777B009252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json */,
 				F7D9B821255D6D9500A76E2C /* attachmentForm.json */,
+				F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */,
+				F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */,
 				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
 				F7CE2303254369BD00D710DE /* checkboxForm.json */,
+				F7F15B16274596B1008FF6C2 /* events.json */,
 				F71446F424A3FAF5005A5EC1 /* feedContent.json */,
 				F70B47B324B5F7AF00D0BFE5 /* feeds.json */,
 				F7C640FE257EB29100C02335 /* geometryField.json */,
 				F711241D25F69BF5008849B1 /* geometryObservations.json */,
+				F7F08E8E27E0BE3100640D89 /* gpkgWithMedia.gpkg */,
 				F71446F0249BB5BC005A5EC1 /* icon27.png */,
 				F795ED1724BF36DD0028FBFC /* locationsabc.json */,
 				F7003947200D3FFA00E6E660 /* loginSuccess.json */,
+				F7F15B1827459A1F008FF6C2 /* myself.json */,
 				F7103F01266A5D7D000832CD /* noResponse.html */,
 				F795ED1324BD061C0028FBFC /* observations.json */,
 				F7154AB6260BEAE3002C8617 /* observationsUpdate.json */,
 				F795ED1124BD04730028FBFC /* oneForm.json */,
 				F76BB9F625ED8195004CFB97 /* oneFormRestricted.json */,
+				F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */,
 				F7CDD7122601194600F3294C /* polygonObservation.json */,
 				F7059AB320446B1D00A6B7CC /* registrationSuccess.json */,
 				F76090FF23FDA5E5000233A6 /* signinSuccess.json */,
@@ -2198,11 +2203,12 @@
 				F7154A8D2604F157002C8617 /* signups.json */,
 				F777AFF9252B541A00B88BD4 /* signupSuccess.json */,
 				F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */,
+				F786492F273C5E71002D3DC2 /* staticFeatures.geojson */,
 				F7098F252492C36700313703 /* test_marker.png */,
 				F7F7532A2565862F00EF51FF /* testmovie.MOV */,
 				F755B55A25E41BFF008E8D41 /* testRecording.mp4 */,
 				F7BCAC262630B62E006BE2A9 /* testResponse.html */,
-				F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */,
+				F7F08E9B27E9282400640D89 /* tile.png */,
 				F777AFF52527D05200B88BD4 /* tokenSuccess.json */,
 				F777B00D252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json */,
 				F7CE22BF2540DF2D00D710DE /* twoForms.json */,
@@ -2210,14 +2216,8 @@
 				F711248925F7B8B0008849B1 /* twoFormsObservations.json */,
 				F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */,
 				F795ED1524BD0B9A0028FBFC /* userabc.json */,
-				F7CE22C52540DF7600D710DE /* zeroForms.json */,
-				F786492F273C5E71002D3DC2 /* staticFeatures.geojson */,
-				F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */,
-				F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */,
 				F7F15B142745865F008FF6C2 /* users.json */,
-				F7F15B16274596B1008FF6C2 /* events.json */,
-				F7F15B1827459A1F008FF6C2 /* myself.json */,
-				F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */,
+				F7CE22C52540DF7600D710DE /* zeroForms.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2226,7 +2226,6 @@
 			isa = PBXGroup;
 			children = (
 				F76A15BC1A93C33300F2BDF1 /* Constraints */,
-				2FB41CE11DC79C5D005C18F9 /* Filter */,
 				F76949141AA6436000CB680B /* EventChooserController.h */,
 				F76949151AA6436000CB680B /* EventChooserController.m */,
 				F7E457651F61E2380082F527 /* EventChooserCoordinator.h */,
@@ -2243,10 +2242,11 @@
 				F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */,
 				2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */,
 				2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */,
+				F76EB1DF247C14DA0089F3AC /* FieldKey.swift */,
+				2FB41CE11DC79C5D005C18F9 /* Filter */,
 				2F4E10A5220DDC46001C9F12 /* FormDefaults.h */,
 				2F4E10A6220DDC46001C9F12 /* FormDefaults.m */,
 				2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */,
-				F76EB1DF247C14DA0089F3AC /* FieldKey.swift */,
 				F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */,
 			);
 			name = Event;
@@ -2264,9 +2264,9 @@
 		F76FFC2E2624FF3200532330 /* StraightLineNav */ = {
 			isa = PBXGroup;
 			children = (
+				F7081DB32627696F004B89D4 /* CompassView.swift */,
 				F7154AD5260D18A8002C8617 /* StraightLineNavigation.swift */,
 				F76FFC2F2624FF4900532330 /* StraightLineNavigationView.swift */,
-				F7081DB32627696F004B89D4 /* CompassView.swift */,
 			);
 			path = StraightLineNav;
 			sourceTree = "<group>";
@@ -2274,16 +2274,16 @@
 		F770852E25915D61008903BA /* Fields */ = {
 			isa = PBXGroup;
 			children = (
-				F7813A8224632E9A003666ED /* TextFieldView.swift */,
-				F7813A8724647C62003666ED /* DateView.swift */,
-				F7813A892466037B003666ED /* GeometryView.swift */,
-				F71B7252246C412900E4CF33 /* BaseFieldView.swift */,
-				F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */,
-				F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */,
-				F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */,
 				F7CE23092544676800D710DE /* AttachmentFieldView.swift */,
+				F71B7252246C412900E4CF33 /* BaseFieldView.swift */,
+				F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */,
+				F7813A8724647C62003666ED /* DateView.swift */,
+				F7F9121F247EFA4100C068B6 /* DropdownFieldView.swift */,
+				F7813A892466037B003666ED /* GeometryView.swift */,
 				F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */,
+				F76EB1E1247D83EC0089F3AC /* NumberFieldView.swift */,
 				F78FDC8D265D7F3E0011C536 /* RadioFieldView.swift */,
+				F7813A8224632E9A003666ED /* TextFieldView.swift */,
 			);
 			name = Fields;
 			sourceTree = "<group>";
@@ -2291,12 +2291,12 @@
 		F77B7D7C24797B0400C51953 /* Form */ = {
 			isa = PBXGroup;
 			children = (
-				F77B7D7924797AD500C51953 /* FormBuilder.swift */,
 				F77B7D7D24797B9900C51953 /* allFieldTypesForm.json */,
 				F7F9122824819D5D00C068B6 /* emptyForm.json */,
+				F77B7D7924797AD500C51953 /* FormBuilder.swift */,
 				F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */,
-				F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */,
 				F70D19E02742C5F3006E12F8 /* FormTests.swift */,
+				F730B94C2685196E004AD64A /* ObservationFormReorderTests.swift */,
 			);
 			path = Form;
 			sourceTree = "<group>";
@@ -2305,8 +2305,8 @@
 			isa = PBXGroup;
 			children = (
 				F7148D3624002FD100F9F879 /* ImageCacheProvider.swift */,
-				F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */,
 				F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */,
+				F77ECB6D242E53C40030EE73 /* VideoImageProvider.swift */,
 			);
 			path = ImageUtilities;
 			sourceTree = "<group>";
@@ -2314,8 +2314,8 @@
 		F7813A842463337F003666ED /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F7FE8C8D258829BE00314285 /* EditAttachmentCardView.swift */,
 				F7813A8524647B10003666ED /* CommonFieldsView.swift */,
+				F7FE8C8D258829BE00314285 /* EditAttachmentCardView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -2349,13 +2349,13 @@
 		F796E4472417E146005CA09C /* Attachment */ = {
 			isa = PBXGroup;
 			children = (
-				F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */,
 				F796E44F24193E73005CA09C /* AskToDownloadViewController.swift */,
-				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
-				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
 				F7D9B829255EF6A800A76E2C /* AttachmentCreationCoordinator.swift */,
-				F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */,
 				F7F8B4B626CE88B500DACCC7 /* AttachmentProgressViewController.swift */,
+				F7F4755025BB3D77006634F7 /* AttachmentSlideshow.swift */,
+				F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */,
+				F796E4492417E1FC005CA09C /* AttachmentViewCoordinator.swift */,
+				F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */,
 			);
 			name = Attachment;
 			sourceTree = "<group>";
@@ -2374,9 +2374,9 @@
 				2FCDC35722C2888C004189AD /* AuthenticationButton.xib */,
 				F74A758A1FD5C34A00FF52A5 /* ChangePasswordView.xib */,
 				F7E4575F1F619CAB0082F527 /* DisclaimerConsent.xib */,
-				F7C3DB9C207FE93100154281 /* local-authView.xib */,
-				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
 				F7AA6AF8206EA810004F9437 /* idp-authView.xib */,
+				2F38DF1D22B957C300485DA4 /* ldap-authView.xib */,
+				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,
 				F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */,
@@ -2388,15 +2388,15 @@
 		F7A2B5E825E55F1600F1F27A /* Fields */ = {
 			isa = PBXGroup;
 			children = (
-				F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */,
-				F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */,
-				F71B724F246B53F500E4CF33 /* GeometryViewTests.swift */,
-				F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */,
-				F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */,
-				F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */,
 				F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */,
+				F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */,
+				F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */,
+				F7F91221247F046500C068B6 /* DropdownFieldViewTests.swift */,
+				F71B724F246B53F500E4CF33 /* GeometryViewTests.swift */,
 				F76BB96725E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift */,
+				F76EB1E3247D83FD0089F3AC /* NumberFieldViewTests.swift */,
 				F78FDC8F265E8D130011C536 /* RadioFieldViewTests.swift */,
+				F7BE036D246609A100D2F7C3 /* TextFieldViewTests.swift */,
 			);
 			path = Fields;
 			sourceTree = "<group>";
@@ -2414,6 +2414,10 @@
 				F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */,
 				F72D42812694B60300F9AC3B /* FeedItem.swift */,
 				F72D42C02694B60300F9AC3B /* FeedItem+CoreDataProperties.swift */,
+				F72D42AB2694B60300F9AC3B /* Form.swift */,
+				F7D4F58627597C25004EA263 /* Form+CoreDataProperties.swift */,
+				F752B5EF275FF80C00BFA6EC /* FormJson.swift */,
+				F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */,
 				F72D42D22694B60300F9AC3B /* GPSLocation.swift */,
 				F72D429F2694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift */,
 				F72D42A72694B60300F9AC3B /* ImageryLayer.swift */,
@@ -2438,10 +2442,6 @@
 				F72D422E2694B60300F9AC3B /* Team+CoreDataProperties.swift */,
 				F72D425E2694B60300F9AC3B /* User.swift */,
 				F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */,
-				F72D42AB2694B60300F9AC3B /* Form.swift */,
-				F7D4F58627597C25004EA263 /* Form+CoreDataProperties.swift */,
-				F752B5EF275FF80C00BFA6EC /* FormJson.swift */,
-				F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -2496,57 +2496,57 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
-				F7AA61AE27A9E73400D617B7 /* Media */,
+				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
+				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
+				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
+				2FD853701BDAAB2300602CEA /* Authentication */,
+				F73607DA26F90C41008CF824 /* BottomSheets */,
+				2FF467091A12794000BA8357 /* Categories */,
+				F723D60C253F6D9900C6BE34 /* Colors.xcassets */,
 				8474FD9426FB8AFE0041891A /* Contact */,
 				F7A5A336270CE20F00961CAA /* CoreData */,
-				F73607DA26F90C41008CF824 /* BottomSheets */,
-				F7B1C473267404A80005FCE4 /* ViewLoader */,
-				F7154ABF260CE136002C8617 /* Navigation */,
-				F743008A2547759C00DCE050 /* Extensions */,
-				F739682F2460B0290017D481 /* MaterialComponents */,
-				F7DB714B2486D79C00A7CD00 /* Feed */,
-				2FC8BB932602428300F73B0E /* Server5 */,
-				F77ECB6C242E53220030EE73 /* ImageUtilities */,
-				F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */,
-				F7DCCC221F46362B00E4C616 /* ExternalDevice */,
-				F714D5ED1A5C831B00B096A7 /* AudioRecorder */,
-				F7FC59281F3CEDEB0010351A /* Form */,
-				2FD853701BDAAB2300602CEA /* Authentication */,
+				4CF141B01992A5D900C4B70E /* DeviceUUID.h */,
+				4CF141B11992A5D900C4B70E /* DeviceUUID.m */,
+				F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */,
+				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */,
 				F76949131AA6434A00CB680B /* Event */,
-				2FF467091A12794000BA8357 /* Categories */,
+				F743008A2547759C00DCE050 /* Extensions */,
+				F7DCCC221F46362B00E4C616 /* ExternalDevice */,
+				F7DB714B2486D79C00A7CD00 /* Feed */,
 				F727516B19C888A3006C63CB /* Fetch */,
+				F7FC59281F3CEDEB0010351A /* Form */,
+				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
+				F77ECB6C242E53220030EE73 /* ImageUtilities */,
 				2FE24CDB19C79B850019688B /* iPad */,
-				4C6A9BBD19813C64004A6205 /* Settings */,
+				F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */,
+				F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */,
+				F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */,
+				04E0CB0D1C40161C00E34F9C /* MageConstants.h */,
+				04E0CB0E1C40161C00E34F9C /* MageConstants.m */,
+				F79116252491414B0043A529 /* MageInitializer.swift */,
+				2F9B48DC1ED3BCC1001D07AB /* MageOfflineObservationManager.h */,
+				2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */,
+				F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */,
+				F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */,
+				4C546FE9195A27D1000CF230 /* Map */,
+				F739682F2460B0290017D481 /* MaterialComponents */,
+				F7AA61AE27A9E73400D617B7 /* Media */,
+				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
+				2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */,
+				F7154ABF260CE136002C8617 /* Navigation */,
+				F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */,
 				F70E6EE719781585002D66F6 /* Observation */,
 				4C2A38ED19745C0D00E7470A /* People */,
 				F75DD30B1A97A9B50007FA3F /* Segues */,
-				4C546FE9195A27D1000CF230 /* Map */,
-				2F389C931DCD24E200F05C95 /* Views */,
+				2FC8BB932602428300F73B0E /* Server5 */,
+				4C6A9BBD19813C64004A6205 /* Settings */,
 				F7A94D7218AD9CB000CB9EE0 /* Supporting Files */,
-				F7A94D8018AD9CB000CB9EE0 /* Images.xcassets */,
-				F7A94DB118B55E6D00CB9EE0 /* Media.xcassets */,
-				F723D60C253F6D9900C6BE34 /* Colors.xcassets */,
-				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
-				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
-				F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */,
-				2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */,
-				4CF141B01992A5D900C4B70E /* DeviceUUID.h */,
-				4CF141B11992A5D900C4B70E /* DeviceUUID.m */,
-				2F14288F199AB9A400C64A98 /* UINextField.h */,
-				2F142890199AB9A400C64A98 /* UINextField.m */,
-				F7B3B3EA1B863A0E00EC0349 /* DisclaimerViewController.h */,
-				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.m */,
-				04E0CB0D1C40161C00E34F9C /* MageConstants.h */,
-				04E0CB0E1C40161C00E34F9C /* MageConstants.m */,
-				2F9B48DC1ED3BCC1001D07AB /* MageOfflineObservationManager.h */,
-				2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */,
-				F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */,
-				F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */,
 				F73CD0831F7E941E00B4124D /* TransitionViewController.h */,
 				F73CD0841F7E941E00B4124D /* TransitionViewController.m */,
-				F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */,
-				F72C175E2523B82500682052 /* MageUserDefaultKeys.swift */,
-				F79116252491414B0043A529 /* MageInitializer.swift */,
+				2F14288F199AB9A400C64A98 /* UINextField.h */,
+				2F142890199AB9A400C64A98 /* UINextField.m */,
+				F7B1C473267404A80005FCE4 /* ViewLoader */,
+				2F389C931DCD24E200F05C95 /* Views */,
 			);
 			path = Mage;
 			sourceTree = "<group>";
@@ -2609,8 +2609,8 @@
 		F7AA61AE27A9E73400D617B7 /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */,
 				F7AA61B727AC394800D617B7 /* DocumentViewer.swift */,
+				F7AA61B327AB237E00D617B7 /* FileViewerCoordinator.swift */,
 				F7AA61B927ADB19100D617B7 /* MediaPreviewController.swift */,
 			);
 			path = Media;
@@ -2619,9 +2619,9 @@
 		F7B1C473267404A80005FCE4 /* ViewLoader */ = {
 			isa = PBXGroup;
 			children = (
+				F7B1C477267405A50005FCE4 /* ViewLoader.swift */,
 				F7B1C474267404BC0005FCE4 /* ViewLoaderAppDelegate.h */,
 				F7B1C475267404BC0005FCE4 /* ViewLoaderAppDelegate.m */,
-				F7B1C477267405A50005FCE4 /* ViewLoader.swift */,
 			);
 			path = ViewLoader;
 			sourceTree = "<group>";
@@ -2629,17 +2629,17 @@
 		F7BCAC1F263093E7006BE2A9 /* SDK */ = {
 			isa = PBXGroup;
 			children = (
-				F71EFE4A2757F810001E6134 /* Networking */,
-				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
 				F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */,
 				F781609A273EB9C80055B5D2 /* GeometryDeserializerTests.swift */,
 				F7EEF487273EEB2C009B28F0 /* GeometrySerializerTests.swift */,
-				F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */,
-				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
-				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
-				F7DDF46E2748023A00689550 /* ObservationImageTests.swift */,
-				F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */,
 				F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */,
+				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
+				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
+				F71EFE4A2757F810001E6134 /* Networking */,
+				F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */,
+				F7DDF46E2748023A00689550 /* ObservationImageTests.swift */,
+				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
+				F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -2647,15 +2647,15 @@
 		F7BE036A2466093700D2F7C3 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
-				F7A2B5E825E55F1600F1F27A /* Fields */,
-				F73886CA258A6BF700EDA036 /* View */,
 				F7D9B82D2562EFE900A76E2C /* Attachment */,
 				F7BE036B2466095100D2F7C3 /* Edit */,
+				F7A2B5E825E55F1600F1F27A /* Fields */,
+				F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */,
 				F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */,
+				F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */,
 				F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */,
 				F7F118212602A1F600C7DE9A /* ObservationTests.swift */,
-				F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */,
-				F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */,
+				F73886CA258A6BF700EDA036 /* View */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -2664,10 +2664,10 @@
 			isa = PBXGroup;
 			children = (
 				F7BE036C2466095500D2F7C3 /* Components */,
-				F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */,
+				F7521DE72672317700C52318 /* GeometryEditViewControllerTests.swift */,
 				F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */,
 				F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */,
-				F7521DE72672317700C52318 /* GeometryEditViewControllerTests.swift */,
+				F7F9121C247EC00500C068B6 /* ObservationFormViewTests.swift */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -2718,12 +2718,12 @@
 		F7CFC09A201FD40C003250A3 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */,
+				F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */,
 				F7C5C8951F4B8F7E002C78D3 /* GeometryEditMapDelegate.h */,
 				F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */,
 				F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */,
 				F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */,
-				F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */,
-				F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -2747,16 +2747,16 @@
 		F7DB714B2486D79C00A7CD00 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				F7012B9B248E96E8002BBDE8 /* FeedService.swift */,
+				F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */,
+				F7D43BE3269F357200561A8F /* FeedItemActionsView.swift */,
+				F71446EC249928AD005A5EC1 /* FeedItemCard.swift */,
+				F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */,
+				F7098F2D24980DD000313703 /* FeedItemRetriever.swift */,
+				2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */,
 				F74020BA2492767900B5A8BA /* FeedItemsViewController.swift */,
 				F7098F27249401E500313703 /* FeedItemTableViewCell.swift */,
 				F7098F292497C75F00313703 /* FeedItemViewController.swift */,
-				F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */,
-				F7098F2D24980DD000313703 /* FeedItemRetriever.swift */,
-				F71446EC249928AD005A5EC1 /* FeedItemCard.swift */,
-				2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */,
-				F7D43BE3269F357200561A8F /* FeedItemActionsView.swift */,
-				F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */,
+				F7012B9B248E96E8002BBDE8 /* FeedService.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -2821,8 +2821,8 @@
 		F7FC59281F3CEDEB0010351A /* Form */ = {
 			isa = PBXGroup;
 			children = (
-				F7F4753425B764A8006634F7 /* ObservationFormReorder.swift */,
 				F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */,
+				F7F4753425B764A8006634F7 /* ObservationFormReorder.swift */,
 				F7F4753A25B76925006634F7 /* ObservationFormTableViewCell.swift */,
 			);
 			name = Form;
