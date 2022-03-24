@@ -144,13 +144,13 @@
             break;
         }
         case kLocationDisplay: {
-            LocationDisplayTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"LocationDisplay" owner:self options:nil][0];
+            LocationDisplayTableViewController *viewController = [[LocationDisplayTableViewController alloc] init];
             [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;
         }
         case kTimeDisplay: {
-            TimeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"TimeDisplay" owner:self options:nil][0];
+            TimeSettingsTableViewController *viewController = [[TimeSettingsTableViewController alloc] init];
             [viewController applyThemeWithContainerScheme:self.scheme];
             [self showSetting:viewController];
             break;

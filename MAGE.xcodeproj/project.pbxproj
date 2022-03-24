@@ -38,7 +38,6 @@
 		2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1069DC221C9005009F661A /* SettingsCoordinator.m */; };
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
-		2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */; };
 		2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */; };
 		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
 		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
@@ -47,13 +46,9 @@
 		2F38DF1E22B957C300485DA4 /* ldap-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F38DF1D22B957C300485DA4 /* ldap-authView.xib */; };
 		2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B20CD25FA69950063A940 /* UIColor+Hex.m */; };
 		2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E1099220CA195001C9F12 /* AttributionCell.xib */; };
-		2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */; };
 		2F4E10A4220CCF39001C9F12 /* UITableViewCell+Setting.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */; };
 		2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10A6220DDC46001C9F12 /* FormDefaults.m */; };
-		2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10A8220E0C4A001C9F12 /* Themes.xib */; };
-		2F4E10AD220E1493001C9F12 /* LocationDisplay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */; };
 		2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */; };
-		2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */; };
 		2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */; };
 		2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */; };
 		2F52827224732B740023E974 /* IDPCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F52827124732B740023E974 /* IDPCoordinator.m */; };
@@ -77,8 +72,6 @@
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
 		2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FB41CDE1DC79436005C18F9 /* Filter.storyboard */; };
 		2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */; };
-		2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */; };
-		2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */; };
 		2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */; };
 		2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FCB1AC81DDA439700A63C71 /* Users.storyboard */; };
 		2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */; };
@@ -659,8 +652,6 @@
 		2F142890199AB9A400C64A98 /* UINextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINextField.m; sourceTree = "<group>"; };
 		2F1542DF1CF76FC90022AABA /* ObservationFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFields.h; sourceTree = "<group>"; };
 		2F1542E01CF76FC90022AABA /* ObservationFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFields.m; sourceTree = "<group>"; };
-		2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailCoordinator.h; sourceTree = "<group>"; };
-		2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailCoordinator.m; sourceTree = "<group>"; };
 		2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemSummary.swift; sourceTree = "<group>"; };
 		2F2F58F41BFA504B00B78993 /* ServerURLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLController.h; sourceTree = "<group>"; };
 		2F2F58F51BFA504B00B78993 /* ServerURLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerURLController.m; sourceTree = "<group>"; };
@@ -674,15 +665,11 @@
 		2F3B20CC25FA69950063A940 /* UIColor+Hex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		2F3B20CD25FA69950063A940 /* UIColor+Hex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		2F4E1099220CA195001C9F12 /* AttributionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttributionCell.xib; sourceTree = "<group>"; };
-		2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Disclaimer.xib; sourceTree = "<group>"; };
 		2F4E10A2220CCF39001C9F12 /* UITableViewCell+Setting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Setting.h"; sourceTree = "<group>"; };
 		2F4E10A3220CCF39001C9F12 /* UITableViewCell+Setting.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Setting.m"; sourceTree = "<group>"; };
 		2F4E10A5220DDC46001C9F12 /* FormDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormDefaults.h; sourceTree = "<group>"; };
 		2F4E10A6220DDC46001C9F12 /* FormDefaults.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FormDefaults.m; sourceTree = "<group>"; };
-		2F4E10A8220E0C4A001C9F12 /* Themes.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Themes.xib; sourceTree = "<group>"; };
-		2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationDisplay.xib; sourceTree = "<group>"; };
 		2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DisplaySettingsHeader.xib; sourceTree = "<group>"; };
-		2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimeDisplay.xib; sourceTree = "<group>"; };
 		2F4E10B7220E387D001C9F12 /* RightDetailSubtitleTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightDetailSubtitleTableViewCell.h; sourceTree = "<group>"; };
 		2F4E10B8220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightDetailSubtitleTableViewCell.m; sourceTree = "<group>"; };
 		2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightDetailSubtitleCell.xib; sourceTree = "<group>"; };
@@ -725,9 +712,6 @@
 		2FB41CDF1DC79436005C18F9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Filter.storyboard; sourceTree = "<group>"; };
 		2FB41CE21DC79C8F005C18F9 /* ObservationFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFilterTableViewController.h; sourceTree = "<group>"; };
 		2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFilterTableViewController.m; sourceTree = "<group>"; };
-		2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeatureDetail.xib; sourceTree = "<group>"; };
-		2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeatureDetailViewController.h; sourceTree = "<group>"; };
-		2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeatureDetailViewController.m; sourceTree = "<group>"; };
 		2FC8BB8C2602421400F73B0E /* AuthenticationCoordinator_Server5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator_Server5.h; sourceTree = "<group>"; };
 		2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCoordinator_Server5.m; sourceTree = "<group>"; };
 		2FCB1AC81DDA439700A63C71 /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
@@ -1458,10 +1442,6 @@
 			children = (
 				F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */,
 				F7D43BDF269E0FEB00561A8F /* FeatureActionsView.swift */,
-				2F2287DA21F0EB1B0058E527 /* FeatureDetailCoordinator.h */,
-				2F2287DB21F0EB1B0058E527 /* FeatureDetailCoordinator.m */,
-				2FB5BB8021EFC5840014A059 /* FeatureDetailViewController.h */,
-				2FB5BB8121EFC5840014A059 /* FeatureDetailViewController.m */,
 				F7F8B4B426C5A03000DACCC7 /* FeatureSummaryView.swift */,
 				F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */,
 			);
@@ -1479,7 +1459,6 @@
 				F71123A925EE88F1008849B1 /* DropdownChoiceCell.xib */,
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				F7E457611F61AC770082F527 /* EventChooserView.xib */,
-				2FB5BB7E21EE802D0014A059 /* FeatureDetail.xib */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
 				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
 				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
@@ -2783,14 +2762,10 @@
 			isa = PBXGroup;
 			children = (
 				2F4E1099220CA195001C9F12 /* AttributionCell.xib */,
-				2F4E109B220CAC6A001C9F12 /* Disclaimer.xib */,
 				2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */,
 				2F8A2C182201305D007FE473 /* EventInformationView.xib */,
-				2F4E10AC220E1493001C9F12 /* LocationDisplay.xib */,
 				F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */,
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
-				2F4E10A8220E0C4A001C9F12 /* Themes.xib */,
-				2F4E10B3220E2D1F001C9F12 /* TimeDisplay.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -2925,7 +2900,6 @@
 			files = (
 				F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */,
 				F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */,
-				2F4E10AD220E1493001C9F12 /* LocationDisplay.xib in Resources */,
 				2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */,
 				2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */,
 				F74A758B1FD5C34A00FF52A5 /* ChangePasswordView.xib in Resources */,
@@ -2936,7 +2910,6 @@
 				2FCDC35822C2888C004189AD /* AuthenticationButton.xib in Resources */,
 				2F4E109A220CA195001C9F12 /* AttributionCell.xib in Resources */,
 				F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */,
-				2F4E10A9220E0C4A001C9F12 /* Themes.xib in Resources */,
 				F7ED5D171FFE9966007BD768 /* MapTypeCell.xib in Resources */,
 				F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */,
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
@@ -2945,14 +2918,12 @@
 				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
 				F71123AA25EE88F1008849B1 /* DropdownChoiceCell.xib in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
-				2FB5BB7F21EE802D0014A059 /* FeatureDetail.xib in Resources */,
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
 				F7E457641F61C14F0082F527 /* EventCell.xib in Resources */,
 				F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */,
 				F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */,
-				2F4E109C220CAC6A001C9F12 /* Disclaimer.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
 				F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */,
@@ -2961,7 +2932,6 @@
 				F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */,
 				F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
-				2F4E10B4220E2D1F001C9F12 /* TimeDisplay.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
 			);
@@ -3311,7 +3281,6 @@
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
 				F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */,
 				F7402C8A276D1A9B00531613 /* HasMapSettings.swift in Sources */,
-				2FB5BB8221EFC5840014A059 /* FeatureDetailViewController.m in Sources */,
 				8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */,
 				F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */,
 				F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */,
@@ -3361,7 +3330,6 @@
 				F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */,
 				F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.swift in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
-				2F2287DC21F0EB1B0058E527 /* FeatureDetailCoordinator.m in Sources */,
 				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
 				F72D42E72694B60300F9AC3B /* ObservationImage.swift in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,

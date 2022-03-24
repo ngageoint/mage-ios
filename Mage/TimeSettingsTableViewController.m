@@ -26,6 +26,11 @@ static NSString *TIME_DISPLAY_USER_DEFAULTS_KEY = @"gmtTimeZome";
 static NSInteger LOCAL_TIME_CELL_ROW = 0;
 static NSInteger GMT_TIME_CELL_ROW = 1;
 
+- (instancetype)init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    return self;
+}
+
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         self.scheme = containerScheme;

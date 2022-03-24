@@ -205,13 +205,13 @@
             break;
         }
         case kLocationDisplay: {
-            LocationDisplayTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"LocationDisplay" owner:self options:nil][0];
+            LocationDisplayTableViewController *viewController = [[LocationDisplayTableViewController alloc] init];
             [viewController applyThemeWithContainerScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
         }
         case kTimeDisplay: {
-            TimeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"TimeDisplay" owner:self options:nil][0];
+            TimeSettingsTableViewController *viewController = [[TimeSettingsTableViewController alloc] init];
             [viewController applyThemeWithContainerScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;
@@ -253,11 +253,10 @@
             [self onLogout];
             break;
         }
-            //        case kTheme: {
-            //            ThemeSettingsTableViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Themes" owner:self options:nil][0];
-            //            [self showDetailViewController:viewController sender:nil];
-            //            break;
-            //        }
+        case kTheme: {
+            ThemeTableViewController *viewController = [[ThemeTableViewController alloc] initWithScheme:self.scheme];
+            [self showDetailViewController:viewController sender:nil];
+        }
         case kDisclaimer: {
             DisclaimerViewController *viewController = [[DisclaimerViewController alloc] init];
             [viewController applyThemeWithContainerScheme:self.scheme];
