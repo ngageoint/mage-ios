@@ -281,13 +281,14 @@ public enum FeedKey : String {
     case summary
     case constantParams
     case variableParams
-    case updateFrequency
+    case updateFrequencySeconds
     case mapStyle
     case itemPropertiesSchema
     case itemPrimaryProperty
     case itemSecondaryProperty
     case itemTemporalProperty
     case itemsHaveIdentity
+    case icon
     
     var key : String {
         return self.rawValue
@@ -342,6 +343,17 @@ public enum LayerKey: String {
     case state
     case remoteId
     case eventId
+    case tables
+    case base
+    
+    var key : String {
+        return self.rawValue
+    }
+}
+
+public enum LayerOptionsKey: String {
+    case base
+    case transparent
     
     var key : String {
         return self.rawValue

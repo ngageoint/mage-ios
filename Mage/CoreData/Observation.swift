@@ -11,6 +11,7 @@ import CoreData
 import sf_ios
 import UIKit
 import MagicalRecord
+import geopackage_ios
 
 enum State: Int, CustomStringConvertible {
     case Archive, Active
@@ -25,7 +26,109 @@ enum State: Int, CustomStringConvertible {
     }
 }
 
-@objc public class Observation: NSManagedObject {
+@objc public class Observation: NSManagedObject, Navigable {
+    
+    var orderedAttachments: [Attachment]? {
+        get {
+            var observationForms: [[String: Any]] = []
+            if let properties = self.properties as? [String: Any] {
+                if (properties.keys.contains("forms")) {
+                    observationForms = properties["forms"] as! [[String: Any]];
+                }
+            }
+            
+            return attachments?.sorted(by: { first, second in
+                // return true if first comes before second, false otherwise
+                
+                if first.observationFormId == second.observationFormId {
+                    // if they are in the same form, sort on field
+                    if first.fieldName == second.fieldName {
+                        // if they are the same field return the order comparison unless they are both zero, then return the lat modified comparison
+                        let firstOrder = first.order?.intValue ?? 0
+                        let secondOrder = second.order?.intValue ?? 0
+                        return (firstOrder != secondOrder) ? (firstOrder < secondOrder) : (first.lastModified ?? Date()) < (second.lastModified ?? Date())
+                    } else {
+                        // return the first field
+                        let form = observationForms.first { form in
+                            return form[FormKey.id.key] as? String == first.observationFormId
+                        }
+                        
+                        let firstFieldIndex = (form?[FormKey.fields.key] as? [[String: Any]])?.firstIndex { form in
+                            return form[FieldKey.name.key] as? String == first.fieldName
+                        } ?? 0
+                        let secondFieldIndex = (form?[FormKey.fields.key] as? [[String: Any]])?.firstIndex { form in
+                            return form[FieldKey.name.key] as? String == second.fieldName
+                        } ?? 0
+                        return firstFieldIndex < secondFieldIndex
+                    }
+                } else {
+                    // different forms, sort on form order
+                    let firstFormIndex = observationForms.firstIndex { form in
+                        return form[FormKey.id.key] as? String == first.observationFormId
+                    } ?? 0
+                    let secondFormIndex = observationForms.firstIndex { form in
+                        return form[FormKey.id.key] as? String == second.observationFormId
+                    } ?? 0
+                    return firstFormIndex < secondFormIndex
+                }
+            })
+        }
+    }
+    
+    var coordinate: CLLocationCoordinate2D {
+        get {
+            return location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        }
+    }
+
+    public func viewRegion(mapView: MKMapView) -> MKCoordinateRegion {
+        if let geometry = self.geometry {
+            var latitudeMeters = 2500.0
+            var longitudeMeters = 2500.0
+            if geometry is SFPoint {
+                if let properties = properties, let accuracy = properties[ObservationKey.accuracy.key] as? Double {
+                    latitudeMeters = accuracy * 2.5
+                    longitudeMeters = accuracy * 2.5
+                }
+            } else {
+                let envelope = SFGeometryEnvelopeBuilder.buildEnvelope(with: geometry)
+                let boundingBox = GPKGBoundingBox(envelope: envelope)
+                if let size = boundingBox?.sizeInMeters() {
+                    latitudeMeters = size.height + (2 * (size.height * 0.1))
+                    longitudeMeters = size.width + (2 * (size.width * 0.1))
+                    
+                }
+            }
+            if let centroid = geometry.centroid() {
+                return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue), latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
+            }
+        }
+        
+        return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0, longitude: 0), latitudinalMeters: 50000, longitudinalMeters: 50000)
+    }
+    
+    static func fetchedResultsController(_ observation: Observation, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Observation>? {
+        let fetchRequest = Observation.fetchRequest()
+
+        if let remoteId = observation.remoteId {
+            fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        } else {
+            fetchRequest.predicate = NSPredicate(format: "self = %@", observation)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        }
+        
+        let observationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        observationFetchedResultsController.delegate = delegate
+        do {
+            try observationFetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("Unable to Perform Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
+        }
+        return observationFetchedResultsController
+    }
     
     @objc public static func operationToPullInitialObservations(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         return Observation.operationToPullObservations(initial: true, success: success, failure: failure);
@@ -390,8 +493,9 @@ enum State: Int, CustomStringConvertible {
         return nil;
     }
     
-    @objc public static func create(geometry: SFGeometry?, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> Observation {
-        var observationDate = Date();
+    @discardableResult
+    @objc public static func create(geometry: SFGeometry?, date: Date? = nil, accuracy: CLLocationAccuracy, provider: String?, delta: Double, context: NSManagedObjectContext) -> Observation {
+        var observationDate = date ?? Date();
         observationDate = Calendar.current.date(bySetting: .second, value: 0, of: observationDate)!
         observationDate = Calendar.current.date(bySetting: .nanosecond, value: 0, of: observationDate)!
         
@@ -432,6 +536,7 @@ enum State: Int, CustomStringConvertible {
         return State.Active;
     }
     
+    @discardableResult
     @objc public static func create(feature: [AnyHashable : Any], context:NSManagedObjectContext) -> Observation? {
         var newObservation: Observation? = nil;
         let eventId = Server.currentEventId();
@@ -491,7 +596,7 @@ enum State: Int, CustomStringConvertible {
                 }
                 
                 if let attachmentsJson = feature[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
-                    for attachmentJson in attachmentsJson {
+                    for (index, attachmentJson) in attachmentsJson.enumerated() {
                         var attachmentFound = false;
                         if let remoteId = attachmentJson[AttachmentKey.id.key] as? String, let attachments = existingObservation.attachments {
                             
@@ -503,13 +608,14 @@ enum State: Int, CustomStringConvertible {
                                     attachment.url = attachmentJson[AttachmentKey.url.key] as? String
                                     attachment.remotePath = attachmentJson[AttachmentKey.remotePath.key] as? String
                                     attachment.observation = existingObservation;
+                                    attachment.order = NSNumber(value: index)
                                     attachmentFound = true;
                                     break;
                                 }
                             }
                         }
                         if !attachmentFound {
-                            if let attachment = Attachment.attachment(json: attachmentJson, context: context) {
+                            if let attachment = Attachment.attachment(json: attachmentJson, order: index, context: context) {
                                 existingObservation.addToAttachments(attachment);
                             }
                         }
@@ -544,8 +650,8 @@ enum State: Int, CustomStringConvertible {
                     }
                     
                     if let attachmentsJson = feature[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
-                        for attachmentJson in attachmentsJson {
-                            if let attachment = Attachment.attachment(json: attachmentJson, context: context) {
+                        for (index, attachmentJson) in attachmentsJson.enumerated() {
+                            if let attachment = Attachment.attachment(json: attachmentJson, order: index, context: context) {
                                 observation.addToAttachments(attachment);
                             }
                         }

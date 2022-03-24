@@ -31,12 +31,10 @@ extension UIImage {
     
     @objc public static func setAnnotationImage(feedItem: FeedItem, annotationView: MKAnnotationView) {
         if let url: URL = feedItem.iconURL {
-            let size = 24;
+            let size = 35;
             
-            let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
             KingfisherManager.shared.retrieveImage(with: url, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
                 .transition(.fade(1)),
                 .cacheOriginalImage
@@ -44,18 +42,22 @@ extension UIImage {
                 switch result {
                 case .success(let value):
                     
-                    let image: UIImage = value.image.resized(to: CGSize(width: size, height: size));
+                    let image = value.image.aspectResize(to: CGSize(width: size, height: size))
                     annotationView.image = image;
+                    annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
+                    
                 case .failure(_):
                     annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                    annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
                 }
             }
         } else {
             annotationView.image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0)/2.0))
         }
     }
     
-    @objc public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+    public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
         if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
         
@@ -67,14 +69,14 @@ extension UIImage {
         return feedRetrievers;
     }
     
-    @objc public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+    public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
         if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag) {
             return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
         }
         return nil;
     }
     
-    @objc public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+    public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
         if let feed: Feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId)) {
             if (feed.itemsHaveSpatialDimension) {
                 return FeedItemRetriever(feed: feed, delegate: delegate);
@@ -83,7 +85,7 @@ extension UIImage {
         return nil;
     }
     
-    @objc public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+    public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
         if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
             
@@ -137,14 +139,17 @@ extension UIImage {
 
 extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let feedItem = anObject as? FeedItem else {
+            return
+        }
         switch type {
         case .insert:
-            delegate.add(anObject as? FeedItem);
+            delegate.addFeedItem(feedItem)
         case .delete:
-            delegate.remove(anObject as? FeedItem)
+            delegate.removeFeedItem(feedItem)
         case .update:
-            delegate.remove(anObject as? FeedItem)
-            delegate.add(anObject as? FeedItem);
+            delegate.removeFeedItem(feedItem)
+            delegate.addFeedItem(feedItem)
         case .move:
             print("...")
         @unknown default:

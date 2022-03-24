@@ -45,24 +45,40 @@ class MageCoreDataFixtures {
         localContext.mr_saveToPersistentStoreAndWait();
         return cleared;
     }
-    
-    public static func addLocation(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
+        
+    public static func addLocation(userId: String = "userabc", geometry: SFPoint? = nil, date: Date? = nil, completion: MRSaveCompletionHandler? = nil) -> Location? {
         let jsonDictionary: NSArray = parseJsonFile(jsonFile: "locationsabc") as! NSArray;
         
         if (completion == nil) {
+            var l: Location?
             MagicalRecord.save(blockAndWait:{ (localContext: NSManagedObjectContext) in
                 let userJson: [String: Any] = jsonDictionary[0] as! [String: Any];
-                let locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
-                let user: User = User.mr_findFirst(in: localContext)!;
+                var locations: [[String: Any]] = userJson["locations"] as! [[String: Any]];
+                locations[0]["userId"] = userId
+                if let geometry = geometry {
+                    locations[0]["geometry"] = GeometrySerializer.serializeGeometry(geometry)
+                }
+                let formatter = ISO8601DateFormatter()
+                formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone];
+                formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
+                if let date = date {
+                    var properties = locations[0]["properties"] as! [String: Any]
+                    properties["timestamp"] = formatter.string(from:date)
+                    locations[0]["properties"] = properties
+                }
+                let user: User = User.mr_findFirst(byAttribute: "remoteId", withValue: userId, in: localContext)!;
                 if let location: Location = user.location {
                     location.populate(json: locations[0]);
+                    l = location
                 } else {
                     let location: Location = Location.mr_createEntity(in: localContext)!;
                     location.populate(json: locations[0]);
                     user.location = location;
+                    l = location
                 }
                 
             })
+            return l?.mr_(in: NSManagedObjectContext.mr_default())
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let userJson: [String: Any] = jsonDictionary[0] as! [String: Any];
@@ -77,26 +93,28 @@ class MageCoreDataFixtures {
                 }
                 
             }, completion: completion)
+            return nil
         }
     }
     
-    public static func addGPSLocation(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
+    public static func addGPSLocation(userId: String = "userabc", location: CLLocation? = nil, completion: MRSaveCompletionHandler? = nil) {
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
+                let location: CLLocation = location ?? CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation.gpsLocation(location: location, context: localContext);
+                _ = GPSLocation.gpsLocation(location: location, context: localContext);
             })
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let location: CLLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
+                let location: CLLocation = location ?? CLLocation(coordinate: CLLocationCoordinate2D(latitude: 40.1085, longitude: -104.3678), altitude: 2600, horizontalAccuracy: 4.2, verticalAccuracy: 3.1, timestamp: Date(timeIntervalSince1970: 5));
                 
-                let gpsLocation = GPSLocation.gpsLocation(location: location, context: localContext);
+                _ = GPSLocation.gpsLocation(location: location, context: localContext);
             }, completion: completion)
         }
     }
     
-    public static func addUser(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
+    @discardableResult
+    public static func addUser(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) -> User? {
         var jsonDictionary: [AnyHashable : Any] = parseJsonFile(jsonFile: "userabc") as! [AnyHashable : Any];
         
         let stubPath: String! = OHPathForFile("icon27.png", self);
@@ -120,6 +138,7 @@ class MageCoreDataFixtures {
         jsonDictionary["avatarUrl"] = "icon27.png";
         jsonDictionary["iconUrl"] = "test_marker.png";
         if (completion == nil) {
+            var u: User?
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
                 var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
@@ -130,11 +149,12 @@ class MageCoreDataFixtures {
                     print("role already existed")
                 }
                 print("inserting a user")
-                let u: User = User.insert(json: jsonDictionary, context: localContext)!
-                u.remoteId = userId;
-                u.role = existingRole;
+                u = User.insert(json: jsonDictionary, context: localContext)!
+                u?.remoteId = userId;
+                u?.role = existingRole;
                 
             })
+            return u
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
@@ -159,6 +179,43 @@ class MageCoreDataFixtures {
                 }, completion: completion);
             }
         }
+        return nil
+    }
+    
+    public static func addImageryLayer(eventId: NSNumber = 1, layerId: NSNumber = 1, format: String = "XYZ", url: String = "https://magetest/xyzlayer/{z}/{x}/{y}.png", base: Bool = true, options: [String:Any]? = nil, completion: MRSaveCompletionHandler? = nil) {
+        if (completion == nil) {
+            MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
+                let layer = ImageryLayer.mr_createEntity(in: localContext)
+                let json: [AnyHashable : Any?] = [
+                    LayerKey.base.key: base,
+                    LayerKey.description.key: "layer description",
+                    LayerKey.format.key: format,
+                    LayerKey.id.key: layerId,
+                    LayerKey.name.key: "layer name",
+                    LayerKey.state.key: "available",
+                    LayerKey.type.key: "Imagery",
+                    LayerKey.url.key: url,
+                    LayerKey.wms.key: options
+                ]
+                layer?.populate(json, eventId: eventId)
+            });
+        } else {
+            MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+                let layer = ImageryLayer.mr_createEntity(in: localContext)
+                let json: [AnyHashable : Any?] = [
+                    LayerKey.base.key: base,
+                    LayerKey.description.key: "layer description",
+                    LayerKey.format.key: format,
+                    LayerKey.id.key: layerId,
+                    LayerKey.name.key: "layer name",
+                    LayerKey.state.key: "available",
+                    LayerKey.type.key: "Imagery",
+                    LayerKey.url.key: url,
+                    LayerKey.wms.key: options
+                ]
+                layer?.populate(json, eventId: eventId)
+            }, completion: completion);
+        }
     }
     
     public static func addUserToEvent(eventId: NSNumber = 1, userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
@@ -166,7 +223,7 @@ class MageCoreDataFixtures {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
                 let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                if let teams = event?.teams as? Set<Team>, let team = teams.first {
+                if let teams = event?.teams, let team = teams.first {
                     team.addToUsers(user!);
                 }
             });
@@ -174,7 +231,7 @@ class MageCoreDataFixtures {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
                 let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                if let teams = event?.teams as? Set<Team>, let team = teams.first {
+                if let teams = event?.teams, let team = teams.first {
                     team.addToUsers(user!);
                 }
             }, completion: completion);
@@ -207,17 +264,20 @@ class MageCoreDataFixtures {
         return jsonDictionary[0];
     }
     
-    public static func addObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler? = nil) {
+    @discardableResult
+    public static func addObservationToEvent(eventId: NSNumber = 1, completion: MRSaveCompletionHandler? = nil) -> Observation? {
         let jsonDictionary : NSArray = parseJsonFile(jsonFile: "observations") as! NSArray;
 
         if (completion == nil) {
+            var o: Observation?
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
-                let o: Observation = Observation.create(feature: jsonDictionary[0] as! [AnyHashable : Any], context: localContext)!;
-                o.eventId = eventId;
-                o.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
-                o.user = user;
+                o = Observation.create(feature: jsonDictionary[0] as! [AnyHashable : Any], context: localContext)!;
+                o?.eventId = eventId;
+                o?.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
+                o?.user = user;
             })
+            return o?.mr_(in: NSManagedObjectContext.mr_default())
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: ["userabc"]), in: localContext)
@@ -226,6 +286,7 @@ class MageCoreDataFixtures {
                 o.populate(json: jsonDictionary[0] as! [AnyHashable : Any])
                 o.user = user;
             }, completion: completion)
+            return nil
         }
     }
     
@@ -348,7 +409,7 @@ class MageCoreDataFixtures {
             "itemPrimaryProperty": primaryProperty,
             "itemSecondaryProperty": secondaryProperty,
             "itemsHaveSpatialDimension": true,
-            "updateFrequency": ["seconds": 1.0],
+            "updateFrequencySeconds": 1.0,
             "itemsHaveIdentity": true
         ];
         if (timestampProperty != nil) {
@@ -384,8 +445,9 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addFeedItemToFeed(feedId: String = "1", itemId: String? = nil, properties: [String: Any]?, simpleFeature: SFGeometry = SFPoint(x: -105.2678, andY: 40.0085), completion: MRSaveCompletionHandler? = nil) {
+    public static func addFeedItemToFeed(feedId: String = "1", itemId: String? = nil, properties: [String: Any]? = nil, simpleFeature: SFGeometry = SFPoint(x: -105.2678, andY: 40.0085), completion: MRSaveCompletionHandler? = nil) -> FeedItem? {
         if (completion == nil) {
+            var feedItem: FeedItem?
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [feedId]), in: localContext)
                 let count = FeedItem.mr_countOfEntities();
@@ -400,8 +462,11 @@ class MageCoreDataFixtures {
                         ];
                     }
                     f.simpleFeature = simpleFeature;
+                    
+                    feedItem = f
                 }
             });
+            return feedItem?.mr_(in: NSManagedObjectContext.mr_default())
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [feedId]), in: localContext)
@@ -419,6 +484,7 @@ class MageCoreDataFixtures {
                     f.simpleFeature = simpleFeature;
                 }
             }, completion: completion)
+            return nil
         }
     }
     
@@ -465,12 +531,12 @@ class MageCoreDataFixtures {
 
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext) as! [String]
+                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext)
                 expect(remoteIds) == feedIds;
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext) as! [String]
+                let remoteIds: [String] = Feed.populateFeeds(feeds: jsonDictionary as! [[AnyHashable:Any]], eventId: eventId, context: localContext)
                 expect(remoteIds) == feedIds;
             }, completion: completion);
         }
@@ -487,12 +553,12 @@ class MageCoreDataFixtures {
         if (completion == nil) {
             MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                 let remoteIds = Feed.populateFeedItems(feedItems: features as! [[AnyHashable:Any]], feedId: feedId, eventId: 1, context: localContext)
-                expect(remoteIds as? [String]) == feedItemIds;
+                expect(remoteIds) == feedItemIds;
             });
         } else {
             MagicalRecord.save({ (localContext: NSManagedObjectContext) in
                 let remoteIds = Feed.populateFeedItems(feedItems: features as! [[AnyHashable:Any]], feedId: feedId, eventId: 1, context: localContext)
-                expect(remoteIds as? [String]) == feedItemIds;
+                expect(remoteIds) == feedItemIds;
             }, completion: completion);
         }
     }

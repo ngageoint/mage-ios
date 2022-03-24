@@ -69,8 +69,8 @@
     }
 }
 
-- (NSSet<Attachment *> *) filteredAttachments {
-    return [self.attachments filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"markedForDeletion != true"]];
+- (NSArray<Attachment *> *) filteredAttachments {
+    return [self.attachments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"markedForDeletion != true"]];
 }
 
 - (NSArray<NSDictionary *> *) filteredUnsentAttachments {
@@ -98,13 +98,8 @@
 }
 
 - (Attachment *) attachmentAtIndex:(NSUInteger) index {
-    NSMutableArray *attachments = [[[self filteredAttachments] sortedArrayUsingDescriptors:@[
-        [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES],
-        [NSSortDescriptor sortDescriptorWithKey:@"remoteId" ascending:NO]
-    ]] mutableCopy];
-    
     @try {
-        return [attachments objectAtIndex:index];
+        return [[self filteredAttachments] objectAtIndex:index];
     }
     @catch (NSException *exception) {
         return nil;

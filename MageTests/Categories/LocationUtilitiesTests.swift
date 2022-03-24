@@ -9,9 +9,9 @@
 import Foundation
 import Quick
 import Nimble
+import CoreLocation
 
 @testable import MAGE
-import CoreLocation
 
 class LocationUtilitiesTests: QuickSpec {
     
@@ -221,8 +221,8 @@ class LocationUtilitiesTests: QuickSpec {
             }
             
             it("should parse to DMS") {
-                var coordinate = "113000NNNN"
-                var parsed = LocationUtilities.parseDMS(coordinate: coordinate)
+                let coordinate = "113000NNNN"
+                let parsed = LocationUtilities.parseDMS(coordinate: coordinate)
                 expect(parsed.direction).to(equal("N"))
                 expect(parsed.seconds).to(equal(0))
                 expect(parsed.minutes).to(equal(30))

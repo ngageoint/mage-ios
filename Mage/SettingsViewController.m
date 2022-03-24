@@ -355,8 +355,7 @@
 }
 
 # pragma mark - CLLocationManager delegate
-
-- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
     [self.settingsTableViewController.dataSource reloadData];
     [self.settingsTableViewController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }

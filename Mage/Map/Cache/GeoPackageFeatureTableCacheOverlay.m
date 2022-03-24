@@ -91,9 +91,6 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
     // Build a bounding box to represent the click location
     GPKGBoundingBox * boundingBox = [GPKGMapUtils buildClickBoundingBoxWithLocationCoordinate:tapLocation andMapView:mapView andScreenPercentage:self.featureOverlayQuery.screenClickPercentage];
     
-    // Get the map click distance tolerance
-    GPKGMapTolerance *tolerance = [GPKGMapUtils toleranceWithLocationCoordinate:tapLocation andMapView:mapView andScreenPercentage:self.featureOverlayQuery.screenClickPercentage];
-    
     GPKGFeatureTableStyles *styles = self.featureOverlayQuery.featureTiles.featureTableStyles;
     
     // Verify the features are indexed and we are getting information
@@ -145,14 +142,14 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
                     GPKGFeatureIndexResults * results = [self.featureOverlayQuery queryFeaturesWithBoundingBox:boundingBox inProjection:nil];
                 
                     for (GPKGFeatureRow *featureRow in results) {
-                        NSArray<GPKGMediaRow *> * medias = nil;
+                        NSMutableArray<GPKGMediaRow *> * medias = [[NSMutableArray alloc] init];
                         NSMutableArray<GPKGAttributesRow *> *attributes = [NSMutableArray array];
                         
                         int featureId = featureRow.idValue;
                         for (GPKGExtendedRelation *relation in mediaTables) {
                             NSArray<NSNumber *> *relatedMedia = [rte mappingsForTableName:relation.mappingTableName withBaseId:featureId];
                             GPKGMediaDao *mediaDao = [rte mediaDaoForTableName:relation.relatedTableName];
-                            medias = [mediaDao rowsWithIds:relatedMedia];
+                            [medias addObjectsFromArray: [mediaDao rowsWithIds:relatedMedia]];
                         }
                         
                         for (GPKGExtendedRelation *relation in attributeTables) {

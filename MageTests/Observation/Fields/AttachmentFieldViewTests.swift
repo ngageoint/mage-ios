@@ -116,7 +116,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments as! Set<Attachment>);
+                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.orderedAttachments);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -148,7 +148,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.attachments as! Set<Attachment>);
+                attachmentFieldView = AttachmentFieldView(field: field, editMode: false, value: observation.orderedAttachments);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -188,7 +188,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.orderedAttachments);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -234,7 +234,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.orderedAttachments);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -293,7 +293,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.orderedAttachments);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -361,7 +361,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.orderedAttachments);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -404,7 +404,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 view.addSubview(attachmentFieldView)
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
-                attachmentFieldView.setValue(observation.attachments as Any?);
+                attachmentFieldView.setValue(observation.orderedAttachments as Any?);
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
@@ -444,7 +444,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
                     
-                    attachmentFieldView.setValue(observation.attachments);
+                    attachmentFieldView.setValue(observation.orderedAttachments);
                 }
                 
                 window.rootViewController = controller;
@@ -510,8 +510,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
-                    
-                    attachmentFieldView.setValue(observation.attachments);
+                    attachmentFieldView.setValue(set: observation.attachments);
                     
                     let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
@@ -557,7 +556,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
                     
-                    attachmentFieldView.setValue(observation.attachments);
+                    attachmentFieldView.setValue(set: observation.attachments);
                     
                     let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
@@ -596,7 +595,6 @@ class AttachmentFieldViewTests: KIFSpec {
             }
             
             it("set one attachment with observation and two later then remove first") {
-                var attachmentLoaded = false;
                 var attachmentLoaded2 = false;
                 var attachmentLoaded3 = false;
                 
@@ -606,7 +604,6 @@ class AttachmentFieldViewTests: KIFSpec {
                 let attachmentURL: URL = URL(string: attachment.url!)!;
                 stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL.path)) { (request) -> HTTPStubsResponse in
                     let image: UIImage = createGradientImage(startColor: .blue, endColor: .red, size: CGSize(width: 50, height: 50))
-                    attachmentLoaded = true;
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
@@ -617,7 +614,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
                     
-                    attachmentFieldView.setValue(observation.attachments);
+                    attachmentFieldView.setValue(set: observation.attachments);
                     
                     let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
@@ -660,7 +657,6 @@ class AttachmentFieldViewTests: KIFSpec {
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 
                 var attachmentLoaded = false;
-                var attachmentLoaded2 = false;
                 var attachmentLoaded3 = false;
                 
                 let observation = ObservationBuilder.createBlankObservation();
@@ -680,13 +676,12 @@ class AttachmentFieldViewTests: KIFSpec {
                     view.addSubview(attachmentFieldView)
                     attachmentFieldView.autoPinEdgesToSuperviewEdges();
                     
-                    attachmentFieldView.setValue(observation.attachments);
+                    attachmentFieldView.setValue(set: observation.attachments);
                     
                     let attachment2 = ObservationBuilder.addAttachmentToObservation(observation: observation);
                     let attachmentURL2: URL = URL(string: attachment2.url!)!;
                     stub(condition: isMethodGET() && isHost("magetest") && isScheme("https") && isPath(attachmentURL2.path)) { (request) -> HTTPStubsResponse in
                         let image: UIImage = createGradientImage(startColor: .blue, endColor: .green, size: CGSize(width: 50, height: 50))
-                        attachmentLoaded2 = true;
                         return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                     }
                     attachmentFieldView.addAttachment(attachment2);
@@ -755,7 +750,7 @@ class AttachmentFieldViewTests: KIFSpec {
                     return HTTPStubsResponse(data: image.pngData()!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 }
                 
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.orderedAttachments);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -807,7 +802,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 
                 window.rootViewController = controller;
                 controller.view.addSubview(view);
-                attachmentFieldView = AttachmentFieldView(field: field, value: observation.attachments as! Set<Attachment>, attachmentSelectionDelegate: attachmentSelectionDelegate);
+                attachmentFieldView = AttachmentFieldView(field: field, value: observation.orderedAttachments, attachmentSelectionDelegate: attachmentSelectionDelegate);
                 attachmentFieldView.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 view.addSubview(attachmentFieldView)
@@ -822,7 +817,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 viewTester().usingLabel("Attachment Collection").tapCollectionViewItem(at: IndexPath(row: 0, section: 0));
                 
                 expect(attachmentSelectionDelegate.selectedAttachmentCalled).to(beTrue());
-                expect(attachmentSelectionDelegate.attachmentSelected).to(equal(attachment));
+                expect(attachmentSelectionDelegate.attachmentSelected).to(equal(observation.orderedAttachments?[0]));
             }
             
             it("should tap camera button to add attachment") {
@@ -958,24 +953,24 @@ class AttachmentFieldViewTests: KIFSpec {
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
                 // not synced attachments should be ordered last so row 0 should be attachment and row 1 should be attachment 2
-                attachmentFieldView.setValue(Set(arrayLiteral: attachment2, attachment));
+                attachmentFieldView.setValue([attachment2, attachment]);
                 tester().waitForView(withAccessibilityLabel: "Attachment Collection");
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
 
                 viewTester().usingLabel("Attachment Collection").tapCollectionViewItem(at: IndexPath(row: 0, section: 0));
                 
                 expect(attachmentSelectionDelegate.selectedAttachmentCalled).to(beTrue());
-                expect(attachmentSelectionDelegate.attachmentSelected).to(equal(attachment));
+                expect(attachmentSelectionDelegate.attachmentSelected).to(equal(attachment2));
                 
                 attachmentSelectionDelegate.selectedAttachmentCalled = false;
                 viewTester().usingLabel("Attachment Collection").tapCollectionViewItem(at: IndexPath(row: 1, section: 0));
                 
                 expect(attachmentSelectionDelegate.selectedAttachmentCalled).to(beTrue());
-                expect(attachmentSelectionDelegate.attachmentSelected).to(equal(attachment2));
+                expect(attachmentSelectionDelegate.attachmentSelected).to(equal(attachment));
                 
                 attachmentSelectionDelegate.selectedAttachmentCalled = false;
                 // reset the attachments in a different order
-                attachmentFieldView.setValue(Set(arrayLiteral: attachment, attachment2));
+                attachmentFieldView.setValue([attachment, attachment2]);
                 tester().waitForView(withAccessibilityLabel: "Attachment Collection");
                 viewTester().usingLabel("Attachment Collection").tapCollectionViewItem(at: IndexPath(row: 0, section: 0));
                 
@@ -1015,7 +1010,7 @@ class AttachmentFieldViewTests: KIFSpec {
                 attachmentFieldView.autoPinEdgesToSuperviewEdges();
                 
                 // not synced attachments should be ordered last so row 0 should be attachment and row 1 should be attachment 2
-                attachmentFieldView.setValue(Set(arrayLiteral: attachment, attachment2));
+                attachmentFieldView.setValue([attachment, attachment2]);
                 tester().waitForView(withAccessibilityLabel: "Attachment Collection");
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
 

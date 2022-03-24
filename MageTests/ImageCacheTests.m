@@ -23,6 +23,10 @@
 
 @implementation ImageCacheTests
 
+- (UIImage *) createUIImageFromURL: (NSURL *) url {
+    return nil;
+}
+
 - (void)setUp {
 //    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
 //    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];

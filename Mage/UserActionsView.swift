@@ -165,7 +165,17 @@ class UserActionsView: UIView {
     }
     
     @objc func getDirectionsToUser(_ sender: UIButton) {
-        userActionsDelegate?.getDirectionsToUser?(user!, sourceView: sender);
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
+        // let the bottom sheet dismiss
+        var notification = DirectionsToItemNotification()
+        if let cacheIconUrl = user?.cacheIconUrl {
+            notification.imageUrl = URL(string: cacheIconUrl)
+        }
+        notification.user = user
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
+        }
     }
     
     @objc func callUser() {

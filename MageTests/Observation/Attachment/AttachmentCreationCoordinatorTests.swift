@@ -11,6 +11,7 @@ import Quick
 import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
+import UniformTypeIdentifiers
 
 @testable import MAGE
 
@@ -37,8 +38,6 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
     override func spec() {
         
         xdescribe("AttachmentCreationCoordinatorTests") {
-            let recordSnapshots = false;
-            
             var attachmentCreationCoordinator: AttachmentCreationCoordinator!
             var view: UIView!
             var controller: UIViewController!
@@ -57,22 +56,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 guard let cgImage = image?.cgImage else { return UIImage() }
                 return UIImage(cgImage: cgImage)
             }
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, usesDrawRect: Bool = false, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.5);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot(usesDrawRect: usesDrawRect);
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
-            
+
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
@@ -106,7 +90,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 mockPicker.sourceType = .camera;
                 
                 let info: [UIImagePickerController.InfoKey : Any] = [
-                    .mediaType: kUTTypeImage as String,
+                    .mediaType: UTType.image,
                     .editedImage: createGradientImage(startColor: .purple, endColor: .white, size: CGSize(width: 500, height: 500)),
                     .mediaMetadata: [ "mykey": "myvalue" ]
                 ];
@@ -139,7 +123,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 print("URL is \(url)")
                 
                 let info: [UIImagePickerController.InfoKey : Any] = [
-                    .mediaType: kUTTypeMovie as String,
+                    .mediaType: UTType.movie,
                     .mediaURL: url
                 ];
                 

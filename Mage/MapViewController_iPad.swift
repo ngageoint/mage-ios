@@ -7,10 +7,11 @@
 import Foundation
 import PureLayout
 
-@objc class MapViewController_iPad : MapViewController {
+@objc class MapViewController_iPad : MageMapViewController {
     
     typealias Delegate = ObservationActionsDelegate & UserActionsDelegate & FeedItemSelectionDelegate
-    var delegate: Delegate?;
+    weak var delegate: Delegate?;
+    var settingsCoordinator: MapSettingsCoordinator?
     
     private lazy var profileButton : UIButton = {
         let profileButton = UIButton();
@@ -38,7 +39,7 @@ import PureLayout
         self.delegate = delegate;
     }
     
-    func setupNavigationBar() {
+    override func setupNavigationBar() {
         let profileBarButtonItem: UIBarButtonItem = UIBarButtonItem(customView: profileButton);
         let filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(filterTapped(_:)))
         let moreBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "more"), style: .plain, target: self, action: #selector(moreTapped(_:)))
@@ -51,7 +52,6 @@ import PureLayout
         
         self.offlineObservationManager = MageOfflineObservationManager(delegate: self);
         self.offlineObservationManager?.start()
-        self.createFab.isHidden = true;
         setupNavigationBar()
     }
     
@@ -74,10 +74,9 @@ import PureLayout
     }
     
     @objc func mapSettingsTapped(_ sender: UIView) {
-        let settingsCoordinator: MapSettingsCoordinator = MapSettingsCoordinator(rootViewController: self.navigationController, andSourceView: sender, scheme: self.scheme);
-        settingsCoordinator.delegate = self;
-        self.childCoordinators.add(settingsCoordinator);
-        settingsCoordinator.start();
+        settingsCoordinator = MapSettingsCoordinator(rootViewController: self.navigationController, andSourceView: sender, scheme: self.scheme);
+        settingsCoordinator?.delegate = self;
+        settingsCoordinator?.start();
     }
     
     @objc func moreTapped(_ sender: UIBarButtonItem) {
@@ -98,7 +97,7 @@ import PureLayout
         self.present(alert, animated: true, completion: nil);
     }
     
-    override func calloutTapped(_ calloutItem: Any!) {
+    func calloutTapped(_ calloutItem: Any!) {
         if let user = calloutItem as? User {
             delegate?.viewUser?(user);
         } else if let observation = calloutItem as? Observation {
@@ -136,8 +135,6 @@ extension MapViewController_iPad : OfflineObservationDelegate {
 
 extension MapViewController_iPad : MapSettingsCoordinatorDelegate {
     func mapSettingsComplete(_ coordinator: NSObject!) {
-        if let coordinator = coordinator {
-            self.childCoordinators.remove(coordinator)
-        }
+        settingsCoordinator = nil
     }
 }

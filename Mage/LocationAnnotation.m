@@ -16,13 +16,7 @@
 
 -(id) initWithLocation:(Location *) location {
 	if ((self = [super init])) {
-        _location = [[CLLocation alloc] initWithCoordinate:location.location.coordinate
-                                                  altitude:[[location.properties valueForKey:@"altitude"] doubleValue]
-                                        horizontalAccuracy:[[location.properties valueForKey:@"accuracy"] doubleValue]
-                                          verticalAccuracy:[[location.properties valueForKey:@"verticalAccuracy"] doubleValue]
-                                                    course:[[location.properties valueForKey:@"course"] doubleValue]
-                                                     speed:[[location.properties valueForKey:@"speed"] doubleValue]
-                                                 timestamp:location.timestamp];
+        _location = location.location;
         
         [self setCoordinate:_location.coordinate];
         
@@ -39,6 +33,7 @@
 -(id) initWithGPSLocation: (GPSLocation *) gpsLocation user: (User *) user {
     if ((self = [super init])) {
         SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:gpsLocation.geometry];
+        // TODO: when this is swift, use user.location
         _location = [[CLLocation alloc] initWithCoordinate:(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]))
                                                   altitude:[[gpsLocation.properties valueForKey:@"altitude"] doubleValue]
                                         horizontalAccuracy:[[gpsLocation.properties valueForKey:@"accuracy"] doubleValue]
@@ -70,15 +65,13 @@
         } else {
             personAnnotationView.annotation = self;
         }
+        personAnnotationView.titleVisibility = MKFeatureVisibilityHidden;
         annotationView = personAnnotationView;
     } else {
         annotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:@"userIconAnnotation"];
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:self reuseIdentifier:@"userIconAnnotation"];
             annotationView.enabled = YES;
-            
-            UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-            annotationView.rightCalloutAccessoryView = rightButton;
         } else {
             annotationView.annotation = self;
         }
@@ -87,6 +80,7 @@
     }
     annotationView.displayPriority = MKFeatureDisplayPriorityRequired;
     annotationView.collisionMode = MKAnnotationViewCollisionModeNone;
+    self.view = annotationView;
     return annotationView;
 }
 

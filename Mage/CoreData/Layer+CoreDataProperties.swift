@@ -30,4 +30,5 @@ extension Layer {
     @NSManaged var file: [AnyHashable: Any]?
     @NSManaged var downloadedBytes: NSNumber?
     @NSManaged var downloading: Bool
+    @NSManaged var base: Bool
 }

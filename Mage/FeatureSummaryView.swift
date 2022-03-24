@@ -13,12 +13,17 @@ import Kingfisher
 @objc class FeatureItem: NSObject {
     
     @objc public init(annotation: StaticPointAnnotation) {
-        self.featureDetail = (annotation.feature["properties"] as? [AnyHashable : Any])?["description"] as? String
+        self.featureDetail = StaticLayer.featureDescription(feature: annotation.feature)
         self.coordinate = annotation.coordinate
-        self.featureTitle = (annotation.feature["properties"] as? [AnyHashable : Any])?["name"] as? String
+        self.featureTitle = StaticLayer.featureName(feature: annotation.feature)
+        self.featureDate = StaticLayer.featureTimestamp(feature: annotation.feature)
         self.layerName = annotation.layerName
         if let iconUrl = annotation.iconUrl {
-            self.iconURL = URL(string: iconUrl);
+            if iconUrl.hasPrefix("http") {
+                self.iconURL = URL(string: iconUrl)
+            } else {
+                self.iconURL = URL(fileURLWithPath: "\(FeatureItem.getDocumentsDirectory())/\(iconUrl)")
+            }
         }
     }
     
@@ -39,6 +44,13 @@ import Kingfisher
     @objc public var iconURL: URL?;
     @objc public var images: [UIImage]?;
     @objc public var layerName: String?
+    @objc public var featureDate: Date?
+    
+    static func getDocumentsDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
+        return documentsDirectory as String
+    }
 }
 
 class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate> {
@@ -88,7 +100,9 @@ class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate
         }
         
         primaryField.text = item.featureTitle ?? " ";
-        timestamp.isHidden = true;
+        if let featureDate: NSDate = item.featureDate as NSDate? {
+            timestamp.text = featureDate.formattedDisplay().uppercased().replacingOccurrences(of: " ", with: "\u{00a0}")
+        }
         secondaryField.text = item.layerName;
         if (secondaryLabelIcon.superview == nil) {
             secondaryContainer.insertArrangedSubview(secondaryLabelIcon, at: 0);

@@ -68,6 +68,9 @@ class ObservationBottomSheetView: BottomSheetView {
         self.addSubview(stackView);
         populateView();
         applyTheme(withScheme: self.scheme);
+        NotificationCenter.default.addObserver(forName: .ObservationUpdated, object: observation, queue: .main) { [weak self] notification in
+            self?.refresh()
+        }
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
@@ -132,6 +135,7 @@ class ObservationBottomSheetView: BottomSheetView {
         if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                NotificationCenter.default.post(name: .ViewObservation, object: observation)
                 self.actionsDelegate?.viewObservation?(observation);
             }
         }

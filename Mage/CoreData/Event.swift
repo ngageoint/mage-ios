@@ -151,8 +151,8 @@ import CoreData
         }
     }
     
-    @objc public func isUserInEvent(user: User) -> Bool {
-        guard let teams = teams else {
+    @objc public func isUserInEvent(user: User?) -> Bool {
+        guard let user = user, let teams = teams else {
             return false;
         }
         for team in teams {

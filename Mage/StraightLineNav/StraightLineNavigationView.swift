@@ -9,6 +9,7 @@
 import Foundation
 import PureLayout
 import UIKit
+import Kingfisher
 
 @objc class StraightLineNavigationView: UIView {
     var didSetupConstraints = false;
@@ -28,6 +29,39 @@ import UIKit
     var compassView: CompassView?;
     
     let navigation = UIImageView(image: UIImage(named: "navigation"))
+        
+    var destinationMarkerUrl: URL? {
+        get {
+            return nil
+        }
+        set {
+            guard let newValue = newValue else {
+                return
+            }
+            let processor = DownsamplingImageProcessor(size: CGSize(width: 40, height: 40))
+
+            destinationMarkerView.kf.indicatorType = .activity
+            destinationMarkerView.kf.setImage(
+                with: newValue,
+                options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ])
+            {
+                result in
+                
+                switch result {
+                case .success(_):
+                    self.setNeedsLayout()
+                case .failure(let error):
+                    print("Job failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
     
     private lazy var directionArrow: UIView = {
         let view = UIView.newAutoLayout();
@@ -117,6 +151,9 @@ import UIKit
         distanceToTargetLabel.font = scheme?.typographyScheme.headline6;
         relativeBearingToTargetLabel.font = scheme?.typographyScheme.headline6;
         
+        headingLabel.textColor = self.headingColor;
+        navigation.tintColor = self.relativeBearingColor
+        
         compassView?.applyTheme(withScheme: scheme);
     }
     
@@ -132,6 +169,14 @@ import UIKit
         layoutView();
         
         applyTheme(withScheme: scheme);
+    }
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
+        self.compassView = nil
     }
     
     override func updateConstraints() {
@@ -176,7 +221,10 @@ import UIKit
         super.updateConstraints();
     }
     
-    @objc public func populate(relativeBearingColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed) {
+    public func populate(relativeBearingColor: UIColor = .systemGreen, headingColor: UIColor = .systemRed, destinationCoordinate: CLLocationCoordinate2D? = nil) {
+        if let destinationCoordinate = destinationCoordinate {
+            self.destinationCoordinate = destinationCoordinate
+        }
         self.relativeBearingColor = relativeBearingColor;
         self.headingColor = headingColor;
         let measurementFormatter = MeasurementFormatter();
@@ -197,8 +245,8 @@ import UIKit
             }
         }
         
-        if (bearing >= 0) {
-            let bearingTo = userLocation.coordinate.bearing(to: destinationCoordinate!);
+        if bearing >= 0, let destinationCoordinate = self.destinationCoordinate {
+            let bearingTo = userLocation.coordinate.bearing(to: destinationCoordinate);
             compassView?.updateHeading(heading: bearing, destinationBearing: bearingTo, targetColor: self.relativeBearingColor, bearingColor: self.headingColor);
             let headingMeasurement = Measurement(value: bearing, unit: UnitAngle.degrees);
             let bearingToMeasurement = Measurement(value: bearingTo, unit: UnitAngle.degrees);

@@ -112,6 +112,7 @@ class ObservationBuilder {
         if (observationRemoteId != nil && remoteId != nil) {
             attachment.url = "https://magetest/observation/\(observationRemoteId ?? "")/attachments/remoteid\(remoteId ?? "")";
         }
+        attachment.lastModified = Date()
         return attachment;
     }
     
@@ -156,7 +157,7 @@ class ObservationBuilder {
             for (_, field) in fields.enumerated() {
                 var value: Any? = nil;
                 // grab the server default from the form fields value property
-                if let defaultField: Any = field["value"] {
+                if let defaultField: Any = field["value"] as Any? {
                     value = defaultField;
                 }
                 
@@ -165,7 +166,7 @@ class ObservationBuilder {
 //                    print("\(safeValues.keys)")
 //                    print("\(field)")
                     if ((safeValues.keys.contains(field["name"] as! Dictionary<String, Any>.Keys.Element))) {
-                        value = safeValues[field["name"] as! String];
+                        value = safeValues[field["name"] as! String] as Any?;
                     }
                 }
                 

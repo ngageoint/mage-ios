@@ -9,11 +9,15 @@
 import Foundation
 import PureLayout
 import MaterialComponents.MDCPalettes
+import CoreLocation
+import UIKit
 
 class FeatureActionsView: UIView {
     var didSetupConstraints = false;
     var location: CLLocationCoordinate2D?;
     var title: String?;
+    var featureItem: FeatureItem?
+    var geoPackageFeatureItem: GeoPackageFeatureItem?
     var featureActionsDelegate: FeatureActionsDelegate?;
     var bottomSheet: MDCBottomSheetController?;
     internal var scheme: MDCContainerScheming?;
@@ -62,11 +66,25 @@ class FeatureActionsView: UIView {
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
     }
     
-    public convenience init(location: CLLocationCoordinate2D?, title: String?, featureActionsDelegate: FeatureActionsDelegate?, scheme: MDCContainerScheming?) {
+    public convenience init(geoPackageFeatureItem: GeoPackageFeatureItem?, featureActionsDelegate: FeatureActionsDelegate?, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
-        self.location = location;
-        self.title = title;
+        self.geoPackageFeatureItem = geoPackageFeatureItem
+        self.location = featureItem?.coordinate
+        self.featureActionsDelegate = featureActionsDelegate;
+        self.configureForAutoLayout();
+        layoutView();
+        populate(location: location, title: title, delegate: featureActionsDelegate);
+        applyTheme(withScheme: scheme);
+    }
+    
+    
+    public convenience init(featureItem: FeatureItem?, featureActionsDelegate: FeatureActionsDelegate?, scheme: MDCContainerScheming?) {
+        self.init(frame: CGRect.zero);
+        self.scheme = scheme;
+        self.featureItem = featureItem
+        self.location = featureItem?.coordinate
+        self.title = featureItem?.featureTitle;
         self.featureActionsDelegate = featureActionsDelegate;
         self.configureForAutoLayout();
         layoutView();
@@ -111,7 +129,15 @@ class FeatureActionsView: UIView {
         guard let location = self.location else {
             return;
         }
-        featureActionsDelegate?.getDirectionsToLocation?(location, title: title, sourceView: sender);
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
+        // let the bottom sheet dismiss
+        var notification = DirectionsToItemNotification()
+        notification.imageUrl = featureItem?.iconURL
+        notification.location = CLLocation(latitude: location.latitude, longitude: location.longitude)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
+        }
     }
     
     @objc func copyLocation() {

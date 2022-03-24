@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import sf_ios
 
 class MockGeometryEditCoordinator : GeometryEditCoordinator {
     var _currentGeometry: SFGeometry! = SFPoint(x: 1.0, andY: 1.0);

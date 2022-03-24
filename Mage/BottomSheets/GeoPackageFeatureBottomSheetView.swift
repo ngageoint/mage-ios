@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import geopackage_ios
 
 class GeoPackageFeatureBottomSheetView: BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var actionsDelegate: FeatureActionsDelegate?;
     private var featureItem: GeoPackageFeatureItem;
+    private var fileViewerCoordinator: FileViewerCoordinator?
     var scheme: MDCContainerScheming?;
     
     private lazy var stackView: PassThroughStackView = {
@@ -34,7 +36,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         stackView.alignment = .fill
         stackView.spacing = 0
         stackView.distribution = .fill
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8)
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 8)
         stackView.isLayoutMarginsRelativeArrangement = true;
         return stackView;
     }()
@@ -52,12 +54,13 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
     
     private lazy var mediaCollection: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        layout.itemSize = CGSize(width: 150, height: 150)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        layout.itemSize = CGSize(width: 150, height: 170)
         layout.scrollDirection = .horizontal
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.dataSource = self;
-        collection.autoSetDimension(.height, toSize: 150);
+        collection.delegate = self
+        collection.autoSetDimension(.height, toSize: 170);
         collection.register(UIImageCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collection.backgroundColor = .clear;
         return collection;
@@ -78,7 +81,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
     }()
     
     private lazy var featureActionsView: FeatureActionsView = {
-        let view = FeatureActionsView(location: nil, title: nil, featureActionsDelegate: actionsDelegate, scheme: scheme);
+        let view = FeatureActionsView(geoPackageFeatureItem: featureItem, featureActionsDelegate: actionsDelegate, scheme: scheme);
         return view;
     }()
     
@@ -86,7 +89,7 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(geoPackageFeatureItem: GeoPackageFeatureItem, actionsDelegate: FeatureActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+    init(geoPackageFeatureItem: GeoPackageFeatureItem, actionsDelegate: FeatureActionsDelegate? = nil, includeSummary: Bool = true, scheme: MDCContainerScheming?) {
         self.actionsDelegate = actionsDelegate;
         self.scheme = scheme;
         featureItem = geoPackageFeatureItem;
@@ -94,9 +97,11 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         self.translatesAutoresizingMaskIntoConstraints = false;
         
         self.addSubview(stackView)
-        stackView.addArrangedSubview(summaryView);
-        
-        stackView.addArrangedSubview(featureActionsView);
+        if includeSummary {
+            stackView.addArrangedSubview(summaryView);
+            stackView.addArrangedSubview(featureActionsView);
+        }
+            
         stackView.addArrangedSubview(mediaCollection);
         stackView.addArrangedSubview(propertyStack);
         stackView.addArrangedSubview(attributeRowStack);
@@ -195,11 +200,14 @@ class GeoPackageFeatureBottomSheetView: BottomSheetView {
         
         for attributeRow in attributeRows {
             let separator = UIView.newAutoLayout();
-            separator.autoSetDimension(.height, toSize: 1);
-            separator.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+            separator.autoSetDimension(.height, toSize: 8);
+            separator.backgroundColor = scheme?.colorScheme.backgroundColor
             self.attributeRowStack.addArrangedSubview(separator);
-            
-            let featureItemBottomSheetView:GeoPackageFeatureBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: attributeRow, actionsDelegate: actionsDelegate, scheme: scheme);
+            let attributesHeader = CardHeader(headerText: "ATTRIBUTES")
+            attributesHeader.applyTheme(withScheme: scheme)
+            self.attributeRowStack.addArrangedSubview(attributesHeader)
+
+            let featureItemBottomSheetView:GeoPackageFeatureBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: attributeRow, actionsDelegate: actionsDelegate, includeSummary: false, scheme: scheme);
             
             self.attributeRowStack.addArrangedSubview(featureItemBottomSheetView);
         }
@@ -217,11 +225,43 @@ extension GeoPackageFeatureBottomSheetView : UICollectionViewDataSource {
         }
         
         if let mediaRow = self.featureItem.mediaRows?[indexPath.row] {
-            cell.setupCell(image: mediaRow.dataImage());
+            
+            var title = "media"
+            if mediaRow.hasColumn(withColumnName: "title"), let titleValue = mediaRow.value(withColumnName: "title") as? String {
+                title = titleValue
+            } else if mediaRow.hasColumn(withColumnName: "name"), let nameValue = mediaRow.value(withColumnName: "name") as? String {
+                title = nameValue
+            }
+            
+            if let image = mediaRow.dataImage() {
+                cell.setupCell(image: image, title: title, scheme: scheme);
+            } else {
+                cell.setupCell(image: UIImage(named: "paperclip"), title: title, scheme: scheme);
+                cell.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.3)
+            }
         } else {
-            cell.setupCell(image: nil);
+            cell.setupCell(image: nil, title: nil, scheme: scheme);
         }
         return cell;
+    }
+}
+
+extension GeoPackageFeatureBottomSheetView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if let pvc = parentViewController, let mediaRow = self.featureItem.mediaRows?[indexPath.row] {
+
+            var info: [String : Any] = [:]
+            if let columns = mediaRow.columns, let names = columns.columnNames() {
+                for name in names {
+                    if name != "data" {
+                        info[name] = mediaRow.value(withColumnName: name)
+                    }
+                }
+            }
+            fileViewerCoordinator = FileViewerCoordinator(presentingViewController: pvc, data: mediaRow.data(), contentType: mediaRow.contentType(), info: info, scheme: scheme)
+            fileViewerCoordinator?.start(animated: true, withCloseButton: true)
+        }
     }
 }
 

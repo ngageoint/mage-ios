@@ -39,6 +39,7 @@ public enum LayerType : String {
         self.file = json[LayerKey.file.key] as? [AnyHashable : Any]
         self.layerDescription = json[LayerKey.description.key] as? String
         self.state = json[LayerKey.state.key] as? String
+        self.base = json[LayerKey.base.key] as? Bool ?? false
         self.eventId = eventId;
     }
     
@@ -107,6 +108,7 @@ public enum LayerType : String {
         return task;
     }
     
+    @discardableResult
     @objc public static func populateLayers(json: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [NSNumber] {
         var layerRemoteIds: [NSNumber] = [];
         for layer in json {

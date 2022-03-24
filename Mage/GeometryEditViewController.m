@@ -19,7 +19,6 @@
 #import "ObservationShapeStyle.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
-#import "BaseMapOverlay.h"
 #import "GPKGGeoPackageFactory.h"
 #import "AppDelegate.h"
 #import <mgrs/MGRS.h>
@@ -32,7 +31,7 @@
 static float paddingPercentage = .1;
 
 
-@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate>
+@interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate, CoordinateFieldDelegate>
 
 @property (strong, nonatomic) GeometryEditCoordinator *coordinator;
 @property (strong, nonatomic) SFGeometry *geometry;

@@ -6,6 +6,8 @@
 //  Copyright © 2020 National Geospatial Intelligence Agency. All rights reserved.
 //
 
+import Foundation
+
 @objc class MageInitializer: NSObject {
     
     @objc public static func initializePreferences() {
@@ -37,6 +39,15 @@
     @objc public static func clearServerSpecificData() -> [String: Bool] {
         let localContext: NSManagedObjectContext = NSManagedObjectContext.mr_default();
         
+        // clear server specific selected layers
+        if let events = Event.mr_findAll(in:localContext) as? [Event] {
+            for event in events {
+                UserDefaults.standard.removeObject(forKey: "selectedFeeds-\(event.remoteId ?? -1)")
+            }
+        }
+        UserDefaults.standard.removeObject(forKey: "selectedStaticLayers")
+        UserDefaults.standard.removeObject(forKey: "selectedOnlineLayers")
+        
         var cleared = [
             String(describing: Attachment.self): Attachment.mr_truncateAll(in: localContext),
             String(describing: Event.self): Event.mr_truncateAll(in: localContext),
@@ -57,6 +68,7 @@
         cleared[String(describing: Layer.self)] = Layer.mr_deleteAll(matching: NSPredicate(format: "eventId != -1"), in: localContext)
         
         localContext.mr_saveToPersistentStoreAndWait();
+        
         return cleared;
     }
 

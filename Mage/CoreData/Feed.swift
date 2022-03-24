@@ -28,13 +28,14 @@ import CoreData
             if let remoteFeedId = Feed.feedIdFromJson(json: feed) {
                 feedRemoteIds.append(remoteFeedId);
                 if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
-                    f.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
+                    f.populate(json: feed, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
                 } else {
                     let f = Feed.mr_createEntity(in: context);
                     selectedFeedsForEvent.append(remoteFeedId);
                     f?.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
+                    f?.selected = true
+                    count = count + 1;
                 }
-                count = count + 1;
             }
         }
         selectedFeedsForEvent = selectedFeedsForEvent.filter { feedRemoteId in
@@ -54,11 +55,12 @@ import CoreData
         }
         
         if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
-            f.populate(json: json, eventId: eventId, tag: NSNumber(value: count));
+            f.populate(json: json, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
         } else {
             let f = Feed.mr_createEntity(in: context);
             selectedFeedsForEvent.append(remoteFeedId);
             f?.populate(json: json, eventId: eventId, tag: NSNumber(value: count));
+            f?.selected = true
         }
         UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
         return remoteFeedId;
@@ -97,6 +99,10 @@ import CoreData
                 MagicalRecord.save({ localContext in
                     if let feedsJson = responseObject as? [[AnyHashable : Any]] {
                         feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: localContext);
+                        for feedRemoteId in feedRemoteIds {
+                            Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, success: nil, failure: nil);
+                        }
+                        Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds), in: localContext)
                     }
                 }, completion: { contextDidSave, error in
                     if let error = error {
@@ -104,18 +110,7 @@ import CoreData
                             failure(error);
                         }
                     } else if let success = success {
-                        MagicalRecord.save({ localContext in
-                            Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds), in: localContext);
-                        }, completion: { contextDidSave, error in
-                            if let feeds = Feed.mr_findAll(with: NSPredicate(format: "\(FeedKey.eventId.key) == %@", eventId)) as? [Feed] {
-                                for feed in feeds {
-                                    if let remoteId = feed.remoteId {
-                                        Feed.pullFeedItems(feedId: remoteId, eventId: eventId, success: nil, failure: nil);
-                                    }
-                                }
-                            }
-                            success(task, nil);
-                        });
+                        success(task, nil);
                     }
                 })
             }, failure: { task, error in
@@ -174,6 +169,14 @@ import CoreData
         return nil;
     }
     
+    @objc public var tabIconURL: URL? {
+        // TODO: get the feed icon when we set it properly on the server
+//        if let icon = icon, let iconId = icon[FeedMapStyleKey.id.key] as? String, let baseURL = MageServer.baseURL() {
+//            return URL(string: "\(baseURL.absoluteString)/api/icons/\(iconId)/content")
+//        }
+        return nil;
+    }
+    
     @objc public func populate(json: [AnyHashable : Any], eventId: NSNumber, tag: NSNumber) {
         self.remoteId = json[FeedKey.id.key] as? String
         self.tag = tag
@@ -181,8 +184,8 @@ import CoreData
         self.summary = json[FeedKey.summary.key] as? String
         self.constantParams = json[FeedKey.constantParams.key]
         self.variableParams = json[FeedKey.variableParams.key]
-        self.updateFrequency = (json[FeedKey.updateFrequency.key] as? [AnyHashable : Any])?["seconds"] as? NSNumber
-        self.pullFrequency = (json[FeedKey.updateFrequency.key] as? [AnyHashable : Any])?["seconds"] as? NSNumber
+        self.updateFrequency = json[FeedKey.updateFrequencySeconds.key] as? NSNumber
+        self.pullFrequency = json[FeedKey.updateFrequencySeconds.key] as? NSNumber
         self.mapStyle = json[FeedKey.mapStyle.key] as? [AnyHashable : Any]
         self.itemPropertiesSchema = json[FeedKey.itemPropertiesSchema.key] as? [AnyHashable : Any]
         self.itemPrimaryProperty = json[FeedKey.itemPrimaryProperty.key] as? String
@@ -190,6 +193,7 @@ import CoreData
         self.itemTemporalProperty = json[FeedKey.itemTemporalProperty.key] as? String
         self.itemsHaveIdentity = (json[FeedKey.itemsHaveIdentity.key] as? Bool) ?? false
         self.itemsHaveSpatialDimension = (json[FeedKey.itemsHaveSpatialDimension.key] as? Bool) ?? false
+        self.icon = json[FeedKey.icon.key] as? [AnyHashable : Any]
         self.eventId = eventId;
     }
     

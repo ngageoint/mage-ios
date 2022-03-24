@@ -9,38 +9,40 @@
 import AVKit;
 import MagicalRecord;
 import Kingfisher
+import QuickLook
 
 @objc protocol AttachmentViewDelegate {
     @objc func doneViewing(coordinator: NSObject);
 }
 
-@objc class AttachmentViewCoordinator: NSObject, MediaLoaderDelegate, NavigationControllerObserverDelegate, AskToDownloadDelegate {
+@objc class AttachmentViewCoordinator: NSObject, NavigationControllerObserverDelegate, AskToDownloadDelegate {
     var scheme: MDCContainerScheming?;
 
     var attachment: Attachment?
-    var delegate: AttachmentViewDelegate?
+    weak var delegate: AttachmentViewDelegate?
     var rootViewController: UINavigationController
     var navigationControllerObserver: NavigationControllerObserver
     var tempFile: String?
     var contentType: String?
     
-    var playerViewController: AVPlayerViewController?
-    var player: AVPlayer?
+    var mediaPreviewController: MediaPreviewController?
+
     var imageViewController: ImageAttachmentViewController?
     var observer: NSKeyValueObservation?
     
     var urlToLoad: URL?
     var fullAudioDataLength: Int = 0;
     
-    var mediaLoader: MediaLoader?;
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
+    var needsCloseButton: Bool = false
     
     @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.attachment = attachment;
         self.delegate = delegate;
         self.scheme = scheme;
+        contentType = attachment.contentType
         
         if let attachmentUrl = self.attachment?.url {
             self.tempFile =  NSTemporaryDirectory() + (URL(string: attachmentUrl)?.lastPathComponent ?? "tempfile");
@@ -49,7 +51,6 @@ import Kingfisher
         }
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
-        self.mediaLoader = MediaLoader(delegate: self);
     }
     
     @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
@@ -62,16 +63,17 @@ import Kingfisher
         
         self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
-        self.mediaLoader = MediaLoader(delegate: self);
     }
     
     @objc public func start() {
         self.start(true);
     }
     
-    @objc public func start(_ animated: Bool = true) {
+    @objc public func start(_ animated: Bool = true, needsCloseButton: Bool = false) {
+        self.needsCloseButton = needsCloseButton
         if UIDevice.current.userInterfaceIdiom == .pad {
             let navigationController = UINavigationController();
+            navigationController.view.backgroundColor = scheme?.colorScheme.surfaceColor
             self.rootViewController.present(navigationController, animated: animated, completion: nil);
             self.rootViewController = navigationController;
         }
@@ -124,7 +126,7 @@ import Kingfisher
             } else if contentType.hasPrefix("video") {
                 self.playAudioVideo();
             } else if contentType.hasPrefix("audio") {
-                self.downloadAudio();
+                self.playAudioVideo();
             }
         }
     }
@@ -142,7 +144,30 @@ import Kingfisher
             } else if contentType.hasPrefix("video") {
                 self.playAudioVideo();
             } else if contentType.hasPrefix("audio") {
-                self.downloadAudio();
+                self.playAudioVideo();
+            } else {
+                var url: URL?
+                if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
+                    url = URL(fileURLWithPath: localPath)
+                } else if let attachmentUrl = attachment.url {
+                    if let attachmentUrl = URL(string: attachmentUrl) {
+                        let token: String = StoredPassword.retrieveStoredToken()
+
+                        var urlComponents: URLComponents? = URLComponents(url: attachmentUrl, resolvingAgainstBaseURL: false);
+                        if (urlComponents?.queryItems) != nil {
+                            urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
+                        } else {
+                            urlComponents?.queryItems = [URLQueryItem(name:"access_token", value:token)];
+                        }
+                        url = (urlComponents?.url)!;
+                    }
+                }
+                if let url = url {
+                    mediaPreviewController = MediaPreviewController(fileName: attachment.name ?? "file", mediaTitle: attachment.name ?? "file", data: nil, url: url, mediaLoaderDelegate: self, scheme: scheme)
+                    self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
+                } else {
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Unable to open attachment \(attachment.name ?? "file")"))
+                }
             }
         }
     }
@@ -159,32 +184,10 @@ import Kingfisher
         }
     }
     
-    func downloadAudio() {
-        if let attachment = self.attachment {
-            if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
-                self.playAudioVideo();
-                return;
-            }
-            if let attachmentUrl = attachment.url, let urlToLoad = URL(string: String(format: "%@", attachmentUrl)) {
-                print("playing audio:", String(format: "%@", attachmentUrl));
-                self.urlToLoad = urlToLoad
-                if let name = attachment.name {
-                    self.tempFile = (self.tempFile ?? "") + "_" + name;
-                } else if let contentType = attachment.contentType, let ext = (UTTypeCopyPreferredTagWithClass(contentType as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue()) {
-                    self.tempFile = (self.tempFile ?? "") + "." + String(ext);
-                } else {
-                    self.tempFile = (self.tempFile ?? "") + ".mp3";
-                }
-                self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: urlToLoad);
-            }
-        } else if let urlToLoad = urlToLoad {
-            self.tempFile = (self.tempFile ?? "") + ".mp3";
-            self.mediaLoader?.downloadAudio(toFile: self.tempFile ?? "", from: urlToLoad);
-        }
-    }
-    
     func playAudioVideo() {
+        var name = "file"
         if let attachment = self.attachment {
+            name = attachment.name ?? "file"
             if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
                 print("Playing locally", localPath);
                 self.urlToLoad = URL(fileURLWithPath: localPath);
@@ -207,87 +210,16 @@ import Kingfisher
         guard let urlToLoad = self.urlToLoad else {
             return;
         }
-        let player = AVPlayer(url: urlToLoad);
-        self.player = player;
-        self.player?.currentItem?.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: nil)
-        // even though we are not going to do anything with the delegate, it must be set so we can later export the video if the user wants
-        (self.player?.currentItem?.asset as? AVURLAsset)?.resourceLoader.setDelegate(self, queue: .main)
         
-        player.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
-        player.automaticallyWaitsToMinimizeStalling = true;
-
-        let playerViewController = AVPlayerViewController();
-        self.playerViewController = playerViewController;
-        self.playerViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveVideo))
-        
-        self.playerViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismiss))
-        playerViewController.player = self.player;
-        playerViewController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth];
-        playerViewController.addObserver(self, forKeyPath: "videoBounds", options: [.old, .new], context: nil);
-
-        self.rootViewController.pushViewController(playerViewController, animated: false);
-        self.navigationControllerObserver.observePopTransition(of: playerViewController, delegate: self);
-        self.hasPushedViewController = true;
-        player.play();
+        mediaPreviewController = MediaPreviewController(fileName: name, mediaTitle: name, data: nil, url: urlToLoad, mediaLoaderDelegate: self, scheme: scheme)
+        self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
     }
-    
-    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(AVPlayerItem.status) {
-            let status: AVPlayerItem.Status
-            if let statusNumber = change?[.newKey] as? NSNumber {
-                status = AVPlayerItem.Status(rawValue: statusNumber.intValue)!
-            } else {
-                status = .unknown
-            }
-            
-            // Switch over status value
-            switch status {
-            case .readyToPlay:
-                // Player item is ready to play.
-                player?.play()
-            case .failed:
-                // Player item failed. See error.
-                if let error = (object as? AVPlayerItem)?.error?.localizedDescription {
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to play video with error: \(error)"))
-                } else {
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to play video"))
-                }
-            case .unknown:
-                // Player item is not yet ready.
-                print("unknown")
-            @unknown default:
-                print("fallthrough state")
-            }
-        }
-    }
-    
+ 
     func navigationControllerObserver(_ observer: NavigationControllerObserver, didObservePopTransitionFor viewController: UIViewController) {
-        if let player = self.playerViewController?.player {
-            player.pause();
-        }
         if (!self.ignoreNextDelegateCall) {
             self.delegate?.doneViewing(coordinator: self);
         }
         self.ignoreNextDelegateCall = false;
-    }
-    
-    // MARK: MediaLoadDelegate
-    func mediaLoadComplete(_ filePath: String, withNewFile: Bool) {
-        print("Media load complete");
-        if (withNewFile) {
-            MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
-                if let attachment = self.attachment {
-                    let localAttachment = attachment.mr_(in: localContext);
-                    localAttachment?.localPath = filePath;
-                }
-            }) { (success, error) in
-                if let attachment = self.attachment {
-                    if (attachment.contentType?.hasPrefix("audio") == true) {
-                        self.playAudioVideo();
-                    }
-                }
-            };
-        }
     }
     
     func getDocumentsDirectory() -> String {
@@ -296,73 +228,12 @@ import Kingfisher
         return documentsDirectory as String
     }
     
-    @objc func dismiss() {
+    @objc func dismiss(_ sender: UIBarButtonItem) {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            self.playerViewController?.dismiss(animated: true, completion: nil);
+//            self.playerViewController?.dismiss(animated: true, completion: nil);
         } else {
             self.rootViewController.popViewController(animated: true);
         }
-    }
-    
-    @objc func saveVideo() {
-        
-        self.playerViewController?.navigationItem.rightBarButtonItem?.title = "Saving..."
-        self.playerViewController?.navigationItem.rightBarButtonItem?.isEnabled = false
-        
-        guard let asset: AVURLAsset = player?.currentItem?.asset as? AVURLAsset , let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality) else {
-            self.playerViewController?.navigationItem.rightBarButtonItem?.title = "Save"
-            self.playerViewController?.navigationItem.rightBarButtonItem?.isEnabled = true
-            return;
-        }
-
-        var fileUrl: URL = URL(fileURLWithPath: self.getDocumentsDirectory());
-        if let name = attachment?.name {
-            fileUrl = fileUrl.appendingPathComponent(name);
-        } else {
-            fileUrl = fileUrl.appendingPathComponent("temp.mov");
-        }
-        exportSession.outputURL = URL(fileURLWithPath: fileUrl.path)
-        exportSession.outputFileType = .mov
-        let startTime = CMTimeMake(value: 0, timescale: 1)
-        let timeRange = CMTimeRangeMake(start: startTime, duration: asset.duration)
-        exportSession.timeRange = timeRange
-        print("Exporting to file \(fileUrl)")
-        if FileManager.default.fileExists(atPath: fileUrl.path) {
-            do {
-                try FileManager.default.removeItem(at: fileUrl)
-            } catch let error {
-                print("Failed to delete file with error: \(error)")
-            }
-        }
-        exportSession.exportAsynchronously {
-            DispatchQueue.main.async {
-                self.playerViewController?.navigationItem.rightBarButtonItem?.title = "Save"
-                self.playerViewController?.navigationItem.rightBarButtonItem?.isEnabled = true
-            }
-            switch exportSession.status {
-            case .completed:
-                UISaveVideoAtPathToSavedPhotosAlbum(fileUrl.path, self, #selector(self.videoExportComplete(videoPath:didFinishSavingWithError:contextInfo:)), nil)
-            case .failed:
-                if let recoverySuggestion = (exportSession.error as NSError?)?.localizedRecoverySuggestion {
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to save video. \(recoverySuggestion)"))
-                } else {
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Failed to save video. \(exportSession.error?.localizedDescription ?? "")"))
-                }
-            case .cancelled:
-                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Save video cancelled"))
-            default: break
-            }
-        }
-    }
-    
-    @objc func videoExportComplete(videoPath: String, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
-        do {
-            print("Removing file at \(videoPath)")
-            try FileManager.default.removeItem(atPath: videoPath);
-        } catch {
-            print("Error removing item \(error)")
-        }
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Saved video to the camera roll"))
     }
 }
 
@@ -370,4 +241,19 @@ import Kingfisher
 // this is only here to allow the export session to not fail if the user wants to export the video
 extension AttachmentViewCoordinator : AVAssetResourceLoaderDelegate {
     
+}
+
+extension AttachmentViewCoordinator : MediaLoaderDelegate {
+    func mediaLoadComplete(filePath: String, newFile: Bool) {
+        print("Media load complete");
+        if (newFile) {
+            MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
+                if let attachment = self.attachment {
+                    let localAttachment = attachment.mr_(in: localContext);
+                    localAttachment?.localPath = filePath;
+                }
+            }) { (success, error) in
+            };
+        }
+    }
 }

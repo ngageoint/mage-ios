@@ -336,7 +336,6 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSDictionary *) displaySection {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *themeString = @"";
     switch ([UIWindow getInterfaceStyle]) {
         case UIUserInterfaceStyleUnspecified:

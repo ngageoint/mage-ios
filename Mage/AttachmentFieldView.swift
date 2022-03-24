@@ -17,7 +17,7 @@ import MaterialComponents.MDCButton;
 }
 
 class AttachmentFieldView : BaseFieldView {
-    private var attachments: Set<Attachment>?;
+    private var attachments: [Attachment]?;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
@@ -116,6 +116,17 @@ class AttachmentFieldView : BaseFieldView {
         return button;
     }()
     
+    private lazy var fileButton: MDCButton = {
+        let button = MDCButton();
+        button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " File";
+        button.setImage(UIImage(named: "paperclip_thumbnail")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.addTarget(self, action: #selector(addFileAttachment), for: .touchUpInside);
+        button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
+        button.inkMaxRippleRadius = 30;
+        button.inkStyle = .unbounded;
+        return button;
+    }()
+    
     override func applyTheme(withScheme scheme: MDCContainerScheming?) {
         guard let scheme = scheme else {
             return
@@ -130,10 +141,12 @@ class AttachmentFieldView : BaseFieldView {
         galleryButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         cameraButton.applyTextTheme(withScheme: scheme);
         cameraButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
+        fileButton.applyTextTheme(withScheme: scheme);
+        fileButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         errorLabel.font = scheme.typographyScheme.caption;
         errorLabel.textColor = scheme.colorScheme.errorColor;
-        attachmentHolderView.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
-        attachmentCollectionView.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
+        attachmentHolderView.backgroundColor = scheme.colorScheme.surfaceColor
+        attachmentCollectionView.backgroundColor = scheme.colorScheme.surfaceColor;
         if (editMode) {
             self.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
         }
@@ -144,7 +157,7 @@ class AttachmentFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: Set<Attachment>? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [Attachment]? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.attachmentCreationCoordinator = attachmentCreationCoordinator;
@@ -173,7 +186,7 @@ class AttachmentFieldView : BaseFieldView {
             
             viewStack.addArrangedSubview(actionsHolderView);
             
-            if let allowedAttachmentTypes: [String] = field[FieldKey.allowedAttachmentTypes.key] as? [String] {
+            if let allowedAttachmentTypes: [String] = field[FieldKey.allowedAttachmentTypes.key] as? [String], !allowedAttachmentTypes.isEmpty {
                 if (allowedAttachmentTypes.contains("audio")) {
                     actionsHolderView.addArrangedSubview(audioButton);
                 }
@@ -189,7 +202,12 @@ class AttachmentFieldView : BaseFieldView {
                 actionsHolderView.addArrangedSubview(cameraButton);
                 actionsHolderView.addArrangedSubview(galleryButton);
                 actionsHolderView.addArrangedSubview(videoButton);
+                actionsHolderView.addArrangedSubview(fileButton)
             }
+            // give the last button room to breath
+            let endSpace = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 40))
+            endSpace.autoSetDimensions(to: CGSize(width: 0, height: 40))
+            actionsHolderView.addArrangedSubview(endSpace)
         }
     }
     
@@ -214,30 +232,34 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     override func setValue(_ value: Any?) {
-        setValue(value as? Set<Attachment>);
+        setValue(value as? [Attachment]);
     }
     
-    func setValue(_ value: Set<Attachment>? = nil) {
+    func setValue(_ value: [Attachment]? = nil) {
         self.attachments = value;
         setCollectionData(attachments: self.attachments);
     }
     
+    func setValue(set: Set<Attachment>? = nil) {
+        setValue(Array(set ?? Set()))
+    }
+    
     func addAttachment(_ attachment: Attachment) {
-        var attachments = self.attachments ?? Set(minimumCapacity: 0);
-        attachments.insert(attachment);
+        var attachments = self.attachments ?? [];
+        attachments.append(attachment);
         self.attachments = attachments
         setCollectionData(attachments: attachments);
     }
     
     func removeAttachment(_ attachment: Attachment) {
-        if var attachments = self.attachments {
-            attachments.remove(attachment);
+        if var attachments = self.attachments, let index = attachments.firstIndex(of: attachment) {
+            attachments.remove(at: index)
             self.attachments = attachments
             setCollectionData(attachments: attachments);
         }
     }
     
-    func setCollectionData(attachments: Set<Attachment>?) {
+    func setCollectionData(attachments: [Attachment]?) {
         attachmentCollectionDataStore.attachments = attachments;
         attachmentCollectionView.reloadData();
         setNeedsUpdateConstraints();
@@ -261,6 +283,7 @@ class AttachmentFieldView : BaseFieldView {
                 cameraButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
                 videoButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
                 galleryButton.autoSetDimensions(to: CGSize(width: 40, height: 40));
+                fileButton.autoSetDimensions(to: CGSize(width: 40, height: 40))
             }
         }
         setAttachmentHolderHeight();
@@ -301,6 +324,13 @@ class AttachmentFieldView : BaseFieldView {
         // let the button press be shown before moving
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
             attachmentCreationCoordinator?.addVoiceAttachment();
+        }
+    }
+    
+    @objc func addFileAttachment() {
+        // let the button press be shown before moving
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+            attachmentCreationCoordinator?.addFileAttachment();
         }
     }
 }

@@ -10,7 +10,7 @@ import MapKit
 
 @objc class ObservationAnnotationView : MKAnnotationView {
     
-    var mapView: MKMapView
+    weak var mapView: MKMapView?
     var dragCallback: AnnotationDragCallback?
     
     @objc public init(annotation: MKAnnotation?, reuseIdentifier: String, mapView: MKMapView, dragCallback: AnnotationDragCallback?) {
@@ -28,8 +28,9 @@ import MapKit
             super.center = newValue
             if let dragCallback = dragCallback {
                 let point = CGPoint(x: newValue.x, y: newValue.y - centerOffset.y)
-                let coordinate = mapView.convert(point, toCoordinateFrom: superview)
-                dragCallback.dragging(self, at: coordinate)
+                if let coordinate = mapView?.convert(point, toCoordinateFrom: superview) {
+                    dragCallback.dragging(self, at: coordinate)
+                }
             }
         }
         get {

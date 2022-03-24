@@ -20,12 +20,7 @@ class UserViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("UserViewController") {
-            
-            let recordSnapshots = false;
-//            Nimble_Snapshots.setNimbleTolerance(0.1);
-            
-            var userTableHeaderView: UserTableHeaderView!
-            var view: UIView!
+        
             var controller: UserViewController!
             var window: UIWindow!;
             
@@ -42,21 +37,6 @@ class UserViewControllerTests: KIFSpec {
                 guard let cgImage = image?.cgImage else { return UIImage() }
                 return UIImage(cgImage: cgImage)
             }
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.0);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot();
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
             
             beforeEach {
                 
@@ -84,7 +64,6 @@ class UserViewControllerTests: KIFSpec {
             }
             
             it("user view") {
-                var completeTest = false;
                 MageCoreDataFixtures.addEvent()
                 MageCoreDataFixtures.addUser()
                 MageCoreDataFixtures.addLocation()
@@ -107,20 +86,19 @@ class UserViewControllerTests: KIFSpec {
                 tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
                 
                 tester().tapView(withAccessibilityLabel: "location", traits: UIAccessibilityTraits(arrayLiteral: .button));
-                tester().waitForView(withAccessibilityLabel: "Location copied to clipboard");
+                tester().waitForView(withAccessibilityLabel: "Location 40.00850, -105.26780 copied to clipboard");
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().tapView(withAccessibilityLabel: "favorite", traits: UIAccessibilityTraits(arrayLiteral: .button));
                 tester().wait(forTimeInterval: 0.5);
                 expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for:.normal)).to(be(MDCPalette.green.accent700));
 
+                let directionsExpectation = self.expectation(forNotification: .DirectionsToItem, object: nil, handler: nil)
                 tester().tapView(withAccessibilityLabel: "directions", traits: UIAccessibilityTraits(arrayLiteral: .button));
-                tester().waitForView(withAccessibilityLabel: "Apple Maps");
-                tester().waitForView(withAccessibilityLabel: "Google Maps");
-                tester().waitForView(withAccessibilityLabel: "Cancel");
-                tester().tapView(withAccessibilityLabel: "Cancel");
+                let result: XCTWaiter.Result = XCTWaiter.wait(for: [directionsExpectation], timeout: 5.0)
+                XCTAssertEqual(result, .completed)
 
-                let observation: Observation = ((user.observations as? Set<Observation>)?.first)!;
-                let attachment: Attachment = ((observation.attachments as? Set<Attachment>)?.first!)! ;
+                let observation: Observation = ((user.observations)?.first)!;
+                let attachment: Attachment = ((observation.attachments)?.first!)! ;
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
                 tester().tapView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded");
@@ -134,17 +112,6 @@ class UserViewControllerTests: KIFSpec {
                 expect(nc.topViewController).toEventually(beAnInstanceOf(ObservationViewCardCollectionViewController.self));
                 tester().tapView(withAccessibilityLabel: "User ABC");
                 expect(nc.topViewController).toEventually(beAnInstanceOf(UserViewController.self));
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//                
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(10), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(10), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(10), description: "Map loaded")
-//                }
             }
         }
     }

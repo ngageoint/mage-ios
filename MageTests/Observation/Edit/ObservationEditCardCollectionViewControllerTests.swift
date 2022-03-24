@@ -9,7 +9,6 @@
 import Foundation
 import Quick
 import Nimble
-//import Nimble_Snapshots
 
 @testable import MAGE
 import CoreData
@@ -20,7 +19,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
         
         describe("ObservationEditCardCollectionViewController") {
             var observationEditController: ObservationEditCardCollectionViewController!
-            var view: UIView!
             var window: UIWindow!;
             var stackSetup = false;
             
@@ -30,10 +28,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     stackSetup = true;
                 }
                 window = TestHelpers.getKeyWindowVisible();
-                
-//                Nimble_Snapshots.setNimbleTolerance(0.0);
-//                Nimble_Snapshots.recordAllSnapshots()
-                
                 TestHelpers.resetUserDefaults();
 
                 MageCoreDataFixtures.clearAllData();
@@ -48,7 +42,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController.dismiss(animated: false);
                 window.rootViewController = nil;
                 observationEditController = nil;
-                view = nil;
             }
             
             describe("Legacy") {
@@ -68,9 +61,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                     
                     window.rootViewController = observationEditController;
-                    view = observationEditController.view;
-                    
-//                    expect(view).to(haveValidSnapshot(usesDrawRect: true));
                 }
                 
                 it("verify legacy behavior") {
@@ -84,7 +74,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     
                     let nc = UINavigationController(rootViewController: observationEditController);
                     window.rootViewController = nc;
-                    view = observationEditController.view;
                     
                     tester().waitForView(withAccessibilityLabel: "attachments Gallery");
                     tester().waitForView(withAccessibilityLabel: "Edit Attachment Card")
@@ -135,10 +124,9 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 let nc = UINavigationController(rootViewController: observationEditController);
                 
                 window.rootViewController = nc;
-                view = observationEditController.view;
                 
+                tester().waitForView(withAccessibilityLabel: "Save")
                 expect(observationEditController.title) == "Edit Observation";
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("empty new observation zero forms") {
@@ -151,8 +139,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("validation error on observation") {
@@ -165,9 +151,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 let nc = UINavigationController(rootViewController: observationEditController);
                 window.rootViewController = nc;
-                view = observationEditController.view;
                 
-                TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().tapView(withAccessibilityLabel: "Save");
                 tester().waitForView(withAccessibilityLabel: "The observation has validation errors.");
             }
@@ -182,13 +166,11 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form");
                 
-                expect(delegate.addFormCalled).to(beTrue());
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+                expect(delegate.addFormCalled).toEventually(beTrue());
             }
             
             it("show the form button if there are two forms") {
@@ -201,7 +183,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form");
@@ -220,7 +201,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
 //                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
@@ -234,7 +214,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form");
                 expect(delegate.addFormCalled).to(beTrue());
@@ -250,7 +229,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -261,7 +239,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
-                TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().waitForView(withAccessibilityLabel: "field1 value", value: "None", traits: .none);
 //                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
@@ -281,7 +258,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -308,7 +284,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -319,7 +294,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 
                 tester().waitForAnimationsToFinish()
-                TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().waitForView(withAccessibilityLabel: "Form 1")
                 
                 tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: -1.0);
@@ -342,7 +316,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 let nc = UINavigationController(rootViewController: observationEditController);
                 
                 window.rootViewController = nc;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -353,19 +326,13 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
-                
-                tester().swipeView(withAccessibilityLabel: "card scroll", in: .up)
-                tester().waitForAnimationsToFinish()
-                
-                // hide this button, b/c it is getting in the way of tapping the delete button in the tests
-                // update, still doesn't work.  Sometimes this test works, sometimes it doesn't.  I give up
+
+                tester().waitForTappableView(withAccessibilityLabel: "Add Form")
                 let addFormButton: UIButton = viewTester().usingLabel("Add Form").view as! UIButton
                 addFormButton.removeFromSuperview()
-                
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "Add Form")
                 tester().waitForTappableView(withAccessibilityLabel: "Delete Form")
-                let deleteButton: UIButton = viewTester().usingIdentifier("Delete Form").view as! UIButton;
-                tester().waitForTappableView(withAccessibilityLabel: "Delete Form")
-                deleteButton.tap()
+                tester().tapView(withAccessibilityLabel: "Delete Form")
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Form 1")
                 tester().tapView(withAccessibilityLabel: "Save");
                 expect(delegate.saveObservationCalled).to(beTrue());
@@ -384,7 +351,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 let nc = UINavigationController(rootViewController: observationEditController);
                 
                 window.rootViewController = nc;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -437,7 +403,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 let nc = UINavigationController(rootViewController: observationEditController);
                 
                 window.rootViewController = nc;
-                view = observationEditController.view;
                 
                 // try to save with zero forms, should fail
                 tester().waitForTappableView(withAccessibilityLabel: "Save")
@@ -485,7 +450,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 let nc = UINavigationController(rootViewController: observationEditController);
                 
                 window.rootViewController = nc;
-                view = observationEditController.view;
                 
                 // try to save with zero forms, should fail
                 tester().waitForTappableView(withAccessibilityLabel: "Save")
@@ -548,8 +512,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should expand current forms") {
@@ -585,12 +547,10 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForView(withAccessibilityLabel: "expand");
                 tester().tapView(withAccessibilityLabel: "expand");
                 tester().waitForAnimationsToFinish();
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should show current forms multiple forms") {
@@ -630,8 +590,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: false, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should show all the things form") {
@@ -667,8 +625,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("observation should show checkbox form") {
@@ -682,7 +638,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -692,7 +647,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                     observationEditController.formAdded(form: (event.forms!)[0]);
                 }
                 
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("filling out the form should update the form header") {
@@ -706,7 +660,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -720,7 +673,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Done");
                 tester().clearText(fromAndThenEnterText: "Some other text", intoViewWithAccessibilityLabel: "field1");
                 tester().tapView(withAccessibilityLabel: "Done");
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
             
             it("saving the form should send the observation to the delegate") {
@@ -735,11 +687,10 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 let navigationController = UINavigationController(rootViewController: observationEditController);
                 
                 window.rootViewController = navigationController;
-                view = observationEditController.view;
                 
                 tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection");
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
-                expect(delegate.addFormCalled).to(beTrue());
+                expect(delegate.addFormCalled).toEventually(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms!)[0]);
@@ -755,7 +706,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
 
                 tester().waitForView(withAccessibilityLabel: "field0");
                 tester().enterText("The Title", intoViewWithAccessibilityLabel: "field0");
-                TestHelpers.printAllAccessibilityLabelsInWindows();
 
                 tester().waitForFirstResponder(withAccessibilityLabel: "field0");
                 tester().tapView(withAccessibilityLabel: "Done");
@@ -790,11 +740,10 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 let navigationController = UINavigationController(rootViewController: observationEditController);
                 
                 window.rootViewController = navigationController;
-                view = observationEditController.view;
                 
                 tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection");
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
-                expect(delegate.addFormCalled).to(beTrue());
+                expect(delegate.addFormCalled).toEventually(beTrue());
                 
                 if let event: Event = Event.mr_findFirst() {
                     observationEditController.formAdded(form: (event.forms!)[0]);
@@ -809,7 +758,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "field0");
                 tester().enterText("The Title", intoViewWithAccessibilityLabel: "field0");
-                TestHelpers.printAllAccessibilityLabelsInWindows();
+
                 
                 tester().waitForFirstResponder(withAccessibilityLabel: "field0");
                 tester().tapView(withAccessibilityLabel: "Done");
@@ -833,7 +782,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 observationEditController = ObservationEditCardCollectionViewController(delegate: delegate, observation: observation, newObservation: true, containerScheme: MAGEScheme.scheme());
                 
                 window.rootViewController = observationEditController;
-                view = observationEditController.view;
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Add Form");
                 tester().tapView(withAccessibilityLabel: "Add Form")
@@ -846,7 +794,6 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 tester().setText("", intoViewWithAccessibilityLabel: "field1");
                 (viewTester().usingLabel("Field View field0").view as? TextFieldView)?.textFieldDidEndEditing(viewTester().usingLabel("field0").view as! UITextField)
                 (viewTester().usingLabel("Field View field1").view as? TextFieldView)?.textFieldDidEndEditing(viewTester().usingLabel("field1").view as! UITextField)
-//                expect(view).to(haveValidSnapshot(usesDrawRect: true));
             }
         }
     }

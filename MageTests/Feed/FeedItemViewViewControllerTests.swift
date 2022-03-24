@@ -9,7 +9,6 @@
 import Foundation
 import Quick
 import Nimble
-//import Nimble_Snapshots
 import PureLayout
 import OHHTTPStubs
 import Kingfisher
@@ -22,27 +21,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
     override func spec() {
         
         describe("FeedItemViewController no timestamp") {
-            let recordSnapshots = false;
-//            Nimble_Snapshots.setNimbleTolerance(0.1);
-
             var controller: FeedItemViewController!
             var window: UIWindow!;
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 5.0);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot();
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
-    
             
             beforeEach {
                 ImageCache.default.clearMemoryCache();
@@ -79,373 +59,164 @@ class FeedItemViewViewControllerTests: KIFSpec {
             
             it("feed item with no value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: [:])
-                var completeTest = false;
 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with no value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: [:])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with no value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with secondary value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
             
             it("feed item with secondary value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with secondary value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value and icon non mappable") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
                 
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value and icon mappable") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and long secondary value and icon mappable") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae neque et felis mattis congue ut in nisl. Phasellus a massa ipsum. In tempor nisi sit amet erat dignissim blandit. Aenean euismod non urna vel lobortis. Nulla interdum ipsum vel rhoncus efficitur. Aliquam suscipit viverra dui eu facilisis. Pellentesque iaculis, arcu nec porttitor tincidunt, urna ligula auctor nulla, sit amet egestas tortor mi in leo."])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
         }
         
         describe("FeedItemViewController with timestamp") {
-            let recordSnapshots = false;
-//            Nimble_Snapshots.setNimbleTolerance(0.1);
-            
             var controller: FeedItemViewController!
             var window: UIWindow!;
-            
-//            func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-//                print("Record snapshot?", recordSnapshots);
-//                if (recordSnapshots || recordThisSnapshot) {
-//                    DispatchQueue.global(qos: .userInitiated).async {
-//                        Thread.sleep(forTimeInterval: 1.0);
-//                        DispatchQueue.main.async {
-//                            expect(view) == recordSnapshot();
-//                            doneClosure?();
-//                        }
-//                    }
-//                } else {
-//                    doneClosure?();
-//                }
-//            }
-                        
+                
             beforeEach {
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
@@ -480,369 +251,171 @@ class FeedItemViewViewControllerTests: KIFSpec {
             
             it("feed item with no value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with no value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
             
             it("feed item with no value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["otherkey": "other value", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
             
             it("feed item with primary value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with secondary value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with secondary value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with secondary value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value non mappable") {
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value mappable") {
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
             
             it("feed item with primary and secondary value mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
             
             it("feed item with primary and secondary value and icon non mappable") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addNonMappableFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
             
             it("feed item with primary and secondary value and icon mappable") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style:["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
+
             }
             
             it("feed item with primary and secondary value and icon mappable mgrs") {
                 UserDefaults.standard.locationDisplay = .mgrs;
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "secondary Value for item", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and secondary value and icon without timestamp") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
             
             it("feed item with primary and long secondary value and icon mappable") {
                 MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
                 MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae neque et felis mattis congue ut in nisl. Phasellus a massa ipsum. In tempor nisi sit amet erat dignissim blandit. Aenean euismod non urna vel lobortis. Nulla interdum ipsum vel rhoncus efficitur. Aliquam suscipit viverra dui eu facilisis. Pellentesque iaculis, arcu nec porttitor tincidunt, urna ligula auctor nulla, sit amet egestas tortor mi in leo.", "timestamp": 1593440445])
-                var completeTest = false;
                 
                 if let feedItem: FeedItem = FeedItem.mr_findFirst() {
                     controller = FeedItemViewController(feedItem: feedItem, scheme: MAGEScheme.scheme())
                     window.rootViewController = controller;
                 }
-                
-//                maybeRecordSnapshot(controller.view, doneClosure: {
-//                    completeTest = true;
-//                })
-//                
-//                if (recordSnapshots) {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                } else {
-//                    expect(completeTest).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Test Complete");
-//                    expect(controller.view).toEventually(haveValidSnapshot(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Map loaded")
-//                }
             }
         }
     }

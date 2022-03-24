@@ -11,11 +11,11 @@ import MaterialComponents
 import UIKit
 import CoreLocation
 
-@objc protocol CoordinateFieldDelegate {
+@objc public protocol CoordinateFieldDelegate {
     @objc func fieldValueChanged(coordinate: CLLocationDegrees, field: CoordinateField);
 }
 
-@objc class CoordinateField:UIView {
+@objc public class CoordinateField:UIView {
     
     lazy var textField: MDCFilledTextField = {
         // this is just an estimated size
@@ -109,7 +109,7 @@ import CoreLocation
     }
     
     @discardableResult
-    override func resignFirstResponder() -> Bool {
+    public override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
         return textField.resignFirstResponder()
     }
@@ -118,7 +118,7 @@ import CoreLocation
 
 extension CoordinateField: UITextFieldDelegate {
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // allow backspace, decimal point and dash at the begining of the string
         let text = textField.text?.replacingCharacters(in: Range(range, in: textField.text!)!, with: string).uppercased()
         

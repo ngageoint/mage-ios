@@ -10,6 +10,12 @@
 
 @implementation Locations
 
++ (NSMutableArray *) getPredicatesForLocationsForMap {
+    NSMutableArray *predicates = [Locations getPredicatesForLocations];
+    [predicates addObject:[NSPredicate predicateWithValue:![[NSUserDefaults standardUserDefaults] boolForKey:@"hidePeople"]]];
+    return predicates;
+}
+
 + (NSMutableArray *) getPredicatesForLocations {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableArray *predicates = [NSMutableArray arrayWithObjects:
@@ -33,6 +39,18 @@
                           groupBy:nil
                          delegate:nil
                         inContext:[NSManagedObjectContext MR_defaultContext]];
+    
+    
+    return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];
+}
+
++ (Locations *) locationsForMap {
+    NSFetchedResultsController *fetchedResultsController = [Location MR_fetchAllSortedBy:@"timestamp"
+                                                                               ascending:NO
+                                                                           withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:[Locations getPredicatesForLocationsForMap]]
+                                                                                 groupBy:nil
+                                                                                delegate:nil
+                                                                               inContext:[NSManagedObjectContext MR_defaultContext]];
     
     
     return [[Locations alloc] initWithFetchedResultsController:fetchedResultsController];

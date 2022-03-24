@@ -15,6 +15,20 @@ extension Notification.Name {
     public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
     public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
     public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
+    public static let MapItemsTapped = Notification.Name("MapItemsTapped")
+    public static let MapAnnotationFocused = Notification.Name("MapAnnotationFocused")
+    public static let MapViewDisappearing = Notification.Name("MapViewDisappearing")
+    public static let ObservationUpdated = Notification.Name("ObservationUpdated")
+    public static let DirectionsToItem = Notification.Name("DirectionsToItem")
+    public static let DismissBottomSheet = Notification.Name("DismissBottomSheet")
+    public static let BottomSheetDismissed = Notification.Name("BottomSheetDismissed")
+    public static let GeoPackageImported = Notification.Name("mil.nga.giat.mage.geopackage.imported")
+    public static let ObservationFiltersChanged = Notification.Name("ObservationFiltersChanged")
+    public static let LocationFiltersChanged = Notification.Name("LocationFiltersChanged")
+    public static let ViewObservation = Notification.Name("ViewObservation")
+    public static let ViewUser = Notification.Name("ViewUser")
+    public static let ViewFeedItem = Notification.Name("ViewFeedItem")
+    public static let MapRequestFocus = Notification.Name("MapRequestFocus")
 }
 
 @objc public enum LocationDisplay : Int {
@@ -146,6 +160,15 @@ extension Notification.Name {
         }
     }
     
+    var selectedCaches: [String]? {
+        get {
+            return array(forKey: #function) as? [String];
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+    
     var serverMajorVersion: Int {
         get {
             return integer(forKey: #function)
@@ -158,6 +181,24 @@ extension Notification.Name {
     var serverMinorVersion: Int {
         get {
             return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var reportLocation: Bool {
+        get {
+            return bool(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var gpsDistanceFilter: Double {
+        get {
+            return double(forKey: #function)
         }
         set {
             set(newValue, forKey: #function)
@@ -453,6 +494,15 @@ extension Notification.Name {
         }
     }
     
+    var currentEventSelectedFeeds: [String] {
+        get {
+            return array(forKey: "selectedFeeds-\(Server.currentEventId() ?? -1)") as? [String] ?? []
+        }
+        set {
+            set(newValue, forKey: "selectedFeeds-\(Server.currentEventId() ?? -1)")
+        }
+    }
+    
     // MARK: GeoPackage keys
     var geoPackageFeatureTilesMaxPointsPerTile: Int {
         get {
@@ -487,6 +537,15 @@ extension Notification.Name {
         }
         set {
             set(newValue, forKey: "geopackage_features_max_features_per_table");
+        }
+    }
+    
+    var shapeScreenClickPercentage: Float {
+        get {
+            return float(forKey: "shape_screen_click_percentage")
+        }
+        set {
+            set(newValue, forKey: "shape_screen_click_percentage")
         }
     }
 }

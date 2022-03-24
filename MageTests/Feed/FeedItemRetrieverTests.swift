@@ -18,11 +18,11 @@ class MockFeedItemDelegate: NSObject, FeedItemDelegate {
     var lastFeedItemAdded: FeedItem?;
     var lastFeedItemRemoved: FeedItem?;
     
-    func add(_ feedItem: FeedItem!) {
+    func addFeedItem(_ feedItem: FeedItem) {
         lastFeedItemAdded = feedItem;
     }
     
-    func remove(_ feedItem: FeedItem!) {
+    func removeFeedItem(_ feedItem: FeedItem) {
         lastFeedItemRemoved = feedItem;
     }
 }
@@ -75,7 +75,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 var feedIds: [String] = ["0","1","2","3"];
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) as! [String]
+                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext)
                     expect(remoteIds) == feedIds;
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
@@ -92,7 +92,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 var feedIds: [String] = ["0","1","2","3"];
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) as! [String]
+                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext)
                     expect(remoteIds) == feedIds;
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
@@ -117,7 +117,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 let feedIds: [String] = ["0","1","2","3"];
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) as! [String]
+                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) 
                     expect(remoteIds) == feedIds;
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
@@ -138,7 +138,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 let feedIds: [String] = ["0","1","2","3"];
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) as! [String]
+                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) 
                     expect(remoteIds) == feedIds;
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
@@ -159,7 +159,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 let feedIds: [String] = ["0","1","2","3"];
                 let feeds = loadFeedsJson();
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) as! [String]
+                    let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) 
                     expect(remoteIds) == feedIds;
                 })
                 let feedItemDelegate = MockFeedItemDelegate();
@@ -188,7 +188,7 @@ class FeedItemRetrieverTests: KIFSpec {
                 waitUntil { done in
                     let feeds = loadFeedsJson();
                     MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                        let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) as! [String]
+                        let remoteIds: [String] = Feed.populateFeeds(feeds: feeds as! [[AnyHashable:Any]], eventId: 1, context: localContext) 
                         expect(remoteIds) == feedIds;
                     }) { (success, error) in
                         done();

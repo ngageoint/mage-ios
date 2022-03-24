@@ -211,6 +211,14 @@
             [self showSetting:viewController];
             break;
         }
+        case kDataFetching: {
+            
+            break;
+        }
+        case kDataPushing: {
+            
+            break;
+        }
     }
 }
 

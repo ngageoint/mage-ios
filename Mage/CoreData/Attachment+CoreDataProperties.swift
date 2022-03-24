@@ -33,4 +33,5 @@ extension Attachment {
     @NSManaged var observation: Observation?
     @NSManaged var taskIdentifier: NSNumber?
     @NSManaged var markedForDeletion: Bool
+    @NSManaged var order: NSNumber?
 }

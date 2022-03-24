@@ -26,12 +26,12 @@
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
-@property (strong, nonatomic) UINavigationController *navigationController;
+@property (weak, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) MageServer *server;
 @property (strong, nonatomic) NSString *signupUsername;
 @property (strong, nonatomic) NSString *captchaToken;
 @property (strong, nonatomic) NSDictionary *signupParameters;
-@property (strong, nonatomic) id<AuthenticationDelegate> delegate;
+@property (weak, nonatomic) id<AuthenticationDelegate> delegate;
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
@@ -51,6 +51,10 @@ BOOL signingIn = YES;
     _delegate = delegate;
     
     return self;
+}
+
+- (void)dealloc {
+    _delegate = nil;
 }
 
 - (void) createAccount {

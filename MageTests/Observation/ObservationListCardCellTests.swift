@@ -20,12 +20,9 @@ class ObservationListCardCellTests: KIFSpec {
     override func spec() {
         
         describe("ObservationListCardCellTests") {
-            
-            let recordSnapshots = false;
-            
+                        
             var window: UIWindow?;
             var viewController: ObservationTableViewController?;
-            var view: UIView?;
             var navigationController: UINavigationController?;
             
             beforeEach {
@@ -79,14 +76,7 @@ class ObservationListCardCellTests: KIFSpec {
                 expect(viewController?.observationDataStore.numberOfSections(in: (viewController?.tableView)!)).to(equal(1));
                 expect(viewController?.tableView.numberOfRows(inSection: 0)).to(equal(1));
                 
-                tester().waitForView(withAccessibilityLabel: "attachment \((observation.attachments as? Set<Attachment>)?.first!.name ?? "") loaded")
-
-                view = viewTester().usingLabel("observation card \(observation.objectID.uriRepresentation().absoluteString)").view
-//                if (!recordSnapshots) {
-//                    expect(view).to(haveValidSnapshot(usesDrawRect: true))
-//                } else {
-//                    expect(view) == recordSnapshot(usesDrawRect: true);
-//                }
+                tester().waitForView(withAccessibilityLabel: "attachment \((observation.attachments)?.first!.name ?? "") loaded")
             }
         }
     }

@@ -8,6 +8,7 @@
 
 import Foundation
 import Kingfisher
+import UIKit
 
 class PlaceholderImage: UIImageView { }
 extension PlaceholderImage: Placeholder {}

@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-#import "BaseMapOverlay.h"
+
+@class BaseMapOverlay;
 
 @interface TestingAppDelegate : AppDelegate
 @property (nonatomic, strong) UIWindow *window;

@@ -7,8 +7,8 @@
 #import <UIKit/UIKit.h>
 #import "LocationService.h"
 #import "AttachmentPushService.h"
-#import "BaseMapOverlay.h"
 
+@class BaseMapOverlay;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -20,5 +20,6 @@
 - (void) createRootView;
 - (BaseMapOverlay *) getBaseMap;
 - (BaseMapOverlay *) getDarkBaseMap;
++ (UIViewController*) topMostController;
 
 @end

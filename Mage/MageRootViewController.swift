@@ -13,6 +13,7 @@ import Kingfisher
     var moreTableViewDelegate: UITableViewDelegate?;
     var scheme: MDCContainerScheming?;
     var feedViewControllers: [UINavigationController] = [];
+    var mapRequestFocusObserver: Any?
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
         let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self);
@@ -40,10 +41,17 @@ import Kingfisher
         return nc;
     }()
     
+//    private lazy var mapTab: UINavigationController = {
+//        let mapViewController: MapViewController = MapViewController(scheme: self.scheme);
+//        let nc = UINavigationController(rootViewController: mapViewController);
+//        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
+//        return nc;
+//    }()
+    
     private lazy var mapTab: UINavigationController = {
-        let mapViewController: MapViewController = MapViewController(scheme: self.scheme);
+        let mapViewController: MageMapViewController = MageMapViewController(scheme: scheme)
         let nc = UINavigationController(rootViewController: mapViewController);
-        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: 0);
+        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: -1);
         return nc;
     }()
     
@@ -110,37 +118,30 @@ import Kingfisher
         setServerConnectionStatus();
         UserDefaults.standard.addObserver(self, forKeyPath: "loginType" , options: .new, context: nil);
         
-        NotificationCenter.default.addObserver(forName: .StartStraightLineNavigation, object: nil, queue: .main) { [weak self]  notification in
-            guard let notificationObject: StraightLineNavigationNotification = notification.object as? StraightLineNavigationNotification else {
-                return;
-            }
+        mapRequestFocusObserver = NotificationCenter.default.addObserver(forName: .MapRequestFocus, object: nil, queue: .main) { [weak self]  notification in
             self?.mapTab.popToRootViewController(animated: false);
             self?.selectedViewController = self?.mapTab;
             
-            if let mvc: MapViewController = self?.mapTab.viewControllers[0] as? MapViewController {
-                mvc.mapDelegate.feedItemToNavigateTo = nil;
-                mvc.mapDelegate.userToNavigateTo = nil;
-                if let user = notificationObject.user {
-                    mvc.mapDelegate.userToNavigateTo = user;
-                } else if let feedItem = notificationObject.feedItem {
-                    mvc.mapDelegate.feedItemToNavigateTo = feedItem;
-                }
-                mvc.mapDelegate.startStraightLineNavigation(notificationObject.coordinate, image: notificationObject.image);
-            }
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
-        mapTab.viewControllers = [];
+        
+        mapTab.viewControllers.removeAll()
         Mage.singleton.stopServices();
         offlineObservationManager.stop();
-        UserDefaults.standard.removeObserver(self, forKeyPath: "loginType", context: nil);
-        NotificationCenter.default.removeObserver(self, name: .StartStraightLineNavigation, object: nil);
+        offlineObservationManager.delegate = nil
+        if let mapRequestFocusObserver = mapRequestFocusObserver {
+            NotificationCenter.default.removeObserver(mapRequestFocusObserver, name: .MapRequestFocus, object: nil);
+        }
+        self.delegate = nil
+        UserDefaults.standard.removeObserver(self, forKeyPath: "loginType")
     }
     
     func createOrderedTabs() {
         var allTabs: [UIViewController] = self.viewControllers ?? [];
+//        allTabs.append(mapTab2)
         allTabs.append(mapTab);
         allTabs.append(settingsTabItem);
         if let meTab = meTab {
@@ -181,7 +182,7 @@ import Kingfisher
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
         nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));
 
-        if let url: URL = feed.iconURL {
+        if let url: URL = feed.tabIconURL {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
             KingfisherManager.shared.retrieveImage(with: url, options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier),

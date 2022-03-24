@@ -19,6 +19,10 @@ import Foundation
         UserDefaults.standard.addObserver(self, forKeyPath: "observationFetchFrequency", options: .new, context: nil)
     }
     
+    deinit {
+        UserDefaults.standard.removeObserver(self, forKeyPath: "observationFetchFrequency")
+    }
+    
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let change = change else {
             return

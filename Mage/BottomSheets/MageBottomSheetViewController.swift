@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 @objc protocol BottomSheetDelegate {
     @objc optional func bottomSheetItemShowing(_ item: BottomSheetItem);
@@ -32,12 +33,12 @@ import UIKit
     private var rightConstraint: NSLayoutConstraint?;
     private var leftConstraint: NSLayoutConstraint?;
     var currentBottomSheetView: BottomSheetView?
-    private var bottomSheetDelegate: BottomSheetDelegate?
+    var mapView: MKMapView?
     
     @objc public lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
         scrollView.accessibilityIdentifier = "feature bottom sheet";
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return scrollView;
     }()
     
@@ -131,6 +132,10 @@ import UIKit
         return view;
     }()
     
+    deinit {
+        items.removeAll()
+    }
+    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }
@@ -139,11 +144,11 @@ import UIKit
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public convenience init(items: [BottomSheetItem], scheme: MDCContainerScheming?, bottomSheetDelegate: BottomSheetDelegate? = nil) {
+    @objc public convenience init(items: [BottomSheetItem], mapView: MKMapView?, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.items = items;
-        self.bottomSheetDelegate = bottomSheetDelegate;
+        self.mapView = mapView
         pageControl.numberOfPages = items.count
     }
 
@@ -164,6 +169,11 @@ import UIKit
         populateView();
         
         view.setNeedsUpdateConstraints();
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
     
     func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
@@ -210,9 +220,13 @@ import UIKit
         if (!didSetUpConstraints) {
             scrollView.autoPinEdge(toSuperviewEdge: .top);
             scrollView.autoPinEdge(toSuperviewEdge: .bottom);
-            
-            stackView.autoPinEdgesToSuperviewEdges();
+
+            stackView.autoPinEdge(toSuperviewEdge: .left)
+            stackView.autoPinEdge(toSuperviewEdge: .right)
+            stackView.autoPinEdge(toSuperviewEdge: .top)
+            stackView.autoPinEdge(toSuperviewMargin: .bottom)
             stackView.autoMatch(.width, to: .width, of: scrollView);
+            stackView.autoAlignAxis(toSuperviewAxis: .vertical)
             didSetUpConstraints = true;
         }
         
@@ -230,13 +244,15 @@ import UIKit
     }
     
     func populateView() {
+        let item = self.items[self.pageControl.currentPage];
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
+        
         UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
             if self.currentBottomSheetView?.superview != nil {
                 self.currentBottomSheetView?.removeFromSuperview();
             }
             self.pageNumberLabel.text = "\(self.pageControl.currentPage+1) of \(self.pageControl.numberOfPages)";
             
-            let item = self.items[self.pageControl.currentPage];
             if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
                 self.currentBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
                 self.stackView.addArrangedSubview(self.currentBottomSheetView!);
@@ -255,8 +271,7 @@ import UIKit
             }
             self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
             self.view.setNeedsUpdateConstraints();
-            self.bottomSheetDelegate?.bottomSheetItemShowing?(item)
-        }, completion: nil);
+        }, completion: nil)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

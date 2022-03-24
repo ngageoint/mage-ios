@@ -13,7 +13,7 @@ class LocationDataStore: NSObject {
     var tableView: UITableView;
     var scheme: MDCContainerScheming?;
     var locations: Locations?;
-    var actionsDelegate: UserActionsDelegate?;
+    weak var actionsDelegate: UserActionsDelegate?;
     
     public init(tableView: UITableView, actionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {
         self.scheme = scheme;

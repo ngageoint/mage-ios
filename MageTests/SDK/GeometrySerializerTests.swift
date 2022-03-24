@@ -9,6 +9,7 @@
 import Foundation
 import Quick
 import Nimble
+import sf_ios
 
 @testable import MAGE
 

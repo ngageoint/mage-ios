@@ -72,16 +72,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.primaryColor];
     }
     
-    private lazy var mapDelegate: MapDelegate = {
-        let mapDelegate: MapDelegate = MapDelegate();
-        return mapDelegate;
-    }()
-    
-    private lazy var mapView: MKMapView = {
-        let mapView = MKMapView(forAutoLayout: ());
+    private lazy var mapView: SingleUserMapView = {
+        let mapView = SingleUserMapView(user: user, scheme: scheme)
         mapView.autoSetDimension(.height, toSize: 150);
-        mapView.delegate = mapDelegate;
-        mapDelegate.mapView = mapView;
         return mapView;
     }()
     
@@ -228,6 +221,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     @objc public convenience init(user: User, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
+        self.user = user
         self.configureForAutoLayout();
         layoutView();
         applyTheme(withContainerScheme: self.scheme);
@@ -237,8 +231,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     
     deinit {
         NotificationCenter.default.removeObserver(self);
-        self.mapDelegate.cleanup();
-        self.mapView.delegate = nil;
+        mapView.cleanupMapMixins()
     }
     
     func layoutView() {
@@ -253,11 +246,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     }
     
     func start() {
-        mapDelegate.setupListeners();
-        mapDelegate.allowEnlarge = false;
-        mapDelegate.observations = Observations.init(for: user);
-        mapDelegate.locations = Locations.init(for: user);
-        
+
         if (currentUserIsMe) {
             let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
             if (locations.count != 0) {
@@ -272,39 +261,22 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                     horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
                     verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
                     timestamp: location.timestamp!);
-                self.mapDelegate.update(location, for: user);
             }
-            
-        }
-        if (userLastLocation == nil) {
-            if let controller = mapDelegate.locations.fetchedResultsController as? NSFetchedResultsController<Location>, let locations = controller.fetchedObjects {
-                if (locations.count != 0) {
-                    let location: Location = locations[0] as Location
-                    let dictionary: [String : Any] = location.properties as! [String : Any];
-                    if let coordinate = location.location?.coordinate {
-                        userLastLocation = CLLocation(
-                            coordinate: coordinate,
-                            altitude: dictionary["altitude"] as? CLLocationDistance ?? 0.0,
-                            horizontalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
-                            verticalAccuracy: dictionary["accuracy"] as? CLLocationAccuracy ?? 0.0,
-                            timestamp: location.timestamp!);
-                    }
-                }
+        } else {
+            if let user = user, let location = Location.mr_findFirst(with:NSPredicate(format: "user = %@", user)) {
+                userLastLocation = location.location
             }
-            mapDelegate.locations.fetchedResultsController.delegate = self;
         }
         
         if (userLastLocation != nil) {
             setLocationText(userLastLocation: userLastLocation!);
             locationView.isHidden = false;
-            zoomAndCenterMap(location: userLastLocation!);
         } else {
             locationView.isHidden = true;
         }
     }
     
     func stop() {
-        mapDelegate.cleanup();
     }
     
     @objc public func populate(user: User) {
@@ -325,14 +297,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let cacheOnly = DataConnectionUtilities.shouldFetchAvatars();
         avatarImage.showImage(cacheOnly: cacheOnly);
     }
-    
-    func zoomAndCenterMap(location: CLLocation) {
-        let latitudeMeters: CLLocationDistance = location.horizontalAccuracy * 2.5;
-        let longitudeMeters: CLLocationDistance = location.horizontalAccuracy * 2.5;
-        let region: MKCoordinateRegion = mapView.regionThatFits(MKCoordinateRegion(center: location.coordinate, latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters));
-        mapDelegate.selectedUser(self.user, region: region);
-    }
-    
+
     @objc public func updateUserDefaults(notification: Notification) {
         if let userLastLocation = userLastLocation {
             setLocationText(userLastLocation: userLastLocation);
@@ -537,21 +502,6 @@ extension UserTableHeaderView : UIImagePickerControllerDelegate {
                 }
             }
         }
-    }
-    
-}
-
-extension UserTableHeaderView : NSFetchedResultsControllerDelegate {
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        if let controller = mapDelegate.locations.fetchedResultsController as? NSFetchedResultsController<Location>, let locations: [Location] = controller.fetchedObjects {
-            self.mapDelegate.updateLocations(locations);
-            if (locations.count != 0) {
-                let centroid: SFPoint = SFGeometryUtils.centroid(of: locations[0].geometry);
-                let location: CLLocation = CLLocation(latitude: centroid.y as! CLLocationDegrees, longitude: centroid.x as! CLLocationDegrees);
-                zoomAndCenterMap(location: location);
-            }
-        }
-        
     }
 }
 

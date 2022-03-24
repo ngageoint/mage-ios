@@ -10,13 +10,13 @@ import CoreData
 
 @objc public class Attachment: NSManagedObject {
     
-    @objc public static func attachment(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Attachment? {
+    public static func attachment(json: [AnyHashable : Any], order: Int? = 0, context: NSManagedObjectContext) -> Attachment? {
         let attachment = Attachment.mr_createEntity(in: context);
-        attachment?.populate(json: json);
+        attachment?.populate(json: json, order: order);
         return attachment;
     }
     
-    @objc public func populate(json: [AnyHashable : Any]) {
+    public func populate(json: [AnyHashable : Any], order: Int? = 0) {
         self.remoteId = json[AttachmentKey.id.key] as? String
         self.contentType = json[AttachmentKey.contentType.key] as? String
         self.url = json[AttachmentKey.url.key] as? String
@@ -24,6 +24,11 @@ import CoreData
         self.size = json[AttachmentKey.size.key] as? NSNumber
         self.observationFormId = json[AttachmentKey.observationFormId.key] as? String
         self.fieldName = json[AttachmentKey.fieldName.key] as? String
+        if let order = order {
+            self.order = NSNumber(value:order)
+        } else {
+            self.order = 0
+        }
         if let dirty = json[AttachmentKey.dirty.key] as? Bool {
             self.dirty = dirty;
         } else {

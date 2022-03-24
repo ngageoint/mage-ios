@@ -8,6 +8,7 @@
 
 import Foundation
 import Kingfisher
+import UIKit
 
 class MDCActivityIndicatorProgress: Indicator {
     private let progressIndicatorView: IndicatorView
@@ -100,6 +101,12 @@ class AttachmentSlideShow: UIView {
         self.accessibilityLabel = "attachment slideshow";
     }
     
+    deinit {
+        for subview in stackView.subviews {
+            subview.removeFromSuperview()
+        }
+    }
+    
     func getAttachmentUrl(attachment: Attachment) -> URL {
         if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
             return URL(fileURLWithPath: attachment.localPath!);
@@ -150,10 +157,16 @@ class AttachmentSlideShow: UIView {
                                     });
     }
     
+    func clear() {
+        for view in stackView.arrangedSubviews {
+            view.removeFromSuperview();
+        }
+    }
+    
     func populate(observation: Observation, attachmentSelectionDelegate: AttachmentSelectionDelegate?) {
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         
-        guard let attachments = (observation.attachments)?.filter({ attachment in
+        guard let attachments = (observation.orderedAttachments)?.filter({ attachment in
             return attachment.url != nil
         }) else {
             return
@@ -255,6 +268,21 @@ class AttachmentSlideShow: UIView {
                 imageView.image = UIImage(named: "paperclip_thumbnail");
                 imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
                 imageView.contentMode = .scaleAspectFit;
+                imageView.setAttachment(attachment: attachment);
+                
+                let label = UILabel.newAutoLayout()
+                label.text = attachment.name
+                label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+                label.font = scheme?.typographyScheme.overline
+                label.autoSetDimension(.height, toSize: label.font.pointSize)
+                imageView.addSubview(label)
+                label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
+                
+                if (attachmentSelectionDelegate != nil) {
+                    imageView.isUserInteractionEnabled = true;
+                    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.imageViewTapped(sender:)))
+                    imageView.addGestureRecognizer(tapGesture);
+                }
             }
             
         }

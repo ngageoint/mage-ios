@@ -11,6 +11,65 @@ import CoreData
 
 @objc public class StaticLayer : Layer {
     
+    public var features: [[AnyHashable: Any]]? {
+        get {
+            return data?["features"] as? [[AnyHashable: Any]]
+        }
+    }
+    
+    static func featureName(feature: [AnyHashable : Any]) -> String? {
+        return (feature["properties"] as? [AnyHashable : Any])?["name"] as? String
+    }
+    
+    static func featureDescription(feature: [AnyHashable : Any]) -> String? {
+        return (feature["properties"] as? [AnyHashable : Any])?["description"] as? String
+    }
+    
+    static func featureTimestamp(feature: [AnyHashable : Any]) -> Date? {
+        guard let timestamp = (feature["properties"] as? [AnyHashable : Any])?["timestamp"] as? String else {
+            return nil
+        }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withTime, .withColonSeparatorInTime, .withTimeZone];
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
+        let lastModifiedDate = formatter.date(from: timestamp) ?? Date();
+        return lastModifiedDate
+    }
+    
+    static func featureType(feature: [AnyHashable : Any]) -> String? {
+        return (feature["geometry"] as? [AnyHashable : Any])?["type"] as? String
+    }
+    
+    static func featureCoordinates(feature: [AnyHashable : Any]) -> [Any]? {
+        return (feature["geometry"] as? [AnyHashable : Any])?["coordinates"] as? [Any]
+    }
+    
+    static func featureFillOpacity(feature: [AnyHashable : Any]) -> Double {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.polyStyle.color.opacity") as? Double ?? 255.0
+    }
+    
+    static func featureFillColor(feature: [AnyHashable : Any]) -> String {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.polyStyle.color.rgb") as? String ?? "#000000"
+    }
+    
+    func featureLineOpacity(feature: [AnyHashable : Any]) -> Double {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.color.opacity") as? Double ?? 255.0
+    }
+    
+    static func featureLineColor(feature: [AnyHashable : Any]) -> String {
+        return (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.color.rgb") as? String ?? "#000000"
+    }
+    
+    static func featureLineWidth(feature: [AnyHashable : Any]) -> Double {
+        let width = (feature as NSDictionary).value(forKeyPath: "properties.style.lineStyle.width")
+        if let doubleWidth = width as? Double {
+            return doubleWidth
+        } else if let stringWidth = width as? String {
+            return Double(stringWidth) ?? 1.0
+        }
+        return 1.0
+    }
+    
     @objc public static let StaticLayerLoaded = "mil.nga.giat.mage.static.layer.loaded";
     
     @objc public static func operationToFetchStaticLayerData(layer: StaticLayer, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {

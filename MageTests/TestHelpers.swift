@@ -72,7 +72,7 @@ class TestHelpers {
     
     public static func printAllAccessibilityLabelsInWindows() {
         let labelArray = TestHelpers.getAllAccessibilityLabelsInWindows();
-        NSLog("labelArray = \(labelArray)")
+        NSLog("labelArray = \(labelArray ?? [])")
     }
     
     public static func clearImageCache() {
@@ -89,6 +89,7 @@ class TestHelpers {
         if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
             let eventsDirectory = documentsDirectory.appendingPathComponent("events");
+            let geopackagesDirectory = documentsDirectory.appendingPathComponent("geopackages");
             do {
                 try FileManager.default.removeItem(at: attachmentsDirectory);
             } catch {
@@ -99,6 +100,12 @@ class TestHelpers {
                 try FileManager.default.removeItem(at: eventsDirectory);
             } catch {
                 print("Failed to remove events directory.  Moving on.")
+            }
+            
+            do {
+                try FileManager.default.removeItem(at: geopackagesDirectory);
+            } catch {
+                print("Failed to remove geopackages directory.  Moving on.")
             }
         }
         
@@ -121,13 +128,11 @@ class TestHelpers {
     public static func cleanUpStack() {
         if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments");
-            let eventsDirectory = documentsDirectory.appendingPathComponent("events");
-            do {
-                try FileManager.default.removeItem(at: attachmentsDirectory);
-                try FileManager.default.removeItem(at: eventsDirectory);
-            } catch {
-                print("Failed to remove events or attachments directory.  Moving on.")
-            }
+            let eventsDirectory = documentsDirectory.appendingPathComponent("events")
+            let geopackagesDirectory = documentsDirectory.appendingPathComponent("geopackages");
+            try? FileManager.default.removeItem(at: attachmentsDirectory);
+            try? FileManager.default.removeItem(at: eventsDirectory);
+            try? FileManager.default.removeItem(at: geopackagesDirectory)
         }
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
         MageInitializer.initializePreferences();

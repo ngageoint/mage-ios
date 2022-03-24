@@ -11,10 +11,9 @@
 #import "GPKGMapShapeConverter.h"
 #import "MapShapeObservation.h"
 #import "MapAnnotationObservation.h"
-#import "StyledPolygon.h"
-#import "StyledPolyline.h"
 #import "ObservationShapeStyle.h"
 #import "ObservationShapeStyleParser.h"
+#import "MAGE-Swift.h"
 
 @interface MapObservationManager ()
 
@@ -59,7 +58,7 @@
         annotation.animateDrop = animateDrop;
         [_mapView addAnnotation:annotation];
         
-        observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];
+//        observationShape = [[MapAnnotationObservation alloc] initWithObservation:observation andAnnotation:annotation];
     } else{
         
         ObservationShapeStyle *style = [ObservationShapeStyleParser styleOfObservation: observation];

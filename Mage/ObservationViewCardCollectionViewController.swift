@@ -241,37 +241,7 @@ import MaterialComponents.MDCContainerScheme;
     }
     
     func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-//        let eventForm: Form? = self.eventForms.first { (form) -> Bool in
-//            return form.formId?.intValue == observationForm[EventKey.formId.key] as? Int
-//        }
-//
-//        let fields: [[String: Any]] = eventForm?.formJson?.[FormKey.fields.key] as? [[String: Any]] ?? [];
-//
-//        var formPrimaryValue: String? = nil;
-//        var formSecondaryValue: String? = nil;
-//
-//        if let primaryFieldName = eventForm?[FormKey.primaryFeedField.key] as? String {
-//            if let primaryField = fields.first(where: { field in
-//                return (field[FieldKey.name.key] as? String) == primaryFieldName
-//            }) {
-//                if let obsfield = observationForm[primaryFieldName] {
-//                    formPrimaryValue = Observation.fieldValueText(value: obsfield, field: primaryField)
-//                }
-//            }
-//        }
-//
-//        if let secondaryFieldName = eventForm?[FormKey.secondaryFeedField.key] as? String {
-//            if let secondaryField = fields.first(where: { field in
-//                return (field[FieldKey.name.key] as? String) == secondaryFieldName
-//            }) {
-//                if let obsfield = observationForm[secondaryFieldName] {
-//                    formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
-//                }
-//            }
-//        }
-        
         let eventForm = event?.form(id: observationForm[EventKey.formId.key] as? NSNumber)
-        let fields: [[String: Any]] = eventForm?.fields ?? [];
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
@@ -418,14 +388,10 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
-        guard let location = observation.location else {
-            return;
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            let notification = DirectionsToItemNotification(observation: observation, user: nil, feedItem: nil, sourceView: sourceView)
+            NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
-        var extraActions: [UIAlertAction] = [];
-        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(observation: observation), coordinate: location.coordinate))
-        }));
-        ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
     
     func makeImportant(_ observation: Observation, reason: String) {
