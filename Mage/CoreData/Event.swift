@@ -171,10 +171,10 @@ import CoreData
     }
     
     @objc public func form(id: NSNumber?) -> Form? {
-        guard let id = id, let managedObjectContext = self.managedObjectContext else {
+        guard let id = id, let managedObjectContext = self.managedObjectContext, let remoteId = remoteId else {
             return nil
         }
-        return Form.mr_findFirst(byAttribute: "formId", withValue: id, in: managedObjectContext)
+        return Form.mr_findFirst(with: NSPredicate(format: "\(FormKey.eventId.key) == %@ AND \(FormKey.formId.key) == %@", remoteId, id), in: managedObjectContext)
     }
     
     @objc public var forms: [Form]? {

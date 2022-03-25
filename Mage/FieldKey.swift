@@ -49,6 +49,7 @@ public enum EventKey : String {
 
 public enum FormKey : String {
     
+    case eventId
     case name
     case primaryField
     case secondaryField = "variantField"

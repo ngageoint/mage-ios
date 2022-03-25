@@ -53,6 +53,8 @@ import Foundation
             String(describing: Event.self): Event.mr_truncateAll(in: localContext),
             String(describing: Feed.self): Feed.mr_truncateAll(in: localContext),
             String(describing: FeedItem.self): FeedItem.mr_truncateAll(in: localContext),
+            String(describing: Form.self): Form.mr_truncateAll(in: localContext),
+            String(describing: FormJson.self): FormJson.mr_truncateAll(in: localContext),
             String(describing: GPSLocation.self): GPSLocation.mr_truncateAll(in: localContext),
             String(describing: Location.self): Location.mr_truncateAll(in: localContext),
             String(describing: Observation.self): Observation.mr_truncateAll(in: localContext),
