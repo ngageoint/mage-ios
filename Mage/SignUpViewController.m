@@ -33,8 +33,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
 @property (strong, nonatomic) id<SignupDelegate> delegate;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *signupButton;
+@property (weak, nonatomic) IBOutlet MDCButton *cancelButton;
+@property (weak, nonatomic) IBOutlet MDCButton *signupButton;
 @property (weak, nonatomic) IBOutlet UILabel *mageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *wandLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
@@ -72,8 +72,8 @@
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     [self.mageServerURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
     self.mageVersion.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    self.signupButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    [self.signupButton applyContainedThemeWithScheme:self.scheme];
+    [self.cancelButton applyContainedThemeWithScheme:self.scheme];
     self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.passwordStrengthText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.showPasswordText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];

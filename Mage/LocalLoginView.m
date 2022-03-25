@@ -16,10 +16,10 @@
 
 @property (weak, nonatomic) IBOutlet MDCFilledTextField *usernameField;
 @property (weak, nonatomic) IBOutlet MDCFilledTextField *passwordField;
-@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet MDCButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *showPasswordLabel;
 @property (weak, nonatomic) IBOutlet UILabel *signupDescription;
-@property (weak, nonatomic) IBOutlet UIButton *signupButton;
+@property (weak, nonatomic) IBOutlet MDCButton *signupButton;
 @property (weak, nonatomic) IBOutlet UISwitch *showPassword;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *signupContainerView;
@@ -38,11 +38,12 @@
     self.usernameField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.passwordField.leadingView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     
-    self.loginButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.signupDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     [self.signupButton setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
     self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
+    [self.loginButton applyContainedThemeWithScheme:self.scheme];
+    [self.signupButton applyTextThemeWithScheme:self.scheme];
 }
 
 - (id) init {
@@ -57,6 +58,8 @@
 }
 
 - (void) didMoveToSuperview {
+    [self.signupButton setTitle:@"Sign Up Here" forState:UIControlStateNormal];
+    [self.loginButton setTitle:@"Sign In" forState:UIControlStateNormal];
     UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"me"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.usernameField setLeadingView:meImage];
     self.usernameField.leadingViewMode = UITextFieldViewModeAlways;

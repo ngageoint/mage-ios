@@ -14,11 +14,11 @@
 
 @interface ServerURLController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *setServerUrlText;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet MDCButton *cancelButton;
 @property (weak, nonatomic) IBOutlet MDCFilledTextField *serverURL;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *errorButton;
-@property (weak, nonatomic) IBOutlet UIButton *okButton;
+@property (weak, nonatomic) IBOutlet MDCButton *okButton;
 @property (weak, nonatomic) IBOutlet UITextView *errorStatus;
 @property (strong, nonatomic) id<ServerURLDelegate> delegate;
 @property (strong, nonatomic) NSString *error;
@@ -56,8 +56,8 @@
     self.view.backgroundColor = self.scheme.colorScheme.surfaceColor; // [UIColor background];
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
-    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.okButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    [self.cancelButton applyContainedThemeWithScheme:self.scheme];
+    [self.okButton applyContainedThemeWithScheme:self.scheme];
     self.errorStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.setServerUrlText.textColor = self.scheme.colorScheme.primaryColor;
     
@@ -77,6 +77,9 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self.okButton setTitle:@"OK" forState:UIControlStateNormal];
+    [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     
     UIImageView *worldImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"world"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.serverURL setLeadingView:worldImage];
