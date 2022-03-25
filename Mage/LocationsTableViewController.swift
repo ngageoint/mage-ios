@@ -164,7 +164,7 @@ class LocationsTableViewController: UITableViewController {
     }
     
     func setNavBarTitle() {
-        let timeFilterString = MageFilter.getString();
+        let timeFilterString = MageFilter.getLocationFilterString()
         self.navigationItem.setTitle("People", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
     }
     
