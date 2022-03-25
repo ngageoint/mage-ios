@@ -166,6 +166,7 @@
     
     self.messageView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.loginsStackView.bounds.size.width, self.loginsStackView.bounds.size.height)];
     self.messageView.hidden = YES;
+    self.messageView.editable = NO;
     [self.loginsStackView addArrangedSubview:self.messageView];
     
     self.statusView.hidden = !self.loginFailure;
