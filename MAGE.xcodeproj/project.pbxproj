@@ -1030,6 +1030,7 @@
 		F76090FF23FDA5E5000233A6 /* signinSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signinSuccess.json; sourceTree = "<group>"; };
 		F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = authorizeLocalSuccess.json; sourceTree = "<group>"; };
 		F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkSyncOptionTetsts.m; sourceTree = "<group>"; };
+		F7613D5027EE03B300570145 /* ReleaseTestPlan.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReleaseTestPlan.md; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
 		F76949141AA6436000CB680B /* EventChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserController.h; sourceTree = "<group>"; };
@@ -2560,6 +2561,7 @@
 				F74020B82491904200B5A8BA /* TestHelpers.swift */,
 				F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */,
 				F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */,
+				F7613D5027EE03B300570145 /* ReleaseTestPlan.md */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
