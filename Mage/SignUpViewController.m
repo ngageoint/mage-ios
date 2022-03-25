@@ -192,6 +192,9 @@
     self.wandLabel.text = @"\U0000f0d0";
     self.password.delegate = self;
     
+    [self.signupButton setTitle:@"Sign Up" forState:UIControlStateNormal];
+    [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    
     [self applyThemeWithContainerScheme:self.scheme];
 }
 

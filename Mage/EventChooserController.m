@@ -69,7 +69,7 @@
     self.loadingView.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.chooseEventTitle.textColor = self.scheme.colorScheme.onSecondaryColor;
     self.eventInstructions.textColor = [self.scheme.colorScheme.onSecondaryColor colorWithAlphaComponent:0.87];
-    self.actionButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    [self.actionButton applyContainedThemeWithScheme:self.scheme];
     self.loadingLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.activityIndicator.color = self.scheme.colorScheme.primaryColorVariant;
     self.tableView.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -120,6 +120,8 @@
     [self.searchContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.searchController.searchBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.searchContainer attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
     
     self.definesPresentationContext = YES;
+    
+    [self.actionButton setTitle:@"Return To Login" forState:UIControlStateNormal];
     [self applyThemeWithContainerScheme:self.scheme];
 }
 
@@ -224,6 +226,7 @@
         messageText.font = self.scheme.typographyScheme.body1;
         messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         messageText.scrollEnabled = false;
+        messageText.editable = false;
         [messageText sizeToFit];
         
         UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];

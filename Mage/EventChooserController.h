@@ -7,6 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "EventTableDataSource.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
+#import <MaterialComponents/MDCButton.h>
 
 @class Event;
 
@@ -25,7 +26,7 @@
 @property (nonatomic) BOOL passthrough;
 @property (nonatomic) BOOL forcePick;
 @property (weak, nonatomic) IBOutlet UIView *loadingView;
-@property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (weak, nonatomic) IBOutlet MDCButton *actionButton;
 @property (weak, nonatomic) id<EventSelectionDelegate> delegate;
 
 - (instancetype) initWithDataSource: (EventTableDataSource *) eventDataSource andDelegate: (id<EventSelectionDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme;
