@@ -241,8 +241,22 @@ class FormDefaultsViewController: UIViewController {
     @objc func saveDefaults() {
         let valid = observationFormView?.checkValidity(enforceRequired: false) ?? false;
         if (!valid) {
-            print("Not valid");
-            return;
+            if let fieldViews = observationFormView?.fieldViews {
+                for (_, subview) in fieldViews {
+                    if !subview.isValid(enforceRequired: false) {
+                        var yOffset = subview.frame.origin.y
+                        var superview = subview.superview
+                        while (superview != nil) {
+                            yOffset += superview?.frame.origin.y ?? 0.0
+                            superview = superview?.superview
+                        }
+                        let newFrame = CGRect(x: 0, y: yOffset, width: subview.frame.size.width, height: subview.frame.size.height)
+                        scrollView.scrollRectToVisible(newFrame, animated: true)
+                        return
+                    }
+                }
+            }
+            return
         }
         
         let currentDefaults: [String: AnyHashable] = (observationFormView?.observation.properties!["forms"] as! [[String: AnyHashable]])[0];
