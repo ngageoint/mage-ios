@@ -257,9 +257,9 @@ BOOL signingIn = YES;
                 [weakSelf authenticationWasSuccessfulWithModule:authenticationModule];
             }
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
-            [weakSelf registrationWasSuccessful];
+            [weakSelf registrationWasSuccessful:[parameters objectForKey:@"username"]];
         } else if (authenticationStatus == AUTHENTICATION_ERROR) {
-            [weakSelf failedToAuthenticate:message];
+            [weakSelf failedToAuthenticate:message username:[parameters objectForKey:@"username"]];
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
             [weakSelf unableToAuthenticate: parameters complete:complete];
             return;
@@ -282,11 +282,11 @@ BOOL signingIn = YES;
     [self.navigationController presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) failedToAuthenticate:(NSString *) message {
+- (void) failedToAuthenticate:(NSString *) message username: (NSString *) username {
     NSString *error = [message isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : message;
     
-    ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
-            
+    ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
+    info.username = username;
     [self.loginView  setContactInfo:info];
 }
 
@@ -351,7 +351,7 @@ BOOL signingIn = YES;
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             [weakSelf authenticationWasSuccessfulWithModule:offlineAuthenticationModel];
         } else if (authenticationStatus == REGISTRATION_SUCCESS) {
-            [weakSelf registrationWasSuccessful];
+            [weakSelf registrationWasSuccessful:[parameters objectForKey:@"username"]];
         } else if (authenticationStatus == UNABLE_TO_AUTHENTICATE) {
             [weakSelf unableToAuthenticate: parameters complete:complete];
             return;
@@ -387,12 +387,13 @@ BOOL signingIn = YES;
     }];
 }
 
-- (void) registrationWasSuccessful {
-    NSString * error =@"Your device has been registered.  \nAn administrator has been notified to approve this device.";
+- (void) registrationWasSuccessful: (NSString *) username {
+    NSString *error = @"Your device has been registered.  \nAn administrator has been notified to approve this device.";
     
-    ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"Registration Sent" andMessage:error];
+    ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Registration Sent" andMessage:error];
+    info.username = username;
     
-    [self.loginView  setContactInfo:info];
+    [self.loginView setContactInfo:info];
     
 }
 

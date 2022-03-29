@@ -7,6 +7,7 @@
 #import "EventChooserController.h"
 #import "MAGE-Swift.h"
 #import "ContactInfo.h"
+#import <PureLayout/PureLayout.h>
 
 @interface EventChooserController() <NSFetchedResultsControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
@@ -216,24 +217,24 @@
     
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {
         
-        NSString * error =  @"You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
+        NSString *error =  @"You must be part of an event to use MAGE.  Contact your administrator to be added to an event.";
         
-        ContactInfo * info = [[ContactInfo alloc] initWithTitle:@"You are not in any events" andMessage:error];
-        
-        UITextView *messageText = [[UITextView alloc] initWithFrame:CGRectMake(16, 20, self.tableView.bounds.size.width - 32, 0)];
+        ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"You are not in any events" andMessage:error];
+        User *currentUser = [User fetchCurrentUserWithContext:NSManagedObjectContext.MR_defaultContext];
+        if (currentUser != nil) {
+            info.username = currentUser.username;
+        }
+        UITextView *messageText = [[UITextView alloc] initForAutoLayout];
         messageText.attributedText = info.messageWithContactInfo;
         messageText.textAlignment = NSTextAlignmentCenter;
         messageText.font = self.scheme.typographyScheme.body1;
         messageText.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         messageText.scrollEnabled = false;
         messageText.editable = false;
-        [messageText sizeToFit];
-        
-        UIView *messageView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
-        [messageView addSubview:messageText];
         
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.tableView.backgroundView = messageView;
+        self.tableView.backgroundView = messageText;
+        [messageText autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.tableView];
         
         self.actionButton.hidden = NO;
     } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0) {

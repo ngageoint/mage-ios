@@ -34,12 +34,7 @@
 }
 
 - (NSString *) constructMessage {
-    if(_identifier == nil) {
-        NSUUID * uuid = [DeviceUUID retrieveDeviceUUID];
-        _identifier = [uuid UUIDString];
-    }
-    
-    NSString* emailLink = [LinkGenerator emailLinkWithMessage:_message andIdentifier:_identifier andStrategy:_strategy];
+    NSString* emailLink = [LinkGenerator emailLinkWithMessage:_message andUsername:_username andStrategy:_strategy];
     NSString* phoneLink = [LinkGenerator phoneLink];
     
     NSString* extendedMessage = [self title];

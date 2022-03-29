@@ -10,11 +10,11 @@
 
 @implementation EmailBuilder
 
--(instancetype) initWithMessage: (NSString *)message andIdentifier: (NSString *)identifier andStrategy: (NSString *)strategy {
+-(instancetype) initWithMessage: (NSString *)message andUsername: (NSString *)username andStrategy: (NSString *)strategy {
     self = [super init];
     if (self != nil) {
         [self setMessage:message];
-        [self setIdentifier:identifier];
+        [self setUsername:username];
         [self setStrategy:strategy];
         [self setSubject:@""];
         [self setBody:@""];
@@ -23,32 +23,28 @@
 }
 
 -(void) build {
-    NSString * upperMessage = [_message uppercaseString];
-    
-    if ([upperMessage containsString:@"DEVICE"]) {
-        if ([upperMessage containsString:@"REGISTER"]) {
-            _subject = [_subject stringByAppendingString:@"Please approve my device"];
+    if ([_message rangeOfString:@"device" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        if ([_message rangeOfString:@"register" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            _subject = [_subject stringByAppendingString:@"Please Approve My MAGE Device"];
         } else {
             _subject = [_subject stringByAppendingString:@"Device ID issue"];
         }
     } else {
-        if ([upperMessage containsString:@"APPROVED"] || [upperMessage containsString:@"ACTIVATE"]) {
-            _subject = [_subject stringByAppendingString:@"Please activate my account"];
-        } else if ([upperMessage containsString:@"DISABLED"]) {
-            _subject = [_subject stringByAppendingString:@"Please enable my account"];
-        } else if ([upperMessage containsString:@"LOCKED"]) {
-            _subject = [_subject stringByAppendingString:@"Please unlock my account"];
+        if (([_message rangeOfString:@"approved" options:NSCaseInsensitiveSearch].location != NSNotFound) || ([_message rangeOfString:@"activate" options:NSCaseInsensitiveSearch].location != NSNotFound)) {
+            _subject = [_subject stringByAppendingString:@"Please Activate My MAGE Account"];
+        } else if ([_message rangeOfString:@"disabled" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            _subject = [_subject stringByAppendingString:@"Please Enable My MAGE Account"];
+        } else if ([_message rangeOfString:@"locked" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            _subject = [_subject stringByAppendingString:@"Please Unlock My MAGE Account"];
         } else {
-            _subject = [_subject stringByAppendingString:@"User login issue"];
+            _subject = [_subject stringByAppendingString:@"User Sign-In Issue"];
         }
     }
     
-    if (_identifier != nil) {
-        _subject = [_subject stringByAppendingString:@" - "];
-        _subject = [_subject stringByAppendingString:_identifier];
-        _body = [_body stringByAppendingString:@"Identifier (username or device id): "];
-        _body = [_body stringByAppendingString:_identifier];
-        _body = [_body stringByAppendingString:@"\n"];
+    if (_username != nil) {
+        _body = [_body stringByAppendingString:@"Username: "];
+        _body = [_body stringByAppendingString:_username];
+        _body = [_body stringByAppendingString:@"\n\n"];
     }
     if (_strategy != nil) {
         _body = [_body stringByAppendingString:@"Authentication Method: "];
@@ -56,7 +52,7 @@
         _body = [_body stringByAppendingString:@"\n"];
     }
     
-    _body = [_body stringByAppendingString:@"Error Message Received: "];
+    _body = [_body stringByAppendingString:@"Message: "];
     _body = [_body stringByAppendingString:_message];
     
 }

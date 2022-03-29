@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *message;
 
 /**
- *  Identifier
+ *  Username
  */
-@property (nonatomic, strong) NSString *identifier;
+@property (nonatomic, strong) NSString *username;
 
 /**
  *  Strategy
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) NSString *body;
 
--(instancetype) initWithMessage: (NSString *)message andIdentifier: (NSString *)identifier andStrategy: (NSString *)strategy;
+-(instancetype) initWithMessage: (NSString *)message andUsername: (NSString *)username andStrategy: (NSString *)strategy;
 
 -(void) build;
 

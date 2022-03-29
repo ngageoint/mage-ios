@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Identifier
  */
-@property (nonatomic, strong) NSString *identifier;
+@property (nonatomic, strong) NSString *username;
 
 /**
  *  strategy

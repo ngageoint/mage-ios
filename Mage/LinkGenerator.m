@@ -11,7 +11,7 @@
 
 @implementation LinkGenerator
 
-+(NSString *) emailLinkWithMessage: (NSString *)message andIdentifier: (NSString *)ident andStrategy: (NSString *) strategy {
++(NSString *) emailLinkWithMessage: (NSString *)message andUsername: (NSString *)username andStrategy: (NSString *) strategy {
     NSString * url;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -19,7 +19,7 @@
     
     if(email != nil && [email length] > 0) {
         EmailBuilder * builder = [[EmailBuilder alloc] initWithMessage:message
-                                                         andIdentifier:ident
+                                                         andUsername:username
                                                            andStrategy:strategy];
         [builder build];
         NSString * encodedTo = [email stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];

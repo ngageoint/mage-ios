@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LinkGenerator : NSObject
 
-+(NSString *) emailLinkWithMessage: (NSString *)message andIdentifier: (NSString *)ident andStrategy: (NSString *) strategy;
++(NSString *) emailLinkWithMessage: (NSString *)message andUsername: (NSString *)username andStrategy: (NSString *) strategy;
 +(NSString *) phoneLink;
 
 @end
