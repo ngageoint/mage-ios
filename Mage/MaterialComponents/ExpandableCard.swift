@@ -260,6 +260,8 @@ class ExpandableCard: MDCCard {
         
         self.addSubview(errorBadge);
         errorBadge.isHidden = true;
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     public func markValid(_ valid: Bool = true) {

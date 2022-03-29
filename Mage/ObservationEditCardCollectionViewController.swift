@@ -471,15 +471,34 @@ import MaterialComponents.MDCCard
     }
     
     func checkObservationValidity() -> Bool {
+        var scrolledToInvalidField = false
         var valid: Bool = false;
         if let commonFieldView = commonFieldView {
             valid = commonFieldView.checkValidity(enforceRequired: true)
+            if !valid {
+                scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: 0), animated: true)
+                scrolledToInvalidField = true
+            }
         } else {
             valid = true;
         }
         for formView in formViews {
             let formValid = formView.checkValidity(enforceRequired: true);
             valid = valid && formValid;
+            if !formValid && !scrolledToInvalidField {
+                var yOffset = 0.0
+                var fieldViews = Array(formView.fieldViews.values)
+                fieldViews.sort { ($0.field[FieldKey.id.key] as? Int ?? Int.max ) < ($1.field[FieldKey.id.key] as? Int ?? Int.max) }
+                for subview in fieldViews {
+                    if !subview.isValid(enforceRequired: true) && !scrolledToInvalidField {
+                        yOffset += subview.frame.origin.y
+                        yOffset += -(bottomConstraint?.constant ?? 0.0)
+                        scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: yOffset), animated: true)
+
+                        scrolledToInvalidField = true
+                    }
+                }
+            }
         }
         
         let realFormCount = self.observationForms.count - (self.observation?.formsToBeDeleted.count ?? 0);
