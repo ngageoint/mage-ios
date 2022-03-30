@@ -71,10 +71,10 @@ import Kingfisher
             self.imageView.setImage(url: URL(fileURLWithPath: localPath), cacheOnly: !DataConnectionUtilities.shouldFetchAttachments());
             self.imageView.accessibilityLabel = "attachment \(localPath) loaded";
             self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
-            self.imageView.contentMode = .scaleAspectFit;
+            self.imageView.contentMode = .scaleAspectFill;
         } else if (contentType.hasPrefix("video")) {
             let provider: VideoImageProvider = VideoImageProvider(localPath: localPath);
-            self.imageView.contentMode = .scaleAspectFit;
+            self.imageView.contentMode = .scaleAspectFill;
             DispatchQueue.main.async {
                 self.imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
                     .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
@@ -123,7 +123,7 @@ import Kingfisher
             label.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
         }
         
-        self.backgroundColor = scheme?.colorScheme.backgroundColor
+        self.backgroundColor = scheme?.colorScheme.surfaceColor
 
         if let button = button {
             self.addSubview(button);

@@ -60,6 +60,7 @@ When releasing the MAGE app we have multiple types of users that we need to test
 - add an attachment and then remove it before saving
 - add another attachment and save
 - remove an attachment
+- ensure you choose a photo which is a live photo and one which is a static photo
 
 ### Map Interaction
 - verify clicking on a map brings up the bottom sheet for any features on the map at that location

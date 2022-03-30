@@ -327,7 +327,8 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     }
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true, completion: nil)
+        print("picked a photo \(results)")
+
         guard !results.isEmpty else { return }
         
         let dateFormatter = DateFormatter();
@@ -336,21 +337,32 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
         for result in results {
             let itemProvider = result.itemProvider
             
-            guard let typeIdentifier = itemProvider.registeredTypeIdentifiers.first,
-                  let utType = UTType(typeIdentifier)
-            else { continue }
-            
-            if utType.conforms(to: .image), let assetIdentifier = result.assetIdentifier {
-                let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                handlePhoto(phasset: fetchResult.firstObject, utType: utType)
-                return
+            // find the first type that we can handle
+            for typeIdentifier in itemProvider.registeredTypeIdentifiers {
+                guard let utType = UTType(typeIdentifier) else {
+                    continue
+                }
+                // Matches both com.apple.live-photo-bundle and com.apple.private.live-photo-bundle
+                if utType.conforms(to: .image) || typeIdentifier.contains("live-photo-bundle") {
+                    if let assetIdentifier = result.assetIdentifier {
+                        let options = PHFetchOptions()
+                        options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+                        handlePhoto(phasset: fetchResult.firstObject, utType: utType)
+                        picker.dismiss(animated: true, completion: nil)
+                        return
+                    }
+                }
+                
+                // otherwise it should be a movie
+                if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
+                    let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+                    handleVideo(phasset: fetchResult.firstObject, utType: utType)
+                    picker.dismiss(animated: true, completion: nil)
+                    return
+                }
             }
-            
-            // otherwise it should be a movie
-            if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
-                let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                handleVideo(phasset: fetchResult.firstObject, utType: utType)
-            }
+            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset of types: \(itemProvider.registeredTypeIdentifiers)"))
         }
     }
 }

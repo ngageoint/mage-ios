@@ -78,7 +78,13 @@
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger) section {
-    return [self filteredAttachments].count + [self filteredUnsentAttachments].count;
+    NSInteger count = [self filteredAttachments].count + [self filteredUnsentAttachments].count;
+    if (count != 0) {
+        collectionView.backgroundColor = _containerScheme.colorScheme.surfaceColor;
+    } else {
+        collectionView.backgroundColor = UIColor.clearColor;
+    }
+    return count;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

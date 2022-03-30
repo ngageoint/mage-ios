@@ -8,6 +8,7 @@
 
 import Foundation
 import MaterialComponents.MDCButton;
+import UIKit
 
 @objc protocol AttachmentCreationDelegate {
     @objc func addVoiceAttachment();
@@ -22,6 +23,8 @@ class AttachmentFieldView : BaseFieldView {
     private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
     
+    private var min: NSNumber?
+    private var max: NSNumber?
     private var unsentAttachments: [[String: AnyHashable]] = []
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
@@ -49,15 +52,47 @@ class AttachmentFieldView : BaseFieldView {
     
     lazy var attachmentHolderView: UIView = {
         let holder = UIView(forAutoLayout: ());
+        holder.addSubview(attachmentCollectionEmptyView)
         holder.addSubview(attachmentCollectionView);
         return holder;
     }()
     
+    lazy var errorLabelSpacerView: UIView = {
+        let errorLabelSpacerView = UIView(forAutoLayout: ());
+        errorLabelSpacerView.addSubview(errorLabel);
+        errorLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 4, left: 16, bottom: 0, right: 16));
+        return errorLabelSpacerView;
+    }()
+    
     lazy var errorLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());
-        label.text = "At least one attachment must be added";
-        label.isHidden = true;
+        label.text = getErrorMessage();
         return label;
+    }()
+    
+    private let emptyDoc = UIImageView(image: UIImage(systemName: "doc.fill"))
+    lazy var noAttachmentsLabel: UILabel = {
+        let label = UILabel(forAutoLayout: ());
+        label.text = "No Attachments"
+        label.textAlignment = .center
+        return label;
+    }()
+    
+    private lazy var attachmentCollectionEmptyView: UIView = {
+        let attachmentCollectionEmptyView = UIView.newAutoLayout()
+        attachmentCollectionEmptyView.addSubview(emptyDoc)
+        attachmentCollectionEmptyView.addSubview(noAttachmentsLabel)
+        emptyDoc.contentMode = .scaleAspectFit
+        emptyDoc.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
+        noAttachmentsLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .top)
+        noAttachmentsLabel.autoPinEdge(.top, to: .bottom, of: emptyDoc, withOffset: 8)
+        return attachmentCollectionEmptyView
+    }()
+    
+    private lazy var divider: UIView = {
+        let divider = UIView(forAutoLayout: ());
+        divider.autoSetDimension(.height, toSize: 1);
+        return divider;
     }()
     
     private lazy var actionsHolderView: UIStackView = {
@@ -144,13 +179,19 @@ class AttachmentFieldView : BaseFieldView {
         fileButton.applyTextTheme(withScheme: scheme);
         fileButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal);
         errorLabel.font = scheme.typographyScheme.caption;
-        errorLabel.textColor = scheme.colorScheme.errorColor;
-        attachmentHolderView.backgroundColor = scheme.colorScheme.surfaceColor
-        attachmentCollectionView.backgroundColor = scheme.colorScheme.surfaceColor;
+        errorLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        errorLabelSpacerView.backgroundColor = scheme.colorScheme.surfaceColor
         if (editMode) {
             self.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
+            attachmentCollectionView.backgroundColor = .clear
+            attachmentHolderView.backgroundColor = .clear
         }
         attachmentCollectionDataStore.applyTheme(withContainerScheme: scheme);
+        emptyDoc.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        attachmentCollectionEmptyView.backgroundColor = .clear
+        divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12)
+        noAttachmentsLabel.font = scheme.typographyScheme.body1
+        noAttachmentsLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -159,6 +200,10 @@ class AttachmentFieldView : BaseFieldView {
     
     init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [Attachment]? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
+        
+        self.min = field[FieldKey.min.key] as? NSNumber;
+        self.max = field[FieldKey.max.key] as? NSNumber;
+        
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
         self.attachmentCreationCoordinator = attachmentCreationCoordinator;
         self.attachmentCreationCoordinator?.delegate = self;
@@ -181,11 +226,12 @@ class AttachmentFieldView : BaseFieldView {
         viewStack.setCustomSpacing(0, after: attachmentHolderView);
         
         if (editMode) {
-            viewStack.addArrangedSubview(errorLabel);
-            viewStack.setCustomSpacing(0, after: errorLabel);
-            
+            viewStack.addArrangedSubview(divider)
+            viewStack.setCustomSpacing(0, after: divider);
             viewStack.addArrangedSubview(actionsHolderView);
-            
+            viewStack.setCustomSpacing(0, after: actionsHolderView);
+            viewStack.addArrangedSubview(errorLabelSpacerView);
+            viewStack.setCustomSpacing(0, after: errorLabelSpacerView);
             if let allowedAttachmentTypes: [String] = field[FieldKey.allowedAttachmentTypes.key] as? [String], !allowedAttachmentTypes.isEmpty {
                 if (allowedAttachmentTypes.contains("audio")) {
                     actionsHolderView.addArrangedSubview(audioButton);
@@ -209,6 +255,9 @@ class AttachmentFieldView : BaseFieldView {
             endSpace.autoSetDimensions(to: CGSize(width: 0, height: 40))
             actionsHolderView.addArrangedSubview(endSpace)
         }
+        
+        layer.cornerRadius = 4
+        clipsToBounds = true
     }
     
     func setAttachmentHolderHeight() {
@@ -229,6 +278,32 @@ class AttachmentFieldView : BaseFieldView {
     
     override func isEmpty() -> Bool {
         return self.attachmentCollectionView.numberOfItems(inSection: 0) == 0;
+    }
+    
+    override func isValid(enforceRequired: Bool = false) -> Bool {
+        return super.isValid(enforceRequired: enforceRequired) && isValidAttachmentCollection()
+    }
+    
+    func isValidAttachmentCollection() -> Bool {
+        let attachmentCount = self.attachmentCollectionView.numberOfItems(inSection: 0)
+        if let min = min, let max = max {
+            if attachmentCount > max.intValue || attachmentCount < min.intValue {
+                return false
+            }
+        } else if let min = self.min {
+            if attachmentCount < min.intValue {
+                return false
+            }
+        } else if let max = max {
+            if attachmentCount > max.intValue {
+                return false
+            }
+        } else if (field[FieldKey.required.key] as? Bool) == true {
+            if attachmentCount == 0 {
+                return false
+            }
+        }
+        return true
     }
     
     override func setValue(_ value: Any?) {
@@ -275,6 +350,7 @@ class AttachmentFieldView : BaseFieldView {
     override func updateConstraints() {
         if (!didSetupConstraints) {
             attachmentCollectionView.autoPinEdgesToSuperviewEdges();
+            attachmentCollectionEmptyView.autoPinEdgesToSuperviewEdges()
 
             if (editMode) {
                 fieldNameSpacerView.autoSetDimension(.height, toSize: 32);
@@ -290,14 +366,29 @@ class AttachmentFieldView : BaseFieldView {
 
         super.updateConstraints();
     }
+    
+    override func getErrorMessage() -> String {
+        var error: String = ""
+        if let min = min, let max = max {
+            error = "Must have between \(min) and \(max) attachments";
+        } else if let min = self.min {
+            error = "Must have at least \(min) attachments";
+        } else if let max = max {
+            error = "Must have less than \(max) attachments";
+        } else if (field[FieldKey.required.key] as? Bool) == true {
+            error = "At least one attachment must be added"
+        }
+        return error
+    }
 
     override func setValid(_ valid: Bool) {
-        errorLabel.isHidden = valid;
+        errorLabel.text = getErrorMessage()
         if let scheme = scheme {
             if (valid) {
                 applyTheme(withScheme: scheme);
             } else {
                 fieldNameLabel.textColor = scheme.colorScheme.errorColor;
+                errorLabel.textColor = scheme.colorScheme.errorColor
             }
         }
     }
