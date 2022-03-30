@@ -298,7 +298,6 @@
 		F752B5F2275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */; };
 		F752B5F42760DD7600BFA6EC /* MageMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F32760DD7600BFA6EC /* MageMapView.swift */; };
 		F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F62760DDEC00BFA6EC /* GeoPackageBaseMap.swift */; };
-		F752B5F92760EB7900BFA6EC /* MageOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F82760EB7900BFA6EC /* MageOverlay.swift */; };
 		F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */; };
 		F755B55B25E41BFF008E8D41 /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
@@ -1016,7 +1015,6 @@
 		F752B5F1275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormJson+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F752B5F32760DD7600BFA6EC /* MageMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageMapView.swift; sourceTree = "<group>"; };
 		F752B5F62760DDEC00BFA6EC /* GeoPackageBaseMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageBaseMap.swift; sourceTree = "<group>"; };
-		F752B5F82760EB7900BFA6EC /* MageOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageOverlay.swift; sourceTree = "<group>"; };
 		F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerObserver.swift; sourceTree = "<group>"; };
 		F755B55A25E41BFF008E8D41 /* testRecording.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testRecording.mp4; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
@@ -1688,7 +1686,6 @@
 				F7929C7523C66CD000396D11 /* BaseMapOverlay.swift */,
 				F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */,
 				F752B5F32760DD7600BFA6EC /* MageMapView.swift */,
-				F752B5F82760EB7900BFA6EC /* MageOverlay.swift */,
 				F7EBAEB72760F62000650F4F /* MainMageMapView.swift */,
 				F78D578C27B5841D003594D3 /* MageMapViewController.swift */,
 				F78D578E27B58901003594D3 /* SingleUserMapView.swift */,
@@ -3318,7 +3315,6 @@
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
 				F72D43062694B60300F9AC3B /* Server.swift in Sources */,
-				F752B5F92760EB7900BFA6EC /* MageOverlay.swift in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
 				F7489B3927A09D7D00A9E314 /* UserTrackingMap.swift in Sources */,
 				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,

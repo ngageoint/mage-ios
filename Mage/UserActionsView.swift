@@ -27,11 +27,21 @@ class UserActionsView: UIView {
         stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         stack.isLayoutMarginsRelativeArrangement = true;
         stack.translatesAutoresizingMaskIntoConstraints = false;
+        stack.addArrangedSubview(latitudeLongitudeButton)
+        stack.setCustomSpacing(0, after: latitudeLongitudeButton)
+        stack.addArrangedSubview(fillerView)
+        stack.setCustomSpacing(0, after: fillerView)
         stack.addArrangedSubview(emailButton);
         stack.addArrangedSubview(phoneButton);
         stack.addArrangedSubview(directionsButton);
         stack.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return stack;
+    }()
+    
+    private lazy var fillerView: UIView = {
+        let fillerView = UIView()
+        fillerView.setContentHuggingPriority(.defaultHigh, for: .horizontal);
+        return fillerView
     }()
     
     private lazy var latitudeLongitudeButton: MDCButton = {
@@ -47,7 +57,7 @@ class UserActionsView: UIView {
     }()
     
     private lazy var directionsButton: MDCButton = {
-        let directionsButton = MDCButton();
+        let directionsButton = MDCButton(forAutoLayout: ())
         directionsButton.accessibilityLabel = "directions";
         directionsButton.setImage(UIImage(named: "directions_large")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToUser), for: .touchUpInside);
@@ -59,7 +69,7 @@ class UserActionsView: UIView {
     }()
     
     private lazy var phoneButton: MDCButton = {
-        let phoneButton = MDCButton();
+        let phoneButton = MDCButton(forAutoLayout: ())
         phoneButton.accessibilityLabel = "phone";
         phoneButton.setImage(UIImage(named: "phone")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         phoneButton.addTarget(self, action: #selector(callUser), for: .touchUpInside);
@@ -71,7 +81,7 @@ class UserActionsView: UIView {
     }()
     
     private lazy var emailButton: MDCButton = {
-        let emailButton = MDCButton();
+        let emailButton = MDCButton(forAutoLayout: ())
         emailButton.accessibilityLabel = "email";
         emailButton.setImage(UIImage(named: "email")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         emailButton.addTarget(self, action: #selector(emailUser), for: .touchUpInside);
@@ -115,20 +125,17 @@ class UserActionsView: UIView {
     
     func layoutView() {
         self.addSubview(actionButtonView);
-        self.addSubview(latitudeLongitudeButton);
+//        self.addSubview(latitudeLongitudeButton);
     }
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
             actionButtonView.autoSetDimension(.height, toSize: 56);
-            actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16), excludingEdge: .left);
-            emailButton.autoSetDimension(.width, toSize: 24)
-            phoneButton.autoSetDimension(.width, toSize: 24)
-            directionsButton.autoSetDimension(.width, toSize: 24)
+            actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16))//, excludingEdge: .left);
 
-            latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
-            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
-            actionButtonView.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton, withOffset: 8, relation: .greaterThanOrEqual);
+//            latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
+//            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
+//            actionButtonView.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton, withOffset: 8, relation: .greaterThanOrEqual);
             didSetupConstraints = true;
         }
         super.updateConstraints();

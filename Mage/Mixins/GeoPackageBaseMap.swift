@@ -59,13 +59,6 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
         mapView?.showsTraffic = UserDefaults.standard.mapShowTraffic && mapView?.mapType != .satellite && UserDefaults.standard.mapType != 3
     }
     
-    func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
-        guard let overlay = overlay as? BaseMapOverlay else {
-            return nil
-        }
-        return MKTileOverlayRenderer(overlay: overlay)
-    }
-    
     func traitCollectionUpdated(previous: UITraitCollection?) {
         if let previous = previous, previous.hasDifferentColorAppearance(comparedTo: UITraitCollection.current) {
             addBaseMap()

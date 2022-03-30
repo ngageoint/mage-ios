@@ -35,8 +35,9 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var locationFetchedResultsController: NSFetchedResultsController<Location>?
     var observationFetchedResultsController: NSFetchedResultsController<Observation>?
     var feedItemFetchedResultsController: NSFetchedResultsController<FeedItem>?
+    private var timer: Timer?
     
-    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, locationManager: CLLocationManager? = CLLocationManager(), sourceView: UIView? = nil) {
+    init(mapDirections: MapDirections, viewController: UIViewController, mapStack: UIStackView?, scheme: MDCContainerScheming?, locationManager: CLLocationManager? = nil, sourceView: UIView? = nil) {
         self.mapDirections = mapDirections
         self.mapView = mapDirections.mapView
         self.viewController = viewController
@@ -89,6 +90,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
             try? feedItemFetchedResultsController?.performFetch()
         }
         
+        self.locationManager = self.locationManager ?? CLLocationManager()
         self.locationManager?.delegate = self;
         self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager?.startUpdatingLocation()
@@ -222,15 +224,32 @@ class MapDirectionsMixin: NSObject, MapMixin {
 }
 
 extension MapDirectionsMixin : CLLocationManagerDelegate {
+    
+    func maybeScheduleTimer(_ manager: CLLocationManager, straightLineNotification: StraightLineNavigationNotification, straightLineNavigation: StraightLineNavigation) {
+        if let timer = timer {
+            if !timer.isValid {
+                self.timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false, block: { (timer) in
+                    timer.invalidate()
+                    straightLineNavigation.updateNavigationLines(manager: manager, destinationCoordinate: straightLineNotification.coordinate);
+                })
+            }
+        } else {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false, block: { (timer) in
+                timer.invalidate()
+                straightLineNavigation.updateNavigationLines(manager: manager, destinationCoordinate: straightLineNotification.coordinate);
+            })
+        }
+    }
+    
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let straightLineNotification = straightLineNotification, let straightLineNavigation = straightLineNavigation {
-            straightLineNavigation.updateNavigationLines(manager: manager, destinationCoordinate: straightLineNotification.coordinate);
+            maybeScheduleTimer(manager, straightLineNotification: straightLineNotification, straightLineNavigation: straightLineNavigation)
         }
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         if let straightLineNotification = straightLineNotification, let straightLineNavigation = straightLineNavigation {
-            straightLineNavigation.updateNavigationLines(manager: manager, destinationCoordinate: straightLineNotification.coordinate);
+            maybeScheduleTimer(manager, straightLineNotification: straightLineNotification, straightLineNavigation: straightLineNavigation)
         }
     }
 }

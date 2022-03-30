@@ -6,7 +6,16 @@
 
 import CoreLocation
 
-@objc class StyledPolyline : MKPolyline {
+@objc class StyledPolyline : MKPolyline, OverlayRenderable {
+    var renderer: MKOverlayRenderer {
+        get {
+            let renderer = MKPolylineRenderer(polyline: self)
+            renderer.strokeColor = lineColor
+            renderer.lineWidth = lineWidth
+            return renderer
+        }
+    }
+    
     @objc public var lineColor: UIColor = .black
     @objc public var lineWidth: CGFloat = 1.0
     @objc var observationRemoteId: String?

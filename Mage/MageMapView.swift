@@ -10,6 +10,10 @@ import UIKit
 import geopackage_ios
 import MapKit
 
+protocol OverlayRenderable {
+    var renderer: MKOverlayRenderer { get }
+}
+
 class MageMapView: UIView, GeoPackageBaseMap {
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?;
@@ -38,8 +42,6 @@ class MageMapView: UIView, GeoPackageBaseMap {
     }
 
     func layoutView() {
-//        super.viewDidLoad()
-        
         mapView = MKMapView.newAutoLayout()
         guard let mapView = mapView else {
             return
@@ -132,6 +134,9 @@ class MageMapView: UIView, GeoPackageBaseMap {
 extension MageMapView : MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let renderableOverlay = overlay as? OverlayRenderable {
+            return renderableOverlay.renderer
+        }
         for mixin in mapMixins {
             if let renderer = mixin.renderer(overlay: overlay) {
                 return renderer

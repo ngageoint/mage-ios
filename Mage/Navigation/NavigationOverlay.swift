@@ -8,11 +8,11 @@
 import Foundation
 import MapKit
 
-class NavigationOverlay: MKPolyline {
+class NavigationOverlay: MKPolyline, OverlayRenderable {
     var color: UIColor = UIColor.systemRed
     var lineWidth: CGFloat = 1.0
     
-    @objc public var renderer: MKPolylineRenderer {
+    var renderer: MKOverlayRenderer {
         get {
             let renderer = MKPolylineRenderer(overlay: self);
             renderer.strokeColor = self.color;

@@ -9,8 +9,12 @@
 import Foundation
 import geopackage_ios
 
-@objc class BaseMapOverlay: GPKGFeatureOverlay, MageOverlay {
-    var renderer: MKOverlayRenderer?
+@objc class BaseMapOverlay: GPKGFeatureOverlay, OverlayRenderable {
+    var renderer: MKOverlayRenderer {
+        get {
+            return MKTileOverlayRenderer(overlay: self)
+        }
+    }
     @objc public var darkTheme = false
     
     @objc public func cleanup() {
@@ -19,7 +23,6 @@ import geopackage_ios
     
     override init!(featureTiles: GPKGFeatureTiles!) {
         super.init(featureTiles: featureTiles)
-        renderer = MKTileOverlayRenderer(overlay: self)
     }
     
     override func retrieveTileWith(x: Int, andY y: Int, andZoom zoom: Int) -> Data! {

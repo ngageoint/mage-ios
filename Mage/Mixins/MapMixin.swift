@@ -74,27 +74,19 @@ extension MapMixin {
     }
     
     func standardRenderer(overlay: MKOverlay) -> MKOverlayRenderer? {
+        if let renderable = overlay as? OverlayRenderable {
+            return renderable.renderer
+        }
         // standard renderers
-        if let polygon = overlay as? StyledPolygon {
+        if let polygon = overlay as? MKPolygon {
             let renderer = MKPolygonRenderer(polygon: polygon)
-            if let overlay = overlay as? StyledPolygon {
-                renderer.fillColor = overlay.fillColor
-                renderer.strokeColor = overlay.lineColor
-                renderer.lineWidth = overlay.lineWidth
-            } else {
-                renderer.strokeColor = .black
-                renderer.lineWidth = 1
-            }
+            renderer.strokeColor = .black
+            renderer.lineWidth = 1
             return renderer
-        } else if let polyline = overlay as? StyledPolyline {
+        } else if let polyline = overlay as? MKPolyline {
             let renderer = MKPolylineRenderer(polyline: polyline)
-            if let overlay = overlay as? StyledPolyline {
-                renderer.strokeColor = overlay.lineColor
-                renderer.lineWidth = overlay.lineWidth
-            } else {
-                renderer.strokeColor = .black
-                renderer.lineWidth = 1
-            }
+            renderer.strokeColor = .black
+            renderer.lineWidth = 1
             return renderer
         }
         return nil

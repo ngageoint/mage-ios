@@ -7,7 +7,17 @@
 //
 //
 
-@objc class StyledPolygon: MKPolygon {
+@objc class StyledPolygon: MKPolygon, OverlayRenderable {
+    var renderer: MKOverlayRenderer {
+        get {
+            let renderer = MKPolygonRenderer(polygon: self)
+            renderer.fillColor = fillColor
+            renderer.strokeColor = lineColor
+            renderer.lineWidth = lineWidth
+            return renderer
+        }
+    }
+    
     @objc public var lineColor: UIColor = .black
     @objc public var lineWidth: CGFloat = 1.0
     @objc public var fillColor: UIColor?
