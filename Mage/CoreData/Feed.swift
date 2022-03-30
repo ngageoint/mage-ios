@@ -102,7 +102,7 @@ import CoreData
                         for feedRemoteId in feedRemoteIds {
                             Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, success: nil, failure: nil);
                         }
-                        Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds), in: localContext)
+                        Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId), in: localContext)
                     }
                 }, completion: { contextDidSave, error in
                     if let error = error {
