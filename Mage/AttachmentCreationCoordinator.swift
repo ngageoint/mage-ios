@@ -173,15 +173,18 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
     }
     
     func presentGallery() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
             print("Present the gallery")
             var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
             configuration.filter = .any(of: [.images, .videos])
             configuration.selectionLimit = 1;
             
+            // This is to compensate for iOS not setting all the colors on the PHPicker
+            // it only sets the tint color not anything else, so let's make the button actually viewable
+            UINavigationBar.appearance().tintColor = .systemBlue
             let photoPicker = PHPickerViewController(configuration: configuration);
             photoPicker.delegate = self;
-            self.rootViewController?.present(photoPicker, animated: true, completion: nil);
+            self?.rootViewController?.present(photoPicker, animated: true)
         }
     }
 }
@@ -328,8 +331,13 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         print("picked a photo \(results)")
+        // This is to compensate for iOS not setting all the colors on the PHPicker so now we have to set it back
+        UINavigationBar.appearance().barTintColor = self.scheme?.colorScheme.primaryColorVariant
 
-        guard !results.isEmpty else { return }
+        guard !results.isEmpty else {
+            picker.dismiss(animated: true, completion: nil)
+            return
+        }
         
         let dateFormatter = DateFormatter();
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
