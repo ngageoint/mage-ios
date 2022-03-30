@@ -109,7 +109,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             
             persistedMapStateMixin = PersistedMapStateMixin(persistedMapState: self)
             hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, navigationController: navigationController, rootView: self, scheme: scheme)
-            canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, navigationController: navigationController, rootView: self, mapStackView: mapStack, scheme: scheme, locationService: nil)
+            canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, shouldShowFab: UIDevice.current.userInterfaceIdiom != .pad, navigationController: navigationController, rootView: self, mapStackView: mapStack, scheme: scheme, locationService: nil)
             canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 1, scheme: scheme)
             userTrackingMapMixin = UserTrackingMapMixin(userTrackingMap: self, buttonParentView: buttonStack, indexInView: 0, scheme: scheme)
             userHeadingDisplayMixin = UserHeadingDisplayMixin(userHeadingDisplay: self, mapStack: mapStack, scheme: scheme)

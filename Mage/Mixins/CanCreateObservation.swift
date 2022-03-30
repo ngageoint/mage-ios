@@ -23,16 +23,18 @@ class CanCreateObservationMixin: NSObject, MapMixin {
     weak var mapStackView: UIStackView?
     var editCoordinator: ObservationEditCoordinator?
     weak var locationService: LocationService?
+    var shouldShowFab: Bool = true
     
     private lazy var createFab: MDCFloatingButton = {
         let createFab = MDCFloatingButton(shape: .default)
         createFab.setImage(UIImage(named:"add_location"), for: .normal)
         createFab.addTarget(self, action: #selector(createNewObservation(_:)), for: .touchUpInside)
         createFab.accessibilityLabel = "New"
+        createFab.isHidden = !shouldShowFab
         return createFab
     }()
     
-    init(canCreateObservation: CanCreateObservation, navigationController: UINavigationController?, rootView: UIView?, mapStackView: UIStackView?, scheme: MDCContainerScheming?, locationService: LocationService? = nil) {
+    init(canCreateObservation: CanCreateObservation, shouldShowFab: Bool? = true, navigationController: UINavigationController?, rootView: UIView?, mapStackView: UIStackView?, scheme: MDCContainerScheming?, locationService: LocationService? = nil) {
         self.canCreateObservation = canCreateObservation
         self.mapView = canCreateObservation.mapView
         self.navigationController = navigationController
@@ -44,6 +46,7 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         } else {
             self.locationService = LocationService.singleton()
         }
+        self.shouldShowFab = shouldShowFab ?? true
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {
