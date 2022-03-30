@@ -223,6 +223,15 @@ extension Notification.Name {
         }
     }
     
+    @objc public var showEventChooserOnce: Bool {
+        get {
+            return bool(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     var currentEventId: Any? {
         get {
             return object(forKey: #function);

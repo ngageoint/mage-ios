@@ -270,8 +270,19 @@
     
     if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count > 1) {
         self.eventInstructions.text = @"Please choose an event.  The observations you create and your reported location will be part of the selected event.";
-    } else if ((self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1) || self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1) {
+    } else if ((self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 0 && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1) ||  (self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1 && self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 0)) {
         self.eventInstructions.text = @"You are a part of one event.  The observations you create and your reported location will be part of this event.";
+        if (![[NSUserDefaults standardUserDefaults] showEventChooserOnce]) {
+            if (self.eventDataSource.recentFetchedResultsController.fetchedObjects.count == 1) {
+                Event *e = [self.eventDataSource.recentFetchedResultsController.fetchedObjects objectAtIndex:0];
+                [self didSelectEvent:e];
+            } else if (self.eventDataSource.otherFetchedResultsController.fetchedObjects.count == 1) {
+                Event *e = [self.eventDataSource.otherFetchedResultsController.fetchedObjects objectAtIndex:0];
+                [self didSelectEvent:e];
+            }
+        } else {
+            [[NSUserDefaults standardUserDefaults] setShowEventChooserOnce:false];
+        }
     }
     
     [self.tableView reloadData];

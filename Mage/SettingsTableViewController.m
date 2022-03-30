@@ -257,6 +257,7 @@
 }
 
 - (void) onMoreEvents {
+    [[NSUserDefaults standardUserDefaults] setShowEventChooserOnce:true];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate chooseEvent];
 }
