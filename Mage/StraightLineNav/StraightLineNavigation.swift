@@ -139,8 +139,8 @@ class StraightLineNavigation: NSObject {
             var bearing = location.course;
             let speed = location.speed;
             
-            if (bearing < 0 || speed <= 0) {
-                // if the user is not moving, use the heading of the phone
+            if (bearing < 0 || speed <= 0 || location.courseAccuracy < 0 || location.courseAccuracy >= 180) {
+                // if the user is not moving, use the heading of the phone or the course accuracy is invalid
                 if let trueHeading = manager.heading?.trueHeading {
                     bearing = trueHeading;
                 } else {
