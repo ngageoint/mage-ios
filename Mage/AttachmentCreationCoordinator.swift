@@ -159,6 +159,8 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
             self.pickerController!.delegate = self;
             self.pickerController!.sourceType = .camera;
             self.pickerController!.mediaTypes = [UTType.image.identifier];
+            self.pickerController!.modalPresentationStyle = .fullScreen;
+            self.pickerController!.modalTransitionStyle = .coverVertical;
             self.rootViewController?.present(self.pickerController!, animated: true, completion: nil);
         }
     }
