@@ -4,9 +4,9 @@
 <dict>
 	<key>mapShowTraffic</key>
 	<false/>
-	<key>timeFilterKey</key>
+	<key>observationTimeFilterKey</key>
 	<integer>4</integer>
-	<key>locationtimeFilterKey</key>
+	<key>locationTimeFilter</key>
 	<string>4</string>
 	<key>shape_screen_click_percentage</key>
 	<real>0.03</real>

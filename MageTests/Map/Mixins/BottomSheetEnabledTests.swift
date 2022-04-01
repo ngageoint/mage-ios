@@ -56,7 +56,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.selectedOnlineLayers = nil
-                UserDefaults.standard.observationTimeFilter = .all
+                UserDefaults.standard.observationTimeFilterKey = .all
                 
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 

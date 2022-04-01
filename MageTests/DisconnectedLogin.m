@@ -14,7 +14,6 @@
 #import <OCMock/OCMock.h>
 #import "AuthenticationCoordinator.h"
 #import "LoginViewController.h"
-#import "DisclaimerViewController.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "Authentication.h"

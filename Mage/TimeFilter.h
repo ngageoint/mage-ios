@@ -25,10 +25,6 @@ typedef NS_ENUM(NSUInteger, TimeUnit) {
 
 @interface TimeFilter : NSObject
 
-extern NSString * const kObservationTimeFilterKey;
-extern NSString * const kObservationTimeFilterUnitKey;
-extern NSString * const kObservationTimeFilterNumberKey;
-
 + (TimeFilterType) getObservationTimeFilter;
 + (void) setObservationTimeFilter:(TimeFilterType) timeFilter;
 
@@ -41,10 +37,6 @@ extern NSString * const kObservationTimeFilterNumberKey;
 + (NSString *) getObservationTimeFilterString;
 
 + (NSPredicate *) getObservationTimePredicateForField:(NSString *) timeField;
-
-extern NSString * const kLocationTimeFilterKey;
-extern NSString * const kLocationTimeFilterUnitKey;
-extern NSString * const kLocationTimeFilterNumberKey;
 
 + (TimeFilterType) getLocationTimeFilter;
 + (void) setLocationTimeFilter:(TimeFilterType) timeFilter;

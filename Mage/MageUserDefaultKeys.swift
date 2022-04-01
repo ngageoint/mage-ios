@@ -223,6 +223,33 @@ extension Notification.Name {
         }
     }
     
+    @objc public var importantFilterKey: Bool {
+        get {
+            return bool(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    @objc public var favoritesFilterKey: Bool {
+        get {
+            // This is misspelled on purpose to support legacy misspellings
+            if value(forKey: "favortiesFilterKey") != nil {
+                // migrate the legacy key to the new key.  New key is going out in 4.0.0
+                // this code can probably removed after some amount of time
+                let favoriteFilter = bool(forKey: "favortiesFilterKey")
+                set(favoriteFilter, forKey: #function)
+                removeObject(forKey: "favortiesFilterKey")
+                return favoriteFilter
+            }
+            return bool(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     @objc public var showEventChooserOnce: Bool {
         get {
             return bool(forKey: #function)
@@ -332,12 +359,125 @@ extension Notification.Name {
         }
     }
     
-    var observationTimeFilter: TimeFilterType {
+    @objc public var observationTimeFilterKey: TimeFilterType {
         get {
-            return TimeFilterType.init(rawValue: UInt(integer(forKey: "timeFilterKey"))) ?? TimeFilterType.all;
+            if value(forKey: "timeFilterKey") != nil {
+                // migrate the legacy key to the new key.  New key is going out in 4.0.0
+                // this code can probably removed after some amount of time
+                let timeFilter = TimeFilterType.init(rawValue: UInt(integer(forKey: "timeFilterKey"))) ?? TimeFilterType.lastMonth
+                set(timeFilter.rawValue, forKey: #function)
+                removeObject(forKey: "timeFilterKey")
+                return timeFilter
+            }
+            
+            return TimeFilterType.init(rawValue: UInt(integer(forKey: #function))) ?? TimeFilterType.lastMonth
         }
         set {
-            set(newValue.rawValue, forKey: "timeFilterKey");
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    @objc public var observationTimeFilterUnitKey: TimeUnit {
+        get {
+            if value(forKey: "timeFilterUnitKey") != nil {
+                // migrate the legacy key to the new key.  New key is going out in 4.0.0
+                // this code can probably removed after some amount of time
+                let timeUnit = TimeUnit.init(rawValue: UInt(integer(forKey: "timeFilterUnitKey"))) ?? TimeUnit.Days
+                set(timeUnit.rawValue, forKey: #function)
+                removeObject(forKey: "timeFilterUnitKey")
+                return timeUnit
+            }
+            return TimeUnit(rawValue: UInt(integer(forKey: #function))) ?? TimeUnit.Days
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    @objc public var observationTimeFilterNumberKey: Int {
+        get {
+            if value(forKey: "timeFilterNumberKey") != nil {
+                // migrate the legacy key to the new key.  New key is going out in 4.0.0
+                // this code can probably removed after some amount of time
+                let timeNumber = integer(forKey: "timeFilterNumberKey")
+                set(timeNumber, forKey: #function)
+                removeObject(forKey: "timeFilterNumberKey")
+                return timeNumber
+            }
+            return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    @objc public var hideObservations: Bool {
+        get {
+            return bool(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
+        }
+    }
+
+    @objc public var locationTimeFilter: TimeFilterType {
+        get {
+            if value(forKey: "locationtimeFilterKey") != nil {
+                // migrate the legacy key to the new key.  New key is going out in 4.0.0
+                // this code can probably removed after some amount of time
+                let timeFilter = TimeFilterType.init(rawValue: UInt(integer(forKey: "locationtimeFilterKey"))) ?? TimeFilterType.lastMonth
+                set(timeFilter.rawValue, forKey: #function)
+                removeObject(forKey: "locationtimeFilterKey")
+                return timeFilter
+            }
+            
+            return TimeFilterType.init(rawValue: UInt(integer(forKey: #function))) ?? TimeFilterType.lastMonth
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    @objc public var locationTimeFilterUnit: TimeUnit {
+        get {
+            if value(forKey: "locationtimeFilterUnitKey") != nil {
+                // migrate the legacy key to the new key.  New key is going out in 4.0.0
+                // this code can probably removed after some amount of time
+                let timeUnit = TimeUnit.init(rawValue: UInt(integer(forKey: "locationtimeFilterUnitKey"))) ?? TimeUnit.Days
+                set(timeUnit.rawValue, forKey: #function)
+                removeObject(forKey: "locationtimeFilterUnitKey")
+                return timeUnit
+            }
+            return TimeUnit(rawValue: UInt(integer(forKey: #function))) ?? TimeUnit.Days
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+
+    @objc public var locationTimeFilterNumber: Int {
+        get {
+            if value(forKey: "locationtimeFilterNumberKey") != nil {
+                // migrate the legacy key to the new key.  New key is going out in 4.0.0
+                // this code can probably removed after some amount of time
+                let timeNumber = integer(forKey: "locationtimeFilterNumberKey")
+                set(timeNumber, forKey: #function)
+                removeObject(forKey: "locationtimeFilterNumberKey")
+                return timeNumber
+            }
+            return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    @objc public var hidePeople: Bool {
+        get {
+            return bool(forKey: #function);
+        }
+        set {
+            set(newValue, forKey: #function);
         }
     }
     

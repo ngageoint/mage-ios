@@ -91,17 +91,17 @@ class LocationsTableViewController: UITableViewController {
     }
     
     func setupFilterListeners() {
-        UserDefaults.standard.addObserver(self, forKeyPath: kLocationTimeFilterKey, options: .new, context: nil);
-        UserDefaults.standard.addObserver(self, forKeyPath: kLocationTimeFilterNumberKey, options: .new, context: nil);
-        UserDefaults.standard.addObserver(self, forKeyPath: kLocationTimeFilterUnitKey, options: .new, context: nil);
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilter), options: .new, context: nil);
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterNumber), options: .new, context: nil);
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterUnit), options: .new, context: nil);
         listenersSetUp = true;
     }
     
     func removeFilterListeners() {
         if (listenersSetUp) {
-            UserDefaults.standard.removeObserver(self, forKeyPath: kLocationTimeFilterKey, context: nil);
-            UserDefaults.standard.removeObserver(self, forKeyPath: kLocationTimeFilterNumberKey, context: nil);
-            UserDefaults.standard.removeObserver(self, forKeyPath: kLocationTimeFilterUnitKey, context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilter), context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterNumber), context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterUnit), context: nil);
         }
         listenersSetUp = false;
     }
@@ -191,7 +191,7 @@ class LocationsTableViewController: UITableViewController {
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if (keyPath == kLocationTimeFilterKey || keyPath == kLocationTimeFilterNumberKey || keyPath == kLocationTimeFilterUnitKey) {
+        if (keyPath == #keyPath(UserDefaults.locationTimeFilter) || keyPath == #keyPath(UserDefaults.locationTimeFilterNumber) || keyPath == #keyPath(UserDefaults.locationTimeFilterUnit)) {
             self.locationDataStore.updatePredicates();
             setNavBarTitle();
         }

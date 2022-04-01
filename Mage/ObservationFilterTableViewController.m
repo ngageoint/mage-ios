@@ -129,6 +129,7 @@
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
     }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

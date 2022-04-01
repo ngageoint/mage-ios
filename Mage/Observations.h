@@ -10,10 +10,6 @@
 @class User;
 
 @interface Observations : NSObject
-
-extern NSString * const kImportantFilterKey;
-extern NSString * const kFavortiesFilterKey;
-
 @property(nonatomic, strong)  NSFetchedResultsController *fetchedResultsController;
 @property(nonatomic, weak) id< NSFetchedResultsControllerDelegate > delegate;
 

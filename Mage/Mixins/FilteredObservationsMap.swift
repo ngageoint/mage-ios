@@ -42,12 +42,12 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
         mapAnnotationFocusedObserver = nil
-        UserDefaults.standard.removeObserver(self, forKeyPath: "timeFilterKey")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "timeFilterUnitKey")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "timeFilterNumberKey")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "hideObservations")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "importantFilterKey")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "favoritesFilterKey")
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterKey))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterUnitKey))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterNumberKey))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.hideObservations))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey))
     }
     
     func cleanupMixin() {
@@ -56,12 +56,12 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     }
     
     func setupMixin() {
-        UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterKey", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterUnitKey", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "timeFilterNumberKey", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "hideObservations", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "importantFilterKey", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "favoritesFilterKey", options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterKey), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterUnitKey), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterNumberKey), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.hideObservations), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey), options: [.new], context: nil)
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.mapView {
                 self?.focusAnnotation(annotation: notificationObject.annotation)

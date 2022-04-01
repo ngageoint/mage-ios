@@ -67,7 +67,7 @@ class ObservationTableViewControllerTests: KIFSpec {
                 let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson);
                 
-                UserDefaults.standard.observationTimeFilter = TimeFilterType.all;
+                UserDefaults.standard.observationTimeFilterKey = TimeFilterType.all;
                 
                 view = ObservationTableViewController(scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
@@ -81,7 +81,7 @@ class ObservationTableViewControllerTests: KIFSpec {
                 MageCoreDataFixtures.addUser(userId: "userabc");
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 
-                UserDefaults.standard.observationTimeFilter = TimeFilterType.all;
+                UserDefaults.standard.observationTimeFilterKey = TimeFilterType.all;
                 
                 view = ObservationTableViewController(scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);

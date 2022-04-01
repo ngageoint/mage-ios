@@ -64,7 +64,7 @@ class ObservationListCardCellTests: KIFSpec {
                 let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson);
                 UserDefaults.standard.currentUserId = "userabc";
-                UserDefaults.standard.observationTimeFilter = TimeFilterType.all;
+                UserDefaults.standard.observationTimeFilterKey = TimeFilterType.all;
                 let observations = Observation.mr_findAll();
                 expect(observations?.count).to(equal(1));
                 let observation: Observation = observations![0] as! Observation;

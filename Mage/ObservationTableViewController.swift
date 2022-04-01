@@ -95,21 +95,21 @@ class ObservationTableViewController: UITableViewController {
     }
     
     func setupFilterListeners() {
-        UserDefaults.standard.addObserver(self, forKeyPath: kObservationTimeFilterKey, options: .new, context: nil);
-        UserDefaults.standard.addObserver(self, forKeyPath: kObservationTimeFilterNumberKey, options: .new, context: nil);
-        UserDefaults.standard.addObserver(self, forKeyPath: kObservationTimeFilterUnitKey, options: .new, context: nil);
-        UserDefaults.standard.addObserver(self, forKeyPath: kImportantFilterKey, options: .new, context: nil);
-        UserDefaults.standard.addObserver(self, forKeyPath: kFavortiesFilterKey, options: .new, context: nil);
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterKey), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterUnitKey), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterNumberKey), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey), options: .new, context: nil);
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey), options: .new, context: nil);
         listenersSetUp = true;
     }
     
     func removeFilterListeners() {
         if (listenersSetUp) {
-            UserDefaults.standard.removeObserver(self, forKeyPath: kObservationTimeFilterKey, context: nil);
-            UserDefaults.standard.removeObserver(self, forKeyPath: kObservationTimeFilterNumberKey, context: nil);
-            UserDefaults.standard.removeObserver(self, forKeyPath: kObservationTimeFilterUnitKey, context: nil);
-            UserDefaults.standard.removeObserver(self, forKeyPath: kImportantFilterKey, context: nil);
-            UserDefaults.standard.removeObserver(self, forKeyPath: kFavortiesFilterKey, context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterKey))
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterUnitKey))
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterNumberKey))
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey), context: nil);
+            UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey), context: nil);
         }
         listenersSetUp = false;
     }
@@ -226,10 +226,10 @@ class ObservationTableViewController: UITableViewController {
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if (keyPath == kObservationTimeFilterKey || keyPath == kObservationTimeFilterNumberKey || keyPath == kObservationTimeFilterUnitKey) {
+        if (keyPath == #keyPath(UserDefaults.observationTimeFilterKey) || keyPath == #keyPath(UserDefaults.observationTimeFilterNumberKey) || keyPath == #keyPath(UserDefaults.observationTimeFilterUnitKey)) {
             self.observationDataStore.updatePredicates();
             setNavBarTitle();
-        } else if (keyPath == kImportantFilterKey || keyPath == kFavortiesFilterKey) {
+        } else if (keyPath == #keyPath(UserDefaults.importantFilterKey) || keyPath == #keyPath(UserDefaults.favoritesFilterKey)) {
             self.observationDataStore.updatePredicates();
         }
     }

@@ -11,34 +11,32 @@
 
 @implementation Observations
 
-NSString * const kImportantFilterKey = @"importantFilterKey";
-NSString * const kFavortiesFilterKey = @"favortiesFilterKey";
-
 + (BOOL) getImportantFilter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults boolForKey:kImportantFilterKey];
+    return defaults.importantFilterKey;
 }
 
 + (void) setImportantFilter:(BOOL) filter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:filter forKey:kImportantFilterKey];
+    defaults.importantFilterKey = filter;
     [defaults synchronize];
 }
 
 + (BOOL) getFavoritesFilter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults boolForKey:kFavortiesFilterKey];
+    return defaults.favoritesFilterKey;
 }
 
 + (void) setFavoritesFilter:(BOOL) filter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:filter forKey:kFavortiesFilterKey];
+    defaults.favoritesFilterKey = filter;
     [defaults synchronize];
 }
 
 + (NSMutableArray *) getPredicatesForObservationsForMap {
     NSMutableArray *predicates = [Observations getPredicatesForObservations];
-    [predicates addObject:[NSPredicate predicateWithValue:![[NSUserDefaults standardUserDefaults] boolForKey:@"hideObservations"]]];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [predicates addObject:[NSPredicate predicateWithValue:!defaults.hideObservations]];
     return predicates;
 }
 

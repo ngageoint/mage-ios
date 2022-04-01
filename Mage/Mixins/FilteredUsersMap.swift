@@ -46,20 +46,20 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         }
         mapAnnotationFocusedObserver = nil
         
-        UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterKey")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterUnitKey")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "locationtimeFilterNumberKey")
-        UserDefaults.standard.removeObserver(self, forKeyPath: "hidePeople")
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilter))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterUnit))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterNumber))
+        UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.hidePeople))
         
         locations?.fetchedResultsController.delegate = nil
         locations = nil
     }
     
     func setupMixin() {
-        UserDefaults.standard.addObserver(self, forKeyPath: "locationtimeFilterKey", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "locationtimeFilterUnitKey", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "locationtimeFilterNumberKey", options: [.new], context: nil)
-        UserDefaults.standard.addObserver(self, forKeyPath: "hidePeople", options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilter), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterUnit), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterNumber), options: [.new], context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.hidePeople), options: [.new], context: nil)
         
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.mapView {

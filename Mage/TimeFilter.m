@@ -7,6 +7,7 @@
 //
 
 #import "TimeFilter.h"
+#import "MAGE-Swift.h"
 
 @interface TimeFilter ()
 @property (strong, nonatomic) NSArray *trackingButton;
@@ -14,23 +15,14 @@
 
 @implementation TimeFilter
 
-NSString * const kObservationTimeFilterKey = @"timeFilterKey";
-NSString * const kObservationTimeFilterUnitKey = @"timeFilterUnitKey";
-NSString * const kObservationTimeFilterNumberKey = @"timeFilterNumberKey";
-
-NSString * const kLocationTimeFilterKey = @"locationtimeFilterKey";
-NSString * const kLocationTimeFilterUnitKey = @"locationtimeFilterUnitKey";
-NSString * const kLocationTimeFilterNumberKey = @"locationtimeFilterNumberKey";
-
-
 + (TimeFilterType) getObservationTimeFilter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults integerForKey:kObservationTimeFilterKey];
+    return defaults.observationTimeFilterKey;
 }
 
 + (void) setObservationTimeFilter:(TimeFilterType) timeFilter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:timeFilter forKey:kObservationTimeFilterKey];
+    defaults.observationTimeFilterKey = timeFilter;
     [defaults synchronize];
 }
 
@@ -39,35 +31,35 @@ NSString * const kLocationTimeFilterNumberKey = @"locationtimeFilterNumberKey";
 }
 
 + (TimeUnit) getObservationCustomTimeFilterUnit {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];   
-    return [defaults integerForKey:kObservationTimeFilterUnitKey];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return defaults.observationTimeFilterUnitKey;
 }
 
 + (void) setObservationCustomTimeFilterUnit:(TimeUnit) timeUnit {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:timeUnit forKey:kObservationTimeFilterUnitKey];
+    defaults.observationTimeFilterUnitKey = timeUnit;
     [defaults synchronize];
 }
 
 + (NSInteger) getObservationCustomTimeFilterNumber {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults integerForKey:kObservationTimeFilterNumberKey];
+    return defaults.observationTimeFilterNumberKey;
 }
 
 + (void) setObservationCustomTimeFilterNumber: (NSInteger) timeNumber {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:timeNumber forKey:kObservationTimeFilterNumberKey];
+    defaults.observationTimeFilterNumberKey = timeNumber;
     [defaults synchronize];
 }
 
 + (TimeFilterType) getLocationTimeFilter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults integerForKey:kLocationTimeFilterKey];
+    return defaults.locationTimeFilter;
 }
 
 + (void) setLocationTimeFilter:(TimeFilterType) timeFilter {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:timeFilter forKey:kLocationTimeFilterKey];
+    defaults.locationTimeFilter = timeFilter;
     [defaults synchronize];
 }
 
@@ -77,23 +69,23 @@ NSString * const kLocationTimeFilterNumberKey = @"locationtimeFilterNumberKey";
 
 + (TimeUnit) getLocationCustomTimeFilterUnit {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults integerForKey:kLocationTimeFilterUnitKey];
+    return defaults.locationTimeFilterUnit;
 }
 
 + (void) setLocationCustomTimeFilterUnit:(TimeUnit) timeUnit {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:timeUnit forKey:kLocationTimeFilterUnitKey];
+    defaults.locationTimeFilterUnit = timeUnit;
     [defaults synchronize];
 }
 
 + (NSInteger) getLocationCustomTimeFilterNumber {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults integerForKey:kLocationTimeFilterNumberKey];
+    return defaults.locationTimeFilterNumber;
 }
 
 + (void) setLocationCustomTimeFilterNumber: (NSInteger) timeNumber {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:timeNumber forKey:kLocationTimeFilterNumberKey];
+    defaults.locationTimeFilterNumber = timeNumber;
     [defaults synchronize];
 }
 

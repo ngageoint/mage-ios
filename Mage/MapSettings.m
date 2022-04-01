@@ -171,7 +171,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.textLabel.text = @"Observations";
             cell.detailTextLabel.text = @"Show observations on map";
             UISwitch *observationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-            observationSwitch.on = ![defaults boolForKey:@"hideObservations"];
+            observationSwitch.on = !defaults.hideObservations;
             observationSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
             [observationSwitch addTarget:self action:@selector(observationSwitchChanged:) forControlEvents:UIControlEventTouchUpInside];
             cell.accessoryView = observationSwitch;
@@ -296,7 +296,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (void) observationSwitchChanged:(UISwitch *)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:!sender.on forKey:@"hideObservations"];
+    defaults.hideObservations = !sender.on;
     [defaults synchronize];
 }
 
