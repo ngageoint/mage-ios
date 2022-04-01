@@ -383,7 +383,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func copyLocation(_ locationString: String) {
         UIPasteboard.general.string = locationString;
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(locationString) copied to clipboard"))
     }
     
     

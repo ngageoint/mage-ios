@@ -197,6 +197,6 @@ class UserActionsView: UIView {
     
     @objc func copyLocation() {
         UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location copied to clipboard"))
+        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(latitudeLongitudeButton.currentTitle ?? "No Location") copied to clipboard"))
     }
 }
