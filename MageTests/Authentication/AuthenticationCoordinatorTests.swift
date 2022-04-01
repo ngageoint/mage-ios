@@ -139,8 +139,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
-                tester().waitForView(withAccessibilityLabel: "Agree");
-                tester().tapView(withAccessibilityLabel: "Agree");
+                tester().waitForView(withAccessibilityLabel: "AGREE");
+                tester().tapView(withAccessibilityLabel: "AGREE");
                 
                 expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
             }
@@ -180,8 +180,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
-                tester().waitForView(withAccessibilityLabel: "Agree");
-                tester().tapView(withAccessibilityLabel: "Agree");
+                tester().waitForView(withAccessibilityLabel: "AGREE");
+                tester().tapView(withAccessibilityLabel: "AGREE");
                 
                 expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
             }
@@ -272,8 +272,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 expect(MageOfflineObservationManager.offlineObservationCount()).to(equal(0));
                 
-                tester().waitForView(withAccessibilityLabel: "Agree");
-                tester().tapView(withAccessibilityLabel: "Agree");
+                tester().waitForView(withAccessibilityLabel: "AGREE");
+                tester().tapView(withAccessibilityLabel: "AGREE");
                 
                 expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
             }
@@ -519,8 +519,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(alert.message).to(equal("We are unable to connect to the server. Would you like to work offline until a connection to the server can be established?"));
                 tester().tapView(withAccessibilityLabel: "OK, Work Offline");
                 
-                tester().waitForView(withAccessibilityLabel: "Agree");
-                tester().tapView(withAccessibilityLabel: "Agree");
+                tester().waitForView(withAccessibilityLabel: "AGREE");
+                tester().tapView(withAccessibilityLabel: "AGREE");
                 
                 expect(delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
             }
@@ -673,8 +673,8 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
                 expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
                 
-                tester().waitForView(withAccessibilityLabel: "Disagree");
-                tester().tapView(withAccessibilityLabel: "Disagree");
+                tester().waitForView(withAccessibilityLabel: "DISAGREE");
+                tester().tapView(withAccessibilityLabel: "DISAGREE");
                 
                 expect((UIApplication.shared.delegate as! TestingAppDelegate).logoutCalled).to(beTrue());
             }
@@ -888,8 +888,9 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 tester().setText("password", intoViewWithAccessibilityLabel: "Password");
                 tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
                 
-                tester().waitForView(withAccessibilityLabel: "Cancel");
-                tester().tapView(withAccessibilityLabel: "Cancel");
+                TestHelpers.printAllAccessibilityLabelsInWindows()
+                tester().waitForView(withAccessibilityLabel: "CANCEL");
+                tester().tapView(withAccessibilityLabel: "CANCEL");
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
             }

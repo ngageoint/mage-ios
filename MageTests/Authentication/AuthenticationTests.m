@@ -13,7 +13,6 @@
 #import "AuthenticationCoordinator.h"
 #import "ServerURLController.h"
 #import "LoginViewController.h"
-#import "DisclaimerViewController.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"
 #import "Authentication.h"

@@ -90,8 +90,8 @@ class SignUpViewControllerTests: KIFSpec {
                 expect(viewTester().usingLabel("Phone")?.view).toNot(beNil());
                 expect(viewTester().usingLabel("Password")?.view).toNot(beNil());
                 expect(viewTester().usingLabel("Confirm Password")?.view).toNot(beNil());
-                expect(viewTester().usingLabel("Cancel")?.view).toNot(beNil());
-                expect(viewTester().usingLabel("Sign Up")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("CANCEL")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("SIGN UP")?.view).toNot(beNil());
                 tester().waitForView(withAccessibilityLabel: "Version");
                 let versionString: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String;
                 tester().expect(viewTester().usingLabel("Version").view, toContainText: "v\(versionString)");
@@ -109,8 +109,8 @@ class SignUpViewControllerTests: KIFSpec {
                 expect(viewTester().usingLabel("Phone")?.view).toNot(beNil());
                 expect(viewTester().usingLabel("Password")?.view).toNot(beNil());
                 expect(viewTester().usingLabel("Confirm Password")?.view).toNot(beNil());
-                expect(viewTester().usingLabel("Cancel")?.view).toNot(beNil());
-                expect(viewTester().usingLabel("Sign Up")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("CANCEL")?.view).toNot(beNil());
+                expect(viewTester().usingLabel("SIGN UP")?.view).toNot(beNil());
                 expect(viewTester().usingLabel("Captcha")?.view).toNot(beNil());
                 tester().waitForView(withAccessibilityLabel: "Version");
                 let versionString: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String;
@@ -188,8 +188,8 @@ class SignUpViewControllerTests: KIFSpec {
                 view = SignUpViewController(delegate: delegate, andScheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
-                tester().waitForView(withAccessibilityLabel: "Cancel");
-                tester().tapView(withAccessibilityLabel: "Cancel");
+                tester().waitForView(withAccessibilityLabel: "CANCEL");
+                tester().tapView(withAccessibilityLabel: "CANCEL");
                 
                 expect(delegate?.signupCanceledCalled).to(beTrue());
             }
