@@ -102,7 +102,7 @@ import Kingfisher
         self.downloadBlock.isHidden = true;
         if (!DataConnectionUtilities.shouldFetchAttachments()) {
             if (self.attachment.contentType?.hasPrefix("image") == true) {
-                self.descriptionLabel.text = "Your attachment fetch settings do not allow auto downloading of images.  Would you like to view the image?";
+                self.descriptionLabel.text = "Your attachment fetch settings do not allow auto downloading full size images.  Would you like to view the image?";
             } else if (self.attachment.contentType?.hasPrefix("video") == true) {
                 self.descriptionLabel.text = String.init(format: "Your attachment fetch settings do not allow auto downloading of videos.  This video is %.2FMB.  Would you like to view the video?", (self.attachment.size!.doubleValue / (1024.0 * 1024.0)));
             }

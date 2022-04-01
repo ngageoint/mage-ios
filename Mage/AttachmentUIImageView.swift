@@ -40,7 +40,7 @@ import Kingfisher
     
     public func isLargeSizeCached() -> Bool {
         if let attachmentUrl = self.attachment?.url {
-            return ImageCache.default.isCached(forKey: String(format: "%@_large", attachmentUrl))
+            return ImageCache.default.isCached(forKey: String(format: "%@_large", attachmentUrl)) || isFullSizeCached()
         }
         return false
     }
@@ -53,7 +53,7 @@ import Kingfisher
     }
     
     public func isAnyCached() -> Bool {
-        return isThumbnailCached() || isLargeSizeCached();
+        return isThumbnailCached() || isLargeSizeCached() || isFullSizeCached();
     }
     
     func getImageSize() -> Int {
@@ -142,8 +142,10 @@ import Kingfisher
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
             .transition(.fade(0.3)),
             .scaleFactor(UIScreen.main.scale),
-            .processor(DownsamplingImageProcessor(size: self.frame.size)),
             .cacheOriginalImage]
+        if self.frame.size != .zero {
+            options.append(.processor(DownsamplingImageProcessor(size: self.frame.size)))
+        }
         if (cacheOnly) {
             options.append(.onlyFromCache);
         }

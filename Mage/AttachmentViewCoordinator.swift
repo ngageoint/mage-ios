@@ -35,7 +35,6 @@ import QuickLook
     
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
-    var needsCloseButton: Bool = false
     
     @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
@@ -69,8 +68,7 @@ import QuickLook
         self.start(true);
     }
     
-    @objc public func start(_ animated: Bool = true, needsCloseButton: Bool = false) {
-        self.needsCloseButton = needsCloseButton
+    @objc public func start(_ animated: Bool = true) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let navigationController = UINavigationController();
             navigationController.view.backgroundColor = scheme?.colorScheme.surfaceColor
@@ -88,6 +86,9 @@ import QuickLook
                 self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                }
             }
         } else if let urlToLoad = self.urlToLoad {
             if (urlToLoad.isFileURL == true || DataConnectionUtilities.shouldFetchAvatars() ||
@@ -100,6 +101,9 @@ import QuickLook
                 self.rootViewController.pushViewController(vc, animated: animated);
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                }
             }
         }
     }
@@ -123,6 +127,9 @@ import QuickLook
                 self.navigationControllerObserver.observePopTransition(of: imageViewController, delegate: self);
                 self.hasPushedViewController = true;
                 self.imageViewController = imageViewController;
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    self.imageViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                }
             } else if contentType.hasPrefix("video") {
                 self.playAudioVideo();
             } else if contentType.hasPrefix("audio") {
@@ -141,6 +148,9 @@ import QuickLook
                 self.navigationControllerObserver.observePopTransition(of: imageViewController, delegate: self);
                 self.hasPushedViewController = true;
                 self.imageViewController = imageViewController;
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    self.imageViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                }
             } else if contentType.hasPrefix("video") {
                 self.playAudioVideo();
             } else if contentType.hasPrefix("audio") {
@@ -165,6 +175,9 @@ import QuickLook
                 if let url = url {
                     mediaPreviewController = MediaPreviewController(fileName: attachment.name ?? "file", mediaTitle: attachment.name ?? "file", data: nil, url: url, mediaLoaderDelegate: self, scheme: scheme)
                     self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        self.mediaPreviewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                    }
                 } else {
                     MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Unable to open attachment \(attachment.name ?? "file")"))
                 }
@@ -213,6 +226,9 @@ import QuickLook
         
         mediaPreviewController = MediaPreviewController(fileName: name, mediaTitle: name, data: nil, url: urlToLoad, mediaLoaderDelegate: self, scheme: scheme)
         self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.mediaPreviewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+        }
     }
  
     func navigationControllerObserver(_ observer: NavigationControllerObserver, didObservePopTransitionFor viewController: UIViewController) {
@@ -229,11 +245,7 @@ import QuickLook
     }
     
     @objc func dismiss(_ sender: UIBarButtonItem) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-//            self.playerViewController?.dismiss(animated: true, completion: nil);
-        } else {
-            self.rootViewController.popViewController(animated: true);
-        }
+        self.rootViewController.dismiss(animated: true, completion: nil)
     }
 }
 
