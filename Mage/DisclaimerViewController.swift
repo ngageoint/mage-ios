@@ -19,12 +19,14 @@ import UIKit
     lazy var consentText: UITextView = {
         let consentText = UITextView(forAutoLayout: ())
         consentText.isScrollEnabled = true
+        consentText.isSelectable = false
         return consentText
     }()
     
     lazy var consentTitle: UITextView = {
         let consentTitle = UITextView(forAutoLayout: ())
         consentTitle.textAlignment = .center
+        consentTitle.isSelectable = false
         return consentTitle
     }()
     
