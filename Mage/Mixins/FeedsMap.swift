@@ -15,15 +15,15 @@ protocol FeedItemDelegate {
 }
 protocol FeedsMap {
     var mapView: MKMapView? { get set }
+    var scheme: MDCContainerScheming? { get set }
     var feedsMapMixin: FeedsMapMixin? { get set }
 }
 
 class FeedsMapMixin: NSObject, MapMixin {
+    var feedsMap: FeedsMap
     let FEEDITEM_ANNOTATION_VIEW_REUSE_ID = "FEEDITEM_ANNOTATION"
     
     var mapAnnotationFocusedObserver: AnyObject?
-    var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
 
     var enlargedFeedItem: MKAnnotationView?
     var feedItemRetrievers: [String:FeedItemRetriever] = [:]
@@ -32,9 +32,8 @@ class FeedsMapMixin: NSObject, MapMixin {
     
     var userDefaultsEventName: String?
     
-    init(mapView: MKMapView, scheme: MDCContainerScheming?) {
-        self.mapView = mapView
-        self.scheme = scheme
+    init(feedsMap: FeedsMap) {
+        self.feedsMap = feedsMap
     }
     
     func cleanupMixin() {
@@ -54,7 +53,7 @@ class FeedsMapMixin: NSObject, MapMixin {
             UserDefaults.standard.addObserver(self, forKeyPath: userDefaultsEventName!, options: [.new], context: nil)
         }
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
-            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.mapView {
+            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.feedsMap.mapView {
                 self?.focusAnnotation(annotation: notificationObject.annotation)
             } else if notification.object == nil {
                 self?.focusAnnotation(annotation: nil)
@@ -84,7 +83,7 @@ class FeedsMapMixin: NSObject, MapMixin {
             feedItemRetrievers.removeValue(forKey: feedId)
             if let items = FeedItem.getFeedItems(feedId: feedId, eventId: currentEventId.intValue) {
                 for item in items where item.isMappable {
-                    mapView?.removeAnnotation(item)
+                    feedsMap.mapView?.removeAnnotation(item)
                 }
             }
         }
@@ -101,7 +100,7 @@ class FeedsMapMixin: NSObject, MapMixin {
             feedItemRetrievers[feedId] = retriever
             if let items = retriever.startRetriever() {
                 for item in items where item.isMappable {
-                    mapView?.addAnnotation(item)
+                    feedsMap.mapView?.addAnnotation(item)
                 }
             }
         }
@@ -170,13 +169,13 @@ class FeedsMapMixin: NSObject, MapMixin {
 extension FeedsMapMixin : FeedItemDelegate {
     func addFeedItem(_ feedItem: FeedItem) {
         if (feedItem.isMappable) {
-            mapView?.addAnnotation(feedItem);
+            feedsMap.mapView?.addAnnotation(feedItem);
         }
     }
     
     func removeFeedItem(_ feedItem: FeedItem) {
         if (feedItem.isMappable) {
-            mapView?.removeAnnotation(feedItem);
+            feedsMap.mapView?.removeAnnotation(feedItem);
         }
     }
 }

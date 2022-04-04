@@ -11,7 +11,6 @@ import MapKit
 import geopackage_ios
 
 protocol MapMixin {
-    var mapView: MKMapView? { get set }
     func setupMixin()
     func cleanupMixin()
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?

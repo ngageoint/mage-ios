@@ -12,14 +12,13 @@ import geopackage_ios
 
 protocol FilteredObservationsMap {
     var mapView: MKMapView? { get set }
+    var scheme: MDCContainerScheming? { get set }
     var filteredObservationsMapMixin: FilteredObservationsMapMixin? { get set }
 }
 
 class FilteredObservationsMapMixin: NSObject, MapMixin {
+    var filteredObservationsMap: FilteredObservationsMap
     var mapAnnotationFocusedObserver: AnyObject?
-
-    weak var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
     var user: User?
     
     var enlargedObservationView: MKAnnotationView?
@@ -30,11 +29,10 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     var lineObservations: [StyledPolyline] = []
     var polygonObservations: [StyledPolygon] = []
     
-    init(mapView: MKMapView, user: User? = nil, scheme: MDCContainerScheming?) {
-        self.mapView = mapView
-        self.scheme = scheme
+    init(filteredObservationsMap: FilteredObservationsMap, user: User? = nil) {
+        self.filteredObservationsMap = filteredObservationsMap
         self.user = user
-        mapObservationManager = MapObservationManager(mapView: mapView)
+        mapObservationManager = MapObservationManager(mapView: filteredObservationsMap.mapView)
     }
     
     deinit {
@@ -63,7 +61,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey), options: [.new], context: nil)
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
-            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.mapView {
+            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.filteredObservationsMap.mapView {
                 self?.focusAnnotation(annotation: notificationObject.annotation)
             } else if notification.object == nil {
                 self?.focusAnnotation(annotation: nil)
@@ -86,7 +84,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
 
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = (self.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
+        let tolerance = (self.filteredObservationsMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
         var annotations: [Any] = []
         for lineObservation in lineObservations {
@@ -154,7 +152,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 let annotation = ObservationAnnotation(observation: observation, geometry: geometry)
 //                annotation.view.layer.zPosition = CGFloat(observation.timestamp?.timeIntervalSinceReferenceDate ?? 0)
                 annotation.animateDrop = animated
-                mapView?.addAnnotation(annotation)
+                filteredObservationsMap.mapView?.addAnnotation(annotation)
             } else {
                 let style = ObservationShapeStyleParser.style(of: observation)
                 let shapeConverter = GPKGMapShapeConverter()
@@ -168,7 +166,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     styledPolyline.observation = observation
                     lineObservations.append(styledPolyline)
                     DispatchQueue.main.async { [weak self] in
-                        self?.mapView?.addOverlay(styledPolyline)
+                        self?.filteredObservationsMap.mapView?.addOverlay(styledPolyline)
                     }
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
@@ -179,7 +177,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     styledPolygon.observationRemoteId = observation.remoteId
                     polygonObservations.append(styledPolygon)
                     DispatchQueue.main.async { [weak self] in
-                        self?.mapView?.addOverlay(styledPolygon)
+                        self?.filteredObservationsMap.mapView?.addOverlay(styledPolygon)
                     }
                 }
             }
@@ -190,7 +188,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     }
     
     func deleteObservation(observation: Observation) {
-        let annotation = mapView?.annotations.first(where: { annotation in
+        let annotation = filteredObservationsMap.mapView?.annotations.first(where: { annotation in
             if let annotation = annotation as? ObservationAnnotation {
                 if let observationRemoteId = annotation.observationId {
                     return observationRemoteId == observation.remoteId
@@ -202,7 +200,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         })
         
         if let annotation = annotation {
-            mapView?.removeAnnotation(annotation)
+            filteredObservationsMap.mapView?.removeAnnotation(annotation)
         } else {
             // it might be a line
             let polyline = lineObservations.first { polyline in
@@ -210,7 +208,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
             
             if let polyline = polyline {
-                mapView?.removeOverlay(polyline)
+                filteredObservationsMap.mapView?.removeOverlay(polyline)
             } else {
                 // it might be a polygon
                 let polygon = polygonObservations.first { polygon in
@@ -218,14 +216,14 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 }
                 
                 if let polygon = polygon {
-                    mapView?.removeOverlay(polygon)
+                    filteredObservationsMap.mapView?.removeOverlay(polygon)
                 }
             }
         }
     }
     
     func zoomAndCenterMap(observation: Observation?) {
-        if let mapView = mapView, let viewRegion = observation?.viewRegion(mapView: mapView) {
+        if let mapView = filteredObservationsMap.mapView, let viewRegion = observation?.viewRegion(mapView: mapView) {
             mapView.setRegion(viewRegion, animated: true)
         }
     }
@@ -235,7 +233,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             return nil
         }
         
-        let annotationView = observationAnnotation.viewForAnnotation(on: mapView, scheme: scheme ?? globalContainerScheme())
+        let annotationView = observationAnnotation.viewForAnnotation(on: mapView, scheme: filteredObservationsMap.scheme ?? globalContainerScheme())
         
         // adjiust the center offset if this is the enlargedPin
         if (annotationView == self.enlargedObservationView) {
@@ -253,7 +251,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
               let observation = annotation.observation,
               let annotationView = annotation.view else {
             if let selectedObservationAccuracy = selectedObservationAccuracy {
-                mapView?.removeOverlay(selectedObservationAccuracy)
+                filteredObservationsMap.mapView?.removeOverlay(selectedObservationAccuracy)
                 self.selectedObservationAccuracy = nil
             }
             if let enlargedObservationView = enlargedObservationView {
@@ -281,7 +279,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
         
         if let selectedObservationAccuracy = selectedObservationAccuracy {
-            mapView?.removeOverlay(selectedObservationAccuracy)
+            filteredObservationsMap.mapView?.removeOverlay(selectedObservationAccuracy)
         }
         
         enlargedObservationView = annotationView
@@ -289,7 +287,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
            let coordinate = observation.location?.coordinate
         {
             selectedObservationAccuracy = ObservationAccuracy(center: coordinate, radius: CLLocationDistance(truncating: accuracy))
-            mapView?.addOverlay(selectedObservationAccuracy!)
+            filteredObservationsMap.mapView?.addOverlay(selectedObservationAccuracy!)
         }
 
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
@@ -302,7 +300,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let overlay = overlay as? ObservationAccuracy {
             let renderer = ObservationAccuracyRenderer(overlay: overlay)
-            if let scheme = scheme {
+            if let scheme = filteredObservationsMap.scheme {
                 renderer.applyTheme(withContainerScheme: scheme)
             }
             return renderer

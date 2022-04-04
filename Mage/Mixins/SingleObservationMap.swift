@@ -10,10 +10,10 @@ import Foundation
 import MapKit
 import geopackage_ios
 
-protocol SingleObservationMap {
-    var mapView: MKMapView? { get set }
-    var singleObservationMapMixin: SingleObservationMapMixin? { get set }
-}
+//protocol SingleObservationMap {
+//    var mapView: MKMapView? { get set }
+//    var singleObservationMapMixin: SingleObservationMapMixin? { get set }
+//}
 
 class SingleObservationMapMixin: FilteredObservationsMapMixin {
     var _observation: Observation?
@@ -28,8 +28,8 @@ class SingleObservationMapMixin: FilteredObservationsMapMixin {
         }
     }
     
-    init(mapView: MKMapView, observation: Observation? = nil, scheme: MDCContainerScheming?) {
-        super.init(mapView: mapView, user: nil, scheme: scheme)
+    init(filteredObservationsMap: FilteredObservationsMap, observation: Observation? = nil) {
+        super.init(filteredObservationsMap: filteredObservationsMap, user: nil)
         self._observation = observation
     }
     
@@ -58,13 +58,13 @@ class SingleObservationMapMixin: FilteredObservationsMapMixin {
     override func updateObservation(observation: Observation, animated: Bool = false, zoom: Bool = false) {
         super.updateObservation(observation: observation, animated:animated, zoom: zoom)
         if let selectedObservationAccuracy = selectedObservationAccuracy {
-            mapView?.removeOverlay(selectedObservationAccuracy)
+            filteredObservationsMap.mapView?.removeOverlay(selectedObservationAccuracy)
         }
         if let accuracy = observation.properties?[ObservationKey.accuracy.key] as? NSNumber,
            let coordinate = observation.location?.coordinate
         {
             selectedObservationAccuracy = ObservationAccuracy(center: coordinate, radius: CLLocationDistance(truncating: accuracy))
-            mapView?.addOverlay(selectedObservationAccuracy!)
+            filteredObservationsMap.mapView?.addOverlay(selectedObservationAccuracy!)
         }
     }
 }

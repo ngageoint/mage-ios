@@ -8,10 +8,10 @@
 
 import Foundation
 
-class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, SingleObservationMap, SFGeometryMap {
+class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, FilteredObservationsMap, SFGeometryMap {
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var onlineLayerMapMixin: OnlineLayerMapMixin?
-    var singleObservationMapMixin: SingleObservationMapMixin?
+    var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var sfGeometryMapMixin: SFGeometryMapMixin?
     
     var _observation: Observation?
@@ -55,15 +55,13 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, Sin
     override func layoutView() {
         super.layoutView()
         
-        if let mapView = self.mapView {
-            onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self, scheme: scheme)
-            geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
-            singleObservationMapMixin = SingleObservationMapMixin(mapView: mapView, observation: nil, scheme: scheme)
-            sfGeometryMapMixin = SFGeometryMapMixin(sfGeometryMap: self, sfGeometry: sfgeometry, scheme: scheme)
-            mapMixins.append(onlineLayerMapMixin!)
-            mapMixins.append(singleObservationMapMixin!)
-            mapMixins.append(sfGeometryMapMixin!)
-        }
+        onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self)
+        geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
+        filteredObservationsMapMixin = SingleObservationMapMixin(filteredObservationsMap: self, observation: nil)
+        sfGeometryMapMixin = SFGeometryMapMixin(sfGeometryMap: self, sfGeometry: sfgeometry)
+        mapMixins.append(onlineLayerMapMixin!)
+        mapMixins.append(filteredObservationsMapMixin!)
+        mapMixins.append(sfGeometryMapMixin!)
         
         initiateMapMixins()
         
@@ -75,12 +73,12 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, Sin
         geoPackageLayerMapMixin = nil
         onlineLayerMapMixin = nil
         sfGeometryMapMixin = nil
-        singleObservationMapMixin = nil
+        filteredObservationsMapMixin = nil
     }
     
     func addFeature() {
         if let observation = observation {
-            singleObservationMapMixin?.updateObservation(observation: observation, zoom: true)
+            filteredObservationsMapMixin?.updateObservation(observation: observation, zoom: true)
         } else if let sfgeometry = sfgeometry {
             // add the geometry to the map
             sfGeometryMapMixin?.sfGeometry = sfgeometry

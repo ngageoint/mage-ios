@@ -13,22 +13,19 @@ import geopackage_ios
 
 protocol StaticLayerMap {
     var mapView: MKMapView? { get set }
+    var scheme: MDCContainerScheming? { get set }
     var staticLayerMapMixin: StaticLayerMapMixin? { get set }
 }
 
 class StaticLayerMapMixin: NSObject, MapMixin {
     var mapAnnotationFocusedObserver: AnyObject?
 
-    var staticLayerMap: StaticLayerMap?
-    var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var staticLayerMap: StaticLayerMap
     var staticLayers: [NSNumber:[Any]] = [:]
     var enlargedAnnotationView: MKAnnotationView?
     
-    init(staticLayerMap: StaticLayerMap, scheme: MDCContainerScheming?) {
+    init(staticLayerMap: StaticLayerMap) {
         self.staticLayerMap = staticLayerMap
-        self.mapView = staticLayerMap.mapView
-        self.scheme = scheme
     }
     
     func cleanupMixin() {
@@ -41,7 +38,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
     
     func setupMixin() {
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
-            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.mapView {
+            if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.staticLayerMap.mapView {
                 self?.focusAnnotation(annotation: notificationObject.annotation)
             } else if notification.object == nil {
                 self?.focusAnnotation(annotation: nil)
@@ -82,7 +79,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             annotation.layerName = staticLayer.name
                             annotation.title = StaticLayer.featureName(feature: feature)
                             annotation.subtitle = StaticLayer.featureDescription(feature: feature)
-                            mapView?.addAnnotation(annotation)
+                            staticLayerMap.mapView?.addAnnotation(annotation)
                             annotations.append(annotation)
                         }
                     } else if featureType == "Polygon" {
@@ -102,7 +99,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             polygon.subtitle = StaticLayer.featureDescription(feature: feature)
                             
                             annotations.append(polygon)
-                            mapView?.addOverlay(polygon)
+                            staticLayerMap.mapView?.addOverlay(polygon)
                         }
                     } else if featureType == "LineString" {
                         if let coordinates = StaticLayer.featureCoordinates(feature: feature) {
@@ -117,7 +114,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             polyline.subtitle = StaticLayer.featureDescription(feature: feature)
                             
                             annotations.append(polyline)
-                            mapView?.addOverlay(polyline)
+                            staticLayerMap.mapView?.addOverlay(polyline)
                         }
                     }
                 }
@@ -134,9 +131,9 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                 print("removing the layer \(unselectedStaticLayer.name ?? "No Name") from the map")
                 for staticItem in staticItems {
                     if let overlay = staticItem as? MKOverlay {
-                        mapView?.removeOverlay(overlay)
+                        staticLayerMap.mapView?.removeOverlay(overlay)
                     } else if let annotation = staticItem as? MKAnnotation {
-                        mapView?.removeAnnotation(annotation)
+                        staticLayerMap.mapView?.removeAnnotation(annotation)
                     }
                 }
                 staticLayers.removeValue(forKey: unselectedStaticLayerId)
@@ -146,7 +143,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
     
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = (self.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
+        let tolerance = (self.staticLayerMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
         var annotations: [Any] = []
         
@@ -175,12 +172,12 @@ class StaticLayerMapMixin: NSObject, MapMixin {
             return nil
         }
         
-        return annotation.viewForAnnotation(on: mapView, scheme: scheme)
+        return annotation.viewForAnnotation(on: mapView, scheme: staticLayerMap.scheme)
     }
     
     func focusAnnotation(annotation: MKAnnotation?) {
         guard let annotation = annotation as? StaticPointAnnotation,
-              let annotationView = mapView?.view(for: annotation) else {
+              let annotationView = staticLayerMap.mapView?.view(for: annotation) else {
                   if let enlargedAnnotationView = enlargedAnnotationView {
                       // shrink the old focused view
                       UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {

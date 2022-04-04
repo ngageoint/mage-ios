@@ -12,13 +12,12 @@ import geopackage_ios
 
 protocol SFGeometryMap {
     var mapView: MKMapView? { get set }
+    var scheme: MDCContainerScheming? { get set }
     var sfGeometryMapMixin: SFGeometryMapMixin? { get set }
 }
 
 class SFGeometryMapMixin: NSObject, MapMixin {
-    var sfGeometryMap: SFGeometryMap?
-    var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var sfGeometryMap: SFGeometryMap
     var _sfGeometry: SFGeometry?
     var sfGeometry: SFGeometry? {
         get {
@@ -31,15 +30,9 @@ class SFGeometryMapMixin: NSObject, MapMixin {
     }
     var geometryToShape: [SFGeometry : GPKGMapShape] = [:]
     
-    init(sfGeometryMap: SFGeometryMap, sfGeometry: SFGeometry?, scheme: MDCContainerScheming?) {
+    init(sfGeometryMap: SFGeometryMap, sfGeometry: SFGeometry?) {
         self.sfGeometryMap = sfGeometryMap
-        self.mapView = sfGeometryMap.mapView
         self._sfGeometry = sfGeometry
-        self.scheme = scheme
-    }
-    
-    func applyTheme(scheme: MDCContainerScheming?) {
-        self.scheme = scheme
     }
     
     func setupMixin() {
@@ -47,7 +40,7 @@ class SFGeometryMapMixin: NSObject, MapMixin {
     }
     
     func addSFGeometry(sfGeometry: SFGeometry?) {
-        guard let sfGeometry = sfGeometry, let mapView = mapView else {
+        guard let sfGeometry = sfGeometry, let mapView = sfGeometryMap.mapView else {
             return
         }
         let shapeConverter: GPKGMapShapeConverter = GPKGMapShapeConverter()
@@ -56,7 +49,7 @@ class SFGeometryMapMixin: NSObject, MapMixin {
     }
     
     func removeSFGeometry(sfGeometry: SFGeometry?) {
-        if let sfGeometry = sfGeometry, let shape = geometryToShape[sfGeometry], let mapView = mapView {
+        if let sfGeometry = sfGeometry, let shape = geometryToShape[sfGeometry], let mapView = sfGeometryMap.mapView {
             shape.remove(from: mapView)
             geometryToShape.removeValue(forKey: sfGeometry)
         }
@@ -83,7 +76,7 @@ class SFGeometryMapMixin: NSObject, MapMixin {
             
             if let centroid = geometry.centroid() {
                 let mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue), latitudinalMeters: latitudeMeters, longitudinalMeters: longitudeMeters)
-                mapView?.setRegion(mapRegion, animated: true)
+                sfGeometryMap.mapView?.setRegion(mapRegion, animated: true)
                 return
             }
         }
@@ -97,8 +90,8 @@ class SFGeometryMapMixin: NSObject, MapMixin {
                 renderer.strokeColor = options.strokeColor
                 renderer.lineWidth = options.lineWidth
             } else {
-                renderer.fillColor = (scheme?.colorScheme.primaryColor ?? .label).withAlphaComponent(0.2)
-                renderer.strokeColor = scheme?.colorScheme.primaryColor ?? .label
+                renderer.fillColor = (sfGeometryMap.scheme?.colorScheme.primaryColor ?? .label).withAlphaComponent(0.2)
+                renderer.strokeColor = sfGeometryMap.scheme?.colorScheme.primaryColor ?? .label
                 renderer.lineWidth = 1
             }
             return renderer
@@ -108,7 +101,7 @@ class SFGeometryMapMixin: NSObject, MapMixin {
                 renderer.strokeColor = options.strokeColor
                 renderer.lineWidth = options.lineWidth
             } else {
-                renderer.strokeColor = scheme?.colorScheme.primaryColor ?? .label
+                renderer.strokeColor = sfGeometryMap.scheme?.colorScheme.primaryColor ?? .label
                 renderer.lineWidth = 1
             }
             return renderer

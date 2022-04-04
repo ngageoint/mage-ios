@@ -12,14 +12,13 @@ import MaterialComponents
 
 protocol CanReportLocation {
     var mapView: MKMapView? { get set }
+    var scheme: MDCContainerScheming? { get set }
     var navigationController: UINavigationController? { get }
     var canReportLocationMixin: CanReportLocationMixin? { get set }
 }
 
 class CanReportLocationMixin: NSObject, MapMixin {
-    var mapView: MKMapView?
     var canReportLocation: CanReportLocation
-    var scheme: MDCContainerScheming?
     weak var buttonParentView: UIStackView?
     var indexInView: Int = 1
     var locationManager: CLLocationManager?
@@ -33,10 +32,8 @@ class CanReportLocationMixin: NSObject, MapMixin {
         return reportLocationButton
     }()
     
-    init(canReportLocation: CanReportLocation, buttonParentView: UIStackView?, indexInView: Int = 1, locationManager: CLLocationManager? = CLLocationManager(), scheme: MDCContainerScheming?) {
+    init(canReportLocation: CanReportLocation, buttonParentView: UIStackView?, indexInView: Int = 1, locationManager: CLLocationManager? = CLLocationManager()) {
         self.canReportLocation = canReportLocation
-        self.mapView = canReportLocation.mapView
-        self.scheme = scheme
         self.buttonParentView = buttonParentView
         self.indexInView = indexInView
         self.locationManager = locationManager
@@ -48,10 +45,9 @@ class CanReportLocationMixin: NSObject, MapMixin {
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {
-        guard let scheme = scheme else {
+        guard let scheme = self.canReportLocation.scheme else {
             return
         }
-        self.scheme = scheme
         reportLocationButton.backgroundColor = scheme.colorScheme.surfaceColor;
     }
     
@@ -65,7 +61,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
             buttonParentView.insertArrangedSubview(reportLocationButton, at: indexInView)
         }
         
-        applyTheme(scheme: scheme)
+        applyTheme(scheme: self.canReportLocation.scheme)
         
         locationManager?.delegate = self
         
@@ -119,7 +115,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
             reportLocationButton.tintColor = UIColor(red: 244.0/255.0, green:67.0/255.0, blue:54.0/255.0, alpha:1.0)
         } else {
             reportLocationButton.setImage(UIImage(named: "location_tracking_off"), for: .normal)
-            reportLocationButton.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.3)
+            reportLocationButton.tintColor = canReportLocation.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.3)
         }
     }
 }

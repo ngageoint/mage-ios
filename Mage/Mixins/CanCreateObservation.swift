@@ -11,14 +11,14 @@ import MapKit
 
 protocol CanCreateObservation {
     var mapView: MKMapView? { get set }
+    var navigationController: UINavigationController? { get set }
+    var scheme: MDCContainerScheming? { get set }
     var canCreateObservationMixin: CanCreateObservationMixin? { get set }
 }
 
 class CanCreateObservationMixin: NSObject, MapMixin {
     var mapView: MKMapView?
     var canCreateObservation: CanCreateObservation
-    weak var navigationController: UINavigationController?
-    var scheme: MDCContainerScheming?
     weak var rootView: UIView?
     weak var mapStackView: UIStackView?
     var editCoordinator: ObservationEditCoordinator?
@@ -34,11 +34,9 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         return createFab
     }()
     
-    init(canCreateObservation: CanCreateObservation, shouldShowFab: Bool? = true, navigationController: UINavigationController?, rootView: UIView?, mapStackView: UIStackView?, scheme: MDCContainerScheming?, locationService: LocationService? = nil) {
+    init(canCreateObservation: CanCreateObservation, shouldShowFab: Bool? = true, rootView: UIView?, mapStackView: UIStackView?, locationService: LocationService? = nil) {
         self.canCreateObservation = canCreateObservation
         self.mapView = canCreateObservation.mapView
-        self.navigationController = navigationController
-        self.scheme = scheme
         self.rootView = rootView
         self.mapStackView = mapStackView
         if let locationService = locationService {
@@ -53,7 +51,7 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         guard let scheme = scheme else {
             return
         }
-        self.scheme = scheme
+        canCreateObservation.scheme = scheme
         createFab.applySecondaryTheme(withScheme: scheme)
     }
     
@@ -65,7 +63,7 @@ class CanCreateObservationMixin: NSObject, MapMixin {
         createFab.autoPinEdge(.bottom, to: .top, of: mapStackView, withOffset: -25)
         createFab.autoPinEdge(toSuperviewMargin: .right)
                 
-        applyTheme(scheme: scheme)
+        applyTheme(scheme: canCreateObservation.scheme)
         
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(mapLongPress(_:)))
         mapView.addGestureRecognizer(longPressGestureRecognizer)
@@ -104,8 +102,8 @@ class CanCreateObservationMixin: NSObject, MapMixin {
             delta = location.timestamp.timeIntervalSinceNow * -1000
         }
         
-        editCoordinator = ObservationEditCoordinator(rootViewController: navigationController, delegate: self, location: point, accuracy: accuracy, provider: provider, delta: delta)
-        editCoordinator?.applyTheme(withContainerScheme: scheme)
+        editCoordinator = ObservationEditCoordinator(rootViewController: canCreateObservation.navigationController, delegate: self, location: point, accuracy: accuracy, provider: provider, delta: delta)
+        editCoordinator?.applyTheme(withContainerScheme: canCreateObservation.scheme)
         editCoordinator?.start()
     }
 }

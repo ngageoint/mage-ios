@@ -11,15 +11,14 @@ import MapKit
 
 protocol HasMapSettings {
     var mapView: MKMapView? { get set }
+    var scheme: MDCContainerScheming? { get set }
+    var navigationController: UINavigationController? { get set }
     var hasMapSettingsMixin: HasMapSettingsMixin? { get set }
 }
 
 class HasMapSettingsMixin: NSObject, MapMixin {
     var geoPackageImportedObserver: Any?
-    weak var mapView: MKMapView?
     var hasMapSettings: HasMapSettings
-    weak var navigationController: UINavigationController?
-    var scheme: MDCContainerScheming?
     var settingsCoordinator: MapSettingsCoordinator?
     weak var rootView: UIView?
     
@@ -31,10 +30,8 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         return mapSettingsButton
     }()
     
-    init(hasMapSettings: HasMapSettings, navigationController: UINavigationController?, rootView: UIView?, scheme: MDCContainerScheming?) {
+    init(hasMapSettings: HasMapSettings, rootView: UIView?) {
         self.hasMapSettings = hasMapSettings
-        self.navigationController = navigationController
-        self.scheme = scheme
         self.rootView = rootView
     }
     
@@ -46,7 +43,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {
-        self.scheme = scheme
+        hasMapSettings.scheme = scheme
         mapSettingsButton.backgroundColor = scheme?.colorScheme.surfaceColor;
         mapSettingsButton.tintColor = scheme?.colorScheme.primaryColor;
     }
@@ -61,7 +58,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         
         setupMapSettingsButton()
 
-        applyTheme(scheme: scheme)
+        applyTheme(scheme: hasMapSettings.scheme)
         
         geoPackageImportedObserver = NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) { [weak self] notification in
             self?.setupMapSettingsButton()
@@ -69,7 +66,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     }
     
     @objc func mapSettingsButtonTapped(_ sender: UIButton) {
-        settingsCoordinator = MapSettingsCoordinator(rootViewController: navigationController, scheme: scheme)
+        settingsCoordinator = MapSettingsCoordinator(rootViewController: hasMapSettings.navigationController, scheme: hasMapSettings.scheme)
         settingsCoordinator?.delegate = self
         settingsCoordinator?.start()
     }
@@ -86,12 +83,12 @@ class HasMapSettingsMixin: NSObject, MapMixin {
             circle.tag = 998
             circle.layer.cornerRadius = 10
             circle.layer.borderWidth = 0.5
-            circle.layer.borderColor = scheme?.colorScheme.onSecondaryColor.withAlphaComponent(0.6).cgColor
-            circle.backgroundColor = scheme?.colorScheme.primaryColorVariant
+            circle.layer.borderColor = hasMapSettings.scheme?.colorScheme.onSecondaryColor.withAlphaComponent(0.6).cgColor
+            circle.backgroundColor = hasMapSettings.scheme?.colorScheme.primaryColorVariant
             circle.accessibilityLabel = "layer_download_circle"
             let imageView = UIImageView(image: UIImage(named: "download"))
             imageView.frame = CGRect(x: 3, y: 2, width: 14, height: 15)
-            imageView.tintColor = scheme?.colorScheme.onSecondaryColor
+            imageView.tintColor = hasMapSettings.scheme?.colorScheme.onSecondaryColor
             circle.addSubview(imageView)
             mapSettingsButton.addSubview(circle)
         }

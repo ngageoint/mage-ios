@@ -11,19 +11,16 @@ import MapKit
 
 protocol OnlineLayerMap {
     var mapView: MKMapView? { get set }
+    var scheme: MDCContainerScheming? { get set }
     var onlineLayerMapMixin: OnlineLayerMapMixin? { get set }
 }
 
 class OnlineLayerMapMixin: NSObject, MapMixin {
-    var onlineLayerMap: OnlineLayerMap?
-    var mapView: MKMapView?
-    var scheme: MDCContainerScheming?
+    var onlineLayerMap: OnlineLayerMap
     var onlineLayers: [NSNumber:MKTileOverlay] = [:]
     
-    init(onlineLayerMap: OnlineLayerMap, scheme: MDCContainerScheming?) {
+    init(onlineLayerMap: OnlineLayerMap) {
         self.onlineLayerMap = onlineLayerMap
-        self.scheme = scheme
-        self.mapView = onlineLayerMap.mapView
     }
     
     func cleanupMixin() {
@@ -102,18 +99,18 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
         
         // Add the layers in the proper order ot the map
         for overlay in baseLayers {
-            mapView?.addOverlay(overlay)
+            onlineLayerMap.mapView?.addOverlay(overlay)
         }
         for overlay in nonBaseLayers {
-            mapView?.addOverlay(overlay)
+            onlineLayerMap.mapView?.addOverlay(overlay)
         }
         for overlay in transparentLayers {
-            mapView?.addOverlay(overlay)
+            onlineLayerMap.mapView?.addOverlay(overlay)
         }
         
         for unselectedOnlineLayerId in unselectedOnlineLayerIds {
             if let overlay = onlineLayers[unselectedOnlineLayerId] {
-                mapView?.removeOverlay(overlay)
+                onlineLayerMap.mapView?.removeOverlay(overlay)
                 onlineLayers.removeValue(forKey: unselectedOnlineLayerId)
             }
         }
