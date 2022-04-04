@@ -20,6 +20,7 @@ import UIKit
         let consentText = UITextView(forAutoLayout: ())
         consentText.isScrollEnabled = true
         consentText.isSelectable = false
+        consentText.backgroundColor = .clear
         return consentText
     }()
     
@@ -27,6 +28,7 @@ import UIKit
         let consentTitle = UITextView(forAutoLayout: ())
         consentTitle.textAlignment = .center
         consentTitle.isSelectable = false
+        consentTitle.backgroundColor = .clear
         return consentTitle
     }()
     

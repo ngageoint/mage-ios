@@ -8,10 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import <MaterialComponents/MaterialContainerScheme.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ObservationAccuracyRenderer : MKCircleRenderer
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 
 @end
 

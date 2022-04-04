@@ -24,7 +24,7 @@
         self.scheme = containerScheme;
     }
     self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.navigationController.navigationBar.tintColor = self.scheme.colorScheme.onSecondaryColor;
     self.navigationController.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;

@@ -15,11 +15,20 @@
     self = [super initWithOverlay:overlay];
     if (self) {
         self.lineWidth = 1.0f;
-        self.fillColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:.1f];
-        self.strokeColor = [UIColor blueColor];
+        self.fillColor = [[UIColor labelColor] colorWithAlphaComponent:0.2f];
+        self.strokeColor = [UIColor labelColor];
     }
     
     return self;
+}
+
+- (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
+    if (containerScheme != nil) {
+        if (containerScheme.colorScheme.primaryColor != nil) {
+            self.fillColor = [containerScheme.colorScheme.primaryColor colorWithAlphaComponent:0.2f];
+            self.strokeColor = containerScheme.colorScheme.primaryColor;
+        }
+    }
 }
 
 @end

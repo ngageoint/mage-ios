@@ -5,7 +5,7 @@ This is a test plan that should be run through when we release the MAGE app
 ## Overview
 
 When releasing the MAGE app we have multiple types of users that we need to test with: Admin users, event manager users, and users with no edit
-These tests should be run on both iPads and iPhones.
+These tests should be run on both iPads and iPhones. These should all be run in dark mode and light mode to ensure all UI elements are visible
 
 ## General Online Operation
 

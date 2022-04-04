@@ -80,7 +80,7 @@
     self.refreshingStatus.textColor = self.scheme.colorScheme.onSecondaryColor;
     
     self.searchController.searchBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onSecondaryColor;
     self.searchController.searchBar.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
     self.searchContainer.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
 

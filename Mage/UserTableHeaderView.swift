@@ -261,6 +261,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                     horizontalAccuracy: dictionary["accuracy"] as! CLLocationAccuracy,
                     verticalAccuracy: dictionary["accuracy"] as!CLLocationAccuracy,
                     timestamp: location.timestamp!);
+            } else {
+                if let user = user, let location = Location.mr_findFirst(with:NSPredicate(format: "user = %@", user)) {
+                    userLastLocation = location.location
+                }
             }
         } else {
             if let user = user, let location = Location.mr_findFirst(with:NSPredicate(format: "user = %@", user)) {

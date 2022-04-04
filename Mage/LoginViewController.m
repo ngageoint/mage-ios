@@ -178,6 +178,7 @@
     self.messageView.textAlignment = NSTextAlignmentCenter;
     self.messageView.font = self.scheme.typographyScheme.body1;
     self.messageView.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
+    self.messageView.backgroundColor = [UIColor clearColor];
     self.messageView.scrollEnabled = false;
     [self.messageView sizeToFit];
     self.messageView.hidden = NO;

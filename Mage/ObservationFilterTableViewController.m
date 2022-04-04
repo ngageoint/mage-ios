@@ -57,7 +57,7 @@
         NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
     } forState:UIControlStateNormal];
     [self.periodSegmentedControl setTitleTextAttributes:@{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor
     } forState:UIControlStateSelected];
     self.favoriteSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.importantSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;

@@ -125,17 +125,17 @@
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
             navigationController.navigationBar.translucent = NO;
             navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-            navigationController.navigationBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
-            navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onPrimaryColor};
-            navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor};
+            navigationController.navigationBar.tintColor = self.scheme.colorScheme.onSecondaryColor;
+            navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onSecondaryColor};
+            navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor};
             UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
             [appearance configureWithOpaqueBackground];
             appearance.titleTextAttributes = @{
-                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
                 NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
             };
             appearance.largeTitleTextAttributes = @{
-                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor,
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
                 NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
             };
             
@@ -264,7 +264,7 @@
             break;
         }
         case kAttributions: {
-            AttributionsViewController *viewController = [[NSBundle mainBundle] loadNibNamed:@"Attributions" owner:self options:nil][0];
+            AttributionsViewController *viewController = [[AttributionsViewController alloc] initWithScheme: self.scheme];
             [viewController applyThemeWithContainerScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
             break;

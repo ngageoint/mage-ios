@@ -43,9 +43,9 @@ import Foundation
         
         if let masterViewController = self.masterViewController {
             masterViewController.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-            masterViewController.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor
+            masterViewController.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor
             masterViewController.navigationBar.titleTextAttributes =
-                [.foregroundColor:containerScheme.colorScheme.onPrimaryColor];
+                [.foregroundColor:containerScheme.colorScheme.onSecondaryColor];
         
             masterViewController.navigationBar.prefersLargeTitles = false;
             masterViewController.navigationItem.largeTitleDisplayMode = .never;
@@ -53,9 +53,9 @@ import Foundation
         
         if let detailViewController = self.detailViewController {
             detailViewController.navigationBar.barTintColor = containerScheme.colorScheme.primaryColorVariant;
-            detailViewController.navigationBar.tintColor = containerScheme.colorScheme.onPrimaryColor;
+            detailViewController.navigationBar.tintColor = containerScheme.colorScheme.onSecondaryColor;
             detailViewController.navigationBar.titleTextAttributes =
-                [.foregroundColor :containerScheme.colorScheme.onPrimaryColor];
+                [.foregroundColor :containerScheme.colorScheme.onSecondaryColor];
             
             detailViewController.navigationBar.prefersLargeTitles = false;
             detailViewController.navigationItem.largeTitleDisplayMode = .never;
@@ -211,6 +211,10 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func viewUser(_ user: User) {
+        if let uvc = self.masterViewController?.topViewController as? UserViewController, uvc.user == user {
+            // already showing
+            return
+        }
         let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }

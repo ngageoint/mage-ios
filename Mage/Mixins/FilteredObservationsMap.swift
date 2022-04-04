@@ -301,7 +301,11 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
     
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let overlay = overlay as? ObservationAccuracy {
-            return ObservationAccuracyRenderer(overlay: overlay)
+            let renderer = ObservationAccuracyRenderer(overlay: overlay)
+            if let scheme = scheme {
+                renderer.applyTheme(withContainerScheme: scheme)
+            }
+            return renderer
         }
         return nil
     }
