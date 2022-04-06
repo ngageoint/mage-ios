@@ -53,6 +53,7 @@ class ObservationActionsSheetController: UITableViewController {
         self.scheme = containerScheme;
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
         cancelButton.applyTextTheme(withScheme: containerScheme);
+        cancelButton.setTitleColor(containerScheme.colorScheme.primaryColorVariant, for: .normal)
     }
     
     override func viewDidLoad() {

@@ -30,9 +30,9 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *mageServerURL;
 @property (weak, nonatomic) IBOutlet UILabel *mageVersion;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet MDCButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIView *changePasswordView;
-@property (weak, nonatomic) IBOutlet UIButton *changeButton;
+@property (weak, nonatomic) IBOutlet MDCButton *changeButton;
 @property (weak, nonatomic) IBOutlet UIView *informationView;
 @property (weak, nonatomic) IBOutlet UILabel *informationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *passwordStrengthLabel;
@@ -67,14 +67,12 @@
 
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
-    self.cancelButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.cancelButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
-    self.changeButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.changeButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
-    self.showCurrentPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
-    self.showNewPasswordLabel.textColor = self.scheme.colorScheme.primaryColor;
-    self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    [self.mageServerURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+    [self.cancelButton applyContainedThemeWithScheme:self.scheme];
+    [self.changeButton applyContainedThemeWithScheme:self.scheme];
+    self.showCurrentPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.showNewPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    self.passwordStrengthNameLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+    [self.mageServerURL setTitleColor:self.scheme.colorScheme.primaryColorVariant forState:UIControlStateNormal];
     self.mageVersion.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.showPasswordSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.showCurrentPasswordSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
@@ -130,6 +128,9 @@
     self.currentPasswordField.label.text = @"Current Password";
     self.currentPasswordField.leadingAssistiveLabel.text = @" ";
     [self.currentPasswordField sizeToFit];
+    
+    [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [self.changeButton setTitle:@"Change" forState:UIControlStateNormal];
         
     [self applyThemeWithContainerScheme:self.scheme];
 

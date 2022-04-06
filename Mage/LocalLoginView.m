@@ -40,10 +40,10 @@
     
     self.showPasswordLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.signupDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
-    [self.signupButton setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
     self.showPassword.onTintColor = self.scheme.colorScheme.primaryColorVariant;
     [self.loginButton applyContainedThemeWithScheme:self.scheme];
     [self.signupButton applyTextThemeWithScheme:self.scheme];
+    [self.signupButton setTitleColor:[self.scheme.colorScheme.primaryColorVariant colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
 }
 
 - (id) init {

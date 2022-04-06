@@ -42,7 +42,7 @@ class FormsHeader: UIView {
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.scheme = scheme;
         headerLabel.font = scheme.typographyScheme.overline;
-        headerLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
+        headerLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         reorderButton.applyTextTheme(withScheme: scheme);
         reorderButton.tintColor = scheme.colorScheme.primaryColor;
     }

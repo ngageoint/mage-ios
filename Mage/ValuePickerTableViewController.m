@@ -49,7 +49,7 @@
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-    
+    cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
     cell.textLabel.text = self.labels[indexPath.row];
     
     if ([self.selected isEqual:self.values[indexPath.row]]) {

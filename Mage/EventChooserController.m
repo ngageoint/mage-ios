@@ -66,23 +66,23 @@
         self.scheme = containerScheme;
     }
 
-    self.view.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.view.backgroundColor = self.scheme.colorScheme.primaryColor;
     self.loadingView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    self.chooseEventTitle.textColor = self.scheme.colorScheme.onSecondaryColor;
-    self.eventInstructions.textColor = [self.scheme.colorScheme.onSecondaryColor colorWithAlphaComponent:0.87];
+    self.chooseEventTitle.textColor = self.scheme.colorScheme.onPrimaryColor;
+    self.eventInstructions.textColor = self.scheme.colorScheme.onPrimaryColor;
     [self.actionButton applyContainedThemeWithScheme:self.scheme];
-    self.loadingLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
-    self.activityIndicator.color = self.scheme.colorScheme.primaryColorVariant;
+    self.loadingLabel.textColor = self.scheme.colorScheme.onSurfaceColor;
+    self.activityIndicator.color = self.scheme.colorScheme.onSurfaceColor;
     self.tableView.backgroundColor = self.scheme.colorScheme.surfaceColor;
-    self.refreshingButton.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.refreshingView.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.refreshingButton.tintColor = self.scheme.colorScheme.onSecondaryColor;
-    self.refreshingStatus.textColor = self.scheme.colorScheme.onSecondaryColor;
+    self.refreshingButton.backgroundColor = self.scheme.colorScheme.primaryColor;
+    self.refreshingView.backgroundColor = self.scheme.colorScheme.primaryColor;
+    self.refreshingButton.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.refreshingStatus.textColor = self.scheme.colorScheme.onPrimaryColor;
     
-    self.searchController.searchBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onSecondaryColor;
-    self.searchController.searchBar.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-    self.searchContainer.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.searchController.searchBar.barTintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.searchController.searchBar.backgroundColor = self.scheme.colorScheme.primaryColor;
+    self.searchContainer.backgroundColor = self.scheme.colorScheme.primaryColor;
 
     self.searchController.searchBar.searchTextField.backgroundColor = self.scheme.colorScheme.surfaceColor;
 

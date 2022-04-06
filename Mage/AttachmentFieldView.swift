@@ -83,9 +83,9 @@ class AttachmentFieldView : BaseFieldView {
         attachmentCollectionEmptyView.addSubview(emptyDoc)
         attachmentCollectionEmptyView.addSubview(noAttachmentsLabel)
         emptyDoc.contentMode = .scaleAspectFit
-        emptyDoc.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .bottom)
-        noAttachmentsLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8), excludingEdge: .top)
-        noAttachmentsLabel.autoPinEdge(.top, to: .bottom, of: emptyDoc, withOffset: 8)
+        emptyDoc.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 36, left: 8, bottom: 24, right: 8), excludingEdge: .bottom)
+        noAttachmentsLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 36, right: 8), excludingEdge: .top)
+        noAttachmentsLabel.autoPinEdge(.top, to: .bottom, of: emptyDoc, withOffset: 16)
         return attachmentCollectionEmptyView
     }()
     
@@ -190,7 +190,7 @@ class AttachmentFieldView : BaseFieldView {
         emptyDoc.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         attachmentCollectionEmptyView.backgroundColor = .clear
         divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12)
-        noAttachmentsLabel.font = scheme.typographyScheme.body1
+        noAttachmentsLabel.font = scheme.typographyScheme.headline5
         noAttachmentsLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
     }
     
@@ -261,13 +261,13 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     func setAttachmentHolderHeight() {
-        var attachmentHolderHeight: CGFloat = 100.0;
+        var attachmentHolderHeight: CGFloat = 200.0;
         var attachmentCount = attachments?.filter { attachment in
             return !attachment.markedForDeletion
         }.count ?? 0;
         attachmentCount = attachmentCount + unsentAttachments.count;
         if (attachmentCount != 0) {
-            attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * 100.0
+            attachmentHolderHeight = ceil(CGFloat(Double(attachmentCount) / 2.0)) * attachmentHolderHeight
         }
         if (heightConstraint != nil) {
             heightConstraint?.constant = attachmentHolderHeight;

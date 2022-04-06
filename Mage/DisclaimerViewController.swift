@@ -78,7 +78,7 @@ import UIKit
             return
         }
         self.scheme = scheme
-        self.view.backgroundColor = scheme.colorScheme.surfaceColor
+        self.view.backgroundColor = scheme.colorScheme.backgroundColor
         self.consentText.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         self.consentText.font = scheme.typographyScheme.body2
         self.consentTitle.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87)

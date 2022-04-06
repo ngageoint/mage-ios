@@ -45,7 +45,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     func applyTheme(scheme: MDCContainerScheming?) {
         hasMapSettings.scheme = scheme
         mapSettingsButton.backgroundColor = scheme?.colorScheme.surfaceColor;
-        mapSettingsButton.tintColor = scheme?.colorScheme.primaryColor;
+        mapSettingsButton.tintColor = scheme?.colorScheme.primaryColorVariant;
     }
     
     func setupMixin() {
@@ -83,12 +83,12 @@ class HasMapSettingsMixin: NSObject, MapMixin {
             circle.tag = 998
             circle.layer.cornerRadius = 10
             circle.layer.borderWidth = 0.5
-            circle.layer.borderColor = hasMapSettings.scheme?.colorScheme.onSecondaryColor.withAlphaComponent(0.6).cgColor
-            circle.backgroundColor = hasMapSettings.scheme?.colorScheme.primaryColorVariant
+            circle.layer.borderColor = hasMapSettings.scheme?.colorScheme.onPrimaryColor.withAlphaComponent(0.87).cgColor
+            circle.backgroundColor = hasMapSettings.scheme?.colorScheme.primaryColor
             circle.accessibilityLabel = "layer_download_circle"
             let imageView = UIImageView(image: UIImage(named: "download"))
             imageView.frame = CGRect(x: 3, y: 2, width: 14, height: 15)
-            imageView.tintColor = hasMapSettings.scheme?.colorScheme.onSecondaryColor
+            imageView.tintColor = hasMapSettings.scheme?.colorScheme.onPrimaryColor
             circle.addSubview(imageView)
             mapSettingsButton.addSubview(circle)
         }

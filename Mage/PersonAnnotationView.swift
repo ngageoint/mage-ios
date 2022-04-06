@@ -20,7 +20,7 @@ import Kingfisher
                     self.glyphText = user.iconText
                 } else {
                     self.glyphImage = UIImage(named: "me")
-                    self.markerTintColor = scheme?.colorScheme.primaryColor
+                    self.markerTintColor = scheme?.colorScheme.primaryColorVariant
                 }
                 
                 for subview in subviews {
@@ -39,7 +39,7 @@ import Kingfisher
                 }
             } else {
                 self.glyphImage = UIImage(named: "me")
-                self.markerTintColor = scheme?.colorScheme.primaryColor
+                self.markerTintColor = scheme?.colorScheme.primaryColorVariant
             }
         }
     }
@@ -143,7 +143,7 @@ import Kingfisher
                         } else {
                             self.glyphText = nil
                             self.glyphImage = UIImage(named: "me")
-                            self.markerTintColor = self.scheme?.colorScheme.primaryColor
+                            self.markerTintColor = self.scheme?.colorScheme.primaryColorVariant
                         }
                     case .failure(_):
                         if let iconColor = user.iconColor {
@@ -152,13 +152,13 @@ import Kingfisher
                         } else {
                             self.glyphText = nil
                             self.glyphImage = UIImage(named: "me")
-                            self.markerTintColor = self.scheme?.colorScheme.primaryColor
+                            self.markerTintColor = self.scheme?.colorScheme.primaryColorVariant
                         }
                     }
                 }
             } else {
                 self.glyphImage = UIImage(named: "me")
-                self.markerTintColor = scheme?.colorScheme.primaryColor
+                self.markerTintColor = scheme?.colorScheme.primaryColorVariant
             }
             
             for subview in subviews {
@@ -177,7 +177,7 @@ import Kingfisher
             }
         } else {
             self.glyphImage = UIImage(named: "me")
-            self.markerTintColor = scheme?.colorScheme.primaryColor
+            self.markerTintColor = scheme?.colorScheme.primaryColorVariant
         }
     }
 }

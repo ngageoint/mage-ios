@@ -83,6 +83,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
     }
     
     func applyTheme(scheme: MDCContainerScheming?) {
+        self.scheme = scheme
         for mixin in mapMixins {
             mixin.applyTheme(scheme: scheme)
         }

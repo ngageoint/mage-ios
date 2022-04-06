@@ -135,7 +135,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
             if (indexPath.row == 0) {
                 UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
                 cell.textLabel.text = @"Add a WiFi SSID";
-                cell.textLabel.textColor = self.scheme.colorScheme.primaryColor;
+                cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
                 cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
                 return cell;
             } else {
@@ -149,7 +149,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
             if (indexPath.row == 0) {
                 UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
                 cell.textLabel.text = @"Add a WiFi SSID";
-                cell.textLabel.textColor = self.scheme.colorScheme.primaryColor;
+                cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
                 cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
                 return cell;
             } else {
@@ -240,7 +240,7 @@ static NSInteger NOT_THESE_WIFI_NETWORKS_CELL_ROW = 2;
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.6];
+        header.textLabel.textColor = [self.scheme.colorScheme.onBackgroundColor colorWithAlphaComponent:0.87];
     }
 }
 

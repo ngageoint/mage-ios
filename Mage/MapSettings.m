@@ -97,15 +97,14 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
     if (indexPath.section == LAYERS_SECTION) {
         if (indexPath.row == LAYERS_ROW_MAP_TYPE) {
             MapTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTypeCell"];
-            cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
-            cell.mapTypeSegmentedControl.tintColor = self.scheme.colorScheme.primaryColorVariant;
+            cell.mapTypeSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColor;
             [cell.mapTypeSegmentedControl setTitleTextAttributes:@{
                 NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
             } forState:UIControlStateNormal];
             [cell.mapTypeSegmentedControl setTitleTextAttributes:@{
-                NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
             } forState:UIControlStateSelected];
-            cell.mapTypeSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColorVariant;
+            cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
             cell.cellTitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
             cell.delegate = self;
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -148,7 +147,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             }
             cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-            cell.tintColor = self.scheme.colorScheme.primaryColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
             return cell;
         } else if (row == LAYERS_ROW_ONLINE) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StaticLayerCell"];
@@ -159,7 +158,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-            cell.tintColor = self.scheme.colorScheme.primaryColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
             return cell;
         }
     } else if (indexPath.section == MAGE_SECTION) {
@@ -177,7 +176,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.accessoryView = observationSwitch;
             cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-            cell.tintColor = self.scheme.colorScheme.primaryColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
             return cell;
         } else if (indexPath.row == MAGE_ROW_PEOPLE) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellWithSwitch"];
@@ -193,7 +192,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
             cell.accessoryView = peopleSwitch;
             cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-            cell.tintColor = self.scheme.colorScheme.primaryColor;
+            cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
             return cell;
         }
     } else if (indexPath.section == FEED_SECTION) {
@@ -215,7 +214,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         cell.accessoryView = observationSwitch;
         cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
         cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-        cell.tintColor = self.scheme.colorScheme.primaryColor;
+        cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
         return cell;
     }
 

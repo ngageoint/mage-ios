@@ -25,8 +25,8 @@
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     if (containerScheme != nil) {
         if (containerScheme.colorScheme.primaryColor != nil) {
-            self.fillColor = [containerScheme.colorScheme.primaryColor colorWithAlphaComponent:0.2f];
-            self.strokeColor = containerScheme.colorScheme.primaryColor;
+            self.fillColor = [containerScheme.colorScheme.primaryColorVariant colorWithAlphaComponent:0.2f];
+            self.strokeColor = containerScheme.colorScheme.primaryColorVariant;
         }
     }
 }

@@ -106,6 +106,8 @@ class UserActionsView: UIView {
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
         
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
+        latitudeLongitudeButton.setTitleColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
+        latitudeLongitudeButton.setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
     }
     
     public convenience init(user: User?, userActionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -125,17 +127,12 @@ class UserActionsView: UIView {
     
     func layoutView() {
         self.addSubview(actionButtonView);
-//        self.addSubview(latitudeLongitudeButton);
     }
     
     override func updateConstraints() {
         if (!didSetupConstraints) {
             actionButtonView.autoSetDimension(.height, toSize: 56);
-            actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16))//, excludingEdge: .left);
-
-//            latitudeLongitudeButton.autoAlignAxis(toSuperviewAxis: .horizontal);
-//            latitudeLongitudeButton.autoPinEdge(toSuperviewEdge: .left, withInset: 0);
-//            actionButtonView.autoPinEdge(.left, to: .right, of: latitudeLongitudeButton, withOffset: 8, relation: .greaterThanOrEqual);
+            actionButtonView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16))
             didSetupConstraints = true;
         }
         super.updateConstraints();

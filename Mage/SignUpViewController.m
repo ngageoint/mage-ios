@@ -67,10 +67,10 @@
         self.scheme = containerScheme;
     }
     
-    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
-    [self.mageServerURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+    [self.mageServerURL setTitleColor:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
     self.mageVersion.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     [self.signupButton applyContainedThemeWithScheme:self.scheme];
     [self.cancelButton applyContainedThemeWithScheme:self.scheme];

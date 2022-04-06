@@ -42,7 +42,7 @@ class GeometryView : BaseFieldView {
     
     lazy var mapView: SingleFeatureMapView = {
         let mapView = SingleFeatureMapView(observation: nil, scheme: scheme)
-        mapView.autoSetDimension(.height, toSize: editMode ? 95 : 200);
+        mapView.autoSetDimension(.height, toSize: editMode ? 150 : 200);
         return mapView;
     }()
     
@@ -56,6 +56,8 @@ class GeometryView : BaseFieldView {
         accuracyLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         accuracyLabel.font = scheme.typographyScheme.caption;
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
+        latitudeLongitudeButton.setTitleColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
+        latitudeLongitudeButton.setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
         textField.applyTheme(withScheme: scheme);
         textField.trailingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         mapView.applyTheme(scheme: scheme)

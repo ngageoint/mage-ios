@@ -64,6 +64,8 @@ class FeatureActionsView: UIView {
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
         latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
+        latitudeLongitudeButton.setTitleColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
+        latitudeLongitudeButton.setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
     }
     
     public convenience init(geoPackageFeatureItem: GeoPackageFeatureItem?, featureActionsDelegate: FeatureActionsDelegate?, scheme: MDCContainerScheming?) {

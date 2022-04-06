@@ -55,8 +55,8 @@ class UserTrackingMapMixin: NSObject, MapMixin {
         self.scheme = scheme
         
         trackingButton.backgroundColor = scheme.colorScheme.surfaceColor;
-        trackingButton.tintColor = scheme.colorScheme.primaryColor;
-        self.trackingButton.setImageTintColor(scheme.colorScheme.primaryColor, for: .normal)
+        trackingButton.tintColor = scheme.colorScheme.primaryColorVariant;
+        self.trackingButton.setImageTintColor(scheme.colorScheme.primaryColorVariant, for: .normal)
     }
     
     func setupMixin() {
@@ -119,8 +119,8 @@ class UserTrackingMapMixin: NSObject, MapMixin {
                 return
             }
             self.trackingButton.backgroundColor = scheme.colorScheme.surfaceColor;
-            self.trackingButton.tintColor = scheme.colorScheme.primaryColor;
-            self.trackingButton.setImageTintColor(scheme.colorScheme.primaryColor, for: .normal)
+            self.trackingButton.tintColor = scheme.colorScheme.primaryColorVariant;
+            self.trackingButton.setImageTintColor(scheme.colorScheme.primaryColorVariant, for: .normal)
         }
     }
 }

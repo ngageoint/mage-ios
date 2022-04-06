@@ -72,9 +72,13 @@ import MaterialComponents.MDCButton;
         }
 
         self.scheme = scheme;
-        self.tableView.backgroundColor = scheme.colorScheme.surfaceColor;
+        self.view.backgroundColor = scheme.colorScheme.backgroundColor
+        self.tableView.backgroundColor = scheme.colorScheme.backgroundColor;
         cancelButton.applyTextTheme(withScheme: scheme);
+        cancelButton.setTitleColor(scheme.colorScheme.primaryColorVariant, for: .normal)
         titleLabel.font = scheme.typographyScheme.body1
+        titleLabel.backgroundColor = scheme.colorScheme.surfaceColor
+        tableSectionHeaderView.backgroundColor = scheme.colorScheme.surfaceColor
         divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12);
     }
     
@@ -167,9 +171,10 @@ extension FormPickerViewController: UITableViewDataSource {
                 } else {
                     cell.imageView?.tintColor = scheme?.colorScheme.primaryColor
                 }
-                cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
+                cell.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor;
                 cell.detailTextLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
                 cell.backgroundColor = scheme?.colorScheme.surfaceColor;
+                cell.textLabel?.font = scheme?.typographyScheme.subtitle1;
             }
         }
 
@@ -214,6 +219,7 @@ extension FormPickerViewController: UITableViewDelegate {
         cancelButton.autoAlignAxis(toSuperviewAxis: .vertical);
         cancelButton.autoPinEdge(toSuperviewEdge: .top, withInset: 12);
         cancelButton.autoPinEdge(toSuperviewEdge: .bottom, withInset: 20);
+        footerView.backgroundColor = scheme?.colorScheme.backgroundColor
         return footerView;
     }
     

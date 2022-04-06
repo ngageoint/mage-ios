@@ -14,22 +14,25 @@ func applicationAppearance(scheme: MDCContainerScheming?) {
     guard let scheme = scheme else {
         return
     }
+    
+    let tableViewCellAppearance = UITableViewCell.appearance()
+    tableViewCellAppearance.tintColor = scheme.colorScheme.primaryColorVariant
 
     let appearance = UINavigationBarAppearance()
     appearance.configureWithOpaqueBackground();
-    appearance.backgroundColor = scheme.colorScheme.primaryColorVariant;
+    appearance.backgroundColor = scheme.colorScheme.primaryColor;
     appearance.titleTextAttributes = [
-        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
-        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColor
     ];
     appearance.largeTitleTextAttributes = [
-        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
-        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColor
     ];
     
-    UINavigationBar.appearance().barTintColor = scheme.colorScheme.primaryColorVariant;
+    UINavigationBar.appearance().barTintColor = scheme.colorScheme.primaryColor;
     UINavigationBar.appearance().isTranslucent = false;
-    UINavigationBar.appearance().tintColor = scheme.colorScheme.onSecondaryColor;
+    UINavigationBar.appearance().tintColor = scheme.colorScheme.onPrimaryColor;
     
     UINavigationBar.appearance().standardAppearance = appearance;
     UINavigationBar.appearance().scrollEdgeAppearance = appearance;
@@ -41,22 +44,22 @@ func applicationAppearance(scheme: MDCContainerScheming?) {
     // this is used when we browse for a file to attach, even though we really use UIDocumentPickerViewController
     let documentBrowserNavBarAppearance = UINavigationBar.appearance(whenContainedInInstancesOf: [UIDocumentBrowserViewController.self])
     documentBrowserNavBarAppearance.isTranslucent = false
-    documentBrowserNavBarAppearance.tintColor = scheme.colorScheme.onSecondaryColor
-    documentBrowserNavBarAppearance.barTintColor = scheme.colorScheme.onSecondaryColor
-    documentBrowserNavBarAppearance.backgroundColor = scheme.colorScheme.primaryColorVariant
+    documentBrowserNavBarAppearance.tintColor = scheme.colorScheme.onPrimaryColor
+    documentBrowserNavBarAppearance.barTintColor = scheme.colorScheme.primaryColor
+    documentBrowserNavBarAppearance.backgroundColor = scheme.colorScheme.primaryColor
     documentBrowserNavBarAppearance.titleTextAttributes = [
-        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
-        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColor
     ];
     documentBrowserNavBarAppearance.largeTitleTextAttributes = [
-        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSecondaryColor,
-        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColorVariant
+        NSAttributedString.Key.foregroundColor: scheme.colorScheme.onPrimaryColor,
+        NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColor
     ];
     
     UITextField.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).backgroundColor = scheme.colorScheme.backgroundColor
     
     let tabBarAppearance = UITabBarAppearance();
-    tabBarAppearance.selectionIndicatorTintColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
+    tabBarAppearance.selectionIndicatorTintColor = scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87)
     tabBarAppearance.backgroundColor = scheme.colorScheme.surfaceColor
     setTabBarItemColors(tabBarAppearance.stackedLayoutAppearance, scheme: scheme)
     setTabBarItemColors(tabBarAppearance.inlineLayoutAppearance, scheme: scheme)
@@ -69,11 +72,11 @@ func applicationAppearance(scheme: MDCContainerScheming?) {
 }
 
 private func setTabBarItemColors(_ itemAppearance: UITabBarItemAppearance, scheme: MDCContainerScheming) {
-    itemAppearance.normal.iconColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-    itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)]
+    itemAppearance.normal.iconColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6);
+    itemAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6)]
     
-    itemAppearance.selected.iconColor = scheme.colorScheme.primaryColor.withAlphaComponent(0.87)
-    itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.primaryColor.withAlphaComponent(0.87)]
+    itemAppearance.selected.iconColor = scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87)
+    itemAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87)]
 }
 
 func globalContainerScheme() -> MDCContainerScheming {
@@ -85,7 +88,7 @@ func globalContainerScheme() -> MDCContainerScheming {
     containerScheme.colorScheme.onSecondaryColor = UIColor(named: "onSecondary") ?? .label;
     containerScheme.colorScheme.surfaceColor = UIColor(named: "surface") ?? UIColor.systemBackground;
     containerScheme.colorScheme.onSurfaceColor = UIColor.label;
-    containerScheme.colorScheme.backgroundColor = UIColor.systemGroupedBackground;
+    containerScheme.colorScheme.backgroundColor = UIColor(named: "background") ?? UIColor.systemBackground;
     containerScheme.colorScheme.onBackgroundColor = UIColor.label;
     containerScheme.colorScheme.errorColor = .systemRed;
     containerScheme.colorScheme.onPrimaryColor = UIColor(named: "onPrimary") ?? .white;
@@ -101,7 +104,7 @@ func globalErrorContainerScheme() -> MDCContainerScheming {
     containerScheme.colorScheme.onSecondaryColor = .white;
     containerScheme.colorScheme.surfaceColor = UIColor(named: "surface") ?? UIColor.systemBackground;
     containerScheme.colorScheme.onSurfaceColor = UIColor.label;
-    containerScheme.colorScheme.backgroundColor = UIColor.systemGroupedBackground;
+    containerScheme.colorScheme.backgroundColor = UIColor(named: "background") ?? UIColor.systemBackground;
     containerScheme.colorScheme.onBackgroundColor = UIColor.label;
     containerScheme.colorScheme.errorColor = .systemRed;
     containerScheme.colorScheme.onPrimaryColor = .white;

@@ -37,11 +37,11 @@ static NSString *DROPDOWN_CHOICE_REUSE_ID = @"DROPDOWN_CHOICE_REUSE_ID";
     }
 
     self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
-    self.view.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.selectedChoicesView.backgroundColor = self.scheme.colorScheme.surfaceColor;
-    self.searchController.searchBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onSecondaryColor;
-    self.searchController.searchBar.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
+    self.searchController.searchBar.barTintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.searchController.searchBar.tintColor = self.scheme.colorScheme.onPrimaryColor;
+    self.searchController.searchBar.backgroundColor = self.scheme.colorScheme.primaryColor;
     self.selectedTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.60];
     self.selectedLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.clearButton.tintColor = self.scheme.colorScheme.onSurfaceColor;
@@ -148,7 +148,7 @@ static NSString *DROPDOWN_CHOICE_REUSE_ID = @"DROPDOWN_CHOICE_REUSE_ID";
     
     cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-    cell.tintColor = self.scheme.colorScheme.primaryColor;
+    cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
     
     if ([self.selectedChoices containsObject:choice]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -189,6 +189,7 @@ static NSString *DROPDOWN_CHOICE_REUSE_ID = @"DROPDOWN_CHOICE_REUSE_ID";
     
     self.selectedLabel.text = [self.selectedChoices componentsJoinedByString:@", "];
     [self notifyDelegate];
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (void) updateSearchResultsForSearchController:(UISearchController *)searchController {

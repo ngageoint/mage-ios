@@ -78,7 +78,7 @@
     cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-    cell.imageView.tintColor = self.scheme.colorScheme.primaryColor;
+    cell.imageView.tintColor = self.scheme.colorScheme.primaryColorVariant;
     
     if ([self.overlay getChildren].count != 1  && indexPath.row == 0) {
         cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];

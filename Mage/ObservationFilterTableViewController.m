@@ -41,7 +41,6 @@
     }
     self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.favoritesLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.importantLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.favoritesDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
@@ -52,12 +51,12 @@
     self.timeNumberTextField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.timeNumberTextField.layer.borderWidth = .5f;
     self.timeNumberTextField.layer.borderColor = [[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] CGColor];
-    self.periodSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.periodSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColor;
     [self.periodSegmentedControl setTitleTextAttributes:@{
         NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
     } forState:UIControlStateNormal];
     [self.periodSegmentedControl setTitleTextAttributes:@{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
     } forState:UIControlStateSelected];
     self.favoriteSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.importantSwitch.onTintColor = self.scheme.colorScheme.primaryColorVariant;
@@ -86,7 +85,7 @@
         cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
         cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-        cell.tintColor = self.scheme.colorScheme.primaryColor;
+        cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
     }
     
     if ([indexPath section] == 0) {

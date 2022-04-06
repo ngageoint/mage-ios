@@ -32,19 +32,18 @@
     }
     self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.tableView.backgroundColor = self.scheme.colorScheme.backgroundColor;
-    self.navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
     self.customLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.customDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     self.lastLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.timeNumberTextField.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
     self.timeNumberTextField.layer.borderWidth = .5f;
     self.timeNumberTextField.layer.borderColor = [[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] CGColor];
-    self.periodSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColorVariant;
+    self.periodSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColor;
     [self.periodSegmentedControl setTitleTextAttributes:@{
         NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
     } forState:UIControlStateNormal];
     [self.periodSegmentedControl setTitleTextAttributes:@{
-        NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor
+        NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
     } forState:UIControlStateSelected];
     [self.tableView reloadData];
 }
@@ -68,7 +67,7 @@
         cell.textLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
         cell.detailTextLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
-        cell.tintColor = self.scheme.colorScheme.primaryColor;
+        cell.tintColor = self.scheme.colorScheme.primaryColorVariant;
     }
     
     if ([indexPath row] == 5) {

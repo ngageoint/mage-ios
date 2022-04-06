@@ -65,14 +65,14 @@
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
-    self.view.backgroundColor = self.scheme.colorScheme.surfaceColor;
+    self.view.backgroundColor = self.scheme.colorScheme.backgroundColor;
     self.mageLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.wandLabel.textColor = self.scheme.colorScheme.primaryColorVariant;
     self.loginStatus.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
     if (self.user) {
         [self.serverURL setTitleColor:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
     } else {
-        [self.serverURL setTitleColor:self.scheme.colorScheme.primaryColor forState:UIControlStateNormal];
+        [self.serverURL setTitleColor:[self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
     }
     
     self.versionLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];

@@ -85,4 +85,9 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, Fil
         }
     }
     
+    override func applyTheme(scheme: MDCContainerScheming?) {
+        super.applyTheme(scheme: scheme)
+        addFeature()
+    }
+    
 }
