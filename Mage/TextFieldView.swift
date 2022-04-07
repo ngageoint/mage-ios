@@ -41,13 +41,13 @@ class TextFieldView : BaseFieldView {
         textField.inputAccessoryView = accessoryView;
         textField.keyboardType = keyboardType;
         if (field[FieldKey.type.key] as? String == FieldType.email.key) {
-            textField.trailingView = UIImageView(image: UIImage(named: "mail_outline"));
+            textField.trailingView = UIImageView(image: UIImage(systemName: "envelope"));
             textField.trailingViewMode = .always;
         } else if (field[FieldKey.type.key] as? String == FieldType.textfield.key) {
             textField.trailingView = UIImageView(image: UIImage(named: "outline_title"));
             textField.trailingViewMode = .always;
         } else if (field[FieldKey.type.key] as? String == FieldType.password.key) {
-            textField.trailingView = UIImageView(image: UIImage(named: "outline_lock"));
+            textField.trailingView = UIImageView(image: UIImage(systemName: "lock"));
             textField.trailingViewMode = .always;
         }
         textField.autocapitalizationType = .none;
