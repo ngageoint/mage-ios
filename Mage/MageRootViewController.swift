@@ -23,14 +23,14 @@ import Kingfisher
     private lazy var settingsTabItem: UINavigationController = {
         let svc = SettingsTableViewController(scheme: scheme)!;
         let nc = UINavigationController(rootViewController: svc);
-        nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(named: "settings_tab"), tag: 4);
+        nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape.fill"), tag: 4);
         return nc;
     }();
     
     private lazy var locationsTab: UINavigationController = {
         let locationTableViewController: LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
         let nc = UINavigationController(rootViewController: locationTableViewController);
-        nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(named: "people"), tag: 2);
+        nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2);
         return nc;
     }()
     
@@ -44,7 +44,7 @@ import Kingfisher
     private lazy var mapTab: UINavigationController = {
         let mapViewController: MageMapViewController = MageMapViewController(scheme: scheme)
         let nc = UINavigationController(rootViewController: mapViewController);
-        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(named: "map"), tag: -1);
+        nc.tabBarItem = UITabBarItem(title: "Map", image: UIImage(systemName: "map.fill"), tag: -1);
         return nc;
     }()
     
@@ -54,7 +54,7 @@ import Kingfisher
         }
         let uvc = UserViewController(user: user, scheme: self.scheme);
         let nc = UINavigationController(rootViewController: uvc);
-        nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "me"), tag: 3);
+        nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3);
         return nc;
     }()
     

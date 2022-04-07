@@ -34,7 +34,11 @@
     MDCFloatingButton *button = nil;
     if (self.imageName != nil) {
         button = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-        [button setImage:[UIImage imageNamed:self.imageName] forState:UIControlStateNormal];
+        if ([UIImage systemImageNamed:self.imageName]) {
+            [button setImage:[UIImage systemImageNamed:self.imageName] forState: UIControlStateNormal];
+        } else if ([UIImage imageNamed:self.imageName] != nil) {
+            [button setImage:[UIImage imageNamed:self.imageName] forState:UIControlStateNormal];
+        }
         if (self.useErrorColor) {
             [button applySecondaryThemeWithScheme:[MAGEErrorScheme scheme]];
         } else {

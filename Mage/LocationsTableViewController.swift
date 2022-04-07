@@ -212,7 +212,7 @@ extension LocationsTableViewController: UserActionsDelegate {
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             
-            var image: UIImage? = UIImage(named: "me")
+            var image: UIImage? = UIImage(systemName: "person.fill")
             if let cacheIconUrl = user.cacheIconUrl {
                 let url = URL(string: cacheIconUrl)!;
                 
@@ -227,7 +227,7 @@ extension LocationsTableViewController: UserActionsDelegate {
                         let scale = value.image.size.width / 37;
                         image = UIImage(cgImage: value.image.cgImage!, scale: scale, orientation: value.image.imageOrientation);
                     case .failure(_):
-                        image = UIImage.init(named: "me")?.withRenderingMode(.alwaysTemplate);
+                        image = UIImage(systemName: "person.fill")?.withRenderingMode(.alwaysTemplate);
                     }
                     NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: user))
                 }

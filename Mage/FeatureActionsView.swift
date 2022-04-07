@@ -47,7 +47,7 @@ class FeatureActionsView: UIView {
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton();
         directionsButton.accessibilityLabel = "directions";
-        directionsButton.setImage(UIImage(named: "directions_large")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        directionsButton.setImage(UIImage(systemName: "arrow.triangle.turn.up.right.diamond")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToFeature), for: .touchUpInside);
         directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         directionsButton.inkMaxRippleRadius = 30;

@@ -111,6 +111,11 @@ static const NSInteger LEGAL_SECTION = 8;
         cell.imageView.image = [UIImage imageNamed:image];
     }
     
+    NSString *systemImage = [details objectForKey:@"systemImage"];
+    if (systemImage) {
+        cell.imageView.image = [UIImage systemImageNamed:systemImage];
+    }
+    
     NSString *textLabel = [details objectForKey:@"textLabel"];
     if (textLabel) {
         cell.textLabel.text = textLabel;
@@ -256,7 +261,7 @@ static const NSInteger LEGAL_SECTION = 8;
       @"rows": @[@{
                      @"type": [NSNumber numberWithInteger:kLocationServices],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
-                     @"image": @"people",
+                     @"systemImage": @"person.2.fill",
                      @"textLabel": @"Locations",
                      @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
 //                     @"detailTextLabel": locationServicesLabel
@@ -271,7 +276,7 @@ static const NSInteger LEGAL_SECTION = 8;
                  @{
                      @"type": [NSNumber numberWithInteger:kDataSynchronization],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
-                     @"image": @"wifi",
+                     @"systemImage": @"wifi",
                      @"textLabel": @"Network Sync Settings",
                      @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
                      }
@@ -316,7 +321,7 @@ static const NSInteger LEGAL_SECTION = 8;
         [eventRows addObject:@{
                                @"type": [NSNumber numberWithInteger:kChangeEvent],
                                @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
-                               @"image": @"history",
+                               @"systemImage": @"clock.arrow.circlepath",
                                @"textLabel": event.name,
                                @"info": event,
                                @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
@@ -378,7 +383,7 @@ static const NSInteger LEGAL_SECTION = 8;
             @{
                        @"type": [NSNumber numberWithInteger:kTimeDisplay],
                        @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                       @"image": @"access_time",
+                       @"systemImage": @"clock",
                        @"textLabel": @"Time",
                        @"detailTextLabel": [NSDate isDisplayGMT] ? @"GMT Time" : [NSString stringWithFormat:@"Local Time %@", [[NSTimeZone systemTimeZone] name]],
                        @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
@@ -386,7 +391,7 @@ static const NSInteger LEGAL_SECTION = 8;
                    @{
                        @"type": [NSNumber numberWithInteger:kLocationDisplay],
                        @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                       @"image": @"location_arrow_on",
+                       @"systemImage": @"location.fill",
                        @"textLabel": @"Location",
                        @"detailTextLabel": locationDisplayString,
                        @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
@@ -420,7 +425,7 @@ static const NSInteger LEGAL_SECTION = 8;
               @"rows": @[@{
                              @"type": [NSNumber numberWithInteger:kMediaPhoto],
                              @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                             @"image": @"photo",
+                             @"systemImage": @"photo.fill",
                              @"textLabel": @"Photo Upload Size",
                              @"detailTextLabel": imagePrefereceLabel,
                              @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
@@ -428,7 +433,7 @@ static const NSInteger LEGAL_SECTION = 8;
                          @{
                              @"type": [NSNumber numberWithInteger:kMediaVideo],
                              @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                             @"image": @"movie",
+                             @"systemImage": @"video.fill",
                              @"textLabel": @"Video Upload Quality",
                              @"detailTextLabel": videoPrefereceLabel,
                              @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
@@ -445,14 +450,14 @@ static const NSInteger LEGAL_SECTION = 8;
                  @{
                      @"type": [NSNumber numberWithInteger:kChangePassword],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                     @"image": @"lock",
+                     @"systemImage": @"lock.fill",
                      @"textLabel": @"Change Password",
                      @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
                      },
                  @{
                      @"type": [NSNumber numberWithInteger:kLogout],
                      @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
-                     @"image": @"power",
+                     @"systemImage": @"power",
                      @"textLabel": @"Log Out"
                      }]
       

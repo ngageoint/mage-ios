@@ -28,7 +28,7 @@ class AttachmentFieldView : BaseFieldView {
     private var unsentAttachments: [[String: AnyHashable]] = []
     
     lazy var attachmentCollectionDataStore: AttachmentCollectionDataStore = {
-        let ads: AttachmentCollectionDataStore = self.editMode ? AttachmentCollectionDataStore(buttonImage: "trash", useErrorColor: true) : AttachmentCollectionDataStore();
+        let ads: AttachmentCollectionDataStore = self.editMode ? AttachmentCollectionDataStore(buttonImage: "trash.fill", useErrorColor: true) : AttachmentCollectionDataStore();
         ads.attachments = attachments;
         ads.attachmentSelectionDelegate = self;
         return ads;

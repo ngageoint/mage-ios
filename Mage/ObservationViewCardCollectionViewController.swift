@@ -42,7 +42,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
     
     private lazy var editFab : MDCFloatingButton = {
         let fab = MDCFloatingButton(shape: .default);
-        fab.setImage(UIImage(named: "edit"), for: .normal);
+        fab.setImage(UIImage(systemName: "pencil", withConfiguration: UIImage.SymbolConfiguration(weight: .black)), for: .normal);
         fab.addTarget(self, action: #selector(startObservationEditCoordinator), for: .touchUpInside);
         return fab;
     }()

@@ -123,26 +123,6 @@
             [navigationController setViewControllers:@[vc]];
         } else {
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-            navigationController.navigationBar.translucent = NO;
-            navigationController.navigationBar.barTintColor = self.scheme.colorScheme.primaryColorVariant;
-            navigationController.navigationBar.tintColor = self.scheme.colorScheme.onSecondaryColor;
-            navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : self.scheme.colorScheme.onSecondaryColor};
-            navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor};
-            UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-            [appearance configureWithOpaqueBackground];
-            appearance.titleTextAttributes = @{
-                NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
-                NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-            };
-            appearance.largeTitleTextAttributes = @{
-                NSForegroundColorAttributeName: self.scheme.colorScheme.onSecondaryColor,
-                NSBackgroundColorAttributeName: self.scheme.colorScheme.primaryColorVariant
-            };
-            
-            navigationController.navigationBar.standardAppearance = appearance;
-            navigationController.navigationBar.scrollEdgeAppearance = appearance;
-            navigationController.navigationBar.standardAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
-            navigationController.navigationBar.scrollEdgeAppearance.backgroundColor = self.scheme.colorScheme.primaryColorVariant;
             splitViewController.viewControllers = @[[splitViewController.viewControllers firstObject], navigationController];
         }
     } else {

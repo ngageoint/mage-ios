@@ -125,7 +125,7 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"me"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"person.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.username setLeadingView:meImage];
     self.username.leadingViewMode = UITextFieldViewModeAlways;
     self.username.accessibilityLabel = @"Username";
@@ -143,7 +143,7 @@
     self.displayName.leadingAssistiveLabel.text = @" ";
     [self.displayName sizeToFit];
     
-    UIImageView *emailImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"email"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *emailImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"envelope"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.email setLeadingView:emailImage];
     self.email.leadingViewMode = UITextFieldViewModeAlways;
     self.email.accessibilityLabel = @"Email";
@@ -152,7 +152,7 @@
     self.email.leadingAssistiveLabel.text = @" ";
     [self.email sizeToFit];
     
-    UIImageView *phoneImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"phone"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *phoneImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"phone.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.phone setLeadingView:phoneImage];
     self.phone.leadingViewMode = UITextFieldViewModeAlways;
     self.phone.accessibilityLabel = @"Phone";
@@ -161,7 +161,7 @@
     self.phone.leadingAssistiveLabel.text = @" ";
     [self.phone sizeToFit];
     
-    UIImageView *passwordImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *passwordImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.password setLeadingView:passwordImage];
     self.password.leadingViewMode = UITextFieldViewModeAlways;
     self.password.accessibilityLabel = @"Password";
@@ -170,7 +170,7 @@
     self.password.leadingAssistiveLabel.text = @" ";
     [self.password sizeToFit];
     
-    UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *passwordConfirmImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.passwordConfirm setLeadingView:passwordConfirmImage];
     self.passwordConfirm.leadingViewMode = UITextFieldViewModeAlways;
     self.passwordConfirm.accessibilityLabel = @"Confirm Password";
@@ -179,7 +179,7 @@
     self.passwordConfirm.leadingAssistiveLabel.text = @" ";
     [self.passwordConfirm sizeToFit];
     
-    UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"done"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *captchaImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"checkmark"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.captchaText setLeadingView:captchaImage];
     self.captchaText.leadingViewMode = UITextFieldViewModeAlways;
     self.captchaText.accessibilityLabel = @"Captcha";

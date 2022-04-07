@@ -40,7 +40,7 @@ class ObservationListActionsView: UIView {
     private lazy var favoriteButton: MDCButton = {
         let favoriteButton = MDCButton();
         favoriteButton.accessibilityLabel = "favorite";
-        favoriteButton.setImage(UIImage(named: "favorite_border")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        favoriteButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         favoriteButton.addTarget(self, action: #selector(favoriteObservation), for: .touchUpInside);
         favoriteButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         favoriteButton.inkMaxRippleRadius = 30;
@@ -56,7 +56,7 @@ class ObservationListActionsView: UIView {
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton();
         directionsButton.accessibilityLabel = "directions";
-        directionsButton.setImage(UIImage(named: "directions_large")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        directionsButton.setImage(UIImage(systemName: "arrow.triangle.turn.up.right.diamond", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToObservation), for: .touchUpInside);
         directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         directionsButton.inkMaxRippleRadius = 30;
@@ -145,9 +145,9 @@ class ObservationListActionsView: UIView {
                 }
             }
             if (currentUserFavorited) {
-                favoriteButton.setImage(UIImage(named: "favorite_large"), for: .normal);
+                favoriteButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal);
             } else {
-                favoriteButton.setImage(UIImage(named: "favorite_border"), for: .normal);
+                favoriteButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), for: .normal);
             }
             favorites.forEach { favorite in
                 if (favorite.favorite) {

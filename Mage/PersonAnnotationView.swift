@@ -19,7 +19,7 @@ import Kingfisher
                     self.markerTintColor = UIColor(hex: iconColor)
                     self.glyphText = user.iconText
                 } else {
-                    self.glyphImage = UIImage(named: "me")
+                    self.glyphImage = UIImage(systemName: "person.fill")
                     self.markerTintColor = scheme?.colorScheme.primaryColorVariant
                 }
                 
@@ -38,7 +38,7 @@ import Kingfisher
                     circleView.layer.zPosition = -1.0
                 }
             } else {
-                self.glyphImage = UIImage(named: "me")
+                self.glyphImage = UIImage(systemName: "person.fill")
                 self.markerTintColor = scheme?.colorScheme.primaryColorVariant
             }
         }
@@ -95,7 +95,7 @@ import Kingfisher
                         annotation.centerOffset = CGPoint(x: 0, y: -(image.size.height / 2.0))
                     }
                 case .failure(_):
-                    if let image = UIImage(named: "me"), let cgImage = image.cgImage {
+                    if let image = UIImage(systemName: "person.fill"), let cgImage = image.cgImage {
                         let scale = Float(cgImage.width) / 37.0
                         let image: UIImage = UIImage(cgImage: cgImage, scale: CGFloat(scale), orientation: image.imageOrientation)
                         annotation.image = image
@@ -142,7 +142,7 @@ import Kingfisher
                             self.glyphText = user.iconText
                         } else {
                             self.glyphText = nil
-                            self.glyphImage = UIImage(named: "me")
+                            self.glyphImage = UIImage(systemName: "person.fill")
                             self.markerTintColor = self.scheme?.colorScheme.primaryColorVariant
                         }
                     case .failure(_):
@@ -151,13 +151,13 @@ import Kingfisher
                             self.glyphText = user.iconText
                         } else {
                             self.glyphText = nil
-                            self.glyphImage = UIImage(named: "me")
+                            self.glyphImage = UIImage(systemName: "person.fill")
                             self.markerTintColor = self.scheme?.colorScheme.primaryColorVariant
                         }
                     }
                 }
             } else {
-                self.glyphImage = UIImage(named: "me")
+                self.glyphImage = UIImage(systemName: "person.fill")
                 self.markerTintColor = scheme?.colorScheme.primaryColorVariant
             }
             
@@ -176,7 +176,7 @@ import Kingfisher
                 circleView.layer.zPosition = -1.0
             }
         } else {
-            self.glyphImage = UIImage(named: "me")
+            self.glyphImage = UIImage(systemName: "person.fill")
             self.markerTintColor = scheme?.colorScheme.primaryColorVariant
         }
     }

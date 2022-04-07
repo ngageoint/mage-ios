@@ -123,7 +123,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
         if let user = notification.user {
             location = user.location?.location
             title = user.name ?? "User"
-            image = UIImage(named: "me")
+            image = UIImage(systemName: "person.fill")
         }
         
         if let feedItem = notification.feedItem {

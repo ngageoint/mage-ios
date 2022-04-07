@@ -59,7 +59,7 @@ class UserActionsView: UIView {
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton(forAutoLayout: ())
         directionsButton.accessibilityLabel = "directions";
-        directionsButton.setImage(UIImage(named: "directions_large")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        directionsButton.setImage(UIImage(systemName: "arrow.triangle.turn.up.right.diamond", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         directionsButton.addTarget(self, action: #selector(getDirectionsToUser), for: .touchUpInside);
         directionsButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         directionsButton.inkMaxRippleRadius = 30;
@@ -71,7 +71,7 @@ class UserActionsView: UIView {
     private lazy var phoneButton: MDCButton = {
         let phoneButton = MDCButton(forAutoLayout: ())
         phoneButton.accessibilityLabel = "phone";
-        phoneButton.setImage(UIImage(named: "phone")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        phoneButton.setImage(UIImage(systemName: "phone")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         phoneButton.addTarget(self, action: #selector(callUser), for: .touchUpInside);
         phoneButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         phoneButton.inkMaxRippleRadius = 30;
@@ -83,7 +83,7 @@ class UserActionsView: UIView {
     private lazy var emailButton: MDCButton = {
         let emailButton = MDCButton(forAutoLayout: ())
         emailButton.accessibilityLabel = "email";
-        emailButton.setImage(UIImage(named: "email")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        emailButton.setImage(UIImage(systemName: "envelope")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         emailButton.addTarget(self, action: #selector(emailUser), for: .touchUpInside);
         emailButton.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         emailButton.inkMaxRippleRadius = 30;

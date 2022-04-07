@@ -93,7 +93,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"me"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *meImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"person.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.usernameField setLeadingView:meImage];
     self.usernameField.leadingViewMode = UITextFieldViewModeAlways;
     self.usernameField.accessibilityLabel = @"Username";
@@ -102,7 +102,7 @@
     self.usernameField.leadingAssistiveLabel.text = @" ";
     [self.usernameField sizeToFit];
     
-    UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *keyImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.passwordField setLeadingView:keyImage];
     self.passwordField.leadingViewMode = UITextFieldViewModeAlways;
     self.passwordField.accessibilityLabel = @"New Password";
@@ -111,7 +111,7 @@
     self.passwordField.leadingAssistiveLabel.text = @" ";
     [self.passwordField sizeToFit];
     
-    UIImageView *keyImage2 = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *keyImage2 = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.confirmPasswordField setLeadingView:keyImage2];
     self.confirmPasswordField.leadingViewMode = UITextFieldViewModeAlways;
     self.confirmPasswordField.accessibilityLabel = @"Confirm New Password";
@@ -120,7 +120,7 @@
     self.confirmPasswordField.leadingAssistiveLabel.text = @" ";
     [self.confirmPasswordField sizeToFit];
     
-    UIImageView *keyImage3 = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"key"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *keyImage3 = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"key.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.currentPasswordField setLeadingView:keyImage3];
     self.currentPasswordField.leadingViewMode = UITextFieldViewModeAlways;
     self.currentPasswordField.accessibilityLabel = @"Current Password";

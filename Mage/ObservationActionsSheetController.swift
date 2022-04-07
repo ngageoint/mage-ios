@@ -105,7 +105,7 @@ class ObservationActionsSheetController: UITableViewController {
         if (correctedRow == 0) {
             cell.textLabel?.text = "Delete Observation";
             cell.accessibilityLabel = "Delete Observation";
-            cell.imageView?.image = UIImage(named: "trash")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
+            cell.imageView?.image = UIImage(systemName: "trash.fill")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             cell.tag = ObservationActionsSheetController.DELETE_CELL_TAG
             cell.textLabel?.textColor = scheme?.colorScheme.errorColor;
             cell.imageView?.tintColor = scheme?.colorScheme.errorColor;
@@ -116,7 +116,7 @@ class ObservationActionsSheetController: UITableViewController {
             cell.textLabel?.text = "Edit Observation";
             cell.accessibilityLabel = "Edit Observation";
             cell.tag = ObservationActionsSheetController.EDIT_CELL_TAG
-            cell.imageView?.image = UIImage(named: "edit")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
+            cell.imageView?.image = UIImage(systemName: "pencil", withConfiguration: UIImage.SymbolConfiguration(weight: .black))?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate);
             return cell;
         }
         

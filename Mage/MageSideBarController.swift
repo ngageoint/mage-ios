@@ -124,7 +124,7 @@ class SidebarUIButton: UIButton {
         controller.didMove(toParent: self)
     }
     
-    func createRailItem(sidebarType: SidebarUIButton.SidebarType, title: String?, iconUrl: URL? = nil, imageName: String? = nil) -> SidebarUIButton {
+    func createRailItem(sidebarType: SidebarUIButton.SidebarType, title: String?, iconUrl: URL? = nil, imageName: String? = nil, systemImageName: String? = nil) -> SidebarUIButton {
         let size = 24;
         let button : SidebarUIButton = SidebarUIButton(forAutoLayout: ());
         button.autoSetDimensions(to: CGSize(width: 56, height: 56));
@@ -155,6 +155,8 @@ class SidebarUIButton: UIButton {
                 })
         } else if let imageName: String = imageName {
             button.setImage(UIImage(named: imageName), for: .normal);
+        } else if let systemImageName = systemImageName {
+            button.setImage(UIImage(systemName: systemImageName), for: .normal)
         }
         
         return button;
@@ -179,7 +181,7 @@ class SidebarUIButton: UIButton {
     }
     
     func createLocationsRailView() -> SidebarUIButton {
-        let locationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.locations, title: "People", imageName: "people");
+        let locationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.locations, title: "People", systemImageName: "person.2.fill");
         locationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
         let locationViewController : LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
 //        locationViewController.actionsDelegate = delegate;
@@ -209,7 +211,7 @@ class SidebarUIButton: UIButton {
         if let activeButton = activeButton {
             activeButton.tintColor = self.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         }
-        button.tintColor = self.scheme?.colorScheme.primaryColor;
+        button.tintColor = self.scheme?.colorScheme.onSurfaceColor;
         activeButton = button;
         activateSidebarDataController(viewController: button.viewController, title: button.title);
     }

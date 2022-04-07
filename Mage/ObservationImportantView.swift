@@ -21,7 +21,7 @@ class ObservationImportantView: UIView {
     }()
     
     private lazy var flagImage: UIImageView = {
-        let flag = UIImage(named: "flag");
+        let flag = UIImage(systemName: "flag.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold));
         let flagView = UIImageView(image: flag);
         return flagView;
     }()

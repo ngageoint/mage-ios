@@ -59,15 +59,15 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         avatarImage.tintColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
         nameField.textColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
         
-        locationIcon.textColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
+        locationIcon.tintColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
         locationLabel.textColor = scheme.colorScheme.onBackgroundColor;
         locationLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.onBackgroundColor];
         
-        emailIcon.textColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
+        emailIcon.tintColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
         emailLabel.textColor = scheme.colorScheme.onBackgroundColor;
         emailLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.onBackgroundColor];
         
-        phoneIcon.textColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
+        phoneIcon.tintColor = scheme.colorScheme.onBackgroundColor.withAlphaComponent(0.87);
         phoneLabel.textColor = scheme.colorScheme.onBackgroundColor;
         phoneLabel.linkTextAttributes = [NSAttributedString.Key.foregroundColor : scheme.colorScheme.onBackgroundColor];
     }
@@ -120,12 +120,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return nameField;
     }()
     
-    private lazy var locationIcon: UITextView = {
-        let locationIcon = UITextView(forAutoLayout: ());
-        locationIcon.autoSetDimensions(to: CGSize(width: 24, height: 24));
-        locationIcon.font = UIFont(name: "FontAwesome", size: 15);
-        locationIcon.text = "\u{0000f0ac}";
-        locationIcon.backgroundColor = UIColor.clear;
+    private lazy var locationIcon: UIImageView = {
+        let locationIcon = UIImageView(image: UIImage(systemName: "globe.americas.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)))
+        locationIcon.contentMode = .scaleAspectFit
+        locationIcon.autoSetDimensions(to: CGSize(width: 18, height: 18));
         return locationIcon;
     }()
     
@@ -157,12 +155,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return locationLabel;
     }()
     
-    private lazy var phoneIcon: UITextView = {
-        let phoneIcon = UITextView(forAutoLayout: ());
-        phoneIcon.autoSetDimensions(to: CGSize(width: 24, height: 24));
-        phoneIcon.font = UIFont(name: "FontAwesome", size: 15);
-        phoneIcon.text = "\u{0000f095}";
-        phoneIcon.backgroundColor = UIColor.clear;
+    private lazy var phoneIcon: UIImageView = {
+        let phoneIcon = UIImageView(image: UIImage(systemName: "phone.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)))
+        phoneIcon.contentMode = .scaleAspectFit
+        phoneIcon.autoSetDimensions(to: CGSize(width: 18, height: 18));
         return phoneIcon;
     }()
     
@@ -188,12 +184,11 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return phoneLabel;
     }()
     
-    private lazy var emailIcon: UITextView = {
-        let emailIcon = UITextView(forAutoLayout: ());
-        emailIcon.autoSetDimensions(to: CGSize(width: 24, height: 24));
-        emailIcon.font = UIFont(name: "FontAwesome", size: 15);
-        emailIcon.text = "\u{0000f0e0}";
-        emailIcon.backgroundColor = UIColor.clear;
+    private lazy var emailIcon: UIImageView = {
+        let emailIcon = UIImageView(image: UIImage(systemName: "envelope.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)))
+        emailIcon.contentMode = .scaleAspectFit
+        
+        emailIcon.autoSetDimensions(to: CGSize(width: 18, height: 18));
         return emailIcon;
     }()
     
@@ -375,7 +370,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
             guard let location: CLLocationCoordinate2D = self.user?.location?.location?.coordinate else {
                 return;
             }
-            var image: UIImage? = UIImage(named: "me")
+            var image: UIImage? = UIImage(systemName: "person.fill")
             if let cacheIconUrl = self.user?.cacheIconUrl {
                 let url = URL(string: cacheIconUrl)!;
 
@@ -390,7 +385,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                         let scale = value.image.size.width / 37;
                         image = UIImage(cgImage: value.image.cgImage!, scale: scale, orientation: value.image.imageOrientation);
                     case .failure(_):
-                        image = UIImage.init(named: "me")?.withRenderingMode(.alwaysTemplate);
+                        image = UIImage(systemName: "person.fill")?.withRenderingMode(.alwaysTemplate);
                     }
                     NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: self.user))
                 }
