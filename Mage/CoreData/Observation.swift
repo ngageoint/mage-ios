@@ -452,6 +452,19 @@ enum State: Int, CustomStringConvertible {
                                 if let fieldGeometry = value as? SFGeometry {
                                     formProperties[key] = GeometrySerializer.serializeGeometry(fieldGeometry);
                                 }
+                            } else if let fieldType = field[FieldKey.type.key] as? String, fieldType == FieldType.attachment.key {
+                                // filter out the unsent attachemnts which are marked for deletion
+                                var newAttachments:[[AnyHashable:Any]] = []
+                                if let currentAttachments = formProperties[key] as? [[AnyHashable:Any]] {
+                                    for attachment in currentAttachments {
+                                        if let markedForDeletion = attachment[AttachmentKey.markedForDeletion.key] as? Int, markedForDeletion == 1 {
+                                            //skip it
+                                        } else {
+                                            newAttachments.append(attachment)
+                                        }
+                                    }
+                                    formProperties[key] = newAttachments
+                                }
                             }
                         }
                     }

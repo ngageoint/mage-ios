@@ -78,7 +78,10 @@
 }
 
 - (NSArray<NSDictionary *> *) filteredUnsentAttachments {
-    return [self.unsentAttachments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"markedForDeletion != true"]];
+    return [self.unsentAttachments filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluateObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        NSDictionary *attachment = (NSDictionary *)evaluateObject;
+        return ![attachment objectForKey:@"markedForDeletion"];
+    }]];
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger) section {
