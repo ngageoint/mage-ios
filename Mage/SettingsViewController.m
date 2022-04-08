@@ -89,7 +89,7 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    [self setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+    [self setPreferredDisplayMode:UISplitViewControllerDisplayModeOneBesideSecondary];
     
     self.delegate = self;
     
