@@ -74,7 +74,7 @@
     UIViewController *detailViewController = [[UIViewController alloc] init];
     [detailViewController.view addSubview:self.settingsDetailView];
     [self.settingsDetailView autoPinEdgesToSuperviewEdges];
-    self.settingsDetailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"settings"]];
+    self.settingsDetailImageView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"gearshape.fill"]];
     [self.settingsDetailImageView autoSetDimensionsToSize:CGSizeMake(48, 48)];
     [self.settingsDetailView addSubview:self.settingsDetailImageView];
     [self.settingsDetailImageView autoCenterInSuperview];

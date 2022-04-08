@@ -15,7 +15,7 @@ class DocumentViewer : UIViewController {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView.newAutoLayout()
-        imageView.image = UIImage(named: "visibility_off")
+        imageView.image = UIImage(systemName: "eye.slash.fill")
         return imageView
     }()
     
@@ -120,7 +120,7 @@ class DocumentViewer : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(presentShareSheet(_ :)));
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
     }
     
     @objc func dismiss(_ sender: UIBarButtonItem) {

@@ -48,7 +48,7 @@ class MediaPreviewController : QLPreviewController {
     
     private lazy var notVisibleImage: UIImageView = {
         let notVisibleImage = UIImageView.newAutoLayout()
-        notVisibleImage.image = UIImage(named: "visibility_off")
+        notVisibleImage.image = UIImage(systemName: "eye.slash.fill")
         return notVisibleImage
     }()
     
@@ -122,7 +122,7 @@ class MediaPreviewController : QLPreviewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
     }
     
     @objc func dismiss(_ sender: UIBarButtonItem) {

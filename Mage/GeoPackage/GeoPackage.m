@@ -313,7 +313,9 @@
             }
         
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        [self.mapView addOverlay:geoPackageTileOverlay level:(linkedToFeatures ? MKOverlayLevelAboveLabels: MKOverlayLevelAboveRoads)];
+                        if (self.mapView != nil) {
+                            [self.mapView addOverlay:geoPackageTileOverlay level:(linkedToFeatures ? MKOverlayLevelAboveLabels: MKOverlayLevelAboveRoads)];
+                        }
                     });
         
             

@@ -22,7 +22,7 @@ class FormDefaultsViewController: UIViewController {
     let formDescriptionLabel = UILabel.newAutoLayout();
     let defaultsLabel = UILabel.newAutoLayout();
     let defaultDescriptionLabel = UILabel.newAutoLayout();
-    let image = UIImageView(image: UIImage(named: "form"));
+    let image = UIImageView(image: UIImage(systemName: "doc.text.fill"));
     
     private lazy var managedObjectContext: NSManagedObjectContext = {
         var managedObjectContext: NSManagedObjectContext = .mr_newMainQueue();
@@ -186,7 +186,7 @@ class FormDefaultsViewController: UIViewController {
         super.viewDidLoad();
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(self.saveDefaults));
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.cancel));
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.cancel));
         
         view.addSubview(scrollView);
         scrollView.addSubview(card);

@@ -67,11 +67,13 @@
 }
 
 - (void) setupView: (BOOL) recordingExists {
+    [self.recordBarButton setImage: [[UIImage systemImageNamed:@"square.fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateSelected];
+    [self.recordBarButton setImage: [[UIImage systemImageNamed:@"circle.fill"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.playButton setHidden:!recordingExists];
     [self.trashButton setHidden:!recordingExists];
     [self.playSlider setHidden:!recordingExists];
     [self.recordingStartTime setHidden:!recordingExists];
-    [self.recordBarButton setEnabled:!recordingExists];
+    [self.recordBarButton setHidden:recordingExists];
     [self.recordingLength setHidden:!recordingExists];
     [self.useRecordingButton setHidden:!recordingExists];
 }
@@ -95,7 +97,7 @@
     
     if (!isRecording) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            [self.recordBarButton setImage: [UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+            [self.recordBarButton setSelected:true];
         }];
         
         self.recording = [[Recording alloc]init];
@@ -182,9 +184,10 @@
         
     } else {
         isRecording = NO;
-        
+
         [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-            [self.recordBarButton setImage:[UIImage imageNamed:@"record"] forState:UIControlStateNormal];
+            [self.recordBarButton setSelected:false];
+//            [self.recordBarButton setImage:[UIImage systemImageNamed:@"circle.fill"] forState:UIControlStateNormal];
         }];
         
         [self.recorder stop];
@@ -266,7 +269,7 @@
     if (_audioPlayer.isPlaying) {
         [_audioPlayer stop];
     }
-    [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage systemImageNamed:@"play.fill"] forState:UIControlStateNormal];
     [self updateSlider];
     [_sliderTimer invalidate];
 }
@@ -280,7 +283,7 @@
     
     [_audioPlayer prepareToPlay];
     [_audioPlayer play];
-    [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage systemImageNamed:@"pause.fill"] forState:UIControlStateNormal];
 }
 
 - (void)updateSlider {

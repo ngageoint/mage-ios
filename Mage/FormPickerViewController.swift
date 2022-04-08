@@ -149,7 +149,7 @@ extension FormPickerViewController: UITableViewDataSource {
             cell.accessibilityLabel = form.name;
             cell.textLabel?.text = form.name
             cell.detailTextLabel?.text = form.formDescription;
-            cell.imageView?.image = UIImage(named: "description")?.aspectResize(to: CGSize(width: 40, height: 40)).withRenderingMode(.alwaysTemplate);
+            cell.imageView?.image = UIImage(systemName: "doc.text.fill")?.aspectResize(to: CGSize(width: 40, height: 40)).withRenderingMode(.alwaysTemplate);
             
             
             let formCount = formIdCount[form.formId?.intValue ?? Int.min] ?? 0;

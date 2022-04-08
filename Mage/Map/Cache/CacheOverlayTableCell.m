@@ -92,7 +92,7 @@
         cell.accessoryView = cacheSwitch;
         cell.textLabel.text = self.mageLayer ? self.mageLayer.name : [self.overlay getName];
         cell.detailTextLabel.text = [NSString stringWithFormat: @"%lu layer%@", (unsigned long)[self.overlay getChildren].count, [self.overlay getChildren].count == 1 ? @"" : @"s"];
-        [cell.imageView setImage:[UIImage imageNamed:@"folder"]];
+        [cell.imageView setImage:[UIImage systemImageNamed:@"folder"]];
         
     } else {
         CacheOverlay *cacheOverlay = [self.overlay.getChildren objectAtIndex:[self.overlay getChildren].count == 1 ? indexPath.row : indexPath.row - 1];

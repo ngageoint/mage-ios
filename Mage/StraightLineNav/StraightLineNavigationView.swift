@@ -28,7 +28,7 @@ class StraightLineNavigationView: UIView {
     var relativeBearingToTargetLabel: UILabel = UILabel(forAutoLayout: ());
     var compassView: CompassView?;
     
-    let navigation = UIImageView(image: UIImage(named: "navigation"))
+    let navigation = UIImageView(image: UIImage(systemName: "location.north.fill"))
         
     var destinationMarkerUrl: URL? {
         get {
@@ -74,7 +74,7 @@ class StraightLineNavigationView: UIView {
     private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton(type: .custom);
         cancelButton.accessibilityLabel = "cancel";
-        cancelButton.setImage(UIImage(named: "cancel" )?.withRenderingMode(.alwaysTemplate), for: .normal);
+        cancelButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal);
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
         return cancelButton;
     }();

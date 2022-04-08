@@ -91,20 +91,20 @@ class ExpandableCardTests: KIFSpec {
             }
             
             it("image name set") {
-                expandableCard = ExpandableCard(imageName: "form");
+                expandableCard = ExpandableCard(systemImageName: "doc.text.fill");
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(expandableCard);
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 
 //                expect(view).to(haveValidSnapshot());
             }
             
             it("all header fields set") {
-                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title");
+                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", systemImageName: "doc.text.fill", title: "Title");
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(expandableCard.title).to(equal("TITLE"));
@@ -121,7 +121,7 @@ class ExpandableCardTests: KIFSpec {
             }
             
             it("image and title set") {
-                expandableCard = ExpandableCard(imageName: "form", title: "Title");
+                expandableCard = ExpandableCard(systemImageName: "doc.text.fill", title: "Title");
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(expandableCard.title).to(equal("TITLE"));
@@ -136,7 +136,7 @@ class ExpandableCardTests: KIFSpec {
             }
             
             it("header field set later") {
-                expandableCard = ExpandableCard(subheader: "Subheader", imageName: "form", title: "Title");
+                expandableCard = ExpandableCard(subheader: "Subheader", systemImageName: "doc.text.fill", title: "Title");
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(expandableCard.title).to(equal("TITLE"));
@@ -156,7 +156,7 @@ class ExpandableCardTests: KIFSpec {
             }
             
             it("subheader field set later") {
-                expandableCard = ExpandableCard(header: "Header", imageName: "form", title: "Title");
+                expandableCard = ExpandableCard(header: "Header", systemImageName: "doc.text.fill", title: "Title");
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(expandableCard.title).to(equal("TITLE"));
@@ -176,7 +176,7 @@ class ExpandableCardTests: KIFSpec {
             }
             
             it("title field set later") {
-                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form");
+                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", systemImageName: "doc.text.fill");
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(expandableCard.title).to(beNil());
@@ -200,7 +200,7 @@ class ExpandableCardTests: KIFSpec {
                 expandView.backgroundColor = .blue;
                 expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
-                expandableCard = ExpandableCard(imageName: "form", title: "Title", expandedView: expandView);
+                expandableCard = ExpandableCard(systemImageName: "doc.text.fill", title: "Title", expandedView: expandView);
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(expandableCard.title).to(equal("TITLE"));
@@ -222,7 +222,7 @@ class ExpandableCardTests: KIFSpec {
                 expandView.backgroundColor = .blue;
                 expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
-                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
+                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", systemImageName: "doc.text.fill", title: "Title", expandedView: expandView);
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 
                 expect(expandableCard.title).to(equal("TITLE"));
@@ -250,7 +250,7 @@ class ExpandableCardTests: KIFSpec {
                 view.addSubview(expandableCard);
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
-                expandableCard.configure(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
+                expandableCard.configure(header: "Header", subheader: "Subheader", imageName: nil, systemImageName: "doc.text.fill", title: "Title", expandedView: expandView);
                 
                 expect(expandableCard.title).to(equal("TITLE"));
                 expect(expandableCard.subheader).to(equal("Subheader"));
@@ -274,7 +274,7 @@ class ExpandableCardTests: KIFSpec {
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
                 expandableCard.expanded = false;
-                expandableCard.configure(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
+                expandableCard.configure(header: "Header", subheader: "Subheader", imageName: nil, systemImageName: "doc.text.fill", title: "Title", expandedView: expandView);
                 
                 TestHelpers.printAllAccessibilityLabelsInWindows();
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expandableArea")
@@ -296,7 +296,7 @@ class ExpandableCardTests: KIFSpec {
                 expandView.backgroundColor = .blue;
                 expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
-                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
+                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: nil, systemImageName: "doc.text.fill", title: "Title", expandedView: expandView);
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
                 expandableCard.expanded = false;
 
@@ -314,7 +314,7 @@ class ExpandableCardTests: KIFSpec {
                 expandView.backgroundColor = .blue;
                 expandView.autoSetDimensions(to: CGSize(width: 300, height: 300));
                 
-                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: "form", title: "Title", expandedView: expandView);
+                expandableCard = ExpandableCard(header: "Header", subheader: "Subheader", imageName: nil, systemImageName: "doc.text.fill", title: "Title", expandedView: expandView);
                 expandableCard.applyTheme(withScheme: MAGEScheme.scheme());
 
                 view.addSubview(expandableCard);

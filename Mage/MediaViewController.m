@@ -94,7 +94,7 @@
     
     if(!isRecording){
         
-        [self.recordBarButton setImage: [UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+        [self.recordBarButton setImage: [UIImage systemImageNamed:@"square.fill"] forState:UIControlStateNormal];
         
         self.recording = [[Recording alloc]init];
 
@@ -180,7 +180,7 @@
         
     }else{
         isRecording = NO;
-        [self.recordBarButton setImage:[UIImage imageNamed:@"record"] forState:UIControlStateNormal];
+        [self.recordBarButton setImage:[UIImage systemImageNamed:@"circle.fill"] forState:UIControlStateNormal];
 		[self.recorder stop];
         if (_sliderTimer != nil && _sliderTimer.isValid) {
             [_sliderTimer invalidate];
@@ -258,7 +258,7 @@
     if (_audioPlayer.isPlaying) {
         [_audioPlayer stop];
     }
-    [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage systemImageNamed:@"play.fill"] forState:UIControlStateNormal];
     [self updateSlider];
     [_sliderTimer invalidate];
 }
@@ -272,7 +272,7 @@
     
     [_audioPlayer prepareToPlay];
     [_audioPlayer play];
-    [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage systemImageNamed:@"pause.fill"] forState:UIControlStateNormal];
 }
 
 - (void)updateSlider {

@@ -236,7 +236,7 @@ extension GeoPackageFeatureBottomSheetView : UICollectionViewDataSource {
             if let image = mediaRow.dataImage() {
                 cell.setupCell(image: image, title: title, scheme: scheme);
             } else {
-                cell.setupCell(image: UIImage(named: "paperclip"), title: title, scheme: scheme);
+                cell.setupCell(image: UIImage(systemName: "paperclip", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold)), title: title, scheme: scheme);
                 cell.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.3)
             }
         } else {

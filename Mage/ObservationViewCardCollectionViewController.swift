@@ -278,11 +278,11 @@ class ObservationViewCardCollectionViewController: UIViewController {
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView);
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, systemImageName: "doc.text.fill", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView);
         if let scheme = self.scheme {
             card.applyTheme(withScheme: scheme);
         }
-        stackView.addArrangedSubview(card);
+        stackView.addArrangedSubview(card)
         cards.append(card);
         return card;
     }

@@ -80,7 +80,7 @@ import MaterialComponents.MDCCard
         let fab = MDCFloatingButton(shape: .default);
         fab.accessibilityLabel = "Add Form";
         fab.mode = .expanded;
-        fab.setImage(UIImage(named: "form")?.withRenderingMode(.alwaysTemplate), for: .normal);
+        fab.setImage(UIImage(systemName: "doc.text.fill"), for: .normal);
         fab.setTitle("Add Form", for: .normal);
         fab.addTarget(self, action: #selector(self.addForm(sender:)), for: .touchUpInside);
         return fab;
@@ -127,7 +127,7 @@ import MaterialComponents.MDCCard
         self.view.accessibilityLabel = "ObservationEditCardCollection"
     
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveObservation(sender:)));
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.cancel(sender:)));
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.cancel(sender:)));
         self.navigationItem.leftBarButtonItem?.accessibilityLabel = "Cancel";
         if (self.newObservation) {
             self.title = "Create Observation";
@@ -376,7 +376,7 @@ import MaterialComponents.MDCCard
         } else {
             tintColor = scheme?.colorScheme.primaryColor
         }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, imageName: "description", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView)
+        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, systemImageName: "doc.text.fill", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView)
         formView.containingCard = card;
         stackView.addArrangedSubview(card);
         cards.append(card);

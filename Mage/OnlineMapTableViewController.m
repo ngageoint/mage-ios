@@ -118,7 +118,7 @@
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, self.view.bounds.size.height)];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-        imageView.image = [UIImage imageNamed:@"layers_large"];
+        imageView.image = [UIImage systemImageNamed:@"square.stack.3d.up"];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.translatesAutoresizingMaskIntoConstraints = NO;
         imageView.alpha = 0.6f;

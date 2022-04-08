@@ -57,7 +57,7 @@ class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate
     private var didSetUpConstraints = false;
     
     private lazy var secondaryLabelIcon: UIImageView = {
-        let secondaryLabelIcon = UIImageView(image: UIImage(named: "layers"));
+        let secondaryLabelIcon = UIImageView(image: UIImage(systemName: "square.stack.3d.up"));
         secondaryLabelIcon.tintColor = secondaryField.textColor
         secondaryLabelIcon.autoSetDimensions(to: CGSize(width: 14, height: 14));
         return secondaryLabelIcon;

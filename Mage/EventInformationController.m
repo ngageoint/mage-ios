@@ -85,7 +85,7 @@ static const NSInteger FORMS_SECTION = 0;
     Form* form = [self.forms objectAtIndex:indexPath.row];
     cell.textLabel.text = [form name];
     cell.detailTextLabel.text = [form formDescription];
-    cell.imageView.image = [UIImage imageNamed:@"form"];
+    cell.imageView.image = [UIImage systemImageNamed:@"doc.text.fill"];
     
     if ([form color] != nil) {
         cell.imageView.tintColor = [UIColor hx_colorWithHexRGBAString:[form color]];

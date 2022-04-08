@@ -27,14 +27,12 @@ class SingleUserMapView: MageMapView, FilteredUsersMap, FilteredObservationsMap,
     override func layoutView() {
         super.layoutView()
         
-        if let mapView = mapView {
-            filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, user: user, scheme: scheme)
-            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self, user: user)
-            followUserMapMixin = FollowUserMapMixin(followUser: self, user: user, scheme: scheme)
-            mapMixins.append(filteredObservationsMapMixin!)
-            mapMixins.append(filteredUsersMapMixin!)
-            mapMixins.append(followUserMapMixin!)
-        }
+        filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, user: user, scheme: scheme)
+        filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self, user: user)
+        followUserMapMixin = FollowUserMapMixin(followUser: self, user: user, scheme: scheme)
+        mapMixins.append(filteredObservationsMapMixin!)
+        mapMixins.append(filteredUsersMapMixin!)
+        mapMixins.append(followUserMapMixin!)
 
         initiateMapMixins()
     }

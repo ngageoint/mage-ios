@@ -13,7 +13,7 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
     private weak var observation: Observation?;
     private var didSetUpConstraints = false;
     
-    private let exclamation = UIImageView(image: UIImage(named: "exclamation"));
+    private let exclamation = UIImageView(image: UIImage(systemName: "exclamationmark", withConfiguration: UIImage.SymbolConfiguration(weight:.semibold)));
     
     private lazy var errorShapeLayer: CAShapeLayer = {
         let path = CGMutablePath()
@@ -55,7 +55,7 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
         return shape;
     }()
     
-    private let sync = UIImageView(image: UIImage(named: "sync"));
+    private let sync = UIImageView(image: UIImage(systemName: "arrow.triangle.2.circlepath"));
     
     private lazy var syncBadge: UIView = {
         let syncBadge = UIView(forAutoLayout: ());
@@ -83,6 +83,7 @@ class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsD
             errorBadge.autoPinEdge(toSuperviewEdge: .top);
             errorBadge.autoPinEdge(toSuperviewEdge: .left);
             
+            exclamation.contentMode = .scaleAspectFit
             exclamation.autoSetDimensions(to: CGSize(width: 14, height: 14));
             exclamation.autoPinEdge(toSuperviewEdge: .top, withInset: 1);
             exclamation.autoPinEdge(toSuperviewEdge: .left);

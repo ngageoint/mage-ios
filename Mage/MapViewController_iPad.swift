@@ -23,7 +23,8 @@ import PureLayout
     private lazy var badge : UILabel = {
         let badge: UILabel = UILabel.newAutoLayout();
         badge.autoSetDimensions(to: CGSize(width: 20, height: 20))
-        badge.layer.cornerRadius = badge.bounds.size.height / 2
+        badge.layer.cornerRadius = 10
+        badge.clipsToBounds = true
         badge.textAlignment = .center
         badge.layer.masksToBounds = true
         badge.textColor = .white
@@ -121,13 +122,13 @@ extension MapViewController_iPad : OfflineObservationDelegate {
         if (count <= 0) {
             self.badge.autoSetDimensions(to: CGSize(width: 0, height: 0))
         } else if (count < 10) {
-            self.badge.autoPinEdge(toSuperviewEdge: .right, withInset: 14);
+            self.badge.autoPinEdge(toSuperviewEdge: .right, withInset: -14);
             self.badge.autoSetDimensions(to: CGSize(width: 20, height: 20));
         } else if (count < 100) {
-            self.badge.autoPinEdge(toSuperviewEdge: .right, withInset: 24);
+            self.badge.autoPinEdge(toSuperviewEdge: .right, withInset: -24);
             self.badge.autoSetDimensions(to: CGSize(width: 30, height: 20));
         } else {
-            self.badge.autoPinEdge(toSuperviewEdge: .right, withInset: 34);
+            self.badge.autoPinEdge(toSuperviewEdge: .right, withInset: -34);
             self.badge.autoSetDimensions(to: CGSize(width: 40, height: 20));
         }
     }

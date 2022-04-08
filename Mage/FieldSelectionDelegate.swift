@@ -43,7 +43,7 @@ class FieldSelectionCoordinator {
             if (field[FieldKey.type.key] as? String == FieldType.multiselectdropdown.key) {
                 editSelect?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(self.editDone));
             }
-            editSelect?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.editCanceled));
+            editSelect?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.editCanceled));
             delegate?.launchFieldSelectionViewController(viewController: editSelect!);
         } else if (field[FieldKey.type.key] as? String == FieldType.geometry.key) {
             geometryCoordinator = GeometryEditCoordinator(fieldDefinition: field, andGeometry: formField?.value as? SFGeometry, andPinImage: nil, andDelegate: self, andNavigationController: nil, scheme: self.scheme);

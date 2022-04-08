@@ -18,8 +18,7 @@ protocol GeoPackageLayerMap {
 class GeoPackageLayerMapMixin: NSObject, MapMixin {
     var geopackageImportedObserver: AnyObject?
 
-    var geoPackageLayerMap: GeoPackageLayerMap?
-    var mapView: MKMapView?
+    var geoPackageLayerMap: GeoPackageLayerMap
     
     var geoPackageManager: GPKGGeoPackageManager?
     var geoPackageCache: GPKGGeoPackageCache?
@@ -28,11 +27,10 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     
     init(geoPackageLayerMap: GeoPackageLayerMap) {
         self.geoPackageLayerMap = geoPackageLayerMap
-        self.mapView = geoPackageLayerMap.mapView
     }
     
     func setupMixin() {
-        guard let mapView = mapView else {
+        guard let mapView = geoPackageLayerMap.mapView else {
             return
         }
         geoPackage = GeoPackage(mapView: mapView)

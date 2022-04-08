@@ -87,7 +87,7 @@ import QuickLook
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
                 if UIDevice.current.userInterfaceIdiom == .pad {
-                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
                 }
             }
         } else if let urlToLoad = self.urlToLoad {
@@ -102,7 +102,7 @@ import QuickLook
                 self.navigationControllerObserver.observePopTransition(of: vc, delegate: self);
                 self.hasPushedViewController = true;
                 if UIDevice.current.userInterfaceIdiom == .pad {
-                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
                 }
             }
         }
@@ -128,7 +128,7 @@ import QuickLook
                 self.hasPushedViewController = true;
                 self.imageViewController = imageViewController;
                 if UIDevice.current.userInterfaceIdiom == .pad {
-                    self.imageViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                    self.imageViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
                 }
             } else if contentType.hasPrefix("video") {
                 self.playAudioVideo();
@@ -149,7 +149,7 @@ import QuickLook
                 self.hasPushedViewController = true;
                 self.imageViewController = imageViewController;
                 if UIDevice.current.userInterfaceIdiom == .pad {
-                    self.imageViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                    self.imageViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
                 }
             } else if contentType.hasPrefix("video") {
                 self.playAudioVideo();
@@ -176,7 +176,7 @@ import QuickLook
                     mediaPreviewController = MediaPreviewController(fileName: attachment.name ?? "file", mediaTitle: attachment.name ?? "file", data: nil, url: url, mediaLoaderDelegate: self, scheme: scheme)
                     self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
                     if UIDevice.current.userInterfaceIdiom == .pad {
-                        self.mediaPreviewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+                        self.mediaPreviewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
                     }
                 } else {
                     MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Unable to open attachment \(attachment.name ?? "file")"))
@@ -227,7 +227,7 @@ import QuickLook
         mediaPreviewController = MediaPreviewController(fileName: name, mediaTitle: name, data: nil, url: urlToLoad, mediaLoaderDelegate: self, scheme: scheme)
         self.rootViewController.pushViewController(mediaPreviewController!, animated: true)
         if UIDevice.current.userInterfaceIdiom == .pad {
-            self.mediaPreviewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+            self.mediaPreviewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
         }
     }
  

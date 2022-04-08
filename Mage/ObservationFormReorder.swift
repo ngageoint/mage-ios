@@ -84,13 +84,14 @@ class ObservationFormReorder: UITableViewController {
         
         self.descriptionHeaderView.font = containerScheme.typographyScheme.overline;
         self.descriptionHeaderView.textColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
+        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.primaryColorVariant
     }
     
     override func viewDidLoad() {
         super.viewDidLoad();
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .done, target: self, action: #selector(self.saveFormOrder(sender:)));
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.cancel(sender:)));
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.cancel(sender:)));
         
         self.tableView.isEditing = true;
         self.tableView.rowHeight = UITableView.automaticDimension;

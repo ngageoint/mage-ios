@@ -90,7 +90,7 @@ import Kingfisher
             self.clipsToBounds = true;
             
             if (self.useDownloadPlaceholder) {
-                placeholder.image = UIImage.init(named: "portrait");
+                placeholder.image = UIImage(systemName: "person.crop.square");
             }
             
             // Have to do this so that the placeholder image shows up behind the activity indicator
@@ -98,7 +98,7 @@ import Kingfisher
                 self.kf.setImage(with: url, placeholder: placeholder, options: options, progressBlock: progressBlock, completionHandler: completionHandler);
             }
         } else {
-            self.image = UIImage(named: "portrait")
+            self.image = UIImage(systemName: "person.crop.square")
         }
     }
 }

@@ -150,7 +150,7 @@ static float paddingPercentage = .1;
         _coordinator = coordinator;
         _scheme = containerScheme;
         
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"close"] style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"xmark"] style:UIBarButtonItemStylePlain target:self action:@selector(fieldEditCanceled)];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStyleDone target:self action:@selector(fieldEditDone)];
         doneButton.isAccessibilityElement = true;
         doneButton.accessibilityLabel = @"Apply";

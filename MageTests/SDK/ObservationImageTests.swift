@@ -389,7 +389,7 @@ class ObservationImageTests: KIFSpec {
                 // if there is no file at the location, the default marker will be returned so a file must exist
                 do {
                     try FileManager.default.removeItem(atPath: iconPath);
-                    let image: UIImage = UIImage(named: "navigation")!
+                    let image: UIImage = UIImage(systemName: "location.north.fill")!
                     FileManager.default.createFile(atPath: iconPath, contents: image.pngData()!, attributes: nil)
                 }
                 

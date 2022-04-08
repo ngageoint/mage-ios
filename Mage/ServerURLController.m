@@ -81,7 +81,7 @@
     [self.okButton setTitle:@"OK" forState:UIControlStateNormal];
     [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     
-    UIImageView *worldImage = [[UIImageView alloc] initWithImage:[[[UIImage imageNamed:@"world"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    UIImageView *worldImage = [[UIImageView alloc] initWithImage:[[[UIImage systemImageNamed:@"globe.americas.fill"] aspectResizeTo:CGSizeMake(24, 24)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     [self.serverURL setLeadingView:worldImage];
     self.serverURL.leadingViewMode = UITextFieldViewModeAlways;
     self.serverURL.accessibilityLabel = @"Server URL";

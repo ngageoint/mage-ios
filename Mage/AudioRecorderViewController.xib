@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,7 +27,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Record Audio" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UGY-Y4-rxy">
-                    <rect key="frame" x="4" y="274.5" width="367" height="21"/>
+                    <rect key="frame" x="12" y="274.5" width="351" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="Dz6-t3-Kn4"/>
                     </constraints>
@@ -37,47 +35,53 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLU-Xg-1nJ">
-                    <rect key="frame" x="159" y="304.5" width="58" height="58"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLU-Xg-1nJ">
+                    <rect key="frame" x="158.5" y="304.5" width="58" height="58"/>
+                    <color key="backgroundColor" systemColor="systemRedColor"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="58" id="Ioz-0w-p4e"/>
                         <constraint firstAttribute="height" constant="58" id="T7x-DB-2CP"/>
                     </constraints>
-                    <color key="tintColor" red="1" green="0.080767708780000003" blue="0.1467440327" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="record" backgroundImage="record">
-                        <color key="titleColor" red="1" green="0.080767708780000003" blue="0.1467440327" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="circle.fill"/>
+                    <state key="selected" image="square.fill" catalog="system"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="29"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <action selector="startRecording" destination="-1" eventType="touchUpInside" id="1ta-S8-HRK"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="McN-Lp-1Yl">
-                    <rect key="frame" x="97" y="313.5" width="41" height="41"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="McN-Lp-1Yl">
+                    <rect key="frame" x="96.5" y="313" width="41" height="41"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="41" id="2Ip-7T-WFP"/>
                         <constraint firstAttribute="width" constant="41" id="IgK-5B-Nbg"/>
                     </constraints>
-                    <state key="normal" image="play"/>
+                    <state key="normal" image="play.fill" catalog="system"/>
                     <connections>
                         <action selector="playButtonPressed:" destination="-1" eventType="touchUpInside" id="bea-Dt-WoP"/>
                         <action selector="playRecording:" destination="-1" eventType="touchUpInside" id="JOR-oP-fi3"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="znJ-r4-bzY">
-                    <rect key="frame" x="252" y="321.5" width="28" height="25"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="znJ-r4-bzY">
+                    <rect key="frame" x="251.5" y="321" width="28" height="25"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="28" id="MQ8-NC-AOM"/>
                         <constraint firstAttribute="height" constant="25" id="c5R-8X-j49"/>
                     </constraints>
                     <color key="tintColor" red="1" green="0.080767708780000003" blue="0.1467440327" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="trash"/>
+                    <state key="normal" image="trash.fill" catalog="system"/>
                     <connections>
                         <action selector="deleteRecording:" destination="-1" eventType="touchUpInside" id="HQI-Y2-Esq"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OM3-Ll-2bv">
-                    <rect key="frame" x="4" y="367.5" width="367" height="21"/>
+                    <rect key="frame" x="12" y="367" width="351" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="L59-I5-Kod"/>
                     </constraints>
@@ -86,7 +90,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I3C-lO-Ugf">
-                    <rect key="frame" x="4" y="396.5" width="58" height="21"/>
+                    <rect key="frame" x="12" y="396" width="58" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="4OI-pW-lqd"/>
                         <constraint firstAttribute="width" constant="58" id="akf-tZ-4zw"/>
@@ -96,7 +100,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00:02" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAY-mH-ZnK">
-                    <rect key="frame" x="313" y="396.5" width="58" height="21"/>
+                    <rect key="frame" x="305" y="396" width="58" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="58" id="1JM-8Q-GOk"/>
                         <constraint firstAttribute="height" constant="21" id="pm9-1s-nUY"/>
@@ -105,8 +109,8 @@
                     <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o3F-Ix-Hqw">
-                    <rect key="frame" x="0.0" y="466.5" width="375" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o3F-Ix-Hqw">
+                    <rect key="frame" x="0.0" y="466" width="375" height="30"/>
                     <state key="normal" title="Use This Recording">
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
@@ -115,7 +119,7 @@
                     </connections>
                 </button>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="t4L-xh-1hB">
-                    <rect key="frame" x="61" y="392.5" width="254" height="31"/>
+                    <rect key="frame" x="69" y="392" width="238" height="31"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="Vu1-BJ-j0o"/>
                     </constraints>
@@ -150,11 +154,16 @@
                 <constraint firstItem="t4L-xh-1hB" firstAttribute="leading" secondItem="I3C-lO-Ugf" secondAttribute="trailing" constant="1" id="z26-N3-yVf"/>
                 <constraint firstAttribute="trailingMargin" secondItem="UGY-Y4-rxy" secondAttribute="trailing" constant="-4" id="zXi-5F-Jqx"/>
             </constraints>
+            <point key="canvasLocation" x="138" y="152"/>
         </view>
     </objects>
     <resources>
-        <image name="play" width="48" height="48"/>
-        <image name="record" width="48" height="48"/>
-        <image name="trash" width="24" height="24"/>
+        <image name="circle.fill" width="128" height="128"/>
+        <image name="play.fill" catalog="system" width="116" height="128"/>
+        <image name="square.fill" catalog="system" width="128" height="114"/>
+        <image name="trash.fill" catalog="system" width="121" height="128"/>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

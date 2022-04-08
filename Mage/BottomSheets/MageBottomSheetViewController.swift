@@ -90,7 +90,7 @@ class MageBottomSheetViewController: UIViewController {
     private lazy var leftButton: MDCButton = {
         let button = MDCButton();
         button.accessibilityLabel = "previous_feature";
-        button.setImage(UIImage(named: "navigate_before")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setImage(UIImage(systemName: "chevron.left")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 20;
@@ -102,7 +102,7 @@ class MageBottomSheetViewController: UIViewController {
     private lazy var rightButton: MDCButton = {
         let button = MDCButton();
         button.accessibilityLabel = "next_feature";
-        button.setImage(UIImage(named: "navigate_next")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setImage(UIImage(systemName: "chevron.right")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.autoSetDimensions(to: CGSize(width: 40, height: 40));
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 20;
@@ -179,14 +179,14 @@ class MageBottomSheetViewController: UIViewController {
         self.view.backgroundColor = scheme.colorScheme.surfaceColor;
         
         leftButton.applyTextTheme(withScheme: scheme);
-        leftButton.tintColor = scheme.colorScheme.primaryColor;
+        leftButton.tintColor = scheme.colorScheme.primaryColorVariant;
         rightButton.applyTextTheme(withScheme: scheme);
-        rightButton.tintColor = scheme.colorScheme.primaryColor;
+        rightButton.tintColor = scheme.colorScheme.primaryColorVariant;
         
         drag.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         
         pageControl.pageIndicatorTintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
-        pageControl.currentPageIndicatorTintColor = scheme.colorScheme.primaryColor;
+        pageControl.currentPageIndicatorTintColor = scheme.colorScheme.primaryColorVariant;
         pageNumberLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         pageNumberLabel.font = scheme.typographyScheme.caption;
         self.scheme = scheme;

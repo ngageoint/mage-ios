@@ -101,7 +101,7 @@ class ObservationFormTableViewCell: UITableViewCell {
     func applyTheme(withScheme scheme: MDCContainerScheming?) {
         formNameLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         formNameLabel.font = scheme?.typographyScheme.overline;
-        primaryLabel.textColor = scheme?.colorScheme.primaryColor.withAlphaComponent(0.87);
+        primaryLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         primaryLabel.font = scheme?.typographyScheme.headline6;
         secondaryLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         secondaryLabel.font = scheme?.typographyScheme.subtitle2;
@@ -123,7 +123,7 @@ class ObservationFormTableViewCell: UITableViewCell {
             }
         }
         
-        thumbnail.image  = UIImage(named: "description")
+        thumbnail.image  = UIImage(systemName: "doc.text.fill")
         formName = eventForm.name
         primary = formPrimaryValue;
         secondary = formSecondaryValue;

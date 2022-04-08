@@ -20,7 +20,7 @@ class ExpandableCard: MDCCard {
     private var imageTint: UIColor?;
     var showExpanded: Bool = true;
     
-    private let exclamation = UIImageView(image: UIImage(named: "exclamation"));
+    private let exclamation = UIImageView(image: UIImage(systemName: "exclamationmark", withConfiguration: UIImage.SymbolConfiguration(weight:.semibold)));
     
     private lazy var errorShapeLayer: CAShapeLayer = {
         let path = CGMutablePath()
@@ -95,8 +95,8 @@ class ExpandableCard: MDCCard {
     private lazy var expandAction: MDCButton = {
         let expandAction = MDCButton();
         expandAction.accessibilityLabel = "expand";
-        expandAction.setImage(UIImage(named: "collapse")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
-        expandAction.setImage(UIImage(named: "expand")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .selected);
+        expandAction.setImage(UIImage(systemName: "chevron.up")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        expandAction.setImage(UIImage(systemName: "chevron.down")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .selected);
         expandAction.addTarget(self, action: #selector(expandButtonPressed), for: .touchUpInside)
         expandAction.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         expandAction.inkMaxRippleRadius = 30;
@@ -187,16 +187,19 @@ class ExpandableCard: MDCCard {
         self.expandedView = nil;
     }
     
-    convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView? = nil) {
+    convenience init(header: String? = nil, subheader: String? = nil, imageName: String? = nil, systemImageName: String? = nil, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView? = nil) {
         self.init(frame: .zero);
         self.configureForAutoLayout();
-        self.configure(header: header, subheader: subheader, imageName: imageName, title: title, imageTint: imageTint, expandedView: expandedView);
+        self.configure(header: header, subheader: subheader, imageName: imageName, systemImageName: systemImageName, title: title, imageTint: imageTint, expandedView: expandedView);
     }
     
-    func configure(header: String?, subheader: String?, imageName: String?, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView?) {
+    func configure(header: String?, subheader: String?, imageName: String?, systemImageName: String?, title: String? = nil, imageTint: UIColor? = nil, expandedView: UIView?) {
         if let imageName = imageName {
-            self.thumbnail.image  = UIImage(named: imageName)
+            self.thumbnail.image = UIImage(named: imageName)
             self.thumbnail.accessibilityLabel = imageName;
+        } else if let systemImageName = systemImageName {
+            self.thumbnail.image = UIImage(systemName: systemImageName)
+            self.thumbnail.accessibilityLabel = systemImageName
         }
         self.header = header;
         self.subheader = subheader;
@@ -219,6 +222,7 @@ class ExpandableCard: MDCCard {
             errorBadge.autoPinEdge(toSuperviewEdge: .top);
             errorBadge.autoPinEdge(toSuperviewEdge: .left);
             
+            exclamation.contentMode = .scaleAspectFit
             exclamation.autoSetDimensions(to: CGSize(width: 14, height: 14));
             exclamation.autoPinEdge(toSuperviewEdge: .top, withInset: 1);
             exclamation.autoPinEdge(toSuperviewEdge: .left);

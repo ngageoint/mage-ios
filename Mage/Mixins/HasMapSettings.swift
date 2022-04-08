@@ -24,7 +24,7 @@ class HasMapSettingsMixin: NSObject, MapMixin {
     
     private lazy var mapSettingsButton: MDCFloatingButton = {
         let mapSettingsButton = MDCFloatingButton(shape: .mini)
-        mapSettingsButton.setImage(UIImage(named:"layers"), for: .normal)
+        mapSettingsButton.setImage(UIImage(systemName:"square.stack.3d.up"), for: .normal)
         mapSettingsButton.addTarget(self, action: #selector(mapSettingsButtonTapped(_:)), for: .touchUpInside)
         mapSettingsButton.accessibilityLabel = "map_settings"
         return mapSettingsButton

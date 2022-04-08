@@ -110,7 +110,7 @@ class AttachmentFieldView : BaseFieldView {
     private lazy var audioButton: MDCButton = {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Audio";
-        button.setImage(UIImage(named: "voice")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setImage(UIImage(systemName: "mic.fill")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.addTarget(self, action: #selector(addAudioAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;
@@ -121,7 +121,7 @@ class AttachmentFieldView : BaseFieldView {
     private lazy var cameraButton: MDCButton = {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Camera";
-        button.setImage(UIImage(named: "camera")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setImage(UIImage(systemName: "camera.fill")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.addTarget(self, action: #selector(addCameraAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;
@@ -132,7 +132,7 @@ class AttachmentFieldView : BaseFieldView {
     private lazy var galleryButton: MDCButton = {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " Gallery";
-        button.setImage(UIImage(named: "gallery")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setImage(UIImage(systemName: "photo.fill.on.rectangle.fill")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.addTarget(self, action: #selector(addGalleryAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;
@@ -154,7 +154,7 @@ class AttachmentFieldView : BaseFieldView {
     private lazy var fileButton: MDCButton = {
         let button = MDCButton();
         button.accessibilityLabel = (field[FieldKey.name.key] as? String ?? "") + " File";
-        button.setImage(UIImage(named: "paperclip_thumbnail")?.resized(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
+        button.setImage(UIImage(systemName: "paperclip")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate), for: .normal);
         button.addTarget(self, action: #selector(addFileAttachment), for: .touchUpInside);
         button.setInsets(forContentPadding: UIEdgeInsets.zero, imageTitlePadding: 0);
         button.inkMaxRippleRadius = 30;

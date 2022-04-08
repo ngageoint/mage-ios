@@ -44,7 +44,7 @@ class UserSummaryView: CommonSummaryView<User, UserActionsDelegate> {
             return
         }
         
-        avatarImage.tintColor = scheme.colorScheme.primaryColor;
+        avatarImage.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
     }
     
     override func populate(item: User, actionsDelegate: UserActionsDelegate? = nil) {

@@ -224,18 +224,17 @@ class AttachmentSlideShow: UIView {
                 let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
                 imageView.contentMode = .scaleAspectFit;
                 DispatchQueue.main.async {
-                    imageView.kf.setImage(with: provider, placeholder: UIImage(named: "play_overlay"), options: [
+                    imageView.kf.setImage(with: provider, placeholder: UIImage(systemName: "play.circle.fill"), options: [
                         .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                         .transition(.fade(0.2)),
                         .scaleFactor(UIScreen.main.scale),
-                        .processor(DownsamplingImageProcessor(size: imageView.frame.size)),
                         .cacheOriginalImage
                     ], completionHandler:
                         { result in
                             switch result {
                             case .success(_):
                                 imageView.contentMode = .scaleAspectFill;
-                                let overlay: UIImageView = UIImageView(image: UIImage(named: "play_overlay"));
+                                let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"));
                                 overlay.contentMode = .scaleAspectFit;
                                 imageView.addSubview(overlay);
                                 overlay.autoCenterInSuperview();
@@ -246,16 +245,11 @@ class AttachmentSlideShow: UIView {
                                 }
                             case .failure(let error):
                                 print(error);
-                                imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
-                                let overlay: UIImageView = UIImageView(image: UIImage.init(named: "play_overlay"));
-                                overlay.contentMode = .scaleAspectFit;
-                                imageView.addSubview(overlay);
-                                overlay.autoCenterInSuperview();
                             }
                         });
                 }
             } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
-                imageView.image = UIImage(named: "audio_thumbnail");
+                imageView.image = UIImage(systemName: "speaker.wave.2.fill");
                 imageView.contentMode = .scaleAspectFit;
                 imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
                 imageView.setAttachment(attachment: attachment);
@@ -265,7 +259,7 @@ class AttachmentSlideShow: UIView {
                     imageView.addGestureRecognizer(tapGesture);
                 }
             } else {
-                imageView.image = UIImage(named: "paperclip_thumbnail");
+                imageView.image = UIImage(systemName: "paperclip");
                 imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.4)
                 imageView.contentMode = .scaleAspectFit;
                 imageView.setAttachment(attachment: attachment);

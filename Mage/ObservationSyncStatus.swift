@@ -85,7 +85,7 @@ class ObservationSyncStatus: UIView {
         if (observation?.hasValidationError ?? false) {
             syncStatusView.textView.text = "Error Pushing Changes\n\(observation?.errorMessage ?? "")";
             syncStatusView.accessibilityLabel = "Error Pushing Changes\n\(observation?.errorMessage ?? "")";
-            syncStatusView.imageView.image = UIImage(named: "error_outline");
+            syncStatusView.imageView.image = UIImage(systemName: "exclamationmark.circle");
             syncStatusView.leadingButton.isHidden = true;
             if let scheme = scheme {
                 applyTheme(withScheme: scheme);
@@ -101,7 +101,7 @@ class ObservationSyncStatus: UIView {
                 syncStatusView.accessibilityLabel = "Pushed on \(pushedDate.formattedDisplay())";
             }
             syncStatusView.textView.textColor = MDCPalette.green.accent700;
-            syncStatusView.imageView.image = UIImage(named: "done");
+            syncStatusView.imageView.image = UIImage(systemName: "checkmark");
             syncStatusView.imageView.tintColor = MDCPalette.green.accent700;
             syncStatusView.leadingButton.isHidden = true;
             if let scheme = scheme {
@@ -115,7 +115,7 @@ class ObservationSyncStatus: UIView {
         if (manualSync) {
             syncStatusView.textView.text = "Force Pushing Changes...";
             syncStatusView.accessibilityLabel = "Force Pushing Changes..."
-            syncStatusView.imageView.image = UIImage(named: "cached");
+            syncStatusView.imageView.image = UIImage(systemName: "arrow.triangle.2.circlepath");
             syncStatusView.leadingButton.isHidden = true;
             if let scheme = scheme {
                 applyTheme(withScheme: scheme);
@@ -127,7 +127,7 @@ class ObservationSyncStatus: UIView {
         // if the observation is dirty and needs synced
         syncStatusView.textView.text = "Changes Queued";
         syncStatusView.accessibilityLabel = "Changes Queued";
-        syncStatusView.imageView.image = UIImage(named: "cached");
+        syncStatusView.imageView.image = UIImage(systemName: "arrow.triangle.2.circlepath");
         syncStatusView.leadingButton.setTitle("Sync Now", for: .normal);
         syncStatusView.leadingButton.accessibilityLabel = "Sync Now";
         syncStatusView.leadingButton.addTarget(self, action: #selector(self.syncObservation), for: .touchUpInside)

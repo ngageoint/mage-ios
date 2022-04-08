@@ -157,6 +157,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
                               cell.detailTextLabel.text = [NSString stringWithFormat:@"Downloading, Please wait: %@ of %@",
                                                            [NSByteCountFormatter stringFromByteCount:downloadBytes countStyle:NSByteCountFormatterCountStyleFile],
                                                            [NSByteCountFormatter stringFromByteCount:[[[layer file] valueForKey:@"size"] intValue] countStyle:NSByteCountFormatterCountStyleFile]];
+                   [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                } else {
                    cell.detailTextLabel.text = [NSString stringWithFormat:@"Loading static feature data, Please wait"];
                }
@@ -166,9 +167,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
        case NSFetchedResultsChangeMove:
            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                      withRowAnimation:UITableViewRowAnimationFade];
+                      withRowAnimation:UITableViewRowAnimationNone];
            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-                      withRowAnimation:UITableViewRowAnimationFade];
+                      withRowAnimation:UITableViewRowAnimationNone];
            break;
    }
 }
@@ -187,7 +188,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width * .8, self.view.bounds.size.height)];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-        imageView.image = [UIImage imageNamed:@"layers_large"];
+        imageView.image = [UIImage systemImageNamed:@"square.stack.3d.up"];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.translatesAutoresizingMaskIntoConstraints = NO;
         imageView.tintColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];

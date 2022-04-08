@@ -232,7 +232,7 @@ static const NSInteger LEGAL_SECTION = 8;
                                                @{
                                                    @"type": [NSNumber numberWithInteger:kConnection],
                                                    @"style": [NSNumber numberWithInteger:UITableViewCellStyleDefault],
-                                                   @"image": @"wifi_off",
+                                                   @"systemImage": @"wifi.slash",
                                                    @"textLabel": @"Work Online",
                                                    @"accessoryView": offlineLabel
                                                    }
@@ -280,23 +280,6 @@ static const NSInteger LEGAL_SECTION = 8;
                      @"textLabel": @"Network Sync Settings",
                      @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
                      }
-//                 ,
-//                 @{
-//                     @"type": [NSNumber numberWithInteger:kDataFetching],
-//                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
-//                     @"image": @"cached",
-//                     @"textLabel": @"Data Fetching",
-//                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
-//                     @"detailTextLabel": [defaults boolForKey:@"dataFetchEnabled"] ? @"On" : @"Off"
-//                     },
-//                 @{
-//                     @"type": [NSNumber numberWithInteger:kDataPushing],
-//                     @"style": [NSNumber numberWithInteger:UITableViewCellStyleValue1],
-//                     @"image": @"cached",
-//                     @"textLabel": @"Data Pushing",
-//                     @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator],
-//                     @"detailTextLabel": [defaults boolForKey:@"dataPushEnabled"] ? @"On" : @"Off"
-//                     }
       ]
       } mutableCopy];
 }

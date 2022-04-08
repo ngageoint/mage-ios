@@ -54,7 +54,7 @@ class FileViewerCoordinator: NSObject {
         
         quickLookController = MediaPreviewController(fileName: fileName, mediaTitle: documentTitle, data: data, url: nil, scheme: scheme)
         if withCloseButton {
-            quickLookController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "close"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
+            quickLookController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(self.dismiss(_ :)))
         }
         
         let nav = UINavigationController(rootViewController: quickLookController!)

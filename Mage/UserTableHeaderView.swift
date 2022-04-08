@@ -82,7 +82,9 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         let border = UIView(forAutoLayout: ());
         border.autoSetDimensions(to: CGSize(width: 80, height: 80));
         border.addSubview(avatarImage);
-        border.layer.cornerRadius = 4.0;
+        avatarImage.layer.cornerRadius = 70.0 * 0.15
+        avatarImage.clipsToBounds = true
+        border.layer.cornerRadius = 80.0 * 0.15;
         
         let singleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(portraitClick));
         singleTap.numberOfTapsRequired = 1;
