@@ -28,14 +28,7 @@ class ObservationListActionsView: UIView {
         return actionButtonView;
     }()
     
-    private lazy var latitudeLongitudeButton: MDCButton = {
-        let button = MDCButton(forAutoLayout: ());
-        button.accessibilityLabel = "location";
-        button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
-        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
-        button.addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
-        return button;
-    }()
+    private lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
     
     private lazy var favoriteButton: MDCButton = {
         let favoriteButton = MDCButton();
@@ -78,9 +71,7 @@ class ObservationListActionsView: UIView {
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
 
-        latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
-        latitudeLongitudeButton.setTitleColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
-        latitudeLongitudeButton.setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
+        latitudeLongitudeButton.applyTheme(withScheme: scheme);
         self.backgroundColor = scheme.colorScheme.surfaceColor;
     }
     
@@ -128,12 +119,10 @@ class ObservationListActionsView: UIView {
         if let geometry = self.observation?.geometry {
             if let point: SFPoint = geometry.centroid() {
                 let coordinate = CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
-                latitudeLongitudeButton.setTitle(coordinate.toDisplay(short: true), for: .normal)
-                latitudeLongitudeButton.isEnabled = true;
+                latitudeLongitudeButton.coordinate = coordinate
             }
         } else {
-            latitudeLongitudeButton.setTitle("No Location Set", for: .normal);
-            latitudeLongitudeButton.isEnabled = false;
+            latitudeLongitudeButton.coordinate = nil
         }
         
         currentUserFavorited = false;
@@ -198,10 +187,5 @@ class ObservationListActionsView: UIView {
             let notification = DirectionsToItemNotification(observation: self.observation, user: nil, feedItem: nil)
             NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
-    }
-    
-    @objc func copyLocation() {
-        UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(latitudeLongitudeButton.currentTitle ?? "No Location") copied to clipboard"))
     }
 }

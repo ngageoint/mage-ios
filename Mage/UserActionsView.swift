@@ -43,18 +43,8 @@ class UserActionsView: UIView {
         fillerView.setContentHuggingPriority(.defaultHigh, for: .horizontal);
         return fillerView
     }()
-    
-    private lazy var latitudeLongitudeButton: MDCButton = {
-        let button = MDCButton(forAutoLayout: ());
-        button.accessibilityLabel = "location";
-        button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
-        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
-        button.addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.titleLabel?.lineBreakMode = .byClipping
-        button.titleLabel?.numberOfLines = 1
-        return button;
-    }()
+        
+    private lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
     
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton(forAutoLayout: ())
@@ -104,10 +94,7 @@ class UserActionsView: UIView {
         phoneButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        
-        latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
-        latitudeLongitudeButton.setTitleColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
-        latitudeLongitudeButton.setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
+        latitudeLongitudeButton.applyTheme(withScheme: scheme)
     }
     
     public convenience init(user: User?, userActionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -156,11 +143,10 @@ class UserActionsView: UIView {
             let geometry = user.location?.geometry;
             if let point: SFPoint = geometry?.centroid() {
                 let coordinate = CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
-                latitudeLongitudeButton.setTitle(coordinate.toDisplay(short: true), for: .normal)
+                latitudeLongitudeButton.coordinate = coordinate
             }
-            latitudeLongitudeButton.isHidden = false;
         } else {
-            latitudeLongitudeButton.isHidden = true;
+            latitudeLongitudeButton.coordinate = nil
         }
 
         if let safeScheme = scheme {
@@ -190,10 +176,5 @@ class UserActionsView: UIView {
     @objc func emailUser() {
         guard let number = URL(string: "mailto:\(user?.email ?? "")") else { return }
         UIApplication.shared.open(number)
-    }
-    
-    @objc func copyLocation() {
-        UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(latitudeLongitudeButton.currentTitle ?? "No Location") copied to clipboard"))
     }
 }

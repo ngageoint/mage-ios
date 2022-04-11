@@ -394,6 +394,7 @@
 		F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */; };
 		F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */; };
 		F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */; };
+		F7A26E0F280466BF004B0404 /* LatitudeLongitudeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A26E0E280466BF004B0404 /* LatitudeLongitudeButton.swift */; };
 		F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */; };
 		F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */; };
 		F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */; };
@@ -1126,6 +1127,7 @@
 		F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLControllerTests.swift; sourceTree = "<group>"; };
 		F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewTests.swift; sourceTree = "<group>"; };
 		F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewTests.swift; sourceTree = "<group>"; };
+		F7A26E0E280466BF004B0404 /* LatitudeLongitudeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatitudeLongitudeButton.swift; sourceTree = "<group>"; };
 		F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsViewController.swift; sourceTree = "<group>"; };
 		F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDropdownFieldView.swift; sourceTree = "<group>"; };
 		F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObservationTableHeaderView.h; sourceTree = "<group>"; };
@@ -1463,6 +1465,7 @@
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
 				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
 				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
+				F7A26E0E280466BF004B0404 /* LatitudeLongitudeButton.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -3534,6 +3537,7 @@
 				F7081DB42627696F004B89D4 /* CompassView.swift in Sources */,
 				F7D43BE2269F329D00561A8F /* FeedItemBottomSheetView.swift in Sources */,
 				F7402C842769395C00531613 /* MapDirectionsMixin.swift in Sources */,
+				F7A26E0F280466BF004B0404 /* LatitudeLongitudeButton.swift in Sources */,
 				2F1069DD221C9005009F661A /* SettingsCoordinator.m in Sources */,
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7EBAEC12762537100650F4F /* BottomSheetEnabled.swift in Sources */,

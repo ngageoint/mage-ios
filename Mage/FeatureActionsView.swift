@@ -35,14 +35,7 @@ class FeatureActionsView: UIView {
         return stack;
     }()
     
-    private lazy var latitudeLongitudeButton: MDCButton = {
-        let button = MDCButton(forAutoLayout: ());
-        button.accessibilityLabel = "location";
-        button.setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
-        button.setInsets(forContentPadding: button.defaultContentEdgeInsets, imageTitlePadding: 5);
-        button.addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
-        return button;
-    }()
+    private lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
     
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton();
@@ -63,9 +56,7 @@ class FeatureActionsView: UIView {
         self.scheme = scheme;
         directionsButton.applyTextTheme(withScheme: scheme);
         directionsButton.setImageTintColor(scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6), for: .normal)
-        latitudeLongitudeButton.applyTextTheme(withScheme: scheme);
-        latitudeLongitudeButton.setTitleColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
-        latitudeLongitudeButton.setImageTintColor(scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87), for: .normal)
+        latitudeLongitudeButton.applyTheme(withScheme: scheme);
     }
     
     public convenience init(geoPackageFeatureItem: GeoPackageFeatureItem?, featureActionsDelegate: FeatureActionsDelegate?, scheme: MDCContainerScheming?) {
@@ -116,14 +107,7 @@ class FeatureActionsView: UIView {
         self.title = title;
         self.featureActionsDelegate = delegate;
         
-        if let location = location, CLLocationCoordinate2DIsValid(location) {
-            latitudeLongitudeButton.setTitle(location.toDisplay(short: true), for: .normal)
-            latitudeLongitudeButton.isEnabled = true;
-            latitudeLongitudeButton.isHidden = false;
-        } else {
-            latitudeLongitudeButton.isHidden = true;
-        }
-        
+        latitudeLongitudeButton.coordinate = location
         applyTheme(withScheme: scheme);
     }
     
@@ -140,10 +124,5 @@ class FeatureActionsView: UIView {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
-    }
-    
-    @objc func copyLocation() {
-        UIPasteboard.general.string = latitudeLongitudeButton.currentTitle ?? "No Location";
-        MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(latitudeLongitudeButton.currentTitle ?? "No Location") copied to clipboard"))
     }
 }
