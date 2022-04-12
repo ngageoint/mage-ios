@@ -11,7 +11,6 @@
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
 #import "AuthenticationCoordinator.h"
-#import "ServerURLController.h"
 #import "LoginViewController.h"
 #import "MageSessionManager.h"
 #import "StoredPassword.h"

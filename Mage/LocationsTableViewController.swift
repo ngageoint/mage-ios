@@ -75,7 +75,6 @@ class LocationsTableViewController: UITableViewController {
         
         self.tableView.backgroundView = nil;
         self.tableView.register(cellClass: PersonTableViewCell.self)
-        self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forCellReuseIdentifier: "TableSectionHeader");
         
         if (userIds == nil) {
             self.refreshControl = UIRefreshControl();

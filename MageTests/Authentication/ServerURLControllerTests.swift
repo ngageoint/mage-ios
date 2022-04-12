@@ -19,7 +19,7 @@ class MockServerURLDelegate: ServerURLDelegate {
     var setServerURLCalled = false;
     var cancelSetServerURLCalled = false;
     var newURL: URL?;
-    func setServerURL(_ url: URL!) {
+    func setServerURL(url: URL) {
         setServerURLCalled = true;
         newURL = url;
     }
@@ -37,7 +37,7 @@ class ServerURLControllerTests: KIFSpec {
             
             var window: UIWindow?;
             var view: ServerURLController?;
-            var delegate: MockServerURLDelegate?;
+            var delegate: MockServerURLDelegate!;
             var navigationController: UINavigationController?;
             
             beforeEach {
@@ -61,7 +61,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should load empty the ServerURLController") {
-                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
+                view = ServerURLController(delegate: delegate, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Server URL");
@@ -72,7 +72,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should not allow setting an empty server URL") {
-                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
+                view = ServerURLController(delegate: delegate, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
@@ -86,7 +86,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should allow setting a server URL") {
-                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
+                view = ServerURLController(delegate: delegate, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(viewTester().usingLabel("Server URL")?.view).toNot(beNil());
@@ -100,7 +100,7 @@ class ServerURLControllerTests: KIFSpec {
             }
             
             it("should allow setting a server URL with the enter key") {
-                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
+                view = ServerURLController(delegate: delegate, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 TestHelpers.printAllAccessibilityLabelsInWindows();
@@ -117,7 +117,7 @@ class ServerURLControllerTests: KIFSpec {
             it("should load current URL into the ServerURLController") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
+                view = ServerURLController(delegate: delegate, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Server URL");
@@ -131,7 +131,7 @@ class ServerURLControllerTests: KIFSpec {
             it("should load current URL into the ServerURLController with an error") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                view = ServerURLController(delegate: delegate, andError: "Something wrong", andScheme: MAGEScheme.scheme());
+                view = ServerURLController(delegate: delegate, error: "Something wrong", scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 TestHelpers.printAllAccessibilityLabelsInWindows();
@@ -149,7 +149,7 @@ class ServerURLControllerTests: KIFSpec {
             it("should cancel the ServerURLController") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                view = ServerURLController(delegate: delegate, andScheme: MAGEScheme.scheme());
+                view = ServerURLController(delegate: delegate, scheme: MAGEScheme.scheme());
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Server URL");

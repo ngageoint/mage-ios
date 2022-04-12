@@ -10,7 +10,6 @@
 
 #import "AuthenticationCoordinator.h"
 #import "AuthenticationCoordinator_Server5.h"
-#import "ServerURLController.h"
 #import "EventChooserCoordinator.h"
 
 #import <UserNotifications/UserNotifications.h>
@@ -97,20 +96,19 @@
 
 - (void) changeServerUrl {
     [self.navigationController popToRootViewControllerAnimated:NO];
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self andScheme:self.scheme];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self error:nil scheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
 - (void) setServerURLWithError: (NSString *) error {
-    self.urlController = [[ServerURLController alloc] initWithDelegate:self andError: error andScheme:self.scheme];
+    self.urlController = [[ServerURLController alloc] initWithDelegate:self error:error scheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.urlController animated:NO];
 }
 
-- (void) setServerURL:(NSURL *) url {
+- (void) setServerURLWithUrl:(NSURL *)url {
     __weak __typeof__(self) weakSelf = self;
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"baseServerUrl"];
     [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
         [MageInitializer clearServerSpecificData];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -119,7 +117,7 @@
             [weakSelf startAuthentication:mageServer];
         });
     } failure:^(NSError *error) {
-        [weakSelf.urlController showError:error.localizedDescription];
+        [weakSelf.urlController showErrorWithError:error.localizedDescription];
     }];
 }
 

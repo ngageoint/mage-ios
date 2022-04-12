@@ -39,7 +39,7 @@
 		2F142891199AB9A400C64A98 /* UINextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F142890199AB9A400C64A98 /* UINextField.m */; };
 		2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1542E01CF76FC90022AABA /* ObservationFields.m */; };
 		2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */; };
-		2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.m */; };
+		2F2F58F61BFA504B00B78993 /* ServerURLController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2F58F51BFA504B00B78993 /* ServerURLController.swift */; };
 		2F320B6D1BEABF0200C7F66C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6C1BEABF0200C7F66C /* LoginViewController.m */; };
 		2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */; };
 		2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F38DF1622B942C800485DA4 /* LdapLoginView.m */; };
@@ -73,7 +73,6 @@
 		2FB41CE01DC79436005C18F9 /* Filter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FB41CDE1DC79436005C18F9 /* Filter.storyboard */; };
 		2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */; };
 		2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */; };
-		2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FCB1AC81DDA439700A63C71 /* Users.storyboard */; };
 		2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */; };
 		2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCDC35222C27B9C004189AD /* UIColor+Adjust.m */; };
 		2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FCDC35522C2866A004189AD /* AuthenticationButton.m */; };
@@ -301,7 +300,6 @@
 		F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */; };
 		F755B55B25E41BFF008E8D41 /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
-		F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F75A10F12048B037002F9906 /* TableSectionHeader.xib */; };
 		F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */; };
 		F75D24C0274C2B11003C0A83 /* ObservationAnnotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */; };
 		F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F75FC905233AAA4100547315 /* XYZTileOverlay.m */; };
@@ -436,7 +434,6 @@
 		F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8961F4B8F7E002C78D3 /* GeometryEditMapDelegate.m */; };
 		F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */; };
 		F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */; };
-		F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */; };
 		F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C5C8D81F5F5473002C78D3 /* LoginView.xib */; };
 		F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */; };
 		F7C640FF257EB29100C02335 /* geometryField.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C640FE257EB29100C02335 /* geometryField.json */; };
@@ -652,8 +649,7 @@
 		2F1542DF1CF76FC90022AABA /* ObservationFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationFields.h; sourceTree = "<group>"; };
 		2F1542E01CF76FC90022AABA /* ObservationFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFields.m; sourceTree = "<group>"; };
 		2F2582EF24EC6AE6009CA918 /* FeedItemSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemSummary.swift; sourceTree = "<group>"; };
-		2F2F58F41BFA504B00B78993 /* ServerURLController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerURLController.h; sourceTree = "<group>"; };
-		2F2F58F51BFA504B00B78993 /* ServerURLController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerURLController.m; sourceTree = "<group>"; };
+		2F2F58F51BFA504B00B78993 /* ServerURLController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerURLController.swift; sourceTree = "<group>"; };
 		2F320B6B1BEABF0200C7F66C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		2F320B6C1BEABF0200C7F66C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
@@ -713,7 +709,6 @@
 		2FB41CE31DC79C8F005C18F9 /* ObservationFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationFilterTableViewController.m; sourceTree = "<group>"; };
 		2FC8BB8C2602421400F73B0E /* AuthenticationCoordinator_Server5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthenticationCoordinator_Server5.h; sourceTree = "<group>"; };
 		2FC8BBBD2602538300F73B0E /* AuthenticationCoordinator_Server5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCoordinator_Server5.m; sourceTree = "<group>"; };
-		2FCB1AC81DDA439700A63C71 /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
 		2FCD7B0424F8084C0073D6F7 /* MoreTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreTableViewDelegate.swift; sourceTree = "<group>"; };
 		2FCDC35122C27B9C004189AD /* UIColor+Adjust.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Adjust.h"; sourceTree = "<group>"; };
 		2FCDC35222C27B9C004189AD /* UIColor+Adjust.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Adjust.m"; sourceTree = "<group>"; };
@@ -1019,7 +1014,6 @@
 		F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerObserver.swift; sourceTree = "<group>"; };
 		F755B55A25E41BFF008E8D41 /* testRecording.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testRecording.mp4; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
-		F75A10F12048B037002F9906 /* TableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
 		F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewController.swift; sourceTree = "<group>"; };
 		F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 19.xcdatamodel"; sourceTree = "<group>"; };
 		F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAnnotationTests.swift; sourceTree = "<group>"; };
@@ -1184,7 +1178,6 @@
 		F7C5C8981F4CC703002C78D3 /* AttachmentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AttachmentView.xib; sourceTree = "<group>"; };
 		F7C5C8D31F5F28BC002C78D3 /* MageAppCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageAppCoordinator.h; sourceTree = "<group>"; };
 		F7C5C8D41F5F28BC002C78D3 /* MageAppCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageAppCoordinator.m; sourceTree = "<group>"; };
-		F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerURLView.xib; sourceTree = "<group>"; };
 		F7C5C8D81F5F5473002C78D3 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
 		F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormListener.swift; sourceTree = "<group>"; };
 		F7C640FE257EB29100C02335 /* geometryField.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryField.json; sourceTree = "<group>"; };
@@ -1461,10 +1454,8 @@
 				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
 				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
 				F7ED5D0F1FFD7F88007BD768 /* Settings */,
-				F75A10F12048B037002F9906 /* TableSectionHeader.xib */,
 				F717E56F1F62FFD000211D0D /* TransitionScreen.xib */,
 				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
-				2FCB1AC81DDA439700A63C71 /* Users.storyboard */,
 				F7A26E0E280466BF004B0404 /* LatitudeLongitudeButton.swift */,
 			);
 			name = Views;
@@ -1543,8 +1534,7 @@
 				2F320B6C1BEABF0200C7F66C /* LoginViewController.m */,
 				F7467B7A209A2F0B00EABA63 /* OrView.h */,
 				F7467B7B209A2F0B00EABA63 /* OrView.m */,
-				2F2F58F41BFA504B00B78993 /* ServerURLController.h */,
-				2F2F58F51BFA504B00B78993 /* ServerURLController.m */,
+				2F2F58F51BFA504B00B78993 /* ServerURLController.swift */,
 				2F7D5D642602566B00886844 /* SignupDelegate.h */,
 				2F320B6E1BEBB90300C7F66C /* SignUpViewController.h */,
 				2F320B6F1BEBB90300C7F66C /* SignUpViewController.m */,
@@ -2347,7 +2337,6 @@
 				F7C3DB9C207FE93100154281 /* local-authView.xib */,
 				F7C5C8D81F5F5473002C78D3 /* LoginView.xib */,
 				F7467B78209A2DC600EABA63 /* orView.xib */,
-				F7C5C8D61F5F52BB002C78D3 /* ServerURLView.xib */,
 				F7D6EFAD1F69CA3B000D5BDA /* SignupView.xib */,
 			);
 			name = Authentication;
@@ -2914,19 +2903,16 @@
 				F7467B79209A2DC600EABA63 /* orView.xib in Resources */,
 				F7929C7023C4E69600396D11 /* countries.gpkg in Resources */,
 				F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */,
-				2FCB1AC91DDA439700A63C71 /* Users.storyboard in Resources */,
 				F7A94DB218B55E6D00CB9EE0 /* Media.xcassets in Resources */,
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
 				F7E457641F61C14F0082F527 /* EventCell.xib in Resources */,
 				F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */,
-				F75A10F22048B037002F9906 /* TableSectionHeader.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
 				F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */,
 				F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */,
-				F7C5C8D71F5F52BB002C78D3 /* ServerURLView.xib in Resources */,
 				F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */,
 				F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
@@ -3221,7 +3207,7 @@
 				F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */,
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */,
-				2F2F58F61BFA504B00B78993 /* ServerURLController.m in Sources */,
+				2F2F58F61BFA504B00B78993 /* ServerURLController.swift in Sources */,
 				F78D579627B709D4003594D3 /* FollowUser.swift in Sources */,
 				F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,

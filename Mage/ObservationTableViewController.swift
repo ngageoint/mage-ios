@@ -82,7 +82,6 @@ class ObservationTableViewController: UITableViewController {
         
         self.tableView.backgroundView = nil;
         self.tableView.register(cellClass: ObservationListCardCell.self);
-        self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forCellReuseIdentifier: "TableSectionHeader");
                 
         self.refreshControl = UIRefreshControl();
         refreshControl?.addTarget(self, action: #selector(refreshObservations), for: .valueChanged);
