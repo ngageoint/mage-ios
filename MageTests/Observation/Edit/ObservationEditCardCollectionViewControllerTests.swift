@@ -367,15 +367,13 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 tester().waitForView(withAccessibilityLabel: "Form 2")
                 
-                tester().swipeView(withAccessibilityLabel: "card scroll", in: .down)
-                tester().waitForAnimationsToFinish()
-                
                 let reorderButton: UIButton = viewTester().usingIdentifier("reorder").view as! UIButton;
                 expect(reorderButton.isHidden).to(beFalse());
                 expect(reorderButton.isEnabled).to(beTrue());
                 tester().waitForTappableView(withAccessibilityLabel: "reorder")
-                reorderButton.tap()
                 tester().waitForAnimationsToFinish();
+
+                reorderButton.tap()
                 
                 expect(delegate.reorderFormsCalled).toEventually(beTrue());
                 var obsForms: [[String: Any]] = observation.properties![ObservationKey.forms.key] as! [[String : Any]];

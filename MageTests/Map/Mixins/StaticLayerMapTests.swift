@@ -184,6 +184,11 @@ class StaticLayerMapTests: KIFSpec {
                 expect(layer.url).to(equal("https://magetest/api/events/1/layers"))
                 expect(layer.state).to(equal("available"))
                 
+                let sl = StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())
+                expect(sl).toNot(beNil())
+                
+                StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
+                
                 expect(featuresStubCalled).toEventually(beTrue());
                 
                 expect(StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())?.data).toEventuallyNot(beNil(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find layer")
@@ -276,6 +281,11 @@ class StaticLayerMapTests: KIFSpec {
                 expect(layer.layerDescription).to(equal("description"))
                 expect(layer.url).to(equal("https://magetest/api/events/1/layers"))
                 expect(layer.state).to(equal("available"))
+                
+                let sl = StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())
+                expect(sl).toNot(beNil())
+                
+                StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
                 
                 expect(featuresStubCalled).toEventually(beTrue());
                 
@@ -387,6 +397,11 @@ class StaticLayerMapTests: KIFSpec {
                 expect(layer.url).to(equal("https://magetest/api/events/1/layers"))
                 expect(layer.state).to(equal("available"))
                 
+                let sl = StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())
+                expect(sl).toNot(beNil())
+                
+                StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
+                
                 expect(featuresStubCalled).toEventually(beTrue());
                 
                 expect(StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())?.data).toEventuallyNot(beNil(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find layer")
@@ -494,6 +509,11 @@ class StaticLayerMapTests: KIFSpec {
                 expect(layer.layerDescription).to(equal("description"))
                 expect(layer.url).to(equal("https://magetest/api/events/1/layers"))
                 expect(layer.state).to(equal("available"))
+                
+                let sl = StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())
+                expect(sl).toNot(beNil())
+                
+                StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
                 
                 expect(featuresStubCalled).toEventually(beTrue());
                 

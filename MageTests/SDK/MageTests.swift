@@ -187,6 +187,11 @@ class MageTests: KIFSpec {
                 expect(userIconFetchStubCalled).toEventually(beTrue());
                 expect(userAvatarFetchStubCalled).toEventually(beTrue());
                 expect(feedsFetchStubCalled).toEventually(beTrue());
+                
+                let sl = StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())
+                expect(sl).toNot(beNil())
+                
+                StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
                 expect(featuresFetchStubCalled).toEventually(beTrue());
                 expect(mageFormFetchedCalled).toEventually(beTrue());
             }

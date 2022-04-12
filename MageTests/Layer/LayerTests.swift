@@ -27,8 +27,6 @@ class LayerTests: KIFSpec {
                 var cleared = false;
                 while (!cleared) {
                     let clearMap = TestHelpers.clearAndSetUpStack()
-                    print("xxx clear map layer \(clearMap[String(describing: Layer.self)])")
-//                    print("xxx clear map static layer \(clearMap[String(describing: StaticLayer.self)])")
                     cleared = (clearMap[String(describing: Layer.self)] ?? false)
                     
                     if (!cleared) {
@@ -404,7 +402,6 @@ class LayerTests: KIFSpec {
             }
             
             it("should pull a Static layer") {
-                print("xxx shoudl pull a static layer")
                 var stubCalled = false;
                 
                 stub(condition: isMethodGET() &&
@@ -457,7 +454,6 @@ class LayerTests: KIFSpec {
                 
                 var staticLayerLoaded = false
                 staticLayerObserver = NotificationCenter.default.addObserver(forName: .StaticLayerLoaded, object: nil, queue: .main) { notification in
-                    print("xxx static layer loaded")
                     staticLayerLoaded = true
                 }
                 
@@ -498,7 +494,6 @@ class LayerTests: KIFSpec {
             }
             
             it("should delete static layer data") {
-                print("xxx should delete static layer")
                 var stubCalled = false;
                 
                 stub(condition: isMethodGET() &&
@@ -592,7 +587,6 @@ class LayerTests: KIFSpec {
             }
             
             it("should update a Static layer") {
-                print("xxx should update a sttaic layer")
                 var stubCalled = 0;
                 
                 stub(condition: isMethodGET() &&
