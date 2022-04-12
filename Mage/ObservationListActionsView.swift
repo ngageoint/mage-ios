@@ -28,7 +28,7 @@ class ObservationListActionsView: UIView {
         return actionButtonView;
     }()
     
-    private lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
+    lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
     
     private lazy var favoriteButton: MDCButton = {
         let favoriteButton = MDCButton();

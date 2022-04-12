@@ -219,9 +219,9 @@ class GeoPackageLayerMapTests: KIFSpec {
                     }
                 }
                 
-                expect(mixin.mapView?.overlays.count).toEventually(equal(1))
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.57367, longitude:-104.66225), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                expect(testimpl.mapView?.overlays.count).toEventually(equal(1))
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.57367, longitude:-104.66225), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
                 tester().wait(forTimeInterval: 6)
@@ -244,7 +244,7 @@ class GeoPackageLayerMapTests: KIFSpec {
                     }
                 }
                 
-                expect(mixin.mapView?.overlays.count).toEventually(equal(0))
+                expect(testimpl.mapView?.overlays.count).toEventually(equal(0))
                 
                 mixin.cleanupMixin()
             }

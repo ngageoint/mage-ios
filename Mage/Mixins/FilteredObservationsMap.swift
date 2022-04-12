@@ -35,7 +35,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         mapObservationManager = MapObservationManager(mapView: filteredObservationsMap.mapView)
     }
     
-    deinit {
+    func cleanupMixin() {
         if let mapAnnotationFocusedObserver = mapAnnotationFocusedObserver {
             NotificationCenter.default.removeObserver(mapAnnotationFocusedObserver, name: .MapAnnotationFocused, object: nil)
         }
@@ -46,9 +46,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.hideObservations))
         UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey))
         UserDefaults.standard.removeObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey))
-    }
-    
-    func cleanupMixin() {
+        
         observations?.delegate = nil
         observations = nil
     }

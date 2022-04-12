@@ -269,7 +269,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Form 1")
                 
-                tester().waitForView(withAccessibilityLabel: "field1 value", value: "", traits: .none);
+                tester().waitForView(withAccessibilityLabel: "field1 value", value: "Level *", traits: .none);
                 tester().waitForView(withAccessibilityLabel: "field0 value", value: "Protest", traits: .none);
             }
             

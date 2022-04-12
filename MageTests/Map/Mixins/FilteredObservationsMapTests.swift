@@ -15,6 +15,7 @@ import MagicalRecord
 @testable import MAGE
 
 class FilteredObservationsMapTestImpl : NSObject, FilteredObservationsMap {
+    var scheme: MDCContainerScheming?
     var mapView: MKMapView?
     
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
@@ -39,7 +40,7 @@ class FilteredObservationsMapTests: KIFSpec {
             var view: UIView!
             var window: UIWindow!;
             var controller: UIViewController!
-            var fotest: FilteredObservationsMapTestImpl!
+            var testimpl: FilteredObservationsMapTestImpl!
             var fomixin: FilteredObservationsMapMixin!
             
             describe("show observations for user") {
@@ -82,11 +83,12 @@ class FilteredObservationsMapTests: KIFSpec {
                     let mapView = MKMapView()
                     controller.view = mapView
                     
-                    fotest = FilteredObservationsMapTestImpl()
-                    fotest.mapView = mapView
+                    testimpl = FilteredObservationsMapTestImpl()
+                    testimpl.mapView = mapView
+                    testimpl.scheme = MAGEScheme.scheme()
                     
-                    fomixin = FilteredObservationsMapMixin(mapView: mapView, user: user, scheme: MAGEScheme.scheme())
-                    fotest.filteredObservationsMapMixin = fomixin
+                    fomixin = FilteredObservationsMapMixin(filteredObservationsMap: testimpl, user: user)
+                    testimpl.filteredObservationsMapMixin = fomixin
                     
                     navController = UINavigationController(rootViewController: controller);
                     window.rootViewController = navController;
@@ -99,7 +101,7 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 afterEach {
                     fomixin = nil
-                    fotest = nil
+                    testimpl = nil
                     
                     for subview in view.subviews {
                         subview.removeFromSuperview();
@@ -136,7 +138,7 @@ class FilteredObservationsMapTests: KIFSpec {
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
                     fomixin.setupMixin()
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(2))
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                     fomixin.cleanupMixin()
                 }
             }
@@ -179,11 +181,11 @@ class FilteredObservationsMapTests: KIFSpec {
                     let mapView = MKMapView()
                     controller.view = mapView
                     
-                    fotest = FilteredObservationsMapTestImpl()
-                    fotest.mapView = mapView
+                    testimpl = FilteredObservationsMapTestImpl()
+                    testimpl.mapView = mapView
                     
-                    fomixin = FilteredObservationsMapMixin(mapView: mapView, scheme: MAGEScheme.scheme())
-                    fotest.filteredObservationsMapMixin = fomixin
+                    fomixin = FilteredObservationsMapMixin(filteredObservationsMap: testimpl)
+                    testimpl.filteredObservationsMapMixin = fomixin
                     
                     navController = UINavigationController(rootViewController: controller);
                     window.rootViewController = navController;
@@ -196,7 +198,7 @@ class FilteredObservationsMapTests: KIFSpec {
                 
                 afterEach {
                     fomixin = nil
-                    fotest = nil
+                    testimpl = nil
                     
                     for subview in view.subviews {
                         subview.removeFromSuperview();
@@ -228,7 +230,7 @@ class FilteredObservationsMapTests: KIFSpec {
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
                     fomixin.setupMixin()
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(2))
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                     fomixin.cleanupMixin()
                 }
                 
@@ -240,9 +242,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     UserDefaults.standard.observationTimeFilterKey = .last24Hours
                     
                     fomixin.setupMixin()
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                     expect(oa?.observation).to(equal(two))
                     fomixin.cleanupMixin()
                 }
@@ -255,9 +257,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     UserDefaults.standard.observationTimeFilterKey = .lastWeek
                     
                     fomixin.setupMixin()
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                     expect(oa?.observation).to(equal(two))
                     fomixin.cleanupMixin()
                 }
@@ -270,9 +272,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     UserDefaults.standard.observationTimeFilterKey = .lastWeek
                     
                     fomixin.setupMixin()
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                     expect(oa?.observation).to(equal(two))
                     fomixin.cleanupMixin()
                 }
@@ -285,12 +287,12 @@ class FilteredObservationsMapTests: KIFSpec {
                     let longAgo = Date(timeIntervalSince1970: 1)
                     let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(2))
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                     
                     one.mr_deleteEntity()
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                     expect(oa?.observation).to(equal(two))
                     fomixin.cleanupMixin()
                 }
@@ -303,13 +305,13 @@ class FilteredObservationsMapTests: KIFSpec {
                     let longAgo = Date(timeIntervalSince1970: 1)
                     _ = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(2))
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                     
                     UserDefaults.standard.observationTimeFilterKey = .lastWeek
                     
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                     expect(oa?.observation).to(equal(two))
                     fomixin.cleanupMixin()
                 }
@@ -321,14 +323,14 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     let longAgo = Date(timeIntervalSince1970: 1)
                     let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(1))
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                     
                     one.geometry = SFPoint(x: 20, andY: 30)
 
-                    expect(((fomixin.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
-                    expect(fomixin.mapView?.annotations.count).toEventually(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation
+                    expect(((testimpl.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
+                    expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                     expect(oa?.observation).to(equal(one))
                     fomixin.cleanupMixin()
                 }
@@ -342,18 +344,18 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.mapView?.delegate = fotest
+                    testimpl.mapView?.delegate = testimpl
                     
                     fomixin.setupMixin()
                     
-                    if let region = fomixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 21, longitude: 16), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
-                        fomixin.mapView?.setRegion(region, animated: false)
+                    if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 21, longitude: 16), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                        testimpl.mapView?.setRegion(region, animated: false)
                     }
                     
-                    expect(fomixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
-                    expect(fomixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
                                     
-                    expect(fomixin.mapView?.overlays.count).toEventually(equal(2))
+                    expect(testimpl.mapView?.overlays.count).toEventually(equal(2))
                     
                     let items = fomixin.items(at: CLLocationCoordinate2D(latitude: 21, longitude: 16))
                     expect(items?.count).to(equal(1))
@@ -375,18 +377,18 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.mapView?.delegate = fotest
+                    testimpl.mapView?.delegate = testimpl
                     
                     fomixin.setupMixin()
                     
-                    if let region = fomixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 21, longitude: 16), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
-                        fomixin.mapView?.setRegion(region, animated: false)
+                    if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 21, longitude: 16), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                        testimpl.mapView?.setRegion(region, animated: false)
                     }
                     
-                    expect(fomixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
-                    expect(fomixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
                     
-                    expect(fomixin.mapView?.overlays.count).toEventually(equal(3))
+                    expect(testimpl.mapView?.overlays.count).toEventually(equal(3))
                                     
                     let items = fomixin.items(at: CLLocationCoordinate2D(latitude: 21, longitude: 16))
                     expect(items?.count).to(equal(2))
@@ -404,14 +406,14 @@ class FilteredObservationsMapTests: KIFSpec {
                     let one = Observation.create(geometry: geometryone, date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.mapView?.delegate = fotest
+                    testimpl.mapView?.delegate = testimpl
                     
                     fomixin.setupMixin()
                     
                     fomixin.zoomAndCenterMap(observation: one)
                     
-                    expect(fomixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
-                    expect(fomixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
                     
                     fomixin.cleanupMixin()
                 }
@@ -422,19 +424,19 @@ class FilteredObservationsMapTests: KIFSpec {
                     let one = Observation.create(geometry: geometryone, date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.mapView?.delegate = fotest
+                    testimpl.mapView?.delegate = testimpl
                     
                     fomixin.setupMixin()
                     
                     fomixin.zoomAndCenterMap(observation: one)
                     
-                    expect(fomixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
-                    expect(fomixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
                     
-                    expect(fomixin.mapView?.annotations.count).to(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    if let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation {
-                        expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
+                    expect(testimpl.mapView?.annotations.count).to(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    if let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation {
+                        expect(oa.view).toEventually(beAKindOf(ObservationAnnotationView.self))
                         if let oav = oa.view as? ObservationAnnotationView {
                             expect(oav.isEnabled).to(beFalse())
                             expect(oav.canShowCallout).to(beFalse())
@@ -452,20 +454,20 @@ class FilteredObservationsMapTests: KIFSpec {
                     let one = Observation.create(geometry: geometryone, date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     UserDefaults.standard.observationTimeFilterKey = .all
 
-                    fomixin.mapView?.delegate = fotest
+                    testimpl.mapView?.delegate = testimpl
 
                     fomixin.setupMixin()
 
                     fomixin.zoomAndCenterMap(observation: one)
 
-                    expect(fomixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
-                    expect(fomixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(16.0000, within: 0.1))
 
-                    expect(fomixin.mapView?.annotations.count).to(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    expect(testimpl.mapView?.annotations.count).to(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
                     var originalHeight = 0.0
-                    if let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation {
-                        expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
+                    if let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation {
+                        expect(oa.view).toEventually(beAKindOf(ObservationAnnotationView.self))
                         if let oav = oa.view as? ObservationAnnotationView {
                             originalHeight = oav.frame.size.height
                             expect(oav.isEnabled).to(beFalse())
@@ -473,13 +475,13 @@ class FilteredObservationsMapTests: KIFSpec {
                             expect(oav.accessibilityLabel).to(equal("Observation Annotation \(one.objectID.uriRepresentation().absoluteString)"))
                             expect(oav.centerOffset).to(equal(CGPoint(x: 0, y: -((oav.image?.size.height ?? 0.0) / 2.0))))
                         }
-                        let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: fomixin.mapView)
+                        let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: testimpl.mapView)
                         NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification)
                     }
 
-                    expect(fomixin.mapView?.annotations.count).to(equal(1))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                    if let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation {
+                    expect(testimpl.mapView?.annotations.count).to(equal(1))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    if let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation {
                         expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
                         if let oav = oa.view as? ObservationAnnotationView {
                             expect(oav.frame.size.height).toEventually(equal(originalHeight * 2.0))
@@ -489,7 +491,7 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
                     expect(fomixin.enlargedObservationView).toEventually(beNil())
-                    if let oa = fomixin.mapView?.annotations[0] as? ObservationAnnotation {
+                    if let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation {
                         expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
                         if let oav = oa.view as? ObservationAnnotationView {
                             expect(oav.frame.size.height).toEventually(equal(originalHeight))
@@ -508,21 +510,21 @@ class FilteredObservationsMapTests: KIFSpec {
                     let two = Observation.create(geometry: geometrytwo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.mapView?.delegate = fotest
+                    testimpl.mapView?.delegate = testimpl
                     
                     fomixin.setupMixin()
                     
-                    if let region = fomixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20.5, longitude: 15.5), latitudinalMeters: 1000000, longitudinalMeters: 100000)) {
-                        fomixin.mapView?.setRegion(region, animated: false)
+                    if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20.5, longitude: 15.5), latitudinalMeters: 1000000, longitudinalMeters: 100000)) {
+                        testimpl.mapView?.setRegion(region, animated: false)
                     }
                     
-                    expect(fomixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.5000, within: 0.5))
-                    expect(fomixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.5000, within: 0.5))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.5000, within: 0.5))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.5000, within: 0.5))
                     
-                    expect(fomixin.mapView?.annotations.count).to(equal(2))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    expect(testimpl.mapView?.annotations.count).to(equal(2))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
                     var originalHeight = 0.0
-                    guard let annotations = fomixin.mapView?.annotations else {
+                    guard let annotations = testimpl.mapView?.annotations else {
                         tester().fail()
                         return
                     }
@@ -534,7 +536,7 @@ class FilteredObservationsMapTests: KIFSpec {
                         expect(oa).to(beAKindOf(ObservationAnnotation.self))
                         
                         if oa.observation == one {
-                            expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
+                            expect(oa.view).toEventually(beAKindOf(ObservationAnnotationView.self))
                             if let oav = oa.view as? ObservationAnnotationView {
                                 // focus on one first
                                 
@@ -544,7 +546,7 @@ class FilteredObservationsMapTests: KIFSpec {
                                 expect(oav.accessibilityLabel).to(equal("Observation Annotation \(one.objectID.uriRepresentation().absoluteString)"))
                                 expect(oav.centerOffset).to(equal(CGPoint(x: 0, y: -((oav.image?.size.height ?? 0.0) / 2.0))))
                             
-                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: fomixin.mapView)
+                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: testimpl.mapView)
                                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification)
                                 
                                 expect(oav.frame.size.height).toEventually(equal(originalHeight * 2.0))
@@ -553,7 +555,7 @@ class FilteredObservationsMapTests: KIFSpec {
                         }
                     }
 
-                    guard let annotations = fomixin.mapView?.annotations else {
+                    guard let annotations = testimpl.mapView?.annotations else {
                         tester().fail()
                         return
                     }
@@ -564,7 +566,7 @@ class FilteredObservationsMapTests: KIFSpec {
                         }
                         expect(oa).to(beAKindOf(ObservationAnnotation.self))
                         if oa.observation == two {
-                            expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
+                            expect(oa.view).toEventually(beAKindOf(ObservationAnnotationView.self))
                             if let oav = oa.view as? ObservationAnnotationView {
                                 // focus on one first
                                 
@@ -574,7 +576,7 @@ class FilteredObservationsMapTests: KIFSpec {
                                 expect(oav.accessibilityLabel).to(equal("Observation Annotation \(two.objectID.uriRepresentation().absoluteString)"))
                                 expect(oav.centerOffset).to(equal(CGPoint(x: 0, y: -((oav.image?.size.height ?? 0.0) / 2.0))))
                             
-                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: fomixin.mapView)
+                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: testimpl.mapView)
                                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification)
                                 expect(oav.frame.size.height).toEventually(equal(originalHeight * 2.0))
                                 expect(fomixin.enlargedObservationView).to(equal(oav))
@@ -582,7 +584,7 @@ class FilteredObservationsMapTests: KIFSpec {
                         }
                     }
                     
-                    guard let annotations = fomixin.mapView?.annotations else {
+                    guard let annotations = testimpl.mapView?.annotations else {
                         tester().fail()
                         return
                     }
@@ -622,21 +624,21 @@ class FilteredObservationsMapTests: KIFSpec {
                     _ = Observation.create(geometry: geometrytwo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.mapView?.delegate = fotest
+                    testimpl.mapView?.delegate = testimpl
                     
                     fomixin.setupMixin()
                     
-                    if let region = fomixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20.5, longitude: 15.5), latitudinalMeters: 1000000, longitudinalMeters: 100000)) {
-                        fomixin.mapView?.setRegion(region, animated: false)
+                    if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20.5, longitude: 15.5), latitudinalMeters: 1000000, longitudinalMeters: 100000)) {
+                        testimpl.mapView?.setRegion(region, animated: false)
                     }
                     
-                    expect(fomixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.5000, within: 0.5))
-                    expect(fomixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.5000, within: 0.5))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.5000, within: 0.5))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.5000, within: 0.5))
                     
-                    expect(fomixin.mapView?.annotations.count).to(equal(2))
-                    expect(fomixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                    expect(testimpl.mapView?.annotations.count).to(equal(2))
+                    expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
                     var originalHeight = 0.0
-                    guard let annotations = fomixin.mapView?.annotations else {
+                    guard let annotations = testimpl.mapView?.annotations else {
                         tester().fail()
                         return
                     }
@@ -648,7 +650,7 @@ class FilteredObservationsMapTests: KIFSpec {
                         expect(oa).to(beAKindOf(ObservationAnnotation.self))
                         
                         if oa.observation == one {
-                            expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
+                            expect(oa.view).toEventually(beAKindOf(ObservationAnnotationView.self))
                             if let oav = oa.view as? ObservationAnnotationView {
                                 // focus on one first
                                 
@@ -658,7 +660,7 @@ class FilteredObservationsMapTests: KIFSpec {
                                 expect(oav.accessibilityLabel).to(equal("Observation Annotation \(one.objectID.uriRepresentation().absoluteString)"))
                                 expect(oav.centerOffset).to(equal(CGPoint(x: 0, y: -((oav.image?.size.height ?? 0.0) / 2.0))))
                                 
-                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: fomixin.mapView)
+                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: testimpl.mapView)
                                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification)
                                 
                                 expect(oav.frame.size.height).toEventually(equal(originalHeight * 2.0))
@@ -675,7 +677,7 @@ class FilteredObservationsMapTests: KIFSpec {
                         expect(oa).to(beAKindOf(ObservationAnnotation.self))
                         
                         if oa.observation == one {
-                            expect(oa.view).to(beAKindOf(ObservationAnnotationView.self))
+                            expect(oa.view).toEventually(beAKindOf(ObservationAnnotationView.self))
                             if let oav = oa.view as? ObservationAnnotationView {
                                 // focus on one again
                                 expect(oav.isEnabled).to(beFalse())
@@ -684,7 +686,7 @@ class FilteredObservationsMapTests: KIFSpec {
                                 expect(oav.frame.size.height).toEventually(equal(originalHeight * 2.0))
                                 expect(oav.centerOffset).to(equal(CGPoint(x: 0, y: -((oav.image?.size.height ?? 0.0)))))
                                 
-                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: fomixin.mapView)
+                                let notification = MapAnnotationFocusedNotification(annotation: oa, mapView: testimpl.mapView)
                                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification)
                                 
                                 expect(oav.frame.size.height).toEventually(equal(originalHeight * 2.0))

@@ -17,8 +17,11 @@ import CoreLocation
 import MapKit
 
 class CanCreateObservationTestImpl : NSObject, CanCreateObservation {
-    var mapView: MKMapView?
+    var navigationController: UINavigationController?
     
+    var mapView: MKMapView?
+    var scheme: MDCContainerScheming?
+
     var canCreateObservationMixin: CanCreateObservationMixin?
 }
 
@@ -83,9 +86,11 @@ class CanCreateObservationTests: KIFSpec {
                 
                 testimpl = CanCreateObservationTestImpl()
                 testimpl.mapView = mapView
+                testimpl.scheme = MAGEScheme.scheme()
                 
                 navController = UINavigationController(rootViewController: controller);
-                mixin = CanCreateObservationMixin(canCreateObservation: testimpl, navigationController: navController, rootView: mapView, mapStackView: mapStack, scheme: MAGEScheme.scheme(), locationService: locationService)
+                testimpl.navigationController = navController
+                mixin = CanCreateObservationMixin(canCreateObservation: testimpl, rootView: mapView, mapStackView: mapStack, locationService: locationService)
                 
                 window.rootViewController = navController;
                 

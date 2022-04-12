@@ -42,6 +42,7 @@ class LatitudeLongitudeButton : MDCButton {
         setImage(UIImage(named: "location_tracking_on")?.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate), for: .normal);
         setInsets(forContentPadding: defaultContentEdgeInsets, imageTitlePadding: 5);
         addTarget(self, action: #selector(copyLocation), for: .touchUpInside);
+        accessibilityLabel = "location button"
         titleLabel?.adjustsFontSizeToFitWidth = true
         titleLabel?.lineBreakMode = .byClipping
         titleLabel?.numberOfLines = 1

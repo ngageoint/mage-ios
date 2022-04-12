@@ -18,6 +18,8 @@ import CoreData
 class LayerTests: KIFSpec {
     
     override func spec() {
+        
+        var staticLayerObserver: AnyObject?
     
         describe("Layer Tests") {
             
@@ -25,6 +27,8 @@ class LayerTests: KIFSpec {
                 var cleared = false;
                 while (!cleared) {
                     let clearMap = TestHelpers.clearAndSetUpStack()
+                    print("xxx clear map layer \(clearMap[String(describing: Layer.self)])")
+//                    print("xxx clear map static layer \(clearMap[String(describing: StaticLayer.self)])")
                     cleared = (clearMap[String(describing: Layer.self)] ?? false)
                     
                     if (!cleared) {
@@ -35,6 +39,10 @@ class LayerTests: KIFSpec {
                         Thread.sleep(forTimeInterval: 0.5);
                     }
                     
+                }
+                
+                if let staticLayerObserver = staticLayerObserver {
+                    NotificationCenter.default.removeObserver(staticLayerObserver, name: .StaticLayerLoaded, object: nil)
                 }
                 
                 expect(Layer.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Layers still exist in default");
@@ -396,6 +404,7 @@ class LayerTests: KIFSpec {
             }
             
             it("should pull a Static layer") {
+                print("xxx shoudl pull a static layer")
                 var stubCalled = false;
                 
                 stub(condition: isMethodGET() &&
@@ -447,7 +456,8 @@ class LayerTests: KIFSpec {
                 }
                 
                 var staticLayerLoaded = false
-                NotificationCenter.default.addObserver(forName: .StaticLayerLoaded, object: nil, queue: .main) { notification in
+                staticLayerObserver = NotificationCenter.default.addObserver(forName: .StaticLayerLoaded, object: nil, queue: .main) { notification in
+                    print("xxx static layer loaded")
                     staticLayerLoaded = true
                 }
                 
@@ -466,7 +476,7 @@ class LayerTests: KIFSpec {
                 expect(layer.state).to(equal("available"))
                 
                 expect(featuresStubCalled).toEventually(beTrue());
-                
+                // this one is failing
                 expect(staticLayerLoaded).toEventually(beTrue())
                 expect(StaticLayer.mr_findFirst(byAttribute: "eventId", withValue: 1, in: NSManagedObjectContext.mr_default())?.data).toEventuallyNot(beNil(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find layer")
                 
@@ -483,6 +493,7 @@ class LayerTests: KIFSpec {
             }
             
             it("should delete static layer data") {
+                print("xxx should delete static layer")
                 var stubCalled = false;
                 
                 stub(condition: isMethodGET() &&
@@ -571,6 +582,7 @@ class LayerTests: KIFSpec {
             }
             
             it("should update a Static layer") {
+                print("xxx should update a sttaic layer")
                 var stubCalled = 0;
                 
                 stub(condition: isMethodGET() &&

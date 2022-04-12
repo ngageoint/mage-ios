@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -142,7 +142,7 @@
                         <constraint firstAttribute="width" constant="24" id="hPO-sS-haU"/>
                         <constraint firstAttribute="height" constant="24" id="qe5-E7-Ip7"/>
                     </constraints>
-                    <state key="normal" image="error">
+                    <state key="normal" image="exclamationmark.circle.fill" catalog="system">
                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                 </button>
@@ -190,6 +190,6 @@
         </view>
     </objects>
     <resources>
-        <image name="error" width="24" height="24"/>
+        <image name="exclamationmark.circle.fill" catalog="system" width="128" height="121"/>
     </resources>
 </document>

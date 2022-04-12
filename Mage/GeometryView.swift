@@ -26,7 +26,7 @@ class GeometryView : BaseFieldView {
         return textField;
     }()
     
-    private lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
+    lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
     
     lazy var accuracyLabel: UILabel = {
         let label = UILabel(forAutoLayout: ());

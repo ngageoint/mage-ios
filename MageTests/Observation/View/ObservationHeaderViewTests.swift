@@ -82,8 +82,8 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "USER ABC • 2020-06-05 11:21 MDT");
                 tester().waitForView(withAccessibilityLabel: "At Venue");
                 tester().waitForView(withAccessibilityLabel: "None");
-                tester().waitForView(withAccessibilityLabel: "location geometry")
-                expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
+                tester().waitForView(withAccessibilityLabel: "location button")
+                expect((viewTester().usingLabel("location button")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
                 tester().waitForView(withAccessibilityLabel: "1 FAVORITE");
                 expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for: .normal)).to(be(MDCPalette.green.accent700));
                 let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! MDCButton
@@ -148,8 +148,8 @@ class ObservationHeaderViewTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "USER ABC • 2020-06-05 11:21 MDT");
                 tester().waitForView(withAccessibilityLabel: "At Venue");
                 tester().waitForView(withAccessibilityLabel: "None");
-                tester().waitForView(withAccessibilityLabel: "location geometry")
-                expect((viewTester().usingLabel("location geometry")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
+                tester().waitForView(withAccessibilityLabel: "location button")
+                expect((viewTester().usingLabel("location button")!.view as! MDCButton).currentTitle) == "40.00850, -105.26780";
                 tester().waitForView(withAccessibilityLabel: "1 FAVORITE");
                 expect((viewTester().usingLabel("favorite").view as! MDCButton).imageTintColor(for:.normal)).to(be(MDCPalette.green.accent700));
                 let importantButton = viewTester().usingLabel("important")?.usingTraits(UIAccessibilityTraits(arrayLiteral: .button)).view as! MDCButton

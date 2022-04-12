@@ -61,6 +61,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 
                 delegate = MockAuthenticationCoordinatorDelegate();
                 navigationController = UINavigationController();
+                navigationController?.isNavigationBarHidden = true;
                 window = TestHelpers.getKeyWindowVisible();
                 window!.rootViewController = navigationController;
                 

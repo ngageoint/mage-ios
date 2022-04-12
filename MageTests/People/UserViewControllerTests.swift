@@ -85,7 +85,7 @@ class UserViewControllerTests: KIFSpec {
                 tester().expect(viewTester().usingLabel("303-555-5555").view, toContainText: "303-555-5555");
                 tester().expect(viewTester().usingLabel("userabc@test.com").view, toContainText: "userabc@test.com");
                 
-                tester().tapView(withAccessibilityLabel: "location", traits: UIAccessibilityTraits(arrayLiteral: .button));
+                tester().tapView(withAccessibilityLabel: "location button", traits: UIAccessibilityTraits(arrayLiteral: .button));
                 tester().waitForView(withAccessibilityLabel: "Location 40.00850, -105.26780 copied to clipboard");
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().tapView(withAccessibilityLabel: "favorite", traits: UIAccessibilityTraits(arrayLiteral: .button));

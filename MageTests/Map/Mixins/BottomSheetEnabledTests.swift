@@ -17,7 +17,9 @@ import CoreLocation
 import MapKit
 
 class BottomSheetEnabledTestImpl : NSObject, BottomSheetEnabled {
+    var navigationController: UINavigationController?
     var mapView: MKMapView?
+    var scheme: MDCContainerScheming?
     var bottomSheetMixin: BottomSheetMixin?
 }
 
@@ -79,10 +81,11 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 testimpl = BottomSheetEnabledTestImpl()
                 testimpl.mapView = mapView
+                testimpl.scheme = MAGEScheme.scheme()
                 
                 navController = UINavigationController(rootViewController: controller);
-                
-                mixin = BottomSheetMixin(mapView: mapView, navigationController: navController, scheme: MAGEScheme.scheme())
+                testimpl.navigationController = navController
+                mixin = BottomSheetMixin(bottomSheetEnabled: testimpl)
                 testimpl.bottomSheetMixin = mixin
                 
                 window.rootViewController = navController;
@@ -127,7 +130,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 mixin.setupMixin()
 
-                let notification = MapItemsTappedNotification(annotations: [oa], items: nil, mapView: mixin.mapView)
+                let notification = MapItemsTappedNotification(annotations: [oa], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "At Venue")
@@ -145,7 +148,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                let notification = MapItemsTappedNotification(annotations: [ua], items: nil, mapView: mixin.mapView)
+                let notification = MapItemsTappedNotification(annotations: [ua], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "User ABC")
@@ -201,7 +204,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                let notification = MapItemsTappedNotification(annotations: [sa], items: nil, mapView: mixin.mapView)
+                let notification = MapItemsTappedNotification(annotations: [sa], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Point")
@@ -219,7 +222,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                let notification = MapItemsTappedNotification(annotations: [feedItem], items: nil, mapView: mixin.mapView)
+                let notification = MapItemsTappedNotification(annotations: [feedItem], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "No Content")
@@ -299,7 +302,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                let notification = MapItemsTappedNotification(annotations: [oa, ua, sa, feedItem], items: [lineObs,polygonObs], mapView: mixin.mapView)
+                let notification = MapItemsTappedNotification(annotations: [oa, ua, sa, feedItem], items: [lineObs,polygonObs], mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "At Venue")

@@ -17,8 +17,11 @@ import CoreLocation
 import MapKit
 
 class HasMapSettingsTestImpl : NSObject, HasMapSettings {
-    var mapView: MKMapView?
+    var navigationController: UINavigationController?
     
+    var mapView: MKMapView?
+    var scheme: MDCContainerScheming?
+
     var hasMapSettingsMixin: HasMapSettingsMixin?
 }
 
@@ -65,10 +68,11 @@ class HasMapSettingsTests: KIFSpec {
                 
                 testimpl = HasMapSettingsTestImpl()
                 testimpl.mapView = mapView
+                testimpl.scheme = MAGEScheme.scheme()
                 
                 navController = UINavigationController(rootViewController: controller);
-                
-                mixin = HasMapSettingsMixin(hasMapSettings: testimpl, navigationController: navController, rootView: mapView, scheme: MAGEScheme.scheme())
+                testimpl.navigationController = navController
+                mixin = HasMapSettingsMixin(hasMapSettings: testimpl, rootView: mapView)
                 window.rootViewController = navController;
                 
                 view = window

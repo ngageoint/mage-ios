@@ -50,6 +50,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView.newAutoLayout();
         scrollView.accessibilityIdentifier = "card scroll";
+        scrollView.accessibilityLabel = "card scroll";
         scrollView.contentInset.bottom = 100;
         return scrollView;
     }()

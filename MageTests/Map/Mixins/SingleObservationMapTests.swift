@@ -16,9 +16,12 @@ import OHHTTPStubs
 import CoreLocation
 import MapKit
 
-class SingleObservationMapTestImpl : NSObject, SingleObservationMap {
-    var mapView: MKMapView?
+class SingleObservationMapTestImpl : NSObject, FilteredObservationsMap {
+    var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     
+    var mapView: MKMapView?
+    var scheme: MDCContainerScheming?
+
     var singleObservationMapMixin: SingleObservationMapMixin?
 }
 
@@ -77,6 +80,7 @@ class SingleObservationMapTests: KIFSpec {
                 
                 testimpl = SingleObservationMapTestImpl()
                 testimpl.mapView = mapView
+                testimpl.scheme = MAGEScheme.scheme()
                 mapView.delegate = testimpl
                 
                 navController = UINavigationController(rootViewController: controller);
@@ -120,19 +124,19 @@ class SingleObservationMapTests: KIFSpec {
             it("initialize the SingleObservationMap with an observation") {
                 let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 
-                mixin = SingleObservationMapMixin(mapView: testimpl.mapView!, observation: observation, scheme: MAGEScheme.scheme())
+                mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20, longitude: 15), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20, longitude: 15), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
                 
                 mixin.cleanupMixin()
             }
@@ -140,26 +144,26 @@ class SingleObservationMapTests: KIFSpec {
             it("initialize the SingleObservationMap with an observation and update location") {
                 let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 
-                mixin = SingleObservationMapMixin(mapView: testimpl.mapView!, observation: observation, scheme: MAGEScheme.scheme())
+                mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20, longitude: 15), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20, longitude: 15), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
                 
                 observation.geometry = SFPoint(x: 20, andY: 30)
                 
-                expect(((mixin.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(1))
-                expect(mixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                let oa = mixin.mapView?.annotations[0] as? ObservationAnnotation
+                expect(((testimpl.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                 expect(oa?.observation).to(equal(observation))
                 
                 mixin.cleanupMixin()
@@ -168,27 +172,27 @@ class SingleObservationMapTests: KIFSpec {
             it("initialize the SingleObservationMap with an observation and then change observation") {
                 let observation = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 
-                mixin = SingleObservationMapMixin(mapView: testimpl.mapView!, observation: observation, scheme: MAGEScheme.scheme())
+                mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20, longitude: 15), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20, longitude: 15), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(20.0000, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(15.0000, within: 0.1))
                 
                 let observation2 = Observation.create(geometry: SFPoint(x: 20, andY: 30), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 
                 mixin.observation = observation2
-                expect(((mixin.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(1))
-                expect(mixin.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
-                let oa = mixin.mapView?.annotations[0] as? ObservationAnnotation
+                expect(((testimpl.mapView?.annotations[0] as? ObservationAnnotation)?.observation?.geometry as? SFPoint)?.x.intValue).toEventually(equal(20))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
+                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
+                let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
                 expect(oa?.observation).to(equal(observation2))
                 
                 mixin.cleanupMixin()

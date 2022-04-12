@@ -115,7 +115,7 @@ class ExpandableCardTests: KIFSpec {
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 
 //                expect(view).to(haveValidSnapshot());
             }
@@ -130,7 +130,7 @@ class ExpandableCardTests: KIFSpec {
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 
 //                expect(view).to(haveValidSnapshot());
             }
@@ -149,7 +149,7 @@ class ExpandableCardTests: KIFSpec {
                 expandableCard.header = "Header Later"
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 expect(expandableCard.header).to(equal("Header Later"));
                 
 //                expect(view).to(haveValidSnapshot());
@@ -169,7 +169,7 @@ class ExpandableCardTests: KIFSpec {
                 expandableCard.subheader = "Subheader Later"
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 expect(expandableCard.subheader).to(equal("Subheader Later"));
                 
 //                expect(view).to(haveValidSnapshot());
@@ -189,7 +189,7 @@ class ExpandableCardTests: KIFSpec {
                 expandableCard.title = "Title Later"
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "expand");
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 expect(expandableCard.title).to(equal("TITLE LATER"));
                 
 //                expect(view).to(haveValidSnapshot());
@@ -210,7 +210,7 @@ class ExpandableCardTests: KIFSpec {
                 view.addSubview(expandableCard);
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 tester().waitForView(withAccessibilityLabel: "expand");
                 expect(expandView.superview).toNot(beNil());
                 
@@ -232,7 +232,7 @@ class ExpandableCardTests: KIFSpec {
                 view.addSubview(expandableCard);
                 expandableCard.autoPinEdgesToSuperviewEdges();
                 
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 tester().waitForView(withAccessibilityLabel: "expand");
                 expect(expandView.superview).toNot(beNil());
                 
@@ -255,7 +255,8 @@ class ExpandableCardTests: KIFSpec {
                 expect(expandableCard.title).to(equal("TITLE"));
                 expect(expandableCard.subheader).to(equal("Subheader"));
                 expect(expandableCard.header).to(equal("Header"));
-                tester().waitForView(withAccessibilityLabel: "form")
+                TestHelpers.printAllAccessibilityLabelsInWindows()
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 tester().waitForView(withAccessibilityLabel: "expand");
                 expect(expandView.superview).toNot(beNil());
                 
@@ -281,7 +282,7 @@ class ExpandableCardTests: KIFSpec {
                 expect(expandableCard.title).to(equal("TITLE"));
                 expect(expandableCard.subheader).to(equal("Subheader"));
                 expect(expandableCard.header).to(equal("Header"));
-                tester().waitForView(withAccessibilityLabel: "form")
+                tester().waitForView(withAccessibilityLabel: "doc.text.fill")
                 tester().waitForView(withAccessibilityLabel: "expand");
                 expect(expandView.superview).toNot(beNil());
                 

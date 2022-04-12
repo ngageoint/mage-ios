@@ -496,9 +496,8 @@ class GeometryViewTests: KIFSpec {
                 expect(geometryFieldView?.accuracyLabel.text) == "GPS ± 100.49m";
                 expect(geometryFieldView?.fieldNameLabel.text) == "Field Title"
                 
-                tester().tapView(withAccessibilityLabel: "location field8");
-                expect(mockActionsDelegate.copyLocationCalled).to(beTrue());
-                expect(mockActionsDelegate.locationStringCopied) == "40.00850, -105.26780";
+                tester().tapView(withAccessibilityLabel: "location button");
+                tester().waitForView(withAccessibilityLabel: "Location 40.00850, -105.26780 copied to clipboard")
             }
         }
     }

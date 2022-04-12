@@ -730,7 +730,7 @@ DEPENDENCIES:
   - OHHTTPStubs
   - OHHTTPStubs/Swift
   - PureLayout
-  - Quick
+  - Quick (from `https://github.com/Quick/Quick.git`, commit `a0a5fc857cea079fbe973e4faa80b6ceaf17bd46`)
   - SSZipArchive (~> 2.2.2)
   - UIImage-Categories (~> 0.0.1)
   - zxcvbn-ios
@@ -757,7 +757,6 @@ SPEC REPOS:
     - OHHTTPStubs
     - proj4-ios
     - PureLayout
-    - Quick
     - sf-geojson-ios
     - sf-ios
     - sf-proj-ios
@@ -767,6 +766,16 @@ SPEC REPOS:
     - tiff-ios
     - UIImage-Categories
     - zxcvbn-ios
+
+EXTERNAL SOURCES:
+  Quick:
+    :commit: a0a5fc857cea079fbe973e4faa80b6ceaf17bd46
+    :git: https://github.com/Quick/Quick.git
+
+CHECKOUT OPTIONS:
+  Quick:
+    :commit: a0a5fc857cea079fbe973e4faa80b6ceaf17bd46
+    :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -789,7 +798,7 @@ SPEC CHECKSUMS:
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
   PureLayout: 5fb5e5429519627d60d079ccb1eaa7265ce7cf88
-  Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
+  Quick: 5dc45f9bc11236594a7acc99f7bd85ecdc9a477d
   sf-geojson-ios: 1891b0ea5df7a42478eacc485d93b0cec5be2743
   sf-ios: 9f97bda6f7291a6d47e7b599f8cbd57a2e5b2c25
   sf-proj-ios: 2d41ecf496d71e3a59dc7734f76d8a33f2e8c83b
@@ -800,6 +809,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 4d8badc9d6e860ed5d4c44270ece616f179e6d29
+PODFILE CHECKSUM: 0de7e32aafae764582fccf4fa9c165cbd83432a1
 
 COCOAPODS: 1.9.3

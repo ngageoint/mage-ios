@@ -17,6 +17,7 @@ import CoreLocation
 import MapKit
 
 class FeedsMapTestImpl : NSObject, FeedsMap {
+    var scheme: MDCContainerScheming?
     var mapView: MKMapView?
     
     var feedsMapMixin: FeedsMapMixin?
@@ -78,11 +79,12 @@ class FeedsMapTests: KIFSpec {
                 
                 testimpl = FeedsMapTestImpl()
                 testimpl.mapView = mapView
+                testimpl.scheme = MAGEScheme.scheme()
                 mapView.delegate = testimpl
                 
                 navController = UINavigationController(rootViewController: controller);
                 
-                mixin = FeedsMapMixin(mapView: mapView, scheme: MAGEScheme.scheme())
+                mixin = FeedsMapMixin(feedsMap: testimpl)
                 testimpl.feedsMapMixin = mixin
                 window.rootViewController = navController;
                 
@@ -128,8 +130,8 @@ class FeedsMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(0))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
                 mixin.cleanupMixin()
             }
@@ -145,8 +147,8 @@ class FeedsMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(2))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
                 mixin.cleanupMixin()
             }
@@ -162,14 +164,14 @@ class FeedsMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(2))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
                 // unselect one of the feeds
                 UserDefaults.standard.currentEventSelectedFeeds = ["1"]
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
                 mixin.cleanupMixin()
             }
@@ -185,14 +187,14 @@ class FeedsMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(0))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
                 // unselect one of the feeds
                 UserDefaults.standard.currentEventSelectedFeeds = ["1"]
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
                 mixin.cleanupMixin()
             }
@@ -205,13 +207,13 @@ class FeedsMapTests: KIFSpec {
                 
                 mixin.setupMixin()
 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
                 MageCoreDataFixtures.addFeedItemToFeed(properties: nil)
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(2))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
                 mixin.cleanupMixin()
             }
@@ -224,35 +226,35 @@ class FeedsMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
-                expect(mixin.mapView?.annotations[0]).to(beAKindOf(FeedItem.self))
-                let feedItem = mixin.mapView!.annotations[0] as! FeedItem
+                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(FeedItem.self))
+                let feedItem = testimpl.mapView!.annotations[0] as! FeedItem
                 let initialLocation: CLLocationCoordinate2D = feedItem.coordinate
                 expect(initialLocation.latitude).to(beCloseTo(40.11))
                 expect(initialLocation.longitude).to(beCloseTo(-105.11))
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: initialLocation, latitudinalMeters: 5000, longitudinalMeters: 5000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: initialLocation, latitudinalMeters: 5000, longitudinalMeters: 5000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
+                expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
+                expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
                 
                 feedItem.simpleFeature = SFPoint(x: -105.3, andY: 40.3)
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(1))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
-                let movedFeedItem = mixin.mapView!.annotations[0] as! FeedItem
+                let movedFeedItem = testimpl.mapView!.annotations[0] as! FeedItem
                 let newLocation = movedFeedItem.coordinate
                 expect(newLocation.latitude).to(beCloseTo(40.3))
                 expect(newLocation.longitude).to(beCloseTo(-105.3))
-                mixin.mapView?.setCenter(newLocation, animated: false)
+                testimpl.mapView?.setCenter(newLocation, animated: false)
                 
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(newLocation.latitude, within: 0.01))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(newLocation.longitude, within: 0.01))
+                expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(newLocation.latitude, within: 0.01))
+                expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(newLocation.longitude, within: 0.01))
                                 
                 mixin.cleanupMixin()
             }
@@ -266,20 +268,20 @@ class FeedsMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(2))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
-                expect(mixin.mapView?.annotations[0]).to(beAKindOf(FeedItem.self))
-                let feedItem = mixin.mapView!.annotations[0] as! FeedItem
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: feedItem.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(FeedItem.self))
+                let feedItem = testimpl.mapView!.annotations[0] as! FeedItem
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: feedItem.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
                 var initialLocation: CLLocationCoordinate2D = feedItem.coordinate
                 var originalHeight = 0.0
 
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
 
                 expect(feedItem.view).to(beAKindOf(MKAnnotationView.self))
                 if let av = feedItem.view {
@@ -288,7 +290,7 @@ class FeedsMapTests: KIFSpec {
                     expect(av.canShowCallout).to(beFalse())
                     expect(av.centerOffset).to(equal(CGPoint(x: 0, y: -((av.frame.size.height) / 2.0))))
 
-                    let notification = MapAnnotationFocusedNotification(annotation: feedItem, mapView: mixin.mapView)
+                    let notification = MapAnnotationFocusedNotification(annotation: feedItem, mapView: testimpl.mapView)
                     NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification)
                     expect(av.frame.size.height).toEventually(equal(originalHeight * 2.0))
                     expect(mixin.enlargedAnnotationView).to(equal(av))
@@ -300,16 +302,16 @@ class FeedsMapTests: KIFSpec {
                 }
 
                 // focus on a different one
-                expect(mixin.mapView?.annotations[1]).to(beAKindOf(FeedItem.self))
-                let feedItem2 = mixin.mapView!.annotations[1] as! FeedItem
+                expect(testimpl.mapView?.annotations[1]).to(beAKindOf(FeedItem.self))
+                let feedItem2 = testimpl.mapView!.annotations[1] as! FeedItem
                 initialLocation = feedItem2.coordinate
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: feedItem2.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: feedItem2.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
 
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
+                expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
 
                 expect(feedItem2.view).to(beAKindOf(MKAnnotationView.self))
                 if let lav = feedItem2.view {
@@ -318,7 +320,7 @@ class FeedsMapTests: KIFSpec {
                     expect(lav.canShowCallout).to(beFalse())
                     expect(lav.centerOffset).to(equal(CGPoint(x: 0, y: -((lav.frame.size.height) / 2.0))))
 
-                    let notification2 = MapAnnotationFocusedNotification(annotation: feedItem2, mapView: mixin.mapView)
+                    let notification2 = MapAnnotationFocusedNotification(annotation: feedItem2, mapView: testimpl.mapView)
                     NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification2)
                     expect(lav.frame.size.height).toEventually(equal(originalHeight * 2.0))
                     expect(mixin.enlargedAnnotationView).to(equal(lav))
@@ -327,7 +329,7 @@ class FeedsMapTests: KIFSpec {
                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
                 expect(mixin.enlargedAnnotationView).toEventually(beNil())
 
-                for annotation in mixin.mapView!.annotations {
+                for annotation in testimpl.mapView!.annotations {
                     if let la = annotation as? FeedItem {
                         expect(la.view).to(beAKindOf(MKAnnotationView.self))
                         if let lav = la.view {

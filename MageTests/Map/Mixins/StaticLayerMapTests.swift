@@ -18,7 +18,8 @@ import MapKit
 
 class StaticLayerMapTestImpl : NSObject, StaticLayerMap {
     var mapView: MKMapView?
-    
+    var scheme: MDCContainerScheming?
+
     var staticLayerMapMixin: StaticLayerMapMixin?
 }
 
@@ -76,11 +77,12 @@ class StaticLayerMapTests: KIFSpec {
                 
                 testimpl = StaticLayerMapTestImpl()
                 testimpl.mapView = mapView
+                testimpl.scheme = MAGEScheme.scheme()
                 mapView.delegate = testimpl
                 
                 navController = UINavigationController(rootViewController: controller);
                 
-                mixin = StaticLayerMapMixin(staticLayerMap: testimpl, scheme: MAGEScheme.scheme())
+                mixin = StaticLayerMapMixin(staticLayerMap: testimpl)
                 testimpl.staticLayerMapMixin = mixin
                 window.rootViewController = navController;
                 
@@ -205,7 +207,7 @@ class StaticLayerMapTests: KIFSpec {
                     layer?.loaded = true
                 })
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
                 
                 mixin.cleanupMixin()
             }
@@ -300,12 +302,12 @@ class StaticLayerMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.7, longitude:-104.75), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.7, longitude:-104.75), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
-                expect(mixin.mapView?.overlays.count).to(equal(4))
-                expect(mixin.mapView?.annotations.count).to(equal(2))
+                expect(testimpl.mapView?.overlays.count).to(equal(4))
+                expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
                 var items = mixin.items(at: CLLocationCoordinate2D(latitude: 39.7, longitude: -104.75))
                 expect(items?.count).to(equal(1))
@@ -408,22 +410,22 @@ class StaticLayerMapTests: KIFSpec {
                 
                 mixin.setupMixin()
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.7, longitude:-104.75), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.7, longitude:-104.75), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
                 
-                expect(mixin.mapView?.overlays.count).to(equal(0))
-                expect(mixin.mapView?.annotations.count).to(equal(0))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.annotations.count).to(equal(0))
                                 
                 UserDefaults.standard.selectedStaticLayers = ["1": [1]]
                 
-                expect(mixin.mapView?.overlays.count).toEventually(equal(4))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(2))
+                expect(testimpl.mapView?.overlays.count).toEventually(equal(4))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                                 
                 UserDefaults.standard.selectedStaticLayers = ["1": []]
                 
-                expect(mixin.mapView?.overlays.count).toEventually(equal(0))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(0))
+                expect(testimpl.mapView?.overlays.count).toEventually(equal(0))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(0))
                                 
                 mixin.cleanupMixin()
             }
@@ -518,17 +520,17 @@ class StaticLayerMapTests: KIFSpec {
 
                 mixin.setupMixin()
                 
-                if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.7, longitude:-104.75), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
-                    mixin.mapView?.setRegion(region, animated: false)
+                if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.7, longitude:-104.75), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
+                    testimpl.mapView?.setRegion(region, animated: false)
                 }
 
-                expect(mixin.mapView?.overlays.count).toEventually(equal(4))
-                expect(mixin.mapView?.annotations.count).toEventually(equal(2))
+                expect(testimpl.mapView?.overlays.count).toEventually(equal(4))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                 
                 var initialLocation: CLLocationCoordinate2D?
                 var originalHeight = 0.0
                 var la: StaticPointAnnotation?
-                for annotation in mixin.mapView!.annotations {
+                for annotation in testimpl.mapView!.annotations {
                     la = annotation as? StaticPointAnnotation
                     guard let la = la else {
                         tester().fail()
@@ -546,12 +548,12 @@ class StaticLayerMapTests: KIFSpec {
                         return
                     }
                     
-                    if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: initialLocation, latitudinalMeters: 100000, longitudinalMeters: 10000)) {
-                        mixin.mapView?.setRegion(region, animated: false)
+                    if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: initialLocation, latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                        testimpl.mapView?.setRegion(region, animated: false)
                     }
                     
-                    expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
-                    expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
                     
                     expect(la.view).to(beAKindOf(MKAnnotationView.self))
                     if let lav = la.view {
@@ -560,7 +562,7 @@ class StaticLayerMapTests: KIFSpec {
                         expect(lav.canShowCallout).to(beFalse())
                         expect(lav.centerOffset).to(equal(CGPoint(x: 0, y: -((lav.frame.size.height) / 2.0))))
                         
-                        let notification = MapAnnotationFocusedNotification(annotation: la, mapView: mixin.mapView)
+                        let notification = MapAnnotationFocusedNotification(annotation: la, mapView: testimpl.mapView)
                         NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification)
                         expect(lav.frame.size.height).toEventually(equal(originalHeight * 2.0))
                         expect(mixin.enlargedAnnotationView).to(equal(lav))
@@ -574,7 +576,7 @@ class StaticLayerMapTests: KIFSpec {
 
                 // focus on a different one
                 var la2: StaticPointAnnotation?
-                for annotation in mixin.mapView!.annotations {
+                for annotation in testimpl.mapView!.annotations {
                     la2 = annotation as? StaticPointAnnotation
                     guard let la2 = la2 else {
                         tester().fail()
@@ -591,12 +593,12 @@ class StaticLayerMapTests: KIFSpec {
                         return
                     }
                     
-                    if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: initialLocation, latitudinalMeters: 100000, longitudinalMeters: 10000)) {
-                        mixin.mapView?.setRegion(region, animated: false)
+                    if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: initialLocation, latitudinalMeters: 100000, longitudinalMeters: 10000)) {
+                        testimpl.mapView?.setRegion(region, animated: false)
                     }
                     
-                    expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
-                    expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.1))
+                    expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.1))
                     
                     expect(la2.view).to(beAKindOf(MKAnnotationView.self))
                     if let lav = la2.view {
@@ -605,7 +607,7 @@ class StaticLayerMapTests: KIFSpec {
                         expect(lav.canShowCallout).to(beFalse())
                         expect(lav.centerOffset).to(equal(CGPoint(x: 0, y: -((lav.frame.size.height) / 2.0))))
                         
-                        let notification2 = MapAnnotationFocusedNotification(annotation: la2, mapView: mixin.mapView)
+                        let notification2 = MapAnnotationFocusedNotification(annotation: la2, mapView: testimpl.mapView)
                         NotificationCenter.default.post(name: .MapAnnotationFocused, object: notification2)
                         expect(lav.frame.size.height).toEventually(equal(originalHeight * 2.0))
                         expect(mixin.enlargedAnnotationView).to(equal(lav))
@@ -615,7 +617,7 @@ class StaticLayerMapTests: KIFSpec {
                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
                 expect(mixin.enlargedAnnotationView).toEventually(beNil())
                 
-                for annotation in mixin.mapView!.annotations {
+                for annotation in testimpl.mapView!.annotations {
                     if let la = annotation as? StaticPointAnnotation {
                         expect(la.view).to(beAKindOf(MKAnnotationView.self))
                         if let lav = la.view {

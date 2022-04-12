@@ -200,7 +200,7 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
 //                }
             }
             
-            it("location copied from geometry form field") {
+           it("location copied from geometry form field") {
                 Server.setCurrentEventId(2);
 
                 MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event", formsJsonFile: "geometryField")
@@ -222,10 +222,10 @@ class ObservationViewCardCollectionViewControllerTests: KIFSpec {
                 view = window;
                 
                 
-                
-                tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: 1.0)
-                tester().tapView(withAccessibilityLabel: "location field1", traits: UIAccessibilityTraits(arrayLiteral: .button));
-                tester().waitForView(withAccessibilityLabel: "Location copied to clipboard");
+               tester().waitForView(withAccessibilityLabel: "card scroll")
+                tester().scrollView(withAccessibilityIdentifier: "card scroll", byFractionOfSizeHorizontal: 0, vertical: 3.0)
+                tester().tapView(withAccessibilityLabel: "location button", traits: UIAccessibilityTraits(arrayLiteral: .button));
+                tester().waitForView(withAccessibilityLabel: "Location 40.00850, -105.26780 copied to clipboard");
             }
             
             it("initiate form reorder") {

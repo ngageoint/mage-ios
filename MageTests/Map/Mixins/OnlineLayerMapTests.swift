@@ -17,6 +17,7 @@ import CoreLocation
 import MapKit
 
 class OnlineLayerMapTestImpl : NSObject, OnlineLayerMap {
+    var scheme: MDCContainerScheming?
     var mapView: MKMapView?
     
     var onlineLayerMapMixin: OnlineLayerMapMixin?
@@ -77,9 +78,10 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 testimpl = OnlineLayerMapTestImpl()
                 testimpl.mapView = mapView
+                testimpl.scheme = MAGEScheme.scheme()
                 mapView.delegate = testimpl
                 
-                mixin = OnlineLayerMapMixin(onlineLayerMap: testimpl, scheme: MAGEScheme.scheme())
+                mixin = OnlineLayerMapMixin(onlineLayerMap: testimpl)
                 testimpl.onlineLayerMapMixin = mixin
                 
                 navController = UINavigationController(rootViewController: controller);
@@ -166,8 +168,8 @@ class OnlineLayerMapTests: KIFSpec {
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(1))
-                expect(mixin.mapView?.overlays[0]).to(beAKindOf(TMSTileOverlay.self))
+                expect(testimpl.mapView?.overlays.count).to(equal(1))
+                expect(testimpl.mapView?.overlays[0]).to(beAKindOf(TMSTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
                 // but we want all of the stubs to finish before we end the test
                 expect(tileStubCalledCount).toEventually(equal(32))
@@ -193,8 +195,8 @@ class OnlineLayerMapTests: KIFSpec {
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(1))
-                expect(mixin.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
+                expect(testimpl.mapView?.overlays.count).to(equal(1))
+                expect(testimpl.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
                 // but we want all of the stubs to finish before we end the test
                 expect(tileStubCalledCount).toEventually(equal(32))
@@ -238,8 +240,8 @@ class OnlineLayerMapTests: KIFSpec {
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(1))
-                expect(mixin.mapView?.overlays[0]).to(beAKindOf(WMSTileOverlay.self))
+                expect(testimpl.mapView?.overlays.count).to(equal(1))
+                expect(testimpl.mapView?.overlays[0]).to(beAKindOf(WMSTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
                 // but we want all of the stubs to finish before we end the test
                 expect(tileStubCalledCount).toEventually(equal(32))
@@ -263,12 +265,12 @@ class OnlineLayerMapTests: KIFSpec {
                 MageCoreDataFixtures.addImageryLayer()
                                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
 
-                expect(mixin.mapView?.overlays.count).to(equal(1))
-                expect(mixin.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
+                expect(testimpl.mapView?.overlays.count).to(equal(1))
+                expect(testimpl.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
                 // but we want all of the stubs to finish before we end the test
                 expect(tileStubCalledCount).toEventually(equal(32))
@@ -292,18 +294,18 @@ class OnlineLayerMapTests: KIFSpec {
                 MageCoreDataFixtures.addImageryLayer()
                 
                 mixin.setupMixin()
-                expect(mixin.mapView?.overlays.count).to(equal(0))
+                expect(testimpl.mapView?.overlays.count).to(equal(0))
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
-                expect(mixin.mapView?.overlays.count).to(equal(1))
-                expect(mixin.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
+                expect(testimpl.mapView?.overlays.count).to(equal(1))
+                expect(testimpl.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
                 // but we want all of the stubs to finish before we end the test
                 expect(tileStubCalledCount).toEventually(equal(32))
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": []]
-                expect(mixin.mapView?.overlays.count).toEventually(equal(0))
+                expect(testimpl.mapView?.overlays.count).toEventually(equal(0))
                 
                 mixin.cleanupMixin()
             }

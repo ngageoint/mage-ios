@@ -18,6 +18,7 @@ import MapKit
 
 class CanReportLocationTestImpl : NSObject, CanReportLocation {
     var mapView: MKMapView?
+    var scheme: MDCContainerScheming?
     var navigationController: UINavigationController?
     var canReportLocationMixin: CanReportLocationMixin?
 }
@@ -86,9 +87,10 @@ class CanReportLocationTests: KIFSpec {
                     testimpl = CanReportLocationTestImpl()
                     testimpl.mapView = mapView
                     testimpl.navigationController = navController
+                    testimpl.scheme = MAGEScheme.scheme()
                     
                     mockCLLocationManager = MockCLLocationManager()
-                    mixin = CanReportLocationMixin(canReportLocation: testimpl, buttonParentView: buttonStack, locationManager: mockCLLocationManager, scheme: MAGEScheme.scheme())
+                    mixin = CanReportLocationMixin(canReportLocation: testimpl, buttonParentView: buttonStack, locationManager: mockCLLocationManager)
                     
                     window.rootViewController = navController;
                     
@@ -217,7 +219,7 @@ class CanReportLocationTests: KIFSpec {
                     testimpl.navigationController = navController
                     
                     mockCLLocationManager = MockCLLocationManager()
-                    mixin = CanReportLocationMixin(canReportLocation: testimpl, buttonParentView: buttonStack, locationManager: mockCLLocationManager, scheme: MAGEScheme.scheme())
+                    mixin = CanReportLocationMixin(canReportLocation: testimpl, buttonParentView: buttonStack, locationManager: mockCLLocationManager)
                     
                     window.rootViewController = navController;
                     

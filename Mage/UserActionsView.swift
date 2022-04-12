@@ -44,7 +44,7 @@ class UserActionsView: UIView {
         return fillerView
     }()
         
-    private lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
+    lazy var latitudeLongitudeButton: LatitudeLongitudeButton = LatitudeLongitudeButton()
     
     private lazy var directionsButton: MDCButton = {
         let directionsButton = MDCButton(forAutoLayout: ())
