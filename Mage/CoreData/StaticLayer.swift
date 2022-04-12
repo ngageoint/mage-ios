@@ -167,9 +167,6 @@ import CoreData
             return;
         }
         NSLog("layer loaded \(l.name ?? "unkonwn")? \(l.loaded ?? -1.0)")
-        if l.loaded == NSNumber(floatLiteral: OFFLINE_LAYER_NOT_DOWNLOADED) {
-            StaticLayer.fetchStaticLayerData(eventId: eventId, staticLayer: l);
-        }
     }
     
     @objc public static func fetchStaticLayerData(eventId: NSNumber, staticLayer: StaticLayer) {
