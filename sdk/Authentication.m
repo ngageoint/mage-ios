@@ -45,7 +45,8 @@
     return [@"saml" isEqualToString:strategy] ||
         [@"google" isEqualToString:strategy] ||
         [@"oauth" isEqualToString:strategy] ||
-        [@"geoaxis" isEqualToString:strategy];
+        [@"geoaxis" isEqualToString:strategy] ||
+        [@"openidconnect" isEqualToString:strategy];
 }
 
 @end

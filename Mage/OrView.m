@@ -21,6 +21,7 @@
 
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     if (containerScheme != nil) {
+        self.scheme = containerScheme;
         self.orLabel.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         self.rightLine.backgroundColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
         self.leftLine.backgroundColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6];
