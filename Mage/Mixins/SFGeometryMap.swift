@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import geopackage_ios
+import sf_ios
 
 protocol SFGeometryMap {
     var mapView: MKMapView? { get set }
