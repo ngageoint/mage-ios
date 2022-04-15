@@ -486,15 +486,15 @@ import MaterialComponents.MDCCard
             let formValid = formView.checkValidity(enforceRequired: true);
             valid = valid && formValid;
             if !formValid && !scrolledToInvalidField {
-                var yOffset = 0.0
+                var yOffset:Double = 0.0
                 var fieldViews = Array(formView.fieldViews.values)
                 fieldViews.sort { ($0.field[FieldKey.id.key] as? Int ?? Int.max ) < ($1.field[FieldKey.id.key] as? Int ?? Int.max) }
                 for subview in fieldViews {
                     if !subview.isValid(enforceRequired: true) && !scrolledToInvalidField {
-                        yOffset += subview.frame.origin.y
-                        yOffset += -(bottomConstraint?.constant ?? 0.0)
-                        scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: yOffset), animated: true)
-
+                        yOffset += Double(subview.frame.origin.y)
+                        yOffset += Double(-(bottomConstraint?.constant ?? 0.0))
+                        scrollView.setContentOffset(CGPoint(x: Double(scrollView.contentOffset.x), y: yOffset), animated: true)
+                        
                         scrolledToInvalidField = true
                     }
                 }
