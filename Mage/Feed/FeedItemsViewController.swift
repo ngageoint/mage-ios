@@ -12,13 +12,6 @@ import Kingfisher
 protocol FeedItemSelectionDelegate {
     func feedItemSelected(_ feedItem: FeedItem)
 }
-//@protocol FeedItemSelectionDelegate <NSObject>
-//
-//@required
-//
-//- (void) feedItemSelected: (FeedItem *) feedItem;
-//
-//@end
 
 @objc class FeedItemsViewController : UITableViewController {
     
@@ -39,6 +32,13 @@ protocol FeedItemSelectionDelegate {
         fetchedResultsController.delegate = self
         
         return fetchedResultsController
+    }()
+    
+    private lazy var emptyView : EmptyState = {
+        let view = EmptyState(frame: CGRect(x: self.tableView.center.x, y: self.tableView.center.y, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+        view.configure(image: UIImage(systemName: "dot.radiowaves.up.forward"), title: "No Feed Items", description: "No feed items have been returned for this feed.", scheme: scheme)
+        
+        return view
     }()
     
     let cellReuseIdentifier = "cell";
@@ -99,8 +99,15 @@ protocol FeedItemSelectionDelegate {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let items = fetchedResultsController.fetchedObjects else { return 0 }
-        return items.count
+        let items = fetchedResultsController.fetchedObjects
+        let number = items?.count ?? 0
+        if number == 0 {
+            tableView.backgroundView = emptyView
+        } else {
+            tableView.backgroundView = nil
+        }
+        return number
+
     }
     
     override func numberOfSections(in: UITableView) -> Int {
@@ -114,10 +121,8 @@ protocol FeedItemSelectionDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell;
         let feedCell: FeedItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemTableViewCell;
-//        feedCell.applyTheme(withContainerScheme: self.scheme);
         let feedItem = fetchedResultsController.object(at: indexPath)
         feedCell.configure(feedItem: feedItem, actionsDelegate: self, scheme: self.scheme);
-//        feedCell.populate(feedItem: feedItem);
         cell = feedCell;
         
         return cell

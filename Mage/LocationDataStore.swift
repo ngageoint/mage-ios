@@ -14,11 +14,13 @@ class LocationDataStore: NSObject {
     var scheme: MDCContainerScheming?;
     var locations: Locations?;
     weak var actionsDelegate: UserActionsDelegate?;
-    
-    public init(tableView: UITableView, actionsDelegate: UserActionsDelegate?, scheme: MDCContainerScheming?) {
+    var emptyView: UIView?
+
+    public init(tableView: UITableView, actionsDelegate: UserActionsDelegate?, emptyView: UIView? = nil, scheme: MDCContainerScheming?) {
         self.scheme = scheme;
         self.tableView = tableView;
         self.actionsDelegate = actionsDelegate;
+        self.emptyView = emptyView
         super.init();
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
@@ -58,7 +60,13 @@ extension LocationDataStore: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo: NSFetchedResultsSectionInfo? = self.locations?.fetchedResultsController.sections?[section];
-        return sectionInfo?.numberOfObjects ?? 0;
+        let number = sectionInfo?.numberOfObjects ?? 0;
+        if number == 0 {
+            tableView.backgroundView = emptyView
+        } else {
+            tableView.backgroundView = nil
+        }
+        return number
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

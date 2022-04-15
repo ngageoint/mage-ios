@@ -25,12 +25,19 @@ class LocationsTableViewController: UITableViewController {
         return label;
     }()
     
+    private lazy var emptyState : EmptyState = {
+        let view = EmptyState(frame: CGRect(x: self.tableView.center.x, y: self.tableView.center.y, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+        view.configure(image: UIImage(systemName: "figure.wave"), title: "No Locations", description: "No users have reported their location within your configured time filter for this event.", buttonText: "Adjust Filter", tapHandler: self, selector: #selector(filterButtonPressed), scheme: scheme)
+        
+        return view
+    }()
+    
     public lazy var locationDataStore: LocationDataStore = {
         if (self.actionsDelegate == nil) {
             actionsDelegate = self;
         }
 
-        let locationDataStore = LocationDataStore(tableView: tableView, actionsDelegate: actionsDelegate, scheme: scheme);
+        let locationDataStore = LocationDataStore(tableView: tableView, actionsDelegate: actionsDelegate, emptyView: emptyState, scheme: scheme);
         return locationDataStore;
     }()
     
@@ -85,7 +92,7 @@ class LocationsTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 155;
         self.tableView.contentInset.bottom = 100;
-        self.tableView.tableFooterView = allReturned;
+//        self.tableView.tableFooterView = allReturned;
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     

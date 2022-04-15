@@ -15,12 +15,14 @@ class ObservationDataStore: NSObject {
     var observations: Observations?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
     weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
+    var emptyView: UIView?
     
-    public init(tableView: UITableView, observationActionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?, scheme: MDCContainerScheming?) {
+    public init(tableView: UITableView, observationActionsDelegate: ObservationActionsDelegate?, attachmentSelectionDelegate: AttachmentSelectionDelegate?, emptyView: UIView? = nil, scheme: MDCContainerScheming?) {
         self.scheme = scheme;
         self.tableView = tableView;
         self.observationActionsDelegate = observationActionsDelegate;
         self.attachmentSelectionDelegate = attachmentSelectionDelegate;
+        self.emptyView = emptyView
         super.init();
         self.tableView.dataSource = self;
         self.tableView.delegate = self;
@@ -64,7 +66,13 @@ extension ObservationDataStore: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.observations?.fetchedResultsController.sections?.count ?? 0;
+        let number = self.observations?.fetchedResultsController.sections?.count ?? 0
+        if number == 0 {
+            tableView.backgroundView = emptyView
+        } else {
+            tableView.backgroundView = nil
+        }
+        return number
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

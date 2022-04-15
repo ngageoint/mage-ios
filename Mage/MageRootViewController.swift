@@ -172,7 +172,7 @@ import Kingfisher
         let fvc = FeedItemsViewController(feed: feed, scheme: self.scheme);
         let nc = UINavigationController(rootViewController: fvc);
         nc.tabBarItem = UITabBarItem(title: feed.title, image: nil, tag: feed.tag!.intValue + 5);
-        nc.tabBarItem.image = UIImage(named: "rss")?.aspectResize(to: CGSize(width: size, height: size));
+        nc.tabBarItem.image = UIImage(systemName: "dot.radiowaves.up.forward")?.aspectResize(to: CGSize(width: size, height: size));
 
         if let url: URL = feed.tabIconURL {
             let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))

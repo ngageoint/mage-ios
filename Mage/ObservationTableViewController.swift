@@ -32,6 +32,13 @@ class ObservationTableViewController: UITableViewController {
         return label;
     }()
     
+    private lazy var emptyState : EmptyState = {
+        let view = EmptyState(frame: CGRect(x: self.tableView.center.x, y: self.tableView.center.y, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+        view.configure(image: UIImage(named: "outline_not_listed_location"), title: "No Observations", description: "No observations have been submitted within your configured time filter for this event.", buttonText: "Adjust Filter", tapHandler: self, selector: #selector(filterButtonPressed), scheme: scheme)
+        
+        return view
+    }()
+    
     public lazy var observationDataStore: ObservationDataStore = {
         var dataStoreAttachmentDelegate = self.attachmentDelegate;
         
@@ -42,7 +49,7 @@ class ObservationTableViewController: UITableViewController {
             observationActionsDelegate = self;
         }
         
-        let observationDataStore = ObservationDataStore(tableView: self.tableView, observationActionsDelegate: self.observationActionsDelegate, attachmentSelectionDelegate: dataStoreAttachmentDelegate, scheme: self.scheme);
+        let observationDataStore = ObservationDataStore(tableView: self.tableView, observationActionsDelegate: self.observationActionsDelegate, attachmentSelectionDelegate: dataStoreAttachmentDelegate, emptyView: emptyState, scheme: self.scheme);
         
         return observationDataStore;
     }()
@@ -89,7 +96,7 @@ class ObservationTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableView.automaticDimension;
         self.tableView.estimatedRowHeight = 155;
         self.tableView.contentInset.bottom = 100;
-        self.tableView.tableFooterView = allReturned;
+//        self.tableView.tableFooterView = allReturned;
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
