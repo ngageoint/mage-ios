@@ -400,6 +400,7 @@ public enum StaticLayerKey: String {
 public enum ApiKey: String {
     
     case disclaimer
+    case locationServiceDisabled
     // do not change this, lowercase i is correct
     case contactinfo
     case authenticationStrategies

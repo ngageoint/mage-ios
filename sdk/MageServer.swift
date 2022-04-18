@@ -163,6 +163,8 @@ import Foundation
                 return
             }
             
+            UserDefaults.standard.locationServiceDisabled = apiResponse[ApiKey.locationServiceDisabled.key] as? Bool ?? false
+            
             if let disclaimer = apiResponse[ApiKey.disclaimer.key] as? [String: Any] {
                 UserDefaults.standard.showDisclaimer = disclaimer[DisclaimerKey.show.key] as? Bool ?? false
                 UserDefaults.standard.disclaimerText = disclaimer[DisclaimerKey.text.key] as? String

@@ -137,9 +137,8 @@ class CanReportLocationTests: KIFSpec {
                     expect(button.tintColor).to(equal(MAGEScheme.scheme().colorScheme.onSurfaceColor.withAlphaComponent(0.3)))
                     
                     tester().tapView(withAccessibilityLabel: "report location")
-                    tester().waitForView(withAccessibilityLabel: "Not In Event")
+                    tester().waitForView(withAccessibilityLabel: "You cannot report your location for an event you are not part of")
                     expect(button.currentImage).to(equal(UIImage(named:"location_tracking_off")))
-                    tester().tapView(withAccessibilityLabel: "OK")
                                         
                     mixin.cleanupMixin()
                 }

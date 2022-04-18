@@ -187,6 +187,15 @@ extension Notification.Name {
         }
     }
     
+    var locationServiceDisabled: Bool {
+        get {
+            return bool(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     var reportLocation: Bool {
         get {
             return bool(forKey: #function)

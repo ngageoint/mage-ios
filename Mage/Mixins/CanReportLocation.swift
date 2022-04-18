@@ -74,8 +74,10 @@ class CanReportLocationMixin: NSObject, MapMixin {
         
         let context = NSManagedObjectContext.mr_default()
         let inEvent = Event.getCurrentEvent(context: context)?.isUserInEvent(user: User.fetchCurrentUser(context: context)) ?? false
-
-        if !authorized {
+        
+        if UserDefaults.standard.locationServiceDisabled {
+            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location reporting for this MAGE server is disabled"))
+        } else if !authorized {
             let alert = UIAlertController(title: "Location Services Disabled", message: "MAGE has been denied access to location services.  To report your location please go into your device settings and enable the Location permission.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { action in
@@ -85,9 +87,7 @@ class CanReportLocationMixin: NSObject, MapMixin {
             }))
             canReportLocation.navigationController?.present(alert, animated: true, completion: nil)
         } else if !inEvent {
-            let alert = UIAlertController(title: "Not In Event", message: "You cannot report your location for an event you are not part of.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            canReportLocation.navigationController?.present(alert, animated: true, completion: nil)
+            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "You cannot report your location for an event you are not part of"))
         } else if !UserDefaults.standard.reportLocation {
             UserDefaults.standard.reportLocation = !UserDefaults.standard.reportLocation
             MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "You are now reporting your location"))
@@ -107,7 +107,10 @@ class CanReportLocationMixin: NSObject, MapMixin {
         let context = NSManagedObjectContext.mr_default()
         let inEvent = Event.getCurrentEvent(context: context)?.isUserInEvent(user: User.fetchCurrentUser(context: context)) ?? false
         
-        if trackingOn && inEvent && authorized {
+        if UserDefaults.standard.locationServiceDisabled {
+            reportLocationButton.setImage(UIImage(named: "location_tracking_off"), for: .normal)
+            reportLocationButton.tintColor = canReportLocation.scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.3)
+        } else if trackingOn && inEvent && authorized {
             reportLocationButton.setImage(UIImage(named: "location_tracking_on"), for: .normal)
             reportLocationButton.tintColor = UIColor(red: 76.0/255.0, green:175.0/255.0, blue:80.0/255.0, alpha:1.0)
         } else if inEvent {
