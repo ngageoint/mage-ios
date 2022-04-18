@@ -187,7 +187,7 @@ extension Notification.Name {
         }
     }
     
-    var locationServiceDisabled: Bool {
+    @objc public var locationServiceDisabled: Bool {
         get {
             return bool(forKey: #function)
         }

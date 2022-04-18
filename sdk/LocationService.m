@@ -93,7 +93,7 @@ NSInteger const kLocationPushLimit = 100;
 }
 
 - (void) locationManager:(CLLocationManager *) manager didUpdateLocations:(NSArray *) locations {
-    if (!_reportLocation) return;
+    if (!_reportLocation || [[NSUserDefaults standardUserDefaults] locationServiceDisabled]) return;
     
     __block NSTimeInterval interval;
     __weak typeof(self) weakSelf = self;
