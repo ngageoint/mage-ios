@@ -33,7 +33,7 @@ class ObservationTableViewController: UITableViewController {
     }()
     
     private lazy var emptyState : EmptyState = {
-        let view = EmptyState(frame: CGRect(x: self.tableView.center.x, y: self.tableView.center.y, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+        let view = EmptyState(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
         view.configure(image: UIImage(named: "outline_not_listed_location"), title: "No Observations", description: "No observations have been submitted within your configured time filter for this event.", buttonText: "Adjust Filter", tapHandler: self, selector: #selector(filterButtonPressed), scheme: scheme)
         
         return view

@@ -88,6 +88,10 @@ class EmptyState: UIView {
         }
     }
     
+    override func didMoveToSuperview() {
+        updateConstraints()
+    }
+    
     override func updateConstraints() {
         if (!didSetupConstraints) {
             // accounts for the tab bar

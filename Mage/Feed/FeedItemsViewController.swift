@@ -35,7 +35,7 @@ protocol FeedItemSelectionDelegate {
     }()
     
     private lazy var emptyView : EmptyState = {
-        let view = EmptyState(frame: CGRect(x: self.tableView.center.x, y: self.tableView.center.y, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+        let view = EmptyState(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
         view.configure(image: UIImage(systemName: "dot.radiowaves.up.forward"), title: "No Feed Items", description: "No feed items have been returned for this feed.", scheme: scheme)
         
         return view
