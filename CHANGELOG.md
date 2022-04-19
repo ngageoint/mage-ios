@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
-## 4.0.0 (future release)
+## 4.0.0
 
 ##### Release Notes
 File attachments are here.  If the attachment field allows files, you can now view and add from the Files app.
@@ -17,6 +17,8 @@ You can now choose to display and enter coordinates in Latitude Longitude, MGRS,
 * significant improvements to the map system within MAGE to improve speed and reliability
 * attachment fields with file support
 * GeoPackage related media support
+* empty states for data tables
+* follows the locationServicesDisabled flag
 
 ##### Bug Fixes
 * A few lingering dark mode color bugs were tracked down
