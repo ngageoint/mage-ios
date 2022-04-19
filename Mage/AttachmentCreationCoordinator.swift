@@ -620,8 +620,45 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
 extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         for url in urls {
+            let securityScoped = url.startAccessingSecurityScopedResource()
+            
+            let dateFormatter = DateFormatter();
+            dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
+            
             let uttype = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType
-            addAttachmentForSaving(location: url, contentType: uttype?.preferredMIMEType ?? (UTType.item.preferredMIMEType ?? ""))
+
+            let fileType = uttype?.preferredFilenameExtension ?? url.pathExtension
+            let mimeType = uttype?.preferredMIMEType ?? UTType.data.identifier
+            
+            guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not access the documents directory"))
+                return;
+            }
+            let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
+            let urlWithoutExtension = url.deletingPathExtension()
+            let filename = urlWithoutExtension.lastPathComponent
+            let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(filename)_\(dateFormatter.string(from: Date())).\(fileType)");
+            
+            do {
+                try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                
+                guard let attachmentData = try? Data(contentsOf: url) else { return }
+                
+                do {
+                    try attachmentData.write(to: fileToWriteTo, options: .completeFileProtection)
+                    self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
+                } catch {
+                    print("Unable to write file \(fileToWriteTo): \(error)")
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Error adding attachment \(error)"))
+                }
+                
+            } catch {
+                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)"))
+            }
+            
+            if securityScoped {
+                url.stopAccessingSecurityScopedResource()
+            }
         }
     }
 }
