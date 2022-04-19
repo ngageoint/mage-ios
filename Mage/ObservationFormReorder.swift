@@ -84,7 +84,6 @@ class ObservationFormReorder: UITableViewController {
         
         self.descriptionHeaderView.font = containerScheme.typographyScheme.overline;
         self.descriptionHeaderView.textColor = containerScheme.colorScheme.onBackgroundColor.withAlphaComponent(0.6)
-        self.navigationController?.navigationBar.tintColor = containerScheme.colorScheme.primaryColorVariant
     }
     
     override func viewDidLoad() {
