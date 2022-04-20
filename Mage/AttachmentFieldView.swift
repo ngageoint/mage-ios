@@ -20,7 +20,7 @@ import UIKit
 class AttachmentFieldView : BaseFieldView {
     private var attachments: [Attachment]?;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private weak var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
+    var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
     
     private var min: NSNumber?
@@ -192,6 +192,7 @@ class AttachmentFieldView : BaseFieldView {
         divider.backgroundColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.12)
         noAttachmentsLabel.font = scheme.typographyScheme.headline5
         noAttachmentsLabel.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        attachmentCreationCoordinator?.applyTheme(withContainerScheme: scheme)
     }
     
     required init(coder aDecoder: NSCoder) {

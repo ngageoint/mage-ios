@@ -24,7 +24,6 @@ class ObservationFormView: UIStackView {
     private var formIndex: Int!;
     var fieldViews: [String: BaseFieldView] = [ : ];
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    private var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private weak var viewController: UIViewController!;
     private weak var fieldSelectionDelegate: FieldSelectionDelegate?;
     private weak var observationFormListener: ObservationFormListener?;
@@ -81,9 +80,6 @@ class ObservationFormView: UIStackView {
     
     func applyTheme(withScheme scheme: MDCContainerScheming) {
         self.scheme = scheme;
-        if let attachmentCreationCoordinator = attachmentCreationCoordinator {
-            attachmentCreationCoordinator.applyTheme(withContainerScheme: scheme);
-        }
         for (_, fieldView) in self.fieldViews {
             fieldView.applyTheme(withScheme: scheme);
         }
@@ -131,7 +127,7 @@ class ObservationFormView: UIStackView {
                 }.count == 0) {
                     continue;
                 }
-                attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as? String, observationFormId: form[FormKey.id.key] as? String, scheme: scheme);
+                let attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: viewController, observation: observation, fieldName: fieldDictionary[FieldKey.name.key] as? String, observationFormId: form[FormKey.id.key] as? String, scheme: scheme);
                 fieldView = AttachmentFieldView(field: fieldDictionary, editMode: editMode, delegate: self, value: (value as? [Attachment]), attachmentSelectionDelegate: attachmentSelectionDelegate, attachmentCreationCoordinator: attachmentCreationCoordinator);
                 (fieldView as! AttachmentFieldView).setUnsentAttachments(attachments: unsentAttachments);
             case FieldType.numberfield.key:
