@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 4.0.1
+
+##### Bug Fixes
+* Bug preventing adding attachments to a form with two attachment fields has been fixed
+
 ## 4.0.0
 
 ##### Release Notes
