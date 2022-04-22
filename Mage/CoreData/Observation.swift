@@ -577,7 +577,31 @@ enum State: Int, CustomStringConvertible {
                 
                 existingObservation.populate(json: feature);
                 if let userId = existingObservation.userId {
-                    existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context);
+                    if let user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context) {
+                        existingObservation.user = user
+                        if user.lastUpdated == nil {
+                            // new user, go fetch
+                            let manager = MageSessionManager.shared();
+                            
+                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
+                                NSLog("Fetched user \(userId) successfully.")
+                            } failure: { task, error in
+                                NSLog("Failed to fetch user \(userId) error \(error)")
+                            }
+                            manager?.addTask(fetchUserTask)
+                        }
+                    } else {
+                        // new user, go fetch
+                        let manager = MageSessionManager.shared();
+                        
+                        let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
+                            NSLog("Fetched user \(userId) successfully.")
+                            existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
+                        } failure: { task, error in
+                            NSLog("Failed to fetch user \(userId) error \(error)")
+                        }
+                        manager?.addTask(fetchUserTask)
+                    }
                 }
                 
                 if let importantJson = feature[ObservationKey.important.key] as? [String : Any] {
@@ -643,7 +667,33 @@ enum State: Int, CustomStringConvertible {
                     observation.eventId = eventId;
                     observation.populate(json: feature);
                     if let userId = observation.userId {
-                        observation.user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context);
+                        if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context) {
+                            observation.user = user
+                            // this could happen if we pulled the teams and know this user belongs on a team
+                            // but did not pull the user information because the bulk user pull failed
+                            if user.lastUpdated == nil {
+                                // new user, go fetch
+                                let manager = MageSessionManager.shared();
+                                
+                                let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
+                                    NSLog("Fetched user \(userId) successfully.")
+                                } failure: { task, error in
+                                    NSLog("Failed to fetch user \(userId) error \(error)")
+                                }
+                                manager?.addTask(fetchUserTask)
+                            }
+                        } else {
+                            // new user, go fetch
+                            let manager = MageSessionManager.shared();
+                            
+                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
+                                NSLog("Fetched user \(userId) successfully.")
+                                observation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
+                            } failure: { task, error in
+                                NSLog("Failed to fetch user \(userId) error \(error)")
+                            }
+                            manager?.addTask(fetchUserTask)
+                        }
                     }
                     
                     if let importantJson = feature[ObservationKey.important.key] as? [String : Any] {

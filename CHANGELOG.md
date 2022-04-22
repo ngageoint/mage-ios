@@ -7,6 +7,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Bug Fixes
 * Bug preventing adding attachments to a form with two attachment fields has been fixed
+* new users will be pulled upon the app finding a user it did not previously know about in an observation
+* start fetch services even if pulling the initial set of users fails
 
 ## 4.0.0
 

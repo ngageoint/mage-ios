@@ -114,6 +114,57 @@ import Kingfisher
     }
     
     @discardableResult
+    @objc public static func operationToFetchUser(userId: String, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
+        guard let baseURL = MageServer.baseURL() else {
+            return nil
+        }
+        let url = "\(baseURL.absoluteURL)/api/users/\(userId)";
+        let manager = MageSessionManager.shared();
+        let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
+            if let responseData = responseObject as? Data {
+                if responseData.count == 0 {
+                    print("Users are empty");
+                    success?(task, nil);
+                    return;
+                }
+            }
+            
+            guard let userJson = responseObject as? [AnyHashable : Any] else {
+                success?(task, nil);
+                return;
+            }
+            
+            MagicalRecord.save { localContext in
+                if let userId = userJson[UserKey.id.key] as? String {
+                    
+                    if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: localContext) {
+                        // already exists in core data, lets update the object we have
+                        print("Updating user in the database \(user.name ?? "")");
+                        user.update(json: userJson, context: localContext);
+                    } else {
+                        // not in core data yet need to create a new managed object
+                        print("Inserting new user into database");
+                        User.insert(json: userJson, context: localContext)
+                    }
+                }
+            } completion: { contextDidSave, error in
+                if let error = error {
+                    if let failure = failure {
+                        failure(task, error);
+                    }
+                } else if let success = success {
+                    success(task, nil);
+                }
+            }
+        }, failure: { task, error in
+            if let failure = failure {
+                failure(task, error);
+            }
+        });
+        return task;
+    }
+    
+    @discardableResult
     @objc public static func operationToFetchUsers(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {
             return nil

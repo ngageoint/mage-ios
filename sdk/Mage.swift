@@ -26,7 +26,12 @@ import Foundation
             LocationFetchService.singleton.start();
             ObservationFetchService.singleton.start(initial: initial);
         } failure: { task, error in
-            NSLog("Failed to pull users")
+            NSLog("Failed to pull users \(error)")
+            // start the fetch services anyway.  Attempting to pull the users before starting these
+            // will cut down on the individual user requests which will be kicked off if a location
+            // or observation shows up with an unknown user
+            LocationFetchService.singleton.start();
+            ObservationFetchService.singleton.start(initial: initial);
         }
         if let usersPullTask = usersPullTask {
             tasks.append(usersPullTask)
