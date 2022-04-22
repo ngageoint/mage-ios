@@ -33,6 +33,7 @@
         
         // Add count to label and get size
         self.eventBadgeLabel.text = [NSString stringWithFormat:@"%@", @(count)];
+        self.eventBadgeLabel.accessibilityLabel = [NSString stringWithFormat:@"%@ Unsent Observations", self.eventBadgeLabel.text];
         CGSize textSize = [self.eventBadgeLabel.text sizeWithAttributes:@{NSFontAttributeName:[self.eventBadgeLabel font]}];
         
         // Adjust frame to be square for single digits or elliptical for numbers > 9

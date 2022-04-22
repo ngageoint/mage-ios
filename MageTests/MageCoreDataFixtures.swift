@@ -114,8 +114,11 @@ class MageCoreDataFixtures {
     }
     
     @discardableResult
-    public static func addUser(userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) -> User? {
+    public static func addUser(userId: String = "userabc", recentEventIds: [Int]? = nil, completion: MRSaveCompletionHandler? = nil) -> User? {
         var jsonDictionary: [AnyHashable : Any] = parseJsonFile(jsonFile: "userabc") as! [AnyHashable : Any];
+        if let recentEventIds = recentEventIds {
+            jsonDictionary["recentEventIds"] = recentEventIds
+        }
         
         let stubPath: String! = OHPathForFile("icon27.png", self);
         

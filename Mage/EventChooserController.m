@@ -94,6 +94,9 @@
     [self.tableView setDataSource:self.eventDataSource];
     [self.tableView setDelegate:self.eventDataSource];
     [self.tableView registerNib:[UINib nibWithNibName:@"EventCell" bundle:nil] forCellReuseIdentifier:@"eventCell"];
+    self.tableView.isAccessibilityElement = true;
+    self.tableView.accessibilityLabel = @"Event Table";
+    self.tableView.accessibilityIdentifier = @"Event Table";
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
