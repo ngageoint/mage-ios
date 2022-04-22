@@ -26,6 +26,9 @@
 
 - (void) updateOtherFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
     if (!self.otherFetchedResultsController) {
+        if (recentEventIds == nil) {
+            recentEventIds = [[NSArray alloc] init];
+        }
         self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAllWithSortTerm:@"name" ascending:true predicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil context:[NSManagedObjectContext MR_defaultContext]];
         self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
     }
@@ -37,6 +40,9 @@
 }
 
 - (void) updateRecentFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
+    if (recentEventIds == nil) {
+        recentEventIds = [[NSArray alloc] init];
+    }
     NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
     [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
     [recentRequest setIncludesSubentities:NO];
