@@ -165,6 +165,20 @@ import MagicalRecord
                             location?.populate(json: locations[0]);
                             user.location = location;
                         }
+                        
+                        // this could happen if we pulled the teams and know this user belongs on a team
+                        // but did not pull the user information because the bulk user pull failed
+                        if user.lastUpdated == nil {
+                            // new user, go fetch
+                            let manager = MageSessionManager.shared();
+                            
+                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
+                                NSLog("Fetched user \(userId) successfully.")
+                            } failure: { task, error in
+                                NSLog("Failed to fetch user \(userId) error \(error)")
+                            }
+                            manager?.addTask(fetchUserTask)
+                        }
                     } else {
                         if (locations.count != 0) {
                             print("Could not find user for id \(userId)")
@@ -181,6 +195,15 @@ import MagicalRecord
                                 UserKey.displayName.key: displayName
                             ]
                             _ = User.insert(json: userDicationary, context: localContext);
+                            // new user, go fetch
+                            let manager = MageSessionManager.shared();
+                            
+                            let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
+                                NSLog("Fetched user \(userId) successfully.")
+                            } failure: { task, error in
+                                NSLog("Failed to fetch user \(userId) error \(error)")
+                            }
+                            manager?.addTask(fetchUserTask)
                         }
                     }
                 }
