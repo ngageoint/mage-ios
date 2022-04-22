@@ -48,15 +48,19 @@ static const NSInteger LEGAL_SECTION = 8;
         User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
         NSArray *recentEventIds = [user.recentEventIds filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", self.event.remoteId]];
 
-        NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
-        [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
-        [recentRequest setIncludesSubentities:NO];
-        NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
-        [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
-        
-        NSError *error = nil;
-        self.recentEvents = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:recentRequest error:&error];
-        if (error != nil) {
+        if (recentEventIds != nil) {
+            NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
+            [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
+            [recentRequest setIncludesSubentities:NO];
+            NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
+            [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
+            
+            NSError *error = nil;
+            self.recentEvents = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:recentRequest error:&error];
+            if (error != nil) {
+                self.recentEvents = [[NSArray alloc] init];
+            }
+        } else {
             self.recentEvents = [[NSArray alloc] init];
         }
         
