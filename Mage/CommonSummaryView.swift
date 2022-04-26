@@ -41,16 +41,17 @@ class CommonSummaryView<T, V>: UIView {
     lazy var primaryField: UILabel = {
         let primaryField = UILabel(forAutoLayout: ());
         primaryField.setContentHuggingPriority(.defaultLow, for: .vertical)
-        primaryField.numberOfLines = 0;
+        primaryField.numberOfLines = 1;
+        primaryField.lineBreakMode = .byTruncatingTail
         return primaryField;
     }()
     
     lazy var secondaryField: UILabel = {
         let secondaryField = UILabel(forAutoLayout: ());
         secondaryField.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        secondaryField.numberOfLines = 0;
+        secondaryField.numberOfLines = 1;
         secondaryField.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        secondaryField.lineBreakMode = .byWordWrapping
+        secondaryField.lineBreakMode = .byTruncatingTail
         secondaryField.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return secondaryField;
     }()
@@ -122,7 +123,7 @@ class CommonSummaryView<T, V>: UIView {
         timestamp.autoSetDimension(.height, toSize: timestamp.font.pointSize);
         primaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
         primaryField.font = scheme.typographyScheme.headline6;
-        primaryField.autoSetDimension(.height, toSize: primaryField.font.pointSize, relation: .greaterThanOrEqual);
+        primaryField.autoSetDimension(.height, toSize: primaryField.font.pointSize + 2, relation: .greaterThanOrEqual);
         secondaryField.textColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6);
         secondaryField.font = scheme.typographyScheme.subtitle2;
         secondaryContainer.autoSetDimension(.height, toSize: secondaryField.font.pointSize + 2)

@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 4.0.2
+
+##### Bug Fixes
+* Navigation bar colors were incorrect after using the camera
+* long secondary fields are now ellipsized
+
 ## 4.0.1
 
 ##### Bug Fixes

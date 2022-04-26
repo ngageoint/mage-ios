@@ -334,7 +334,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         print("picked a photo \(results)")
         // This is to compensate for iOS not setting all the colors on the PHPicker so now we have to set it back
-        UINavigationBar.appearance().barTintColor = self.scheme?.colorScheme.primaryColorVariant
+        UINavigationBar.appearance().tintColor = self.scheme?.colorScheme.onPrimaryColor
 
         guard !results.isEmpty else {
             picker.dismiss(animated: true, completion: nil)

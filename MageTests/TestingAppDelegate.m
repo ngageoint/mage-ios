@@ -46,8 +46,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [MageInitializer initializePreferences];
     
-    [MagicalRecord setupCoreDataStackWithInMemoryStore];
-    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
+    [MageInitializer setupCoreData];
+//    [MagicalRecord setupCoreDataStackWithInMemoryStore];
+//    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
     NSString *countriesDarkGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries_dark" ofType:@"gpkg"];
     NSLog(@"Countries GeoPackage path %@", countriesDarkGeoPackagePath);
