@@ -88,12 +88,8 @@ static float paddingPercentage = .1;
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     self.scheme = containerScheme;
     self.navigationController.navigationBar.translucent = NO;
-    self.slidescroll.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
-    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-        [self.fieldTypeTabs applySurfaceThemeWithScheme:self.scheme];
-    } else {
-        [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
-    }
+    self.slidescroll.backgroundColor = containerScheme.colorScheme.primaryColor;
+    [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
     [self themeTextField:self.latitudeField withScheme:containerScheme];
     [self themeTextField:self.longitudeField withScheme:containerScheme];
     [self themeTextField:self.mgrsField withScheme:containerScheme];
@@ -102,19 +98,13 @@ static float paddingPercentage = .1;
     [self.dmsLatitudeField applyThemeWithScheme:containerScheme];
     [self.dmsLongitudeField applyThemeWithScheme:containerScheme];
     
-    self.hintView.backgroundColor = containerScheme.colorScheme.primaryColorVariant;
+    self.hintView.backgroundColor = containerScheme.colorScheme.primaryColor;
     self.hintLabel.textColor = containerScheme.colorScheme.onSecondaryColor;
     
     [self setShapeTypeSelection];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-        [self.fieldTypeTabs applySurfaceThemeWithScheme:self.scheme];
-    } else {
-        [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
-    }
-    
     // this will force the offline map to update
     [self setupMapType:[NSUserDefaults standardUserDefaults]];
 }
