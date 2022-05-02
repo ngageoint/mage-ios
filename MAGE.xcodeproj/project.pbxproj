@@ -268,7 +268,7 @@
 		F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388714258AABE800EDA036 /* ObservationImportantView.swift */; };
 		F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738871C258BA22500EDA036 /* UIButtonInsets.swift */; };
 		F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388720258BB75A00EDA036 /* ObservationActionsView.swift */; };
-		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
+		F739EFE51AA64F19003A6E4B /* EventTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */; };
 		F73B764627442D0B00799BBF /* attachmentFormPlusOne.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */; };
 		F73B7648274438FA00799BBF /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73CD0841F7E941E00B4124D /* TransitionViewController.m */; };
@@ -978,7 +978,7 @@
 		F738871C258BA22500EDA036 /* UIButtonInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonInsets.swift; sourceTree = "<group>"; };
 		F7388720258BB75A00EDA036 /* ObservationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsView.swift; sourceTree = "<group>"; };
 		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
-		F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableDataSource.m; sourceTree = "<group>"; };
+		F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableDataSource.swift; sourceTree = "<group>"; };
 		F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentFormPlusOne.json; sourceTree = "<group>"; };
 		F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentPushTestResponse.json; sourceTree = "<group>"; };
 		F73CD0831F7E941E00B4124D /* TransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransitionViewController.h; sourceTree = "<group>"; };
@@ -2197,7 +2197,7 @@
 				2F8A2C1522012D1C007FE473 /* EventInformationView.h */,
 				2F8A2C1622012D1C007FE473 /* EventInformationView.m */,
 				F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */,
-				F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */,
+				F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */,
 				F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */,
 				F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */,
 				2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */,
@@ -3229,7 +3229,7 @@
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
 				F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */,
-				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
+				F739EFE51AA64F19003A6E4B /* EventTableDataSource.swift in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
