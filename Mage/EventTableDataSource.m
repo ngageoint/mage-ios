@@ -5,7 +5,6 @@
 //
 
 #import "EventTableDataSource.h"
-#import "EventChooserController.h"
 #import "EventTableViewCell.h"
 #import "EventTableHeaderView.h"
 #import "MAGE-Swift.h"
@@ -232,7 +231,7 @@
     }
 
     [Server setCurrentEventId:event.remoteId];
-    [self.eventSelectionDelegate didSelectEvent:event];
+    [self.eventSelectionDelegate didSelectEventWithEvent:event];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

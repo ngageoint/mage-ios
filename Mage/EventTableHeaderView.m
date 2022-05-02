@@ -44,7 +44,7 @@
     if (containerScheme != nil) {
         self.scheme = containerScheme;
     }
-    self.backgroundColor = containerScheme.colorScheme.surfaceColor;
+    self.backgroundColor = [UIColor clearColor];
     self.label.textColor = [containerScheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
 }
 

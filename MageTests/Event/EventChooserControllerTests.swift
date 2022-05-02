@@ -16,7 +16,7 @@ class MockEventSelectionDelegate: NSObject, EventSelectionDelegate {
     var didSelectCalled = false
     var eventSelected: Event?
     var actionButtonTappedCalled = false
-    func didSelect(_ event: Event!) {
+    func didSelectEvent(event: Event) {
         didSelectCalled = true
         eventSelected = event
     }
@@ -57,15 +57,12 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
-                tester().waitForView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForView(withAccessibilityLabel: "Loading Events")
                 view?.eventsFetchedFromServer()
-                tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
                 tester().waitForView(withAccessibilityLabel: "RETURN TO LOGIN")
                 tester().tapView(withAccessibilityLabel: "RETURN TO LOGIN")
                 expect(delegate.actionButtonTappedCalled).to(beTrue())
@@ -75,13 +72,10 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
-                tester().waitForView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
@@ -91,27 +85,24 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 
                 view?.eventsFetchedFromServer()
-                tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
                 expect(delegate.actionButtonTappedCalled).to(beFalse())
             }
             
-            it("Should load the event chooser with no events and then get one from the server") {
+            it("Should load the event chooser with no events and then get one from the server and auto select") {
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
-                tester().waitForView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 
                 view?.eventsFetchedFromServer()
-                tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(1))
             }
@@ -120,19 +111,16 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
-                tester().waitForView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 
                 view?.eventsFetchedFromServer()
-                tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(1))
             }
@@ -145,11 +133,8 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
@@ -160,6 +145,9 @@ class EventChooserControllerTests : KIFSpec {
                 
                 view?.eventsFetchedFromServer()
                 tester().waitForView(withAccessibilityLabel: "Refresh Events")
+                tester().waitForCell(at: IndexPath(row: 1, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().tapView(withAccessibilityLabel: "Refresh Events")
+                tester().waitForCell(at: IndexPath(row: 2, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
             }
             
             it("should load the event chooser with one event not recent") {
@@ -168,11 +156,8 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
@@ -189,11 +174,8 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
@@ -211,11 +193,8 @@ class EventChooserControllerTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 UserDefaults.standard.showEventChooserOnce = true
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
@@ -232,13 +211,10 @@ class EventChooserControllerTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 UserDefaults.standard.showEventChooserOnce = true
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
 
                 navigationController?.pushViewController(view!, animated: false)
-                eventDataSource?.startFetchController()
-                view?.initializeView()
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
@@ -256,11 +232,8 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
@@ -269,6 +242,34 @@ class EventChooserControllerTests : KIFSpec {
                 tester().wait(forTimeInterval: 0.8)
                 tester().waitForView(withAccessibilityLabel: "My Recent Events (1)")
 
+                tester().tapRow(at: IndexPath(row: 0, section: 1), inTableViewWithAccessibilityIdentifier: "Event Table")
+                expect(delegate.didSelectCalled).toEventually(beTrue())
+                expect(delegate.eventSelected?.remoteId).to(equal(1))
+            }
+            
+            it("should load the event chooser with one recent and one other event refreshing taking too long") {
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                UserDefaults.standard.currentUserId = "userabc"
+                
+                let delegate = MockEventSelectionDelegate()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
+                navigationController?.pushViewController(view!, animated: false)
+                tester().waitForView(withAccessibilityLabel: "Refreshing Events")
+
+                // wait for time out
+                tester().wait(forTimeInterval: 12)
+                
+                tester().waitForView(withAccessibilityLabel: "Refreshing events seems to be taking a while...")
+                
+                view?.eventsFetchedFromServer()
+                tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing events seems to be taking a while...")
+                
+                tester().waitForView(withAccessibilityLabel: "My Recent Events (1)")
+                
                 tester().tapRow(at: IndexPath(row: 0, section: 1), inTableViewWithAccessibilityIdentifier: "Event Table")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(1))
@@ -298,11 +299,8 @@ class EventChooserControllerTests : KIFSpec {
                 
                 expect(Observation.mr_findAll()?.count).toEventually(equal(1))
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
@@ -326,11 +324,8 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()
@@ -357,11 +352,8 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
                 
-                let eventDataSource = EventTableDataSource(scheme: MAGEScheme.scheme())
                 let delegate = MockEventSelectionDelegate()
-                view = EventChooserController(dataSource: eventDataSource, andDelegate: delegate, andScheme: MAGEScheme.scheme())
-                eventDataSource?.startFetchController()
-                view?.initializeView()
+                view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Refreshing Events")
                 view?.eventsFetchedFromServer()

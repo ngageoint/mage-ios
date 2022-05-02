@@ -15,11 +15,25 @@ class EmptyState: UIView {
     var image: UIImage?
     var title: String?
     var emptyDescription: String?
+    var attributedDescription: NSAttributedString?
     var buttonText: String?
     var tapHandler: AnyObject?
     var selector: Selector?
     
     let containerView: UIView = UIView.newAutoLayout()
+    
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(forAutoLayout: ());
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 0
+        stackView.distribution = .fill
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.backgroundColor = .clear
+        return stackView
+    }()
     
     lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: image)
@@ -29,21 +43,27 @@ class EmptyState: UIView {
     }()
     
     lazy var titleLabel: UILabel = {
-        let label = UILabel(forAutoLayout: ())
-        label.accessibilityLabel = "Empty Title"
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.text = title
-        return label
+        let titleLabel = UILabel(forAutoLayout: ())
+        titleLabel.accessibilityLabel = "Empty Title"
+        titleLabel.numberOfLines = 0
+        titleLabel.textAlignment = .center
+        titleLabel.text = title
+        return titleLabel
     }()
     
-    lazy var descriptionLabel: UILabel = {
-        let label = UILabel(forAutoLayout: ())
-        label.accessibilityLabel = "Empty Description"
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.text = emptyDescription
-        return label
+    lazy var descriptionLabel: UITextView = {
+        let descriptionLabel = UITextView(forAutoLayout: ())
+        descriptionLabel.accessibilityLabel = "Empty Description"
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.isScrollEnabled = false
+        descriptionLabel.isEditable = false
+        if let attributedDescription = attributedDescription {
+            descriptionLabel.attributedText = attributedDescription
+        }
+        if let emptyDescription = emptyDescription {
+            descriptionLabel.text = emptyDescription
+        }
+        return descriptionLabel
     }()
     
     private lazy var button: MDCButton = {
@@ -57,21 +77,99 @@ class EmptyState: UIView {
         return button;
     }()
     
-    func configure(image: UIImage? = nil, title: String? = nil, description: String? = nil, buttonText: String? = nil, tapHandler: AnyObject? = nil, selector: Selector? = nil, scheme: MDCContainerScheming? = nil) {
-        self.image = image
-        self.title = title
-        self.emptyDescription = description
-        self.buttonText = buttonText
-        self.scheme = scheme
-        self.selector = selector
-        self.tapHandler = tapHandler
+    private lazy var activityIndicator: MDCActivityIndicator = {
+        let activityIndicator = MDCActivityIndicator()
+        activityIndicator.sizeToFit()
+        activityIndicator.indicatorMode = .indeterminate
+        activityIndicator.startAnimating()
+        return activityIndicator;
+    }()
+    
+    var isActivityIndicatorHidden: Bool {
+        get {
+            return activityIndicator.isHidden
+        }
+        set {
+            UIView.animate(withDuration: 0.45, delay: 0, options: [], animations: { [weak self] in
+                self?.activityIndicator.alpha = newValue ? 0 : 1
+            }, completion: { [weak self] _ in
+                self?.activityIndicator.isHidden = newValue
+            })
+        }
+    }
+    
+    var isButtonHidden: Bool {
+        get {
+            return button.isHidden
+        }
+        set {
+            UIView.animate(withDuration: 0.45, delay: 0, options: [], animations: { [weak self] in
+                self?.button.alpha = newValue ? 0 : 1
+            }, completion: { [weak self] _ in
+                self?.button.isHidden = newValue
+            })
+        }
+    }
+        
+    required init(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: CGRect.zero);
         addSubview(containerView)
         containerView.addSubview(imageView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(descriptionLabel)
-        if buttonText != nil {
-            containerView.addSubview(button)
-        }
+        containerView.addSubview(stackView)
+        stackView.addArrangedSubview(activityIndicator)
+        stackView.addArrangedSubview(button)
+
+        applyTheme(withScheme: scheme)
+    }
+    
+    func toggleVisible(_ visible: Bool = true, completion: ((Bool) -> Void)? = nil) {
+        UIView.animate(withDuration: 0.45, delay: 0, options: [], animations: { [weak self] in
+            self?.alpha = visible ? 1 : 0
+        }, completion: { [weak self] success in
+            if success {
+                self?.isHidden = !visible
+            }
+            completion?(success)
+        })
+    }
+    
+    func configure(image: UIImage? = nil, title: String? = nil, description: String? = nil, attributedDescription: NSAttributedString? = nil, showActivityIndicator: Bool? = false, buttonText: String? = nil, tapHandler: AnyObject? = nil, selector: Selector? = nil, scheme: MDCContainerScheming? = nil) {
+        UIView.transition(with: self, duration: 0.45, options: .transitionCrossDissolve, animations: { [weak self] in
+            self?.image = image
+            self?.title = title
+            self?.emptyDescription = description
+            self?.attributedDescription = attributedDescription
+            self?.buttonText = buttonText
+            self?.scheme = scheme
+            self?.selector = selector
+            self?.tapHandler = tapHandler
+        
+            self?.button.accessibilityLabel = buttonText;
+            self?.button.setTitle(buttonText, for: .normal);
+            if let selector = selector {
+                self?.button.addTarget(tapHandler, action: selector, for: .touchUpInside)
+            }
+            
+            if let attributedDescription = self?.attributedDescription {
+                self?.descriptionLabel.attributedText = attributedDescription
+            }
+            if let emptyDescription = self?.emptyDescription {
+                self?.descriptionLabel.text = emptyDescription
+            }
+        
+            self?.titleLabel.text = title
+            self?.titleLabel.accessibilityLabel = title
+        
+            self?.imageView.image = image
+            self?.button.isHidden = buttonText == nil
+            self?.activityIndicator.isHidden = !(showActivityIndicator ?? false)
+        }, completion: nil)
         applyTheme(withScheme: scheme)
     }
     
@@ -82,8 +180,9 @@ class EmptyState: UIView {
         titleLabel.font = scheme?.typographyScheme.headline4
         descriptionLabel.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.60)
         descriptionLabel.font = scheme?.typographyScheme.body1
+        descriptionLabel.backgroundColor = .clear
         imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.45)
-        if let scheme = scheme, button.superview != nil {
+        if let scheme = scheme {
             button.applyContainedTheme(withScheme: scheme)
         }
     }
@@ -109,13 +208,13 @@ class EmptyState: UIView {
             descriptionLabel.autoAlignAxis(toSuperviewAxis: .vertical)
             descriptionLabel.autoPinEdge(toSuperviewEdge: .left)
             descriptionLabel.autoPinEdge(toSuperviewEdge: .right)
-            if button.superview == nil {
-                descriptionLabel.autoPinEdge(toSuperviewEdge: .bottom)
-            } else {
-                button.autoPinEdge(.top, to: .bottom, of: descriptionLabel, withOffset: 24)
-                button.autoAlignAxis(toSuperviewAxis: .vertical)
-                button.autoPinEdge(toSuperviewEdge: .bottom)
-            }
+//            if button.superview == nil {
+//                descriptionLabel.autoPinEdge(toSuperviewEdge: .bottom)
+//            } else {
+            stackView.autoPinEdge(.top, to: .bottom, of: descriptionLabel, withOffset: 24)
+            stackView.autoAlignAxis(toSuperviewAxis: .vertical)
+            stackView.autoPinEdge(toSuperviewEdge: .bottom)
+//            }
 
             didSetupConstraints = true;
         }
