@@ -8,7 +8,6 @@
 
 #import "EventChooserCoordinator.h"
 #import "MAGE-Swift.h"
-#import "EventTableDataSource.h"
 #import "FadeTransitionSegue.h"
 #import "AppDelegate.h"
 

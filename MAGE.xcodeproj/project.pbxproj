@@ -977,7 +977,6 @@
 		F7388714258AABE800EDA036 /* ObservationImportantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantView.swift; sourceTree = "<group>"; };
 		F738871C258BA22500EDA036 /* UIButtonInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonInsets.swift; sourceTree = "<group>"; };
 		F7388720258BB75A00EDA036 /* ObservationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsView.swift; sourceTree = "<group>"; };
-		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
 		F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableDataSource.swift; sourceTree = "<group>"; };
 		F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentFormPlusOne.json; sourceTree = "<group>"; };
 		F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentPushTestResponse.json; sourceTree = "<group>"; };
@@ -2196,7 +2195,6 @@
 				2F8A2C0E2200FC2C007FE473 /* EventInformationCoordinator.m */,
 				2F8A2C1522012D1C007FE473 /* EventInformationView.h */,
 				2F8A2C1622012D1C007FE473 /* EventInformationView.m */,
-				F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */,
 				F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */,
 				F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */,
 				F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */,

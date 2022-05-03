@@ -4,234 +4,241 @@
 //
 //
 
-#import "EventTableDataSource.h"
-#import "EventTableViewCell.h"
-#import "EventTableHeaderView.h"
-#import "MAGE-Swift.h"
+import CoreData
+import UIKit
 
-@interface EventTableDataSource()
-@property (strong, nonatomic) NSDictionary *eventIdToOfflineObservationCount;
-@property (strong, nonatomic) NSString *currentFilter;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
-@end
-
-@implementation EventTableDataSource
-
-- (id) initWithScheme: (id<MDCContainerScheming>) containerScheme {
-    self = [self init];
-    self.scheme = containerScheme;
-    return self;
-}
-
-- (void) updateOtherFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
-    if (!self.otherFetchedResultsController) {
-        self.otherFetchedResultsController = [Event caseInsensitiveSortFetchAllWithSortTerm:@"name" ascending:true predicate:[NSPredicate predicateWithFormat:@"NOT (remoteId IN %@)", recentEventIds] groupBy:nil context:[NSManagedObjectContext MR_defaultContext]];
-        self.otherFetchedResultsController.accessibilityLabel = @"Other Events";
-    }
-    NSError *error;
-    if (![self.otherFetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }
-}
-
-- (void) updateRecentFetchedResultsControllerWithRecentEvents: (NSArray *) recentEventIds {
-    NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
-    [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
-    [recentRequest setIncludesSubentities:NO];
-    NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
-    [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
-    if (!self.recentFetchedResultsController) {
-        self.recentFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:recentRequest
-                                                                                  managedObjectContext:[NSManagedObjectContext MR_defaultContext]
-                                                                                    sectionNameKeyPath:nil
-                                                                                             cacheName:nil];
-        self.recentFetchedResultsController.accessibilityLabel = @"My Recent Events";
+class EventTableDataSource: NSObject {
+    var tableView: UITableView
+    var scheme: MDCContainerScheming?
+    var eventSelectionDelegate: EventSelectionDelegate?
+    var otherFetchedResultsController: NSFetchedResultsController<Event>?
+    var recentFetchedResultsController:NSFetchedResultsController<Event>?
+    var filteredFetchedResultsController:NSFetchedResultsController<Event>?
+    var eventIdToOfflineObservationCount: [NSNumber : NSNumber] = [:]
+    
+    public init(tableView: UITableView, eventSelectionDelegate: EventSelectionDelegate? = nil, scheme: MDCContainerScheming? = nil) {
+        self.scheme = scheme
+        self.tableView = tableView
+        self.eventSelectionDelegate = eventSelectionDelegate
+        super.init()
     }
     
-    NSError *error;
-    
-    if (![self.recentFetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }
-}
-
-- (void) refreshEventData {
-    User *current = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
-    NSArray *recentEventIds = [NSArray arrayWithArray:current.recentEventIds];
-    [self updateOtherFetchedResultsControllerWithRecentEvents:recentEventIds];
-    [self updateRecentFetchedResultsControllerWithRecentEvents:recentEventIds];
-}
-
-- (void) startFetchController {
-    [self refreshEventData];
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:[Observation MR_entityName]];
-    
-    NSExpression *eventExpression = [NSExpression expressionForKeyPath:@"eventId"];
-    NSExpressionDescription *countExpression = [[NSExpressionDescription alloc] init];
-    
-    countExpression.name = @"count";
-    countExpression.expression = [NSExpression expressionForFunction:@"count:" arguments:@[eventExpression]];
-    countExpression.expressionResultType = NSInteger64AttributeType;
-    
-    request.resultType = NSDictionaryResultType;
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]];
-    request.propertiesToGroupBy = @[@"eventId"];
-    request.propertiesToFetch = @[@"eventId", countExpression];
-    request.predicate = [NSPredicate predicateWithFormat:@"error != nil"];
-    
-    NSArray *groups = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:request error:nil];
-    NSMutableDictionary *offlineCount = [[NSMutableDictionary alloc] init];
-    for (NSDictionary *group in groups) {
-        [offlineCount setObject:[group objectForKey:@"count"] forKey:[group objectForKey:@"eventId"]];
-    }
-    self.eventIdToOfflineObservationCount = offlineCount;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"Section %ld", (long)section);
-    if (self.filteredFetchedResultsController) {
-        return self.filteredFetchedResultsController.fetchedObjects.count;
-    }
-    if (section == 1) {
-        return self.recentFetchedResultsController.fetchedObjects.count;
-    } else if (section == 2) {
-        return self.otherFetchedResultsController.fetchedObjects.count;// self.otherFetchedResultsController.fetchedObjects.count;
-    }
-    return 0;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.filteredFetchedResultsController != nil) return 1;
-    if (self.otherFetchedResultsController.fetchedObjects.count == 0 && self.recentFetchedResultsController.fetchedObjects.count == 0) return 0;
-    return 3;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (self.filteredFetchedResultsController) {
-        return [NSString stringWithFormat:@"%@ (%lu)", self.filteredFetchedResultsController.accessibilityLabel, (unsigned long)self.filteredFetchedResultsController.fetchedObjects.count];
-    }
-    if (section == 1) {
-        return [NSString stringWithFormat:@"%@ (%lu)", self.recentFetchedResultsController.accessibilityLabel, (unsigned long)self.recentFetchedResultsController.fetchedObjects.count];
-    } else if (section == 2) {
-        return [NSString stringWithFormat:@"%@ (%lu)", @"Other Events", (unsigned long)self.otherFetchedResultsController.fetchedObjects.count];
-    }
-    return nil;
-}
-
-- (void) setEventFilter: (NSString *) filter withDelegate:(id<NSFetchedResultsControllerDelegate>) delegate {
-    if (!filter) {
-        self.filteredFetchedResultsController.delegate = nil;
-        self.filteredFetchedResultsController = nil;
-        return;
-    }
-    if (!self.filteredFetchedResultsController) {
-        self.filteredFetchedResultsController = [Event caseInsensitiveSortFetchAllWithSortTerm:@"name" ascending:true predicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter] groupBy:nil context:[NSManagedObjectContext MR_defaultContext]];
-        self.filteredFetchedResultsController.delegate = delegate;
-    
-        self.filteredFetchedResultsController.accessibilityLabel = @"Filtered";
-    } else {
-        [self.filteredFetchedResultsController.fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", filter]];
-    }
-    NSError *error;
-    if (![self.filteredFetchedResultsController performFetch:&error]) {
-        // Update to handle the error appropriately.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }
-}
-
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
-    cell.eventName.textColor = self.scheme.colorScheme.onSurfaceColor;
-    cell.eventDescription.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.60];
-    Event *event = nil;
-    
-    if (self.filteredFetchedResultsController != nil) {
-        event = [self.filteredFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 1) {
-        event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 2) {
-        event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    }
-    
-    [cell populateCellWithEvent:event offlineObservationCount:[[self.eventIdToOfflineObservationCount objectForKey:event.remoteId] integerValue]];
-    
-    return cell;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    Event *event = nil;
-    if (self.filteredFetchedResultsController != nil) {
-        event = [self.filteredFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 1) {
-        event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 2) {
-        event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    }
-    if (event.eventDescription && ![event.eventDescription isEqualToString:@""]) {
-        return 72.0f;
-    }
-    return 48.0f;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Event *event = nil;
-    if (self.filteredFetchedResultsController != nil) {
-        event = [self.filteredFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 1) {
-        event = [self.recentFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 2) {
-        event = [self.otherFetchedResultsController.fetchedObjects objectAtIndex:indexPath.row];
-    }
-
-    [Server setCurrentEventId:event.remoteId];
-    [self.eventSelectionDelegate didSelectEventWithEvent:event];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 0 && self.filteredFetchedResultsController != nil && [self.filteredFetchedResultsController.fetchedObjects count] != 0) {
-            return 40.0f;
-    }
-    return CGFLOAT_MIN;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (self.filteredFetchedResultsController != nil) {
-        return 48.0f;
-    }
-    
-    if (section == 0) return CGFLOAT_MIN;
-    
-    if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return CGFLOAT_MIN;
-    
-    if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return CGFLOAT_MIN;
-   
-    return 48.0f;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    if (self.filteredFetchedResultsController != nil && [self.filteredFetchedResultsController.fetchedObjects count] != 0) {
-        return @"End of Results";
-    }
-    return nil;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (self.filteredFetchedResultsController != nil) {
-        NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-        return [[EventTableHeaderView alloc] initWithName:name containerScheme:self.scheme];
-    }
+    func startFetchController() {
+        refreshEventData()
         
-    if (section == 0) return [[UIView alloc] initWithFrame:CGRectZero];
-    if (section == 1 && self.recentFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
-    if (section == 2 && self.otherFetchedResultsController.fetchedObjects.count == 0) return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, CGFLOAT_MIN)];
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Observation")
+        
+        let eventExpression = NSExpression(forKeyPath: "eventId")
+        let countExpression = NSExpressionDescription()
+        countExpression.name = "count"
+        countExpression.expression = NSExpression(forFunction: "count:", arguments: [eventExpression])
+        countExpression.expressionResultType = .integer64AttributeType
+        
+        request.resultType = .dictionaryResultType
+        request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        request.propertiesToGroupBy = ["eventId"]
+        request.propertiesToFetch = ["eventId", countExpression]
+        request.predicate = NSPredicate(format: "error != nil")
+        
+        do {
+            let groups = try NSManagedObjectContext.mr_default().fetch(request)
+            var offlineCount: [NSNumber:NSNumber] = [:]
+            for group in groups {
+                if let dictionary = group as? [String : NSNumber], let eventId = dictionary["eventId"], let count = dictionary["count"] {
+                    offlineCount[eventId] = count
+                }
+            }
+            eventIdToOfflineObservationCount = offlineCount
+        } catch {
+            NSLog("Error fetching offline observation counts \(error)")
+        }
+    }
     
-    NSString *name = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
-    return [[EventTableHeaderView alloc] initWithName:name containerScheme:self.scheme];
+    func refreshEventData() {
+        guard let current = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()), let recentEventIds = current.recentEventIds else {
+            return
+        }
+        updateOtherFetchedResultsController(recentEventIds: recentEventIds)
+        updateRecentFetchedResultsController(recentEventIds: recentEventIds)
+    }
+    
+    func updateOtherFetchedResultsController(recentEventIds: [NSNumber]) {
+        otherFetchedResultsController = otherFetchedResultsController ?? {
+            let frc = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format: "NOT (remoteId IN %@)", recentEventIds), groupBy: nil, context: NSManagedObjectContext.mr_default())
+            frc?.accessibilityLabel = "Other Events"
+            return frc
+        }()
+        do {
+            try otherFetchedResultsController?.performFetch()
+        } catch {
+            NSLog("Error fetching other events \(error)")
+        }
+    }
+    
+    func updateRecentFetchedResultsController(recentEventIds: [NSNumber]) {
+        guard let recentRequest: NSFetchRequest<Event> = Event.mr_requestAll(in: NSManagedObjectContext.mr_default()) as? NSFetchRequest<Event> else {
+            return
+        }
+        recentRequest.predicate = NSPredicate(format: "(remoteId IN %@)", recentEventIds)
+        recentRequest.includesSubentities = false
+        let sortBy = NSSortDescriptor(key: "recentSortOrder", ascending: true)
+        recentRequest.sortDescriptors = [sortBy]
+        recentFetchedResultsController = recentFetchedResultsController ?? {
+            let frc = NSFetchedResultsController(fetchRequest: recentRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+            frc.accessibilityLabel = "My Recent Events"
+            return frc
+        }()
+        do {
+            try recentFetchedResultsController?.performFetch()
+        } catch {
+            NSLog("Error fetching recent events \(error)")
+        }
+    }
+    
+    func setEventFilter(filter: String?, delegate: NSFetchedResultsControllerDelegate?) {
+        guard let filter = filter else {
+            filteredFetchedResultsController?.delegate = nil
+            filteredFetchedResultsController = nil
+            return
+        }
+        
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            filteredFetchedResultsController.fetchRequest.predicate = NSPredicate(format: "name contains[cd] %@", filter)
+        } else {
+            filteredFetchedResultsController = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format:"name contains[cd] %@", filter), groupBy: nil, context: NSManagedObjectContext.mr_default())
+            filteredFetchedResultsController?.delegate = delegate
+            filteredFetchedResultsController?.accessibilityLabel = "Filtered"
+        }
+        
+        do {
+            try filteredFetchedResultsController?.performFetch()
+        } catch {
+            NSLog("Error fetching filtered events \(error)")
+        }
+    }
 }
 
-@end
+extension EventTableDataSource : UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var event: Event? = nil
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            event = filteredFetchedResultsController.fetchedObjects?[indexPath.row]
+        } else if indexPath.section == 1 {
+            event = recentFetchedResultsController?.fetchedObjects?[indexPath.row]
+        } else if indexPath.section == 2 {
+            event = otherFetchedResultsController?.fetchedObjects?[indexPath.row]
+        }
+        
+        if let event = event, let remoteId = event.remoteId {
+            Server.setCurrentEventId(remoteId)
+            eventSelectionDelegate?.didSelectEvent(event: event)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if let filteredFetchedResultsController = filteredFetchedResultsController, section == 0, filteredFetchedResultsController.fetchedObjects?.count != 0 {
+            return 40.0
+        }
+        return CGFloat.leastNormalMagnitude
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if filteredFetchedResultsController != nil {
+            return 48.0
+        }
+        
+        if section == 0 {
+            return CGFloat.leastNormalMagnitude
+        }
+        
+        if section == 1, let fetchedObjects = recentFetchedResultsController?.fetchedObjects?.count, fetchedObjects == 0 {
+            return CGFloat.leastNormalMagnitude
+        }
+        
+        if section == 2, let fetchedObjects = otherFetchedResultsController?.fetchedObjects?.count, fetchedObjects == 0 {
+            return CGFloat.leastNormalMagnitude
+        }
+        
+        return 48.0
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        if let filteredFetchedResultsController = filteredFetchedResultsController, let fetchedObjects = filteredFetchedResultsController.fetchedObjects?.count, fetchedObjects != 0 {
+            return "End of Results"
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int){
+        view.tintColor = UIColor.red
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
+        header.backgroundColor = .clear
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+}
+
+extension EventTableDataSource : UITableViewDataSource {
+        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            return filteredFetchedResultsController.fetchedObjects?.count ?? 0
+        }
+        if section == 1 {
+            return recentFetchedResultsController?.fetchedObjects?.count ?? 0
+        }
+        if section == 2 {
+            return otherFetchedResultsController?.fetchedObjects?.count ?? 0
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell") as! EventTableViewCell
+        cell.eventName.textColor = scheme?.colorScheme.onSurfaceColor
+        cell.eventDescription.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
+        
+        var event: Event? = nil
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            event = filteredFetchedResultsController.fetchedObjects?[indexPath.row]
+        } else if indexPath.section == 1 {
+            event = recentFetchedResultsController?.fetchedObjects?[indexPath.row]
+        } else if indexPath.section == 2 {
+            event = otherFetchedResultsController?.fetchedObjects?[indexPath.row]
+        }
+        
+        if let event = event, let remoteId = event.remoteId {
+            cell.populateCell(with: event, offlineObservationCount: UInt(truncating: eventIdToOfflineObservationCount[remoteId] ?? 0))
+        }
+        
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if filteredFetchedResultsController != nil {
+            return 1
+        }
+        if otherFetchedResultsController?.fetchedObjects?.count == 0 && recentFetchedResultsController?.fetchedObjects?.count == 0 {
+            return 0
+        }
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            return "\(filteredFetchedResultsController.accessibilityLabel ?? "Filtered Events") (\(filteredFetchedResultsController.fetchedObjects?.count ?? 0))"
+        }
+        if section == 1 {
+            return "\(recentFetchedResultsController?.accessibilityLabel ?? "My Recent Events") (\(recentFetchedResultsController?.fetchedObjects?.count ?? 0))"
+        }
+        if section == 2 {
+            return "\(otherFetchedResultsController?.accessibilityLabel ?? "Other Events") (\(otherFetchedResultsController?.fetchedObjects?.count ?? 0))"
+        }
+        return nil
+    }
+}

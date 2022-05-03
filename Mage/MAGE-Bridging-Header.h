@@ -59,7 +59,7 @@
 #import "ObservationTableHeaderView.h"
 #import "StaticPointAnnotation.h"
 #import "LocationFilterTableViewController.h"
-#import "EventTableDataSource.h"
+#import "EventTableViewCell.h"
 
 #import "AttachmentPushService.h"
 #import "LocationAnnotation.h"

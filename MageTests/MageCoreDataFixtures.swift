@@ -356,20 +356,20 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
+    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", description: String = "Test event description", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
         let jsonDictionary = parseJsonFile(jsonFile: formsJsonFile, forceArray: true)
         
-        MageCoreDataFixtures.addEventFromJson(remoteId: remoteId, name: name, formsJson: jsonDictionary as! [[AnyHashable : Any]], maxObservationForms: maxObservationForms, minObservationForms: minObservationForms, completion: completion);
+        MageCoreDataFixtures.addEventFromJson(remoteId: remoteId, name: name, description: description, formsJson: jsonDictionary as! [[AnyHashable : Any]], maxObservationForms: maxObservationForms, minObservationForms: minObservationForms, completion: completion);
     }
     
-    public static func addEventFromJson(remoteId: NSNumber = 1, name: String = "Test Event", formsJson: [[AnyHashable: Any]], maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
+    public static func addEventFromJson(remoteId: NSNumber = 1, name: String = "Test Event", description: String = "Test event description", formsJson: [[AnyHashable: Any]], maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
 
         if (completion == nil) {
             MagicalRecord.save(blockAndWait:{ (localContext: NSManagedObjectContext) in
                 if let e: Event = Event.mr_createEntity(in: localContext) {
                     e.name = name;
                     e.remoteId = remoteId;
-                    e.eventDescription = "Test event description";
+                    e.eventDescription = description;
                     e.maxObservationForms = maxObservationForms;
                     e.minObservationForms = minObservationForms;
                     let teamJson: [String: Any] = [
@@ -387,7 +387,7 @@ class MageCoreDataFixtures {
                 if let e: Event = Event.mr_createEntity(in: localContext) {
                     e.name = name;
                     e.remoteId = remoteId;
-                    e.eventDescription = "Test event description";
+                    e.eventDescription = description;
                     e.maxObservationForms = maxObservationForms;
                     e.minObservationForms = minObservationForms;
                     let teamJson: [String: Any] = [

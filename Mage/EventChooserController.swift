@@ -119,9 +119,7 @@ func actionButtonTapped()
         self.modalPresentationStyle = .fullScreen
         self.scheme = scheme
         self.delegate = delegate
-        self.eventDataSource = EventTableDataSource(scheme: scheme)
-        self.eventDataSource?.tableView = self.tableView
-        self.eventDataSource?.eventSelectionDelegate = self
+        self.eventDataSource = EventTableDataSource(tableView: tableView, eventSelectionDelegate: self, scheme: scheme)
         self.allEventsController?.delegate = self
         
         do {
@@ -255,7 +253,7 @@ func actionButtonTapped()
         } else {
             eventsInitialized = true
             if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 1 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 0 {
-                if let e = eventDataSource?.otherFetchedResultsController.fetchedObjects?[0] as? Event, let remoteId = e.remoteId {
+                if let e = eventDataSource?.otherFetchedResultsController?.fetchedObjects?[0] as? Event, let remoteId = e.remoteId {
                     Server.setCurrentEventId(remoteId)
                 }
             }
@@ -335,11 +333,11 @@ func actionButtonTapped()
             eventInstructions.isHidden = true
             searchContainerHeightConstraint?.constant = 0.0
         } else if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 1 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 0 {
-            if let e = eventDataSource?.otherFetchedResultsController.fetchedObjects?[0] as? Event {
+            if let e = eventDataSource?.otherFetchedResultsController?.fetchedObjects?[0] as? Event {
                 didSelectEvent(event: e)
             }
         } else if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 0 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 1 {
-            if let e = eventDataSource?.recentFetchedResultsController.fetchedObjects?[0] as? Event {
+            if let e = eventDataSource?.recentFetchedResultsController?.fetchedObjects?[0] as? Event {
                 didSelectEvent(event: e)
             }
         } else {
@@ -388,9 +386,9 @@ extension EventChooserController : NSFetchedResultsControllerDelegate {
 extension EventChooserController : UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if searchController.isActive {
-            eventDataSource?.setEventFilter(searchController.searchBar.text, with: self)
+            eventDataSource?.setEventFilter(filter: searchController.searchBar.text, delegate: self)
         } else {
-            eventDataSource?.setEventFilter(nil, with: nil)
+            eventDataSource?.setEventFilter(filter: nil, delegate: nil)
         }
         tableView.reloadData()
     }

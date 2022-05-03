@@ -7,6 +7,7 @@
 //
 
 #import "EventTableViewCell.h"
+#import "MAGE-Swift.h"
 
 @interface EventTableViewCell()
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *eventBadgeLabelHeight;

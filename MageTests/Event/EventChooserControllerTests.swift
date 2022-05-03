@@ -276,7 +276,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one recent and one other event") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", description: "Lorem ipsum dolor sit amet, no eos nonumes temporibus vituperatoribus, usu oporteat inimicus ex. Sint inimicus cum eu, libris melius oblique ad mel, et libris accusamus vix. Vel ut dolor aperiam debitis. Ius at diam ferri option, eum solet blandit deseruisse ea, eu ridens periculis sed. Nonumy utamur mel ut, eos eu nulla populo, sea habeo veniam tempor in. Ius et eius ancillae assueverit, sed cu probo putent labores, no atqui tacimates invenire duo. No usu probo repudiandae, quando cetero nominati quo et.", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -284,20 +284,28 @@ class EventChooserControllerTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 Server.setCurrentEventId(1);
                 
-                let observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                var observationJson: [AnyHashable : Any] = MageCoreDataFixtures.loadObservationsJson();
+                observationJson["id"] = "observationdef"
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
+                MageCoreDataFixtures.addObservationToEvent(eventId: 2)
                 
                 let observations = Observation.mr_findAll();
-                expect(observations?.count).to(equal(1));
+                expect(observations?.count).to(equal(2));
                 let observation: Observation = observations![0] as! Observation;
                 observation.dirty = true;
                 observation.error = [
                     ObservationPushService.ObservationErrorStatusCode: 503,
                     ObservationPushService.ObservationErrorMessage: "Something Bad"
                 ]
+                let observation2: Observation = observations![1] as! Observation;
+                observation2.dirty = true;
+                observation2.error = [
+                    ObservationPushService.ObservationErrorStatusCode: 503,
+                    ObservationPushService.ObservationErrorMessage: "Something Really Bad"
+                ]
                 NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
                 
-                expect(Observation.mr_findAll()?.count).toEventually(equal(1))
+                expect(Observation.mr_findAll()?.count).toEventually(equal(2))
                 
                 let delegate = MockEventSelectionDelegate()
                 view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
