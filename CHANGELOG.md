@@ -8,6 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ##### Bug Fixes
 * Navigation bar colors were incorrect after using the camera
 * long secondary fields are now ellipsized
+* fixes crash when switching quickly between an attachment view and the observation list
 
 ## 4.0.1
 
