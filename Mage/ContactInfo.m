@@ -12,7 +12,7 @@
 
 @implementation ContactInfo
 
-- (instancetype) initWithTitle: (NSString *)title andMessage: (NSString *) message {
+- (instancetype) initWithTitle: (nullable NSString *)title andMessage: (NSString *) message {
     
     self = [super init];
     if (!self) return nil;
@@ -37,8 +37,11 @@
     NSString* emailLink = [LinkGenerator emailLinkWithMessage:_message andUsername:_username andStrategy:_strategy];
     NSString* phoneLink = [LinkGenerator phoneLink];
     
-    NSString* extendedMessage = [self title];
-    extendedMessage = [extendedMessage stringByAppendingString:@"<br /><br />"];
+    NSString* extendedMessage = @"";
+    if ([self title] != nil) {
+        extendedMessage = [extendedMessage stringByAppendingString:[self title]];
+        extendedMessage = [extendedMessage stringByAppendingString:@"<br /><br />"];
+    }
     extendedMessage = [extendedMessage stringByAppendingString:[_message copy]];
     if(emailLink != nil || phoneLink != nil) {
         extendedMessage = [extendedMessage stringByAppendingString:@"<br /><br />"];

@@ -268,7 +268,7 @@
 		F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388714258AABE800EDA036 /* ObservationImportantView.swift */; };
 		F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738871C258BA22500EDA036 /* UIButtonInsets.swift */; };
 		F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388720258BB75A00EDA036 /* ObservationActionsView.swift */; };
-		F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */; };
+		F739EFE51AA64F19003A6E4B /* EventTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */; };
 		F73B764627442D0B00799BBF /* attachmentFormPlusOne.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */; };
 		F73B7648274438FA00799BBF /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F73CD0841F7E941E00B4124D /* TransitionViewController.m */; };
@@ -310,7 +310,7 @@
 		F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
 		F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
 		F767AC7A27D95811005684E5 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D427F2694B60300F9AC3B /* Team.swift */; };
-		F76949161AA6436000CB680B /* EventChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.m */; };
+		F76949161AA6436000CB680B /* EventChooserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76949151AA6436000CB680B /* EventChooserController.swift */; };
 		F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */; };
 		F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = F76A15C11A93F56300F2BDF1 /* UIResponder+FirstResponder.m */; };
 		F76A15C41A9402A400F2BDF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */; };
@@ -497,7 +497,6 @@
 		F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */; };
 		F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */; };
 		F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */; };
-		F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457611F61AC770082F527 /* EventChooserView.xib */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
 		F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.m */; };
 		F7E5748C27DA7BEA009A6E0D /* PersistedMapStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5748B27DA7BEA009A6E0D /* PersistedMapStateTests.swift */; };
@@ -978,8 +977,7 @@
 		F7388714258AABE800EDA036 /* ObservationImportantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantView.swift; sourceTree = "<group>"; };
 		F738871C258BA22500EDA036 /* UIButtonInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonInsets.swift; sourceTree = "<group>"; };
 		F7388720258BB75A00EDA036 /* ObservationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionsView.swift; sourceTree = "<group>"; };
-		F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableDataSource.h; sourceTree = "<group>"; };
-		F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableDataSource.m; sourceTree = "<group>"; };
+		F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableDataSource.swift; sourceTree = "<group>"; };
 		F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentFormPlusOne.json; sourceTree = "<group>"; };
 		F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = attachmentPushTestResponse.json; sourceTree = "<group>"; };
 		F73CD0831F7E941E00B4124D /* TransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransitionViewController.h; sourceTree = "<group>"; };
@@ -1028,8 +1026,7 @@
 		F7613D5027EE03B300570145 /* ReleaseTestPlan.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReleaseTestPlan.md; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
 		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
-		F76949141AA6436000CB680B /* EventChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserController.h; sourceTree = "<group>"; };
-		F76949151AA6436000CB680B /* EventChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserController.m; sourceTree = "<group>"; };
+		F76949151AA6436000CB680B /* EventChooserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventChooserController.swift; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
 		F76A15BE1A93C35400F2BDF1 /* KeyboardConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardConstraint.m; sourceTree = "<group>"; };
 		F76A15C01A93F56300F2BDF1 /* UIResponder+FirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FirstResponder.h"; sourceTree = "<group>"; };
@@ -1253,7 +1250,6 @@
 		F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarUIImageView.swift; sourceTree = "<group>"; };
 		F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsView.swift; sourceTree = "<group>"; };
 		F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsDelegate.swift; sourceTree = "<group>"; };
-		F7E457611F61AC770082F527 /* EventChooserView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventChooserView.xib; sourceTree = "<group>"; };
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		F7E457651F61E2380082F527 /* EventChooserCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserCoordinator.h; sourceTree = "<group>"; };
 		F7E457661F61E2380082F527 /* EventChooserCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserCoordinator.m; sourceTree = "<group>"; };
@@ -1454,7 +1450,6 @@
 				F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */,
 				F7489B34278E29C300A9E314 /* CoordinateField.swift */,
 				F7E457631F61C14F0082F527 /* EventCell.xib */,
-				F7E457611F61AC770082F527 /* EventChooserView.xib */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
 				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
 				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
@@ -2191,8 +2186,7 @@
 			isa = PBXGroup;
 			children = (
 				F76A15BC1A93C33300F2BDF1 /* Constraints */,
-				F76949141AA6436000CB680B /* EventChooserController.h */,
-				F76949151AA6436000CB680B /* EventChooserController.m */,
+				F76949151AA6436000CB680B /* EventChooserController.swift */,
 				F7E457651F61E2380082F527 /* EventChooserCoordinator.h */,
 				F7E457661F61E2380082F527 /* EventChooserCoordinator.m */,
 				2F8A2C102200FD2F007FE473 /* EventInformationController.h */,
@@ -2201,8 +2195,7 @@
 				2F8A2C0E2200FC2C007FE473 /* EventInformationCoordinator.m */,
 				2F8A2C1522012D1C007FE473 /* EventInformationView.h */,
 				2F8A2C1622012D1C007FE473 /* EventInformationView.m */,
-				F739EFE31AA64F19003A6E4B /* EventTableDataSource.h */,
-				F739EFE41AA64F19003A6E4B /* EventTableDataSource.m */,
+				F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */,
 				F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */,
 				F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */,
 				2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */,
@@ -2930,7 +2923,6 @@
 				F7D6EFAE1F69CA3B000D5BDA /* SignupView.xib in Resources */,
 				F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */,
 				F723D60D253F6D9900C6BE34 /* Colors.xcassets in Resources */,
-				F7E457621F61AC770082F527 /* EventChooserView.xib in Resources */,
 				2F4E10BC220E3905001C9F12 /* RightDetailSubtitleCell.xib in Resources */,
 				F7AA6AF9206EA810004F9437 /* idp-authView.xib in Resources */,
 				F7A94D8118AD9CB000CB9EE0 /* Images.xcassets in Resources */,
@@ -3235,7 +3227,7 @@
 				F717E5731F63053B00211D0D /* FadeTransitionSegue.m in Sources */,
 				2F763C901DD10D2900780250 /* SettingsViewController.m in Sources */,
 				F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */,
-				F739EFE51AA64F19003A6E4B /* EventTableDataSource.m in Sources */,
+				F739EFE51AA64F19003A6E4B /* EventTableDataSource.swift in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
@@ -3394,7 +3386,7 @@
 				F72D430E2694B60300F9AC3B /* ObservationRoutes.m in Sources */,
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.swift in Sources */,
 				F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */,
-				F76949161AA6436000CB680B /* EventChooserController.m in Sources */,
+				F76949161AA6436000CB680B /* EventChooserController.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */,

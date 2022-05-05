@@ -7,9 +7,7 @@
 //
 
 #import "EventChooserCoordinator.h"
-#import "EventChooserController.h"
 #import "MAGE-Swift.h"
-#import "EventTableDataSource.h"
 #import "FadeTransitionSegue.h"
 #import "AppDelegate.h"
 
@@ -18,14 +16,14 @@
 @property (strong, nonatomic) EventTableDataSource *eventDataSource;
 @property (weak, nonatomic) id<EventChooserDelegate> delegate;
 @property (strong, nonatomic) EventChooserController<NSFetchedResultsControllerDelegate> *eventController;
-@property (strong, nonatomic) UIViewController *viewController;
+@property (strong, nonatomic) UINavigationController *viewController;
 @property (strong, nonatomic) Event *eventToSegueTo;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
 
 @implementation EventChooserCoordinator
 
-- (instancetype) initWithViewController: (UIViewController *) viewController andDelegate: (id<EventChooserDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithViewController: (UINavigationController *) viewController andDelegate: (id<EventChooserDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:@"MAGEEventsFetched" object:nil];
         self.delegate = delegate;
@@ -49,19 +47,21 @@
         }
     }
     
-    self.eventDataSource = [[EventTableDataSource alloc] initWithScheme:self.scheme];
-    self.eventController = [[EventChooserController<NSFetchedResultsControllerDelegate> alloc] initWithDataSource:self.eventDataSource andDelegate:self andScheme:self.scheme];
+//    self.eventDataSource = [[EventTableDataSource alloc] initWithScheme:self.scheme];
+//    [self.eventDataSource startFetchController];
+
+    self.eventController = [[EventChooserController alloc] initWithDelegate:self scheme:self.scheme];
+    self.viewController.navigationBarHidden = false;
+//    self.eventController = [[EventChooserController<NSFetchedResultsControllerDelegate> alloc] initWithDataSource:self.eventDataSource andDelegate:self andScheme:self.scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.viewController.view];
     
-    __weak typeof(self) weakSelf = self;
-    [self.viewController presentViewController:self.eventController animated:NO completion:^{
-        [weakSelf.eventDataSource startFetchController];
-        [weakSelf.eventController initializeView];
-        [[Mage singleton] fetchEvents];
-    }];
+//    __weak typeof(self) weakSelf = self;
+    [self.viewController pushViewController:self.eventController animated:NO];
+//    [self.eventController initializeView];
+    [[Mage singleton] fetchEvents];
 }
 
-- (void) didSelectEvent:(Event *)event {
+- (void) didSelectEventWithEvent:(Event *)event {
     self.eventToSegueTo = event;
     [Server setCurrentEventId:event.remoteId];
     __weak typeof(self) weakSelf = self;
@@ -71,6 +71,7 @@
         Event *localEvent = [event MR_inContext:localContext];
         localEvent.recentSortOrder = [NSNumber numberWithInt:-1];
     } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        self.viewController.navigationBarHidden = true;
         [weakSelf.eventController dismissViewControllerAnimated:NO completion:^{
             [weakSelf.delegate eventChoosen:weakSelf.eventToSegueTo];
         }];

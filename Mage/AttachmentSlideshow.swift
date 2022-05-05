@@ -23,7 +23,7 @@ class MDCActivityIndicatorProgress: Indicator {
     var view: IndicatorView {
         return progressIndicatorView
     }
-    unowned let parent: AttachmentUIImageView;
+    weak var parent: AttachmentUIImageView?
     
     func startAnimatingView() {
         view.isHidden = false
@@ -205,7 +205,7 @@ class AttachmentSlideShow: UIView {
                 imageView?.clipsToBounds = true
                 imageView?.contentMode = .scaleAspectFill
                 imageView?.isUserInteractionEnabled = true;
-                imageView?.kf.indicatorType = .activity;
+//                imageView?.kf.indicatorType = .activity;
             }
             
             guard let imageView = imageView else {
@@ -292,7 +292,7 @@ class AttachmentSlideShow: UIView {
     
     @objc func notCachedImageViewTapped(sender: UITapGestureRecognizer) {
         let attachmentImageView:AttachmentUIImageView = sender.view as! AttachmentUIImageView;
-        attachmentImageView.kf.indicatorType = .activity;
+//        attachmentImageView.kf.indicatorType = .activity;
         attachmentSelectionDelegate?.selectedNotCachedAttachment(attachmentImageView.attachment, completionHandler: { forceDownload in
             self.showThumbnail(imageView: attachmentImageView, cacheOnly: !forceDownload);
         });
