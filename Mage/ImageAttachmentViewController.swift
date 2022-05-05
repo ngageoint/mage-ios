@@ -27,14 +27,14 @@ extension PlaceholderImage: Placeholder {}
     
     struct MyIndicator: Indicator {
         let view: UIView
-        unowned let parent: ImageAttachmentViewController;
+        weak var parent: ImageAttachmentViewController?
         
         func startAnimatingView() { view.isHidden = false }
         func stopAnimatingView() { view.isHidden = true }
         
         func setProgress(progress: Float) {
-            self.parent.downloadProgressBar?.progress = progress;
-            self.parent.progressPercentLabel?.text = String("\(progress * 100)%");
+            self.parent?.downloadProgressBar?.progress = progress;
+            self.parent?.progressPercentLabel?.text = String("\(progress * 100)%");
         }
         
         init(parent: ImageAttachmentViewController) {

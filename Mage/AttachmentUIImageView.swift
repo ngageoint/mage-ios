@@ -133,11 +133,11 @@ import Kingfisher
             thumbUrl = URL(string: String(format: "%@_thumbnail", attachmentUrl)) ?? url
         }
         
-        if let indicator = indicator {
-            self.kf.indicatorType = .custom(indicator: indicator);
-        } else {
-            self.kf.indicatorType = .activity;
-        }
+//        if let indicator = indicator {
+//            self.kf.indicatorType = .custom(indicator: indicator);
+//        } else {
+//            self.kf.indicatorType = .activity;
+//        }
         var options: KingfisherOptionsInfo = [
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
             .transition(.fade(0.3)),
