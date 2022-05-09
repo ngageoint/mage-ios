@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MAGE-Swift.h"
 #import <MaterialComponents/MaterialContainerScheme.h>
+
+@class Event;
 
 @protocol EventChooserDelegate
 

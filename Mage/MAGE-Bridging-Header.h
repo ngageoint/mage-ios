@@ -60,6 +60,7 @@
 #import "StaticPointAnnotation.h"
 #import "LocationFilterTableViewController.h"
 #import "EventTableViewCell.h"
+#import "EventChooserCoordinator.h"
 
 #import "AttachmentPushService.h"
 #import "LocationAnnotation.h"

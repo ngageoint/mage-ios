@@ -295,18 +295,20 @@ func actionButtonTapped()
     @objc public func eventsFetchedFromServer() {
         eventsFetched = true
         refreshingView.isHidden = true
-        emptyState?.toggleVisible(false)
-
-        if !eventsInitialized {
-            eventsInitialized = true
-            refreshingButtonTapped()
-        } else if eventsChanged {
-            self.refreshingButton.isHidden = false
-            UIView.animate(withDuration: 0.45, delay: 0, options: [], animations: { [weak self] in
-                self?.refreshingButton.alpha = 1
-            }, completion: nil)
-        }
-        
+        emptyState?.toggleVisible(false, completion: { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            if !self.eventsInitialized {
+                self.eventsInitialized = true
+                self.refreshingButtonTapped()
+            } else if self.eventsChanged {
+                self.refreshingButton.isHidden = false
+                UIView.animate(withDuration: 0.45, delay: 0, options: [], animations: { [weak self] in
+                    self?.refreshingButton.alpha = 1
+                }, completion: nil)
+            }
+        })
         progressView.stopAnimating()
     }
     
@@ -333,12 +335,26 @@ func actionButtonTapped()
             eventInstructions.isHidden = true
             searchContainerHeightConstraint?.constant = 0.0
         } else if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 1 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 0 {
-            if let e = eventDataSource?.otherFetchedResultsController?.fetchedObjects?[0] as? Event {
-                didSelectEvent(event: e)
+            if !UserDefaults.standard.showEventChooserOnce {
+                if let e = eventDataSource?.otherFetchedResultsController?.fetchedObjects?[0] as? Event {
+                    didSelectEvent(event: e)
+                }
+            } else {
+                UserDefaults.standard.showEventChooserOnce = false
+                eventInstructions.isHidden = false
+                searchContainerHeightConstraint?.constant = 56.0
+                eventInstructions.text = "You are a part of one event.  The observations you create and your reported location will be part of this event."
             }
         } else if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 0 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 1 {
-            if let e = eventDataSource?.recentFetchedResultsController?.fetchedObjects?[0] as? Event {
-                didSelectEvent(event: e)
+            if !UserDefaults.standard.showEventChooserOnce {
+                if let e = eventDataSource?.recentFetchedResultsController?.fetchedObjects?[0] as? Event {
+                    didSelectEvent(event: e)
+                }
+            } else {
+                UserDefaults.standard.showEventChooserOnce = false
+                eventInstructions.isHidden = false
+                searchContainerHeightConstraint?.constant = 56.0
+                eventInstructions.text = "You are a part of one event.  The observations you create and your reported location will be part of this event."
             }
         } else {
             searchContainerHeightConstraint?.constant = 56.0

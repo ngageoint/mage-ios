@@ -76,7 +76,9 @@ import Foundation
             }
         }
         
-        manager?.addTask(myselfTask);
+        if let myselfTask = myselfTask {
+            manager?.addTask(myselfTask)
+        }
     }
     
     @objc public func fetchFormAndStaticLayers(events: [Event]) {
