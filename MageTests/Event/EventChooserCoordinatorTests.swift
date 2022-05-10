@@ -14,11 +14,11 @@ import OHHTTPStubs
 @testable import MAGE
 
 class MockEventChooserDelegate: NSObject, EventChooserDelegate {
-    var eventChoosenCalled = false
-    var eventChoosenEvent: Event?
-    func eventChoosen(event: Event) {
-        eventChoosenCalled = true
-        eventChoosenEvent = event
+    var eventChosenCalled = false
+    var eventChosenEvent: Event?
+    func eventChosen(event: Event) {
+        eventChosenCalled = true
+        eventChosenEvent = event
     }
 }
 
@@ -140,8 +140,8 @@ class EventChooserCoordinatorTests : KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
-                expect(delegate.eventChoosenCalled).toEventually(beTrue())
-                expect(delegate.eventChoosenEvent?.remoteId).to(equal(1))
+                expect(delegate.eventChosenCalled).toEventually(beTrue())
+                expect(delegate.eventChosenEvent?.remoteId).to(equal(1))
             }
             
             it("Should load the current event") {
@@ -157,8 +157,8 @@ class EventChooserCoordinatorTests : KIFSpec {
                 
                 coordinator?.start()
                 
-                expect(delegate.eventChoosenCalled).toEventually(beTrue())
-                expect(delegate.eventChoosenEvent?.remoteId).to(equal(2))
+                expect(delegate.eventChosenCalled).toEventually(beTrue())
+                expect(delegate.eventChosenEvent?.remoteId).to(equal(2))
             }
             
             it("Should show the event picker if the current event is no longer around") {
@@ -176,7 +176,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 
                 coordinator?.start()
                 
-                expect(delegate.eventChoosenCalled).to(beFalse())
+                expect(delegate.eventChosenCalled).to(beFalse())
                 tester().waitForView(withAccessibilityLabel: "Event 3")
                 expect(Server.currentEventId).to(beNil())
             }
@@ -212,8 +212,8 @@ class EventChooserCoordinatorTests : KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
-                expect(delegate.eventChoosenCalled).toEventually(beTrue())
-                expect(delegate.eventChoosenEvent?.remoteId).to(equal(1))
+                expect(delegate.eventChosenCalled).toEventually(beTrue())
+                expect(delegate.eventChosenEvent?.remoteId).to(equal(1))
             }
 
             it("Should load the event chooser with no events and then get one not recent from the server") {
@@ -248,8 +248,8 @@ class EventChooserCoordinatorTests : KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
-                expect(delegate.eventChoosenCalled).toEventually(beTrue())
-                expect(delegate.eventChoosenEvent?.remoteId).to(equal(1))
+                expect(delegate.eventChosenCalled).toEventually(beTrue())
+                expect(delegate.eventChosenEvent?.remoteId).to(equal(1))
             }
             
             it("Should load the event chooser with events then get new ones") {
@@ -344,7 +344,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 tester().waitForCell(at: IndexPath(row: 0, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
                 tester().waitForView(withAccessibilityLabel: "OTHER EVENTS (1)")
                 tester().waitForView(withAccessibilityLabel: "Animal")
-                expect(delegate.eventChoosenCalled).to(beFalse())
+                expect(delegate.eventChosenCalled).to(beFalse())
             }
             
             it("should load the event chooser with one event not recent but not pick it because showEventChooserOnce was set") {
@@ -379,7 +379,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
                 tester().waitForView(withAccessibilityLabel: "Other Events (1)")
-                expect(delegate.eventChoosenCalled).to(beFalse())
+                expect(delegate.eventChosenCalled).to(beFalse())
                 expect(UserDefaults.standard.showEventChooserOnce).to(beFalse())
             }
             
@@ -415,7 +415,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
                 tester().waitForView(withAccessibilityLabel: "My Recent Events (1)")
-                expect(delegate.eventChoosenCalled).to(beFalse())
+                expect(delegate.eventChosenCalled).to(beFalse())
                 expect(UserDefaults.standard.showEventChooserOnce).to(beFalse())
             }
             

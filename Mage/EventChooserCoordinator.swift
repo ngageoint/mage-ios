@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol EventChooserDelegate {
-    func eventChoosen(event: Event)
+    func eventChosen(event: Event)
 }
 
 @objc class EventChooserCoordinator: NSObject {
@@ -32,7 +32,7 @@ import UIKit
             if let event = Event.getEvent(eventId: currentEventId, context: NSManagedObjectContext.mr_default()) {
                 eventToSegueTo = event
                 eventController?.dismiss(animated: false)
-                delegate?.eventChoosen(event: event)
+                delegate?.eventChosen(event: event)
                 if let mageEventsFetchedObserver = mageEventsFetchedObserver {
                     NotificationCenter.default.removeObserver(mageEventsFetchedObserver, name: .MAGEEventsFetched, object: nil)
                 }
@@ -77,9 +77,9 @@ extension EventChooserCoordinator : EventSelectionDelegate {
             localEvent?.recentSortOrder = -1
         } completion: { [weak self] didSave, error in
             self?.viewController?.isNavigationBarHidden = true
-            self?.eventController?.dismiss(animated: false, completion: {
+            self?.eventController?.dismiss(animated: false, completion: { [weak self] in
                 if let eventToSegueTo = self?.eventToSegueTo {
-                    self?.delegate?.eventChoosen(event: eventToSegueTo)
+                    self?.delegate?.eventChosen(event: eventToSegueTo)
                 }
             })
         }

@@ -144,7 +144,7 @@
     [eventChooser start];
 }
 
-- (void) eventChoosen:(Event *)event {
+- (void) eventChosenWithEvent:(Event *)event {
     [_childCoordinators removeLastObject];
     [Event sendRecentEvent];
     [FeedService.shared restart];
