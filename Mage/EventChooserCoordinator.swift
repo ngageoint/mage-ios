@@ -6,86 +6,88 @@
 //  Copyright © 2017 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "EventChooserCoordinator.h"
-#import "MAGE-Swift.h"
-#import "FadeTransitionSegue.h"
-#import "AppDelegate.h"
+import UIKit
 
-@interface EventChooserCoordinator() <EventSelectionDelegate>
-
-@property (strong, nonatomic) EventTableDataSource *eventDataSource;
-@property (weak, nonatomic) id<EventChooserDelegate> delegate;
-@property (strong, nonatomic) EventChooserController<NSFetchedResultsControllerDelegate> *eventController;
-@property (strong, nonatomic) UINavigationController *viewController;
-@property (strong, nonatomic) Event *eventToSegueTo;
-@property (strong, nonatomic) id<MDCContainerScheming> scheme;
-@end
-
-@implementation EventChooserCoordinator
-
-- (instancetype) initWithViewController: (UINavigationController *) viewController andDelegate: (id<EventChooserDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
-    if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventsFetched:) name:@"MAGEEventsFetched" object:nil];
-        self.delegate = delegate;
-        self.viewController = viewController;
-        self.scheme = containerScheme;
-    }
-    return self;
+@objc protocol EventChooserDelegate {
+    func eventChoosen(event: Event)
 }
 
-- (void) start {
-    if ([Server currentEventId] != nil) {
-        Event *event = [Event getEventWithEventId:[Server currentEventId] context:[NSManagedObjectContext MR_defaultContext]];
-        if (event != nil) {
-            self.eventToSegueTo = event;
-            [self.eventController dismissViewControllerAnimated:NO completion:nil];
-            [self.delegate eventChoosen:self.eventToSegueTo];
-            [[NSNotificationCenter defaultCenter] removeObserver:self];
-            return;
-        } else {
-            [Server removeCurrentEventId];
+@objc class EventChooserCoordinator: NSObject {
+    var eventDataSource: EventTableDataSource?
+    var delegate: EventChooserDelegate?
+    var eventController: EventChooserController?
+    var viewController: UINavigationController?
+    var eventToSegueTo: Event?
+    var scheme: MDCContainerScheming?
+    var mageEventsFetchedObserver: Any?
+    
+    @objc init(viewController: UINavigationController, delegate: EventChooserDelegate?, scheme: MDCContainerScheming) {
+        self.viewController = viewController
+        self.delegate = delegate
+        self.scheme = scheme
+    }
+    
+    @objc func start() {
+        if let currentEventId = Server.currentEventId() {
+            if let event = Event.getEvent(eventId: currentEventId, context: NSManagedObjectContext.mr_default()) {
+                eventToSegueTo = event
+                eventController?.dismiss(animated: false)
+                delegate?.eventChoosen(event: event)
+                if let mageEventsFetchedObserver = mageEventsFetchedObserver {
+                    NotificationCenter.default.removeObserver(mageEventsFetchedObserver, name: .MAGEEventsFetched, object: nil)
+                }
+                return
+            } else {
+                Server.removeCurrentEventId()
+            }
+        }
+        
+        self.mageEventsFetchedObserver = NotificationCenter.default.addObserver(forName: .MAGEEventsFetched, object: nil, queue: .main, using: { [weak self] notification in
+            self?.eventsFetched()
+        })
+            
+        eventController = EventChooserController(delegate: self, scheme: scheme)
+        viewController?.isNavigationBarHidden = false
+        
+        if let view = viewController?.view {
+            FadeTransitionSegue.addFadeTransition(to: view)
+        }
+        
+        if let eventController = eventController {
+            viewController?.pushViewController(eventController, animated: false)
+        }
+        Mage.singleton.fetchEvents()
+    }
+
+    func eventsFetched() {
+        eventController?.eventsFetchedFromServer()
+    }
+}
+
+extension EventChooserCoordinator : EventSelectionDelegate {
+    func didSelectEvent(event: Event) {
+        eventToSegueTo = event
+        if let remoteId = event.remoteId {
+            Server.setCurrentEventId(remoteId)
+        }
+        MagicalRecord.save { localContext in
+            // Save this event as the most recent one
+            // this will get changed once it re-pulls form the server but that is fine
+            let localEvent = event.mr_(in: localContext)
+            localEvent?.recentSortOrder = -1
+        } completion: { [weak self] didSave, error in
+            self?.viewController?.isNavigationBarHidden = true
+            self?.eventController?.dismiss(animated: false, completion: {
+                if let eventToSegueTo = self?.eventToSegueTo {
+                    self?.delegate?.eventChoosen(event: eventToSegueTo)
+                }
+            })
         }
     }
     
-//    self.eventDataSource = [[EventTableDataSource alloc] initWithScheme:self.scheme];
-//    [self.eventDataSource startFetchController];
-
-    self.eventController = [[EventChooserController alloc] initWithDelegate:self scheme:self.scheme];
-    self.viewController.navigationBarHidden = false;
-//    self.eventController = [[EventChooserController<NSFetchedResultsControllerDelegate> alloc] initWithDataSource:self.eventDataSource andDelegate:self andScheme:self.scheme];
-    [FadeTransitionSegue addFadeTransitionToView:self.viewController.view];
-    
-//    __weak typeof(self) weakSelf = self;
-    [self.viewController pushViewController:self.eventController animated:NO];
-//    [self.eventController initializeView];
-    [[Mage singleton] fetchEvents];
+    func actionButtonTapped() {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.logout()
+        }
+    }
 }
-
-- (void) didSelectEventWithEvent:(Event *)event {
-    self.eventToSegueTo = event;
-    [Server setCurrentEventId:event.remoteId];
-    __weak typeof(self) weakSelf = self;
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        // Save this event as the most recent one
-        // this will get changed once it re-pulls from the server but that is fine
-        Event *localEvent = [event MR_inContext:localContext];
-        localEvent.recentSortOrder = [NSNumber numberWithInt:-1];
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-        self.viewController.navigationBarHidden = true;
-        [weakSelf.eventController dismissViewControllerAnimated:NO completion:^{
-            [weakSelf.delegate eventChoosen:weakSelf.eventToSegueTo];
-        }];
-    }];
-}
-
-- (void) actionButtonTapped {
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate logout];
-}
-
-- (void) eventsFetched: (NSNotification *) notification {
-    [self.eventController eventsFetchedFromServer];
-}
-
-
-@end

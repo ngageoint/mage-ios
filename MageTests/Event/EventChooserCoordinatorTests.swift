@@ -16,7 +16,7 @@ import OHHTTPStubs
 class MockEventChooserDelegate: NSObject, EventChooserDelegate {
     var eventChoosenCalled = false
     var eventChoosenEvent: Event?
-    func eventChoosen(_ event: Event!) {
+    func eventChoosen(event: Event) {
         eventChoosenCalled = true
         eventChoosenEvent = event
     }
@@ -64,7 +64,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -100,7 +100,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
@@ -133,7 +133,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -153,7 +153,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -172,7 +172,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -205,7 +205,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -241,7 +241,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -280,7 +280,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -323,7 +323,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
@@ -359,7 +359,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
-                coordinator = EventChooserCoordinator(viewController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme())
+                coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
                 
                 coordinator?.start()
                 
