@@ -141,7 +141,7 @@ extension EventTableDataSource : UITableViewDelegate {
         if let filteredFetchedResultsController = filteredFetchedResultsController, section == 0, filteredFetchedResultsController.fetchedObjects?.count != 0 {
             return 40.0
         }
-        return CGFloat.leastNormalMagnitude
+        return CGFloat.leastNonzeroMagnitude
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -150,15 +150,15 @@ extension EventTableDataSource : UITableViewDelegate {
         }
         
         if section == 0 {
-            return CGFloat.leastNormalMagnitude
+            return CGFloat.leastNonzeroMagnitude
         }
         
         if section == 1, let fetchedObjects = recentFetchedResultsController?.fetchedObjects?.count, fetchedObjects == 0 {
-            return CGFloat.leastNormalMagnitude
+            return CGFloat.leastNonzeroMagnitude
         }
         
         if section == 2, let fetchedObjects = otherFetchedResultsController?.fetchedObjects?.count, fetchedObjects == 0 {
-            return CGFloat.leastNormalMagnitude
+            return CGFloat.leastNonzeroMagnitude
         }
         
         return 48.0
@@ -172,7 +172,6 @@ extension EventTableDataSource : UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int){
-        view.tintColor = UIColor.red
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
         header.backgroundColor = .clear
@@ -239,6 +238,6 @@ extension EventTableDataSource : UITableViewDataSource {
         if section == 2 {
             return "\(otherFetchedResultsController?.accessibilityLabel ?? "Other Events") (\(otherFetchedResultsController?.fetchedObjects?.count ?? 0))"
         }
-        return nil
+        return " "
     }
 }
