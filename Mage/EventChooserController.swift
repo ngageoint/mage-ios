@@ -301,7 +301,7 @@ func actionButtonTapped()
             }
             if !self.eventsInitialized {
                 self.eventsInitialized = true
-                self.refreshingButtonTapped()
+                self.updateEventTable(autoSelectEvent: true)
             } else if self.eventsChanged {
                 self.refreshingButton.isHidden = false
                 UIView.animate(withDuration: 0.45, delay: 0, options: [], animations: { [weak self] in
@@ -313,6 +313,11 @@ func actionButtonTapped()
     }
     
     @objc func refreshingButtonTapped() {
+        updateEventTable(autoSelectEvent: false)
+    }
+    
+    // will update the event table and if there is only one event follow the autoSelectEvent flag
+    func updateEventTable(autoSelectEvent: Bool = true) {
         eventDataSource?.refreshEventData()
         tableView.reloadData()
         refreshingButton.isHidden = true
@@ -336,7 +341,7 @@ func actionButtonTapped()
             searchContainerHeightConstraint?.constant = 0.0
         } else if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 1 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 0 {
             if !UserDefaults.standard.showEventChooserOnce {
-                if let e = eventDataSource?.otherFetchedResultsController?.fetchedObjects?[0] as? Event {
+                if autoSelectEvent, let e = eventDataSource?.otherFetchedResultsController?.fetchedObjects?[0] as? Event {
                     didSelectEvent(event: e)
                 }
             } else {
@@ -347,7 +352,7 @@ func actionButtonTapped()
             }
         } else if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 0 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 1 {
             if !UserDefaults.standard.showEventChooserOnce {
-                if let e = eventDataSource?.recentFetchedResultsController?.fetchedObjects?[0] as? Event {
+                if autoSelectEvent, let e = eventDataSource?.recentFetchedResultsController?.fetchedObjects?[0] as? Event {
                     didSelectEvent(event: e)
                 }
             } else {
@@ -380,7 +385,7 @@ extension EventChooserController : EventSelectionDelegate {
         } else {
             let alert = UIAlertController(title: "Unauthorized", message: "You are no longer a part of the event '\(event.name ?? "")'.  Please contact an administrator if you need access.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Refresh Events", style: .default, handler: { action in
-                self.refreshingButtonTapped()
+                self.updateEventTable(autoSelectEvent: false)
             }))
             self.present(alert, animated: true)
         }
