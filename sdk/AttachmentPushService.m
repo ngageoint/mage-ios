@@ -290,6 +290,8 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
             if (![[NSFileManager defaultManager] removeItemAtURL:attachmentUrl error:&removeError]) {
                 NSLog(@"ATTACHMENT - Error removing temporary attachment upload file %@", removeError);
             }
+            
+            [NSNotificationCenter.defaultCenter postNotificationName:@"AttachmentPushed" object:nil];
         }];
     } else {
         // try again
