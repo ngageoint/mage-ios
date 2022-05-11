@@ -10,7 +10,6 @@
 
 #import "AuthenticationCoordinator.h"
 #import "AuthenticationCoordinator_Server5.h"
-#import "EventChooserCoordinator.h"
 
 #import <UserNotifications/UserNotifications.h>
 #import "MageSessionManager.h"
@@ -140,12 +139,12 @@
 
 
 - (void) startEventChooser {
-    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController andDelegate:self andScheme:_scheme];
+    EventChooserCoordinator *eventChooser = [[EventChooserCoordinator alloc] initWithViewController:self.navigationController delegate:self scheme:_scheme];
     [_childCoordinators addObject:eventChooser];
     [eventChooser start];
 }
 
-- (void) eventChoosen:(Event *)event {
+- (void) eventChosenWithEvent:(Event *)event {
     [_childCoordinators removeLastObject];
     [Event sendRecentEvent];
     [FeedService.shared restart];

@@ -9,7 +9,6 @@
 #import "LocationService.h"
 #import "NSDate+display.h"
 #import "AppDelegate.h"
-#import "EventChooserCoordinator.h"
 #import "ChangePasswordViewController.h"
 #import "AuthenticationCoordinator.h"
 #import "ObservationTableHeaderView.h"

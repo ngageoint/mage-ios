@@ -124,7 +124,7 @@ import Kingfisher
         
         if (url.isFileURL) {
             let provider = LocalFileImageDataProvider(fileURL: url)
-            self.kf.setImage(with: provider)
+            self.kf.setImage(with: provider, completionHandler: completionHandler)
             return;
         }
         

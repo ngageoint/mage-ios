@@ -840,6 +840,8 @@ enum State: Int, CustomStringConvertible {
         set {
             if let newValue = newValue {
                 self.geometryData = SFGeometryUtils.encode(newValue);
+            } else {
+                self.geometryData = nil
             }
         }
     }

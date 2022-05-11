@@ -111,6 +111,8 @@
 		F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F292497C75F00313703 /* FeedItemViewController.swift */; };
 		F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */; };
 		F7098F2E24980DD000313703 /* FeedItemRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7098F2D24980DD000313703 /* FeedItemRetriever.swift */; };
+		F709F02D28297AD2002EA135 /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
+		F709F02F2829870B002EA135 /* twoEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02E2829870B002EA135 /* twoEvents.json */; };
 		F70A708C27D932FE000881F5 /* FilteredUsersMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70A708B27D932FE000881F5 /* FilteredUsersMapTests.swift */; };
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
@@ -389,6 +391,7 @@
 		F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */; };
 		F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */; };
 		F79A09472694D1A200EB2ABA /* AttachmentPushServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */; };
+		F79B5DE32821D94C001A5844 /* EventChooserCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79B5DE22821D94C001A5844 /* EventChooserCoordinatorTests.swift */; };
 		F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */; };
 		F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */; };
 		F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */; };
@@ -498,7 +501,7 @@
 		F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */; };
 		F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */; };
 		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
-		F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.m */; };
+		F7E457671F61E2380082F527 /* EventChooserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.swift */; };
 		F7E5748C27DA7BEA009A6E0D /* PersistedMapStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5748B27DA7BEA009A6E0D /* PersistedMapStateTests.swift */; };
 		F7E5748E27DA818A009A6E0D /* HasMapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5748D27DA818A009A6E0D /* HasMapSettingsTests.swift */; };
 		F7E5749027DA8D21009A6E0D /* CanCreateObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5748F27DA8D21009A6E0D /* CanCreateObservationTests.swift */; };
@@ -768,6 +771,8 @@
 		F7098F292497C75F00313703 /* FeedItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemViewController.swift; sourceTree = "<group>"; };
 		F7098F2B2497D6E600313703 /* FeedItemPropertyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemPropertyCell.swift; sourceTree = "<group>"; };
 		F7098F2D24980DD000313703 /* FeedItemRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetriever.swift; sourceTree = "<group>"; };
+		F709F02C28297AD2002EA135 /* threeEvents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = threeEvents.json; sourceTree = "<group>"; };
+		F709F02E2829870B002EA135 /* twoEvents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = twoEvents.json; sourceTree = "<group>"; };
 		F70A708B27D932FE000881F5 /* FilteredUsersMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredUsersMapTests.swift; sourceTree = "<group>"; };
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
@@ -1117,6 +1122,7 @@
 		F7974CD4252DF56E000CC266 /* SignupViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewControllerTests.swift; sourceTree = "<group>"; };
 		F7994AB6190EF7BD00A90A1D /* MageRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MageRootViewController.swift; sourceTree = "<group>"; };
 		F79A09462694D1A200EB2ABA /* AttachmentPushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPushServiceTests.swift; sourceTree = "<group>"; };
+		F79B5DE22821D94C001A5844 /* EventChooserCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventChooserCoordinatorTests.swift; sourceTree = "<group>"; };
 		F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLControllerTests.swift; sourceTree = "<group>"; };
 		F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewTests.swift; sourceTree = "<group>"; };
 		F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewTests.swift; sourceTree = "<group>"; };
@@ -1251,8 +1257,7 @@
 		F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsView.swift; sourceTree = "<group>"; };
 		F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsDelegate.swift; sourceTree = "<group>"; };
 		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
-		F7E457651F61E2380082F527 /* EventChooserCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventChooserCoordinator.h; sourceTree = "<group>"; };
-		F7E457661F61E2380082F527 /* EventChooserCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventChooserCoordinator.m; sourceTree = "<group>"; };
+		F7E457661F61E2380082F527 /* EventChooserCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventChooserCoordinator.swift; sourceTree = "<group>"; };
 		F7E5748B27DA7BEA009A6E0D /* PersistedMapStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedMapStateTests.swift; sourceTree = "<group>"; };
 		F7E5748D27DA818A009A6E0D /* HasMapSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasMapSettingsTests.swift; sourceTree = "<group>"; };
 		F7E5748F27DA8D21009A6E0D /* CanCreateObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservationTests.swift; sourceTree = "<group>"; };
@@ -2141,6 +2146,8 @@
 				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
 				F7CE2303254369BD00D710DE /* checkboxForm.json */,
 				F7F15B16274596B1008FF6C2 /* events.json */,
+				F709F02C28297AD2002EA135 /* threeEvents.json */,
+				F709F02E2829870B002EA135 /* twoEvents.json */,
 				F71446F424A3FAF5005A5EC1 /* feedContent.json */,
 				F70B47B324B5F7AF00D0BFE5 /* feeds.json */,
 				F7C640FE257EB29100C02335 /* geometryField.json */,
@@ -2187,8 +2194,7 @@
 			children = (
 				F76A15BC1A93C33300F2BDF1 /* Constraints */,
 				F76949151AA6436000CB680B /* EventChooserController.swift */,
-				F7E457651F61E2380082F527 /* EventChooserCoordinator.h */,
-				F7E457661F61E2380082F527 /* EventChooserCoordinator.m */,
+				F7E457661F61E2380082F527 /* EventChooserCoordinator.swift */,
 				2F8A2C102200FD2F007FE473 /* EventInformationController.h */,
 				2F8A2C112200FD2F007FE473 /* EventInformationController.m */,
 				2F8A2C0D2200FC2C007FE473 /* EventInformationCoordinator.h */,
@@ -2776,6 +2782,7 @@
 			isa = PBXGroup;
 			children = (
 				F7F264382806FDF100758C5B /* EventChooserControllerTests.swift */,
+				F79B5DE22821D94C001A5844 /* EventChooserCoordinatorTests.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -2980,7 +2987,9 @@
 				F70D19E32742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip in Resources */,
 				F795ED1424BD061C0028FBFC /* observations.json in Resources */,
 				F7098F262492C36700313703 /* test_marker.png in Resources */,
+				F709F02D28297AD2002EA135 /* threeEvents.json in Resources */,
 				F7CDD7132601194600F3294C /* polygonObservation.json in Resources */,
+				F709F02F2829870B002EA135 /* twoEvents.json in Resources */,
 				F70039442006BA1700E6E660 /* apiSuccess.json in Resources */,
 				F71446F1249BB5BC005A5EC1 /* icon27.png in Resources */,
 				F777B00A252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json in Resources */,
@@ -3552,7 +3561,7 @@
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
 				F7813A8A2466037B003666ED /* GeometryView.swift in Sources */,
 				F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */,
-				F7E457671F61E2380082F527 /* EventChooserCoordinator.m in Sources */,
+				F7E457671F61E2380082F527 /* EventChooserCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3644,6 +3653,7 @@
 				F7BEF68427D7C561000E8CDE /* FilteredObservationsMapTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 				F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */,
+				F79B5DE32821D94C001A5844 /* EventChooserCoordinatorTests.swift in Sources */,
 				F795ED0C24B8FCC00028FBFC /* UserTableHeaderViewTests.swift in Sources */,
 				F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */,
 				F7F08E9E27EA2E5600640D89 /* SFGeometryMapTests.swift in Sources */,

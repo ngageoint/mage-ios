@@ -17,6 +17,7 @@ class ObservationTableViewController: UITableViewController {
     var childCoordinators: [NSObject] = [];
     var updateTimer: Timer?;
     var listenersSetUp = false;
+    var attachmentPushedObserver:Any?
     
     private lazy var createFab : MDCFloatingButton = {
         let fab = MDCFloatingButton(shape: .default);
@@ -98,6 +99,9 @@ class ObservationTableViewController: UITableViewController {
         self.tableView.contentInset.bottom = 100;
 //        self.tableView.tableFooterView = allReturned;
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        if let attachmentPushedObserver = attachmentPushedObserver {
+            NotificationCenter.default.removeObserver(attachmentPushedObserver, name: .AttachmentPushed, object: nil)
+        }
     }
     
     func setupFilterListeners() {
@@ -106,6 +110,7 @@ class ObservationTableViewController: UITableViewController {
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterNumberKey), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.importantFilterKey), options: .new, context: nil);
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.favoritesFilterKey), options: .new, context: nil);
+        attachmentPushedObserver = NotificationCenter.default.addObserver(self, selector: #selector(refreshObservations), name: .AttachmentPushed, object: nil)
         listenersSetUp = true;
     }
     

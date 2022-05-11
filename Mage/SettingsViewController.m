@@ -233,6 +233,11 @@
             [self onLogout];
             break;
         }
+        case kNavigation: {
+            NavigationSettingsViewController *viewController = [[NavigationSettingsViewController alloc] initWithScheme:self.scheme];
+            [self showDetailViewController:viewController sender:nil];
+            break;
+        }
         case kTheme: {
             ThemeTableViewController *viewController = [[ThemeTableViewController alloc] initWithScheme:self.scheme];
             [self showDetailViewController:viewController sender:nil];
