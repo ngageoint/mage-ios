@@ -5,6 +5,20 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## 4.0.2
 
+##### Features
+  * Long secondary fields are now ellipsized
+  * When all events but one are deleted from the user, they are still shown the event picker
+  * Observation table immediately updates when an attachment is pushed
+
+##### Bug Fixes
+  * Fix navigation bar colors after using the camera
+  * Crash when switching quickly between attachment view and observation list
+  * Extra space at the top of the event chooser view
+  * Cannot clear the observation geometry
+  * iPad Navigation Options Setting does not open
+  * Tapping a local attachment does not show the attachment
+  * Distance is not being calculated correctly when navigation lines are updated
+
 ##### Bug Fixes
 * Navigation bar colors were incorrect after using the camera
 * long secondary fields are now ellipsized
