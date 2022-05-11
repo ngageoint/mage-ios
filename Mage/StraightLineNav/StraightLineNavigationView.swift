@@ -257,17 +257,16 @@ class StraightLineNavigationView: UIView {
             relativeBearingToTargetLabel.textColor = self.relativeBearingColor;
             headingLabel.textColor = self.headingColor;
             navigation.tintColor = self.relativeBearingColor
+            let destinationLocation = CLLocation(latitude: destinationCoordinate.latitude, longitude: destinationCoordinate.longitude);
+            let metersMeasurement = NSMeasurement(doubleValue: destinationLocation.distance(from: userLocation), unit: UnitLength.meters);
+            let convertedMeasurement = metersMeasurement.converting(to: UnitLength.nauticalMiles);
+            distanceToTargetLabel.text = "\(measurementFormatter.string(from: convertedMeasurement))"
         }
         
         if let speed = locationManager?.location?.speed {
             let metersPerSecondMeasurement = Measurement(value: speed, unit: UnitSpeed.metersPerSecond);
             speedLabel.text = "\(measurementFormatter.string(from: metersPerSecondMeasurement.converted(to: .knots)))";
         }
-        
-        let destinationLocation = CLLocation(latitude: destinationCoordinate?.latitude ?? 0, longitude: destinationCoordinate?.longitude ?? 0);
-        let metersMeasurement = NSMeasurement(doubleValue: destinationLocation.distance(from: userLocation), unit: UnitLength.meters);
-        let convertedMeasurement = metersMeasurement.converting(to: UnitLength.nauticalMiles);
-        distanceToTargetLabel.text = "\(measurementFormatter.string(from: convertedMeasurement))"
     }
     
     func layoutView() {
