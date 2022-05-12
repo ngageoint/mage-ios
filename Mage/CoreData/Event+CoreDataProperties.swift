@@ -28,6 +28,29 @@ extension Event {
     @NSManaged var acl:[AnyHashable : Any]?
 }
 
+extension Event {
+    
+    var unsyncedObservations: [Observation] {
+        guard let id = self.remoteId else {
+            return []
+        }
+
+        let predicate = NSPredicate(format: "error != nil && eventId == %@", id)
+        let fetchRequest: NSFetchRequest<Observation> = Observation.fetchRequest()
+        fetchRequest.predicate = predicate
+        do {
+            if let list = try self.managedObjectContext?.fetch(fetchRequest) {
+                return list
+            } else {
+                return []
+            }
+        } catch let error {
+            print("error:\(error)")
+            return []
+        }
+    }
+}
+
 // MARK: Generated accessors for teams
 extension Event {
     

@@ -292,9 +292,9 @@ class EventChooserCoordinatorTests : KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Refresh Events")
                 tester().wait(forTimeInterval: 5)
-                tester().waitForCell(at: IndexPath(row: 1, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().waitForCell(at: IndexPath(row: 1, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 tester().tapView(withAccessibilityLabel: "Refresh Events")
-                tester().waitForCell(at: IndexPath(row: 2, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().waitForCell(at: IndexPath(row: 2, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 tester().waitForView(withAccessibilityLabel: "OTHER EVENTS (3)")
                 tester().waitForView(withAccessibilityLabel: "Animal")
             }
@@ -339,9 +339,9 @@ class EventChooserCoordinatorTests : KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "Refresh Events")
                 tester().wait(forTimeInterval: 5)
-                tester().waitForCell(at: IndexPath(row: 1, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().waitForCell(at: IndexPath(row: 1, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 tester().tapView(withAccessibilityLabel: "Refresh Events")
-                tester().waitForCell(at: IndexPath(row: 0, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().waitForCell(at: IndexPath(row: 0, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 tester().waitForView(withAccessibilityLabel: "OTHER EVENTS (1)")
                 tester().waitForView(withAccessibilityLabel: "Animal")
                 expect(delegate.eventChosenCalled).to(beFalse())

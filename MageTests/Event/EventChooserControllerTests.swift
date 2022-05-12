@@ -145,9 +145,9 @@ class EventChooserControllerTests : KIFSpec {
                 
                 view?.eventsFetchedFromServer()
                 tester().waitForView(withAccessibilityLabel: "Refresh Events")
-                tester().waitForCell(at: IndexPath(row: 1, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().waitForCell(at: IndexPath(row: 1, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 tester().tapView(withAccessibilityLabel: "Refresh Events")
-                tester().waitForCell(at: IndexPath(row: 2, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().waitForCell(at: IndexPath(row: 2, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
             }
             
             it("should load the event chooser with one event not recent") {
@@ -242,7 +242,7 @@ class EventChooserControllerTests : KIFSpec {
                 tester().wait(forTimeInterval: 0.8)
                 tester().waitForView(withAccessibilityLabel: "My Recent Events (1)")
 
-                tester().tapRow(at: IndexPath(row: 0, section: 1), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().tapItem(at: IndexPath(row: 0, section: 1), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(1))
             }
@@ -270,7 +270,7 @@ class EventChooserControllerTests : KIFSpec {
                 
                 tester().waitForView(withAccessibilityLabel: "My Recent Events (1)")
                 
-                tester().tapRow(at: IndexPath(row: 0, section: 1), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().tapItem(at: IndexPath(row: 0, section: 1), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(1))
             }
@@ -316,8 +316,8 @@ class EventChooserControllerTests : KIFSpec {
                 // wait for fade out
                 tester().wait(forTimeInterval: 0.8)
                 tester().waitForView(withAccessibilityLabel: "My Recent Events (1)")
-                tester().waitForView(withAccessibilityLabel: "1 Unsent Observations")
-                tester().tapRow(at: IndexPath(row: 0, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().waitForView(withAccessibilityLabel: "Badge 1")
+                tester().tapItem(at: IndexPath(row: 0, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(2))
             }
@@ -344,7 +344,7 @@ class EventChooserControllerTests : KIFSpec {
                 
                 Event.mr_deleteAll(matching: NSPredicate(format: "remoteId = %d", 2), in: NSManagedObjectContext.mr_default())
                 
-                tester().tapRow(at: IndexPath(row: 0, section: 2), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().tapItem(at: IndexPath(row: 0, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 tester().waitForView(withAccessibilityLabel: "Unauthorized")
                 tester().tapView(withAccessibilityLabel: "Refresh Events")
                 tester().waitForView(withAccessibilityLabel: "Other Events (1)")
@@ -374,7 +374,7 @@ class EventChooserControllerTests : KIFSpec {
                 TestHelpers.printAllAccessibilityLabelsInWindows()
                 tester().enterText("Even", intoViewWithAccessibilityLabel: "Search")
                 tester().waitForView(withAccessibilityLabel: "Filtered (2)")
-                tester().tapRow(at: IndexPath(row: 0, section: 0), inTableViewWithAccessibilityIdentifier: "Event Table")
+                tester().tapItem(at: IndexPath(row: 0, section: 0), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(1))
             }
