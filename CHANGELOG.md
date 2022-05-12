@@ -19,11 +19,6 @@ Adheres to [Semantic Versioning](http://semver.org/).
   * Tapping a local attachment does not show the attachment
   * Distance is not being calculated correctly when navigation lines are updated
 
-##### Bug Fixes
-* Navigation bar colors were incorrect after using the camera
-* long secondary fields are now ellipsized
-* fixes crash when switching quickly between an attachment view and the observation list
-
 ## 4.0.1
 
 ##### Bug Fixes
