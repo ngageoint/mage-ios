@@ -40,16 +40,16 @@ class FormPickerTests: KIFSpec {
             var window: UIWindow!;
 
             beforeEach {
-                window = TestHelpers.getKeyWindowVisible();
-                
-//                Nimble_Snapshots.setNimbleTolerance(0.0);
-//                Nimble_Snapshots.recordAllSnapshots()
+                window = TestHelpers.getKeyWindowVisible()
+                TestHelpers.clearAndSetUpStack()
             }
             
             afterEach {
-                formPicker.dismiss(animated: false, completion: nil);
-                window.rootViewController = nil;
-                formPicker = nil;
+                formPicker.dismiss(animated: false, completion: nil)
+                window.rootViewController = nil
+                formPicker = nil
+                Server.removeCurrentEventId()
+                TestHelpers.clearAndSetUpStack()
             }
             
             it("initialized") {
@@ -180,9 +180,7 @@ class FormPickerTests: KIFSpec {
                     TestHelpers.printAllAccessibilityLabelsInWindows();
                 });
                 tester().waitForView(withAccessibilityLabel: "Add A Form Table");
-                tester().waitForCell(at: IndexPath(row: forms.count - 1, section: 0), in: viewTester().usingLabel("Add A Form Table").view as? UITableView);
-                tester().waitForTappableView(withAccessibilityLabel: "Suspect");
-                tester().tapView(withAccessibilityLabel: "Suspect");
+                tester().tapItem(at: IndexPath(row: forms.count - 1, section: 0), inCollectionViewWithAccessibilityIdentifier: "Add A Form Table")
                 
                 expect(delegate.formPickedCalled).to(beTrue());
                 expect(delegate.pickedForm).to(equal(forms[9]));
@@ -248,6 +246,145 @@ class FormPickerTests: KIFSpec {
                 window.rootViewController = formPicker;
                 
 //                expect(formPicker.view).to(haveValidSnapshot());
+            }
+            
+            it("should disable forms at or exceeding max") {
+                let formsJson: [[String: AnyHashable]] = [[
+                    "name": "Suspect",
+                    "description": "Information about a suspect",
+                    "color": "#5278A2",
+                    "id": 2,
+                    "max": 1
+                ], [
+                    "name": "Vehicle",
+                    "description": "Information about a vehicle",
+                    "color": "#7852A2",
+                    "id": 3
+                ], [
+                    "name": "Evidence",
+                    "description": "Evidence form",
+                    "color": "#52A278",
+                    "id": 0
+                ], [
+                    "name": "Witness",
+                    "description": "Information gathered from a witness",
+                    "color": "#A25278",
+                    "id": 1
+                ], [
+                    "name": "Location",
+                    "description": "Detailed information about the scene",
+                    "color": "#78A252",
+                    "id": 4
+                ]]
+                
+                let delegate = MockFormPickerDelegate();
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                
+                Server.setCurrentEventId(1)
+                
+                var baseObservationJson: [AnyHashable : Any] = [:]
+                baseObservationJson["important"] = nil;
+                baseObservationJson["favoriteUserIds"] = nil;
+                baseObservationJson["attachments"] = nil;
+                baseObservationJson["lastModified"] = nil;
+                baseObservationJson["createdAt"] = nil;
+                baseObservationJson["eventId"] = 1;
+                baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
+                baseObservationJson["state"] = [
+                    "name": "active"
+                ]
+                baseObservationJson["geometry"] = [
+                    "coordinates": [-1.1, 2.1],
+                    "type": "Point"
+                ]
+                baseObservationJson["properties"] = [
+                    "timestamp": "2020-06-05T17:21:46.969Z",
+                    "forms": [[
+                        "formId":2
+                    ]]
+                ];
+                
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
+                let observations = Observation.mr_findAll();
+                expect(observations?.count).to(equal(1));
+                let observation: Observation = observations![0] as! Observation;
+                
+                formPicker = FormPickerViewController(delegate: delegate, forms: forms, observation: observation, scheme: MAGEScheme.scheme());
+                
+                window.rootViewController = formPicker;
+                
+                tester().waitForTappableView(withAccessibilityLabel: "Cancel");
+                tester().tapItem(at: IndexPath(row: 0, section: 0), inCollectionViewWithAccessibilityIdentifier: "Add A Form Table")
+                tester().waitForView(withAccessibilityLabel: "Suspect form cannot be included in an observation more than 1 time")
+
+            }
+            
+            it("should indicate required forms") {
+                let formsJson: [[String: AnyHashable]] = [[
+                    "name": "Suspect",
+                    "description": "Information about a suspect",
+                    "color": "#5278A2",
+                    "id": 2,
+                    "min": 1
+                ], [
+                    "name": "Vehicle",
+                    "description": "Information about a vehicle",
+                    "color": "#7852A2",
+                    "id": 3
+                ], [
+                    "name": "Evidence",
+                    "description": "Evidence form",
+                    "color": "#52A278",
+                    "id": 0
+                ], [
+                    "name": "Witness",
+                    "description": "Information gathered from a witness",
+                    "color": "#A25278",
+                    "id": 1
+                ], [
+                    "name": "Location",
+                    "description": "Detailed information about the scene",
+                    "color": "#78A252",
+                    "id": 4
+                ]]
+                
+                let delegate = MockFormPickerDelegate();
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                
+                Server.setCurrentEventId(1)
+                
+                var baseObservationJson: [AnyHashable : Any] = [:]
+                baseObservationJson["important"] = nil;
+                baseObservationJson["favoriteUserIds"] = nil;
+                baseObservationJson["attachments"] = nil;
+                baseObservationJson["lastModified"] = nil;
+                baseObservationJson["createdAt"] = nil;
+                baseObservationJson["eventId"] = 1;
+                baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
+                baseObservationJson["state"] = [
+                    "name": "active"
+                ]
+                baseObservationJson["geometry"] = [
+                    "coordinates": [-1.1, 2.1],
+                    "type": "Point"
+                ]
+                baseObservationJson["properties"] = [
+                    "timestamp": "2020-06-05T17:21:46.969Z",
+                    "forms": []
+                ];
+                
+                MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
+                let observations = Observation.mr_findAll();
+                expect(observations?.count).to(equal(1));
+                let observation: Observation = observations![0] as! Observation;
+                
+                formPicker = FormPickerViewController(delegate: delegate, forms: forms, observation: observation, scheme: MAGEScheme.scheme());
+                
+                window.rootViewController = formPicker;
+                
+                tester().waitForView(withAccessibilityLabel: "Suspect*");
             }
         }
     }

@@ -16,10 +16,8 @@ class EventTableDataSource: NSObject {
     
     var disclosureIndicator: UICellAccessory?
     var cellRegistration: UICollectionView.CellRegistration<EventCell, EventScheme>?
-    var headerRegistration: UICollectionView.SupplementaryRegistration
-    <UICollectionViewListCell>?
-    var footerRegistration: UICollectionView.SupplementaryRegistration
-    <UICollectionViewListCell>?
+    var headerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>?
+    var footerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>?
 
     public init(eventSelectionDelegate: EventSelectionDelegate? = nil, scheme: MDCContainerScheming? = nil) {
         self.scheme = scheme

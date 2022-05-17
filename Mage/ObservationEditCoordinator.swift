@@ -273,7 +273,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
         let formPicker: FormPickerViewController = FormPickerViewController(delegate: self, forms: forms, observation: observation, scheme: self.scheme);
         formPicker.applyTheme(withScheme: scheme);
         bottomSheet = MDCBottomSheetController(contentViewController: formPicker);
-        bottomSheet?.trackingScrollView = formPicker.tableView
+        bottomSheet?.trackingScrollView = formPicker.collectionView
         self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
     }
     
