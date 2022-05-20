@@ -8,50 +8,75 @@ import CoreData
 import UIKit
 
 class EventTableDataSource: NSObject {
-    var tableView: UITableView
     var scheme: MDCContainerScheming?
     var eventSelectionDelegate: EventSelectionDelegate?
     var otherFetchedResultsController: NSFetchedResultsController<Event>?
     var recentFetchedResultsController:NSFetchedResultsController<Event>?
     var filteredFetchedResultsController:NSFetchedResultsController<Event>?
-    var eventIdToOfflineObservationCount: [NSNumber : NSNumber] = [:]
     
-    public init(tableView: UITableView, eventSelectionDelegate: EventSelectionDelegate? = nil, scheme: MDCContainerScheming? = nil) {
+    var disclosureIndicator: UICellAccessory?
+    var cellRegistration: UICollectionView.CellRegistration<EventCell, EventScheme>?
+    var headerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>?
+    var footerRegistration: UICollectionView.SupplementaryRegistration<UICollectionViewListCell>?
+
+    public init(eventSelectionDelegate: EventSelectionDelegate? = nil, scheme: MDCContainerScheming? = nil) {
         self.scheme = scheme
-        self.tableView = tableView
         self.eventSelectionDelegate = eventSelectionDelegate
         super.init()
     }
     
     func startFetchController() {
-        refreshEventData()
-        
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Observation")
-        
-        let eventExpression = NSExpression(forKeyPath: "eventId")
-        let countExpression = NSExpressionDescription()
-        countExpression.name = "count"
-        countExpression.expression = NSExpression(forFunction: "count:", arguments: [eventExpression])
-        countExpression.expressionResultType = .integer64AttributeType
-        
-        request.resultType = .dictionaryResultType
-        request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-        request.propertiesToGroupBy = ["eventId"]
-        request.propertiesToFetch = ["eventId", countExpression]
-        request.predicate = NSPredicate(format: "error != nil")
-        
-        do {
-            let groups = try NSManagedObjectContext.mr_default().fetch(request)
-            var offlineCount: [NSNumber:NSNumber] = [:]
-            for group in groups {
-                if let dictionary = group as? [String : NSNumber], let eventId = dictionary["eventId"], let count = dictionary["count"] {
-                    offlineCount[eventId] = count
-                }
+
+        self.disclosureIndicator = self.disclosureIndicator ?? UICellAccessory.disclosureIndicator(options: .init(tintColor: scheme?.colorScheme.primaryColorVariant))
+        cellRegistration = cellRegistration ?? UICollectionView.CellRegistration<EventCell, EventScheme> { (cell, indexPath, item) in
+            cell.event = item.event
+            cell.scheme = item.scheme
+            if let disclosureIndicator = self.disclosureIndicator {
+                cell.accessories = [disclosureIndicator]//, customAccessory]
             }
-            eventIdToOfflineObservationCount = offlineCount
-        } catch {
-            NSLog("Error fetching offline observation counts \(error)")
         }
+        
+        headerRegistration = UICollectionView.SupplementaryRegistration
+        <UICollectionViewListCell>(elementKind: UICollectionView.elementKindSectionHeader) {
+            [unowned self] (headerView, elementKind, indexPath) in
+            
+            var headerText = ""
+            if let filteredFetchedResultsController = filteredFetchedResultsController {
+                headerText = "\(filteredFetchedResultsController.accessibilityLabel ?? "Filtered Events") (\(filteredFetchedResultsController.fetchedObjects?.count ?? 0))"
+            }
+            if indexPath.section == 1 {
+                headerText = "\(recentFetchedResultsController?.accessibilityLabel ?? "My Recent Events") (\(recentFetchedResultsController?.fetchedObjects?.count ?? 0))"
+            }
+            if indexPath.section == 2 {
+                headerText = "\(otherFetchedResultsController?.accessibilityLabel ?? "Other Events") (\(otherFetchedResultsController?.fetchedObjects?.count ?? 0))"
+            }
+            var configuration = headerView.defaultContentConfiguration()
+            configuration.text = headerText
+            
+            headerView.contentConfiguration = configuration
+        }
+        
+        footerRegistration = UICollectionView.SupplementaryRegistration
+        <UICollectionViewListCell>(elementKind: UICollectionView.elementKindSectionFooter) {
+            [unowned self] (headerView, elementKind, indexPath) in
+            
+            var headerText = ""
+            if filteredFetchedResultsController != nil {
+                headerText = "End of Results"
+            }
+            if indexPath.section == 1 {
+                headerText = ""
+            }
+            if indexPath.section == 2 {
+                headerText = ""
+            }
+            var configuration = headerView.defaultContentConfiguration()
+            configuration.text = headerText
+            
+            headerView.contentConfiguration = configuration
+        }
+        
+        refreshEventData()
     }
     
     func refreshEventData() {
@@ -102,10 +127,17 @@ class EventTableDataSource: NSObject {
             return
         }
         
-        if let filteredFetchedResultsController = filteredFetchedResultsController {
-            filteredFetchedResultsController.fetchRequest.predicate = NSPredicate(format: "name contains[cd] %@", filter)
+        var predicate: NSPredicate? = nil
+        if filter == "" {
+            predicate = NSPredicate(format: "TRUEPREDICATE")
         } else {
-            filteredFetchedResultsController = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format:"name contains[cd] %@", filter), groupBy: nil, context: NSManagedObjectContext.mr_default())
+            predicate = NSPredicate(format: "name contains[cd] %@", filter)
+        }
+                
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            filteredFetchedResultsController.fetchRequest.predicate = predicate
+        } else {
+            filteredFetchedResultsController = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: predicate, groupBy: nil, context: NSManagedObjectContext.mr_default())
             filteredFetchedResultsController?.delegate = delegate
             filteredFetchedResultsController?.accessibilityLabel = "Filtered"
         }
@@ -118,9 +150,55 @@ class EventTableDataSource: NSObject {
     }
 }
 
-extension EventTableDataSource : UITableViewDelegate {
+extension EventTableDataSource : UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            return filteredFetchedResultsController.fetchedObjects?.count ?? 0
+        }
+        if section == 1 {
+            return recentFetchedResultsController?.fetchedObjects?.count ?? 0
+        }
+        if section == 2 {
+            return otherFetchedResultsController?.fetchedObjects?.count ?? 0
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var event: Event? = nil
+        if let filteredFetchedResultsController = filteredFetchedResultsController {
+            event = filteredFetchedResultsController.fetchedObjects?[indexPath.row]
+        } else if indexPath.section == 1 {
+            event = recentFetchedResultsController?.fetchedObjects?[indexPath.row]
+        } else if indexPath.section == 2 {
+            event = otherFetchedResultsController?.fetchedObjects?[indexPath.row]
+        }
+        
+        let cell = collectionView.dequeueConfiguredReusableCell(
+            using: cellRegistration!, for: indexPath, item: EventScheme(event: event, scheme: scheme))
+        return cell
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if filteredFetchedResultsController != nil {
+            return 1
+        }
+        if otherFetchedResultsController?.fetchedObjects?.count == 0 && recentFetchedResultsController?.fetchedObjects?.count == 0 {
+            return 0
+        }
+        return 3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration!, for: indexPath)
+        }
+        return collectionView.dequeueConfiguredReusableSupplementary(using: footerRegistration!, for: indexPath)
+    }
+}
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+extension EventTableDataSource : UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         var event: Event? = nil
         if let filteredFetchedResultsController = filteredFetchedResultsController {
             event = filteredFetchedResultsController.fetchedObjects?[indexPath.row]
@@ -134,110 +212,6 @@ extension EventTableDataSource : UITableViewDelegate {
             Server.setCurrentEventId(remoteId)
             eventSelectionDelegate?.didSelectEvent(event: event)
         }
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if let filteredFetchedResultsController = filteredFetchedResultsController, section == 0, filteredFetchedResultsController.fetchedObjects?.count != 0 {
-            return 40.0
-        }
-        return CGFloat.leastNonzeroMagnitude
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if filteredFetchedResultsController != nil {
-            return 48.0
-        }
-        
-        if section == 0 {
-            return CGFloat.leastNonzeroMagnitude
-        }
-        
-        if section == 1, let fetchedObjects = recentFetchedResultsController?.fetchedObjects?.count, fetchedObjects == 0 {
-            return CGFloat.leastNonzeroMagnitude
-        }
-        
-        if section == 2, let fetchedObjects = otherFetchedResultsController?.fetchedObjects?.count, fetchedObjects == 0 {
-            return CGFloat.leastNonzeroMagnitude
-        }
-        
-        return 48.0
-    }
-    
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if let filteredFetchedResultsController = filteredFetchedResultsController, let fetchedObjects = filteredFetchedResultsController.fetchedObjects?.count, fetchedObjects != 0 {
-            return "End of Results"
-        }
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int){
-        let header = view as! UITableViewHeaderFooterView
-        header.textLabel?.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87)
-        header.backgroundColor = .clear
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-}
-
-extension EventTableDataSource : UITableViewDataSource {
-        
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let filteredFetchedResultsController = filteredFetchedResultsController {
-            return filteredFetchedResultsController.fetchedObjects?.count ?? 0
-        }
-        if section == 1 {
-            return recentFetchedResultsController?.fetchedObjects?.count ?? 0
-        }
-        if section == 2 {
-            return otherFetchedResultsController?.fetchedObjects?.count ?? 0
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell") as! EventTableViewCell
-        cell.eventName.textColor = scheme?.colorScheme.onSurfaceColor
-        cell.eventDescription.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
-        
-        var event: Event? = nil
-        if let filteredFetchedResultsController = filteredFetchedResultsController {
-            event = filteredFetchedResultsController.fetchedObjects?[indexPath.row]
-        } else if indexPath.section == 1 {
-            event = recentFetchedResultsController?.fetchedObjects?[indexPath.row]
-        } else if indexPath.section == 2 {
-            event = otherFetchedResultsController?.fetchedObjects?[indexPath.row]
-        }
-        
-        if let event = event, let remoteId = event.remoteId {
-            cell.populateCell(with: event, offlineObservationCount: UInt(truncating: eventIdToOfflineObservationCount[remoteId] ?? 0))
-        }
-        
-        return cell
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if filteredFetchedResultsController != nil {
-            return 1
-        }
-        if otherFetchedResultsController?.fetchedObjects?.count == 0 && recentFetchedResultsController?.fetchedObjects?.count == 0 {
-            return 0
-        }
-        return 3
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let filteredFetchedResultsController = filteredFetchedResultsController {
-            return "\(filteredFetchedResultsController.accessibilityLabel ?? "Filtered Events") (\(filteredFetchedResultsController.fetchedObjects?.count ?? 0))"
-        }
-        if section == 1 {
-            return "\(recentFetchedResultsController?.accessibilityLabel ?? "My Recent Events") (\(recentFetchedResultsController?.fetchedObjects?.count ?? 0))"
-        }
-        if section == 2 {
-            return "\(otherFetchedResultsController?.accessibilityLabel ?? "Other Events") (\(otherFetchedResultsController?.fetchedObjects?.count ?? 0))"
-        }
-        return " "
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }

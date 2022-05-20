@@ -641,15 +641,15 @@ extension AttachmentCreationCoordinator: UIDocumentPickerDelegate {
             
             do {
                 try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                
-                guard let attachmentData = try? Data(contentsOf: url) else { return }
+                                
                 
                 do {
+                    let attachmentData = try Data(contentsOf: url)
                     try attachmentData.write(to: fileToWriteTo, options: .completeFileProtection)
                     self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
                 } catch {
                     print("Unable to write file \(fileToWriteTo): \(error)")
-                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Error adding attachment \(error)"))
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "The file type \(filename).\(fileType) is not supported by MAGE. Try uploading a .zip version of the file instead."))
                 }
                 
             } catch {

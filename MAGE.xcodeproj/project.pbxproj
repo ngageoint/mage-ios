@@ -66,7 +66,6 @@
 		2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */; };
 		2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F99EC201E2982E700E0CBB6 /* MageFilter.m */; };
 		2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */; };
-		2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */; };
 		2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43A31CE4F68400D99AAF /* TimeFilter.m */; };
 		2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F43AA1CE5050400D99AAF /* UINavigationItem+Subtitle.m */; };
 		2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA70A9E1A03F2CA00243F4A /* MapSettings.m */; };
@@ -170,7 +169,6 @@
 		F72D42DD2694B60300F9AC3B /* LocalAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D422F2694B60300F9AC3B /* LocalAuthentication.m */; };
 		F72D42DE2694B60300F9AC3B /* Mage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42302694B60300F9AC3B /* Mage.swift */; };
 		F72D42DF2694B60300F9AC3B /* Model13To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */; };
-		F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */; };
 		F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42482694B60300F9AC3B /* RouteMethod.m */; };
 		F72D42E22694B60300F9AC3B /* Layer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.swift */; };
 		F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */; };
@@ -375,7 +373,6 @@
 		F7929C7023C4E69600396D11 /* countries.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C6F23C4E69600396D11 /* countries.gpkg */; };
 		F7929C7623C66CD000396D11 /* BaseMapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7929C7523C66CD000396D11 /* BaseMapOverlay.swift */; };
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
-		F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */; };
 		F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		F795ED0524B8DFB80028FBFC /* LocationUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */; };
 		F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0624B8F15D0028FBFC /* UserViewController.swift */; };
@@ -395,6 +392,9 @@
 		F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */; };
 		F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */; };
 		F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */; };
+		F79D2940282AC907008FD45E /* EventContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79D293F282AC907008FD45E /* EventContentView.swift */; };
+		F79D2943282C36C6008FD45E /* NumberBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79D2942282C36C6008FD45E /* NumberBadge.swift */; };
+		F79D2959282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F79D2944282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld */; };
 		F7A26E0F280466BF004B0404 /* LatitudeLongitudeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A26E0E280466BF004B0404 /* LatitudeLongitudeButton.swift */; };
 		F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */; };
 		F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */; };
@@ -500,7 +500,6 @@
 		F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */; };
 		F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */; };
 		F7E40A6E2693B52200E50E26 /* UserActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */; };
-		F7E457641F61C14F0082F527 /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7E457631F61C14F0082F527 /* EventCell.xib */; };
 		F7E457671F61E2380082F527 /* EventChooserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E457661F61E2380082F527 /* EventChooserCoordinator.swift */; };
 		F7E5748C27DA7BEA009A6E0D /* PersistedMapStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5748B27DA7BEA009A6E0D /* PersistedMapStateTests.swift */; };
 		F7E5748E27DA818A009A6E0D /* HasMapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E5748D27DA818A009A6E0D /* HasMapSettingsTests.swift */; };
@@ -700,8 +699,6 @@
 		2F99EC201E2982E700E0CBB6 /* MageFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageFilter.m; sourceTree = "<group>"; };
 		2F9B48DC1ED3BCC1001D07AB /* MageOfflineObservationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageOfflineObservationManager.h; sourceTree = "<group>"; };
 		2F9B48DD1ED3BCC1001D07AB /* MageOfflineObservationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageOfflineObservationManager.m; sourceTree = "<group>"; };
-		2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewCell.h; sourceTree = "<group>"; };
-		2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewCell.m; sourceTree = "<group>"; };
 		2F9F43A21CE4F68400D99AAF /* TimeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFilter.h; sourceTree = "<group>"; };
 		2F9F43A31CE4F68400D99AAF /* TimeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeFilter.m; sourceTree = "<group>"; };
 		2F9F43A91CE5050400D99AAF /* UINavigationItem+Subtitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+Subtitle.h"; sourceTree = "<group>"; };
@@ -840,24 +837,6 @@
 		F72D42302694B60300F9AC3B /* Mage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mage.swift; sourceTree = "<group>"; };
 		F72D42312694B60300F9AC3B /* Model13To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model13To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42342694B60300F9AC3B /* ObservationRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationRoutes.h; sourceTree = "<group>"; };
-		F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 6.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42372694B60300F9AC3B /* mage-ios-sdk 16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 16.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42382694B60300F9AC3B /* mage-ios-sdk 13.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 13.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42392694B60300F9AC3B /* mage-ios-sdk.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk.xcdatamodel"; sourceTree = "<group>"; };
-		F72D423A2694B60300F9AC3B /* mage-ios-sdk 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 3.xcdatamodel"; sourceTree = "<group>"; };
-		F72D423B2694B60300F9AC3B /* mage-ios-sdk 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 9.xcdatamodel"; sourceTree = "<group>"; };
-		F72D423C2694B60300F9AC3B /* mage-ios-sdk 10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 10.xcdatamodel"; sourceTree = "<group>"; };
-		F72D423D2694B60300F9AC3B /* mage-ios-sdk 15.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 15.xcdatamodel"; sourceTree = "<group>"; };
-		F72D423E2694B60300F9AC3B /* mage-ios-sdk 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 5.xcdatamodel"; sourceTree = "<group>"; };
-		F72D423F2694B60300F9AC3B /* mage-ios-sdk 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 2.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42402694B60300F9AC3B /* mage-ios-sdk 12.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 12.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42412694B60300F9AC3B /* mage-ios-sdk 17.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 17.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42422694B60300F9AC3B /* mage-ios-sdk 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 7.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42432694B60300F9AC3B /* mage-ios-sdk 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 4.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42442694B60300F9AC3B /* mage-ios-sdk 14.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 14.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42452694B60300F9AC3B /* mage-ios-sdk 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 8.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42462694B60300F9AC3B /* mage-ios-sdk 11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 11.xcdatamodel"; sourceTree = "<group>"; };
-		F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 18.xcdatamodel"; sourceTree = "<group>"; };
 		F72D42482694B60300F9AC3B /* RouteMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteMethod.m; sourceTree = "<group>"; };
 		F72D42492694B60300F9AC3B /* NSString+Contains.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Contains.h"; sourceTree = "<group>"; };
 		F72D424A2694B60300F9AC3B /* Layer+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Layer+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -1020,7 +999,6 @@
 		F755B55A25E41BFF008E8D41 /* testRecording.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testRecording.mp4; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
 		F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewController.swift; sourceTree = "<group>"; };
-		F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 19.xcdatamodel"; sourceTree = "<group>"; };
 		F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationAnnotationTests.swift; sourceTree = "<group>"; };
 		F75E30EA205AB65400F52EF8 /* Pods_MAGE_MAGETests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MAGE_MAGETests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F75FC904233AAA4100547315 /* XYZTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYZTileOverlay.h; sourceTree = "<group>"; };
@@ -1090,7 +1068,6 @@
 		F78D578A27B46F49003594D3 /* FeedsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedsMap.swift; sourceTree = "<group>"; };
 		F78D578C27B5841D003594D3 /* MageMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageMapViewController.swift; sourceTree = "<group>"; };
 		F78D578E27B58901003594D3 /* SingleUserMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleUserMapView.swift; sourceTree = "<group>"; };
-		F78D579427B6FBCE003594D3 /* mage-ios-sdk 20.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 20.xcdatamodel"; sourceTree = "<group>"; };
 		F78D579527B709D4003594D3 /* FollowUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUser.swift; sourceTree = "<group>"; };
 		F78D579727BC5E4A003594D3 /* OnlineLayerMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineLayerMap.swift; sourceTree = "<group>"; };
 		F78D579927BDA951003594D3 /* SingleFeatureMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleFeatureMapView.swift; sourceTree = "<group>"; };
@@ -1105,8 +1082,6 @@
 		F7929C6F23C4E69600396D11 /* countries.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries.gpkg; sourceTree = "<group>"; };
 		F7929C7523C66CD000396D11 /* BaseMapOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMapOverlay.swift; sourceTree = "<group>"; };
 		F7929C8023C8F48C00396D11 /* countries_dark.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries_dark.gpkg; sourceTree = "<group>"; };
-		F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTableHeaderView.h; sourceTree = "<group>"; };
-		F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTableHeaderView.m; sourceTree = "<group>"; };
 		F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMageServer.swift; sourceTree = "<group>"; };
 		F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUtilities.swift; sourceTree = "<group>"; };
 		F795ED0624B8F15D0028FBFC /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
@@ -1126,6 +1101,28 @@
 		F79CC3E6252F6875005692DC /* ServerURLControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLControllerTests.swift; sourceTree = "<group>"; };
 		F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewTests.swift; sourceTree = "<group>"; };
 		F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLoginViewTests.swift; sourceTree = "<group>"; };
+		F79D293F282AC907008FD45E /* EventContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventContentView.swift; sourceTree = "<group>"; };
+		F79D2942282C36C6008FD45E /* NumberBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBadge.swift; sourceTree = "<group>"; };
+		F79D2945282C57C9008FD45E /* mage-ios-sdk 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 6.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2946282C57C9008FD45E /* mage-ios-sdk 16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 16.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2947282C57C9008FD45E /* mage-ios-sdk 13.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 13.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2948282C57C9008FD45E /* mage-ios-sdk.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2949282C57C9008FD45E /* mage-ios-sdk 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 3.xcdatamodel"; sourceTree = "<group>"; };
+		F79D294A282C57C9008FD45E /* mage-ios-sdk 19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 19.xcdatamodel"; sourceTree = "<group>"; };
+		F79D294B282C57C9008FD45E /* mage-ios-sdk 9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 9.xcdatamodel"; sourceTree = "<group>"; };
+		F79D294C282C57C9008FD45E /* mage-ios-sdk 10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 10.xcdatamodel"; sourceTree = "<group>"; };
+		F79D294D282C57C9008FD45E /* mage-ios-sdk 15.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 15.xcdatamodel"; sourceTree = "<group>"; };
+		F79D294E282C57C9008FD45E /* mage-ios-sdk 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 5.xcdatamodel"; sourceTree = "<group>"; };
+		F79D294F282C57C9008FD45E /* mage-ios-sdk 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 2.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2950282C57C9008FD45E /* mage-ios-sdk 20.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 20.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2951282C57C9008FD45E /* mage-ios-sdk 12.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 12.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2952282C57C9008FD45E /* mage-ios-sdk 17.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 17.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2953282C57C9008FD45E /* mage-ios-sdk 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 7.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2954282C57C9008FD45E /* mage-ios-sdk 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 4.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2955282C57C9008FD45E /* mage-ios-sdk 14.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 14.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2956282C57C9008FD45E /* mage-ios-sdk 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 8.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2957282C57C9008FD45E /* mage-ios-sdk 11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 11.xcdatamodel"; sourceTree = "<group>"; };
+		F79D2958282C57C9008FD45E /* mage-ios-sdk 18.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 18.xcdatamodel"; sourceTree = "<group>"; };
 		F7A26E0E280466BF004B0404 /* LatitudeLongitudeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatitudeLongitudeButton.swift; sourceTree = "<group>"; };
 		F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDefaultsViewController.swift; sourceTree = "<group>"; };
 		F7A7B6F125DDA5BF00DAB232 /* MultiDropdownFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDropdownFieldView.swift; sourceTree = "<group>"; };
@@ -1256,7 +1253,6 @@
 		F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarUIImageView.swift; sourceTree = "<group>"; };
 		F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsView.swift; sourceTree = "<group>"; };
 		F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionsDelegate.swift; sourceTree = "<group>"; };
-		F7E457631F61C14F0082F527 /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		F7E457661F61E2380082F527 /* EventChooserCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventChooserCoordinator.swift; sourceTree = "<group>"; };
 		F7E5748B27DA7BEA009A6E0D /* PersistedMapStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedMapStateTests.swift; sourceTree = "<group>"; };
 		F7E5748D27DA818A009A6E0D /* HasMapSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasMapSettingsTests.swift; sourceTree = "<group>"; };
@@ -1454,7 +1450,6 @@
 				F7A292291FC3938F00DE5463 /* Authentication */,
 				F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */,
 				F7489B34278E29C300A9E314 /* CoordinateField.swift */,
-				F7E457631F61C14F0082F527 /* EventCell.xib */,
 				2FB41CDE1DC79436005C18F9 /* Filter.storyboard */,
 				F76A15C31A9402A400F2BDF1 /* LaunchScreen.storyboard */,
 				F71123A325EE8826008849B1 /* ObservationEditSelectPickerView.xib */,
@@ -1463,6 +1458,7 @@
 				F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */,
 				F7A26E0E280466BF004B0404 /* LatitudeLongitudeButton.swift */,
 				F7FD5AA32809F3800032384B /* EmptyState.swift */,
+				F79D2942282C36C6008FD45E /* NumberBadge.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1921,7 +1917,7 @@
 				F72D42782694B60300F9AC3B /* LocationFetchService.swift */,
 				F72D42CF2694B60300F9AC3B /* LocationService.h */,
 				F72D428E2694B60300F9AC3B /* LocationService.m */,
-				F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */,
+				F79D2944282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld */,
 				F72D42302694B60300F9AC3B /* Mage.swift */,
 				F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */,
 				F72D42D32694B60300F9AC3B /* MAGERoutes.h */,
@@ -2202,16 +2198,13 @@
 				2F8A2C1522012D1C007FE473 /* EventInformationView.h */,
 				2F8A2C1622012D1C007FE473 /* EventInformationView.m */,
 				F739EFE41AA64F19003A6E4B /* EventTableDataSource.swift */,
-				F7931B57208E4FCD00ACF462 /* EventTableHeaderView.h */,
-				F7931B58208E4FCD00ACF462 /* EventTableHeaderView.m */,
-				2F9D32931ED5FFC100DEC639 /* EventTableViewCell.h */,
-				2F9D32941ED5FFC100DEC639 /* EventTableViewCell.m */,
 				F76EB1DF247C14DA0089F3AC /* FieldKey.swift */,
 				2FB41CE11DC79C5D005C18F9 /* Filter */,
 				2F4E10A5220DDC46001C9F12 /* FormDefaults.h */,
 				2F4E10A6220DDC46001C9F12 /* FormDefaults.m */,
 				2F8A2C1E220231E9007FE473 /* FormDefaultsCoordinator.swift */,
 				F7A7B6DD25D1DC6400DAB232 /* FormDefaultsViewController.swift */,
+				F79D293F282AC907008FD45E /* EventContentView.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -2923,7 +2916,6 @@
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
-				F7E457641F61C14F0082F527 /* EventCell.xib in Resources */,
 				F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
@@ -3204,6 +3196,7 @@
 				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
 				F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
+				F79D2940282AC907008FD45E /* EventContentView.swift in Sources */,
 				F770854025927E1C008903BA /* ObservationSyncStatus.swift in Sources */,
 				04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */,
 				F7AA61B427AB237E00D617B7 /* FileViewerCoordinator.swift in Sources */,
@@ -3306,6 +3299,7 @@
 				04ED96481EB7DFB600B6AD8D /* MapPolylineObservation.m in Sources */,
 				F7F711F623450DE700E01FD7 /* TMSTileOverlay.m in Sources */,
 				F7E40A6626939A4200E50E26 /* UserBottomSheetView.swift in Sources */,
+				F79D2959282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld in Sources */,
 				F7A94D7C18AD9CB000CB9EE0 /* AppDelegate.m in Sources */,
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
@@ -3351,6 +3345,7 @@
 				F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */,
 				F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */,
 				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
+				F79D2943282C36C6008FD45E /* NumberBadge.swift in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
 				F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */,
@@ -3398,7 +3393,6 @@
 				F76949161AA6436000CB680B /* EventChooserController.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
-				2F9D32951ED5FFC100DEC639 /* EventTableViewCell.m in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
 				F78D578B27B46F49003594D3 /* FeedsMap.swift in Sources */,
@@ -3440,7 +3434,6 @@
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
-				F72D42E02694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld in Sources */,
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
 				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
@@ -3508,7 +3501,6 @@
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F72D43122694B60300F9AC3B /* MageServer.swift in Sources */,
 				F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */,
-				F7931B59208E4FCD00ACF462 /* EventTableHeaderView.m in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
@@ -4030,31 +4022,31 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		F72D42352694B60300F9AC3B /* mage-ios-sdk.xcdatamodeld */ = {
+		F79D2944282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				F78D579427B6FBCE003594D3 /* mage-ios-sdk 20.xcdatamodel */,
-				F75CC93D270513BA0023D6B0 /* mage-ios-sdk 19.xcdatamodel */,
-				F72D42362694B60300F9AC3B /* mage-ios-sdk 6.xcdatamodel */,
-				F72D42372694B60300F9AC3B /* mage-ios-sdk 16.xcdatamodel */,
-				F72D42382694B60300F9AC3B /* mage-ios-sdk 13.xcdatamodel */,
-				F72D42392694B60300F9AC3B /* mage-ios-sdk.xcdatamodel */,
-				F72D423A2694B60300F9AC3B /* mage-ios-sdk 3.xcdatamodel */,
-				F72D423B2694B60300F9AC3B /* mage-ios-sdk 9.xcdatamodel */,
-				F72D423C2694B60300F9AC3B /* mage-ios-sdk 10.xcdatamodel */,
-				F72D423D2694B60300F9AC3B /* mage-ios-sdk 15.xcdatamodel */,
-				F72D423E2694B60300F9AC3B /* mage-ios-sdk 5.xcdatamodel */,
-				F72D423F2694B60300F9AC3B /* mage-ios-sdk 2.xcdatamodel */,
-				F72D42402694B60300F9AC3B /* mage-ios-sdk 12.xcdatamodel */,
-				F72D42412694B60300F9AC3B /* mage-ios-sdk 17.xcdatamodel */,
-				F72D42422694B60300F9AC3B /* mage-ios-sdk 7.xcdatamodel */,
-				F72D42432694B60300F9AC3B /* mage-ios-sdk 4.xcdatamodel */,
-				F72D42442694B60300F9AC3B /* mage-ios-sdk 14.xcdatamodel */,
-				F72D42452694B60300F9AC3B /* mage-ios-sdk 8.xcdatamodel */,
-				F72D42462694B60300F9AC3B /* mage-ios-sdk 11.xcdatamodel */,
-				F72D42472694B60300F9AC3B /* mage-ios-sdk 18.xcdatamodel */,
+				F79D2945282C57C9008FD45E /* mage-ios-sdk 6.xcdatamodel */,
+				F79D2946282C57C9008FD45E /* mage-ios-sdk 16.xcdatamodel */,
+				F79D2947282C57C9008FD45E /* mage-ios-sdk 13.xcdatamodel */,
+				F79D2948282C57C9008FD45E /* mage-ios-sdk.xcdatamodel */,
+				F79D2949282C57C9008FD45E /* mage-ios-sdk 3.xcdatamodel */,
+				F79D294A282C57C9008FD45E /* mage-ios-sdk 19.xcdatamodel */,
+				F79D294B282C57C9008FD45E /* mage-ios-sdk 9.xcdatamodel */,
+				F79D294C282C57C9008FD45E /* mage-ios-sdk 10.xcdatamodel */,
+				F79D294D282C57C9008FD45E /* mage-ios-sdk 15.xcdatamodel */,
+				F79D294E282C57C9008FD45E /* mage-ios-sdk 5.xcdatamodel */,
+				F79D294F282C57C9008FD45E /* mage-ios-sdk 2.xcdatamodel */,
+				F79D2950282C57C9008FD45E /* mage-ios-sdk 20.xcdatamodel */,
+				F79D2951282C57C9008FD45E /* mage-ios-sdk 12.xcdatamodel */,
+				F79D2952282C57C9008FD45E /* mage-ios-sdk 17.xcdatamodel */,
+				F79D2953282C57C9008FD45E /* mage-ios-sdk 7.xcdatamodel */,
+				F79D2954282C57C9008FD45E /* mage-ios-sdk 4.xcdatamodel */,
+				F79D2955282C57C9008FD45E /* mage-ios-sdk 14.xcdatamodel */,
+				F79D2956282C57C9008FD45E /* mage-ios-sdk 8.xcdatamodel */,
+				F79D2957282C57C9008FD45E /* mage-ios-sdk 11.xcdatamodel */,
+				F79D2958282C57C9008FD45E /* mage-ios-sdk 18.xcdatamodel */,
 			);
-			currentVersion = F78D579427B6FBCE003594D3 /* mage-ios-sdk 20.xcdatamodel */;
+			currentVersion = F79D2950282C57C9008FD45E /* mage-ios-sdk 20.xcdatamodel */;
 			path = "mage-ios-sdk.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

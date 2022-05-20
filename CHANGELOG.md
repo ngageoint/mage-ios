@@ -18,6 +18,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
   * iPad Navigation Options Setting does not open
   * Tapping a local attachment does not show the attachment
   * Distance is not being calculated correctly when navigation lines are updated
+  * Add more informative message when an attachment fails to open
 
 ## 4.0.1
 

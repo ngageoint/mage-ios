@@ -100,11 +100,13 @@ func actionButtonTapped()
         return refreshingStatus
     }()
     
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.estimatedRowHeight = 52
-        tableView.rowHeight = UITableView.automaticDimension
-        return tableView
+    private lazy var collectionView: UICollectionView = {
+        var configuration = UICollectionLayoutListConfiguration(appearance: .grouped)
+        configuration.headerMode = .supplementary
+        configuration.footerMode = .supplementary
+  
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout:  UICollectionViewCompositionalLayout.list(using: configuration))
+        return collectionView
     }()
     
     let allEventsController = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format: "TRUEPREDICATE"), groupBy: nil, context: NSManagedObjectContext.mr_default())
@@ -119,7 +121,7 @@ func actionButtonTapped()
         self.modalPresentationStyle = .fullScreen
         self.scheme = scheme
         self.delegate = delegate
-        self.eventDataSource = EventTableDataSource(tableView: tableView, eventSelectionDelegate: self, scheme: scheme)
+        self.eventDataSource = EventTableDataSource(eventSelectionDelegate: self, scheme: scheme)
         self.allEventsController?.delegate = self
         
         do {
@@ -140,17 +142,17 @@ func actionButtonTapped()
         title = "Welcome To MAGE"
         navigationItem.hidesBackButton = true
         
-        tableView.dataSource = eventDataSource
-        tableView.delegate = eventDataSource
-        tableView.register(UINib(nibName: "EventCell", bundle: nil), forCellReuseIdentifier: "eventCell")
-        tableView.isAccessibilityElement = true
-        tableView.accessibilityLabel = "Event Table"
-        tableView.accessibilityIdentifier = "Event Table"
+        collectionView.dataSource = eventDataSource
+        collectionView.delegate = eventDataSource
+        
+        collectionView.isAccessibilityElement = true
+        collectionView.accessibilityLabel = "Event Table"
+        collectionView.accessibilityIdentifier = "Event Table"
         
         searchController.searchResultsUpdater = self
         applyTheme(withContainerScheme: scheme)
         
-        emptyState = EmptyState(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+        emptyState = EmptyState(frame: CGRect(x: 0, y: 0, width: self.collectionView.bounds.size.width, height: self.collectionView.bounds.size.height))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,7 +161,7 @@ func actionButtonTapped()
         if !eventsFetched && !eventsInitialized && eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 0 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 0 {
             emptyState?.configure(image: UIImage(systemName: "calendar"), title: "Loading Events", showActivityIndicator: true, scheme: self.scheme)
             emptyState?.toggleVisible(true)
-            tableView.backgroundView = emptyState
+            collectionView.backgroundView = emptyState
         }
     }
     
@@ -173,7 +175,7 @@ func actionButtonTapped()
         eventInstructions.textColor = scheme?.colorScheme.onPrimaryColor
         eventInstructions.font = scheme?.typographyScheme.caption
         // actionbutton
-        tableView.backgroundColor = scheme?.colorScheme.surfaceColor
+        collectionView.backgroundColor = scheme?.colorScheme.surfaceColor
         refreshingButton.applySecondaryTheme(withScheme: containerScheme)
         searchController.searchBar.barTintColor = scheme?.colorScheme.onPrimaryColor;
         searchController.searchBar.tintColor = scheme?.colorScheme.onPrimaryColor;
@@ -203,7 +205,7 @@ func actionButtonTapped()
             searchContainer.addSubview(searchBar)
         }
         view.addSubview(searchContainer)
-        view.addSubview(tableView)
+        view.addSubview(collectionView)
         view.addSubview(refreshingButton)
         view.addSubview(refreshingView)
         searchContainerHeightConstraint = searchContainer.autoSetDimension(.height, toSize: 56)
@@ -218,19 +220,20 @@ func actionButtonTapped()
             searchContainer.autoPinEdge(.top, to: .bottom, of: stackView)
 
             NSLayoutConstraint.autoSetPriority(.defaultHigh) {
-                tableView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-                tableView.autoPinEdge(.top, to: .bottom, of: searchContainer)
+                collectionView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+                collectionView.autoPinEdge(.top, to: .bottom, of: searchContainer)
             }
 
             NSLayoutConstraint.autoSetPriority(.defaultLow) {
-                tableView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-                tableView.autoPinEdge(.top, to: .bottom, of: stackView)
+                collectionView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+                collectionView.autoPinEdge(.top, to: .bottom, of: stackView)
             }
 
             eventInstructions.autoSetDimension(.height, toSize: 32)
 
             refreshingButton.autoAlignAxis(toSuperviewAxis: .vertical)
-            refreshingButton.autoPinEdge(.top, to: .top, of: tableView, withOffset: 8)
+            
+            refreshingButton.autoPinEdge(.top, to: .top, of: collectionView, withOffset: 8)
             
             refreshingStatus.autoPinEdgesToSuperviewSafeArea(with: UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8))
             refreshingView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
@@ -278,7 +281,7 @@ func actionButtonTapped()
             } else {
                 UserDefaults.standard.showEventChooserOnce = false
             }
-            tableView.reloadData()
+            collectionView.reloadData()
         }
         
         let timer = Timer(timeInterval: 10, repeats: true) { [weak self] timer in
@@ -319,7 +322,7 @@ func actionButtonTapped()
     // will update the event table and if there is only one event follow the autoSelectEvent flag
     func updateEventTable(autoSelectEvent: Bool = true) {
         eventDataSource?.refreshEventData()
-        tableView.reloadData()
+        collectionView.reloadData()
         refreshingButton.isHidden = true
         
         if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 0 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 0 {
@@ -335,7 +338,7 @@ func actionButtonTapped()
             attributedString.addAttribute(.paragraphStyle, value: paragraph, range: NSRange(location: 0, length: attributedString.length))
             
             emptyState?.configure(image: UIImage(systemName: "calendar"), title: "No Events", attributedDescription: attributedString, buttonText: "Return to Login", tapHandler: self, selector: #selector(actionButtonTapped), scheme: scheme)
-            self.tableView.backgroundView = emptyState
+            self.collectionView.backgroundView = emptyState
             emptyState?.toggleVisible(true)
             eventInstructions.isHidden = true
             searchContainerHeightConstraint?.constant = 0.0
@@ -411,6 +414,6 @@ extension EventChooserController : UISearchResultsUpdating {
         } else {
             eventDataSource?.setEventFilter(filter: nil, delegate: nil)
         }
-        tableView.reloadData()
+        collectionView.reloadData()
     }
 }
