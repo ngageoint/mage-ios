@@ -552,7 +552,6 @@ enum State: Int, CustomStringConvertible {
     @discardableResult
     @objc public static func create(feature: [AnyHashable : Any], context:NSManagedObjectContext) -> Observation? {
         var newObservation: Observation? = nil;
-        let eventId = Server.currentEventId();
         let remoteId = Observation.idFromJson(json: feature);
         
         let state = Observation.stateFromJson(json: feature);
@@ -658,13 +657,11 @@ enum State: Int, CustomStringConvertible {
                         }
                     }
                 }
-                existingObservation.eventId = eventId;
             }
         } else {
             if state != .Archive {
                 // if the observation doesn't exist, insert it
                 if let observation = Observation.mr_createEntity(in: context) {
-                    observation.eventId = eventId;
                     observation.populate(json: feature);
                     if let userId = observation.userId {
                         if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context) {
@@ -756,6 +753,7 @@ enum State: Int, CustomStringConvertible {
     
     @discardableResult
     @objc public func populate(json: [AnyHashable : Any]) -> Observation {
+        self.eventId = json[ObservationKey.eventId.key] as? NSNumber
         self.remoteId = Observation.idFromJson(json: json);
         self.userId = json[ObservationKey.userId.key] as? String
         self.deviceId = json[ObservationKey.deviceId.key] as? String
