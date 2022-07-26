@@ -175,17 +175,21 @@ enum State: Int, CustomStringConvertible {
             let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
             let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
             localContext.perform {
+                NSLog("TIMING There are \(features.count) features to save, chunking into groups of 250")
                 localContext.mr_setWorkingName(#function)
                 var chunks = features.chunked(into: 250);
                 var newObservationCount = 0;
                 var observationToNotifyAbout: Observation?;
+                NSLog("TIMING we have \(chunks.count) groups to save")
                 while (chunks.count > 0) {
                     autoreleasepool {
                         guard let features = chunks.last else {
                             return;
                         }
                         chunks.removeLast();
-                        
+                        let createObservationsDate = Date()
+                        NSLog("TIMING creating \(features.count) observations for chunk \(chunks.count)")
+
                         for observation in features {
                             if let newObservation = Observation.create(feature: observation, context: localContext) {
                                 newObservationCount = newObservationCount + 1;
@@ -194,25 +198,34 @@ enum State: Int, CustomStringConvertible {
                                 }
                             }
                         }
-                        print("Saved \(features.count) observations")
+                        NSLog("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
                     }
                     
                     // only save once per chunk
+                    let localSaveDate = Date()
                     do {
+                        NSLog("TIMING saving \(features.count) observations on local context")
                         try localContext.save()
                     } catch {
                         print("Error saving observations: \(error)")
                     }
+                    NSLog("TIMING saved \(features.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
                     
                     rootSavingContext.perform {
+                        let rootSaveDate = Date()
+
                         do {
+                            NSLog("TIMING saving \(features.count) observations on root context")
                             try rootSavingContext.save()
                         } catch {
                             print("Error saving observations: \(error)")
                         }
+                        NSLog("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
+
                     }
                     
                     localContext.reset();
+                    NSLog("TIMING reset the local context for chunk \(chunks.count)")
                     NSLog("Saved chunk \(chunks.count)")
                 }
                 
