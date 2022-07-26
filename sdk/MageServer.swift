@@ -137,7 +137,10 @@ import Foundation
         
         let manager = MageSessionManager.shared()
         let apiURL = "\(url.absoluteString)/api"
+        let methodStart = Date()
+        NSLog("TIMING API @ \(methodStart)")
         let task = manager?.get_TASK(apiURL, parameters: nil, progress: nil, success: { task, response in
+            NSLog("TIMING Fetched API. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             if let dataResponse = response as? Data {
                 if dataResponse.count == 0 {
                     failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Empty API response received from server."]))

@@ -94,8 +94,14 @@ import CoreData
         var feedRemoteIds: [String] = [];
         let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/feeds";
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Feeds @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil,
             success: { task, responseObject in
+            NSLog("TIMING Fetched Feeds. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+
+            let saveStart = Date()
+            NSLog("TIMING Saving Feeds @ \(saveStart)")
                 MagicalRecord.save({ localContext in
                     if let feedsJson = responseObject as? [[AnyHashable : Any]] {
                         feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: localContext);
@@ -105,6 +111,8 @@ import CoreData
                         Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId), in: localContext)
                     }
                 }, completion: { contextDidSave, error in
+                    NSLog("TIMING Saved Feeds. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                     if let error = error {
                         if let failure = failure {
                             failure(error);
@@ -127,12 +135,19 @@ import CoreData
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/feeds/\(feedId)/content";
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Feed Items /api/events/\(eventId)/feeds/\(feedId)/content @ \(methodStart)")
         let task = manager?.post_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Feed Items /api/events/\(eventId)/feeds/\(feedId)/content. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+
+            let saveStart = Date()
+            NSLog("TIMING Saving Feed Items /api/events/\(eventId)/feeds/\(feedId)/content @ \(saveStart)")
             MagicalRecord.save { localContext in
                 if let json = responseObject as? [AnyHashable : Any], let items = json[FeedKey.items.key] as? [AnyHashable : Any], let features = items[FeedKey.features.key] as? [[AnyHashable : Any]] {
                     Feed.populateFeedItems(feedItems: features, feedId: feedId, eventId: eventId, context: localContext);
                 }
             } completion: { contextDidSave, error in
+                NSLog("TIMING Saved Feed Items. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
                 if let error = error {
                     if let failure = failure {
                         failure(task, error);

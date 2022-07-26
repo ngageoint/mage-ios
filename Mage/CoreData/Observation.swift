@@ -155,7 +155,10 @@ enum State: Int, CustomStringConvertible {
         }
         
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Observations for event \(currentEventId) @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Observations for event \(currentEventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             guard let features = responseObject as? [[AnyHashable : Any]] else {
                 success?(task, nil);
                 return;
@@ -167,6 +170,8 @@ enum State: Int, CustomStringConvertible {
                 return;
             }
             
+            let saveStart = Date()
+            NSLog("TIMING Saving Observations for event \(currentEventId) @ \(saveStart)")
             let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
             let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
             localContext.perform {
@@ -218,6 +223,7 @@ enum State: Int, CustomStringConvertible {
                     NotificationRequester.observationPulled(observationToNotifyAbout);
                 }
                 
+                NSLog("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
                 DispatchQueue.main.async {
                     success?(task, responseObject);
                 }

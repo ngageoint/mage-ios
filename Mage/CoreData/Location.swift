@@ -115,7 +115,10 @@ import MagicalRecord
             parameters["startDate"] = ISO8601DateFormatter.string(from: lastLocationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
         }
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Locations /api/events/\(currentEventId)/locations/users @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             guard let allUserLocations = responseObject as? [[AnyHashable : Any]] else {
                 success?(task, nil);
                 return;
@@ -126,6 +129,9 @@ import MagicalRecord
                 success?(task, responseObject)
                 return;
             }
+            
+            let saveStart = Date()
+            NSLog("TIMING Saving Locations /api/events/\(currentEventId)/locations/users @ \(saveStart)")
             MagicalRecord.save { localContext in
                 let currentUser = User.fetchCurrentUser(context: localContext);
                 
@@ -213,6 +219,8 @@ import MagicalRecord
                     User.operationToFetchUsers(success: nil, failure: nil);
                 }
             } completion: { contextDidSave, error in
+                NSLog("TIMING Saved Locations /api/events/\(currentEventId)/locations/users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                 if let error = error {
                     failure?(task, error);
                 } else if let success = success {
