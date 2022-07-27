@@ -19,6 +19,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
   * Tapping a local attachment does not show the attachment
   * Distance is not being calculated correctly when navigation lines are updated
   * Add more informative message when an attachment fails to open
+  * Significantly improved the speed of the initial observation fetch
 
 ## 4.0.1
 

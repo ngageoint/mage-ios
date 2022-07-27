@@ -29,7 +29,10 @@ import CoreData
         }
         let url = "\(baseURL.absoluteURL)/api/roles";
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Roles @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Roles. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
                     print("Roles are empty");
@@ -42,9 +45,10 @@ import CoreData
                 success?(task, nil);
                 return;
             }
-            
+            let saveStart = Date()
+            NSLog("TIMING Saving Roles @ \(saveStart)")
             MagicalRecord.save { localContext in
-                
+
                 // Get the role ids to query
                 var roleIds: [String] = [];
                 for roleJson in roles {
@@ -78,6 +82,8 @@ import CoreData
                     }
                 }
             } completion: { contextDidSave, error in
+                NSLog("TIMING inserted roles. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                 if let error = error {
                     if let failure = failure {
                         failure(task, error);

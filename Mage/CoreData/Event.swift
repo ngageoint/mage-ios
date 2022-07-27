@@ -17,7 +17,14 @@ import CoreData
         }
         let url = "\(baseURL.absoluteURL)/api/events";
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Events @ \(methodStart)")
+
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Events. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+
+            let saveStart = Date()
+            NSLog("TIMING Saving Events @ \(saveStart)")
             MagicalRecord.save { localContext in
                 let localUser = User.fetchCurrentUser(context: localContext);
                 var eventsReturned: [NSNumber] = []
@@ -48,6 +55,8 @@ import CoreData
                 }
                 Event.mr_deleteAll(matching: NSPredicate(format: "NOT (\(EventKey.remoteId.key) IN %@)", eventsReturned), in: localContext);
             } completion: { contextDidSave, error in
+                NSLog("TIMING Saved Events. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                 NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
 
                 if let error = error {

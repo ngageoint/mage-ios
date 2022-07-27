@@ -136,6 +136,12 @@ import CoreData
         return nil
     }
     
+    static func getFieldByNameFromJSONFields(json: [[String: AnyHashable]], name: String) -> [String: AnyHashable]? {
+        return json.first { field in
+            field[FieldKey.name.key] as? String == name
+        }
+    }
+    
     static func getDocumentsDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
@@ -153,12 +159,17 @@ import CoreData
         let folderToUnzipTo = "\(getDocumentsDirectory())/events/icons-\(eventId)"
         
         do {
+            let methodStart = Date()
+            NSLog("TIMING Fetching Form for event \(eventId) @ \(methodStart)")
+
             guard let request = try manager?.requestSerializer.request(withMethod: "GET", urlString: url, parameters: nil) else {
                 return nil;
             }
             let task = manager?.downloadTask(with: request as URLRequest, progress: nil, destination: { targetPath, response in
                 return URL(fileURLWithPath: stringPath);
             }, completionHandler: { response, filePath, error in
+                NSLog("TIMING Fetched Form for event \(eventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+
                 if let error = error {
                     NSLog("Error pulling icons and form \(error)")
                     failure?(error);

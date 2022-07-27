@@ -155,7 +155,10 @@ enum State: Int, CustomStringConvertible {
         }
         
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Observations for event \(currentEventId) @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Observations for event \(currentEventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             guard let features = responseObject as? [[AnyHashable : Any]] else {
                 success?(task, nil);
                 return;
@@ -167,47 +170,72 @@ enum State: Int, CustomStringConvertible {
                 return;
             }
             
+            let saveStart = Date()
+            NSLog("TIMING Saving Observations for event \(currentEventId) @ \(saveStart)")
             let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
             let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
             localContext.perform {
+                NSLog("TIMING There are \(features.count) features to save, chunking into groups of 250")
                 localContext.mr_setWorkingName(#function)
+                
                 var chunks = features.chunked(into: 250);
                 var newObservationCount = 0;
                 var observationToNotifyAbout: Observation?;
+                var eventFormDictionary: [NSNumber: [[String: AnyHashable]]] = [:]
+                if let event = Event.getEvent(eventId: currentEventId, context: localContext), let eventForms = event.forms {
+                    for eventForm in eventForms {
+                        if let formId = eventForm.formId, let json = eventForm.json?.json {
+                            eventFormDictionary[formId] = json[FormKey.fields.key] as? [[String: AnyHashable]]
+                        }
+                    }
+                }
+                localContext.reset();
+                NSLog("TIMING we have \(chunks.count) groups to save")
                 while (chunks.count > 0) {
                     autoreleasepool {
                         guard let features = chunks.last else {
                             return;
                         }
                         chunks.removeLast();
-                        
+                        let createObservationsDate = Date()
+                        NSLog("TIMING creating \(features.count) observations for chunk \(chunks.count)")
+
                         for observation in features {
-                            if let newObservation = Observation.create(feature: observation, context: localContext) {
+                            if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: localContext) {
                                 newObservationCount = newObservationCount + 1;
                                 if (!initial) {
                                     observationToNotifyAbout = newObservation;
                                 }
                             }
                         }
-                        print("Saved \(features.count) observations")
+                        NSLog("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
                     }
                     
                     // only save once per chunk
+                    let localSaveDate = Date()
                     do {
+                        NSLog("TIMING saving \(features.count) observations on local context")
                         try localContext.save()
                     } catch {
                         print("Error saving observations: \(error)")
                     }
+                    NSLog("TIMING saved \(features.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
                     
                     rootSavingContext.perform {
+                        let rootSaveDate = Date()
+
                         do {
+                            NSLog("TIMING saving \(features.count) observations on root context")
                             try rootSavingContext.save()
                         } catch {
                             print("Error saving observations: \(error)")
                         }
+                        NSLog("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
+
                     }
                     
                     localContext.reset();
+                    NSLog("TIMING reset the local context for chunk \(chunks.count)")
                     NSLog("Saved chunk \(chunks.count)")
                 }
                 
@@ -218,6 +246,7 @@ enum State: Int, CustomStringConvertible {
                     NotificationRequester.observationPulled(observationToNotifyAbout);
                 }
                 
+                NSLog("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
                 DispatchQueue.main.async {
                     success?(task, responseObject);
                 }
@@ -550,11 +579,13 @@ enum State: Int, CustomStringConvertible {
     }
     
     @discardableResult
-    @objc public static func create(feature: [AnyHashable : Any], context:NSManagedObjectContext) -> Observation? {
+    @objc public static func create(feature: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil, context:NSManagedObjectContext) -> Observation? {
         var newObservation: Observation? = nil;
         let remoteId = Observation.idFromJson(json: feature);
         
         let state = Observation.stateFromJson(json: feature);
+        
+//        NSLog("TIMING create the observation \(remoteId)")
         
         if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
             // if the observation is archived, delete it
@@ -574,7 +605,7 @@ enum State: Int, CustomStringConvertible {
                     }
                 }
                 
-                existingObservation.populate(json: feature);
+                existingObservation.populate(json: feature, eventForms: eventForms);
                 if let userId = existingObservation.userId {
                     if let user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context) {
                         existingObservation.user = user
@@ -662,7 +693,7 @@ enum State: Int, CustomStringConvertible {
             if state != .Archive {
                 // if the observation doesn't exist, insert it
                 if let observation = Observation.mr_createEntity(in: context) {
-                    observation.populate(json: feature);
+                    observation.populate(json: feature, eventForms: eventForms);
                     if let userId = observation.userId {
                         if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context) {
                             observation.user = user
@@ -752,7 +783,7 @@ enum State: Int, CustomStringConvertible {
     }
     
     @discardableResult
-    @objc public func populate(json: [AnyHashable : Any]) -> Observation {
+    @objc public func populate(json: [AnyHashable : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil) -> Observation {
         self.eventId = json[ObservationKey.eventId.key] as? NSNumber
         self.remoteId = Observation.idFromJson(json: json);
         self.userId = json[ObservationKey.userId.key] as? String
@@ -760,7 +791,7 @@ enum State: Int, CustomStringConvertible {
         self.dirty = false
         
         if let properties = json[ObservationKey.properties.key] as? [String : Any] {
-            self.properties = self.generateProperties(propertyJson: properties);
+            self.properties = self.generateProperties(propertyJson: properties, eventForms: eventForms);
         }
         
         if let lastModified = json[ObservationKey.lastModified.key] as? String {
@@ -785,7 +816,7 @@ enum State: Int, CustomStringConvertible {
         return self;
     }
     
-    func generateProperties(propertyJson: [String : Any]) -> [AnyHashable : Any] {
+    func generateProperties(propertyJson: [String : Any], eventForms: [NSNumber: [[String: AnyHashable]]]? = nil) -> [AnyHashable : Any] {
         var parsedProperties: [String : Any] = [:]
         
         if self.event == nil {
@@ -798,19 +829,29 @@ enum State: Int, CustomStringConvertible {
                 if let formsProperties = value as? [[String : Any]] {
                     for formProperties in formsProperties {
                         var parsedFormProperties:[String:Any] = formProperties;
-                        if let formId = formProperties[EventKey.formId.key] as? NSNumber, let managedObjectContext = managedObjectContext, let form : Form = Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext) {
-                            for (formKey, value) in formProperties {
-                                if let field = form.getFieldByName(name: formKey) {
-                                    if let type = field[FieldKey.type.key] as? String, type == FieldType.geometry.key {
-                                        if let value = value as? [String: Any] {
-                                            let geometry = GeometryDeserializer.parseGeometry(json: value)
-                                            parsedFormProperties[formKey] = geometry;
+                        
+                        if let formId = formProperties[EventKey.formId.key] as? NSNumber {
+                            var formFields: [[String: AnyHashable]]? = nil
+                            if let eventForms = eventForms {
+                                formFields = eventForms[formId]
+                            } else if let managedObjectContext = managedObjectContext, let fetchedForm : Form = Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext) {
+                                formFields = fetchedForm.json?.json?[FormKey.fields.key] as? [[String: AnyHashable]]
+                            }
+                            
+                            if let formFields = formFields {
+                                for (formKey, value) in formProperties {
+                                    if let field = Form.getFieldByNameFromJSONFields(json: formFields, name: formKey) {
+                                        if let type = field[FieldKey.type.key] as? String, type == FieldType.geometry.key {
+                                            if let value = value as? [String: Any] {
+                                                let geometry = GeometryDeserializer.parseGeometry(json: value)
+                                                parsedFormProperties[formKey] = geometry;
+                                            }
                                         }
                                     }
                                 }
                             }
+                            forms.append(parsedFormProperties);
                         }
-                        forms.append(parsedFormProperties);
                     }
                 }
                 parsedProperties[ObservationKey.forms.key] = forms;

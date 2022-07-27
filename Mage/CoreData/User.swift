@@ -85,7 +85,13 @@ import Kingfisher
         
         let url = "\(baseURL.absoluteURL)/api/users/myself";
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Myself @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Myself. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            
+            let saveStart = Date()
+            NSLog("TIMING Saving Myself @ \(saveStart)")
             MagicalRecord.save { localContext in
                 guard let myself = responseObject as? [AnyHashable : Any], let userId = myself["id"] as? String else {
                     return;
@@ -97,6 +103,8 @@ import Kingfisher
                 }
                 
             } completion: { contextDidSave, error in
+                NSLog("TIMING Saved Myself. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                 if let error = error {
                     if let failure = failure {
                         failure(task, error);
@@ -120,7 +128,13 @@ import Kingfisher
         }
         let url = "\(baseURL.absoluteURL)/api/users/\(userId)";
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching User /api/users/\(userId) @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched User /api/users/\(userId) . Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            
+            let saveStart = Date()
+            NSLog("TIMING Saving User /api/users/\(userId)  @ \(saveStart)")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
                     print("Users are empty");
@@ -148,6 +162,8 @@ import Kingfisher
                     }
                 }
             } completion: { contextDidSave, error in
+                NSLog("TIMING Saved User /api/users/\(userId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                 if let error = error {
                     if let failure = failure {
                         failure(task, error);
@@ -171,7 +187,13 @@ import Kingfisher
         }
         let url = "\(baseURL.absoluteURL)/api/users";
         let manager = MageSessionManager.shared();
+        let methodStart = Date()
+        NSLog("TIMING Fetching Users @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
+            NSLog("TIMING Fetched Users. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            
+            let saveStart = Date()
+            NSLog("TIMING Saving Users @ \(saveStart)")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
                     print("Users are empty");
@@ -228,6 +250,8 @@ import Kingfisher
                     }
                 }
             } completion: { contextDidSave, error in
+                NSLog("TIMING Saved Users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+
                 if let error = error {
                     if let failure = failure {
                         failure(task, error);
