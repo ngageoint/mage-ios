@@ -136,6 +136,12 @@ import CoreData
         return nil
     }
     
+    static func getFieldByNameFromJSONFields(json: [[String: AnyHashable]], name: String) -> [String: AnyHashable]? {
+        return json.first { field in
+            field[FieldKey.name.key] as? String == name
+        }
+    }
+    
     static func getDocumentsDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
