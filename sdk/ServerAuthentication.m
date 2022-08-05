@@ -137,6 +137,38 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *api = [self.response objectForKey:@"api"];
     
+    if (self.response == nil) {
+        complete(AUTHENTICATION_ERROR, @"Invalid server response");
+        return;
+    } else if (self.loginParameters == nil) {
+        complete(AUTHENTICATION_ERROR, @"Server login error");
+        return;
+    }
+    
+    NSString *token = [self.response objectForKey:@"token"];
+    NSString *username = (NSString *) [self.loginParameters objectForKey:@"username"];
+    NSString *password = (NSString *) [self.loginParameters objectForKey:@"password"];
+    // Always use this locale when parsing fixed format date strings
+    NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[self.response objectForKey:@"expirationDate"]];
+    
+    NSString *failureMessage = @"Server failure while logging in:<br>";
+    if (token == nil || username == nil || password == nil || tokenExpirationDate == nil) {
+        if (token == nil) {
+            failureMessage = [NSString stringWithFormat: @"%@Invalid Token<br>", failureMessage];
+        }
+        if (username == nil) {
+            failureMessage = [NSString stringWithFormat: @"%@Invalid Username<br>", failureMessage];
+        }
+        if (password == nil) {
+            failureMessage = [NSString stringWithFormat: @"%@Invalid Password<br>", failureMessage];
+        }
+        if (tokenExpirationDate == nil) {
+            failureMessage = [NSString stringWithFormat: @"%@Invalid Token Expiration Date<br>", failureMessage];
+        }
+        complete(AUTHENTICATION_ERROR, failureMessage);
+        return;
+    }
+    
     if ([api objectForKey:@"disclaimer"] != NULL && [api valueForKey:@"disclaimer"]) {
         [defaults setObject:[api valueForKeyPath:@"disclaimer.show"] forKey:@"showDisclaimer"];
         [defaults setObject:[api valueForKeyPath:@"disclaimer.text"] forKey:@"disclaimerText"];
@@ -160,12 +192,6 @@
             [user updateWithJson:userJson context:localContext];
         }
     } completion:^(BOOL contextDidSave, NSError *error) {
-        NSString *token = [self.response objectForKey:@"token"];
-        NSString *username = (NSString *) [self.loginParameters objectForKey:@"username"];
-        NSString *password = (NSString *) [self.loginParameters objectForKey:@"password"];
-        // Always use this locale when parsing fixed format date strings
-        NSDate* tokenExpirationDate = [NSDate dateFromIso8601String:[self.response objectForKey:@"expirationDate"]];
-        
         [MageSessionManager sharedManager].token = token;
         
         [[UserUtility singleton] resetExpiration];
@@ -178,7 +204,6 @@
         
         [defaults setObject:loginParameters forKey:@"loginParameters"];
         
-        NSDictionary *userJson = [self.response objectForKey:@"user"];
         NSString *userId = [userJson objectForKey:@"id"];
         [defaults setObject: userId forKey:@"currentUserId"];
         

@@ -383,6 +383,10 @@ BOOL signingIn = YES;
                 [self.navigationController popToRootViewControllerAnimated:NO];
                 [self.navigationController pushViewController:viewController animated:NO];
             }
+        } else {
+            ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage: errorString];
+//            info.username = username;
+            [self.loginView setContactInfo:info];
         }
     }];
 }

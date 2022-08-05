@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 4.0.3
+
+##### Bug Fixes
+  * Extra logging for login errors
+
 ## 4.0.2
 
 ##### Features
