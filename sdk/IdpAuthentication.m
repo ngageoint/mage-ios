@@ -56,7 +56,7 @@
     }
 }
 
-- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString, NSString *errorDetail)) complete {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *api = [self.response objectForKey:@"api"];
     
@@ -109,7 +109,7 @@
         [defaults synchronize];
         [StoredPassword persistTokenToKeyChain:token];
         
-        complete(AUTHENTICATION_SUCCESS, nil);
+        complete(AUTHENTICATION_SUCCESS, nil, nil);
     }];
 }
 

@@ -23,6 +23,16 @@
     return self;
 }
 
+- (instancetype) initWithTitle: (nullable NSString *)title andMessage: (NSString *) message andDetailedInfo:(nonnull NSString *)detailedInfo {
+    
+    self = [self initWithTitle:title andMessage:message];
+    if (!self) return nil;
+    
+    [self setDetailedInfo:detailedInfo];
+    
+    return self;
+}
+
 - (NSAttributedString *) messageWithContactInfo {
     NSString * htmlString = [self constructMessage];
     NSAttributedString *attributedString = [[NSAttributedString alloc]

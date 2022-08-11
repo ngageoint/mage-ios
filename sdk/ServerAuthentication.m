@@ -97,8 +97,9 @@
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:url parameters:authorizeParameters error:nil];
     [request setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     NSURLSessionDataTask *task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+
         if (error) {
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
 
             // if the error was a network error try to login with the local auth module
             if ([error.domain isEqualToString:NSURLErrorDomain]&& (error.code == NSURLErrorCannotConnectToHost|| error.code == NSURLErrorNotConnectedToInternet)) {
@@ -125,7 +126,11 @@
             return complete(AUTHENTICATION_ERROR, error.localizedDescription);
         }
         self.loginParameters = parameters;
-        self.response = responseObject;
+        
+        NSMutableDictionary *responseDictionary = [[NSMutableDictionary alloc] initWithDictionary:responseObject];
+        responseDictionary[@"headers"] = [httpResponse allHeaderFields];
+        
+        self.response = responseDictionary;
         
         complete(AUTHENTICATION_SUCCESS, nil);
     }];
@@ -133,15 +138,15 @@
     [manager addTask:task];
 }
 
-- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString, NSString *errorDetail)) complete {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *api = [self.response objectForKey:@"api"];
     
     if (self.response == nil) {
-        complete(AUTHENTICATION_ERROR, @"Invalid server response");
+        complete(AUTHENTICATION_ERROR, @"Invalid server response", nil);
         return;
     } else if (self.loginParameters == nil) {
-        complete(AUTHENTICATION_ERROR, @"Server login error");
+        complete(AUTHENTICATION_ERROR, @"Server login error", nil);
         return;
     }
     
@@ -165,7 +170,8 @@
         if (tokenExpirationDate == nil) {
             failureMessage = [NSString stringWithFormat: @"%@Invalid Token Expiration Date<br>", failureMessage];
         }
-        complete(AUTHENTICATION_ERROR, failureMessage);
+        
+        complete(AUTHENTICATION_ERROR, failureMessage, [NSString stringWithFormat:@"Response Details %@", self.response]);
         return;
     }
     
@@ -215,7 +221,7 @@
         [StoredPassword persistPasswordToKeyChain:password];
         [StoredPassword persistTokenToKeyChain:token];
         
-        complete(AUTHENTICATION_SUCCESS, nil);
+        complete(AUTHENTICATION_SUCCESS, nil, nil);
     }];
 }
 

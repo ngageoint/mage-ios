@@ -32,7 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) NSString *strategy;
 
+@property (nonatomic, strong) NSString *detailedInfo;
+
 - (instancetype) initWithTitle: (nullable NSString *)title andMessage: (NSString *) message;
+- (instancetype) initWithTitle: (nullable NSString *)title andMessage: (NSString *) message andDetailedInfo: (NSString *) detailedInfo;
 
 - (NSAttributedString *) messageWithContactInfo;
 

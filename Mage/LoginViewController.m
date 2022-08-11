@@ -14,6 +14,7 @@
 #import "LocalLoginView.h"
 #import "LdapLoginView.h"
 #import "OrView.h"
+#import <PureLayout.h>
 
 @interface LoginViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -32,7 +33,10 @@
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @property (weak, nonatomic) IBOutlet UIStackView *loginsStackView;
 @property (strong, nonatomic) IBOutlet UITextView *messageView;
+@property (strong, nonatomic) MDCButton *messageDetailButton;
+@property (strong, nonatomic) NSString *errorMessageDetail;
 @property (strong, nonatomic) OrView *orView;
+@property (strong, nonatomic) UITapGestureRecognizer *gestureRecognizer;
 
 @end
 
@@ -169,7 +173,24 @@
     self.messageView.editable = NO;
     [self.loginsStackView addArrangedSubview:self.messageView];
     
+    UIView *messageDetailButtonContainer = [UIView newAutoLayoutView];
+    self.messageDetailButton = [[MDCButton alloc] init];
+    [self.messageDetailButton applyTextThemeWithScheme:_scheme];
+    [self.messageDetailButton setTitle:@"Copy Error Message Detail" forState:UIControlStateNormal];
+    [self.messageDetailButton addTarget:self action:@selector(copyDetail) forControlEvents:UIControlEventTouchUpInside];
+    self.messageDetailButton.hidden = YES;
+    
+    [messageDetailButtonContainer addSubview:self.messageDetailButton];
+    [self.messageDetailButton autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(0, 16, 0, 16)];
+    
+    [self.loginsStackView addArrangedSubview:messageDetailButtonContainer];
+    
     self.statusView.hidden = !self.loginFailure;
+}
+
+- (void) copyDetail {
+    UIPasteboard.generalPasteboard.string = self.errorMessageDetail;
+    [MDCSnackbarManager.defaultManager showMessage:[MDCSnackbarMessage messageWithText: @"Error detail copied to clipboard"]];
 }
 
 - (void) setContactInfo:(ContactInfo *) contactInfo {
@@ -182,6 +203,14 @@
     self.messageView.scrollEnabled = false;
     [self.messageView sizeToFit];
     self.messageView.hidden = NO;
+    
+    if (contactInfo.detailedInfo) {
+        self.messageDetailButton.hidden = NO;
+        self.errorMessageDetail = contactInfo.detailedInfo;
+    } else {
+        self.messageDetailButton.hidden = YES;
+        self.errorMessageDetail = nil;
+    }
     
     if([self.loginsStackView.superview isMemberOfClass:[UIScrollView class]]) {
         [self.loginsStackView.superview layoutIfNeeded];
