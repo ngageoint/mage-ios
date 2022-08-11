@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, AuthenticationStatus) {
 - (NSDictionary *) parameters;
 - (BOOL) canHandleLoginToURL: (NSString *) url;
 - (void) loginWithParameters: (NSDictionary *) loginParameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
-- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString, NSString *errorDetail)) complete;
 @end
 
 @interface Authentication : NSObject

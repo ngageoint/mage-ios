@@ -366,7 +366,7 @@ BOOL signingIn = YES;
 
 - (void) authenticationWasSuccessfulWithModule: (id<AuthenticationProtocol>) module {
     
-    [module finishLogin:^(AuthenticationStatus authenticationStatus, NSString *errorString) {
+    [module finishLogin:^(AuthenticationStatus authenticationStatus, NSString *errorString, NSString *errorDetail) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             
@@ -384,7 +384,7 @@ BOOL signingIn = YES;
                 [self.navigationController pushViewController:viewController animated:NO];
             }
         } else {
-            ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage: errorString];
+            ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage: errorString andDetailedInfo: errorDetail];
 //            info.username = username;
             [self.loginView setContactInfo:info];
         }

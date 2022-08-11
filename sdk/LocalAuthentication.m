@@ -59,7 +59,7 @@
     complete(AUTHENTICATION_ERROR, @"Error logging in");
 }
 
-- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+- (void) finishLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString, NSString *errorDetail)) complete {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *oldLoginParameters = [defaults objectForKey:@"loginParameters"];
     
@@ -73,7 +73,7 @@
     [[UserUtility singleton] resetExpiration];
     
     [MageSessionManager sharedManager].token = [oldLoginParameters objectForKey:@"token"];
-    complete(AUTHENTICATION_SUCCESS, nil);
+    complete(AUTHENTICATION_SUCCESS, nil, nil);
 }
 
 @end
