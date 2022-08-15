@@ -34,7 +34,11 @@
             break;
         }
         case AVAuthorizationStatusNotDetermined: {
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:complete];
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    complete(granted);
+                });
+            }];
             break;
         }
         case AVAuthorizationStatusRestricted: {
@@ -92,7 +96,11 @@
             break;
         }
         case AVAuthorizationStatusNotDetermined: {
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:complete];
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    complete(granted);
+                });
+            }];
             break;
         }
         case AVAuthorizationStatusRestricted: {
