@@ -303,17 +303,22 @@
     
     self.backgroundGeoPackage = [manager open:@"countries"];
     if (self.backgroundGeoPackage) {
-        GPKGFeatureDao * featureDao = [self.backgroundGeoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.backgroundGeoPackage andFeatureDao:featureDao];
-        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.backgroundGeoPackage andFeatureDao:featureDao]];
-        
-        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
-        [self.backgroundOverlay setMinZoom:0];
-        self.backgroundOverlay.darkTheme = NO;
-        
-        self.backgroundOverlay.canReplaceMapContent = true;
+        @try {
+            GPKGFeatureDao * featureDao = [self.backgroundGeoPackage featureDaoWithTableName:@"countries"];
+            
+            // If indexed, add as a tile overlay
+            GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.backgroundGeoPackage andFeatureDao:featureDao];
+            [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.backgroundGeoPackage andFeatureDao:featureDao]];
+            
+            self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+            [self.backgroundOverlay setMinZoom:0];
+            self.backgroundOverlay.darkTheme = NO;
+            
+            self.backgroundOverlay.canReplaceMapContent = true;
+        }
+        @catch (NSException *e) {
+            NSLog(@"Exception initializing the base map GP %@", e);
+        }
     }
     
     return self.backgroundOverlay;
@@ -340,17 +345,22 @@
 
     self.darkBackgroundGeoPackage = [manager open:@"countries_dark"];
     if (self.darkBackgroundGeoPackage) {
-        GPKGFeatureDao * darkFeatureDao = [self.darkBackgroundGeoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.darkBackgroundGeoPackage andFeatureDao:darkFeatureDao];
-        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.darkBackgroundGeoPackage andFeatureDao:darkFeatureDao]];
-        
-        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
-        [self.darkBackgroundOverlay setMinZoom:0];
-        self.darkBackgroundOverlay.darkTheme = YES;
-        
-        self.darkBackgroundOverlay.canReplaceMapContent = true;
+        @try {
+            GPKGFeatureDao * darkFeatureDao = [self.darkBackgroundGeoPackage featureDaoWithTableName:@"countries"];
+            
+            // If indexed, add as a tile overlay
+            GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:self.darkBackgroundGeoPackage andFeatureDao:darkFeatureDao];
+            [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:self.darkBackgroundGeoPackage andFeatureDao:darkFeatureDao]];
+            
+            self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+            [self.darkBackgroundOverlay setMinZoom:0];
+            self.darkBackgroundOverlay.darkTheme = YES;
+            
+            self.darkBackgroundOverlay.canReplaceMapContent = true;
+            }
+            @catch (NSException *e) {
+                NSLog(@"Exception initializing the dark base map GP %@", e);
+            }
     }
     
     return self.darkBackgroundOverlay;
