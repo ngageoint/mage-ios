@@ -19,9 +19,7 @@
 #import "GPKGTileBoundingBoxUtils.h"
 #import "GPKGMapUtils.h"
 #import "CacheOverlayUpdate.h"
-#import "SFPProjection.h"
-#import "SFPProjectionTransform.h"
-#import "SFPProjectionConstants.h"
+#import "PROJProjectionConstants.h"
 #import "XYZDirectoryCacheOverlay.h"
 
 @interface GeoPackage ()
@@ -244,9 +242,9 @@
                 GPKGContentsDao * contentsDao = [geoPackage contentsDao];
                 GPKGContents * contents = (GPKGContents *)[contentsDao queryForIdObject:[tableCacheOverlay getName]];
                 GPKGBoundingBox * contentsBoundingBox = [contents boundingBox];
-                SFPProjection * projection = [contentsDao projection:contents];
+                PROJProjection * projection = [contentsDao projection:contents];
 
-                SFPProjectionTransform * transform = [[SFPProjectionTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
+                SFPGeometryTransform *transform = [[SFPGeometryTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
                 GPKGBoundingBox * boundingBox = [contentsBoundingBox transform:transform];
                 boundingBox = [GPKGTileBoundingBoxUtils boundWgs84BoundingBoxWithWebMercatorLimits:boundingBox];
                 
@@ -427,7 +425,7 @@
                 }else{
                     maxFeaturesPerTable = [defaults geoPackageFeaturesMaxFeaturesPerTable];
                 }
-                SFPProjection * projection = featureDao.projection;
+                PROJProjection * projection = featureDao.projection;
                 GPKGMapShapeConverter * shapeConverter = [[GPKGMapShapeConverter alloc] initWithProjection:projection];
                 GPKGResultSet * resultSet = [featureDao queryForAll];
                 @try {

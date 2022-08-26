@@ -14,7 +14,7 @@
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MapShapePointAnnotationView.h"
-#import "SFPProjectionConstants.h"
+#import "PROJProjectionConstants.h"
 #import "SFGeometryEnvelopeBuilder.h"
 #import "ObservationShapeStyle.h"
 #import "UINavigationItem+Subtitle.h"
