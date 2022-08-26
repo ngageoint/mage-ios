@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 4.0.4
+
+##### Bug Fixes
+  * set the locale for date parsing to fix bug with 24 hour locales with the time preference set to 12 hours
+
 ## 4.0.3
 
 ##### Bug Fixes

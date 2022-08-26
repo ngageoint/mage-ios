@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "StoredPassword.h"
+#import "NSDate+Iso8601.h"
 
 @interface StoredPasswordTests : XCTestCase
 
@@ -36,6 +37,11 @@
     [StoredPassword clearToken];
     NSString *newToken = [StoredPassword retrieveStoredToken];
     XCTAssertNil(newToken);
+}
+
+- (void)testParse {
+    NSDate *date = [NSDate dateFromIso8601String:@"2022-08-26T19:38:58.121Z"];
+    NSLog(@"Parsed %@ into date %@", @"2022-08-26T19:38:58.121Z", date);
 }
 
 @end

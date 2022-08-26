@@ -26,6 +26,10 @@
     
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+    NSLog(@"The current device locale %@",[NSLocale currentLocale].localeIdentifier);
+    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    [dateFormatter setLocale:locale];
+    NSLog(@"The date formatter locale %@", dateFormatter.locale.localeIdentifier);
     
     return dateFormatter;
 }
