@@ -16,6 +16,7 @@ protocol GeoPackageBaseMap {
 
 class GeoPackageBaseMapMixin: NSObject, MapMixin {
     var mapView: MKMapView?
+    var gridOverlay: MKTileOverlay?
     
     init(mapView: MKMapView?) {
         self.mapView = mapView
@@ -23,11 +24,13 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
     
     deinit {
         UserDefaults.standard.removeObserver(self, forKeyPath: "mapType")
+        UserDefaults.standard.removeObserver(self, forKeyPath: "gridType")
         UserDefaults.standard.removeObserver(self, forKeyPath: "mapShowTraffic")
     }
 
     func setupMixin() {
         UserDefaults.standard.addObserver(self, forKeyPath: "mapType", options: .new, context: nil)
+        UserDefaults.standard.addObserver(self, forKeyPath: "gridType", options: .new, context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "mapShowTraffic", options: .new, context: nil)
         addBaseMap()
     }
@@ -56,6 +59,24 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
         } else {
             mapView?.mapType = MKMapType(rawValue: UInt(UserDefaults.standard.mapType)) ?? .standard
         }
+        
+        if gridOverlay != nil {
+            mapView?.removeOverlay(gridOverlay!)
+        }
+        switch GridType(rawValue: UserDefaults.standard.gridType) {
+        case .GARS:
+            gridOverlay = GridFactory.garsTileOverlay()
+            break;
+        case .MGRS:
+            gridOverlay = GridFactory.mgrsTileOverlay()
+            break;
+        default:
+            gridOverlay = nil
+        }
+        if gridOverlay != nil {
+            mapView?.addOverlay(gridOverlay!)
+        }
+        
         mapView?.showsTraffic = UserDefaults.standard.mapShowTraffic && mapView?.mapType != .satellite && UserDefaults.standard.mapType != 3
     }
     

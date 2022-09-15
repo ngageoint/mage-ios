@@ -125,6 +125,15 @@ extension Notification.Name {
         }
     }
     
+    var gridType: Int {
+        get {
+            return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
     var mapRegion: MKCoordinateRegion {
         get {
             return mkcoordinateregion(forKey: #function)

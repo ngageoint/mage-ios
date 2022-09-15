@@ -6,10 +6,11 @@
 
 #import "MapSettings.h"
 #import "MapTypeTableViewCell.h"
+#import "GridTypeTableViewCell.h"
 #import "ObservationTableHeaderView.h"
 #import "MAGE-Swift.h"
 
-@interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate>
+@interface MapSettings () <UITableViewDelegate, UITableViewDataSource, MapTypeDelegate, GridTypeDelegate>
     @property (strong) id<MapSettingsDelegate> delegate;
 @property (strong) NSArray *feeds;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
@@ -23,10 +24,13 @@ static const NSInteger LAYERS_SECTION = 0;
 static const NSInteger MAGE_SECTION = 1;
 static const NSInteger FEED_SECTION = 2;
 
+static const NSInteger TOTAL_LAYER_SECTIONS = 5;
+
 static const NSInteger LAYERS_ROW_MAP_TYPE = 0;
-static const NSInteger LAYERS_ROW_TRAFFIC = 1;
-static const NSInteger LAYERS_ROW_DOWNLOADABLE = 2;
-static const NSInteger LAYERS_ROW_ONLINE = 3;
+static const NSInteger LAYERS_ROW_GRID_TYPE = 1;
+static const NSInteger LAYERS_ROW_TRAFFIC = 2;
+static const NSInteger LAYERS_ROW_DOWNLOADABLE = 3;
+static const NSInteger LAYERS_ROW_ONLINE = 4;
 
 static const NSInteger MAGE_ROW_OBSERVATIONS = 0;
 static const NSInteger MAGE_ROW_PEOPLE = 1;
@@ -57,6 +61,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
     self.tableView.accessibilityIdentifier = @"settings";
     [self applyThemeWithContainerScheme:self.scheme];
     [self.tableView registerNib:[UINib nibWithNibName:@"MapTypeCell" bundle:nil] forCellReuseIdentifier:@"MapTypeCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"GridTypeCell" bundle:nil] forCellReuseIdentifier:@"GridTypeCell"];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -77,7 +82,7 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == LAYERS_SECTION) {
-        return [self isTrafficAvailable] ? 4 : 3;
+        return [self isTrafficAvailable] ? TOTAL_LAYER_SECTIONS : TOTAL_LAYER_SECTIONS - 1;
     } else if (section == MAGE_SECTION) {
         return 2;
     } else if (section == FEED_SECTION) {
@@ -105,6 +110,21 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
                 NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
             } forState:UIControlStateSelected];
             cell.mapTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"mapType"];
+            cell.cellTitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
+            cell.delegate = self;
+            cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
+            return cell;
+        }
+        if (indexPath.row == LAYERS_ROW_GRID_TYPE) {
+            GridTypeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GridTypeCell"];
+            cell.gridTypeSegmentedControl.selectedSegmentTintColor = self.scheme.colorScheme.primaryColor;
+            [cell.gridTypeSegmentedControl setTitleTextAttributes:@{
+                NSForegroundColorAttributeName: [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.6]
+            } forState:UIControlStateNormal];
+            [cell.gridTypeSegmentedControl setTitleTextAttributes:@{
+                NSForegroundColorAttributeName: self.scheme.colorScheme.onPrimaryColor
+            } forState:UIControlStateSelected];
+            cell.gridTypeSegmentedControl.selectedSegmentIndex = [defaults integerForKey:@"gridType"];
             cell.cellTitle.textColor = [self.scheme.colorScheme.onSurfaceColor colorWithAlphaComponent:0.87];
             cell.delegate = self;
             cell.backgroundColor = self.scheme.colorScheme.surfaceColor;
@@ -285,6 +305,10 @@ static NSString *FEED_SECTION_NAME = @"Feeds";
         || (![self isTrafficAvailable] && [self.tableView numberOfRowsInSection:LAYERS_SECTION] == 4)){
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:LAYERS_SECTION] withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+
+- (void)gridTypeChanged:(GridType)gridType {
+
 }
 
 - (void) trafficSwitchChanged:(UISwitch *)sender {

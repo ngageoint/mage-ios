@@ -20,6 +20,10 @@
 		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
 		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
+		04E2C89828D346D4001F0812 /* GridTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04E2C89728D346D4001F0812 /* GridTypeCell.xib */; };
+		04E2C89B28D34C29001F0812 /* GridTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E2C89A28D34C29001F0812 /* GridTypeTableViewCell.m */; };
+		04E2C89E28D37D0E001F0812 /* GridType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E2C89D28D37D0E001F0812 /* GridType.swift */; };
+		04E2C8A028D387C2001F0812 /* GridFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E2C89F28D387C2001F0812 /* GridFactory.swift */; };
 		04ED963F1EB7AB8700B6AD8D /* MapObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED963E1EB7AB8700B6AD8D /* MapObservation.m */; };
 		04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96411EB7B15900B6AD8D /* MapAnnotationObservation.m */; };
 		04ED96451EB7D1D000B6AD8D /* MapShapeObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04ED96441EB7D1D000B6AD8D /* MapShapeObservation.m */; };
@@ -613,6 +617,11 @@
 		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
 		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
 		04E0CB0E1C40161C00E34F9C /* MageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageConstants.m; sourceTree = "<group>"; };
+		04E2C89728D346D4001F0812 /* GridTypeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GridTypeCell.xib; sourceTree = "<group>"; };
+		04E2C89928D34C29001F0812 /* GridTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridTypeTableViewCell.h; sourceTree = "<group>"; };
+		04E2C89A28D34C29001F0812 /* GridTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridTypeTableViewCell.m; sourceTree = "<group>"; };
+		04E2C89D28D37D0E001F0812 /* GridType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridType.swift; sourceTree = "<group>"; };
+		04E2C89F28D387C2001F0812 /* GridFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridFactory.swift; sourceTree = "<group>"; };
 		04ED963D1EB7AB8700B6AD8D /* MapObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapObservation.h; path = Map/MapObservation.h; sourceTree = "<group>"; };
 		04ED963E1EB7AB8700B6AD8D /* MapObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapObservation.m; path = Map/MapObservation.m; sourceTree = "<group>"; };
 		04ED96401EB7B15900B6AD8D /* MapAnnotationObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapAnnotationObservation.h; path = Map/MapAnnotationObservation.h; sourceTree = "<group>"; };
@@ -2752,6 +2761,7 @@
 				2F4E1099220CA195001C9F12 /* AttributionCell.xib */,
 				2F4E10AE220E19A5001C9F12 /* DisplaySettingsHeader.xib */,
 				2F8A2C182201305D007FE473 /* EventInformationView.xib */,
+				04E2C89728D346D4001F0812 /* GridTypeCell.xib */,
 				F7ED5D161FFE9966007BD768 /* MapTypeCell.xib */,
 				2F4E10BB220E3905001C9F12 /* RightDetailSubtitleCell.xib */,
 			);
@@ -2761,6 +2771,10 @@
 		F7ED5D121FFD8FCE007BD768 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				04E2C89D28D37D0E001F0812 /* GridType.swift */,
+				04E2C89F28D387C2001F0812 /* GridFactory.swift */,
+				04E2C89928D34C29001F0812 /* GridTypeTableViewCell.h */,
+				04E2C89A28D34C29001F0812 /* GridTypeTableViewCell.m */,
 				2FA70A9D1A03F2CA00243F4A /* MapSettings.h */,
 				2FA70A9E1A03F2CA00243F4A /* MapSettings.m */,
 				F7ED5D131FFD95B5007BD768 /* MapSettingsCoordinator.h */,
@@ -2916,6 +2930,7 @@
 				F7C5C8D91F5F5473002C78D3 /* LoginView.xib in Resources */,
 				F717E5701F62FFD000211D0D /* TransitionScreen.xib in Resources */,
 				F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */,
+				04E2C89828D346D4001F0812 /* GridTypeCell.xib in Resources */,
 				F7C5C8991F4CC703002C78D3 /* AttachmentView.xib in Resources */,
 				2F7AB0C11D12EF91006F99FC /* set_build_number.sh in Resources */,
 				2F4E10AF220E19A5001C9F12 /* DisplaySettingsHeader.xib in Resources */,
@@ -3070,8 +3085,10 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/gars-ios/gars-ios.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs/mgrs.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs-ios/mgrs-ios.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/proj-ios/proj-ios.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
@@ -3099,8 +3116,10 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gars-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/proj-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
@@ -3138,8 +3157,10 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_reorder.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/MaterialComponents/MaterialIcons_ic_settings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/gars-ios/gars-ios.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/geopackage-ios/geopackage-ios.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs/mgrs.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/mgrs-ios/mgrs-ios.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/proj-ios/proj-ios.bundle",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/adjacency_graphs.json",
 				"${PODS_ROOT}/zxcvbn-ios/Zxcvbn/generated/frequency_lists.json",
@@ -3167,8 +3188,10 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_radio_button_unchecked.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_reorder.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons_ic_settings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gars-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/geopackage-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mgrs-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/proj-ios.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/adjacency_graphs.json",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/frequency_lists.json",
@@ -3270,6 +3293,7 @@
 				F72D42F82694B60300F9AC3B /* Location.swift in Sources */,
 				04F833FD1ED4872A00B5FE1E /* MapShapePointsObservation.m in Sources */,
 				F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */,
+				04E2C89B28D34C29001F0812 /* GridTypeTableViewCell.m in Sources */,
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
@@ -3521,6 +3545,7 @@
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
+				04E2C8A028D387C2001F0812 /* GridFactory.swift in Sources */,
 				F752B5F0275FF80C00BFA6EC /* FormJson.swift in Sources */,
 				F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
@@ -3528,6 +3553,7 @@
 				F7D43BE4269F357200561A8F /* FeedItemActionsView.swift in Sources */,
 				F7F08E9427E0EB7100640D89 /* GeoPackageImporter.m in Sources */,
 				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,
+				04E2C89E28D37D0E001F0812 /* GridType.swift in Sources */,
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,
 				2FCD7B0524F8084C0073D6F7 /* MoreTableViewDelegate.swift in Sources */,
 				F7081DB42627696F004B89D4 /* CompassView.swift in Sources */,

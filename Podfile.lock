@@ -14,14 +14,21 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - color-ios (1.0.0)
   - crs-ios (1.0.3)
   - DateTools (2.0.0)
-  - geopackage-ios (7.2.1):
-    - ogc-api-features-json-ios (~> 4.0.1)
-    - sf-proj-ios (~> 5.0.3)
-    - sf-wkb-ios (~> 4.0.1)
-    - sf-wkt-ios (~> 2.0.1)
+  - gars-ios (1.1.0):
+    - grid-ios (~> 1.0.2)
+  - geopackage-ios (7.3.0):
+    - color-ios (~> 1.0.0)
+    - ogc-api-features-json-ios (~> 4.1.0)
+    - sf-proj-ios (~> 5.1.0)
+    - sf-wkb-ios (~> 4.1.0)
+    - sf-wkt-ios (~> 2.1.0)
     - tiff-ios (~> 4.0.0)
+  - grid-ios (1.0.2):
+    - color-ios (~> 1.0.0)
+    - sf-ios (~> 4.1.0)
   - HexColors (4.0.0)
   - KIF (3.8.6):
     - KIF/Core (= 3.8.6)
@@ -674,13 +681,15 @@ PODS:
   - MDFInternationalization (3.0.0)
   - MDFTextAccessibility (2.0.1)
   - mgrs (0.1.0)
+  - mgrs-ios (1.1.0):
+    - grid-ios (~> 1.0.2)
   - MotionAnimator (4.0.1):
     - MotionInterchange (~> 3.0)
   - MotionInterchange (3.0.0)
   - Nimble (9.2.1)
   - OCMock (3.9.1)
-  - ogc-api-features-json-ios (4.0.1):
-    - sf-geojson-ios (~> 4.0.2)
+  - ogc-api-features-json-ios (4.1.0):
+    - sf-geojson-ios (~> 4.1.0)
   - OHHTTPStubs (9.1.0):
     - OHHTTPStubs/Default (= 9.1.0)
   - OHHTTPStubs/Core (9.1.0)
@@ -702,16 +711,16 @@ PODS:
   - proj4-ios (4.9.3)
   - PureLayout (3.1.9)
   - Quick (4.0.0)
-  - sf-geojson-ios (4.0.2):
-    - sf-ios (~> 4.0.1)
-  - sf-ios (4.0.1)
-  - sf-proj-ios (5.0.3):
+  - sf-geojson-ios (4.1.0):
+    - sf-ios (~> 4.1.0)
+  - sf-ios (4.1.0)
+  - sf-proj-ios (5.1.0):
     - proj-ios (~> 1.0.3)
-    - sf-ios (~> 4.0.1)
-  - sf-wkb-ios (4.0.1):
-    - sf-ios (~> 4.0.1)
-  - sf-wkt-ios (2.0.1):
-    - sf-ios (~> 4.0.1)
+    - sf-ios (~> 4.1.0)
+  - sf-wkb-ios (4.1.0):
+    - sf-ios (~> 4.1.0)
+  - sf-wkt-ios (2.1.0):
+    - sf-ios (~> 4.1.0)
   - SSZipArchive (2.2.3)
   - tiff-ios (4.0.0)
   - UIImage-Categories (0.0.1)
@@ -720,7 +729,8 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 4.0.1)
   - DateTools (~> 2.0.0)
-  - geopackage-ios (~> 7)
+  - gars-ios (~> 1.1.0)
+  - geopackage-ios (~> 7.3.0)
   - HexColors (~> 4.0.0)
   - KIF
   - Kingfisher (~> 6)
@@ -729,6 +739,7 @@ DEPENDENCIES:
   - MaterialComponents
   - MDFInternationalization
   - mgrs (~> 0.1.0)
+  - mgrs-ios (~> 1.1.0)
   - Nimble (~> 9)
   - OCMock
   - OHHTTPStubs
@@ -742,9 +753,12 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - AFNetworking
+    - color-ios
     - crs-ios
     - DateTools
+    - gars-ios
     - geopackage-ios
+    - grid-ios
     - HexColors
     - KIF
     - Kingfisher
@@ -754,6 +768,7 @@ SPEC REPOS:
     - MDFInternationalization
     - MDFTextAccessibility
     - mgrs
+    - mgrs-ios
     - MotionAnimator
     - MotionInterchange
     - Nimble
@@ -785,9 +800,12 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  color-ios: de6e9f87578f3fa5b688a671d375cc799e52ca41
   crs-ios: b02a1ce24228f85cfc945507fc58b7a35b7bbb88
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
-  geopackage-ios: a4b2aebe2733944cab1f1de623f0b1c9d8fbc4f4
+  gars-ios: d41cbb5eb51f8e8f6407ec5213772f19830ec0b8
+  geopackage-ios: 4f107db4241c4a6c53f6e5edbfd0e5a4e31163a9
+  grid-ios: 651e86865a7d485b5341766a4dc46e8c25f08ff1
   HexColors: 5f95843ef89aff6a72e1fd3a8ebabf205cc43379
   KIF: e2e1bab222b6c9523a0a88caab31f8524fe82404
   Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
@@ -797,26 +815,27 @@ SPEC CHECKSUMS:
   MDFInternationalization: d697c55307816222a55685c4ccb1044ffb030c12
   MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
   mgrs: c4b57f8c27ee1f4939be117f4a683e680c127326
+  mgrs-ios: 6e1718f734ea5ace3ae3748cafa91f096f2b58fd
   MotionAnimator: 5f99d7c9592928c0f28a66283eda9c3b657dc480
   MotionInterchange: 13adae439b377e31d1674cc165539d50e1d1566a
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
   OCMock: 9491e4bec59e0b267d52a9184ff5605995e74be8
-  ogc-api-features-json-ios: 74fdd1cdc97161811051ea7a18a8cfe793be5c35
+  ogc-api-features-json-ios: c528d5dbc44d0268efe44425439734f1240b6764
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   proj-ios: b9b0fced7abed627750164b140fc4629bc76ca17
   proj4-ios: fa2f3ab9ba9ba727bd10bc12aea735d0c3927ef4
   PureLayout: 5fb5e5429519627d60d079ccb1eaa7265ce7cf88
   Quick: 5dc45f9bc11236594a7acc99f7bd85ecdc9a477d
-  sf-geojson-ios: 7401e4d2a99de963285f615f94b8a0d2585733bd
-  sf-ios: e71cb132b84fe91405ecf51578f2d0903fabd7b5
-  sf-proj-ios: 15f13310cfd0e40d4c6841adc1a53d1eb94614d1
-  sf-wkb-ios: abb68b4bc7c3a3d921c52208a88d2da54bde8098
-  sf-wkt-ios: 6d445ec129678901065417fc5a404b167027a684
+  sf-geojson-ios: 3808a5dfb5505c30d5a9d614f42b814da638066a
+  sf-ios: 02f985b929472e3b8a42924a5a352ee0fcf589fe
+  sf-proj-ios: ae6a661e6e01ad7cb1d555110cc64d1bf8887c71
+  sf-wkb-ios: 02fecc1ca79d1661bad77279c196a55f741173f6
+  sf-wkt-ios: c2d988fffb8091d3449d16c74cd215a9cb98f4a6
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   tiff-ios: fb3f51fcd3400ea1dd8f710d2a7832a18d112580
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 72f69c806b87ebeafec83e67e6da53b0c1d05363
+PODFILE CHECKSUM: 6a7015e6d434ce1c2c8ec82a12c8f0e0d39acd6f
 
 COCOAPODS: 1.11.3
