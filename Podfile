@@ -9,7 +9,6 @@ use_modular_headers!
 def common_pods
   pod 'UIImage-Categories', '~> 0.0.1'
   pod 'HexColors', '~> 4.0.0'
-  pod 'mgrs', '~>0.1.0'
   pod 'libPhoneNumber-iOS', '~> 0.9.15'
   pod 'zxcvbn-ios'
   pod 'DateTools', '~> 2.0.0'
@@ -21,8 +20,8 @@ def common_pods
   pod "DateTools", "~> 2.0.0"
   pod "MagicalRecord", "~> 2.3.2"
   pod 'geopackage-ios', '~> 7.3.0'
-  pod 'mgrs-ios', '~> 1.1.0'
-  pod 'gars-ios', '~> 1.1.0'
+  pod 'mgrs-ios', '~> 1.1.1'
+  pod 'gars-ios', '~> 1.1.1'
   pod 'SSZipArchive', '~> 2.2.2'
 end
 

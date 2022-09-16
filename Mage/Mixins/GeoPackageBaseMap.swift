@@ -65,10 +65,10 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
         }
         switch GridType(rawValue: UserDefaults.standard.gridType) {
         case .GARS:
-            gridOverlay = GridFactory.garsTileOverlay()
+            gridOverlay = GridSystems.garsTileOverlay()
             break;
         case .MGRS:
-            gridOverlay = GridFactory.mgrsTileOverlay()
+            gridOverlay = GridSystems.mgrsTileOverlay()
             break;
         default:
             gridOverlay = nil

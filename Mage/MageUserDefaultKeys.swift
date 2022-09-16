@@ -36,6 +36,7 @@ extension Notification.Name {
     case latlng
     case mgrs
     case dms
+    case gars
 }
 
 @objc extension UserDefaults {

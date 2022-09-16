@@ -38,9 +38,11 @@ extension CLLocationCoordinate2D {
     
     public func toDisplay(short: Bool = false) -> String {
         if UserDefaults.standard.locationDisplay == .mgrs {
-            return MGRS.mgrSfromCoordinate(self)
+            return GridSystems.mgrs(self)
         } else if UserDefaults.standard.locationDisplay == .dms {
             return "\(LocationUtilities.latitudeDMSString(coordinate: self.latitude)), \(LocationUtilities.longitudeDMSString(coordinate: self.longitude))"
+        } else if UserDefaults.standard.locationDisplay == .gars {
+            return GridSystems.gars(self)
         } else {
             return String(format: "%.5f, %.5f", self.latitude, self.longitude)
         }

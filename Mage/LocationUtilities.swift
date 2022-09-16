@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import mgrs
 import CoreLocation
 
 struct DMSCoordinate {
