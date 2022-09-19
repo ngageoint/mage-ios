@@ -90,20 +90,28 @@ static NSString *garsTitle = @"GARS";
     [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateEditing];
 }
 
+- (void) applyThemeTextField: (MDCFilledTextField *) field {
+    [self themeTextField:field withScheme:self.scheme];
+}
+
+- (void) applyErrorThemeTextField: (MDCFilledTextField *) field {
+    [self themeTextField:field withScheme:[MAGEErrorScheme scheme]];
+}
+
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     self.scheme = containerScheme;
     self.navigationController.navigationBar.translucent = NO;
     self.slidescroll.backgroundColor = containerScheme.colorScheme.primaryColor;
     [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
-    [self themeTextField:self.latitudeField withScheme:containerScheme];
-    [self themeTextField:self.longitudeField withScheme:containerScheme];
-    [self themeTextField:self.mgrsField withScheme:containerScheme];
+    [self applyThemeTextField:self.latitudeField];
+    [self applyThemeTextField:self.longitudeField];
+    [self applyThemeTextField:self.mgrsField];
     
     // DMS
     [self.dmsLatitudeField applyThemeWithScheme:containerScheme];
     [self.dmsLongitudeField applyThemeWithScheme:containerScheme];
     
-    [self themeTextField:self.garsField withScheme:containerScheme];
+    [self applyThemeTextField:self.garsField];
     
     self.hintView.backgroundColor = containerScheme.colorScheme.primaryColor;
     self.hintLabel.textColor = containerScheme.colorScheme.onSecondaryColor;
@@ -676,6 +684,7 @@ static NSString *garsTitle = @"GARS";
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 1) {
         self.mgrsField.text = [GridSystems mgrs:coordinate];
+        [self applyThemeTextField:self.mgrsField];
     }
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 2) {
@@ -685,6 +694,7 @@ static NSString *garsTitle = @"GARS";
     
     if (!ignore || self.fieldTypeTabs.selectedItem.tag != 3) {
         self.garsField.text = [GridSystems gars:coordinate];
+        [self applyThemeTextField:self.garsField];
     }
 }
 
@@ -747,6 +757,7 @@ static NSString *garsTitle = @"GARS";
 - (void) onLatLonTextChanged {
     
     CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
+    MDCFilledTextField *themeField = nil;
     
     if (self.fieldTypeTabs.selectedItem.tag == 0) {
         NSDecimalNumber *latitude = nil;
@@ -771,15 +782,21 @@ static NSString *garsTitle = @"GARS";
 
     } else if (self.fieldTypeTabs.selectedItem.tag == 1) {
         coordinate = [GridSystems mgrsParse:self.mgrsField.text];
+        themeField = self.mgrsField;
     } else if (self.fieldTypeTabs.selectedItem.tag == 2) {
         coordinate = CLLocationCoordinate2DMake(_dmsLatitudeField.coordinate, _dmsLongitudeField.coordinate);
     } else if (self.fieldTypeTabs.selectedItem.tag == 3) {
         coordinate = [GridSystems garsParse:self.garsField.text];
+        themeField = self.garsField;
     }
     
     self.validLocation = CLLocationCoordinate2DIsValid(coordinate);
     
     if (self.validLocation){
+        
+        if (themeField != nil) {
+            [self applyThemeTextField:themeField];
+        }
         
         [self.map setCenterCoordinate:coordinate];
         
@@ -798,6 +815,9 @@ static NSString *garsTitle = @"GARS";
         }
         
         [self updateLocationTextWithCoordinate:coordinate ignoreSelected:YES];
+    } else if (themeField != nil) {
+        
+        [self applyErrorThemeTextField:themeField];
     }
     
 }
