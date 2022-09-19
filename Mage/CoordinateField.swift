@@ -45,7 +45,11 @@ import CoreLocation
             return textField.text
         }
         set {
-            parseAndUpdateText(newText: newValue, addDirection: (newValue?.count ?? 0) > 1)
+            if newValue != nil {
+                parseAndUpdateText(newText: newValue, addDirection: (newValue?.count ?? 0) > 1)
+            } else {
+                textField.text = nil
+            }
         }
     }
     

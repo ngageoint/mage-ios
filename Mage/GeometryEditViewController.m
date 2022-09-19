@@ -176,7 +176,12 @@ static NSString *garsTitle = @"GARS";
 - (void) clearLocation {
     self.geometry = nil;
     [self updateGeometry];
-    [self updateLocationTextWithLatitudeString:nil andLongitudeString:nil];
+    self.latitudeField.text = nil;
+    self.longitudeField.text = nil;
+    self.mgrsField.text = nil;
+    self.dmsLatitudeField.text = nil;
+    self.dmsLongitudeField.text = nil;
+    self.garsField.text = nil;
     if(self.mapObservation != nil){
         [self.mapObservation removeFromMapView:self.map];
         self.mapObservation = nil;
@@ -643,48 +648,46 @@ static NSString *garsTitle = @"GARS";
 /**
  * Update the latitude and longitude text entries
  *
- * @param coordinate location coordinate
- */
-- (void) updateLocationTextWithCoordinate: (CLLocationCoordinate2D) coordinate {
-    [self updateLocationTextWithLatitude:coordinate.latitude andLongitude:coordinate.longitude];
-}
-
-/**
- * Update the latitude and longitude text entries
- *
  * @param latitude  latitude
  * @param longitude longitude
  */
 - (void) updateLocationTextWithLatitude: (double) latitude andLongitude: (double) longitude {
-    [self updateLocationTextWithLatitudeString:[NSString stringWithFormat:@"%f", latitude] andLongitudeString:[NSString stringWithFormat:@"%f", longitude]];
+    [self updateLocationTextWithCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
 }
 
 /**
  * Update the latitude and longitude text entries
  *
- * @param latitude  latitude
- * @param longitude longitude
+ * @param coordinate location coordinate
  */
-- (void) updateLocationTextWithLatitudeString: (NSString *) latitude andLongitudeString: (NSString *) longitude {
-    self.latitudeField.text = latitude;
-    self.longitudeField.text = longitude;
+- (void) updateLocationTextWithCoordinate: (CLLocationCoordinate2D) coordinate {
+    [self updateLocationTextWithCoordinate:coordinate ignoreSelected:NO];
+}
+
+/**
+ * Update the latitude and longitude text entries
+ *
+ * @param coordinate location coordinate
+ */
+- (void) updateLocationTextWithCoordinate: (CLLocationCoordinate2D) coordinate ignoreSelected: (BOOL) ignore {
     
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-    self.mgrsField.text = [GridSystems mgrs:coordinate];
-    
-    if (latitude == nil) {
-        self.dmsLatitudeField.text = nil;
-    } else {
-        self.dmsLatitudeField.text = [LocationUtilities latitudeDMSStringWithCoordinate:coordinate.latitude];
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 0) {
+        self.latitudeField.text = [NSString stringWithFormat:@"%f", coordinate.latitude];
+        self.longitudeField.text = [NSString stringWithFormat:@"%f", coordinate.longitude];
     }
     
-    if (longitude == nil) {
-        self.dmsLongitudeField.text = nil;
-    } else {
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 1) {
+        self.mgrsField.text = [GridSystems mgrs:coordinate];
+    }
+    
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 2) {
+        self.dmsLatitudeField.text = [LocationUtilities latitudeDMSStringWithCoordinate:coordinate.latitude];
         self.dmsLongitudeField.text = [LocationUtilities longitudeDMSStringWithCoordinate:coordinate.longitude];
     }
     
-    self.garsField.text = [GridSystems gars:coordinate];
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 3) {
+        self.garsField.text = [GridSystems gars:coordinate];
+    }
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
@@ -694,45 +697,6 @@ static NSString *garsTitle = @"GARS";
 
 - (BOOL)textField:(UITextField *) textField shouldChangeCharactersInRange:(NSRange) range replacementString:(NSString *) string {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-//    if (textField == self.dmsLatitudeField) {
-//        if ([@"." isEqualToString:string]) {
-//            return YES;
-//        }
-//        UITextPosition *beginning = textField.beginningOfDocument;
-//        UITextPosition *cursorLocation = [textField positionFromPosition:beginning offset:(range.location + string.length)];
-//
-//        NSMutableCharacterSet *charactersToKeep = [[NSCharacterSet decimalDigitCharacterSet] mutableCopy];
-//        [charactersToKeep addCharactersInString:@".NSEWnsew"];
-//
-//        NSString *latitudeRaw = [[[text componentsSeparatedByCharactersInSet:[charactersToKeep invertedSet]] componentsJoinedByString:@""] uppercaseString];
-//
-////        CLLocationCoordinate2D parse
-//
-//        if (![LocationUtilities validateLatitudeFromDMSWithLatitude:latitudeRaw]) {
-//            [self themeTextField:self.dmsLatitudeField withScheme:[MAGEErrorScheme scheme]];
-//        } else {
-//            [self themeTextField:self.dmsLatitudeField withScheme:self.scheme];
-//        }
-//        NSString *longitudeRaw = [[[self.dmsLongitudeField.text componentsSeparatedByCharactersInSet:[charactersToKeep invertedSet]] componentsJoinedByString:@""] uppercaseString];
-//
-////        coordinate = [CoordinateDisplay coordinateFromDMSWithLatitude:latitudeRaw longitude:longitudeRaw];
-//        NSString *parsed = [LocationUtilities parseLatitudeToDMSWithLatitude:latitudeRaw];
-//        if (parsed != nil) {
-//            self.dmsLatitudeField.text = parsed;
-//            if(cursorLocation)
-//            {
-//                // set start/end location to same spot so that nothing is highlighted
-//                [textField setSelectedTextRange:[textField textRangeFromPosition:cursorLocation toPosition:cursorLocation]];
-//            }
-//
-//            return NO;
-//        }
-//
-//    } else if (textField == self.dmsLongitudeField) {
-////        coordinate = [CoordinateDisplay coordinateFromDMSWithLatitude:self.dmsLatitudeField.text longitude:self.dmsLongitudeField.text];
-//        return YES;
-//    }
 
     // allow backspace
     if (!string.length) {
@@ -760,9 +724,11 @@ static NSString *garsTitle = @"GARS";
         }
         coordinate = CLLocationCoordinate2DMake([self.latitudeField.text doubleValue], [number doubleValue]);
     } else if (textField == self.mgrsField) {
-        coordinate = [GridSystems mgrsParse:text];
+        return text.length <= 15;
+        // coordinate = [GridSystems mgrsParse:text];
     } else if (textField == self.garsField) {
-        coordinate = [GridSystems garsParse:text];
+        return text.length <= 7;
+        // coordinate = [GridSystems garsParse:text];
     }
     
     return CLLocationCoordinate2DIsValid(coordinate);
@@ -800,6 +766,8 @@ static NSString *garsTitle = @"GARS";
             SFPoint *updatedGeometry = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
             [self.coordinator updateGeometry:updatedGeometry];
         }
+        
+        [self updateLocationTextWithCoordinate:coordinate ignoreSelected:YES];
     }
 }
 
@@ -813,14 +781,13 @@ static NSString *garsTitle = @"GARS";
 
 - (void) onLatLonTextChanged {
     
-    NSString *latitudeString = self.latitudeField.text;
-    NSString *longitudeString = self.longitudeField.text;
-    
     CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
     
     if (self.fieldTypeTabs.selectedItem.tag == 0) {
         NSDecimalNumber *latitude = nil;
         NSDecimalNumber *longitude = nil;
+        NSString *latitudeString = self.latitudeField.text;
+        NSString *longitudeString = self.longitudeField.text;
         if(latitudeString.length > 0){
             @try {
                 latitude = [[NSDecimalNumber alloc] initWithDouble:[latitudeString doubleValue]];
@@ -864,6 +831,8 @@ static NSString *garsTitle = @"GARS";
             SFPoint *updatedGeometry = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
             [self.coordinator updateGeometry:updatedGeometry];
         }
+        
+        [self updateLocationTextWithCoordinate:coordinate ignoreSelected:YES];
     }
     
 }
