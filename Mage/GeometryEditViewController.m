@@ -60,12 +60,10 @@ static NSString *garsTitle = @"GARS";
 @property (strong, nonatomic) MDCFilledTextField *latitudeField;
 @property (strong, nonatomic) MDCFilledTextField *longitudeField;
 @property (strong, nonatomic) MDCFilledTextField *mgrsField;
-@property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (strong, nonatomic) MDCFilledTextField *garsField;
-@property (strong, nonatomic) NSTimer *textFieldChangedTimer;
+@property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
 @property (nonatomic) double lastAnnotationSelectedTime;
 @property (nonatomic, strong) Observation *observation;
-@property (strong, nonatomic) id fieldDefinition;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 @property (nonatomic) BOOL isObservationGeometry;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
@@ -735,48 +733,15 @@ static NSString *garsTitle = @"GARS";
 }
 
 - (void)fieldValueChangedWithCoordinate:(CLLocationDegrees)coordinate field:(CoordinateField *)field {
-    NSDecimalNumber *latitude = nil;
-    NSDecimalNumber *longitude = nil;
     if (self.fieldTypeTabs.selectedItem.tag == 2) {
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(_dmsLatitudeField.coordinate, _dmsLongitudeField.coordinate);
-        if (CLLocationCoordinate2DIsValid(coordinate)) {
-            self.validLocation = true;
-            longitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.longitude];
-            latitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.latitude];
-        }
-    } else {
-        return;
-    }
-    
-    if (self.validLocation){
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-        
-        [self.map setCenterCoordinate:coordinate];
-        
-        if (self.selectedMapPoint != nil) {
-            [self.selectedMapPoint setCoordinate:coordinate];
-            [self updateShape:coordinate];
-        } else if([self.mapObservation isKindOfClass:[MapAnnotationObservation class]]){
-            MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-            mapAnnotationObservation.annotation.coordinate = coordinate;
-            [self updateAcceptState];
-        }
-        // if it is a point just update the geometry
-        if (self.shapeType == SF_POINT) {
-            SFPoint *updatedGeometry = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
-            [self.coordinator updateGeometry:updatedGeometry];
-        }
-        
-        [self updateLocationTextWithCoordinate:coordinate ignoreSelected:YES];
+        [self onLatLonTextChanged];
     }
 }
 
 -(void) textFieldDidChange:(UITextField *) textField {
-    if (self.textFieldChangedTimer.isValid) {
-        [self.textFieldChangedTimer invalidate];
+    if (self.fieldTypeTabs.selectedItem.tag != 2) {
+        [self onLatLonTextChanged];
     }
-    // TODO: fix this to not require a half second wait
-    self.textFieldChangedTimer = [NSTimer scheduledTimerWithTimeInterval:.01 target:self selector:@selector(onLatLonTextChanged) userInfo:textField repeats:NO];
 }
 
 - (void) onLatLonTextChanged {
@@ -828,7 +793,7 @@ static NSString *garsTitle = @"GARS";
         }
         // if it is a point just update the geometry
         if (self.shapeType == SF_POINT) {
-            SFPoint *updatedGeometry = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
+            SFPoint *updatedGeometry = [SFPoint pointWithXValue:coordinate.longitude andYValue:coordinate.latitude];
             [self.coordinator updateGeometry:updatedGeometry];
         }
         
@@ -928,7 +893,7 @@ static NSString *garsTitle = @"GARS";
         if (self.shapeType == SF_POINT && self.isObservationGeometry) {
             MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
             ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-            geometry = [[SFPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+            geometry = [SFPoint pointWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
         } else {
             @try {
                 geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
@@ -1094,7 +1059,7 @@ static NSString *garsTitle = @"GARS";
     // Changing from point to a shape
     if (self.shapeType == SF_POINT) {
         
-        SFLineString *lineString = [[SFLineString alloc] init];
+        SFLineString *lineString = [SFLineString lineString];
         if (self.geometry != nil) {
             SFPoint *firstPoint = (SFPoint *)self.geometry;
             [lineString addPoint:firstPoint];
@@ -1117,7 +1082,7 @@ static NSString *garsTitle = @"GARS";
                     break;
                 case SF_POLYGON:
                     {
-                        SFPolygon *polygon = [[SFPolygon alloc] init];
+                        SFPolygon *polygon = [SFPolygon polygon];
                         [polygon addRing:lineString];
                         geometry = polygon;
                     }
@@ -1131,7 +1096,7 @@ static NSString *garsTitle = @"GARS";
     else if (selectedType == SF_POINT) {
         if (self.geometry != nil) {
             CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
-            geometry = [[SFPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
+            geometry = [SFPoint pointWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
         }
         self.newDrawing = NO;
     }
@@ -1193,16 +1158,16 @@ static NSString *garsTitle = @"GARS";
                             SFLineString *lineStringCopy = [lineString mutableCopy];
                             [SFGeometryUtils minimizeGeometry:lineStringCopy withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
                             SFGeometryEnvelope *envelope = [SFGeometryEnvelopeBuilder buildEnvelopeWithGeometry:lineStringCopy];
-                            lineString = [[SFLineString alloc] init];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
+                            lineString = [SFLineString lineString];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.minX andY:envelope.maxY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.minX andY:envelope.minY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.maxX andY:envelope.minY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.maxX andY:envelope.maxY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.minX andY:envelope.maxY]];
                             [self updateIfRectangle:lineString.points];
                         }
                         
-                        SFPolygon *polygon = [[SFPolygon alloc] init];
+                        SFPolygon *polygon = [SFPolygon polygon];
                         [polygon addRing:lineString];
                         self.newDrawing = [lineString numPoints] <= 2;
                         geometry = polygon;
@@ -1436,7 +1401,7 @@ static NSString *garsTitle = @"GARS";
         CLLocationCoordinate2D point = [self.map convertPoint:cgPoint toCoordinateFromView:self.map];
         
         if (self.shapeType == SF_POINT) {
-            SFPoint *geometry = [[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
+            SFPoint *geometry = [SFPoint pointWithXValue:point.longitude andYValue:point.latitude];
             [self addMapShape:geometry];
             [self updateGeometry];
         }
@@ -1447,15 +1412,15 @@ static NSString *garsTitle = @"GARS";
                     // brand new rectangle
                     SFGeometry *geometry = nil;
                     
-                    SFLineString *lineString = [[SFLineString alloc] init];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
+                    SFLineString *lineString = [SFLineString lineString];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
                     [self updateIfRectangle:lineString.points];
                     
-                    SFPolygon *polygon = [[SFPolygon alloc] init];
+                    SFPolygon *polygon = [SFPolygon polygon];
                     [polygon addRing:lineString];
                     self.newDrawing = [lineString numPoints] <= 2;
                     geometry = polygon;
@@ -1476,19 +1441,19 @@ static NSString *garsTitle = @"GARS";
                 
                 if (self.mapObservation == nil) {
                     SFGeometry *geometry = nil;
-                    SFPoint *firstPoint = [[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
+                    SFPoint *firstPoint = [SFPoint pointWithXValue:point.longitude andYValue:point.latitude];
                     switch (self.shapeType) {
                         case SF_LINESTRING:
                             {
-                                SFLineString *lineString = [[SFLineString alloc] init];
+                                SFLineString *lineString = [SFLineString lineString];
                                 [lineString addPoint:firstPoint];
                                 geometry = lineString;
                             }
                             break;
                         case SF_POLYGON:
                             {
-                                SFPolygon *polygon = [[SFPolygon alloc] init];
-                                SFLineString *ring = [[SFLineString alloc] init];
+                                SFPolygon *polygon = [SFPolygon polygon];
+                                SFLineString *ring = [SFLineString lineString];
                                 [ring addPoint:firstPoint];
                                 [polygon addRing: ring];
                                 geometry = polygon;
