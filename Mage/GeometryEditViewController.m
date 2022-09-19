@@ -28,6 +28,10 @@
 @import MaterialComponents;
 
 static float paddingPercentage = .1;
+static NSString *latLngTitle = @"Lat / Lng";
+static NSString *mgrsTitle = @"MGRS";
+static NSString *dmsTitle = @"DMS";
+static NSString *garsTitle = @"GARS";
 
 
 @interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate, CoordinateFieldDelegate>
@@ -45,6 +49,9 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
 @property (nonatomic) BOOL rectangleSameXSide1;
 @property (nonatomic) BOOL validLocation;
+@property (strong, nonatomic) NSString *mapCoordinateSystem;
+@property (strong, nonatomic) NSString *currentCoordinateSystem;
+@property (strong, nonatomic) MKTileOverlay *tileOverlay;
 
 // DMS
 @property (strong, nonatomic) CoordinateField *dmsLatitudeField;
@@ -208,6 +215,23 @@ static float paddingPercentage = .1;
     }
 }
 
+- (void) setupGridType: (id) object {
+    NSInteger gridType = [object integerForKey:@"gridType"];
+    NSString *coordinateSystem = nil;
+    switch(gridType){
+        case GridTypeGARS:
+            coordinateSystem = garsTitle;
+            break;
+        case GridTypeMGRS:
+            coordinateSystem = mgrsTitle;
+            break;
+        default:
+            coordinateSystem = latLngTitle;
+            break;
+    }
+    self.mapCoordinateSystem = coordinateSystem;
+}
+
 - (void) addBackgroundMap {
     BaseMapOverlay *backgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getBaseMap];
     BaseMapOverlay *darkBackgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getDarkBaseMap];
@@ -236,15 +260,17 @@ static float paddingPercentage = .1;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self setupMapType:defaults];
     
+    [self setupGridType:defaults];
+    
     // field type tabs
     self.fieldTypeTabs = [[MDCTabBarView alloc] init];
-    UITabBarItem *latlngTab = [[UITabBarItem alloc] initWithTitle:@"Lat / Lng" image:nil tag:0];
+    UITabBarItem *latlngTab = [[UITabBarItem alloc] initWithTitle:latLngTitle image:nil tag:0];
     latlngTab.accessibilityLabel = @"Latitude Longitude";
-    UITabBarItem *mgrsTab = [[UITabBarItem alloc] initWithTitle:@"MGRS" image:nil tag:1];
+    UITabBarItem *mgrsTab = [[UITabBarItem alloc] initWithTitle:mgrsTitle image:nil tag:1];
     mgrsTab.accessibilityLabel = @"MGRS";
-    UITabBarItem *dmsTab = [[UITabBarItem alloc] initWithTitle:@"DMS" image:nil tag:2];
+    UITabBarItem *dmsTab = [[UITabBarItem alloc] initWithTitle:dmsTitle image:nil tag:2];
     dmsTab.accessibilityLabel = @"DMS";
-    UITabBarItem *garsTab = [[UITabBarItem alloc] initWithTitle:@"GARS" image:nil tag:3];
+    UITabBarItem *garsTab = [[UITabBarItem alloc] initWithTitle:garsTitle image:nil tag:3];
     garsTab.accessibilityLabel = @"GARS";
     self.fieldTypeTabs.items = @[latlngTab, mgrsTab, dmsTab, garsTab];
     self.fieldTypeTabs.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed;
@@ -465,11 +491,46 @@ static float paddingPercentage = .1;
     
     [self applyThemeWithContainerScheme:self.scheme];
     [self updateHint];
+    
+    [self setCoordinateTileOverlay:latLngTitle];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.slidescroll setContentOffset:CGPointMake(self.fieldTypeTabs.selectedItem.tag * self.slidescroll.frame.size.width, self.slidescroll.contentOffset.y)];
+}
+
+-(void) setCoordinateTileOverlay: (NSString *) coordinateSystem {
+    if (coordinateSystem != self.currentCoordinateSystem) {
+        MKTileOverlay *tileOverlay = [self coordinateTileOverlay:coordinateSystem];
+        if (tileOverlay != nil) {
+            self.currentCoordinateSystem = coordinateSystem;
+        } else if (self.mapCoordinateSystem != self.currentCoordinateSystem) {
+            tileOverlay = [self coordinateTileOverlay:self.mapCoordinateSystem];
+            self.currentCoordinateSystem = self.mapCoordinateSystem;
+            if (tileOverlay == nil && self.tileOverlay != nil) {
+                [self.map removeOverlay:self.tileOverlay];
+                self.tileOverlay = nil;
+            }
+        }
+        if (tileOverlay != nil) {
+            if (self.tileOverlay != nil) {
+                [self.map removeOverlay:self.tileOverlay];
+            }
+            [self.map addOverlay:tileOverlay];
+            self.tileOverlay = tileOverlay;
+        }
+    }
+}
+
+-(MKTileOverlay *) coordinateTileOverlay: (NSString *) coordinateSystem {
+    MKTileOverlay *tileOverlay = nil;
+    if ([coordinateSystem isEqualToString:mgrsTitle]) {
+        tileOverlay = (MKTileOverlay *) [GridSystems mgrsTileOverlay];
+    } else if ([coordinateSystem isEqualToString:garsTitle]) {
+        tileOverlay = (MKTileOverlay *) [GridSystems garsTileOverlay];
+    }
+    return tileOverlay;
 }
 
 -(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (SFGeometry *) geometry {
@@ -1704,6 +1765,7 @@ static float paddingPercentage = .1;
             [weakSelf.slidescroll setContentOffset:CGPointMake(item.tag * self.slidescroll.frame.size.width, self.slidescroll.contentOffset.y)];
         } completion:nil];
     });
+    [self setCoordinateTileOverlay:item.title];
 }
 
 @end
