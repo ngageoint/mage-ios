@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 4.0.5
 
 ##### Features
-  * GARS and MGRS grid overlays
+  * GARS and MGRS grid overlays and observation geometry edit
 
 ## 4.0.4
 
