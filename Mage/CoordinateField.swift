@@ -49,6 +49,7 @@ import CoreLocation
                 parseAndUpdateText(newText: newValue, addDirection: (newValue?.count ?? 0) > 1)
             } else {
                 textField.text = nil
+                applyTheme()
             }
         }
     }
@@ -98,18 +99,17 @@ import CoreLocation
         guard let scheme = scheme else {
             return
         }
-
-        self.scheme = scheme
         textField.applyTheme(withScheme: scheme)
         textField.setFilledBackgroundColor(scheme.colorScheme.surfaceColor.withAlphaComponent(0.87), for: .normal)
         textField.setFilledBackgroundColor(scheme.colorScheme.surfaceColor.withAlphaComponent(0.87), for: .editing)
     }
     
+    @objc func applyTheme() {
+        applyTheme(withScheme: self.scheme)
+    }
+    
     @objc func applyErrorTheme() {
-        let scheme = globalErrorContainerScheme()
-        textField.applyTheme(withScheme: scheme)
-        textField.setFilledBackgroundColor(scheme.colorScheme.surfaceColor.withAlphaComponent(0.87), for: .normal)
-        textField.setFilledBackgroundColor(scheme.colorScheme.surfaceColor.withAlphaComponent(0.87), for: .editing)
+        applyTheme(withScheme: globalErrorContainerScheme())
     }
     
     @discardableResult
@@ -139,7 +139,7 @@ extension CoordinateField: UITextFieldDelegate {
     
     func applyFieldTheme(text: String?, addDirection: Bool = false) {
         if text == nil || text!.isEmpty {
-            applyTheme(withScheme: self.scheme)
+            applyTheme()
             return
         }
         
@@ -149,7 +149,7 @@ extension CoordinateField: UITextFieldDelegate {
         
         if let parsed = parsed, let parsedDMS = parsedDMS {
             if LocationUtilities.validateCoordinateFromDMS(coordinate: parsedDMS, latitude: latitude) {
-                applyTheme(withScheme: self.scheme)
+                applyTheme()
                 coordinate = parsed
                 if let delegate = delegate {
                     delegate.fieldValueChanged(coordinate: coordinate, field:self)

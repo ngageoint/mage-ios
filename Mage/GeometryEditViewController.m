@@ -185,9 +185,11 @@ static NSString *garsTitle = @"GARS";
     self.latitudeField.text = nil;
     self.longitudeField.text = nil;
     self.mgrsField.text = nil;
+    [self applyThemeTextField:self.mgrsField];
     self.dmsLatitudeField.text = nil;
     self.dmsLongitudeField.text = nil;
     self.garsField.text = nil;
+    [self applyThemeTextField:self.garsField];
     if(self.mapObservation != nil){
         [self.mapObservation removeFromMapView:self.map];
         self.mapObservation = nil;
@@ -792,11 +794,15 @@ static NSString *garsTitle = @"GARS";
     
     self.validLocation = CLLocationCoordinate2DIsValid(coordinate);
     
-    if (self.validLocation){
-        
-        if (themeField != nil) {
+    if (themeField != nil) {
+        if (self.validLocation || themeField.text.length == 0) {
             [self applyThemeTextField:themeField];
+        } else {
+            [self applyErrorThemeTextField:themeField];
         }
+    }
+    
+    if (self.validLocation){
         
         [self.map setCenterCoordinate:coordinate];
         
@@ -815,9 +821,6 @@ static NSString *garsTitle = @"GARS";
         }
         
         [self updateLocationTextWithCoordinate:coordinate ignoreSelected:YES];
-    } else if (themeField != nil) {
-        
-        [self applyErrorThemeTextField:themeField];
     }
     
 }
