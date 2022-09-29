@@ -7,6 +7,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ##### Features
   * GARS and MGRS grid overlays and observation geometry edit
+  
+##### Bug Fixes
+  * allow DMS fields to start with a 0
 
 ## 4.0.4
 
