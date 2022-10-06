@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## 4.0.5
+
+##### Features
+  * GARS and MGRS grid overlays and observation geometry edit
+  
+##### Bug Fixes
+  * allow DMS fields to start with a 0
+
 ## 4.0.4
 
 ##### Bug Fixes
@@ -63,7 +71,7 @@ You can now choose to display and enter coordinates in Latitude Longitude, MGRS,
 ## 3.0.7
 
 ##### Bug Fixes
-* Default forms are now added to a new observation automatically 
+* Default forms are now added to a new observation automatically
 
 ## 3.0.6
 
@@ -175,7 +183,7 @@ You can now choose to display and enter coordinates in Latitude Longitude, MGRS,
 ##### Release Notes
 
 ##### Features
-* Add observation accuracy.  Accuracy circle displayed on map for annotation click, observation view, 
+* Add observation accuracy.  Accuracy circle displayed on map for annotation click, observation view,
   and edit. Accuracy info is also displayed textually in observation view and edit.
 * Show location accuracy circle in user profile map.
 * Image caching is now handled by KingFisher, this affects all attachment views
@@ -268,10 +276,10 @@ immediately after the user has completed signin.
 
 ##### Features
 * Added loading indicator to oauth provider page load
-* Apply default styles to StyledPolyline and StyledPolygon.  This will ensure static features without those styles defined will  appear on the map. 
+* Apply default styles to StyledPolyline and StyledPolygon.  This will ensure static features without those styles defined will  appear on the map.
 
 ##### Bug Fixes
-* Multi line form names in form picker collection view now wrap correctly.  This is a 
+* Multi line form names in form picker collection view now wrap correctly.  This is a
   workaround for a bug discovered in iOS 12.  
 * Fixed bug where static feature map annotation callout wasn't sized correctly.  Updated to use same callout the geopackage features use, which supports
   html and clickable links.
@@ -313,7 +321,7 @@ immediately after the user has completed signin.
 * Upgrade to 2.0.8 SDK which fixes the case where an observation has no forms but an event does
 * No more crashing when signing up for an account
 
-## 2.0.5 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.5) 
+## 2.0.5 (https://github.com/ngageoint/mage-ios/releases/tag/2.0.5)
 
 ##### Release Notes
 

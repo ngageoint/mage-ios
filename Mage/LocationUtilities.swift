@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import mgrs
 import CoreLocation
 
 struct DMSCoordinate {
@@ -236,7 +235,6 @@ public class LocationUtilities: NSObject {
         }
         
         let parsed = parseDMS(coordinate: string, addDirection: addDirection, latitude: latitude)
-        
         let direction = parsed.direction ?? ""
         
         var seconds = ""
@@ -251,7 +249,11 @@ public class LocationUtilities: NSObject {
         
         var degrees = ""
         if let parsedDegrees = parsed.degrees {
-            degrees = "\(parsedDegrees)"
+            if string.starts(with: "0") && parsedDegrees != 0 {
+                degrees = "0\(parsedDegrees)"
+            } else {
+                degrees = "\(parsedDegrees)"
+            }
         }
 
         if !degrees.isEmpty {

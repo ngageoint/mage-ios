@@ -36,6 +36,7 @@ extension Notification.Name {
     case latlng
     case mgrs
     case dms
+    case gars
 }
 
 @objc extension UserDefaults {
@@ -117,6 +118,15 @@ extension Notification.Name {
     }
     
     var mapType: Int {
+        get {
+            return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+    
+    var gridType: Int {
         get {
             return integer(forKey: #function)
         }

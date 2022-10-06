@@ -20,7 +20,6 @@
 #import "MAGERoutes.h"
 #import "NotificationRequester.h"
 #import "FadeTransitionSegue.h"
-#import <MGRS.h>
 #import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "SettingsTableViewController.h"

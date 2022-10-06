@@ -14,21 +14,24 @@
 #import "MapShapePointsObservation.h"
 #import "MapAnnotationObservation.h"
 #import "MapShapePointAnnotationView.h"
-#import "SFPProjectionConstants.h"
+#import "PROJProjectionConstants.h"
 #import "SFGeometryEnvelopeBuilder.h"
 #import "ObservationShapeStyle.h"
 #import "UINavigationItem+Subtitle.h"
 #import "MapUtils.h"
 #import "GPKGGeoPackageFactory.h"
 #import "AppDelegate.h"
-#import <mgrs/MGRS.h>
-#import <mgrs/mgrs-umbrella.h>
 #import <PureLayout/PureLayout.h>
 #import "MAGE-Swift.h"
+
 
 @import MaterialComponents;
 
 static float paddingPercentage = .1;
+static NSString *latLngTitle = @"Lat / Lng";
+static NSString *mgrsTitle = @"MGRS";
+static NSString *dmsTitle = @"DMS";
+static NSString *garsTitle = @"GARS";
 
 
 @interface GeometryEditViewController()<UITextFieldDelegate, EditableMapAnnotationDelegate, MDCTabBarViewDelegate, CoordinateFieldDelegate>
@@ -46,6 +49,9 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) GPKGMapPoint *rectangleSameYMarker;
 @property (nonatomic) BOOL rectangleSameXSide1;
 @property (nonatomic) BOOL validLocation;
+@property (strong, nonatomic) NSString *mapCoordinateSystem;
+@property (strong, nonatomic) NSString *currentCoordinateSystem;
+@property (strong, nonatomic) MKTileOverlay *tileOverlay;
 
 // DMS
 @property (strong, nonatomic) CoordinateField *dmsLatitudeField;
@@ -54,11 +60,10 @@ static float paddingPercentage = .1;
 @property (strong, nonatomic) MDCFilledTextField *latitudeField;
 @property (strong, nonatomic) MDCFilledTextField *longitudeField;
 @property (strong, nonatomic) MDCFilledTextField *mgrsField;
+@property (strong, nonatomic) MDCFilledTextField *garsField;
 @property (strong, nonatomic) NSNumberFormatter *decimalFormatter;
-@property (strong, nonatomic) NSTimer *textFieldChangedTimer;
 @property (nonatomic) double lastAnnotationSelectedTime;
 @property (nonatomic, strong) Observation *observation;
-@property (strong, nonatomic) id fieldDefinition;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
 @property (nonatomic) BOOL isObservationGeometry;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
@@ -85,18 +90,28 @@ static float paddingPercentage = .1;
     [field setFilledBackgroundColor:[containerScheme.colorScheme.surfaceColor colorWithAlphaComponent:0.87] forState:MDCTextControlStateEditing];
 }
 
+- (void) applyThemeTextField: (MDCFilledTextField *) field {
+    [self themeTextField:field withScheme:self.scheme];
+}
+
+- (void) applyErrorThemeTextField: (MDCFilledTextField *) field {
+    [self themeTextField:field withScheme:[MAGEErrorScheme scheme]];
+}
+
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme {
     self.scheme = containerScheme;
     self.navigationController.navigationBar.translucent = NO;
     self.slidescroll.backgroundColor = containerScheme.colorScheme.primaryColor;
     [self.fieldTypeTabs applyPrimaryThemeWithScheme:self.scheme];
-    [self themeTextField:self.latitudeField withScheme:containerScheme];
-    [self themeTextField:self.longitudeField withScheme:containerScheme];
-    [self themeTextField:self.mgrsField withScheme:containerScheme];
+    [self applyThemeTextField:self.latitudeField];
+    [self applyThemeTextField:self.longitudeField];
+    [self applyThemeTextField:self.mgrsField];
     
     // DMS
     [self.dmsLatitudeField applyThemeWithScheme:containerScheme];
     [self.dmsLongitudeField applyThemeWithScheme:containerScheme];
+    
+    [self applyThemeTextField:self.garsField];
     
     self.hintView.backgroundColor = containerScheme.colorScheme.primaryColor;
     self.hintLabel.textColor = containerScheme.colorScheme.onSecondaryColor;
@@ -167,7 +182,14 @@ static float paddingPercentage = .1;
 - (void) clearLocation {
     self.geometry = nil;
     [self updateGeometry];
-    [self updateLocationTextWithLatitudeString:nil andLongitudeString:nil];
+    self.latitudeField.text = nil;
+    self.longitudeField.text = nil;
+    self.mgrsField.text = nil;
+    [self applyThemeTextField:self.mgrsField];
+    self.dmsLatitudeField.text = nil;
+    self.dmsLongitudeField.text = nil;
+    self.garsField.text = nil;
+    [self applyThemeTextField:self.garsField];
     if(self.mapObservation != nil){
         [self.mapObservation removeFromMapView:self.map];
         self.mapObservation = nil;
@@ -206,6 +228,23 @@ static float paddingPercentage = .1;
     }
 }
 
+- (void) setupGridType: (id) object {
+    NSInteger gridType = [object integerForKey:@"gridType"];
+    NSString *coordinateSystem = nil;
+    switch(gridType){
+        case GridTypeGARS:
+            coordinateSystem = garsTitle;
+            break;
+        case GridTypeMGRS:
+            coordinateSystem = mgrsTitle;
+            break;
+        default:
+            coordinateSystem = latLngTitle;
+            break;
+    }
+    self.mapCoordinateSystem = coordinateSystem;
+}
+
 - (void) addBackgroundMap {
     BaseMapOverlay *backgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getBaseMap];
     BaseMapOverlay *darkBackgroundOverlay = [((AppDelegate *)[UIApplication sharedApplication].delegate) getDarkBaseMap];
@@ -234,15 +273,19 @@ static float paddingPercentage = .1;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self setupMapType:defaults];
     
+    [self setupGridType:defaults];
+    
     // field type tabs
     self.fieldTypeTabs = [[MDCTabBarView alloc] init];
-    UITabBarItem *latlngTab = [[UITabBarItem alloc] initWithTitle:@"Lat / Lng" image:nil tag:0];
+    UITabBarItem *latlngTab = [[UITabBarItem alloc] initWithTitle:latLngTitle image:nil tag:0];
     latlngTab.accessibilityLabel = @"Latitude Longitude";
-    UITabBarItem *mgrsTab = [[UITabBarItem alloc] initWithTitle:@"MGRS" image:nil tag:1];
+    UITabBarItem *mgrsTab = [[UITabBarItem alloc] initWithTitle:mgrsTitle image:nil tag:1];
     mgrsTab.accessibilityLabel = @"MGRS";
-    UITabBarItem *dmsTab = [[UITabBarItem alloc] initWithTitle:@"DMS" image:nil tag:2];
+    UITabBarItem *dmsTab = [[UITabBarItem alloc] initWithTitle:dmsTitle image:nil tag:2];
     dmsTab.accessibilityLabel = @"DMS";
-    self.fieldTypeTabs.items = @[latlngTab, mgrsTab, dmsTab];
+    UITabBarItem *garsTab = [[UITabBarItem alloc] initWithTitle:garsTitle image:nil tag:3];
+    garsTab.accessibilityLabel = @"GARS";
+    self.fieldTypeTabs.items = @[latlngTab, mgrsTab, dmsTab, garsTab];
     self.fieldTypeTabs.preferredLayoutStyle = MDCTabBarViewLayoutStyleFixed;
     NSInteger tabIndex = defaults.locationDisplay;
     [self.fieldTypeTabs setSelectedItem:[self.fieldTypeTabs.items objectAtIndex:tabIndex]];
@@ -298,6 +341,12 @@ static float paddingPercentage = .1;
     [self.dmsLongitudeField sizeToFit];
     self.dmsLatitudeField.linkedLongitudeField = self.dmsLongitudeField;
     
+    self.garsField = [[MDCFilledTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+    self.garsField.placeholder = @"GARS";
+    self.garsField.label.text = @"GARS";
+    self.garsField.accessibilityLabel = @"GARS Value";
+    [self.garsField sizeToFit];
+    
     UIView *latlngContainer = [[UIView alloc] initForAutoLayout];
     [latlngContainer addSubview:_latitudeField];
     [latlngContainer addSubview:_longitudeField];
@@ -329,6 +378,12 @@ static float paddingPercentage = .1;
     [self.dmsLongitudeField autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(8, 8, 8, 8) excludingEdge:ALEdgeLeft];
     [self.dmsLongitudeField autoPinEdge:ALEdgeLeft toEdge:ALEdgeRight ofView:self.dmsLatitudeField withOffset:8];
     [self.dmsLatitudeField autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.dmsLongitudeField];
+    
+    UIView *garsContainer = [[UIView alloc] initForAutoLayout];
+    [garsContainer addSubview:self.garsField];
+    [tabStack addArrangedSubview:garsContainer];
+    [garsContainer autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.slidescroll];
+    [self.garsField autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(8, 8, 8, 8)];
     
     self.hintView = [[UIView alloc] initForAutoLayout];
     [self.hintView autoSetDimension:ALDimensionHeight toSize:16];
@@ -399,10 +454,12 @@ static float paddingPercentage = .1;
     [self.latitudeField setDelegate: self];
     [self.longitudeField setDelegate: self];
     [self.mgrsField setDelegate:self];
+    [self.garsField setDelegate:self];
     
     [self.latitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.longitudeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.mgrsField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.garsField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     NSInteger tabIndex = defaults.locationDisplay;
     [self.fieldTypeTabs setSelectedItem:[self.fieldTypeTabs.items objectAtIndex:tabIndex]];
@@ -447,11 +504,46 @@ static float paddingPercentage = .1;
     
     [self applyThemeWithContainerScheme:self.scheme];
     [self updateHint];
+    
+    [self setCoordinateTileOverlay:latLngTitle];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.slidescroll setContentOffset:CGPointMake(self.fieldTypeTabs.selectedItem.tag * self.slidescroll.frame.size.width, self.slidescroll.contentOffset.y)];
+}
+
+-(void) setCoordinateTileOverlay: (NSString *) coordinateSystem {
+    if (coordinateSystem != self.currentCoordinateSystem) {
+        MKTileOverlay *tileOverlay = [self coordinateTileOverlay:coordinateSystem];
+        if (tileOverlay != nil) {
+            self.currentCoordinateSystem = coordinateSystem;
+        } else if (self.mapCoordinateSystem != self.currentCoordinateSystem) {
+            tileOverlay = [self coordinateTileOverlay:self.mapCoordinateSystem];
+            self.currentCoordinateSystem = self.mapCoordinateSystem;
+            if (tileOverlay == nil && self.tileOverlay != nil) {
+                [self.map removeOverlay:self.tileOverlay];
+                self.tileOverlay = nil;
+            }
+        }
+        if (tileOverlay != nil) {
+            if (self.tileOverlay != nil) {
+                [self.map removeOverlay:self.tileOverlay];
+            }
+            [self.map addOverlay:tileOverlay];
+            self.tileOverlay = tileOverlay;
+        }
+    }
+}
+
+-(MKTileOverlay *) coordinateTileOverlay: (NSString *) coordinateSystem {
+    MKTileOverlay *tileOverlay = nil;
+    if ([coordinateSystem isEqualToString:mgrsTitle]) {
+        tileOverlay = (MKTileOverlay *) [GridSystems mgrsTileOverlay];
+    } else if ([coordinateSystem isEqualToString:garsTitle]) {
+        tileOverlay = (MKTileOverlay *) [GridSystems garsTileOverlay];
+    }
+    return tileOverlay;
 }
 
 -(MKCoordinateRegion) viewRegionOfMapView: (MKMapView *) mapView forGeometry: (SFGeometry *) geometry {
@@ -484,6 +576,7 @@ static float paddingPercentage = .1;
     [self.mgrsField resignFirstResponder];
     [self.dmsLatitudeField resignFirstResponder];
     [self.dmsLongitudeField resignFirstResponder];
+    [self.garsField resignFirstResponder];
     [self updateHint];
 }
 
@@ -501,7 +594,7 @@ static float paddingPercentage = .1;
  */
 -(void) updateHintWithDragging: (BOOL) dragging{
     
-    BOOL locationEdit = self.latitudeField.isEditing || self.longitudeField.isEditing || self.mgrsField.isEditing || self.dmsLatitudeField.isEditing || self.dmsLongitudeField.isEditing;
+    BOOL locationEdit = self.latitudeField.isEditing || self.longitudeField.isEditing || self.mgrsField.isEditing || self.dmsLatitudeField.isEditing || self.dmsLongitudeField.isEditing || self.garsField.isEditing;
     
     NSString *hint = @"";
     
@@ -563,45 +656,47 @@ static float paddingPercentage = .1;
 /**
  * Update the latitude and longitude text entries
  *
- * @param coordinate location coordinate
- */
-- (void) updateLocationTextWithCoordinate: (CLLocationCoordinate2D) coordinate {
-    [self updateLocationTextWithLatitude:coordinate.latitude andLongitude:coordinate.longitude];
-}
-
-/**
- * Update the latitude and longitude text entries
- *
  * @param latitude  latitude
  * @param longitude longitude
  */
 - (void) updateLocationTextWithLatitude: (double) latitude andLongitude: (double) longitude {
-    [self updateLocationTextWithLatitudeString:[NSString stringWithFormat:@"%f", latitude] andLongitudeString:[NSString stringWithFormat:@"%f", longitude]];
+    [self updateLocationTextWithCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
 }
 
 /**
  * Update the latitude and longitude text entries
  *
- * @param latitude  latitude
- * @param longitude longitude
+ * @param coordinate location coordinate
  */
-- (void) updateLocationTextWithLatitudeString: (NSString *) latitude andLongitudeString: (NSString *) longitude {
-    self.latitudeField.text = latitude;
-    self.longitudeField.text = longitude;
+- (void) updateLocationTextWithCoordinate: (CLLocationCoordinate2D) coordinate {
+    [self updateLocationTextWithCoordinate:coordinate ignoreSelected:NO];
+}
+
+/**
+ * Update the latitude and longitude text entries
+ *
+ * @param coordinate location coordinate
+ */
+- (void) updateLocationTextWithCoordinate: (CLLocationCoordinate2D) coordinate ignoreSelected: (BOOL) ignore {
     
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-    self.mgrsField.text = [MGRS MGRSfromCoordinate:coordinate];
-    
-    if (latitude == nil) {
-        self.dmsLatitudeField.text = nil;
-    } else {
-        self.dmsLatitudeField.text = [LocationUtilities latitudeDMSStringWithCoordinate:coordinate.latitude];
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 0) {
+        self.latitudeField.text = [NSString stringWithFormat:@"%f", coordinate.latitude];
+        self.longitudeField.text = [NSString stringWithFormat:@"%f", coordinate.longitude];
     }
     
-    if (longitude == nil) {
-        self.dmsLongitudeField.text = nil;
-    } else {
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 1) {
+        self.mgrsField.text = [GridSystems mgrs:coordinate];
+        [self applyThemeTextField:self.mgrsField];
+    }
+    
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 2) {
+        self.dmsLatitudeField.text = [LocationUtilities latitudeDMSStringWithCoordinate:coordinate.latitude];
         self.dmsLongitudeField.text = [LocationUtilities longitudeDMSStringWithCoordinate:coordinate.longitude];
+    }
+    
+    if (!ignore || self.fieldTypeTabs.selectedItem.tag != 3) {
+        self.garsField.text = [GridSystems gars:coordinate];
+        [self applyThemeTextField:self.garsField];
     }
 }
 
@@ -612,45 +707,6 @@ static float paddingPercentage = .1;
 
 - (BOOL)textField:(UITextField *) textField shouldChangeCharactersInRange:(NSRange) range replacementString:(NSString *) string {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-//    if (textField == self.dmsLatitudeField) {
-//        if ([@"." isEqualToString:string]) {
-//            return YES;
-//        }
-//        UITextPosition *beginning = textField.beginningOfDocument;
-//        UITextPosition *cursorLocation = [textField positionFromPosition:beginning offset:(range.location + string.length)];
-//
-//        NSMutableCharacterSet *charactersToKeep = [[NSCharacterSet decimalDigitCharacterSet] mutableCopy];
-//        [charactersToKeep addCharactersInString:@".NSEWnsew"];
-//
-//        NSString *latitudeRaw = [[[text componentsSeparatedByCharactersInSet:[charactersToKeep invertedSet]] componentsJoinedByString:@""] uppercaseString];
-//
-////        CLLocationCoordinate2D parse
-//
-//        if (![LocationUtilities validateLatitudeFromDMSWithLatitude:latitudeRaw]) {
-//            [self themeTextField:self.dmsLatitudeField withScheme:[MAGEErrorScheme scheme]];
-//        } else {
-//            [self themeTextField:self.dmsLatitudeField withScheme:self.scheme];
-//        }
-//        NSString *longitudeRaw = [[[self.dmsLongitudeField.text componentsSeparatedByCharactersInSet:[charactersToKeep invertedSet]] componentsJoinedByString:@""] uppercaseString];
-//
-////        coordinate = [CoordinateDisplay coordinateFromDMSWithLatitude:latitudeRaw longitude:longitudeRaw];
-//        NSString *parsed = [LocationUtilities parseLatitudeToDMSWithLatitude:latitudeRaw];
-//        if (parsed != nil) {
-//            self.dmsLatitudeField.text = parsed;
-//            if(cursorLocation)
-//            {
-//                // set start/end location to same spot so that nothing is highlighted
-//                [textField setSelectedTextRange:[textField textRangeFromPosition:cursorLocation toPosition:cursorLocation]];
-//            }
-//
-//            return NO;
-//        }
-//
-//    } else if (textField == self.dmsLongitudeField) {
-////        coordinate = [CoordinateDisplay coordinateFromDMSWithLatitude:self.dmsLatitudeField.text longitude:self.dmsLongitudeField.text];
-//        return YES;
-//    }
 
     // allow backspace
     if (!string.length) {
@@ -678,68 +734,38 @@ static float paddingPercentage = .1;
         }
         coordinate = CLLocationCoordinate2DMake([self.latitudeField.text doubleValue], [number doubleValue]);
     } else if (textField == self.mgrsField) {
-        double lat;
-        double lon;
-        char* mgrs = [text UTF8String];
-        Convert_MGRS_To_Geodetic(mgrs, &lat, &lon);
-        coordinate = CLLocationCoordinate2DMake(radiansToDegrees(lat), radiansToDegrees(lon));
+        return text.length <= 15;
+        // coordinate = [GridSystems mgrsParse:text];
+    } else if (textField == self.garsField) {
+        return text.length <= 7;
+        // coordinate = [GridSystems garsParse:text];
     }
     
     return CLLocationCoordinate2DIsValid(coordinate);
 }
 
 - (void)fieldValueChangedWithCoordinate:(CLLocationDegrees)coordinate field:(CoordinateField *)field {
-    NSDecimalNumber *latitude = nil;
-    NSDecimalNumber *longitude = nil;
     if (self.fieldTypeTabs.selectedItem.tag == 2) {
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(_dmsLatitudeField.coordinate, _dmsLongitudeField.coordinate);
-        if (CLLocationCoordinate2DIsValid(coordinate)) {
-            self.validLocation = true;
-            longitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.longitude];
-            latitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.latitude];
-        }
-    } else {
-        return;
-    }
-    
-    if (self.validLocation){
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-        
-        [self.map setCenterCoordinate:coordinate];
-        
-        if (self.selectedMapPoint != nil) {
-            [self.selectedMapPoint setCoordinate:coordinate];
-            [self updateShape:coordinate];
-        } else if([self.mapObservation isKindOfClass:[MapAnnotationObservation class]]){
-            MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-            mapAnnotationObservation.annotation.coordinate = coordinate;
-            [self updateAcceptState];
-        }
-        // if it is a point just update the geometry
-        if (self.shapeType == SF_POINT) {
-            SFPoint *updatedGeometry = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
-            [self.coordinator updateGeometry:updatedGeometry];
-        }
+        [self onLatLonTextChanged];
     }
 }
 
 -(void) textFieldDidChange:(UITextField *) textField {
-    if (self.textFieldChangedTimer.isValid) {
-        [self.textFieldChangedTimer invalidate];
+    if (self.fieldTypeTabs.selectedItem.tag != 2) {
+        [self onLatLonTextChanged];
     }
-    // TODO: fix this to not require a half second wait
-    self.textFieldChangedTimer = [NSTimer scheduledTimerWithTimeInterval:.01 target:self selector:@selector(onLatLonTextChanged) userInfo:textField repeats:NO];
 }
 
 - (void) onLatLonTextChanged {
     
-    NSString *latitudeString = self.latitudeField.text;
-    NSString *longitudeString = self.longitudeField.text;
+    CLLocationCoordinate2D coordinate = kCLLocationCoordinate2DInvalid;
+    MDCFilledTextField *themeField = nil;
     
-    NSDecimalNumber *latitude = nil;
-    NSDecimalNumber *longitude = nil;
-
     if (self.fieldTypeTabs.selectedItem.tag == 0) {
+        NSDecimalNumber *latitude = nil;
+        NSDecimalNumber *longitude = nil;
+        NSString *latitudeString = self.latitudeField.text;
+        NSString *longitudeString = self.longitudeField.text;
         if(latitudeString.length > 0){
             @try {
                 latitude = [[NSDecimalNumber alloc] initWithDouble:[latitudeString doubleValue]];
@@ -752,42 +778,31 @@ static float paddingPercentage = .1;
             } @catch (NSException *exception) {
             }
         }
-        self.validLocation = latitude != nil && longitude != nil;
-        
-        if (latitude == nil) {
-            latitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
+        if (latitude != nil && longitude != nil) {
+            coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
         }
-        if (longitude == nil) {
-            longitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
-        }
+
     } else if (self.fieldTypeTabs.selectedItem.tag == 1) {
-        double lat;
-        double lon;
-        const char* mgrs = [self.mgrsField.text UTF8String];
-        long error = Convert_MGRS_To_Geodetic(mgrs, &lat, &lon);
-        if (lat == 0.0) {
-            latitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
-        } else {
-            latitude = [[NSDecimalNumber alloc] initWithDouble:radiansToDegrees(lat)];
-        }
-        if (lon == 0.0) {
-            longitude = [[NSDecimalNumber alloc] initWithDouble:0.0];
-        } else {
-            longitude = [[NSDecimalNumber alloc] initWithDouble:radiansToDegrees(lon)];
-        }
-        
-        self.validLocation = error == UTM_NO_ERROR;
+        coordinate = [GridSystems mgrsParse:self.mgrsField.text];
+        themeField = self.mgrsField;
     } else if (self.fieldTypeTabs.selectedItem.tag == 2) {
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(_dmsLatitudeField.coordinate, _dmsLongitudeField.coordinate);
-        if (CLLocationCoordinate2DIsValid(coordinate)) {
-            self.validLocation = true;
-            longitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.longitude];
-            latitude = [[NSDecimalNumber alloc] initWithDouble:coordinate.latitude];
+        coordinate = CLLocationCoordinate2DMake(_dmsLatitudeField.coordinate, _dmsLongitudeField.coordinate);
+    } else if (self.fieldTypeTabs.selectedItem.tag == 3) {
+        coordinate = [GridSystems garsParse:self.garsField.text];
+        themeField = self.garsField;
+    }
+    
+    self.validLocation = CLLocationCoordinate2DIsValid(coordinate);
+    
+    if (themeField != nil) {
+        if (self.validLocation || themeField.text.length == 0) {
+            [self applyThemeTextField:themeField];
+        } else {
+            [self applyErrorThemeTextField:themeField];
         }
     }
     
     if (self.validLocation){
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
         
         [self.map setCenterCoordinate:coordinate];
         
@@ -801,9 +816,11 @@ static float paddingPercentage = .1;
         }
         // if it is a point just update the geometry
         if (self.shapeType == SF_POINT) {
-            SFPoint *updatedGeometry = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
+            SFPoint *updatedGeometry = [SFPoint pointWithXValue:coordinate.longitude andYValue:coordinate.latitude];
             [self.coordinator updateGeometry:updatedGeometry];
         }
+        
+        [self updateLocationTextWithCoordinate:coordinate ignoreSelected:YES];
     }
     
 }
@@ -899,7 +916,7 @@ static float paddingPercentage = .1;
         if (self.shapeType == SF_POINT && self.isObservationGeometry) {
             MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
             ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-            geometry = [[SFPoint alloc] initWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
+            geometry = [SFPoint pointWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
         } else {
             @try {
                 geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
@@ -923,6 +940,7 @@ static float paddingPercentage = .1;
     self.mgrsField.enabled = enabled;
     self.dmsLatitudeField.isEnabled = enabled;
     self.dmsLongitudeField.isEnabled = enabled;
+    self.garsField.enabled = enabled;
 }
 
 - (void)draggingAnnotationView:(MKAnnotationView *) annotationView atCoordinate: (CLLocationCoordinate2D) coordinate{
@@ -1064,7 +1082,7 @@ static float paddingPercentage = .1;
     // Changing from point to a shape
     if (self.shapeType == SF_POINT) {
         
-        SFLineString *lineString = [[SFLineString alloc] init];
+        SFLineString *lineString = [SFLineString lineString];
         if (self.geometry != nil) {
             SFPoint *firstPoint = (SFPoint *)self.geometry;
             [lineString addPoint:firstPoint];
@@ -1087,7 +1105,7 @@ static float paddingPercentage = .1;
                     break;
                 case SF_POLYGON:
                     {
-                        SFPolygon *polygon = [[SFPolygon alloc] init];
+                        SFPolygon *polygon = [SFPolygon polygon];
                         [polygon addRing:lineString];
                         geometry = polygon;
                     }
@@ -1101,7 +1119,7 @@ static float paddingPercentage = .1;
     else if (selectedType == SF_POINT) {
         if (self.geometry != nil) {
             CLLocationCoordinate2D newPointPosition = [self shapeToPointLocation];
-            geometry = [[SFPoint alloc] initWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
+            geometry = [SFPoint pointWithXValue:newPointPosition.longitude andYValue:newPointPosition.latitude];
         }
         self.newDrawing = NO;
     }
@@ -1163,16 +1181,16 @@ static float paddingPercentage = .1;
                             SFLineString *lineStringCopy = [lineString mutableCopy];
                             [SFGeometryUtils minimizeGeometry:lineStringCopy withMaxX:PROJ_WGS84_HALF_WORLD_LON_WIDTH];
                             SFGeometryEnvelope *envelope = [SFGeometryEnvelopeBuilder buildEnvelopeWithGeometry:lineStringCopy];
-                            lineString = [[SFLineString alloc] init];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.minY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.minY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.maxX andY:envelope.maxY]];
-                            [lineString addPoint:[[SFPoint alloc] initWithX:envelope.minX andY:envelope.maxY]];
+                            lineString = [SFLineString lineString];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.minX andY:envelope.maxY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.minX andY:envelope.minY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.maxX andY:envelope.minY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.maxX andY:envelope.maxY]];
+                            [lineString addPoint:[SFPoint pointWithX:envelope.minX andY:envelope.maxY]];
                             [self updateIfRectangle:lineString.points];
                         }
                         
-                        SFPolygon *polygon = [[SFPolygon alloc] init];
+                        SFPolygon *polygon = [SFPolygon polygon];
                         [polygon addRing:lineString];
                         self.newDrawing = [lineString numPoints] <= 2;
                         geometry = polygon;
@@ -1406,7 +1424,7 @@ static float paddingPercentage = .1;
         CLLocationCoordinate2D point = [self.map convertPoint:cgPoint toCoordinateFromView:self.map];
         
         if (self.shapeType == SF_POINT) {
-            SFPoint *geometry = [[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
+            SFPoint *geometry = [SFPoint pointWithXValue:point.longitude andYValue:point.latitude];
             [self addMapShape:geometry];
             [self updateGeometry];
         }
@@ -1417,15 +1435,15 @@ static float paddingPercentage = .1;
                     // brand new rectangle
                     SFGeometry *geometry = nil;
                     
-                    SFLineString *lineString = [[SFLineString alloc] init];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
-                    [lineString addPoint:[[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude]];
+                    SFLineString *lineString = [SFLineString lineString];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
+                    [lineString addPoint:[SFPoint pointWithXValue:point.longitude andYValue:point.latitude]];
                     [self updateIfRectangle:lineString.points];
                     
-                    SFPolygon *polygon = [[SFPolygon alloc] init];
+                    SFPolygon *polygon = [SFPolygon polygon];
                     [polygon addRing:lineString];
                     self.newDrawing = [lineString numPoints] <= 2;
                     geometry = polygon;
@@ -1446,19 +1464,19 @@ static float paddingPercentage = .1;
                 
                 if (self.mapObservation == nil) {
                     SFGeometry *geometry = nil;
-                    SFPoint *firstPoint = [[SFPoint alloc] initWithXValue:point.longitude andYValue:point.latitude];
+                    SFPoint *firstPoint = [SFPoint pointWithXValue:point.longitude andYValue:point.latitude];
                     switch (self.shapeType) {
                         case SF_LINESTRING:
                             {
-                                SFLineString *lineString = [[SFLineString alloc] init];
+                                SFLineString *lineString = [SFLineString lineString];
                                 [lineString addPoint:firstPoint];
                                 geometry = lineString;
                             }
                             break;
                         case SF_POLYGON:
                             {
-                                SFPolygon *polygon = [[SFPolygon alloc] init];
-                                SFLineString *ring = [[SFLineString alloc] init];
+                                SFPolygon *polygon = [SFPolygon polygon];
+                                SFLineString *ring = [SFLineString lineString];
                                 [ring addPoint:firstPoint];
                                 [polygon addRing: ring];
                                 geometry = polygon;
@@ -1704,6 +1722,7 @@ static float paddingPercentage = .1;
             [weakSelf.slidescroll setContentOffset:CGPointMake(item.tag * self.slidescroll.frame.size.width, self.slidescroll.contentOffset.y)];
         } completion:nil];
     });
+    [self setCoordinateTileOverlay:item.title];
 }
 
 @end
