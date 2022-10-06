@@ -45,6 +45,8 @@ post_install do |installer|
     target.build_configurations.each do |config|
       config.build_settings.delete 'ARCHS'
       config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+      config.build_settings['BITCODE_GENERATION_MODE'] = 'bitcode'
+      config.build_settings['ENABLE_BITCODE'] = 'YES'
       # Fix Xcode 14 bundle code signing issue
       if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
         target.build_configurations.each do |config|
