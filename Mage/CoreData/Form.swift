@@ -18,7 +18,7 @@ import CoreData
     }
     
     @discardableResult
-    @objc public static func createForm(eventId: NSNumber, formJson: [AnyHashable : Any], context: NSManagedObjectContext) -> Form? {
+    @objc public static func createForm(eventId: NSNumber, order: NSNumber, formJson: [AnyHashable : Any], context: NSManagedObjectContext) -> Form? {
         if let formId = formJson[FormKey.id.key] as? NSNumber, let form = Form.mr_createEntity(in: context), let formJsonEntity = FormJson.mr_createEntity(in: context) {
             formJsonEntity.json = formJson
             formJsonEntity.formId = formId
@@ -26,6 +26,7 @@ import CoreData
             form.eventId = eventId
             form.archived = formJson[FormKey.archived.key] as? Bool ?? false
             form.formId = formId
+            form.order = order
             
             if let formFields = formJson[FormKey.fields.key] as? [[AnyHashable: Any]] {
                 if let primaryMapFieldName = formJson[FormKey.primaryField.key] as? String {
@@ -71,8 +72,8 @@ import CoreData
     @objc public static func deleteAndRecreateForms(eventId: NSNumber, formsJson:[[AnyHashable: Any]], context: NSManagedObjectContext) -> [Form] {
         Form.deleteAllFormsForEvent(eventId: eventId, context: context)
         var forms: [Form] = []
-        for formJson in formsJson {
-            if let form = Form.createForm(eventId: eventId, formJson: formJson, context: context) {
+        for (index, formJson) in formsJson.enumerated() {
+            if let form = Form.createForm(eventId: eventId, order: NSNumber(value: index), formJson: formJson, context: context) {
                 forms.append(form)
             }
         }

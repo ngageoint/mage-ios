@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
   
 ##### Bug Fixes
   * allow DMS fields to start with a 0
+  * forms are ordered according to the order set on the server
 
 ## 4.0.4
 

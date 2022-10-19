@@ -191,7 +191,7 @@ import CoreData
             guard let managedObjectContext = managedObjectContext, let remoteId = remoteId else {
                 return nil
             }
-            return Form.mr_findAllSorted(by: "formId", ascending: true, with: NSPredicate(format: "eventId == %@", remoteId), in: managedObjectContext) as? [Form]
+            return Form.mr_findAllSorted(by: "order", ascending: true, with: NSPredicate(format: "eventId == %@", remoteId), in: managedObjectContext) as? [Form]
         }
     }
     
@@ -200,7 +200,7 @@ import CoreData
             guard let managedObjectContext = managedObjectContext, let remoteId = remoteId else {
                 return nil
             }
-            return Form.mr_findAllSorted(by: "formId", ascending: true, with: NSPredicate(format: "eventId == %@ AND \(FormKey.archived.key) == false", remoteId), in: managedObjectContext) as? [Form]
+            return Form.mr_findAllSorted(by: "order", ascending: true, with: NSPredicate(format: "eventId == %@ AND \(FormKey.archived.key) == false", remoteId), in: managedObjectContext) as? [Form]
         }
     }
 }
