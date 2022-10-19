@@ -837,6 +837,7 @@
 		F727516D19C888DB006C63CB /* Locations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locations.m; sourceTree = "<group>"; };
 		F727516F19C88CAE006C63CB /* Observations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observations.h; sourceTree = "<group>"; };
 		F727517019C88CAE006C63CB /* Observations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observations.m; sourceTree = "<group>"; };
+		F7275FE329004EC000ED8D9A /* mage-ios-sdk 21.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 21.xcdatamodel"; sourceTree = "<group>"; };
 		F729E9D82034CC3700C2600D /* TestingAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestingAppDelegate.h; sourceTree = "<group>"; };
 		F729E9D92034CC3700C2600D /* TestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
 		F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -4050,6 +4051,7 @@
 		F79D2944282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F7275FE329004EC000ED8D9A /* mage-ios-sdk 21.xcdatamodel */,
 				F79D2945282C57C9008FD45E /* mage-ios-sdk 6.xcdatamodel */,
 				F79D2946282C57C9008FD45E /* mage-ios-sdk 16.xcdatamodel */,
 				F79D2947282C57C9008FD45E /* mage-ios-sdk 13.xcdatamodel */,
@@ -4071,7 +4073,7 @@
 				F79D2957282C57C9008FD45E /* mage-ios-sdk 11.xcdatamodel */,
 				F79D2958282C57C9008FD45E /* mage-ios-sdk 18.xcdatamodel */,
 			);
-			currentVersion = F79D2950282C57C9008FD45E /* mage-ios-sdk 20.xcdatamodel */;
+			currentVersion = F7275FE329004EC000ED8D9A /* mage-ios-sdk 21.xcdatamodel */;
 			path = "mage-ios-sdk.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
