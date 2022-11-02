@@ -100,21 +100,19 @@ public class LocationUtilities: NSObject {
             dmsCoordinate.minutes = Int(abs((decimal.truncatingRemainder(dividingBy: 1) * 60.0)))
             let seconds = abs(((decimal.truncatingRemainder(dividingBy: 1) * 60.0).truncatingRemainder(dividingBy: 1) * 60.0))
             dmsCoordinate.seconds = Int(seconds.rounded())
+            if dmsCoordinate.seconds == 60 {
+                dmsCoordinate.minutes = (dmsCoordinate.minutes ?? 0) + 1
+                dmsCoordinate.seconds = 0
+            }
+    
+            if dmsCoordinate.minutes == 60 {
+                dmsCoordinate.degrees = (dmsCoordinate.degrees ?? 0) + 1
+                dmsCoordinate.minutes = 0
+            }
         } else if let decimalSeconds = decimalSeconds {
             // add the decimal seconds to seconds and round
             dmsCoordinate.seconds = Int(Double("\((dmsCoordinate.seconds ?? 0)).\(decimalSeconds)")?.rounded() ?? 0)
         }
-        
-        if dmsCoordinate.seconds == 60 {
-            dmsCoordinate.minutes = (dmsCoordinate.minutes ?? 0) + 1
-            dmsCoordinate.seconds = 0
-        }
-        
-        if dmsCoordinate.minutes == 60 {
-            dmsCoordinate.degrees = (dmsCoordinate.degrees ?? 0) + 1
-            dmsCoordinate.minutes = 0
-        }
-        
         return dmsCoordinate
     }
     
