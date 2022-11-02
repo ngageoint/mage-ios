@@ -112,6 +112,22 @@ class CoordinateFieldTests: KIFSpec {
                 expect(field.textField.accessibilityLabel).to(equal("Coordinate"))
             }
             
+            it("should set the text later with zero seconds specified") {
+                let field = CoordinateField(latitude: true, text: nil, label: "Coordinate", delegate: nil, scheme: MAGEScheme.scheme())
+                view.addSubview(field);
+                field.autoPinEdge(toSuperviewEdge: .left);
+                field.autoPinEdge(toSuperviewEdge: .right);
+                field.autoAlignAxis(toSuperviewAxis: .horizontal);
+                expect(field.isHidden).to(beFalse());
+                expect(field.textField.text).to(equal(""))
+                expect(field.text).to(equal(""))
+                field.text = "705600N"
+                expect(field.textField.text).to(equal("70° 56' 00\" N"))
+                expect(field.text).to(equal("70° 56' 00\" N"))
+                expect(field.textField.label.text).to(equal("Coordinate"))
+                expect(field.textField.accessibilityLabel).to(equal("Coordinate"))
+            }
+            
             it("should enable and disable the field") {
                 let field = CoordinateField(latitude: true, text: nil, label: "Coordinate", delegate: nil, scheme: MAGEScheme.scheme())
                 view.addSubview(field);
@@ -198,6 +214,41 @@ class CoordinateFieldTests: KIFSpec {
                 expect(field.isEditing).to(beFalse())
                 expect(delegate.fieldChangedCalled).to(beTrue())
                 expect(delegate.changedValue).to(equal(0.5))
+            }
+            
+            it("should edit the field with zero seconds specified and notify the delegate") {
+                class MockCoordinateFieldDelegate: NSObject, CoordinateFieldDelegate {
+                    var fieldChangedCalled = false;
+                    var changedValue: CLLocationDegrees?
+                    var changedField: CoordinateField?
+                    func fieldValueChanged(coordinate: CLLocationDegrees, field: CoordinateField) {
+                        fieldChangedCalled = true
+                        changedValue = coordinate
+                        changedField = field
+                    }
+                }
+                
+                let delegate = MockCoordinateFieldDelegate()
+                let field = CoordinateField(latitude: true, text: nil, label: "Coordinate", delegate: delegate, scheme: MAGEScheme.scheme())
+                view.addSubview(field);
+                field.autoPinEdge(toSuperviewEdge: .left);
+                field.autoPinEdge(toSuperviewEdge: .right);
+                field.autoAlignAxis(toSuperviewAxis: .horizontal);
+                expect(field.isHidden).to(beFalse());
+                expect(field.textField.text).to(equal(""))
+                expect(field.text).to(equal(""))
+                tester().waitForView(withAccessibilityLabel: "Coordinate")
+                tester().tapView(withAccessibilityLabel: "Coordinate")
+                expect(field.isEditing).to(beTrue())
+                tester().enterText(intoCurrentFirstResponder: "705600N")
+                expect(field.textField.text).to(equal("70° 56' 00\" N"))
+                expect(field.text).to(equal("70° 56' 00\" N"))
+                expect(field.textField.label.text).to(equal("Coordinate"))
+                expect(field.textField.accessibilityLabel).to(equal("Coordinate"))
+                field.resignFirstResponder()
+                expect(field.isEditing).to(beFalse())
+                expect(delegate.fieldChangedCalled).to(beTrue())
+                expect(delegate.changedValue).to(beCloseTo(70.9333))
             }
             
             it("should not start clearing text if multiple directions are entered") {

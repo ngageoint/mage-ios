@@ -30,7 +30,7 @@ class FormBuilder {
         
         do {
             let jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
-            form = Form.createForm(eventId: eventId, formJson: jsonDictionary, context: NSManagedObjectContext.mr_default())!
+            form = Form.createForm(eventId: eventId, order: 0, formJson: jsonDictionary, context: NSManagedObjectContext.mr_default())!
         } catch {
             fatalError("Unable to convert jsonFileName to JSON dictionary \(error)")
         }
@@ -55,7 +55,7 @@ class FormBuilder {
 
         do {
             let jsonDictionary = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as! [String:Any]
-            form = Form.createForm(eventId: eventId, formJson: jsonDictionary, context: NSManagedObjectContext.mr_default())!
+            form = Form.createForm(eventId: eventId, order: 0, formJson: jsonDictionary, context: NSManagedObjectContext.mr_default())!
         } catch {
             fatalError("Unable to convert jsonFileName to JSON dictionary \(error)")
         }

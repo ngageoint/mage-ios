@@ -132,6 +132,9 @@ class LocationUtilitiesTests: QuickSpec {
                 
                 coordinates = "0° 11' 11\" N"
                 expect(CLLocationCoordinate2D.parse(coordinate: coordinates)).to(beCloseTo(CLLocationDegrees(0.186388888888889)))
+                
+                coordinates = "705600N"
+                expect(CLLocationCoordinate2D.parse(coordinate: coordinates)).to(beCloseTo(CLLocationDegrees(70.9333)))
             }
             
             it("should parse the coordinate string to a DMS string") {
@@ -232,6 +235,12 @@ class LocationUtilitiesTests: QuickSpec {
                 
                 coordinates = "0° 11' 11\" N"
                 expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("0° 11' 11\" N"))
+                
+                coordinates = "705600N"
+                expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("70° 56' 00\" N"))
+                
+                coordinates = "70° 560'"
+                expect(LocationUtilities.parseToDMSString(coordinates)).to(equal("7° 05' 60\" "))
             }
             
             it("should parse to DMS") {
@@ -241,6 +250,15 @@ class LocationUtilitiesTests: QuickSpec {
                 expect(parsed.seconds).to(equal(0))
                 expect(parsed.minutes).to(equal(30))
                 expect(parsed.degrees).to(equal(11))
+            }
+            
+            it("should parse to DMS 2") {
+                let coordinate = "70560"
+                let parsed = LocationUtilities.parseDMS(coordinate: coordinate)
+                expect(parsed.direction).to(beNil())
+                expect(parsed.seconds).to(equal(60))
+                expect(parsed.minutes).to(equal(5))
+                expect(parsed.degrees).to(equal(7))
             }
             
             it("should split the coordinate string") {
