@@ -19,7 +19,7 @@ def common_pods
   pod "AFNetworking", "~> 4.0.1"
   pod "DateTools", "~> 2.0.0"
   pod "MagicalRecord", "~> 2.3.2"
-  pod 'geopackage-ios', '~> 7.4.2'
+  pod 'geopackage-ios', '~> 7.4.3'
   pod 'mgrs-ios', '~> 1.1.4'
   pod 'gars-ios', '~> 1.1.3'
   pod 'SSZipArchive', '~> 2.2.2'
