@@ -246,6 +246,7 @@
 
                 SFPGeometryTransform *transform = [[SFPGeometryTransform alloc] initWithFromProjection:projection andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
                 GPKGBoundingBox * boundingBox = [contentsBoundingBox transform:transform];
+                [transform destroy];
                 boundingBox = [GPKGTileBoundingBoxUtils boundWgs84BoundingBoxWithWebMercatorLimits:boundingBox];
                 
                 if(self.addedCacheBoundingBox == nil){
@@ -281,6 +282,9 @@
                 cacheOverlay = nil;
             } else {
                 // remove the old one and it will be re-added to preserve layer order
+                if ([tileTableCacheOverlay.tileOverlay isKindOfClass:[GPKGBoundedOverlay class]]){
+                    [((GPKGBoundedOverlay *)tileTableCacheOverlay.tileOverlay) close];
+                }
                 [self.mapView removeOverlay:tileTableCacheOverlay.tileOverlay];
                 cacheOverlay = nil;
             }
@@ -293,6 +297,9 @@
             [tileTableCacheOverlay setTileOverlay:geoPackageTileOverlay];
             
             // Check for linked feature tables
+            for (GPKGFeatureOverlayQuery *query in tileTableCacheOverlay.featureOverlayQueries) {
+                [query close];
+            }
             [tileTableCacheOverlay.featureOverlayQueries removeAllObjects];
             GPKGFeatureTileTableLinker * linker = [[GPKGFeatureTileTableLinker alloc] initWithGeoPackage:geoPackage];
             NSArray<GPKGFeatureDao *> * featureDaos = [linker featureDaosForTileTable:tileDao.tableName];
@@ -333,6 +340,7 @@
                 [tileTableCacheOverlay removeFromMap:weakSelf.mapView];
             }
             if (geoPackageTileOverlay != nil) {
+                [geoPackageTileOverlay close];
                 [weakSelf.mapView removeOverlay:geoPackageTileOverlay];
             }
         });
@@ -468,6 +476,7 @@
                 }
                 @finally {
                     [resultSet close];
+                    [shapeConverter close];
                 }
             }
 
@@ -494,6 +503,7 @@
                 [featureTableCacheOverlay removeFromMap:weakSelf.mapView];
             }
             if (featureOverlay != nil) {
+                [featureOverlay close];
                 [self.mapView removeOverlay:featureOverlay];
             }
         });

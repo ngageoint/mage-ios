@@ -46,6 +46,7 @@ class SFGeometryMapMixin: NSObject, MapMixin {
         }
         let shapeConverter: GPKGMapShapeConverter = GPKGMapShapeConverter()
         let shape = shapeConverter.add(sfGeometry, to: mapView)
+        shapeConverter.close()
         geometryToShape[sfGeometry] = shape
     }
     

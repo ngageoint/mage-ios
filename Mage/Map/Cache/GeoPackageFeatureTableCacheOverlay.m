@@ -189,6 +189,7 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
                                 SFPGeometryTransform *transform = [[SFPGeometryTransform alloc] initWithFromProjection:self.featureOverlayQuery.featureTiles.featureDao.projection andToEpsg:4326];
                                 
                                 centroid = [transform transformPoint:centroid];
+                                [transform destroy];
                                 coordinate = CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]);
                             }
                             [featureDataTypes setValue:[GPKGDataTypes name:featureRow.featureColumns.columns[i].dataType] forKey:columnName];

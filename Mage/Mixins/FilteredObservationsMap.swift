@@ -155,6 +155,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 let style = ObservationShapeStyleParser.style(of: observation)
                 let shapeConverter = GPKGMapShapeConverter()
                 let shape = shapeConverter?.toShape(with: geometry)
+                shapeConverter?.close()
                 
                 if let mkpolyline = shape?.shape as? MKPolyline {
                     let styledPolyline = StyledPolyline.create(polyline: mkpolyline)

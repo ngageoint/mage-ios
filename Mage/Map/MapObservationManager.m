@@ -65,6 +65,7 @@
         
         GPKGMapShapeConverter *shapeConverter = [[GPKGMapShapeConverter alloc] init];
         GPKGMapShape *shape = [shapeConverter toShapeWithGeometry:geometry];
+        [shapeConverter close];
         switch(shape.shapeType){
             case GPKG_MST_POLYLINE:
                 {

@@ -18,6 +18,7 @@ import geopackage_ios
     @objc public var darkTheme = false
     
     @objc public func cleanup() {
+        super.close()
         featureTiles = nil
     }
     
