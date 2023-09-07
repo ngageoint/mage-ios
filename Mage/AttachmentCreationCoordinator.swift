@@ -216,12 +216,11 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     return
                 }
                 let scaledImagePath = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg")
-                let scaledImageDir = scaledImagePath.deletingLastPathComponent()
                 do {
-                    try FileManager.default.createDirectory(at: scaledImageDir, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
+                    try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
                 }
                 catch {
-                    print("error creating directory \(scaledImageDir) to save scaled attachment file \(fileName ?? "<unknown file>")", error)
+                    print("error creating directory \(attachmentsDirectory) to save scaled attachment file \(fileName ?? "<unknown file>")", error)
                     return
                 }
                 guard let baseImage = CIImage(data: data) else {
@@ -372,7 +371,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     return
                 }
             }
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset of types: \(itemProvider.registeredTypeIdentifiers)"))
+            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset types: \(itemProvider.registeredTypeIdentifiers)"))
         }
     }
 }
@@ -424,7 +423,6 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
 
                 do {
                     try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-//                    let finalImage = chosenImage.qualityScaled();
                     guard let imageData = chosenImage.qualityScaled() else { return };
                     var metadata: [AnyHashable : Any] = info[.mediaMetadata] as? [AnyHashable : Any] ?? [:];
                     
