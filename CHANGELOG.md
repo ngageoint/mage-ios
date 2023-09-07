@@ -5,6 +5,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## 4.0.6
 
+##### Features
+  * Update GeoPackage library to 8.0.3
+  
 ##### Bug Fixes
   * PNG photo attachments converted to JPEG get a `.jpeg` file extension to match media type
 
