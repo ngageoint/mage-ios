@@ -193,50 +193,49 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
 
 extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     
-    func handlePhoto(phasset: PHAsset?, utType: UTType?) {
+    func handlePhoto(photo: PHAsset?, utType: UTType?) {
         DispatchQueue.global(qos: .userInitiated).async { [self] in
-            if let phasset = phasset {
-                let dateFormatter = DateFormatter();
-                dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
-                
-                let fileType = utType?.preferredFilenameExtension ?? "jpeg"
-                let mimeType = utType?.preferredMIMEType ?? "image/jpeg"
-                
-                guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                    return;
-                }
-                let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
-                let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).\(fileType)");
-                
-                let manager = PHImageManager.default()
-                let requestOptions = PHImageRequestOptions()
-                requestOptions.isSynchronous = true
-                requestOptions.deliveryMode = .fastFormat
-                requestOptions.isNetworkAccessAllowed = true
-                
-                manager.requestImageDataAndOrientation(for: phasset, options: requestOptions) { (data, fileName, orientation, info) in
-                    if let data = data,
-                       let cImage = CIImage(data: data) {
-                        do {
-                            try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                            
-                            guard let finalData = cImage.qualityScaled() else { return }
-                            
-                            do {
-                                try finalData.write(to: fileToWriteTo, options: .completeFileProtection)
-                                self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
-                            } catch {
-                                print("Unable to write image to file \(fileToWriteTo): \(error)")
-                            }
-                            
-                        } catch {
-                            print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
-                        }
-                        
-                    }
-                }
-            } else {
+            guard let photo else {
                 galleryPermissionDenied()
+                return
+            }
+            let dateFormatter = DateFormatter();
+            dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
+            guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                return
+            }
+            let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
+            let manager = PHImageManager.default()
+            let requestOptions = PHImageRequestOptions()
+            requestOptions.isSynchronous = true
+            requestOptions.deliveryMode = .fastFormat
+            requestOptions.isNetworkAccessAllowed = true
+
+            manager.requestImageDataAndOrientation(for: photo, options: requestOptions) { (data, fileName, orientation, info) in
+                guard let data else {
+                    return
+                }
+                let scaledImagePath = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).jpeg")
+                do {
+                    try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
+                }
+                catch {
+                    print("error creating directory \(attachmentsDirectory) to save scaled attachment file \(fileName ?? "<unknown file>")", error)
+                    return
+                }
+                guard let baseImage = CIImage(data: data) else {
+                    return
+                }
+                guard let scaledImageData = baseImage.qualityScaled() else {
+                    return
+                }
+                do {
+                    try scaledImageData.write(to: scaledImagePath, options: .completeFileProtection)
+                    self.addAttachmentForSaving(location: scaledImagePath, contentType: "image/jpeg")
+                }
+                catch {
+                    print("error saving scaled attachment image \(scaledImagePath) from base image \(fileName ?? "<unknown file>")", error)
+                }
             }
         }
     }
@@ -358,7 +357,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                         let options = PHFetchOptions()
                         options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
                         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                        handlePhoto(phasset: fetchResult.firstObject, utType: utType)
+                        handlePhoto(photo: fetchResult.firstObject, utType: utType)
                         picker.dismiss(animated: true, completion: nil)
                         return
                     }
@@ -372,7 +371,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     return
                 }
             }
-            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset of types: \(itemProvider.registeredTypeIdentifiers)"))
+            MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Could not handle asset types: \(itemProvider.registeredTypeIdentifiers)"))
         }
     }
 }
@@ -424,7 +423,6 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
 
                 do {
                     try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-//                    let finalImage = chosenImage.qualityScaled();
                     guard let imageData = chosenImage.qualityScaled() else { return };
                     var metadata: [AnyHashable : Any] = info[.mediaMetadata] as? [AnyHashable : Any] ?? [:];
                     

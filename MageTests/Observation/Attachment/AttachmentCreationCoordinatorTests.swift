@@ -12,16 +12,20 @@ import Nimble
 //import Nimble_Snapshots
 import OHHTTPStubs
 import UniformTypeIdentifiers
+import Photos
+import PhotosUI
 
 @testable import MAGE
 
 class MockAttachmentCreationCoordinatorDelegate: AttachmentCreationCoordinatorDelegate {
-    var attachmentCreatedCalled = false;
-    var createdAttachment: Attachment?;
-    var attachmentCreationCancelledCalled = false;
+
+    let attachmentCreatedCalled = XCTestExpectation(description: "attachmentCreated called")
+    let attachmentCreationCancelledCalled = XCTestExpectation(description: "attachmentCreationCancelled called")
+    var createdAttachment: Attachment?
+
     func attachmentCreated(attachment: Attachment) {
-        createdAttachment = attachment;
-        attachmentCreatedCalled = true;
+        createdAttachment = attachment
+        attachmentCreatedCalled.fulfill()
     }
     
     func attachmentCreated(fieldValue: [String : AnyHashable]) {
@@ -29,7 +33,7 @@ class MockAttachmentCreationCoordinatorDelegate: AttachmentCreationCoordinatorDe
     }
     
     func attachmentCreationCancelled() {
-        attachmentCreationCancelledCalled = true;
+        attachmentCreationCancelledCalled.fulfill()
     }
 }
 
@@ -37,7 +41,8 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("AttachmentCreationCoordinatorTests") {
+        describe("AttachmentCreationCoordinatorTests") {
+
             var attachmentCreationCoordinator: AttachmentCreationCoordinator!
             var view: UIView!
             var controller: UIViewController!
@@ -78,7 +83,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 HTTPStubs.removeAllStubs();
             }
             
-            it("present gallery") {
+            xit("presents the gallery") {
                 let observation: Observation = Observation.mr_createEntity()!;
                 let delegate = MockAttachmentCreationCoordinatorDelegate();
                 
@@ -97,7 +102,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 
                 attachmentCreationCoordinator.imagePickerController(mockPicker, didFinishPickingMediaWithInfo: info)
 
-                expect(delegate.attachmentCreatedCalled).to(beTrue());
+                self.wait(for: [ delegate.attachmentCreatedCalled ], timeout: 0.0)
                 expect(delegate.createdAttachment).toNot(beNil());
                 
                 let createdAttachment: Attachment = delegate.createdAttachment!;
@@ -109,10 +114,44 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 expect(createdAttachment.remotePath).to(beNil());
                 expect(createdAttachment.url).to(beNil());
                 expect(createdAttachment.contentType).to(equal("image/jpeg"));
+            }
 
+            it("converts png to jpeg and marks the attachment as a jpeg") {
+
+                let pngUrl = Bundle(for: AttachmentFieldViewTests.self).url(forResource: "test_image_attachment", withExtension: "png")!
+                var assetId: String? = nil
+                try PHPhotoLibrary.shared().performChangesAndWait {
+                    let addPngToLibrary = PHAssetCreationRequest.creationRequestForAssetFromImage(atFileURL: pngUrl)
+                    let placeholder = addPngToLibrary?.placeholderForCreatedAsset
+                    assetId = placeholder?.localIdentifier
+                }
+                let selectedAsset = PHAsset.fetchAssets(withLocalIdentifiers: [ assetId! ], options: nil).firstObject!
+                let observation: Observation = Observation.mr_createEntity()!
+                let delegate = MockAttachmentCreationCoordinatorDelegate()
+                let attachmentCreationCoordinator = AttachmentCreationCoordinator(rootViewController: controller, observation: observation, delegate: delegate)
+
+                // there is no way to call the delegate method picker(picker:didFinishPicking:) because
+                // the sdk provides no accessible constructor for the PHPickerResult struct. thanks, apple
+                attachmentCreationCoordinator.handlePhoto(photo: selectedAsset, utType: UTType.png)
+                self.wait(for: [ delegate.attachmentCreatedCalled ], timeout: 5.0)
+
+                let createdAttachment: Attachment = delegate.createdAttachment!
+                expect(createdAttachment).toNot(beNil())
+                let createdJpegData = FileManager.default.contents(atPath: createdAttachment.localPath!)
+                let jpegFirstBytes = Data([ 0xff, 0xd8, 0xff ])
+                expect(createdJpegData).notTo(beNil())
+                expect(createdJpegData?[0..<3]).to(equal(jpegFirstBytes))
+                expect(createdAttachment.lastModified).toNot(beNil());
+                expect(createdAttachment.dirty).to(beTrue());
+                expect(createdAttachment.observation).to(equal(observation));
+                expect(createdAttachment.remoteId).to(beNil());
+                expect(createdAttachment.remotePath).to(beNil());
+                expect(createdAttachment.url).to(beNil());
+                expect(createdAttachment.contentType).to(equal("image/jpeg"));
+                expect(createdAttachment.name).to(endWith(".jpeg"))
             }
             
-            it("choose a movie") {
+            xit("choose a movie") {
                 let observation: Observation = Observation.mr_createEntity()!;
                 let delegate = MockAttachmentCreationCoordinatorDelegate();
                 
@@ -131,8 +170,8 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 mockPicker.sourceType = .camera;
                 
                 attachmentCreationCoordinator.imagePickerController(mockPicker, didFinishPickingMediaWithInfo: info)
-                
-                expect(delegate.attachmentCreatedCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Movie failed to export");
+
+                self.wait(for: [ delegate.attachmentCreatedCalled ], timeout: 10.0)
                 expect(delegate.createdAttachment).toEventuallyNot(beNil());
 
                 let createdAttachment: Attachment = delegate.createdAttachment!;
@@ -146,7 +185,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 expect(createdAttachment.contentType).to(equal("video/mp4"));
             }
             
-            it("create a recording") {
+            xit("create a recording") {
                 let observation: Observation = Observation.mr_createEntity()!;
                 
                 let delegate = MockAttachmentCreationCoordinatorDelegate();
@@ -162,7 +201,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
                 
                 attachmentCreationCoordinator.recordingAvailable(recording: recording);
                 
-                expect(delegate.attachmentCreatedCalled).toEventually(beTrue());
+                self.wait(for: [ delegate.attachmentCreatedCalled ]);
                 expect(delegate.createdAttachment).toNot(beNil());
                 
                 let createdAttachment: Attachment = delegate.createdAttachment!;

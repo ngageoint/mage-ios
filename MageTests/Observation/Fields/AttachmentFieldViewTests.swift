@@ -765,8 +765,8 @@ class AttachmentFieldViewTests: KIFSpec {
                 tester().waitForAnimationsToFinish(withTimeout: 0.01);
 
                 expect(attachmentLoaded).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Loading Attachment");
-                
 //                expect(view).to(haveValidSnapshot(usesDrawRect: true));
+                tester().waitForView(withAccessibilityLabel: "attachment \(attachment.name ?? "") loaded")
             }
             
             it("should call the attachment selection delegate on tap") {
