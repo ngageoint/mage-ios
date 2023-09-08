@@ -271,7 +271,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
         NSDate *date = [NSDate dateFromIso8601String:dateString];
         [attachment setLastModified:date];
     }
-    
+
     if (attachment.url) {
         __weak __typeof__(self) weakSelf = self;
 

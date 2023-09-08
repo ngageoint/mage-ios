@@ -40,7 +40,7 @@ extension CIImage {
     
     func jpegData() -> Data? {
         if let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) {
-                let context = CIContext()
+            let context = CIContext()
             return context.jpegRepresentation(of: self, colorSpace: colorSpace, options: [kCGImageDestinationLossyCompressionQuality as CIImageRepresentationOption : 1.0])
         }
         return nil
