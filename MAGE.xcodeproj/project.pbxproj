@@ -3894,6 +3894,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "MAGE Development";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MAGE Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
 			};
