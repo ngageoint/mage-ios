@@ -193,7 +193,7 @@ import Kingfisher
                     largeUrl = URL(string: String(format: "%@_large", attachmentUrl)) ?? url
                 }
                 DispatchQueue.main.async {
-                    let resource = ImageResource(downloadURL: self.getAttachmentUrl(size: self.getImageSize())!, cacheKey: largeUrl.absoluteString)
+                    let resource = Kingfisher.ImageResource(downloadURL: self.getAttachmentUrl(size: self.getImageSize())!, cacheKey: largeUrl.absoluteString)
                     self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock) { result in
                         
                         switch result {
@@ -211,7 +211,7 @@ import Kingfisher
             } else {
                 // Have to do this so that the placeholder image shows up behind the activity indicator
                 DispatchQueue.main.async {
-                    let resource = ImageResource(downloadURL: self.getAttachmentUrl(size: self.getImageSize())!, cacheKey: thumbUrl.absoluteString)
+                    let resource = Kingfisher.ImageResource(downloadURL: self.getAttachmentUrl(size: self.getImageSize())!, cacheKey: thumbUrl.absoluteString)
                     self.kf.setImage(with: resource, placeholder: placeholder, options: options, progressBlock: progressBlock) { result in
                         
                         switch result {
@@ -237,7 +237,7 @@ import Kingfisher
             if let attachmentUrl = self.attachment?.url {
                 largeUrl = URL(string: String(format: "%@_large", attachmentUrl)) ?? url
             }
-            let resource = ImageResource(downloadURL: self.getAttachmentUrl(size: getImageSize())!, cacheKey: largeUrl.absoluteString)
+            let resource = Kingfisher.ImageResource(downloadURL: self.getAttachmentUrl(size: getImageSize())!, cacheKey: largeUrl.absoluteString)
 
             placeholder.kf.setImage(with: resource, options: options) { result in
                 
