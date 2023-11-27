@@ -817,7 +817,7 @@
 		F717E5711F63053B00211D0D /* FadeTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FadeTransitionSegue.h; sourceTree = "<group>"; };
 		F717E5721F63053B00211D0D /* FadeTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FadeTransitionSegue.m; sourceTree = "<group>"; };
 		F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonAnnotationView.swift; sourceTree = "<group>"; };
-		F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecorderViewController.h; sourceTree = "<group>"; };
+		F71B34B31F424DC7001D120A /* ImageResource */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ImageResource; sourceTree = "<group>"; };
 		F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderViewController.m; sourceTree = "<group>"; };
 		F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioRecorderViewController.xib; sourceTree = "<group>"; };
 		F71B724C246B1ACA00E4CF33 /* DateViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewTests.swift; sourceTree = "<group>"; };
@@ -1837,7 +1837,7 @@
 		F714D5ED1A5C831B00B096A7 /* AudioRecorder */ = {
 			isa = PBXGroup;
 			children = (
-				F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */,
+				F71B34B31F424DC7001D120A /* ImageResource */,
 				F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */,
 				F77DCA331A5EFA2C00D54FDE /* AudioRecordingDelegate.h */,
 				F714D5EE1A5C832F00B096A7 /* MediaViewController.h */,
