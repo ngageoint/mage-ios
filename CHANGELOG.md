@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## Pending on develop
+
+##### Bug Fixes
+* Update Kingfisher library to latest 7.x.
+* Update references to Kingfisher's `ImageResource` struct because Xcode 15 introduced a conflicting `ImageResource` symbol.
+
 ## 4.0.6
 
 ##### Features
