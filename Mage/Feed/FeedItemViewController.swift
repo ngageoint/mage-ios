@@ -12,7 +12,7 @@ import UIKit
 import MaterialComponents
 import PureLayout
 
-final class IntrinsicTableView: UITableView {
+private final class IntrinsicTableView: UITableView {
     
     override var contentSize: CGSize {
         didSet {

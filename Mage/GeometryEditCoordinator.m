@@ -12,10 +12,11 @@
 #import "SFPoint.h"
 #import "MAGE-Swift.h"
 
-@interface GeometryEditCoordinator()
+@interface GeometryEditCoordinator() <SearchMapViewControllerDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) GeometryEditViewController *geometryEditViewController;
+@property (strong, nonatomic) SearchMapViewController *searchMapViewController;
 @property (nonatomic) BOOL valueChanged;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 @end
@@ -47,6 +48,7 @@
 
             NSLog(@"Location %@", self.currentGeometry);
         }
+
         self.geometryEditViewController = [[GeometryEditViewController alloc] initWithCoordinator: self scheme:self.scheme];
     }
     
@@ -66,6 +68,12 @@
     [self.navigationController pushViewController:self.geometryEditViewController animated:YES];
 }
 
+- (void) search {
+    self.searchMapViewController = [[SearchMapViewController alloc] initWithScheme:self.scheme];
+    self.searchMapViewController.delegate = self;
+    [self.geometryEditViewController.navigationController pushViewController:self.searchMapViewController animated:YES];
+}
+
 - (void) fieldEditCanceled {
     [self.delegate geometryEditCancel:self];
 }
@@ -81,6 +89,18 @@
 
 - (NSString *) fieldName {
     return [[self.fieldDefinition objectForKey:@"name"] isEqualToString:@"geometry"] ? @"Location" : [self.fieldDefinition objectForKey:@"title"];
+}
+
+- (void) applyWithCoordinate: (CLLocationCoordinate2D) coordinate {
+    SFPoint *point = [[SFPoint alloc] initWithXValue:coordinate.longitude andYValue:coordinate.latitude];
+    [self.geometryEditViewController setLocation:point];
+    [self.geometryEditViewController.navigationController popViewControllerAnimated:self.searchMapViewController];
+    self.searchMapViewController = nil;
+}
+
+- (void) cancel {
+    [self.geometryEditViewController.navigationController popViewControllerAnimated:self.searchMapViewController];
+    self.searchMapViewController = nil;
 }
 
 @end

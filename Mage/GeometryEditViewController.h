@@ -21,5 +21,6 @@
 - (instancetype) initWithCoordinator: (GeometryEditCoordinator *) coordinator scheme: (id<MDCContainerScheming>) containerScheme;
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 - (BOOL) validate:(NSError **) error;
+- (void) setLocation: (SFGeometry *) geometry;
 
 @end

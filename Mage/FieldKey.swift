@@ -439,3 +439,13 @@ public enum LoginParametersKey: String {
         return self.rawValue;
     }
 }
+
+public enum SettingsKey: String {
+    case mobileNominatimUrl
+    case mobileSearchType
+    
+    var key: String {
+        return self.rawValue;
+    }
+}
+
