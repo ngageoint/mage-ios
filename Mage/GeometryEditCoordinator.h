@@ -31,6 +31,7 @@
 - (void) applyThemeWithContainerScheme:(id<MDCContainerScheming>)containerScheme;
 - (UIViewController *) createViewController;
 - (void) start;
+- (void) search;
 - (void) updateGeometry: (SFGeometry *) geometry;
 - (NSString *) fieldName;
 - (void) setMapEventDelegte: (id<MKMapViewDelegate>) mapEventDelegate;

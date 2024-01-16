@@ -37,6 +37,8 @@ import Foundation
             tasks.append(usersPullTask)
         }
         
+        fetchSettings()
+        
         ObservationPushService.singleton.start();
         AttachmentPushService.singleton().start();
         
@@ -51,6 +53,20 @@ import Foundation
         ObservationFetchService.singleton.stop();
         ObservationPushService.singleton.stop();
         AttachmentPushService.singleton().stop();
+    }
+    
+    private func fetchSettings() {
+        let manager = MageSessionManager.shared();
+        
+        let task = Settings.operationToPullMapSettings { task, response in
+            NSLog("Fetched settings");
+        } failure: { task, error in
+            NSLog("Failure to fetch settings");
+        }
+        
+        if let task = task {
+            manager?.addTask(task)
+        }
     }
     
     @objc public func fetchEvents() {

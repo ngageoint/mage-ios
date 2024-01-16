@@ -68,6 +68,8 @@ static NSString *garsTitle = @"GARS";
 @property (nonatomic) BOOL isObservationGeometry;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
+@property (strong, nonatomic) MDCFloatingButton *searchButton;
+
 @property (strong, nonatomic) MDCFloatingButton *pointButton;
 @property (strong, nonatomic) MDCFloatingButton *lineButton;
 @property (strong, nonatomic) MDCFloatingButton *rectangleButton;
@@ -177,6 +179,24 @@ static NSString *garsTitle = @"GARS";
         [self.navigationItem setRightBarButtonItems:@[clearButton, doneButton]];
     }
     return self;
+}
+
+- (void) setLocation:(SFGeometry *)geometry {
+    [self setShapeTypeFromGeometry:geometry];
+    [self addMapShape:geometry];
+
+    if (self.shapeType == SF_POINT) {
+        SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
+        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
+        MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
+        [self.map setRegion:viewRegion animated:NO];
+    } else {
+        MKCoordinateRegion viewRegion = [self viewRegionOfMapView:self.map forGeometry:geometry];
+        [self.map setRegion:viewRegion];
+    }
+    
+    self.geometry = geometry;
+    [self updateGeometry];
 }
 
 - (void) clearLocation {
@@ -399,6 +419,16 @@ static NSString *garsTitle = @"GARS";
     [self.hintView autoPinEdgeToSuperviewEdge:ALEdgeRight];
     [self.hintView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.slidescroll];
     
+    self.searchButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
+    self.searchButton.accessibilityLabel = @"search";
+    [self.searchButton setImage:[UIImage systemImageNamed:@"magnifyingglass"] forState:UIControlStateNormal];
+    [self.searchButton addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.searchButton setTintColor:self.scheme.colorScheme.primaryColor];
+    [self.searchButton setBackgroundColor:self.scheme.colorScheme.surfaceColor];
+    [self.view addSubview:self.searchButton];
+    [self.searchButton autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.hintView withOffset:16];
+    [self.searchButton autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:16];
+    
     UIStackView *buttonStack = [[UIStackView alloc] initForAutoLayout];
     buttonStack.axis = UILayoutConstraintAxisHorizontal;
     buttonStack.spacing = 16.0;
@@ -433,7 +463,7 @@ static NSString *garsTitle = @"GARS";
     
     [self.view addSubview:buttonStack];
     [buttonStack autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.hintView withOffset:16];
-    [buttonStack autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:16];
+    [buttonStack autoPinEdgeToSuperviewEdge:ALEdgeRight withInset:16];
 }
 
 - (void) viewDidLoad {
@@ -467,18 +497,7 @@ static NSString *garsTitle = @"GARS";
     SFGeometry *geometry = [self.coordinator currentGeometry];
     
     if (geometry != nil) {
-        [self setShapeTypeFromGeometry:geometry];
-        [self addMapShape:geometry];
-    
-        if (self.shapeType == SF_POINT) {
-            SFPoint *centroid = [SFGeometryUtils centroidOfGeometry:geometry];
-            MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([centroid.y doubleValue], [centroid.x doubleValue]), MKCoordinateSpanMake(.03125, .03125));
-            MKCoordinateRegion viewRegion = [self.map regionThatFits:region];
-            [self.map setRegion:viewRegion animated:NO];
-        } else {
-            MKCoordinateRegion viewRegion = [self viewRegionOfMapView:self.map forGeometry:geometry];
-            [self.map setRegion:viewRegion];
-        }
+        [self setLocation:geometry];
     } else {
         self.shapeType = SF_POINT;
         [self setShapeTypeSelection];
@@ -992,6 +1011,10 @@ static NSString *garsTitle = @"GARS";
 
 -(void) revertShapeType{
     [self setShapeTypeSelection];
+}
+
+- (IBAction) searchButtonClick:(UIButton *) sender {
+    [self.coordinator search];
 }
 
 - (IBAction)pointButtonClick:(UIButton *)sender {

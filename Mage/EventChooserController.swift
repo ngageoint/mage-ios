@@ -188,7 +188,7 @@ func actionButtonTapped()
         progressView.progressTintColor = scheme?.colorScheme.primaryColor
         var red: CGFloat = 1.0
         var blue: CGFloat = 1.0
-        var green: CGFloat = 1.0
+        var green: CGFloat = 1.0 
         var alpha: CGFloat = 1.0
         scheme?.colorScheme.primaryColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         progressView.trackTintColor = UIColor(red: CGFloat.minimum(red + 0.2, 1.0), green: CGFloat.minimum(green + 0.2, 1.0), blue: CGFloat.minimum(blue + 0.2, 1.0), alpha: 1.0)

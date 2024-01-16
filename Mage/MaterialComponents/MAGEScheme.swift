@@ -56,7 +56,7 @@ func applicationAppearance(scheme: MDCContainerScheming?) {
         NSAttributedString.Key.backgroundColor: scheme.colorScheme.primaryColor
     ];
     
-    UITextField.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).backgroundColor = scheme.colorScheme.backgroundColor
+//    UITextField.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).backgroundColor = scheme.colorScheme.backgroundColor
     
     let tabBarAppearance = UITabBarAppearance();
     tabBarAppearance.selectionIndicatorTintColor = scheme.colorScheme.primaryColorVariant.withAlphaComponent(0.87)

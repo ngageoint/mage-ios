@@ -10,7 +10,7 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap, OnlineLayerMap {
+class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap, OnlineLayerMap {
     
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
@@ -20,6 +20,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     var bottomSheetMixin: BottomSheetMixin?
     var mapDirectionsMixin: MapDirectionsMixin?
     var persistedMapStateMixin: PersistedMapStateMixin?
+    var hasMapSearchMixin: HasMapSearchMixin?
     var hasMapSettingsMixin: HasMapSettingsMixin?
     var canCreateObservationMixin: CanCreateObservationMixin?
     var canReportLocationMixin: CanReportLocationMixin?
@@ -80,6 +81,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         bottomSheetMixin = nil
         mapDirectionsMixin = nil
         persistedMapStateMixin = nil
+        hasMapSearchMixin = nil
         hasMapSettingsMixin = nil
         canCreateObservationMixin = nil
         canReportLocationMixin = nil
@@ -110,8 +112,9 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             persistedMapStateMixin = PersistedMapStateMixin(persistedMapState: self)
             hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, rootView: self)
             canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, shouldShowFab: UIDevice.current.userInterfaceIdiom != .pad, rootView: self, mapStackView: mapStack, locationService: nil)
-            canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 1)
-            userTrackingMapMixin = UserTrackingMapMixin(userTrackingMap: self, buttonParentView: buttonStack, indexInView: 0, scheme: scheme)
+            canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 2)
+            userTrackingMapMixin = UserTrackingMapMixin(userTrackingMap: self, buttonParentView: buttonStack, indexInView: 1, scheme: scheme)
+            hasMapSearchMixin = HasMapSearchMixin(hasMapSearch: self, rootView: buttonStack, indexInView: 0, navigationController: self.navigationController, scheme: self.scheme)
             userHeadingDisplayMixin = UserHeadingDisplayMixin(userHeadingDisplay: self, mapStack: mapStack, scheme: scheme)
             staticLayerMapMixin = StaticLayerMapMixin(staticLayerMap: self)
             geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
@@ -122,6 +125,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(bottomSheetMixin!)
             mapMixins.append(persistedMapStateMixin!)
             mapMixins.append(hasMapSettingsMixin!)
+            mapMixins.append(hasMapSearchMixin!)
             mapMixins.append(canCreateObservationMixin!)
             mapMixins.append(canReportLocationMixin!)
             mapMixins.append(userTrackingMapMixin!)
@@ -169,5 +173,9 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
         navigationController?.pushViewController(ovc, animated: true)
+    }
+    
+    func onSearchResultSelected(result: GeocoderResult) {
+        // no-op
     }
 }
