@@ -133,15 +133,19 @@ import MapKit
         }
         
         if let feed = self.feed, let itemPropertiesSchema = feed.itemPropertiesSchema, let properties = itemPropertiesSchema[FeedItemPropertiesSchemaKey.properties.key] as? [AnyHashable : Any], let keySchema = properties[key] as? [AnyHashable : Any], let type = keySchema[FeedItemPropertiesSchemaKey.type.key] as? String {
-            if (type == FeedItemPropertiesSchemaKey.number.key) {
+            if (feed.itemTemporalProperty == key) {
+                if let numberValue = value as? NSNumber {
+                    let date = Date(timeIntervalSince1970: TimeInterval(numberValue.doubleValue / 1000.0))
+                    return (date as NSDate).formattedDisplay()
+                }
+            } else if (type == FeedItemPropertiesSchemaKey.number.key) {
                 if let numberValue = value as? NSNumber, let format = keySchema[FeedItemPropertiesSchemaKey.format.key] as? String, format == FeedItemPropertiesSchemaKey.date.key {
-                    let dateDisplayFormatter = DateFormatter();
-                    dateDisplayFormatter.dateFormat = "yyyy-MM-dd";
-                    dateDisplayFormatter.timeZone = TimeZone(secondsFromGMT: 0);
-                    return dateDisplayFormatter.string(from: Date(timeIntervalSince1970: numberValue.doubleValue / 1000.0))
+                    let date = Date(timeIntervalSince1970: TimeInterval(numberValue.doubleValue / 1000.0))
+                    return (date as NSDate).formattedDisplay()
                 }
             }
         }
+        
         return String(describing: value);
     }
 }
