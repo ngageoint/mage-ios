@@ -50,10 +50,18 @@ import DateTools
     
     @objc public convenience init(observation: Observation, location: CLLocationCoordinate2D) {
         self.init()
+      
         observationId = observation.remoteId
         if observationId == nil {
             self._observation = observation
         }
+      
+        // If observation is locally modified but not yet saved, annotation uses the modified copy.
+        if observation.isDirty {
+          observationId = nil
+          self._observation = observation
+        }
+      
         self.coordinate = location
         self.title = observation.primaryFeedFieldText
         if self.title == nil || self.title.count == 0 {

@@ -195,6 +195,58 @@ class ObservationAnnotationTests: KIFSpec {
                 expect(annotationView.centerOffset.x).to(equal(0))
                 expect(annotationView.centerOffset.y).to(equal(0))
             }
+          
+           it("should init with the observation id and not an _observation reference if has a remote id and not dirty") {
+              let iconPath = "\(getDocumentsDirectory())/events/icons-1/icons/26/Hi/icon.png"
+              
+              do {
+                 try FileManager.default.createDirectory(at: URL(fileURLWithPath: iconPath).deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+                 let image: UIImage = UIImage(named: "marker")!
+                 FileManager.default.createFile(atPath: iconPath, contents: image.pngData()!, attributes: nil)
+              }
+              
+              var formsJson = getFormsJsonWithExtraFields()
+              
+              formsJson[0]["primaryField"] = "testfield";
+              formsJson[0]["primaryFeedField"] = "testfield";
+              
+              MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+              
+              let observation = ObservationBuilder.createPointObservation(eventId:1);
+              observation.remoteId = "1"
+              observation.dirty = false
+
+              let annotation = ObservationAnnotation(observation: observation, location: observation.location!.coordinate)
+              expect(annotation.observationId).to(be(observation.remoteId))
+              
+              print(annotation.observation)
+              expect(annotation._observation).to(beNil())
+           }
+        
+           
+           it("should init with the observation reference and not an id if the observation is dirty") {
+              let iconPath = "\(getDocumentsDirectory())/events/icons-1/icons/26/Hi/icon.png"
+              
+              do {
+                 try FileManager.default.createDirectory(at: URL(fileURLWithPath: iconPath).deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+                 let image: UIImage = UIImage(named: "marker")!
+                 FileManager.default.createFile(atPath: iconPath, contents: image.pngData()!, attributes: nil)
+              }
+              
+              var formsJson = getFormsJsonWithExtraFields()
+              formsJson[0]["primaryField"] = "testfield";
+              formsJson[0]["primaryFeedField"] = "testfield";
+              
+              MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+              
+              let observation = ObservationBuilder.createPointObservation(eventId:1);
+              observation.remoteId = "1"
+              observation.dirty = true
+               
+              let annotation = ObservationAnnotation(observation: observation, location: observation.location!.coordinate)
+              expect(annotation.observationId).to(beNil())
+              expect(annotation.observation).to(beIdenticalTo(observation))
+           }
         }
     }
 }
