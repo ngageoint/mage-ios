@@ -65,7 +65,6 @@ static NSString *garsTitle = @"GARS";
 @property (nonatomic) double lastAnnotationSelectedTime;
 @property (nonatomic, strong) Observation *observation;
 @property (strong, nonatomic) GPKGMapPoint *selectedMapPoint;
-@property (nonatomic) BOOL isObservationGeometry;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
 
 @property (strong, nonatomic) MDCFloatingButton *searchButton;
@@ -764,7 +763,7 @@ static NSString *garsTitle = @"GARS";
 }
 
 - (void)fieldValueChangedWithCoordinate:(CLLocationDegrees)coordinate field:(CoordinateField *)field {
-    if (self.fieldTypeTabs.selectedItem.tag == 2) {
+    if (self.fieldTypeTabs.selectedItem.tag == 2 && field.isEditing) {
         [self onLatLonTextChanged];
     }
 }
@@ -841,7 +840,6 @@ static NSString *garsTitle = @"GARS";
         
         [self updateLocationTextWithCoordinate:coordinate ignoreSelected:YES];
     }
-    
 }
 
 - (void) mapView: (MKMapView *) mapView didSelectAnnotationView: (MKAnnotationView *) view {
@@ -932,20 +930,13 @@ static NSString *garsTitle = @"GARS";
 - (void) updateGeometry {    
     SFGeometry *geometry = nil;
     if (self.geometry != nil) {
-        if (self.shapeType == SF_POINT && self.isObservationGeometry) {
-            MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-            ObservationAnnotation *annotation = mapAnnotationObservation.annotation;
-            geometry = [SFPoint pointWithXValue:annotation.coordinate.longitude andYValue:annotation.coordinate.latitude];
-        } else {
-            @try {
-                geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
-            }
-            @catch (NSException* e) {
-                NSLog(@"Invalid Geometry");
-            }
+        @try {
+            geometry = [self.shapeConverter toGeometryFromMapShape:[self mapShapePoints].shape];
+        }
+        @catch (NSException* e) {
+            NSLog(@"Invalid Geometry");
         }
     }
-    
     [self.coordinator updateGeometry:geometry];
 }
 
@@ -1265,36 +1256,25 @@ static NSString *garsTitle = @"GARS";
 -(void) addMapShape: (SFGeometry *) geometry{
     self.geometry = geometry;
     CLLocationCoordinate2D previousSelectedPointLocation = kCLLocationCoordinate2DInvalid;
-    if(self.selectedMapPoint != nil){
+    if (self.selectedMapPoint != nil) {
         previousSelectedPointLocation = self.selectedMapPoint.coordinate;
         self.selectedMapPoint = nil;
         [self clearRectangleCorners];
     }
-    if(self.mapObservation != nil){
+    if (self.mapObservation != nil) {
         [self.mapObservation removeFromMapView:self.map];
         self.mapObservation = nil;
     }
     if (geometry.geometryType == SF_POINT) {
-        if (self.isObservationGeometry) {
-            self.mapObservation = [self.observationManager addToMapWithObservation:self.observation withGeometry:geometry];
-            MapAnnotationObservation *mapAnnotationObservation = (MapAnnotationObservation *)self.mapObservation;
-            mapAnnotationObservation.annotation.accessibilityLabel = @"point edit annotation";
-            [self updateLocationTextWithAnnotationObservation:mapAnnotationObservation];
-            [self selectAnnotation:mapAnnotationObservation.annotation];
-            
-        } else {
-            
-            GPKGMapShape *shape = [self.shapeConverter toShapeWithGeometry:geometry];
-            GPKGMapPointOptions *options = [[GPKGMapPointOptions alloc] init];
-            options.image = self.coordinator.pinImage;
-            GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:options andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil andPolylineOptions:nil andPolygonOptions:nil];
-            self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
-            SFPoint *point = (SFPoint *)geometry;
-            [self updateLocationTextWithLatitude:[point.y doubleValue] andLongitude:[point.x doubleValue]];
-            shapePoints.shape.shape.accessibilityLabel = @"point edit annotation";
-            [self selectAnnotation:shapePoints.shape.shape];
-        }
-        
+        GPKGMapShape *shape = [self.shapeConverter toShapeWithGeometry:geometry];
+        GPKGMapPointOptions *options = [[GPKGMapPointOptions alloc] init];
+        options.image = self.coordinator.pinImage;
+        GPKGMapShapePoints *shapePoints = [self.shapeConverter addMapShape:shape asPointsToMapView:self.map withPointOptions:options andPolylinePointOptions:nil andPolygonPointOptions:nil andPolygonPointHoleOptions:nil andPolylineOptions:nil andPolygonOptions:nil];
+        self.mapObservation = [[MapShapePointsObservation alloc] initWithObservation:self.observation andShapePoints:shapePoints];
+        SFPoint *point = (SFPoint *)geometry;
+        [self updateLocationTextWithLatitude:[point.y doubleValue] andLongitude:[point.x doubleValue]];
+        shapePoints.shape.shape.accessibilityLabel = @"point edit annotation";
+        [self selectAnnotation:shapePoints.shape.shape];
     } else {
         GPKGMapShape *shape = [self.shapeConverter toShapeWithGeometry:geometry];
         GPKGMapPointOptions *options = [[GPKGMapPointOptions alloc] init];
