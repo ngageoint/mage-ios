@@ -763,7 +763,7 @@ static NSString *garsTitle = @"GARS";
 }
 
 - (void)fieldValueChangedWithCoordinate:(CLLocationDegrees)coordinate field:(CoordinateField *)field {
-    if (self.fieldTypeTabs.selectedItem.tag == 2) {
+    if (self.fieldTypeTabs.selectedItem.tag == 2 && field.isEditing) {
         [self onLatLonTextChanged];
     }
 }
