@@ -222,7 +222,7 @@ public class LocationUtilities: NSObject {
         return true
     }
     
-    // attempts to parse what was passed in to DDD° MM' SS.sss" (NS) or returns "" if unparsable
+    // attempts to parse the input string to DDD° MM' SS.sss" (NS) or returns "" if unparsable
     @objc public static func parseToDMSString(_ string: String?, addDirection: Bool = false, latitude: Bool = false) -> String? {
         guard let string = string else {
             return nil
@@ -284,7 +284,7 @@ public class LocationUtilities: NSObject {
             latDegrees += 1
             latMinutes = 0
         }
-        return "\(abs(latDegrees))° \(nf.string(for: latMinutes) ?? "")\' \(nf.string(for: latSeconds) ?? "")\" \(latDegrees >= 0 ? "N" : "S")"
+        return "\(abs(latDegrees))° \(nf.string(for: latMinutes) ?? "")\' \(nf.string(for: latSeconds) ?? "")\" \(coordinate >= 0 ? "N" : "S")"
     }
     
     @objc public static func longitudeDMSString(coordinate: CLLocationDegrees) -> String {
@@ -303,6 +303,6 @@ public class LocationUtilities: NSObject {
             lonDegrees += 1
             lonMinutes = 0
         }
-        return "\(abs(lonDegrees))° \(nf.string(for: lonMinutes) ?? "")\' \(nf.string(for: lonSeconds) ?? "")\" \(lonDegrees >= 0 ? "E" : "W")"
+        return "\(abs(lonDegrees))° \(nf.string(for: lonMinutes) ?? "")\' \(nf.string(for: lonSeconds) ?? "")\" \(coordinate >= 0 ? "E" : "W")"
     }
 }

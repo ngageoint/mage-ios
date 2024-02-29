@@ -18,7 +18,7 @@ class LocationUtilitiesTests: QuickSpec {
     override func spec() {
         
         describe("LocationUtilitiesTests Tests") {
-            
+
             it("should display the coordinate") {
                 UserDefaults.standard.locationDisplay = .latlng
                 
@@ -450,6 +450,10 @@ class LocationUtilitiesTests: QuickSpec {
                 expect(LocationUtilities.latitudeDMSString(coordinate:coordinate)).to(equal("11° 06' 00\" N"))
                 coordinate = CLLocationDegrees(-11.1)
                 expect(LocationUtilities.latitudeDMSString(coordinate:coordinate)).to(equal("11° 06' 00\" S"))
+                coordinate = CLLocationDegrees(0.125)
+                expect(LocationUtilities.latitudeDMSString(coordinate: coordinate)).to(equal("0° 07' 30\" N"))
+                coordinate = CLLocationDegrees(-0.125)
+                expect(LocationUtilities.latitudeDMSString(coordinate: coordinate)).to(equal("0° 07' 30\" S"))
             }
             
             it("should return a longitude dms string") {
@@ -457,9 +461,12 @@ class LocationUtilitiesTests: QuickSpec {
                 expect(LocationUtilities.longitudeDMSString(coordinate:coordinate)).to(equal("11° 06' 00\" E"))
                 coordinate = CLLocationDegrees(-11.1)
                 expect(LocationUtilities.longitudeDMSString(coordinate:coordinate)).to(equal("11° 06' 00\" W"))
-                
                 coordinate = CLLocationDegrees(18.077251)
                 expect(LocationUtilities.longitudeDMSString(coordinate:coordinate)).to(equal("18° 04' 38\" E"))
+                coordinate = CLLocationDegrees(0.125)
+                expect(LocationUtilities.longitudeDMSString(coordinate: coordinate)).to(equal("0° 07' 30\" E"))
+                coordinate = CLLocationDegrees(-0.125)
+                expect(LocationUtilities.longitudeDMSString(coordinate: coordinate)).to(equal("0° 07' 30\" W"))
             }
         }
     }
