@@ -560,6 +560,8 @@ enum State: Int, CustomStringConvertible {
         observation.dirty = false;
         observation.state = NSNumber(value: State.Active.rawValue)
         observation.eventId = Server.currentEventId();
+
+        observation.createObservationLocations(context: context)
         return observation;
     }
     
@@ -1290,30 +1292,28 @@ enum State: Int, CustomStringConvertible {
     }
 
     func createObservationLocations(context: NSManagedObjectContext) {
+        var observationLocations: Set<ObservationLocation> = Set<ObservationLocation>()
         // save the observations location
-        if let primaryForm = primaryObservationForm {
-            if let eventFormId = primaryForm[EventKey.formId.key] as? NSNumber,
-               let geometry = geometry
-            {
-                if let observationLocation = NSEntityDescription.insertNewObject(forEntityName: "ObservationLocation", into: context) as? ObservationLocation {
-                    observationLocation.observation = self
-                    if let eventId = eventId {
-                        observationLocation.eventId = eventId.int64Value
-                    }
-                    observationLocation.fieldName = "primary-observation-geometry"
-                    observationLocation.formId = eventFormId.int64Value
-                    observationLocation.geometryData = SFGeometryUtils.encode(geometry)
-                    if let centroid = geometry.centroid() {
-                        observationLocation.latitude = centroid.y.doubleValue
-                        observationLocation.longitude = centroid.x.doubleValue
-                    }
-                    if let envelope = geometry.envelope() {
-                        observationLocation.minLatitude = envelope.minY.doubleValue
-                        observationLocation.maxLatitude = envelope.maxY.doubleValue
-                        observationLocation.minLongitude = envelope.minX.doubleValue
-                        observationLocation.maxLongitude = envelope.maxX.doubleValue
-                    }
+        if let geometry = geometry {
+            if let observationLocation = NSEntityDescription.insertNewObject(forEntityName: "ObservationLocation", into: context) as? ObservationLocation {
+                observationLocation.observation = self
+                if let eventId = eventId {
+                    observationLocation.eventId = eventId.int64Value
                 }
+                observationLocation.fieldName = "primary-observation-geometry"
+                observationLocation.formId = (primaryObservationForm?[EventKey.formId.key] as? NSNumber)?.int64Value ?? -1
+                observationLocation.geometryData = SFGeometryUtils.encode(geometry)
+                if let centroid = geometry.centroid() {
+                    observationLocation.latitude = centroid.y.doubleValue
+                    observationLocation.longitude = centroid.x.doubleValue
+                }
+                if let envelope = geometry.envelope() {
+                    observationLocation.minLatitude = envelope.minY.doubleValue
+                    observationLocation.maxLatitude = envelope.maxY.doubleValue
+                    observationLocation.minLongitude = envelope.minX.doubleValue
+                    observationLocation.maxLongitude = envelope.maxX.doubleValue
+                }
+                observationLocations.insert(observationLocation)
             }
         }
 
@@ -1350,12 +1350,13 @@ enum State: Int, CustomStringConvertible {
                                     observationLocation.minLongitude = envelope.minX.doubleValue
                                     observationLocation.maxLongitude = envelope.maxX.doubleValue
                                 }
-                                print("Obs loc \(observationLocation)")
+                                observationLocations.insert(observationLocation)
                             }
                         }
                     }
                 }
             }
         }
+        self.locations = observationLocations
     }
 }
