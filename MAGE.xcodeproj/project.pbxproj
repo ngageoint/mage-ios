@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -111,6 +111,22 @@
 		F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7012B9B248E96E8002BBDE8 /* FeedService.swift */; };
 		F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7059AB320446B1D00A6B7CC /* registrationSuccess.json */; };
 		F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */; };
+		F70688832BA37ECE00D8E2EA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F70688822BA37ECE00D8E2EA /* Kingfisher */; };
+		F706888B2BA3A7D900D8E2EA /* DataSourceMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706888A2BA3A7D900D8E2EA /* DataSourceMap.swift */; };
+		F706888D2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = F706888C2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions */; };
+		F706888F2BA3A85600D8E2EA /* DataSourceDefinition in Frameworks */ = {isa = PBXBuildFile; productRef = F706888E2BA3A85600D8E2EA /* DataSourceDefinition */; };
+		F70688912BA3A85600D8E2EA /* DataSourceTileOverlay in Frameworks */ = {isa = PBXBuildFile; productRef = F70688902BA3A85600D8E2EA /* DataSourceTileOverlay */; };
+		F70688932BA3A85600D8E2EA /* StringExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = F70688922BA3A85600D8E2EA /* StringExtensions */; };
+		F70688952BA3A85700D8E2EA /* UIImageExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = F70688942BA3A85700D8E2EA /* UIImageExtensions */; };
+		F70688992BA4920D00D8E2EA /* ObservationLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */; };
+		F706889C2BA49CB100D8E2EA /* NSManagedObjectContextExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = F706889B2BA49CB100D8E2EA /* NSManagedObjectContextExtensions */; };
+		F706889F2BA4A2E300D8E2EA /* ObservationMapItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706889E2BA4A2E300D8E2EA /* ObservationMapItem.swift */; };
+		F70688A22BA4CF8900D8E2EA /* ObservationLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688A12BA4CF8900D8E2EA /* ObservationLocation.swift */; };
+		F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F70688A32BA4DA4100D8E2EA /* Model22To23.xcmappingmodel */; };
+		F70688A62BA4DA8600D8E2EA /* ObservationToObservationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688A52BA4DA8600D8E2EA /* ObservationToObservationPolicy.swift */; };
+		F70688A82BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688A72BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift */; };
+		F70688AA2BADDF0A00D8E2EA /* multipleGeometryFields.json in Resources */ = {isa = PBXBuildFile; fileRef = F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */; };
+		F70688AE2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */; };
 		F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */; };
 		F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */; };
 		F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */; };
@@ -785,6 +801,22 @@
 		F7012B9B248E96E8002BBDE8 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		F7059AB320446B1D00A6B7CC /* registrationSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = registrationSuccess.json; sourceTree = "<group>"; };
 		F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisconnectedLogin.m; sourceTree = "<group>"; };
+		F70688842BA37F7000D8E2EA /* CLLocationCoordinate2DExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CLLocationCoordinate2DExtensions; path = Packages/CLLocationCoordinate2DExtensions; sourceTree = "<group>"; };
+		F70688852BA388F000D8E2EA /* UIImageExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = UIImageExtensions; path = Packages/UIImageExtensions; sourceTree = "<group>"; };
+		F70688862BA3896C00D8E2EA /* DataSourceDefinition */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DataSourceDefinition; path = Packages/DataSourceDefinition; sourceTree = "<group>"; };
+		F70688882BA38B1E00D8E2EA /* DataSourceTileOverlay */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DataSourceTileOverlay; path = Packages/DataSourceTileOverlay; sourceTree = "<group>"; };
+		F70688892BA399C000D8E2EA /* StringExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = StringExtensions; path = Packages/StringExtensions; sourceTree = "<group>"; };
+		F706888A2BA3A7D900D8E2EA /* DataSourceMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceMap.swift; sourceTree = "<group>"; };
+		F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocalDataSource.swift; sourceTree = "<group>"; };
+		F706889A2BA49C9300D8E2EA /* NSManagedObjectContextExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = NSManagedObjectContextExtensions; path = Packages/NSManagedObjectContextExtensions; sourceTree = "<group>"; };
+		F706889E2BA4A2E300D8E2EA /* ObservationMapItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapItem.swift; sourceTree = "<group>"; };
+		F70688A02BA4CE7000D8E2EA /* mage-ios-sdk 23.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mage-ios-sdk 23.xcdatamodel"; sourceTree = "<group>"; };
+		F70688A12BA4CF8900D8E2EA /* ObservationLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocation.swift; sourceTree = "<group>"; };
+		F70688A32BA4DA4100D8E2EA /* Model22To23.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model22To23.xcmappingmodel; sourceTree = "<group>"; };
+		F70688A52BA4DA8600D8E2EA /* ObservationToObservationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationToObservationPolicy.swift; sourceTree = "<group>"; };
+		F70688A72BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationToObservationPolicyTests.swift; sourceTree = "<group>"; };
+		F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multipleGeometryFields.json; sourceTree = "<group>"; };
+		F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCoreDataSourceTests.swift; sourceTree = "<group>"; };
 		F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditCardDelegate.swift; sourceTree = "<group>"; };
 		F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentCreationDelegate.swift; sourceTree = "<group>"; };
 		F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerTests.swift; sourceTree = "<group>"; };
@@ -1376,17 +1408,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F70688832BA37ECE00D8E2EA /* Kingfisher in Frameworks */,
 				2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */,
 				F76FAE861A5C797400BD8443 /* CoreAudio.framework in Frameworks */,
 				F70EAF3D199D052D00909C8A /* MediaPlayer.framework in Frameworks */,
+				F706888F2BA3A85600D8E2EA /* DataSourceDefinition in Frameworks */,
 				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
 				F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */,
+				F70688932BA3A85600D8E2EA /* StringExtensions in Frameworks */,
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
 				F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */,
 				F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
+				F70688912BA3A85600D8E2EA /* DataSourceTileOverlay in Frameworks */,
+				F706889C2BA49CB100D8E2EA /* NSManagedObjectContextExtensions in Frameworks */,
+				F70688952BA3A85700D8E2EA /* UIImageExtensions in Frameworks */,
 				F7A94D6E18AD9CB000CB9EE0 /* UIKit.framework in Frameworks */,
 				F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
 				BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */,
+				F706888D2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1800,6 +1839,46 @@
 			name = Contact;
 			sourceTree = "<group>";
 		};
+		F70688962BA491EB00D8E2EA /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				F70688972BA491F500D8E2EA /* Observation */,
+			);
+			name = Repository;
+			sourceTree = "<group>";
+		};
+		F70688972BA491F500D8E2EA /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */,
+			);
+			name = Observation;
+			sourceTree = "<group>";
+		};
+		F706889D2BA4A2D200D8E2EA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F706889E2BA4A2E300D8E2EA /* ObservationMapItem.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		F70688AB2BB1FAF600D8E2EA /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				F70688AC2BB1FAFC00D8E2EA /* Observation */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		F70688AC2BB1FAFC00D8E2EA /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */,
+			);
+			path = Observation;
+			sourceTree = "<group>";
+		};
 		F706B2152554365900C19BA7 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1836,6 +1915,7 @@
 		F70E6EE719781585002D66F6 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F706889D2BA4A2D200D8E2EA /* Models */,
 				F796E4472417E146005CA09C /* Attachment */,
 				F7E0380B1992948A007CCF6C /* AttachmentCell.swift */,
 				F78B0A951A1CEA6900D3AC74 /* AttachmentCollectionDataStore.h */,
@@ -1986,6 +2066,8 @@
 				F72D42A42694B60300F9AC3B /* MageServer.swift */,
 				F72D42AE2694B60300F9AC3B /* MagicalRecord+MAGE.h */,
 				F72D425B2694B60300F9AC3B /* MagicalRecord+MAGE.m */,
+				F70688A52BA4DA8600D8E2EA /* ObservationToObservationPolicy.swift */,
+				F70688A32BA4DA4100D8E2EA /* Model22To23.xcmappingmodel */,
 				F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */,
 				F72D424D2694B60300F9AC3B /* Model2To15.xcmappingmodel */,
 				F72D42D82694B60300F9AC3B /* Model3To15.xcmappingmodel */,
@@ -2164,6 +2246,7 @@
 				F7489B3E27A2FE8100A9E314 /* StaticLayerMap.swift */,
 				F7489B3A27A1A31000A9E314 /* UserHeadingDisplay.swift */,
 				F7489B3827A09D7D00A9E314 /* UserTrackingMap.swift */,
+				F706888A2BA3A7D900D8E2EA /* DataSourceMap.swift */,
 			);
 			path = Mixins;
 			sourceTree = "<group>";
@@ -2243,6 +2326,7 @@
 				F795ED1524BD0B9A0028FBFC /* userabc.json */,
 				F7F15B142745865F008FF6C2 /* users.json */,
 				F7CE22C52540DF7600D710DE /* zeroForms.json */,
+				F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */,
 			);
 			path = responses;
 			sourceTree = SOURCE_ROOT;
@@ -2460,6 +2544,7 @@
 				F72D425E2694B60300F9AC3B /* User.swift */,
 				F72D42902694B60300F9AC3B /* User+CoreDataProperties.swift */,
 				2F42586E2B51F05B00BF83B1 /* Settings.swift */,
+				F70688A12BA4CF8900D8E2EA /* ObservationLocation.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -2467,6 +2552,12 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F706889A2BA49C9300D8E2EA /* NSManagedObjectContextExtensions */,
+				F70688892BA399C000D8E2EA /* StringExtensions */,
+				F70688882BA38B1E00D8E2EA /* DataSourceTileOverlay */,
+				F70688862BA3896C00D8E2EA /* DataSourceDefinition */,
+				F70688852BA388F000D8E2EA /* UIImageExtensions */,
+				F70688842BA37F7000D8E2EA /* CLLocationCoordinate2DExtensions */,
 				F76B4A6F28E61E710012BF4F /* CHANGELOG.md */,
 				F72D422B2694B60300F9AC3B /* sdk */,
 				F7A94D7118AD9CB000CB9EE0 /* Mage */,
@@ -2516,6 +2607,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F70688962BA491EB00D8E2EA /* Repository */,
 				2FAE23FB2B5596A900629721 /* Search */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
@@ -2586,6 +2678,7 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F70688AB2BB1FAF600D8E2EA /* Repository */,
 				F7F264372806FDDE00758C5B /* Event */,
 				F70E7B1927888531000BBC58 /* Categories */,
 				F786492C273BFF02002D3DC2 /* Layer */,
@@ -2662,6 +2755,7 @@
 				F7DDF46E2748023A00689550 /* ObservationImageTests.swift */,
 				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
 				F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */,
+				F70688A72BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
@@ -2879,6 +2973,15 @@
 			dependencies = (
 			);
 			name = MAGE;
+			packageProductDependencies = (
+				F70688822BA37ECE00D8E2EA /* Kingfisher */,
+				F706888C2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions */,
+				F706888E2BA3A85600D8E2EA /* DataSourceDefinition */,
+				F70688902BA3A85600D8E2EA /* DataSourceTileOverlay */,
+				F70688922BA3A85600D8E2EA /* StringExtensions */,
+				F70688942BA3A85700D8E2EA /* UIImageExtensions */,
+				F706889B2BA49CB100D8E2EA /* NSManagedObjectContextExtensions */,
+			);
 			productName = Mage;
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
 			productType = "com.apple.product-type.application";
@@ -2950,6 +3053,9 @@
 				en,
 			);
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
+			packageReferences = (
+				F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -3051,6 +3157,7 @@
 				7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */,
 				F70D19E32742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip in Resources */,
 				F795ED1424BD061C0028FBFC /* observations.json in Resources */,
+				F70688AA2BADDF0A00D8E2EA /* multipleGeometryFields.json in Resources */,
 				F7098F262492C36700313703 /* test_marker.png in Resources */,
 				F709F02D28297AD2002EA135 /* threeEvents.json in Resources */,
 				F7CDD7132601194600F3294C /* polygonObservation.json in Resources */,
@@ -3356,6 +3463,7 @@
 				F723FB1B1F606DD100620B58 /* AuthenticationCoordinator.m in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
+				F706888B2BA3A7D900D8E2EA /* DataSourceMap.swift in Sources */,
 				F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */,
 				F7402C8A276D1A9B00531613 /* HasMapSettings.swift in Sources */,
 				8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */,
@@ -3403,6 +3511,7 @@
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
 				F72D43062694B60300F9AC3B /* Server.swift in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
+				F706889F2BA4A2E300D8E2EA /* ObservationMapItem.swift in Sources */,
 				F7489B3927A09D7D00A9E314 /* UserTrackingMap.swift in Sources */,
 				F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */,
 				F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */,
@@ -3468,6 +3577,7 @@
 				F7F4755125BB3D77006634F7 /* AttachmentSlideshow.swift in Sources */,
 				F72D42F92694B60300F9AC3B /* Model7To15.xcmappingmodel in Sources */,
 				F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */,
+				F70688A62BA4DA8600D8E2EA /* ObservationToObservationPolicy.swift in Sources */,
 				F7F4754525BA357E006634F7 /* ObservationListCardCell.swift in Sources */,
 				F7402C88276CBE9300531613 /* PersistedMapState.swift in Sources */,
 				F71446ED249928AD005A5EC1 /* FeedItemCard.swift in Sources */,
@@ -3479,6 +3589,7 @@
 				F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
+				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
@@ -3577,6 +3688,7 @@
 				2F8A2C0F2200FC2C007FE473 /* EventInformationCoordinator.m in Sources */,
 				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
+				F70688A22BA4CF8900D8E2EA /* ObservationLocation.swift in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
 				F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */,
@@ -3587,6 +3699,7 @@
 				F78FDC8E265D7F3E0011C536 /* RadioFieldView.swift in Sources */,
 				F78D579827BC5E4A003594D3 /* OnlineLayerMap.swift in Sources */,
 				F7AA61BA27ADB19100D617B7 /* MediaPreviewController.swift in Sources */,
+				F70688992BA4920D00D8E2EA /* ObservationLocalDataSource.swift in Sources */,
 				F72D43032694B60300F9AC3B /* IdpAuthentication.m in Sources */,
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F72D43122694B60300F9AC3B /* MageServer.swift in Sources */,
@@ -3693,10 +3806,12 @@
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,
 				F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */,
+				F70688AE2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
 				F7E5748C27DA7BEA009A6E0D /* PersistedMapStateTests.swift in Sources */,
 				F7F15B13274565A8008FF6C2 /* MageTests.swift in Sources */,
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
+				F70688A82BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift in Sources */,
 				F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */,
 				F7F08E9127E0C04900640D89 /* GeoPackageLayerMapTests.swift in Sources */,
 				F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */,
@@ -4016,7 +4131,11 @@
 				);
 				INFOPLIST_FILE = MAGETests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4065,7 +4184,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = MAGETests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4117,10 +4240,54 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.11.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F70688822BA37ECE00D8E2EA /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		F706888C2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CLLocationCoordinate2DExtensions;
+		};
+		F706888E2BA3A85600D8E2EA /* DataSourceDefinition */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataSourceDefinition;
+		};
+		F70688902BA3A85600D8E2EA /* DataSourceTileOverlay */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataSourceTileOverlay;
+		};
+		F70688922BA3A85600D8E2EA /* StringExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StringExtensions;
+		};
+		F70688942BA3A85700D8E2EA /* UIImageExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UIImageExtensions;
+		};
+		F706889B2BA49CB100D8E2EA /* NSManagedObjectContextExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NSManagedObjectContextExtensions;
+		};
+/* End XCSwiftPackageProductDependency section */
+
 /* Begin XCVersionGroup section */
 		F79D2944282C57C9008FD45E /* mage-ios-sdk.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F70688A02BA4CE7000D8E2EA /* mage-ios-sdk 23.xcdatamodel */,
 				2F42586D2B51F04100BF83B1 /* mage-ios-sdk 22.xcdatamodel */,
 				F7275FE329004EC000ED8D9A /* mage-ios-sdk 21.xcdatamodel */,
 				F79D2945282C57C9008FD45E /* mage-ios-sdk 6.xcdatamodel */,
@@ -4144,7 +4311,7 @@
 				F79D2957282C57C9008FD45E /* mage-ios-sdk 11.xcdatamodel */,
 				F79D2958282C57C9008FD45E /* mage-ios-sdk 18.xcdatamodel */,
 			);
-			currentVersion = 2F42586D2B51F04100BF83B1 /* mage-ios-sdk 22.xcdatamodel */;
+			currentVersion = F70688A02BA4CE7000D8E2EA /* mage-ios-sdk 23.xcdatamodel */;
 			path = "mage-ios-sdk.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

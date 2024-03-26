@@ -33,7 +33,6 @@ PODS:
   - KIF (3.8.9):
     - KIF/Core (= 3.8.9)
   - KIF/Core (3.8.9)
-  - Kingfisher (7.10.1)
   - libPhoneNumber-iOS (0.9.15)
   - MagicalRecord (2.3.2):
     - MagicalRecord/Core (= 2.3.2)
@@ -734,7 +733,6 @@ DEPENDENCIES:
   - geopackage-ios (~> 8.0.4)
   - HexColors (~> 4.0.0)
   - KIF
-  - Kingfisher (~> 7.0)
   - libPhoneNumber-iOS (~> 0.9.15)
   - MagicalRecord (~> 2.3.2)
   - MaterialComponents
@@ -762,7 +760,6 @@ SPEC REPOS:
     - grid-ios
     - HexColors
     - KIF
-    - Kingfisher
     - libPhoneNumber-iOS
     - MagicalRecord
     - MaterialComponents
@@ -809,7 +806,6 @@ SPEC CHECKSUMS:
   grid-ios: a86f1d0e90c6ae2721ec3abcf1763a2d300ab19b
   HexColors: 5f95843ef89aff6a72e1fd3a8ebabf205cc43379
   KIF: 7660c626b0f2d4562533590960db70a36d640558
-  Kingfisher: bc5abe80a8e0144537ef1dd5a0b2621b04f7f439
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   MagicalRecord: 53bed74b4323b930992a725be713e53b37d19755
   MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
@@ -837,6 +833,6 @@ SPEC CHECKSUMS:
   UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 89eca234d687507258e09eaade442fa4c43c1e1f
+PODFILE CHECKSUM: e557879bf92806b29cf2424408d078cced195e74
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

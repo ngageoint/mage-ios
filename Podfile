@@ -14,7 +14,6 @@ def common_pods
   pod 'DateTools', '~> 2.0.0'
   pod 'MaterialComponents'
   pod 'MDFInternationalization'
-  pod 'Kingfisher', '~> 7.0'
   pod 'PureLayout'
   pod "AFNetworking", "~> 4.0.1"
   pod "DateTools", "~> 2.0.0"

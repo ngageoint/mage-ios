@@ -27,7 +27,7 @@ enum State: Int, CustomStringConvertible {
 }
 
 @objc public class Observation: NSManagedObject, Navigable {
-    
+
     var orderedAttachments: [Attachment]? {
         get {
             var observationForms: [[String: Any]] = []
@@ -688,6 +688,12 @@ enum State: Int, CustomStringConvertible {
                         }
                     }
                 }
+
+                for location in (existingObservation.locations ?? Set<ObservationLocation>()) {
+                    location.mr_deleteEntity(in: context)
+                }
+
+                existingObservation.createObservationLocations(context: context)
             }
         } else {
             if state != .Archive {
@@ -747,7 +753,9 @@ enum State: Int, CustomStringConvertible {
                             }
                         }
                     }
-                    
+
+                    observation.createObservationLocations(context: context)
+
                     newObservation = observation;
                 }
             }
@@ -1278,6 +1286,76 @@ enum State: Int, CustomStringConvertible {
             MagicalRecord.save({ [weak self] localContext in
                 self?.mr_deleteEntity(in: localContext);
             }, completion: completion)
+        }
+    }
+
+    func createObservationLocations(context: NSManagedObjectContext) {
+        // save the observations location
+        if let primaryForm = primaryObservationForm {
+            if let eventFormId = primaryForm[EventKey.formId.key] as? NSNumber,
+               let geometry = geometry
+            {
+                if let observationLocation = NSEntityDescription.insertNewObject(forEntityName: "ObservationLocation", into: context) as? ObservationLocation {
+                    observationLocation.observation = self
+                    if let eventId = eventId {
+                        observationLocation.eventId = eventId.int64Value
+                    }
+                    observationLocation.fieldName = "primary-observation-geometry"
+                    observationLocation.formId = eventFormId.int64Value
+                    observationLocation.geometryData = SFGeometryUtils.encode(geometry)
+                    if let centroid = geometry.centroid() {
+                        observationLocation.latitude = centroid.y.doubleValue
+                        observationLocation.longitude = centroid.x.doubleValue
+                    }
+                    if let envelope = geometry.envelope() {
+                        observationLocation.minLatitude = envelope.minY.doubleValue
+                        observationLocation.maxLatitude = envelope.maxY.doubleValue
+                        observationLocation.minLongitude = envelope.minX.doubleValue
+                        observationLocation.maxLongitude = envelope.maxX.doubleValue
+                    }
+                }
+            }
+        }
+
+        // save each location field
+        if let forms = properties?[ObservationKey.forms.key] as? [[String: Any]]
+        {
+            for form in forms {
+                if let eventFormId = form[EventKey.formId.key] as? NSNumber,
+                   let eventForm = event?.form(id: eventFormId)
+                {
+                    let geometryFields = eventForm.fields?.filter({ field in
+                        let archived = field[FieldKey.archived.key] as? Bool ?? false
+                        let type = field[FieldKey.type.key] as? String ?? ""
+                        return !archived && type == FieldType.geometry.key
+                    }) ?? [[:]]
+
+                    for geometryField in geometryFields {
+                        if let geometry = form[geometryField[FieldKey.name.key] as? String ?? ""] as? SFGeometry {
+                            if let observationLocation = NSEntityDescription.insertNewObject(forEntityName: "ObservationLocation", into: context) as? ObservationLocation {
+                                observationLocation.observation = self
+                                if let eventId = eventId {
+                                    observationLocation.eventId = eventId.int64Value
+                                }
+                                observationLocation.fieldName = geometryField[FieldKey.name.key] as? String
+                                observationLocation.formId = eventFormId.int64Value
+                                observationLocation.geometryData = SFGeometryUtils.encode(geometry)
+                                if let centroid = geometry.centroid() {
+                                    observationLocation.latitude = centroid.y.doubleValue
+                                    observationLocation.longitude = centroid.x.doubleValue
+                                }
+                                if let envelope = geometry.envelope() {
+                                    observationLocation.minLatitude = envelope.minY.doubleValue
+                                    observationLocation.maxLatitude = envelope.maxY.doubleValue
+                                    observationLocation.minLongitude = envelope.minX.doubleValue
+                                    observationLocation.maxLongitude = envelope.maxX.doubleValue
+                                }
+                                print("Obs loc \(observationLocation)")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

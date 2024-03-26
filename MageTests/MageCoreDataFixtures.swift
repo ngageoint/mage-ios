@@ -37,6 +37,7 @@ class MageCoreDataFixtures {
             String(describing: Observation.self): Observation.mr_truncateAll(in: localContext),
             String(describing: ObservationFavorite.self): ObservationFavorite.mr_truncateAll(in: localContext),
             String(describing: ObservationImportant.self): ObservationImportant.mr_truncateAll(in: localContext),
+            String(describing: ObservationLocation.self): ObservationLocation.mr_truncateAll(in: localContext),
             String(describing: Role.self): Role.mr_truncateAll(in: localContext),
             String(describing: Server.self): Server.mr_truncateAll(in: localContext),
             String(describing: Team.self): Team.mr_truncateAll(in: localContext),
