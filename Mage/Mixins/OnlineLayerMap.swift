@@ -27,7 +27,15 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: "selectedOnlineLayers")
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         UserDefaults.standard.addObserver(self, forKeyPath: "selectedOnlineLayers", options: [.new], context: nil)
         updateOnlineLayers()
     }

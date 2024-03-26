@@ -44,7 +44,15 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
         self.scheme = scheme
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         applyTheme(scheme: scheme)
         
         locationManager?.delegate = self

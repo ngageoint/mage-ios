@@ -131,8 +131,9 @@ class FollowUserTests: KIFSpec {
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let initialLocation = userabc.coordinate
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
@@ -151,8 +152,9 @@ class FollowUserTests: KIFSpec {
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let initialLocation = userabc.coordinate
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
@@ -173,8 +175,9 @@ class FollowUserTests: KIFSpec {
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
                 
                 let initialLocation = userabc.coordinate
@@ -200,8 +203,9 @@ class FollowUserTests: KIFSpec {
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let initialLocation = userabc.coordinate
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
@@ -227,8 +231,9 @@ class FollowUserTests: KIFSpec {
                 mixin = FollowUserMapMixin(followUser: testimpl, user: nil, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let initialLocation = userabc.coordinate
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toNot(beCloseTo(initialLocation.latitude, within: 0.01))
@@ -256,8 +261,9 @@ class FollowUserTests: KIFSpec {
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let initialLocation = userabc.coordinate
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))

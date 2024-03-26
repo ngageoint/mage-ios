@@ -196,8 +196,9 @@ class GeoPackageLayerMapTests: KIFSpec {
                 
                 GeoPackageImporter().importGeoPackageFile(asLink: urlPath.path, andMove: false, withLayerId: "1")
 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 var geopackageImported = false
                 
                 NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) {  notification in

@@ -36,7 +36,15 @@ class SFGeometryMapMixin: NSObject, MapMixin {
         self._sfGeometry = sfGeometry
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         addSFGeometry(sfGeometry: sfGeometry)
     }
     

@@ -51,7 +51,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         observations = nil
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterKey), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterUnitKey), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.observationTimeFilterNumberKey), options: [.new], context: nil)

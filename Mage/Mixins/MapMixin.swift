@@ -10,8 +10,12 @@ import Foundation
 import MapKit
 import geopackage_ios
 
+struct AnnotationsAndOverlays {
+    let annotations: [MKAnnotation]
+    let overlays: [MKOverlay]
+}
+
 protocol MapMixin {
-    func setupMixin()
     func cleanupMixin()
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?
     func traitCollectionUpdated(previous: UITraitCollection?)
@@ -21,6 +25,26 @@ protocol MapMixin {
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView?
     func items(at location: CLLocationCoordinate2D) -> [Any]?
     func applyTheme(scheme: MDCContainerScheming?)
+
+    func setupMixin(mapView: MKMapView, mapState: MapState)
+    func removeMixin(mapView: MKMapView, mapState: MapState)
+    func updateMixin(mapView: MKMapView, mapState: MapState)
+}
+
+
+class MapState: ObservableObject, Hashable {
+    static func == (lhs: MapState, rhs: MapState) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    var id = UUID()
+
+    @Published var userTrackingMode: Int = Int(MKUserTrackingMode.none.rawValue)
+    @Published var mixinStates: [String: Any] = [:]
 }
 
 extension MapMixin {

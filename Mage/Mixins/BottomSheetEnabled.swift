@@ -16,6 +16,14 @@ protocol BottomSheetEnabled {
 }
 
 class BottomSheetMixin: NSObject, MapMixin {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+        
+    }
+    
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+    
     var bottomSheetEnabled: BottomSheetEnabled
     var mapItemsTappedObserver: Any?
     var mapViewDisappearingObserver: Any?
@@ -33,7 +41,7 @@ class BottomSheetMixin: NSObject, MapMixin {
         mapItemsTappedObserver = nil
     }
     
-    func setupMixin() {
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
             if let mapView = self?.bottomSheetEnabled.mapView, self?.isVisible(view: mapView) == true, let notification = notification.object as? MapItemsTappedNotification, notification.mapView == mapView {
                 var bottomSheetItems: [BottomSheetItem] = []

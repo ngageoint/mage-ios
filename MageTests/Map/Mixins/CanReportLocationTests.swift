@@ -129,8 +129,9 @@ class CanReportLocationTests: KIFSpec {
                     UserDefaults.standard.reportLocation = true
                     mockCLLocationManager.authorizationStatus = .authorizedAlways
                     
-                    mixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     tester().waitForView(withAccessibilityLabel: "report location")
                     let button = viewTester().usingLabel("report location").view as! MDCFloatingButton
                     expect(button.currentImage).to(equal(UIImage(named:"location_tracking_off")))
@@ -147,8 +148,9 @@ class CanReportLocationTests: KIFSpec {
                     UserDefaults.standard.reportLocation = true
                     mockCLLocationManager.authorizationStatus = .denied
                     
-                    mixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     tester().waitForView(withAccessibilityLabel: "report location")
                     let button = viewTester().usingLabel("report location").view as! MDCFloatingButton
                     expect(button.currentImage).to(equal(UIImage(named:"location_tracking_off")))
@@ -255,8 +257,9 @@ class CanReportLocationTests: KIFSpec {
                 }
                 
                 it("initialize the CanCreateObservation with the button at index 0") {
-                    mixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     tester().waitForView(withAccessibilityLabel: "report location")
                     expect(buttonStack.arrangedSubviews[0]).to(beAKindOf(MDCFloatingButton.self))
                     
@@ -265,8 +268,9 @@ class CanReportLocationTests: KIFSpec {
                 
                 it("initialize the CanCreateObservation with the button at index 1") {
                     buttonStack.addArrangedSubview(UIView())
-                    mixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     tester().waitForView(withAccessibilityLabel: "report location")
                     expect(buttonStack.arrangedSubviews[1]).to(beAKindOf(MDCFloatingButton.self))
                     
@@ -277,8 +281,9 @@ class CanReportLocationTests: KIFSpec {
                     UserDefaults.standard.reportLocation = true
                     mockCLLocationManager.authorizationStatus = .authorizedAlways
                     
-                    mixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     tester().waitForView(withAccessibilityLabel: "report location")
                     let button = viewTester().usingLabel("report location").view as! MDCFloatingButton
                     expect(button.currentImage).to(equal(UIImage(named:"location_tracking_on")))
@@ -300,7 +305,8 @@ class CanReportLocationTests: KIFSpec {
                     UserDefaults.standard.reportLocation = true
                     mockCLLocationManager.authorizationStatus = .denied
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     
                     tester().waitForView(withAccessibilityLabel: "report location")
                     let button = viewTester().usingLabel("report location").view as! MDCFloatingButton

@@ -19,8 +19,8 @@ class MageMapView: UIView, GeoPackageBaseMap {
     var scheme: MDCContainerScheming?;
     var mapMixins: [MapMixin] = []
     var geoPackageBaseMapMixin: GeoPackageBaseMapMixin?
+    var mapState: MapState = MapState()
 
-    
     lazy var mapStack: UIStackView = {
         let mapStack = UIStackView.newAutoLayout()
         mapStack.axis = .vertical
@@ -69,8 +69,11 @@ class MageMapView: UIView, GeoPackageBaseMap {
     }
     
     func initiateMapMixins() {
+        guard let mapView = mapView else {
+            return
+        }
         for mixin in mapMixins {
-            mixin.setupMixin()
+            mixin.setupMixin(mapView: mapView, mapState: mapState)
             mixin.applyTheme(scheme: scheme)
         }
     }

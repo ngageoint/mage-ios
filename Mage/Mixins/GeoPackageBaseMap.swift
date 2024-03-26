@@ -28,7 +28,15 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: "mapShowTraffic")
     }
 
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         UserDefaults.standard.addObserver(self, forKeyPath: "mapType", options: .new, context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "gridType", options: .new, context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: "mapShowTraffic", options: .new, context: nil)

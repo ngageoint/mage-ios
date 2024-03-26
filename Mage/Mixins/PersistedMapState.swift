@@ -23,7 +23,15 @@ class PersistedMapStateMixin: NSObject, MapMixin {
         self.mapView = self.persistedMapState?.mapView
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         setMapState()
     }
     

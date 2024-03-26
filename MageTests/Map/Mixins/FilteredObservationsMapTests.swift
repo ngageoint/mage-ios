@@ -136,8 +136,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     _ = Observation.create(geometry: SFPoint(x: 14, andY: 21), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     
                     UserDefaults.standard.observationTimeFilterKey = .all
-                    
-                    fomixin.setupMixin()
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                     fomixin.cleanupMixin()
                 }
@@ -229,7 +230,8 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.setupMixin()
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     expect(testimpl.mapView?.annotations.count).toEventually(equal(2))
                     fomixin.cleanupMixin()
                 }
@@ -241,7 +243,8 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     UserDefaults.standard.observationTimeFilterKey = .last24Hours
                     
-                    fomixin.setupMixin()
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                     expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
                     let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
@@ -256,7 +259,8 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     UserDefaults.standard.observationTimeFilterKey = .lastWeek
                     
-                    fomixin.setupMixin()
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                     expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
                     let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
@@ -271,7 +275,8 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     UserDefaults.standard.observationTimeFilterKey = .lastWeek
                     
-                    fomixin.setupMixin()
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                     expect(testimpl.mapView?.annotations[0]).to(beAKindOf(ObservationAnnotation.self))
                     let oa = testimpl.mapView?.annotations[0] as? ObservationAnnotation
@@ -282,8 +287,9 @@ class FilteredObservationsMapTests: KIFSpec {
                 it("initialize the FilteredObservationsMap filtering on all with observations showing up later") {
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     let longAgo = Date(timeIntervalSince1970: 1)
                     let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
@@ -300,8 +306,9 @@ class FilteredObservationsMapTests: KIFSpec {
                 it("initialize the FilteredObservationsMap filtering on all then change filter") {
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     let longAgo = Date(timeIntervalSince1970: 1)
                     _ = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     let two = Observation.create(geometry: SFPoint(x: 15, andY: 20), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
@@ -319,8 +326,9 @@ class FilteredObservationsMapTests: KIFSpec {
                 it("should move the observation when it is updated") {
                     UserDefaults.standard.observationTimeFilterKey = .all
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     let longAgo = Date(timeIntervalSince1970: 1)
                     let one = Observation.create(geometry: SFPoint(x: 16, andY: 21), date: longAgo, accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                     expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
@@ -346,8 +354,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     testimpl.mapView?.delegate = testimpl
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 21, longitude: 16), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                         testimpl.mapView?.setRegion(region, animated: false)
                     }
@@ -379,8 +388,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     testimpl.mapView?.delegate = testimpl
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 21, longitude: 16), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                         testimpl.mapView?.setRegion(region, animated: false)
                     }
@@ -408,8 +418,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     testimpl.mapView?.delegate = testimpl
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     fomixin.zoomAndCenterMap(observation: one)
                     
                     expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
@@ -426,8 +437,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     testimpl.mapView?.delegate = testimpl
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     fomixin.zoomAndCenterMap(observation: one)
                     
                     expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(21.0000, within: 0.1))
@@ -456,7 +468,8 @@ class FilteredObservationsMapTests: KIFSpec {
 
                     testimpl.mapView?.delegate = testimpl
 
-                    fomixin.setupMixin()
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
                     fomixin.zoomAndCenterMap(observation: one)
 
@@ -512,8 +525,9 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     testimpl.mapView?.delegate = testimpl
                     
-                    fomixin.setupMixin()
-                    
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20.5, longitude: 15.5), latitudinalMeters: 1000000, longitudinalMeters: 100000)) {
                         testimpl.mapView?.setRegion(region, animated: false)
                     }
@@ -626,7 +640,8 @@ class FilteredObservationsMapTests: KIFSpec {
                     
                     testimpl.mapView?.delegate = testimpl
                     
-                    fomixin.setupMixin()
+                    let mapState = MapState()
+                    fomixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     
                     if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 20.5, longitude: 15.5), latitudinalMeters: 1000000, longitudinalMeters: 100000)) {
                         testimpl.mapView?.setRegion(region, animated: false)

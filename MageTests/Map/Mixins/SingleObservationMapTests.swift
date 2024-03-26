@@ -127,7 +127,8 @@ class SingleObservationMapTests: KIFSpec {
                 mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                 
@@ -147,7 +148,8 @@ class SingleObservationMapTests: KIFSpec {
                 mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                 
@@ -175,7 +177,8 @@ class SingleObservationMapTests: KIFSpec {
                 mixin = SingleObservationMapMixin(filteredObservationsMap: testimpl, observation: observation)
                 testimpl.singleObservationMapMixin = mixin
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                 

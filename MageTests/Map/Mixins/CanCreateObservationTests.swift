@@ -127,8 +127,9 @@ class CanCreateObservationTests: KIFSpec {
             }
             
             it("initialize the CanCreateObservation and push the new button") {
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 tester().waitForView(withAccessibilityLabel: "New")
                 tester().tapView(withAccessibilityLabel: "New")
                 tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection")
@@ -146,7 +147,8 @@ class CanCreateObservationTests: KIFSpec {
             }
             
             it("initialize the CanCreateObservation and long press the map") {
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:15, longitude:25), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)

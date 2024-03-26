@@ -167,7 +167,8 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
                 expect(testimpl.mapView?.overlays[0]).to(beAKindOf(TMSTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
@@ -194,7 +195,8 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
                 expect(testimpl.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
@@ -239,7 +241,8 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
                 expect(testimpl.mapView?.overlays[0]).to(beAKindOf(WMSTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
@@ -264,9 +267,10 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 MageCoreDataFixtures.addImageryLayer()
                                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
-                
+
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
 
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
@@ -293,9 +297,10 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 MageCoreDataFixtures.addImageryLayer()
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
-                
+
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
                 expect(testimpl.mapView?.overlays.count).to(equal(1))

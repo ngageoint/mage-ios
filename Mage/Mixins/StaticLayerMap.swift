@@ -36,7 +36,15 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         UserDefaults.standard.removeObserver(self, forKeyPath: "selectedStaticLayers")
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         mapAnnotationFocusedObserver = NotificationCenter.default.addObserver(forName: .MapAnnotationFocused, object: nil, queue: .main) { [weak self] notification in
             if let notificationObject = (notification.object as? MapAnnotationFocusedNotification), notificationObject.mapView == self?.staticLayerMap.mapView {
                 self?.focusAnnotation(annotation: notificationObject.annotation)

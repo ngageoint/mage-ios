@@ -128,8 +128,9 @@ class FeedsMapTests: KIFSpec {
                 
                 UserDefaults.standard.currentEventSelectedFeeds = []
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
@@ -145,8 +146,9 @@ class FeedsMapTests: KIFSpec {
                 
                 UserDefaults.standard.currentEventSelectedFeeds = ["1", "2"]
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
@@ -162,8 +164,9 @@ class FeedsMapTests: KIFSpec {
                 
                 UserDefaults.standard.currentEventSelectedFeeds = ["1", "2"]
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
@@ -185,8 +188,9 @@ class FeedsMapTests: KIFSpec {
                 
                 UserDefaults.standard.currentEventSelectedFeeds = []
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(0))
                 
@@ -205,7 +209,8 @@ class FeedsMapTests: KIFSpec {
                 
                 UserDefaults.standard.currentEventSelectedFeeds = ["1"]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(1))
@@ -224,8 +229,9 @@ class FeedsMapTests: KIFSpec {
                 
                 UserDefaults.standard.currentEventSelectedFeeds = ["1"]
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
@@ -266,7 +272,8 @@ class FeedsMapTests: KIFSpec {
                 
                 UserDefaults.standard.currentEventSelectedFeeds = ["1"]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(2))

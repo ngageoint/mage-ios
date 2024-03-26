@@ -101,8 +101,9 @@ class PersistedMapStateTests: KIFSpec {
             it("initialize the PersistedMapState with a region") {
                 UserDefaults.standard.mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30, longitude: 10), span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(30, within: 1.0))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(10, within: 1.0))
                 mixin.cleanupMixin()
@@ -111,7 +112,8 @@ class PersistedMapStateTests: KIFSpec {
             it("initialize the PersistedMapState with a region then move the map and the user preference should change") {
                 UserDefaults.standard.mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30, longitude: 10), span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(30, within: 1.0))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(10, within: 1.0))

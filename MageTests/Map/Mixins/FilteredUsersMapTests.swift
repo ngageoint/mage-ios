@@ -131,7 +131,9 @@ class FilteredUsersMapTests: KIFSpec {
                 it("initialize the FilteredObservationsMap with one user") {
                     TimeFilter.setLocation(.all)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                     expect(mixin.mapView?.annotations.count).toEventually(equal(1))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
                     let la : LocationAnnotation = mixin.mapView!.annotations[0] as! LocationAnnotation
@@ -231,7 +233,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userdef", date: Date(), completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userxyz", date: Date(), completion: nil)
 
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // two because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(2))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
@@ -250,7 +253,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userdef", date: Date(), completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userxyz", date: longAgo, completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // one because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(1))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
@@ -269,7 +273,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userdef", date: Date(), completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userxyz", date: longAgo, completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // two because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(2))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
@@ -297,7 +302,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userdef", date: Date(), completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userxyz", date: longAgo, completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // one because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(1))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
@@ -316,7 +322,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userdef", date: Date(), completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userxyz", date: longAgo, completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // one because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(1))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
@@ -332,7 +339,8 @@ class FilteredUsersMapTests: KIFSpec {
                     
                     MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     expect(mixin.mapView?.annotations.count).toEventually(equal(0))
                     
                     MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
@@ -371,7 +379,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // one because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(1))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
@@ -444,7 +453,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userxyz", completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // one because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(2))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))
@@ -560,7 +570,8 @@ class FilteredUsersMapTests: KIFSpec {
                     MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
                     
-                    mixin.setupMixin()
+                    let mapState = MapState()
+                    mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                     // one because current user is filtered out
                     expect(mixin.mapView?.annotations.count).toEventually(equal(1))
                     expect(mixin.mapView?.annotations[0]).to(beAKindOf(LocationAnnotation.self))

@@ -29,7 +29,15 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
         self.geoPackageLayerMap = geoPackageLayerMap
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         guard let mapView = geoPackageLayerMap.mapView else {
             return
         }

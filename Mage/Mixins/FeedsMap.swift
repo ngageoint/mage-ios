@@ -47,7 +47,15 @@ class FeedsMapMixin: NSObject, MapMixin {
         }
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         if let currentEventId = Server.currentEventId() {
             userDefaultsEventName = "selectedFeeds-\(currentEventId)"
             UserDefaults.standard.addObserver(self, forKeyPath: userDefaultsEventName!, options: [.new], context: nil)

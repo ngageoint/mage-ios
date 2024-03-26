@@ -141,7 +141,8 @@ class UserHeadingDisplayTests: KIFSpec {
                 mixin.mapView?.userTrackingMode = .none
                 mockCLLocationManager.authorizationStatus = .authorizedAlways
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 mixin.mapView?.userTrackingMode = .follow
                 mixin.didChangeUserTrackingMode(mapView: mixin.mapView!, animated: false)
                 
@@ -163,7 +164,8 @@ class UserHeadingDisplayTests: KIFSpec {
                 
                 mixin.mapView?.delegate = testimpl
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 mixin.mapView?.userTrackingMode = .follow
                 mixin.didChangeUserTrackingMode(mapView: mixin.mapView!, animated: false)
                 
@@ -188,7 +190,8 @@ class UserHeadingDisplayTests: KIFSpec {
                 
                 mixin.mapView?.delegate = testimpl
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 mixin.mapView?.userTrackingMode = .followWithHeading
                 mixin.didChangeUserTrackingMode(mapView: mixin.mapView!, animated: false)
                 
@@ -213,7 +216,8 @@ class UserHeadingDisplayTests: KIFSpec {
                 
                 mixin.mapView?.delegate = testimpl
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 mixin.mapView?.userTrackingMode = .followWithHeading
                 mixin.didChangeUserTrackingMode(mapView: mixin.mapView!, animated: false)
                 

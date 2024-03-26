@@ -47,7 +47,15 @@ class MapDirectionsMixin: NSObject, MapMixin {
         self.locationManager = locationManager
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         directionsToItemObserver = NotificationCenter.default.addObserver(forName: .DirectionsToItem, object: nil, queue: .main) { [weak self] notification in
             if let directionsNotification = notification.object as? DirectionsToItemNotification {
                 self?.getDirections(notification: directionsNotification)

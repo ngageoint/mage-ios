@@ -48,7 +48,15 @@ class HasMapSettingsMixin: NSObject, MapMixin {
         mapSettingsButton.tintColor = scheme?.colorScheme.primaryColorVariant;
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         guard let mapView = self.hasMapSettings.mapView else {
             return
         }

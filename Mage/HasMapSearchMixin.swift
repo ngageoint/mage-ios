@@ -53,7 +53,15 @@ class HasMapSearchMixin: NSObject, MapMixin {
         mapSearchButton.tintColor = scheme?.colorScheme.primaryColorVariant;
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         if rootView.arrangedSubviews.count < indexInView {
             rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
         } else {
