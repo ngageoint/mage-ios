@@ -77,12 +77,10 @@ struct DataSourceTileProvider: ImageDataProvider {
             let maxTileX = neCorner3857.x
             let maxTileY = neCorner3857.y
 
-            // border the tile by 40 miles since that is as far as any light i have seen.  if that is wrong, update
-            // border has to be at least 30 pixels as well
-            let nauticalMilesMeasurement = NSMeasurement(doubleValue: 40.0, unit: UnitLength.nauticalMiles)
-            let metersMeasurement = nauticalMilesMeasurement.converting(to: UnitLength.meters).value
-
-            let tolerance = max(metersMeasurement, ((maxTileY - minTileY) / self.tileSize.width) * 30.0)
+            // TODO: determine widest and tallest icon
+            // border has to be at least as wide as the widest icon in pixels and as tall as the tallest icon in pixels
+            // this should be split into width and height tolerances to accomidate for this
+            let tolerance = ((maxTileY - minTileY) / self.tileSize.width) * 35.0
 
             let neCornerTolerance = CLLocationCoordinate2D.metersToDegrees(
                 x: maxTileX + tolerance,

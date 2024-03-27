@@ -9,8 +9,8 @@ import Foundation
 import CoreLocation
 
 public class MapBoundingBox: Codable, ObservableObject {
-    @Published var swCorner: (x: Double, y: Double)
-    @Published var neCorner: (x: Double, y: Double)
+    @Published public var swCorner: (x: Double, y: Double)
+    @Published public var neCorner: (x: Double, y: Double)
 
     enum CodingKeys: String, CodingKey {
         case swCornerX

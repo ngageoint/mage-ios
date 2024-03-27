@@ -68,13 +68,7 @@ public extension DataSourceImage {
         if let tileBounds3857 = tileBounds3857, context != nil {
             // have to do this b/c an ImageRenderer will automatically do this
             radius *= UIScreen.main.scale
-            let coordinate = pointCoordinate // ?? kCLLocationCoordinate2DInvalid
-            //            ?? {
-            //                if let point = SFGeometryUtils.centroid(of: feature) {
-            //                    return CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
-            //                }
-            //                return kCLLocationCoordinate2DInvalid
-            //            }()
+            let coordinate = pointCoordinate
             if CLLocationCoordinate2DIsValid(coordinate) {
                 let pixel = coordinate.toPixel(
                     zoomLevel: zoomLevel,

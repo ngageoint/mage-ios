@@ -22,6 +22,7 @@ class DataSourceMap: MapMixin {
     var mapView: MKMapView?
     var lastChange: Date?
     var overlays: [MKOverlay] = []
+    var renderers: [MKOverlayRenderer] = []
     var annotations: [MKAnnotation] = []
 
     var focusNotificationName: Notification.Name?
@@ -50,7 +51,21 @@ class DataSourceMap: MapMixin {
         self.setupDataSourceUpdatedPublisher(mapState: mapState)
         self.setupUserDefaultsShowPublisher(mapState: mapState)
         self.setupOrderPublisher(mapState: mapState)
+        updateMixin(mapView: mapView, mapState: mapState)
 
+        // this would eventually be rendered unnecessary when we switch to SwiftUI as it would watch the
+        // StateObject and trigger an update when it changes
+        mapState.objectWillChange
+            .makeConnectable()
+            .autoconnect()
+            .sink { [weak self] in
+                DispatchQueue.main.async { [weak self] in
+                    if let mapState = self?.mapState {
+                        self?.updateMixin(mapView: mapView, mapState: mapState)
+                    }
+                }
+            }
+            .store(in: &cancellable)
 //        LocationManager.shared().$current10kmMGRS
 //            .receive(on: RunLoop.main)
 //            .sink { [weak self] _ in
@@ -70,7 +85,6 @@ class DataSourceMap: MapMixin {
                     mapState.mixinStates[stateKey] = self.lastChange
                 }
             }
-
             for overlay in overlays {
                 mapView.removeOverlay(overlay)
             }
@@ -173,8 +187,8 @@ class DataSourceMap: MapMixin {
             .removeDuplicates()
             .receive(on: RunLoop.main)
             .sink { [weak self] show in
-                self?.show = show
-                NSLog("Show \(self?.dataSourceKey ?? ""): \(show)")
+                self?.show = !show
+                NSLog("Show \(self?.dataSourceKey ?? ""): \(!show)")
                 self?.refreshOverlay(mapState: mapState)
             }
             .store(in: &cancellable)

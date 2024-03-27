@@ -14,6 +14,8 @@ struct ObservationMapItem {
     var geometry: SFGeometry?
     var iconPath: String?
     var formId: Int64?
+    var fieldName: String?
+    var eventId: Int64?
 }
 
 extension ObservationMapItem {
@@ -24,5 +26,7 @@ extension ObservationMapItem {
             self.iconPath = ObservationImage.imageName(observation: observation)
         }
         self.formId = observation.formId
+        self.fieldName = observation.fieldName
+        self.eventId = observation.eventId
     }
 }

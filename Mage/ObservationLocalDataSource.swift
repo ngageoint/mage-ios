@@ -50,13 +50,13 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
             predicates.append(timePredicate)
         }
         if Observations.getImportantFilter() {
-            predicates.append(NSPredicate(format: "observationImportant.important = %@", NSNumber(value: true)))
+            predicates.append(NSPredicate(format: "observation.observationImportant.important = %@", NSNumber(value: true)))
         }
         if Observations.getFavoritesFilter(),
            let currentUser = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()),
            let remoteId = currentUser.remoteId
         {
-            predicates.append(NSPredicate(format: "favorites.favorite CONTAINS %@ AND favorites.userId CONTAINS %@", NSNumber(value: true), remoteId))
+            predicates.append(NSPredicate(format: "observation.favorites.favorite CONTAINS %@ AND observation.favorites.userId CONTAINS %@", NSNumber(value: true), remoteId))
         }
         return predicates
     }
@@ -88,10 +88,10 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
             let fetchRequest = ObservationLocation.fetchRequest()
             fetchRequest.predicate = predicate
 
-            print("predicate: \(predicate.debugDescription)")
-            return (context.fetch(request: fetchRequest)?.map { location in
-                ObservationMapItem(observation: location)
-            }) ?? []
+            let results = context.fetch(request: fetchRequest)
+            return results?.map { location in
+                return ObservationMapItem(observation: location)
+            } ?? []
         }
     }
     func getCount(

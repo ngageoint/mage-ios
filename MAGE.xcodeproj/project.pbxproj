@@ -127,6 +127,8 @@
 		F70688A82BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688A72BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift */; };
 		F70688AA2BADDF0A00D8E2EA /* multipleGeometryFields.json in Resources */ = {isa = PBXBuildFile; fileRef = F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */; };
 		F70688AE2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */; };
+		F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */; };
+		F70688B42BB3574100D8E2EA /* ObservationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B22BB3572F00D8E2EA /* ObservationMap.swift */; };
 		F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */; };
 		F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */; };
 		F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */; };
@@ -817,6 +819,8 @@
 		F70688A72BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationToObservationPolicyTests.swift; sourceTree = "<group>"; };
 		F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multipleGeometryFields.json; sourceTree = "<group>"; };
 		F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCoreDataSourceTests.swift; sourceTree = "<group>"; };
+		F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTileRepository.swift; sourceTree = "<group>"; };
+		F70688B22BB3572F00D8E2EA /* ObservationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMap.swift; sourceTree = "<group>"; };
 		F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditCardDelegate.swift; sourceTree = "<group>"; };
 		F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentCreationDelegate.swift; sourceTree = "<group>"; };
 		F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerTests.swift; sourceTree = "<group>"; };
@@ -1851,6 +1855,7 @@
 			isa = PBXGroup;
 			children = (
 				F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */,
+				F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -1941,6 +1946,7 @@
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
 				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
 				F75DD30D1A97AABD0007FA3F /* View */,
+				F70688B22BB3572F00D8E2EA /* ObservationMap.swift */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -3618,6 +3624,7 @@
 				F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */,
+				F70688B42BB3574100D8E2EA /* ObservationMap.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
 				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */,
@@ -3744,6 +3751,7 @@
 				F7EBAEC12762537100650F4F /* BottomSheetEnabled.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
+				F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */,
 				F7D43BEA269F505A00561A8F /* CommonSummaryView.swift in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F7D9B826255DC65C00A76E2C /* MageImage.swift in Sources */,

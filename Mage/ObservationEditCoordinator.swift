@@ -292,6 +292,8 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
             }
             
             print("Saved the observation \(observation.remoteId ?? "")");
+            observation.createObservationLocations(context: self.managedObjectContext)
+            try? self.managedObjectContext.save()
             delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
             observationEditController = nil;
