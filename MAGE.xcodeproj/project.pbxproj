@@ -1843,23 +1843,6 @@
 			name = Contact;
 			sourceTree = "<group>";
 		};
-		F70688962BA491EB00D8E2EA /* Repository */ = {
-			isa = PBXGroup;
-			children = (
-				F70688972BA491F500D8E2EA /* Observation */,
-			);
-			name = Repository;
-			sourceTree = "<group>";
-		};
-		F70688972BA491F500D8E2EA /* Observation */ = {
-			isa = PBXGroup;
-			children = (
-				F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */,
-				F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */,
-			);
-			name = Observation;
-			sourceTree = "<group>";
-		};
 		F706889D2BA4A2D200D8E2EA /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1880,6 +1863,23 @@
 			isa = PBXGroup;
 			children = (
 				F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */,
+			);
+			path = Observation;
+			sourceTree = "<group>";
+		};
+		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				F70688B72BB5BDA400D8E2EA /* Observation */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		F70688B72BB5BDA400D8E2EA /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */,
+				F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -2613,7 +2613,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
-				F70688962BA491EB00D8E2EA /* Repository */,
+				F70688B62BB5BD9C00D8E2EA /* Repository */,
 				2FAE23FB2B5596A900629721 /* Search */,
 				F7A94D7A18AD9CB000CB9EE0 /* AppDelegate.h */,
 				F7A94D7B18AD9CB000CB9EE0 /* AppDelegate.m */,
