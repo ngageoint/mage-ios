@@ -1,6 +1,6 @@
 //
 //  TileRepository.swift
-//  
+//
 //
 //  Created by Daniel Barela on 3/14/24.
 //
@@ -33,6 +33,8 @@ public protocol TileRepository {
     ) async -> [String]
 
     func clearCache(completion: @escaping () -> Void)
+    func getMaximumIconHeightToWidthRatio() -> CGSize
+    func getToleranceInPixels(zoom: Int) -> CGSize
 }
 
 public extension TileRepository {

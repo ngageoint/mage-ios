@@ -18,6 +18,7 @@ protocol ObservationLocalDataSource {
     func getNewestObservation() -> Observation?
     @discardableResult
     func getObservation(remoteId: String?) async -> Observation?
+    func getObservation(observationUri: URL?) async -> Observation?
     func getObservationMapItemsInBounds(
         minLatitude: Double?,
         maxLatitude: Double?,
@@ -40,6 +41,19 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
         let context = NSManagedObjectContext.mr_default()
         return await context.perform {
             context.fetchFirst(Observation.self, key: "remoteId", value: remoteId)
+        }
+    }
+
+    func getObservation(observationUri: URL?) async -> Observation? {
+        guard let observationUri = observationUri else {
+            return nil
+        }
+        let context = NSManagedObjectContext.mr_default()
+        return await context.perform {
+            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
+                return try? context.existingObject(with: id) as? Observation
+            }
+            return nil
         }
     }
 

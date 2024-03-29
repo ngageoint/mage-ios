@@ -129,6 +129,9 @@
 		F70688AE2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */; };
 		F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */; };
 		F70688B42BB3574100D8E2EA /* ObservationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B22BB3572F00D8E2EA /* ObservationMap.swift */; };
+		F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */; };
+		F70688BC2BB5D17E00D8E2EA /* RepositoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */; };
+		F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */; };
 		F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */; };
 		F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */; };
 		F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */; };
@@ -821,6 +824,9 @@
 		F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCoreDataSourceTests.swift; sourceTree = "<group>"; };
 		F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTileRepository.swift; sourceTree = "<group>"; };
 		F70688B22BB3572F00D8E2EA /* ObservationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMap.swift; sourceTree = "<group>"; };
+		F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationIconRepository.swift; sourceTree = "<group>"; };
+		F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryManager.swift; sourceTree = "<group>"; };
+		F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRepository.swift; sourceTree = "<group>"; };
 		F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditCardDelegate.swift; sourceTree = "<group>"; };
 		F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentCreationDelegate.swift; sourceTree = "<group>"; };
 		F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerTests.swift; sourceTree = "<group>"; };
@@ -1871,6 +1877,7 @@
 			isa = PBXGroup;
 			children = (
 				F70688B72BB5BDA400D8E2EA /* Observation */,
+				F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -1878,10 +1885,20 @@
 		F70688B72BB5BDA400D8E2EA /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F70688B82BB5BED200D8E2EA /* Icon */,
 				F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */,
 				F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */,
+				F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */,
 			);
 			path = Observation;
+			sourceTree = "<group>";
+		};
+		F70688B82BB5BED200D8E2EA /* Icon */ = {
+			isa = PBXGroup;
+			children = (
+				F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */,
+			);
+			path = Icon;
 			sourceTree = "<group>";
 		};
 		F706B2152554365900C19BA7 /* Mocks */ = {
@@ -3402,6 +3419,7 @@
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
+				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
@@ -3597,6 +3615,7 @@
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
+				F70688BC2BB5D17E00D8E2EA /* RepositoryManager.swift in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
 				F78D578B27B46F49003594D3 /* FeedsMap.swift in Sources */,
@@ -3610,6 +3629,7 @@
 				F7388721258BB75A00EDA036 /* ObservationActionsView.swift in Sources */,
 				F752B5F42760DD7600BFA6EC /* MageMapView.swift in Sources */,
 				2F52827224732B740023E974 /* IDPCoordinator.m in Sources */,
+				F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.swift in Sources */,

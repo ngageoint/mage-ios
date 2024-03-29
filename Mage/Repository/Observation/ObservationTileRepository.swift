@@ -48,10 +48,16 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         dataSource.key
 //        UserDefaults.standard.filter(DataSources.asam).getCacheKey()
     }
-    let localDataSource: ObservationLocalDataSource
 
-    init(localDataSource: ObservationLocalDataSource) {
-        self.localDataSource = localDataSource
+    var eventIdToMaxIconSize: [Int: CGSize?] = [:]
+
+    let observationRepository: ObservationRepository
+    let iconRepository: ObservationIconRepository
+
+    init(observationRepository: ObservationRepository, observationIconRepository: ObservationIconRepository) {
+        self.observationRepository = observationRepository
+        self.iconRepository = observationIconRepository
+        _ = getMaximumIconHeightToWidthRatio()
     }
 
     func getTileableItems(
@@ -63,7 +69,8 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 //        if !UserDefaults.standard.showOnMapasam {
 //            return []
 //        }
-        return await localDataSource.getObservationMapItemsInBounds(
+        
+        return await observationRepository.getObservationMapItemsInBounds(
 //            filters: UserDefaults.standard.filter(DataSources.asam),
             minLatitude: minLatitude,
             maxLatitude: maxLatitude,
@@ -93,6 +100,26 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 //        .map { model in
 //            model.itemKey
 //        }
+    }
+
+    func getMaximumIconHeightToWidthRatio() -> CGSize {
+        if let currentEvent = Server.currentEventId() {
+            if let calculatedSize = eventIdToMaxIconSize[currentEvent.intValue] as? CGSize {
+                return calculatedSize
+            }
+            let size = iconRepository.getMaximumIconHeightToWidthRatio(eventId: currentEvent.intValue)
+            eventIdToMaxIconSize[currentEvent.intValue] = size
+            return size
+        }
+        return .zero
+    }
+
+    func getToleranceInPixels(zoom: Int) -> CGSize {
+        // icons should be a max of 35 wide
+        let pixelWidthTolerance = max(0.3, (CGFloat(zoom) / 18.0)) * 35
+        // if the icon is pixelWidthTolerance wide, the max height is this
+        let pixelHeightTolerance = (pixelWidthTolerance / getMaximumIconHeightToWidthRatio().width) * getMaximumIconHeightToWidthRatio().height
+        return CGSize(width: pixelWidthTolerance * UIScreen.main.scale, height: pixelHeightTolerance * UIScreen.main.scale)
     }
 }
 

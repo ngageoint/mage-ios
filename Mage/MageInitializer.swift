@@ -74,4 +74,10 @@ import Foundation
         return cleared;
     }
 
+    @objc public static func initializeRepositories() {
+        let observationRepository = ObservationRepository(localDataSource: ObservationCoreDataDataSource())
+        RepositoryManager.shared.observationRepository = observationRepository
+        RepositoryManager.shared.observationIconRepository = ObservationIconRepository(observationRepository: observationRepository)
+    }
+
 }

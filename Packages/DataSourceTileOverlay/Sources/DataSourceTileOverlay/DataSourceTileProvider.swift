@@ -77,17 +77,19 @@ struct DataSourceTileProvider: ImageDataProvider {
             let maxTileX = neCorner3857.x
             let maxTileY = neCorner3857.y
 
-            // TODO: determine widest and tallest icon
+            // determine widest and tallest icon at this zoom level
+            let toleranceAtZoom = tileRepository.getToleranceInPixels(zoom: zoomLevel)
             // border has to be at least as wide as the widest icon in pixels and as tall as the tallest icon in pixels
             // this should be split into width and height tolerances to accomidate for this
-            let tolerance = ((maxTileY - minTileY) / self.tileSize.width) * 35.0
+            let toleranceHeight = (((maxTileY - minTileY) / self.tileSize.height) + 0.0) * toleranceAtZoom.height * 1
+            let toleranceWidth = ((maxTileX - minTileX) / self.tileSize.width) * toleranceAtZoom.width * 1
 
             let neCornerTolerance = CLLocationCoordinate2D.metersToDegrees(
-                x: maxTileX + tolerance,
-                y: maxTileY + tolerance)
+                x: maxTileX + toleranceWidth,
+                y: maxTileY + toleranceHeight)
             let swCornerTolerance = CLLocationCoordinate2D.metersToDegrees(
-                x: minTileX - tolerance,
-                y: minTileY - tolerance)
+                x: minTileX - toleranceWidth,
+                y: minTileY - toleranceHeight)
 
             drawTile(
                 tileBounds3857: MapBoundingBox(
@@ -117,7 +119,6 @@ struct DataSourceTileProvider: ImageDataProvider {
                 minLongitude: queryBounds.swCorner.x,
                 maxLongitude: queryBounds.neCorner.x
             )
-
             UIGraphicsBeginImageContext(self.tileSize)
 
             items.forEach { dataSourceImage in

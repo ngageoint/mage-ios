@@ -122,7 +122,6 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
             feedsMapMixin = FeedsMapMixin(feedsMap: self)
             onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self)
-            observationMap = ObservationMap(repository: ObservationsTileRepository(localDataSource: ObservationCoreDataDataSource()))
 //            mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
@@ -137,7 +136,13 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(geoPackageLayerMapMixin!)
             mapMixins.append(feedsMapMixin!)
             mapMixins.append(onlineLayerMapMixin!)
-            mapMixins.append(observationMap!)
+
+            if let observationRepository = RepositoryManager.shared.observationRepository,
+               let observationIconRepository = RepositoryManager.shared.observationIconRepository {
+                observationMap = ObservationMap(repository: ObservationsTileRepository(observationRepository: observationRepository, observationIconRepository: observationIconRepository))
+                mapMixins.append(observationMap!)
+            }
+
         }
         
         initiateMapMixins()
