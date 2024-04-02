@@ -694,10 +694,8 @@ enum State: Int, CustomStringConvertible {
                         !remoteIdsFromJson.contains($0.remoteId ?? "")
                     }
                     attachmentsDeletedOnServer?.forEach {
-                        if let localPath = $0.localPath, FileManager.default.fileExists(atPath: localPath) {
-                            try? FileManager.default.removeItem(atPath: localPath)
-                        }
                         existingObservation.removeFromAttachments($0)
+                        $0.mr_deleteEntity(in: context)
                     }
                 }
             }
