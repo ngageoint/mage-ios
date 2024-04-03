@@ -100,4 +100,29 @@ extension CLLocationCoordinate2D {
         - CLLocationCoordinate2D.SF_WGS84_HALF_WORLD_LAT_HEIGHT
         return (x: xValue, y: yValue)
     }
+
+    public func long2Tile(zoom: Int) -> Int {
+        let zoomExp = Double(pow(Double(2), Double(zoom)))
+        return Int(min(zoomExp - 1, floor(Double((longitude + 180.0) / 360.0) * zoomExp)))
+    }
+
+    public func lat2Tile(zoom: Int) -> Int {
+        let zoomExp = Double(pow(Double(2), Double(zoom)))
+        return Int(floor(
+            ((1.0 - log(tan((latitude * .pi) / 180.0) + 1.0 / cos((latitude * .pi) / 180.0)) / .pi) / 2.0) * zoomExp
+        ))
+    }
+
+    public func toTile(zoom: Int) -> (x: Int, y: Int) {
+        return (x: long2Tile(zoom: zoom), y: lat2Tile(zoom: zoom))
+    }
+
+    public static func longitudeFromTile(x: Int, zoom: Int) -> Double {
+        return Double(x) / pow(2.0, Double(zoom)) * 360.0 - 180.0
+    }
+
+    public static func latitudeFromTile(y: Int, zoom: Int) -> Double {
+        let yLocation = Double.pi - 2.0 * Double.pi * Double(y) / pow(2.0, Double(zoom))
+        return 180.0 / Double.pi * atan(0.5 * (exp(yLocation) - exp(-yLocation)))
+    }
 }

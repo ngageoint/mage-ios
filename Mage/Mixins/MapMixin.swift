@@ -9,6 +9,8 @@
 import Foundation
 import MapKit
 import geopackage_ios
+import CoreGraphics
+import DataSourceTileOverlay
 
 struct AnnotationsAndOverlays {
     let annotations: [MKAnnotation]
@@ -25,6 +27,11 @@ protocol MapMixin {
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView?
     func items(at location: CLLocationCoordinate2D) -> [Any]?
     func applyTheme(scheme: MDCContainerScheming?)
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]?
 
     func setupMixin(mapView: MKMapView, mapState: MapState)
     func removeMixin(mapView: MKMapView, mapState: MapState)
@@ -48,17 +55,17 @@ class MapState: ObservableObject, Hashable {
 }
 
 extension MapMixin {
-    
+
     func cleanupMixin() {
     }
-    
+
     func polygonHitTest(polygonObservation: StyledPolygon, location: CLLocationCoordinate2D) -> Bool {
         guard let renderer = (renderer(overlay: polygonObservation) as? MKPolygonRenderer ?? standardRenderer(overlay: polygonObservation) as? MKPolygonRenderer) else {
             return false
         }
         let mapPoint = MKMapPoint.init(location)
         let point = renderer.point(for: mapPoint)
-        
+
         var onShape = renderer.path.contains(point)
         // If not on the polygon, check the complementary polygon path in case it crosses -180 / 180 longitude
         if !onShape {
@@ -67,10 +74,10 @@ extension MapMixin {
                 onShape = retained.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
             }
         }
-        
+
         return onShape
     }
-    
+
     func lineHitTest(lineObservation: StyledPolyline, location: CLLocationCoordinate2D, tolerance: Double) -> Bool {
         guard let renderer = (renderer(overlay: lineObservation) as? MKPolylineRenderer ?? standardRenderer(overlay: lineObservation) as? MKPolylineRenderer) else {
             return false
@@ -78,7 +85,7 @@ extension MapMixin {
         let mapPoint = MKMapPoint.init(location)
         let point = renderer.point(for: mapPoint)
         let strokedPath = renderer.path.copy(strokingWithWidth: tolerance, lineCap: .round, lineJoin: .round, miterLimit: 1)
-        
+
         var onShape = strokedPath.contains(point)
         // If not on the line, check the complementary polygon path in case it crosses -180 / 180 longitude
         if !onShape {
@@ -88,14 +95,14 @@ extension MapMixin {
                 onShape = complimentaryStrokedPath.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
             }
         }
-        
+
         return onShape
     }
-    
+
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         return standardRenderer(overlay: overlay)
     }
-    
+
     func standardRenderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let renderable = overlay as? OverlayRenderable {
             return renderable.renderer
@@ -114,20 +121,28 @@ extension MapMixin {
         }
         return nil
     }
-    
+
     func traitCollectionUpdated(previous: UITraitCollection?){ }
     func regionDidChange(mapView: MKMapView, animated: Bool) { }
     func regionWillChange(mapView: MKMapView, animated: Bool) { }
     func didChangeUserTrackingMode(mapView: MKMapView, animated: Bool) { }
-    
+
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
         return nil
     }
-    
+
     func items(at location: CLLocationCoordinate2D) -> [Any]? {
         return nil
     }
-    
+
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]? {
+        return nil
+    }
+
     func applyTheme(scheme: MDCContainerScheming?) {
     }
 }

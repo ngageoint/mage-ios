@@ -61,98 +61,63 @@ struct DataSourceTileProvider: ImageDataProvider {
     }
 
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        Task(priority: .userInitiated) {
             let zoomLevel = path.z
 
-            let minTileLon = longitude(x: path.x, zoom: path.z)
-            let maxTileLon = longitude(x: path.x+1, zoom: path.z)
-            let minTileLat = latitude(y: path.y+1, zoom: path.z)
-            let maxTileLat = latitude(y: path.y, zoom: path.z)
+            let minTileLon = CLLocationCoordinate2D.longitudeFromTile(x: path.x, zoom: path.z)
+            let maxTileLon = CLLocationCoordinate2D.longitudeFromTile(x: path.x+1, zoom: path.z)
+            let minTileLat = CLLocationCoordinate2D.latitudeFromTile(y: path.y+1, zoom: path.z)
+            let maxTileLat = CLLocationCoordinate2D.latitudeFromTile(y: path.y, zoom: path.z)
 
             let neCorner3857 = CLLocationCoordinate2D(latitude: maxTileLat, longitude: maxTileLon).degreesToMeters()
             let swCorner3857 = CLLocationCoordinate2D(latitude: minTileLat, longitude: minTileLon).degreesToMeters()
 
-            let minTileX = swCorner3857.x
-            let minTileY = swCorner3857.y
-            let maxTileX = neCorner3857.x
-            let maxTileY = neCorner3857.y
+            let latitudePerPixel: Double = (maxTileLat - minTileLat) / self.tileSize.height
+            let longitudePerPixel: Double = (maxTileLon - minTileLon) / self.tileSize.width
 
-            // determine widest and tallest icon at this zoom level
-            let toleranceAtZoom = tileRepository.getToleranceInPixels(zoom: zoomLevel)
-            // border has to be at least as wide as the widest icon in pixels and as tall as the tallest icon in pixels
-            // this should be split into width and height tolerances to accomidate for this
-            let toleranceHeight = (((maxTileY - minTileY) / self.tileSize.height) + 0.0) * toleranceAtZoom.height * 1
-            let toleranceWidth = ((maxTileX - minTileX) / self.tileSize.width) * toleranceAtZoom.width * 1
+            let tileBounds3857 = MapBoundingBox(
+                swCorner: (x: swCorner3857.x, y: swCorner3857.y),
+                neCorner: (x: neCorner3857.x, y: neCorner3857.y))
+            let queryBounds = MapBoundingBox(
+                swCorner: (x: minTileLon, y: minTileLat),
+                neCorner: (x: maxTileLon, y: maxTileLat))
 
-            let neCornerTolerance = CLLocationCoordinate2D.metersToDegrees(
-                x: maxTileX + toleranceWidth,
-                y: maxTileY + toleranceHeight)
-            let swCornerTolerance = CLLocationCoordinate2D.metersToDegrees(
-                x: minTileX - toleranceWidth,
-                y: minTileY - toleranceHeight)
 
-            drawTile(
-                tileBounds3857: MapBoundingBox(
-                    swCorner: (x: swCorner3857.x, y: swCorner3857.y),
-                    neCorner: (x: neCorner3857.x, y: neCorner3857.y)),
-                queryBounds: MapBoundingBox(
-                    swCorner: (x: swCornerTolerance.x, y: swCornerTolerance.y),
-                    neCorner: (x: neCornerTolerance.x, y: neCornerTolerance.y)),
-                zoomLevel: zoomLevel,
-                cacheKey: cacheKey,
-                handler: handler)
-        }
-    }
-
-    func drawTile(
-        tileBounds3857: MapBoundingBox,
-        queryBounds: MapBoundingBox,
-        zoomLevel: Int,
-        cacheKey: String,
-        handler: @escaping (Result<Data, Error>) -> Void
-    ) {
-
-        Task {
-            let items = await tileRepository.getTileableItems(
-                minLatitude: queryBounds.swCorner.y,
-                maxLatitude: queryBounds.neCorner.y,
-                minLongitude: queryBounds.swCorner.x,
-                maxLongitude: queryBounds.neCorner.x
-            )
-            UIGraphicsBeginImageContext(self.tileSize)
-
-            items.forEach { dataSourceImage in
-                dataSourceImage.image(
-                    context: UIGraphicsGetCurrentContext(),
+                let items = await tileRepository.getTileableItems(
+                    minLatitude: queryBounds.swCorner.y,
+                    maxLatitude: queryBounds.neCorner.y,
+                    minLongitude: queryBounds.swCorner.x,
+                    maxLongitude: queryBounds.neCorner.x,
+                    latitudePerPixel: latitudePerPixel,
+                    longitudePerPixel: longitudePerPixel,
                     zoom: zoomLevel,
-                    tileBounds: tileBounds3857,
-                    tileSize: tileSize.width
+                    precise: false
                 )
-            }
+                UIGraphicsBeginImageContext(self.tileSize)
 
-            let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+                items.forEach { dataSourceImage in
+                    dataSourceImage.image(
+                        context: UIGraphicsGetCurrentContext(),
+                        zoom: zoomLevel,
+                        tileBounds: tileBounds3857,
+                        tileSize: tileSize.width
+                    )
+                }
 
-            UIGraphicsEndImageContext()
+                let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
 
-            guard let cgImage = newImage.cgImage else {
-                handler(.failure(DataTileError.notFound))
-                return
-            }
-            let data = UIImage(cgImage: cgImage).pngData()
-            if let data = data {
-                handler(.success(data))
-            } else {
-                handler(.failure(DataTileError.notFound))
-            }
+                UIGraphicsEndImageContext()
+
+                guard let cgImage = newImage.cgImage else {
+                    handler(.failure(DataTileError.notFound))
+                    return
+                }
+                let data = UIImage(cgImage: cgImage).pngData()
+                if let data = data {
+                    handler(.success(data))
+                } else {
+                    handler(.failure(DataTileError.notFound))
+                }
         }
-    }
-
-    func longitude(x: Int, zoom: Int) -> Double {
-        return Double(x) / pow(2.0, Double(zoom)) * 360.0 - 180.0
-    }
-
-    func latitude(y: Int, zoom: Int) -> Double {
-        let yLocation = Double.pi - 2.0 * Double.pi * Double(y) / pow(2.0, Double(zoom))
-        return 180.0 / Double.pi * atan(0.5 * (exp(yLocation) - exp(-yLocation)))
     }
 }

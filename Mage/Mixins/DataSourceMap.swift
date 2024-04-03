@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import DataSourceTileOverlay
+import MKMapViewExtensions
 
 class DataSourceMap: MapMixin {
     var uuid: UUID = UUID()
@@ -209,37 +210,38 @@ class DataSourceMap: MapMixin {
         at location: CLLocationCoordinate2D,
         mapView: MKMapView,
         touchPoint: CGPoint
-    ) -> [Any]? {
+    ) async -> [Any]? {
         return nil
     }
 
-//    func itemKeys(
-//        at location: CLLocationCoordinate2D,
-//        mapView: MKMapView,
-//        touchPoint: CGPoint
-//    ) async -> [String: [String]] {
-//        if await mapView.zoomLevel < minZoom {
-//            return [:]
-//        }
-//        guard show == true else {
-//            return [:]
-//        }
-//        let screenPercentage = 0.03
-//        let tolerance = await mapView.region.span.longitudeDelta * Double(screenPercentage)
-//        let minLon = location.longitude - tolerance
-//        let maxLon = location.longitude + tolerance
-//        let minLat = location.latitude - tolerance
-//        let maxLat = location.latitude + tolerance
-//
-//        return [
-//            dataSourceKey: await repository?.getItemKeys(
-//                minLatitude: minLat,
-//                maxLatitude: maxLat,
-//                minLongitude: minLon,
-//                maxLongitude: maxLon
-//            ) ?? []
-//        ]
-//    }
+    func itemKeys(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [String: [String]] {
+        if await mapView.zoomLevel < minZoom {
+            return [:]
+        }
+        guard show == true else {
+            return [:]
+        }
+        let screenPercentage = 0.03
+        let tolerance = await mapView.region.span.longitudeDelta * Double(screenPercentage)
+        let minLon = location.longitude - tolerance
+        let maxLon = location.longitude + tolerance
+        let minLat = location.latitude - tolerance
+        let maxLat = location.latitude + tolerance
+
+        return [
+            dataSourceKey: await repository?.getItemKeys(
+                minLatitude: minLat,
+                maxLatitude: maxLat,
+                minLongitude: minLon,
+                maxLongitude: maxLon,
+                precise: true
+            ) ?? []
+        ]
+    }
 
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         standardRenderer(overlay: overlay)

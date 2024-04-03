@@ -69,5 +69,56 @@ class ObservationMap: DataSourceMap {
                 }
             }
             .store(in: &cancellable)
+
+        NotificationCenter.default.addObserver(forName: .MAGEFormFetched, object: nil, queue: .main) { [weak self] notification in
+            if let event: Event = notification.object as? Event {
+                if event.remoteId == Server.currentEventId() {
+                    if let mapState = self?.mapState {
+                        self?.refreshOverlay(mapState: mapState)
+                    }
+                }
+            }
+        }
+    }
+
+    override func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]? {
+        let viewWidth = await mapView.frame.size.width
+        let viewHeight = await mapView.frame.size.height
+
+        let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
+        let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
+
+        let iconPixelSize = await repository?.getToleranceInPixels(zoom: mapView.zoomLevel) ?? .zero
+
+        // this is how many degrees to add and subtract to ensure we query for the item around the tap location
+        let iconToleranceHeightDegrees = latitudePerPixel * iconPixelSize.height
+        let iconToleranceWidthDegrees = longitudePerPixel * iconPixelSize.width
+
+        let queryLocationMinLongitude = location.longitude - iconToleranceWidthDegrees
+        let queryLocationMaxLongitude = location.longitude + iconToleranceWidthDegrees
+        let queryLocationMinLatitude = location.latitude - iconToleranceHeightDegrees
+        let queryLocationMaxLatitude = location.latitude + iconToleranceHeightDegrees
+
+        let items = await repository?.getTileableItems(
+            minLatitude: queryLocationMinLatitude,
+            maxLatitude: queryLocationMaxLatitude,
+            minLongitude: queryLocationMinLongitude,
+            maxLongitude: queryLocationMaxLongitude,
+            latitudePerPixel: latitudePerPixel,
+            longitudePerPixel: longitudePerPixel,
+            zoom: mapView.zoomLevel,
+            precise: true
+        )
+
+        return items?.compactMap { image in
+            if let observationMapImage = image as? ObservationMapImage {
+                return observationMapImage.mapItem
+            }
+            return nil
+        }
     }
 }

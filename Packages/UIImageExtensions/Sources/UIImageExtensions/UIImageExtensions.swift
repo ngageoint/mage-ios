@@ -3,6 +3,24 @@ import AVKit
 
 extension UIImage {
 
+    public static func getSizeOfImageFile(fileUrl: URL) -> CGSize {
+        var width: CGFloat = 0.0
+        var height: CGFloat = 0.0
+
+        if let imageSource = CGImageSourceCreateWithURL(fileUrl as CFURL, nil) {
+            if let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as Dictionary? {
+
+                if let fileWidth = imageProperties[kCGImagePropertyPixelWidth] as? Int {
+                    width = CGFloat(fileWidth)
+                }
+                if let fileHeight = imageProperties[kCGImagePropertyPixelHeight] as? Int {
+                    height = CGFloat(fileHeight)
+                }
+            }
+        }
+        return CGSize(width: width, height: height)
+    }
+
     public func resized(to size: CGSize) -> UIImage {
         return UIGraphicsImageRenderer(size: size).image { _ in
             draw(in: CGRect(origin: .zero, size: size))
@@ -97,6 +115,34 @@ extension UIImage {
         } else {
             return nil
         }
+    }
+
+    public func hasNonTransparentPixelInBounds(minPoint: CGPoint, maxPoint: CGPoint) -> Bool {
+        var pixelData: [UInt8] = [0]
+        guard let context = CGContext(data: &pixelData,
+                                      width: 1,
+                                      height: 1,
+                                      bitsPerComponent: 8,
+                                      bytesPerRow: 1,
+                                      space: CGColorSpaceCreateDeviceGray(),
+                                      bitmapInfo: CGImageAlphaInfo.alphaOnly.rawValue)
+        else {
+            return false
+        }
+        for y in Int(minPoint.y)...Int(maxPoint.y) {
+            for x in Int(minPoint.x)...Int(maxPoint.x) {
+                // check if the pixel is not transparent
+                UIGraphicsPushContext(context)
+                self.draw(at: CGPoint(x: -x, y: -y))
+                UIGraphicsPopContext()
+                let alpha = Double(pixelData[0]) / 255.0
+                let transparent = alpha < 0.01
+                if !transparent {
+                    return true
+                }
+            }
+        }
+        return false
     }
 }
 

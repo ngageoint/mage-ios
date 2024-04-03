@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIImageExtensions
 
 class ObservationIconRepository: ObservableObject {
     let observationRepository: ObservationRepository
@@ -45,7 +46,7 @@ class ObservationIconRepository: ObservableObject {
                 if resourceValues.isDirectory == true {
                     largest = iterateIconDirectoriesAtRoot(directory: fileURL, currentLargest: largest)
                 } else {
-                    let size = getSizeOfImageFile(fileUrl: fileURL)
+                    let size = UIImage.getSizeOfImageFile(fileUrl: fileURL)
 
                     let heightToWidthRatio = size.height / size.width
                     let currentRatio = largest.height / largest.width
@@ -59,24 +60,6 @@ class ObservationIconRepository: ObservableObject {
             print(error)
         }
         return largest
-    }
-
-    func getSizeOfImageFile(fileUrl: URL) -> CGSize {
-        var width: CGFloat = 0.0
-        var height: CGFloat = 0.0
-
-        if let imageSource = CGImageSourceCreateWithURL(fileUrl as CFURL, nil) {
-            if let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as Dictionary? {
-
-                if let fileWidth = imageProperties[kCGImagePropertyPixelWidth] as? Int {
-                    width = CGFloat(fileWidth)
-                }
-                if let fileHeight = imageProperties[kCGImagePropertyPixelHeight] as? Int {
-                    height = CGFloat(fileHeight)
-                }
-            }
-        }
-        return CGSize(width: width, height: height)
     }
 
     func rootIconFolder(eventId: Int) -> URL {

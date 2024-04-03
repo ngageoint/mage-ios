@@ -103,35 +103,40 @@ class MageMapView: UIView, GeoPackageBaseMap {
             mapTap(tapPoint: tapGestureRecognizer.location(in: mapView), gesture: tapGestureRecognizer)
         }
     }
-    
+
     func mapTap(tapPoint:CGPoint, gesture: UITapGestureRecognizer) {
-        guard let mapView = mapView else {
-            return
-        }
-        
-        let tapCoord = mapView.convert(tapPoint, toCoordinateFrom: mapView)
-        var annotationsTapped: [Any] = []
-        let visibleMapRect = mapView.visibleMapRect
-        let annotationsVisible = mapView.annotations(in: visibleMapRect)
-            
-        for annotation in annotationsVisible {
-            if let mkAnnotation = annotation as? MKAnnotation, let view = mapView.view(for: mkAnnotation) {
-                let location = gesture.location(in: view)
-                if view.bounds.contains(location) {
-                    annotationsTapped.append(annotation)
+        Task {
+            guard let mapView = mapView else {
+                return
+            }
+
+            let tapCoord = mapView.convert(tapPoint, toCoordinateFrom: mapView)
+            var annotationsTapped: [Any] = []
+            let visibleMapRect = mapView.visibleMapRect
+            let annotationsVisible = mapView.annotations(in: visibleMapRect)
+
+            for annotation in annotationsVisible {
+                if let mkAnnotation = annotation as? MKAnnotation, let view = mapView.view(for: mkAnnotation) {
+                    let location = gesture.location(in: view)
+                    if view.bounds.contains(location) {
+                        annotationsTapped.append(annotation)
+                    }
                 }
             }
-        }
-        
-        var items: [Any] = []
-        for mixin in mapMixins {
-            if let matchedItems = mixin.items(at: tapCoord) {
-                items.append(contentsOf: matchedItems)
-            }
-        }
 
-        let notification = MapItemsTappedNotification(annotations: annotationsTapped, items: items, mapView: mapView)
-        NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+            var items: [Any] = []
+            for mixin in mapMixins {
+                if let matchedItems = mixin.items(at: tapCoord) {
+                    items.append(contentsOf: matchedItems)
+                }
+                if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
+                    items.append(contentsOf: matchedItems)
+                }
+            }
+
+            let notification = MapItemsTappedNotification(annotations: annotationsTapped, items: items, mapView: mapView)
+            NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+        }
     }
 }
 

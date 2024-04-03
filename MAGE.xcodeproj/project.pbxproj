@@ -132,6 +132,7 @@
 		F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */; };
 		F70688BC2BB5D17E00D8E2EA /* RepositoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */; };
 		F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */; };
+		F70688C12BB7400C00D8E2EA /* MKMapViewExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = F70688C02BB7400C00D8E2EA /* MKMapViewExtensions */; };
 		F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */; };
 		F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */; };
 		F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */; };
@@ -827,6 +828,7 @@
 		F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationIconRepository.swift; sourceTree = "<group>"; };
 		F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryManager.swift; sourceTree = "<group>"; };
 		F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRepository.swift; sourceTree = "<group>"; };
+		F70688BF2BB73E5F00D8E2EA /* MKMapViewExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MKMapViewExtensions; path = Packages/MKMapViewExtensions; sourceTree = "<group>"; };
 		F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditCardDelegate.swift; sourceTree = "<group>"; };
 		F706B21E2554391000C19BA7 /* MockAttachmentCreationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentCreationDelegate.swift; sourceTree = "<group>"; };
 		F7081D3A254C4CEA009F8C4A /* FormPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerTests.swift; sourceTree = "<group>"; };
@@ -1429,6 +1431,7 @@
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
 				F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */,
 				F7A94D7018AD9CB000CB9EE0 /* CoreData.framework in Frameworks */,
+				F70688C12BB7400C00D8E2EA /* MKMapViewExtensions in Frameworks */,
 				F70688912BA3A85600D8E2EA /* DataSourceTileOverlay in Frameworks */,
 				F706889C2BA49CB100D8E2EA /* NSManagedObjectContextExtensions in Frameworks */,
 				F70688952BA3A85700D8E2EA /* UIImageExtensions in Frameworks */,
@@ -2575,6 +2578,7 @@
 		F7A94D5D18AD9CAF00CB9EE0 = {
 			isa = PBXGroup;
 			children = (
+				F70688BF2BB73E5F00D8E2EA /* MKMapViewExtensions */,
 				F706889A2BA49C9300D8E2EA /* NSManagedObjectContextExtensions */,
 				F70688892BA399C000D8E2EA /* StringExtensions */,
 				F70688882BA38B1E00D8E2EA /* DataSourceTileOverlay */,
@@ -3004,6 +3008,7 @@
 				F70688922BA3A85600D8E2EA /* StringExtensions */,
 				F70688942BA3A85700D8E2EA /* UIImageExtensions */,
 				F706889B2BA49CB100D8E2EA /* NSManagedObjectContextExtensions */,
+				F70688C02BB7400C00D8E2EA /* MKMapViewExtensions */,
 			);
 			productName = Mage;
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
@@ -4308,6 +4313,10 @@
 		F706889B2BA49CB100D8E2EA /* NSManagedObjectContextExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NSManagedObjectContextExtensions;
+		};
+		F70688C02BB7400C00D8E2EA /* MKMapViewExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MKMapViewExtensions;
 		};
 /* End XCSwiftPackageProductDependency section */
 

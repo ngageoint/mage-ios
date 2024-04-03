@@ -103,7 +103,7 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
             fetchRequest.predicate = predicate
 
             let results = context.fetch(request: fetchRequest)
-            return results?.map { location in
+            return results?.compactMap { location in
                 return ObservationMapItem(observation: location)
             } ?? []
         }
