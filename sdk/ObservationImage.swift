@@ -8,7 +8,7 @@ import Foundation
 
 @objc public class ObservationImage: NSObject {
     
-    static let annotationScaleWidth = 35.0 * UIScreen.main.scale
+    static let annotationScaleWidth = 35.0
     
     public static var imageCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
