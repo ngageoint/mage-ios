@@ -45,6 +45,10 @@ class DataSourceMap: MapMixin {
 //        self.mapFeatureRepository = mapFeatureRepository
     }
 
+    func cleanupMixin() {
+        cancellable.removeAll()
+    }
+
     func setupMixin(mapView: MKMapView, mapState: MapState) {
         self.mapView = mapView
         self.mapState = mapState
