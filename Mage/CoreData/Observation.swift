@@ -1313,6 +1313,7 @@ enum State: Int, CustomStringConvertible {
                     observationLocation.minLongitude = envelope.minX.doubleValue
                     observationLocation.maxLongitude = envelope.maxX.doubleValue
                 }
+                observationLocation.form = self.primaryEventForm
                 observationLocations.insert(observationLocation)
             }
         }
@@ -1350,6 +1351,7 @@ enum State: Int, CustomStringConvertible {
                                     observationLocation.minLongitude = envelope.minX.doubleValue
                                     observationLocation.maxLongitude = envelope.maxX.doubleValue
                                 }
+                                observationLocation.form = eventForm
                                 observationLocations.insert(observationLocation)
                             }
                         }

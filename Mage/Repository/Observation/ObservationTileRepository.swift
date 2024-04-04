@@ -47,10 +47,12 @@ class ObservationTileRepository: TileRepository, ObservableObject {
 
     var alwaysShow: Bool = true
 
-    var observationMapItem: ObservationMapItem
+    var observationUrl: URL
+    let observationRepository: ObservationRepository
 
-    init(observationMapItem: ObservationMapItem) {
-        self.observationMapItem = observationMapItem
+    init(observationUrl: URL, observationRepository: ObservationRepository) {
+        self.observationUrl = observationUrl
+        self.observationRepository = observationRepository
     }
 
     func getTileableItems(
@@ -63,7 +65,12 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [any DataSourceImage] {
-        return [ObservationMapImage(mapItem: observationMapItem)]
+        if let observation = await observationRepository.getObservation(observationUri: observationUrl) {
+            return observation.locations?.map({ location in
+                ObservationMapImage(mapItem: ObservationMapItem(observation: location))
+            }) ?? []
+        }
+        return []
     }
     
     func getItemKeys(
@@ -76,10 +83,7 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [String] {
-        if let observationId = observationMapItem.observationId {
-            return [observationId.absoluteString]
-        }
-        return []
+        return [observationUrl.absoluteString]
     }
 }
 
@@ -190,7 +194,10 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             var matchedItems: [ObservationMapItem] = []
 
             for item in items {
-                let observationTileRepo = ObservationTileRepository(observationMapItem: item)
+                guard let observationId = item.observationId else {
+                    continue
+                }
+                let observationTileRepo = ObservationTileRepository(observationUrl: observationId, observationRepository: observationRepository)
                 let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
                 if item.geometry is SFPoint {
                     let include = await markerHitTest(

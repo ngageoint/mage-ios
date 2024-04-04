@@ -21,12 +21,40 @@ struct ObservationMapItem {
 extension ObservationMapItem {
     init(observation: ObservationLocation) {
         self.observationId = observation.observation?.objectID.uriRepresentation()
-        self.geometry = observation.geometry
-        if let observation = observation.observation {
-            self.iconPath = ObservationImage.imageName(observation: observation)
-        }
         self.formId = observation.formId
         self.fieldName = observation.fieldName
         self.eventId = observation.eventId
+        self.geometry = observation.geometry
+
+        var primaryFieldText: String?
+        var secondaryFieldText: String?
+
+        if let primaryField =  observation.form?.primaryMapField,
+           let observationForms = observation.observation?.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]],
+           let primaryFieldName = primaryField[FieldKey.name.key] as? String,
+           observationForms.count > 0
+        {
+            for (index, form) in observationForms.enumerated() {
+                if let formId = form[FormKey.formId.key] as? Int {
+                    if formId == observation.formId {
+                        let primaryValue = form[primaryFieldName]
+                        primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
+                        if let secondaryField = observation.form?.secondaryMapField,
+                           let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
+                        {
+                            let secondaryValue = form[secondaryFieldName]
+                            secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
+                        }
+                    }
+                }
+            }
+        }
+
+        self.iconPath = ObservationImage.imageName(
+            eventId: eventId,
+            formId: formId,
+            primaryFieldText: primaryFieldText,
+            secondaryFieldText: secondaryFieldText
+        )
     }
 }
