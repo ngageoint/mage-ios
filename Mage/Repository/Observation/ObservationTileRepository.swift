@@ -71,28 +71,15 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         maxLatitude: Double,
         minLongitude: Double,
         maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
         precise: Bool
     ) async -> [String] {
         if let observationId = observationMapItem.observationId {
             return [observationId.absoluteString]
         }
         return []
-    }
-    
-    func getMaximumIconHeightToWidthRatio() -> CGSize {
-        if let iconPath = observationMapItem.iconPath {
-            let iconUrl = URL(fileURLWithPath: iconPath)
-            return UIImage.getSizeOfImageFile(fileUrl: iconUrl)
-        }
-        return .zero
-    }
-
-    func getToleranceInPixels(zoom: Int) -> CGSize {
-        // icons should be a max of 35 wide
-        let pixelWidthTolerance = max(0.3, (CGFloat(zoom) / 18.0)) * 35
-        // if the icon is pixelWidthTolerance wide, the max height is this
-        let pixelHeightTolerance = (pixelWidthTolerance / getMaximumIconHeightToWidthRatio().width) * getMaximumIconHeightToWidthRatio().height
-        return CGSize(width: pixelWidthTolerance * UIScreen.main.scale, height: pixelHeightTolerance * UIScreen.main.scale)
     }
 }
 
@@ -132,9 +119,57 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [DataSourceImage] {
+        await getObservationMapItems(
+            minLatitude: minLatitude,
+            maxLatitude: maxLatitude,
+            minLongitude: minLongitude,
+            maxLongitude: maxLongitude,
+            latitudePerPixel: latitudePerPixel,
+            longitudePerPixel: longitudePerPixel,
+            zoom: zoom,
+            precise: precise
+        ).map { item in
+            ObservationMapImage(mapItem: item)
+        }
+    }
 
-        // determine widest and tallest icon at this zoom level pixels (screen scaled?)
-        let iconPixelSize = getToleranceInPixels(zoom: zoom)
+    func getItemKeys(
+        minLatitude: Double,
+        maxLatitude: Double,
+        minLongitude: Double,
+        maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
+        precise: Bool
+    ) async -> [String] {
+        await getObservationMapItems(
+            minLatitude: minLatitude,
+            maxLatitude: maxLatitude,
+            minLongitude: minLongitude,
+            maxLongitude: maxLongitude,
+            latitudePerPixel: latitudePerPixel,
+            longitudePerPixel: longitudePerPixel,
+            zoom: zoom,
+            precise: precise
+        ).compactMap { item in
+            item.observationId?.absoluteString
+        }
+    }
+
+    private func getObservationMapItems(
+        minLatitude: Double,
+        maxLatitude: Double,
+        minLongitude: Double,
+        maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
+        precise: Bool
+    ) async -> [ObservationMapItem] {
+
+        // determine widest and tallest icon at this zoom level pixels
+        let iconPixelSize = getMaxHeightAndWidth(zoom: zoom)
 
         // this is how many degrees to add and subtract to ensure we query for the item around the tap location
         let iconToleranceHeightDegrees = latitudePerPixel * iconPixelSize.height
@@ -171,36 +206,10 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                 }
             }
 
-            return matchedItems.map { model in
-                return ObservationMapImage(mapItem: model)
-            }
+            return matchedItems
         } else {
-            return items.map { model in
-                return ObservationMapImage(mapItem: model)
-            }
+            return items
         }
-    }
-
-    func getItemKeys(
-        minLatitude: Double,
-        maxLatitude: Double,
-        minLongitude: Double,
-        maxLongitude: Double,
-        precise: Bool
-    ) async -> [String] {
-        return []
-//        if !UserDefaults.standard.showOnMapasam {
-//            return []
-//        }
-//        return await localDataSource.getAsamsInBounds(
-//            filters: UserDefaults.standard.filter(DataSources.asam),
-//            minLatitude: minLatitude,
-//            maxLatitude: maxLatitude,
-//            minLongitude: minLongitude,
-//            maxLongitude: maxLongitude)
-//        .map { model in
-//            model.itemKey
-//        }
     }
 
     func getMaximumIconHeightToWidthRatio() -> CGSize {
@@ -215,7 +224,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         return .zero
     }
 
-    func getToleranceInPixels(zoom: Int) -> CGSize {
+    func getMaxHeightAndWidth(zoom: Int) -> CGSize {
         // icons should be a max of 35 wide
         let pixelWidthTolerance = max(0.3, (CGFloat(zoom) / 18.0)) * 35
         // if the icon is pixelWidthTolerance wide, the max height is this

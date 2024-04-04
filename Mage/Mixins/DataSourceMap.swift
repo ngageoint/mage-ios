@@ -211,7 +211,27 @@ class DataSourceMap: MapMixin {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [Any]? {
-        return nil
+        let viewWidth = await mapView.frame.size.width
+        let viewHeight = await mapView.frame.size.height
+
+        let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
+        let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
+
+        let queryLocationMinLongitude = location.longitude
+        let queryLocationMaxLongitude = location.longitude
+        let queryLocationMinLatitude = location.latitude
+        let queryLocationMaxLatitude = location.latitude
+
+        return await repository?.getTileableItems(
+            minLatitude: queryLocationMinLatitude,
+            maxLatitude: queryLocationMaxLatitude,
+            minLongitude: queryLocationMinLongitude,
+            maxLongitude: queryLocationMaxLongitude,
+            latitudePerPixel: latitudePerPixel,
+            longitudePerPixel: longitudePerPixel,
+            zoom: mapView.zoomLevel,
+            precise: true
+        )
     }
 
     func itemKeys(
@@ -225,19 +245,27 @@ class DataSourceMap: MapMixin {
         guard show == true else {
             return [:]
         }
-        let screenPercentage = 0.03
-        let tolerance = await mapView.region.span.longitudeDelta * Double(screenPercentage)
-        let minLon = location.longitude - tolerance
-        let maxLon = location.longitude + tolerance
-        let minLat = location.latitude - tolerance
-        let maxLat = location.latitude + tolerance
+
+        let viewWidth = await mapView.frame.size.width
+        let viewHeight = await mapView.frame.size.height
+
+        let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
+        let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
+
+        let queryLocationMinLongitude = location.longitude
+        let queryLocationMaxLongitude = location.longitude
+        let queryLocationMinLatitude = location.latitude
+        let queryLocationMaxLatitude = location.latitude
 
         return [
             dataSourceKey: await repository?.getItemKeys(
-                minLatitude: minLat,
-                maxLatitude: maxLat,
-                minLongitude: minLon,
-                maxLongitude: maxLon,
+                minLatitude: queryLocationMinLatitude,
+                maxLatitude: queryLocationMaxLatitude,
+                minLongitude: queryLocationMinLongitude,
+                maxLongitude: queryLocationMaxLongitude,
+                latitudePerPixel: latitudePerPixel,
+                longitudePerPixel: longitudePerPixel,
+                zoom: mapView.zoomLevel,
                 precise: true
             ) ?? []
         ]

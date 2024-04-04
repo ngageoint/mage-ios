@@ -37,12 +37,13 @@ public protocol TileRepository {
         maxLatitude: Double,
         minLongitude: Double,
         maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
         precise: Bool
     ) async -> [String]
 
     func clearCache(completion: @escaping () -> Void)
-    func getMaximumIconHeightToWidthRatio() -> CGSize
-    func getToleranceInPixels(zoom: Int) -> CGSize
 }
 
 public extension TileRepository {
