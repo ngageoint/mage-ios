@@ -34,6 +34,55 @@ class ObservationDefinition: DataSourceDefinition {
     private init() { }
 }
 
+class ObservationMapItemTileRepository: TileRepository, ObservableObject {
+    var dataSource: any DataSourceDefinition = DataSources.observation
+
+    var cacheSourceKey: String?
+
+    var imageCache: Kingfisher.ImageCache?
+
+    var filterCacheKey: String {
+        dataSource.key
+    }
+
+    var alwaysShow: Bool = true
+
+    var observationMapItem: ObservationMapItem
+
+    init(observationMapItem: ObservationMapItem) {
+        self.observationMapItem = observationMapItem
+    }
+
+    func getTileableItems(
+        minLatitude: Double,
+        maxLatitude: Double,
+        minLongitude: Double,
+        maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
+        precise: Bool
+    ) async -> [any DataSourceImage] {
+        [ObservationMapImage(mapItem: observationMapItem)]
+    }
+
+    func getItemKeys(
+        minLatitude: Double,
+        maxLatitude: Double,
+        minLongitude: Double,
+        maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
+        precise: Bool
+    ) async -> [String] {
+        if let observationId = observationMapItem.observationId {
+            return [observationId.absoluteString]
+        }
+        return []
+    }
+}
+
 class ObservationTileRepository: TileRepository, ObservableObject {
     var dataSource: any DataSourceDefinition = DataSources.observation
 
@@ -184,7 +233,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         let queryLocationMinLatitude = minLatitude - iconToleranceHeightDegrees
         let queryLocationMaxLatitude = maxLatitude + iconToleranceHeightDegrees
 
-        let items = await observationRepository.getObservationMapItemsInBounds(
+        let items = await observationRepository.getMapItems(
             minLatitude: queryLocationMinLatitude,
             maxLatitude: queryLocationMaxLatitude,
             minLongitude: queryLocationMinLongitude,

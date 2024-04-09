@@ -30,7 +30,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var feedsMapMixin: FeedsMapMixin?
     var onlineLayerMapMixin: OnlineLayerMapMixin?
-    var observationMap: ObservationMap?
+    var observationMap: ObservationsMap?
 
     var viewObservationNotificationObserver: Any?
     var viewUserNotificationObserver: Any?
@@ -139,7 +139,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
 
             if let observationRepository = RepositoryManager.shared.observationRepository,
                let observationIconRepository = RepositoryManager.shared.observationIconRepository {
-                observationMap = ObservationMap(repository: ObservationsTileRepository(observationRepository: observationRepository, observationIconRepository: observationIconRepository))
+                observationMap = ObservationsMap(repository: ObservationsTileRepository(observationRepository: observationRepository, observationIconRepository: observationIconRepository))
                 mapMixins.append(observationMap!)
             }
 

@@ -55,7 +55,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
     override func tearDown() {
     }
 
-    func testGetObservationMapItemsInBounds() async {
+    func testGetObservationMapItemsWithBounds() async {
         Server.setCurrentEventId(1)
         TimeFilter.setObservation(.all)
         MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
@@ -149,7 +149,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
         var minLongitude: Double = 0.0
         var maxLongitude: Double = 0.0
 
-        var items = await dataSource.getObservationMapItemsInBounds(
+        var items = await dataSource.getObservationMapItems(
             minLatitude: minLatitude,
             maxLatitude: maxLatitude,
             minLongitude: minLongitude,
@@ -163,7 +163,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
         minLongitude = 0.9
         maxLongitude = 1.1
 
-        items = await dataSource.getObservationMapItemsInBounds(
+        items = await dataSource.getObservationMapItems(
             minLatitude: minLatitude,
             maxLatitude: maxLatitude,
             minLongitude: minLongitude,
@@ -178,7 +178,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
         minLongitude = 0.9
         maxLongitude = 1.1
 
-        items = await dataSource.getObservationMapItemsInBounds(
+        items = await dataSource.getObservationMapItems(
             minLatitude: minLatitude,
             maxLatitude: maxLatitude,
             minLongitude: minLongitude,

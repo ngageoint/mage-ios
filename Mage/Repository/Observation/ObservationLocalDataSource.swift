@@ -19,7 +19,8 @@ protocol ObservationLocalDataSource {
     @discardableResult
     func getObservation(remoteId: String?) async -> Observation?
     func getObservation(observationUri: URL?) async -> Observation?
-    func getObservationMapItemsInBounds(
+    func getMapItems(observationUri: URL?) async -> [ObservationMapItem]
+    func getMapItems(
         minLatitude: Double?,
         maxLatitude: Double?,
         minLongitude: Double?,
@@ -57,7 +58,7 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
         }
     }
 
-    func getObservationPredicatesForMap() -> [NSPredicate] {
+    func getObservationPredicates() -> [NSPredicate] {
         var predicates: [NSPredicate] = []
         predicates.append(NSPredicate(format: "observation.eventId == %@", Server.currentEventId() ?? -1))
         if let timePredicate = TimeFilter.getObservationTimePredicate(forField: "observation.timestamp") {
@@ -75,7 +76,24 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
         return predicates
     }
 
-    func getObservationMapItemsInBounds(
+    func getMapItems(observationUri: URL?) async -> [ObservationMapItem] {
+        guard let observationUri = observationUri else {
+            return []
+        }
+        let context = NSManagedObjectContext.mr_default()
+        return await context.perform {
+            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
+                if let observation = try? context.existingObject(with: id) as? Observation {
+                    return observation.locations?.map({ location in
+                        ObservationMapItem(observation: location)
+                    }) ?? []
+                }
+            }
+            return []
+        }
+    }
+
+    func getMapItems(
         minLatitude: Double?,
         maxLatitude: Double?,
         minLongitude: Double?,
@@ -84,7 +102,7 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
         let context = NSManagedObjectContext.mr_default()
 
         return await context.perform {
-            var predicates: [NSPredicate] = self.getObservationPredicatesForMap()
+            var predicates: [NSPredicate] = self.getObservationPredicates()
             if let minLatitude = minLatitude,
                let maxLatitude = maxLatitude,
                let minLongitude = minLongitude,
@@ -108,6 +126,7 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
             } ?? []
         }
     }
+
     func getCount(
     ) -> Int {
         return 0

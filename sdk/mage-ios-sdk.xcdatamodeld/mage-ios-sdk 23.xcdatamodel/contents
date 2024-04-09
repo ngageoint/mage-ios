@@ -152,6 +152,7 @@
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" inverseName="observationImportant" inverseEntity="Observation" syncable="YES"/>
     </entity>
     <entity name="ObservationLocation" representedClassName=".ObservationLocation" syncable="YES" codeGenerationType="category">
+        <attribute name="accuracy" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="eventId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="fieldName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="formId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -162,7 +163,6 @@
         <attribute name="maxLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="minLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="minLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="form" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Form" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" inverseName="locations" inverseEntity="Observation" syncable="YES"/>
     </entity>
     <entity name="Role" representedClassName=".Role" syncable="YES">

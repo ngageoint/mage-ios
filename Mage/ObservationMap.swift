@@ -1,100 +1,125 @@
 //
 //  ObservationMap.swift
-//  MAGETests
+//  MAGE
 //
-//  Created by Daniel Barela on 3/26/24.
+//  Created by Daniel Barela on 4/5/24.
 //  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import Foundation
-import DataSourceTileOverlay
 
-class ObservationMap: DataSourceMap {
-
-    override var minZoom: Int {
-        get {
-            return 2
+class ObservationMap: MapMixin {
+    static let MAP_STATE_KEY = "FetchRequestMixinObservationMapDateUpdated"
+    let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
+    var lastChange: Date?
+    var overlays: [MKOverlay] = []
+    var annotations: [MKAnnotation] = []
+    var scheme: MDCContainerScheming?
+    var mapState: MapState? {
+        didSet {
+            if let mapState = mapState {
+                refreshMixin(mapState: mapState)
+            }
         }
-        set {
-
+    }
+    var mapFeatureRepository: MapFeatureRepository? {
+        didSet {
+            if let mapState = mapState {
+                refreshMixin(mapState: mapState)
+            }
         }
     }
 
-    override init(repository: TileRepository? = nil) {
-        super.init(repository: repository)
-        userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
+    func refreshMixin(mapState: MapState) {
+        if mapFeatureRepository != nil {
+            DispatchQueue.main.async {
+                self.mapState?.mixinStates[
+                    ObservationMap.MAP_STATE_KEY
+                ] = Date()
+            }
+        }
+    }
 
-        UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.observationTimeFilterUnitKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.observationTimeFilterNumberKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.importantFilterKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
-                }
-            }
-            .store(in: &cancellable)
-        UserDefaults.standard.publisher(for: \.favoritesFilterKey)
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
-                }
-            }
-            .store(in: &cancellable)
+    func applyTheme(scheme: MDCContainerScheming?) {
+        self.scheme = scheme
+    }
 
-        NotificationCenter.default.addObserver(forName: .MAGEFormFetched, object: nil, queue: .main) { [weak self] notification in
-            if let event: Event = notification.object as? Event {
-                if event.remoteId == Server.currentEventId() {
-                    if let mapState = self?.mapState {
-                        self?.refreshOverlay(mapState: mapState)
-                    }
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
+        updateMixin(mapView: mapView, mapState: mapState)
+    }
+
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+        let stateKey = ObservationMap.MAP_STATE_KEY
+        if lastChange == nil
+            || lastChange != mapState.mixinStates[stateKey] as? Date {
+            lastChange = mapState.mixinStates[stateKey] as? Date ?? Date()
+
+            if mapState.mixinStates[stateKey] as? Date == nil {
+                DispatchQueue.main.async {
+                    mapState.mixinStates[stateKey] = self.lastChange
+                }
+            }
+            for overlay in overlays {
+                mapView.removeOverlay(overlay)
+            }
+            mapView.removeAnnotations(annotations)
+            overlays = []
+            annotations = []
+            Task {
+                if let mapFeatureRepository = mapFeatureRepository {
+                    await addFeatures(features: mapFeatureRepository.getAnnotationsAndOverlays(), mapView: mapView)
                 }
             }
         }
     }
 
-    override func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [Any]? {
-        return await super.items(
-            at: location,
-            mapView: mapView,
-            touchPoint: touchPoint
-        )?.compactMap { image in
-            if let observationMapImage = image as? ObservationMapImage {
-                return observationMapImage.mapItem
-            }
+    func addFeatures(features: AnnotationsAndOverlays, mapView: MKMapView) async {
+        await MainActor.run {
+            mapView.addAnnotations(features.annotations)
+            mapView.showAnnotations(features.annotations, animated: true)
+            mapView.addOverlays(features.overlays)
+            annotations = features.annotations
+            overlays = features.overlays
+        }
+    }
+
+    func viewForAnnotation(annotation: any MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
+        guard let annotation = annotation as? ObservationMapItemAnnotation else {
             return nil
         }
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
+
+        if let annotationView = annotationView {
+            annotationView.annotation = annotation
+        } else {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
+            annotationView?.isEnabled = true
+        }
+
+        if let iconPath = annotation.mapItem.iconPath, let annotationView = annotationView {
+            let image = ObservationImage.imageAtPath(imagePath: iconPath)
+            annotationView.image = image
+            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
+            annotationView.accessibilityLabel = "Observation"
+            annotationView.accessibilityValue = "Observation"
+            annotationView.displayPriority = .required
+            annotationView.canShowCallout = true
+        }
+        return annotationView
+    }
+
+    func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
+        if let overlay = overlay as? ObservationAccuracy {
+            let renderer = ObservationAccuracyRenderer(overlay: overlay)
+            if let scheme = scheme {
+                renderer.applyTheme(withContainerScheme: scheme)
+            }
+            return renderer
+        }
+        return nil
     }
 }

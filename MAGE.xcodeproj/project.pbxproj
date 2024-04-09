@@ -128,7 +128,7 @@
 		F70688AA2BADDF0A00D8E2EA /* multipleGeometryFields.json in Resources */ = {isa = PBXBuildFile; fileRef = F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */; };
 		F70688AE2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */; };
 		F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */; };
-		F70688B42BB3574100D8E2EA /* ObservationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B22BB3572F00D8E2EA /* ObservationMap.swift */; };
+		F70688B42BB3574100D8E2EA /* ObservationsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B22BB3572F00D8E2EA /* ObservationsMap.swift */; };
 		F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */; };
 		F70688BC2BB5D17E00D8E2EA /* RepositoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */; };
 		F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */; };
@@ -288,6 +288,9 @@
 		F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1026540FF700D645AC /* ColorPickerCelliOS13.swift */; };
 		F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7331D1226541C2300D645AC /* ColorPickerViewController.swift */; };
 		F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */; };
+		F734C1D82BBF565B00B2E8C8 /* ObservationMapFeatureRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734C1D72BBF565B00B2E8C8 /* ObservationMapFeatureRepository.swift */; };
+		F734C1DA2BC03EB400B2E8C8 /* MapFeatureRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734C1D92BC03EB400B2E8C8 /* MapFeatureRepository.swift */; };
+		F734C1DC2BC0767C00B2E8C8 /* ObservationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F734C1DB2BC0767C00B2E8C8 /* ObservationMap.swift */; };
 		F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */; };
 		F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */; };
 		F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */; };
@@ -824,7 +827,7 @@
 		F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multipleGeometryFields.json; sourceTree = "<group>"; };
 		F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCoreDataSourceTests.swift; sourceTree = "<group>"; };
 		F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTileRepository.swift; sourceTree = "<group>"; };
-		F70688B22BB3572F00D8E2EA /* ObservationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMap.swift; sourceTree = "<group>"; };
+		F70688B22BB3572F00D8E2EA /* ObservationsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsMap.swift; sourceTree = "<group>"; };
 		F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationIconRepository.swift; sourceTree = "<group>"; };
 		F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryManager.swift; sourceTree = "<group>"; };
 		F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRepository.swift; sourceTree = "<group>"; };
@@ -1020,6 +1023,9 @@
 		F7331D1226541C2300D645AC /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
 		F733DC4D241BFD380056B591 /* MAGE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGE-Bridging-Header.h"; sourceTree = "<group>"; };
 		F733DC4E241BFD380056B591 /* ImageAttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAttachmentViewController.swift; sourceTree = "<group>"; };
+		F734C1D72BBF565B00B2E8C8 /* ObservationMapFeatureRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapFeatureRepository.swift; sourceTree = "<group>"; };
+		F734C1D92BC03EB400B2E8C8 /* MapFeatureRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFeatureRepository.swift; sourceTree = "<group>"; };
+		F734C1DB2BC0767C00B2E8C8 /* ObservationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMap.swift; sourceTree = "<group>"; };
 		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
 		F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummaryView.swift; sourceTree = "<group>"; };
 		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1881,6 +1887,7 @@
 			children = (
 				F70688B72BB5BDA400D8E2EA /* Observation */,
 				F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */,
+				F734C1D92BC03EB400B2E8C8 /* MapFeatureRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -1892,6 +1899,7 @@
 				F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */,
 				F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */,
 				F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */,
+				F734C1D72BBF565B00B2E8C8 /* ObservationMapFeatureRepository.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -1966,7 +1974,8 @@
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
 				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
 				F75DD30D1A97AABD0007FA3F /* View */,
-				F70688B22BB3572F00D8E2EA /* ObservationMap.swift */,
+				F70688B22BB3572F00D8E2EA /* ObservationsMap.swift */,
+				F734C1DB2BC0767C00B2E8C8 /* ObservationMap.swift */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -3584,6 +3593,7 @@
 				F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
 				F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */,
+				F734C1D82BBF565B00B2E8C8 /* ObservationMapFeatureRepository.swift in Sources */,
 				F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
 				F7331D1326541C2300D645AC /* ColorPickerViewController.swift in Sources */,
@@ -3649,13 +3659,14 @@
 				F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */,
-				F70688B42BB3574100D8E2EA /* ObservationMap.swift in Sources */,
+				F70688B42BB3574100D8E2EA /* ObservationsMap.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
 				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */,
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
+				F734C1DA2BC03EB400B2E8C8 /* MapFeatureRepository.swift in Sources */,
 				F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
 				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
@@ -3782,6 +3793,7 @@
 				F7D9B826255DC65C00A76E2C /* MageImage.swift in Sources */,
 				F73CD0851F7E941E00B4124D /* TransitionViewController.m in Sources */,
 				F72D43212694B60300F9AC3B /* StaticLayer+CoreDataProperties.swift in Sources */,
+				F734C1DC2BC0767C00B2E8C8 /* ObservationMap.swift in Sources */,
 				F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */,
 				F752B5F2275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift in Sources */,
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,

@@ -12,11 +12,6 @@ import geopackage_ios
 import CoreGraphics
 import DataSourceTileOverlay
 
-struct AnnotationsAndOverlays {
-    let annotations: [MKAnnotation]
-    let overlays: [MKOverlay]
-}
-
 protocol MapMixin {
     func cleanupMixin()
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?

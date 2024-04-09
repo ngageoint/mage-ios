@@ -100,14 +100,9 @@ class DataSourceMap: MapMixin {
             if !show && !repositoryAlwaysShow {
                 return
             }
-            if let repository = repository {
-                let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: dataSourceKey)
-                newOverlay.tileSize = CGSize(width: 512, height: 512)
-                newOverlay.minimumZ = self.minZoom
+            overlays = getOverlays()
 
-                overlays.append(newOverlay)
-                addFeatures(features: AnnotationsAndOverlays(annotations: [], overlays: overlays), mapView: mapView)
-            }
+            addFeatures(features: AnnotationsAndOverlays(annotations: [], overlays: overlays), mapView: mapView)
 
 //            Task {
 //                let features = await mapFeatureRepository?.getAnnotationsAndOverlays()
@@ -120,6 +115,16 @@ class DataSourceMap: MapMixin {
 //                }
 //            }
         }
+    }
+
+    func getOverlays() -> [MKOverlay] {
+        guard let repository = repository else {
+            return []
+        }
+        let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: dataSourceKey)
+        newOverlay.tileSize = CGSize(width: 512, height: 512)
+        newOverlay.minimumZ = self.minZoom
+        return [newOverlay]
     }
 
     func addFeatures(features: AnnotationsAndOverlays, mapView: MKMapView) {

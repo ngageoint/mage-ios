@@ -26,4 +26,10 @@ class ObservationLocation: NSManagedObject {
             }
         }
     }
+
+    public var form: Form? {
+        get {
+            Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: NSManagedObjectContext.mr_default())
+        }
+    }
 }

@@ -1313,7 +1313,10 @@ enum State: Int, CustomStringConvertible {
                     observationLocation.minLongitude = envelope.minX.doubleValue
                     observationLocation.maxLongitude = envelope.maxX.doubleValue
                 }
-                observationLocation.form = self.primaryEventForm
+                if let accuracy = self.properties?[ObservationKey.accuracy.key] as? Double {
+                    observationLocation.accuracy = accuracy
+                }
+
                 observationLocations.insert(observationLocation)
             }
         }
@@ -1351,7 +1354,6 @@ enum State: Int, CustomStringConvertible {
                                     observationLocation.minLongitude = envelope.minX.doubleValue
                                     observationLocation.maxLongitude = envelope.maxX.doubleValue
                                 }
-                                observationLocation.form = eventForm
                                 observationLocations.insert(observationLocation)
                             }
                         }

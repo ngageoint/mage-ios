@@ -113,25 +113,28 @@ import Foundation
     }
     
     @objc public static func image(observation: Observation) -> UIImage {
-        guard let imagePath = ObservationImage.imageName(observation: observation) as NSString? else {
+        return ObservationImage.imageAtPath(imagePath: ObservationImage.imageName(observation: observation))
+    }
+
+    public static func imageAtPath(imagePath: String?) -> UIImage {
+        guard let imagePath = imagePath as? NSString else {
             return UIImage(named: "defaultMarker")!
         }
-        
         if let image = ObservationImage.imageCache.object(forKey: imagePath) {
             // image is cached
             image.accessibilityIdentifier = imagePath as String
             return image
         }
-        
+
         if let image = UIImage(contentsOfFile: imagePath as String), let cgImage = image.cgImage {
             let scale = image.size.width / annotationScaleWidth
-            
+
             let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
             ObservationImage.imageCache.setObject(scaledImage, forKey: imagePath)
             scaledImage.accessibilityIdentifier = imagePath as String
             return scaledImage
         }
-        
+
         let image = UIImage(named:"defaultMarker")!
         image.accessibilityIdentifier = imagePath as String
         return image

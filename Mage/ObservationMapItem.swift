@@ -16,6 +16,7 @@ struct ObservationMapItem {
     var formId: Int64?
     var fieldName: String?
     var eventId: Int64?
+    var accuracy: Double?
 }
 
 extension ObservationMapItem {
@@ -25,26 +26,29 @@ extension ObservationMapItem {
         self.fieldName = observation.fieldName
         self.eventId = observation.eventId
         self.geometry = observation.geometry
+        self.accuracy = observation.accuracy
 
         var primaryFieldText: String?
         var secondaryFieldText: String?
 
-        if let primaryField =  observation.form?.primaryMapField,
+        let form = observation.form
+        if let eventForm = form,
+           let primaryField =  eventForm.primaryMapField,
            let observationForms = observation.observation?.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]],
            let primaryFieldName = primaryField[FieldKey.name.key] as? String,
            observationForms.count > 0
         {
-            for (index, form) in observationForms.enumerated() {
-                if let formId = form[FormKey.formId.key] as? Int {
-                    if formId == observation.formId {
-                        let primaryValue = form[primaryFieldName]
-                        primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
-                        if let secondaryField = observation.form?.secondaryMapField,
-                           let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
-                        {
-                            let secondaryValue = form[secondaryFieldName]
-                            secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
-                        }
+            for form in observationForms {
+                if let formId = form[FormKey.formId.key] as? Int,
+                   formId == observation.formId
+                {
+                    let primaryValue = form[primaryFieldName]
+                    primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
+                    if let secondaryField = eventForm.secondaryMapField,
+                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
+                    {
+                        let secondaryValue = form[secondaryFieldName]
+                        secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
                     }
                 }
             }
