@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import Combine
 
 class ObservationMap: MapMixin {
     static let MAP_STATE_KEY = "FetchRequestMixinObservationMapDateUpdated"
     let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
+    var cancellable = Set<AnyCancellable>()
+
     var lastChange: Date?
     var overlays: [MKOverlay] = []
     var annotations: [MKAnnotation] = []
@@ -45,11 +48,30 @@ class ObservationMap: MapMixin {
     }
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
+        self.mapState = mapState
         updateMixin(mapView: mapView, mapState: mapState)
+        mapState.objectWillChange
+            .makeConnectable()
+            .autoconnect()
+            .sink { [weak self] in
+                DispatchQueue.main.async { [weak self] in
+                    if let mapState = self?.mapState {
+                        self?.updateMixin(mapView: mapView, mapState: mapState)
+                    }
+                }
+            }
+            .store(in: &cancellable)
     }
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {
+        for overlay in overlays {
+            mapView.removeOverlay(overlay)
+        }
+        mapView.removeAnnotations(annotations)
+    }
 
+    func cleanupMixin() {
+        cancellable.removeAll()
     }
 
     func updateMixin(mapView: MKMapView, mapState: MapState) {

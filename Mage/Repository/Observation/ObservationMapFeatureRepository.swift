@@ -31,7 +31,6 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
                 let geometry = item.geometry,
                 let centroid = geometry.centroid()
             {
-                print("XXX accuracy \(accuracy)")
                 return ObservationAccuracy(
                     center: CLLocationCoordinate2D(
                         latitude: centroid.y.doubleValue,

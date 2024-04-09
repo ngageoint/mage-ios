@@ -25,7 +25,7 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, SFG
             {
                 observationMapMixin.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri, repository: observationRepository)
                 if let mapView = mapView {
-                    observationMapMixin.updateMixin(mapView: mapView, mapState: mapState)
+                    observationMapMixin.refreshMixin(mapState: mapState)
                 }
             }
             _observation = newValue
@@ -82,9 +82,10 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, SFG
     }
     
     func addFeature() {
-        if let observation = observation, let mapView = mapView {
-            observationMapMixin.updateMixin(mapView: mapView, mapState: mapState)
-        } else if let sfgeometry = sfgeometry {
+//        if let observation = observation, let mapView = mapView {
+//            observationMapMixin.updateMixin(mapView: mapView, mapState: mapState)
+//        } else 
+        if let sfgeometry = sfgeometry {
             // add the geometry to the map
             sfGeometryMapMixin?.sfGeometry = sfgeometry
         }
