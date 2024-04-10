@@ -172,11 +172,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
         
         syncStatusView.updateObservationStatus(observation: observation);
         addHeaderCard(stackView: stackView);
-        addLegacyAttachmentCard(stackView: stackView);
-        var headerViews = 2;
-        if (MageServer.isServerVersion5) {
-            headerViews = 4;
-        }
+        var headerViews = 2
         if (stackView.arrangedSubviews.count > headerViews) {
             for v in stackView.arrangedSubviews.suffix(from: headerViews) {
                 v.removeFromSuperview();
@@ -196,38 +192,6 @@ class ObservationViewCardCollectionViewController: UIViewController {
                     headerCard!.applyTheme(withScheme: scheme);
                 }
                 stackView.addArrangedSubview(headerCard!);
-            }
-        }
-    }
-    
-    // for legacy servers add the attachment field to common
-    // TODO: this can be removed once all servers are upgraded
-    func addLegacyAttachmentCard(stackView: UIStackView) {
-        if (MageServer.isServerVersion5) {
-            if let observation = observation {
-                if let attachmentCard = attachmentCard {
-                    attachmentCard.populate(observation: observation);
-                } else {
-                    attachmentCard = ObservationAttachmentCard(observation: observation, attachmentSelectionDelegate: self);
-                    if let scheme = self.scheme {
-                        attachmentCard!.applyTheme(withScheme: scheme);
-                        attachmentHeader.applyTheme(withScheme: scheme);
-                    }
-                    stackView.addArrangedSubview(attachmentHeader);
-                    stackView.addArrangedSubview(attachmentCard!);
-                }
-                
-                let attachmentCount = (observation.attachments)?.filter() { attachment in
-                    return !attachment.markedForDeletion
-                }.count
-                
-                if (attachmentCount != 0) {
-                    attachmentHeader.isHidden = false;
-                    attachmentCard?.isHidden = false;
-                } else {
-                    attachmentHeader.isHidden = true;
-                    attachmentCard?.isHidden = true;
-                }
             }
         }
     }
