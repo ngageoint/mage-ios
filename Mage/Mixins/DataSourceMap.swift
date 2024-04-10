@@ -12,13 +12,16 @@ import DataSourceTileOverlay
 import MKMapViewExtensions
 
 class DataSourceMap: MapMixin {
+    var REFRESH_KEY: String {
+        "\(dataSourceKey)MapDateUpdated"
+    }
     var uuid: UUID = UUID()
     var cancellable = Set<AnyCancellable>()
     var minZoom = 2
 
     var repository: TileRepository?
-//    var mapFeatureRepository: MapFeatureRepository?
-
+    var mapFeatureRepository: MapFeatureRepository?
+    var scheme: MDCContainerScheming?
     var mapState: MapState?
     var mapView: MKMapView?
     var lastChange: Date?
@@ -33,20 +36,24 @@ class DataSourceMap: MapMixin {
 
     var show = false
     var repositoryAlwaysShow: Bool {
-        repository?.alwaysShow ?? false //mapFeatureRepository?.alwaysShow ?? false
+        repository?.alwaysShow ?? mapFeatureRepository?.alwaysShow ?? false
     }
 
     var dataSourceKey: String {
-        repository?.dataSource.key ?? "" //mapFeatureRepository?.dataSource.key ?? ""
+        repository?.dataSource.key ?? mapFeatureRepository?.dataSource.key ?? ""
     }
 
-    init(repository: TileRepository? = nil) { //}, mapFeatureRepository: MapFeatureRepository? = nil) {
+    init(repository: TileRepository? = nil, mapFeatureRepository: MapFeatureRepository? = nil) {
         self.repository = repository
-//        self.mapFeatureRepository = mapFeatureRepository
+        self.mapFeatureRepository = mapFeatureRepository
     }
 
     func cleanupMixin() {
         cancellable.removeAll()
+    }
+
+    func applyTheme(scheme: MDCContainerScheming?) {
+        self.scheme = scheme
     }
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
@@ -71,23 +78,16 @@ class DataSourceMap: MapMixin {
                 }
             }
             .store(in: &cancellable)
-//        LocationManager.shared().$current10kmMGRS
-//            .receive(on: RunLoop.main)
-//            .sink { [weak self] _ in
-//                self?.refreshOverlay(mapState: mapState)
-//            }
-//            .store(in: &cancellable)
     }
 
     func updateMixin(mapView: MKMapView, mapState: MapState) {
-        let stateKey = "FetchRequestMixin\(dataSourceKey)DateUpdated"
         if lastChange == nil
-            || lastChange != mapState.mixinStates[stateKey] as? Date {
-            lastChange = mapState.mixinStates[stateKey] as? Date ?? Date()
+            || lastChange != mapState.mixinStates[self.REFRESH_KEY] as? Date {
+            lastChange = mapState.mixinStates[self.REFRESH_KEY] as? Date ?? Date()
 
-            if mapState.mixinStates[stateKey] as? Date == nil {
+            if mapState.mixinStates[self.REFRESH_KEY] as? Date == nil {
                 DispatchQueue.main.async {
-                    mapState.mixinStates[stateKey] = self.lastChange
+                    mapState.mixinStates[self.REFRESH_KEY] = self.lastChange
                 }
             }
             for overlay in overlays {
@@ -100,20 +100,17 @@ class DataSourceMap: MapMixin {
             if !show && !repositoryAlwaysShow {
                 return
             }
-            overlays = getOverlays()
-
-            addFeatures(features: AnnotationsAndOverlays(annotations: [], overlays: overlays), mapView: mapView)
-
-//            Task {
-//                let features = await mapFeatureRepository?.getAnnotationsAndOverlays()
-//                if let features = features {
-//                    annotations.append(contentsOf: features.annotations)
-//                    overlays.append(contentsOf: features.overlays)
-//                    await MainActor.run {
-//                        addFeatures(features: features, mapView: mapView)
-//                    }
+            Task {
+                overlays = getOverlays()
+                let features = await mapFeatureRepository?.getAnnotationsAndOverlays()
+                if let features = features {
+                    annotations.append(contentsOf: features.annotations)
+                    overlays.append(contentsOf: features.overlays)
+                }
+//                await MainActor.run {
+                await addFeatures(features: AnnotationsAndOverlays(annotations: annotations, overlays: overlays), mapView: mapView)
 //                }
-//            }
+            }
         }
     }
 
@@ -127,49 +124,22 @@ class DataSourceMap: MapMixin {
         return [newOverlay]
     }
 
+    @MainActor
     func addFeatures(features: AnnotationsAndOverlays, mapView: MKMapView) {
         mapView.addAnnotations(features.annotations)
-        // find the right place
-//        let mapOrder = UserDefaults.standard.dataSourceMapOrder(dataSourceKey)
-        let mapOrder = 0
-        if mapView.overlays(in: .aboveLabels).isEmpty {
-            for overlay in features.overlays {
-                mapView.insertOverlay(overlay, at: 0, level: .aboveLabels)
-            }
-            return
-        }
-//        else {
-//            for added in mapView.overlays(in: .aboveLabels) {
-//                if let added = added as? any DataSourceOverlay,
-//                   let key = added.key,
-//                   let addedOverlay = added as? MKTileOverlay {
-//                    let addedOrder = 0 //UserDefaults.standard.dataSourceMapOrder(key)
-//                    if addedOrder < mapOrder {
-//                        for overlay in features.overlays {
-//                            mapView.insertOverlay(overlay, below: addedOverlay)
-//                        }
-//                        return
-//                    }
-//                }
-//            }
-//        }
-
-        for overlay in features.overlays {
-            mapView.insertOverlay(overlay, at: mapView.overlays(in: .aboveLabels).count, level: .aboveLabels)
-        }
+        mapView.showAnnotations(features.annotations, animated: true)
+        mapView.addOverlays(features.overlays)
     }
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {
-        for overlay in overlays {
-            mapView.removeOverlay(overlay)
-        }
+        mapView.removeOverlays(overlays)
         mapView.removeAnnotations(annotations)
     }
 
-    func refreshOverlay(mapState: MapState) {
+    func refreshMap(mapState: MapState) {
         DispatchQueue.main.async {
             self.mapState?.mixinStates[
-                "FetchRequestMixin\(self.dataSourceKey)DateUpdated"
+                self.REFRESH_KEY
             ] = Date()
         }
     }
@@ -185,7 +155,7 @@ class DataSourceMap: MapMixin {
                 if item.key == key {
                     NSLog("New data for \(key), refresh overlay, clear the cache")
                     self.repository?.clearCache(completion: {
-                        self.refreshOverlay(mapState: mapState)
+                        self.refreshMap(mapState: mapState)
                     })
                 }
             }
@@ -199,7 +169,7 @@ class DataSourceMap: MapMixin {
             .sink { [weak self] show in
                 self?.show = !show
                 NSLog("Show \(self?.dataSourceKey ?? ""): \(!show)")
-                self?.refreshOverlay(mapState: mapState)
+                self?.refreshMap(mapState: mapState)
             }
             .store(in: &cancellable)
     }
@@ -210,7 +180,7 @@ class DataSourceMap: MapMixin {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
 
-                self?.refreshOverlay(mapState: mapState)
+                self?.refreshMap(mapState: mapState)
             }
             .store(in: &cancellable)
     }

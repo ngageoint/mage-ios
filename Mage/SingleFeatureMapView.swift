@@ -25,7 +25,7 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, SFG
             {
                 observationMapMixin.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri, repository: observationRepository)
                 if let mapView = mapView {
-                    observationMapMixin.refreshMixin(mapState: mapState)
+                    observationMapMixin.refreshMap(mapState: mapState)
                 }
             }
             _observation = newValue

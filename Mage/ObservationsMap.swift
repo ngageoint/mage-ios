@@ -20,8 +20,8 @@ class ObservationsMap: DataSourceMap {
         }
     }
 
-    override init(repository: TileRepository? = nil) {
-        super.init(repository: repository)
+    override init(repository: TileRepository? = nil, mapFeatureRepository: MapFeatureRepository? = nil) {
+        super.init(repository: repository, mapFeatureRepository: mapFeatureRepository)
         userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
 
         UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
@@ -29,7 +29,7 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
+                    self?.refreshMap(mapState: mapState)
                 }
             }
             .store(in: &cancellable)
@@ -38,7 +38,7 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
+                    self?.refreshMap(mapState: mapState)
                 }
             }
             .store(in: &cancellable)
@@ -47,7 +47,7 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
+                    self?.refreshMap(mapState: mapState)
                 }
             }
             .store(in: &cancellable)
@@ -56,7 +56,7 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
+                    self?.refreshMap(mapState: mapState)
                 }
             }
             .store(in: &cancellable)
@@ -65,7 +65,7 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshOverlay(mapState: mapState)
+                    self?.refreshMap(mapState: mapState)
                 }
             }
             .store(in: &cancellable)
@@ -74,7 +74,7 @@ class ObservationsMap: DataSourceMap {
             if let event: Event = notification.object as? Event {
                 if event.remoteId == Server.currentEventId() {
                     if let mapState = self?.mapState {
-                        self?.refreshOverlay(mapState: mapState)
+                        self?.refreshMap(mapState: mapState)
                     }
                 }
             }
