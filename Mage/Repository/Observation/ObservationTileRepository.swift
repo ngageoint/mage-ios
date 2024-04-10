@@ -256,8 +256,6 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                     )
                     if include {
                         matchedItems.append(item)
-                    } else {
-                        print("filter it out")
                     }
                 }
             }

@@ -128,7 +128,7 @@ class DataSourceMap: MapMixin {
     func addFeatures(features: AnnotationsAndOverlays, mapView: MKMapView) {
         mapView.addAnnotations(features.annotations)
         mapView.showAnnotations(features.annotations, animated: true)
-        mapView.addOverlays(features.overlays)
+        mapView.addOverlays(features.overlays, level: .aboveLabels)
     }
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {

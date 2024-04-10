@@ -105,7 +105,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
     }
 
     func mapTap(tapPoint:CGPoint, gesture: UITapGestureRecognizer) {
-        Task {
+
             guard let mapView = mapView else {
                 return
             }
@@ -123,7 +123,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
                     }
                 }
             }
-
+        Task {
             var items: [Any] = []
             for mixin in mapMixins {
                 if let matchedItems = mixin.items(at: tapCoord) {
