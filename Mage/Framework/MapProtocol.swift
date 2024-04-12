@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol MarlinMapProtocol {
+protocol MapProtocol {
     var mixins: MapMixins { get set }
     var mapState: MapState { get }
     var name: String { get set }

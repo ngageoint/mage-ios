@@ -13,7 +13,7 @@ import Combine
 class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
     var mapView: MKMapView?
     var mapScale: MKScaleView?
-    var marlinMap: MarlinMapProtocol
+    var map: MapProtocol
     var focusedAnnotation: EnlargedAnnotation?
     var focusMapOnItemSink: AnyCancellable?
 
@@ -29,8 +29,8 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
 
     var allowMapTapsOnItems: Bool = true
 
-    init(_ marlinMap: MarlinMapProtocol, focusNotification: NSNotification.Name) {
-        self.marlinMap = marlinMap
+    init(_ map: MapProtocol, focusNotification: NSNotification.Name) {
+        self.map = map
         super.init()
 
         //        focusMapOnItemSink =
@@ -56,7 +56,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
                     //                    itemKeys: itemKeys,
                     //                    mapName: mapName
                 )
-                NotificationCenter.default.post(name: marlinMap.notificationOnTap, object: notification)
+                NotificationCenter.default.post(name: map.notificationOnTap, object: notification)
             }
         }
     }
@@ -80,7 +80,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
 
         if mapGesture.state == .began {
             let coordinate = mapView.convert(mapGesture.location(in: mapView), toCoordinateFrom: mapView)
-            NotificationCenter.default.post(name: marlinMap.notificationOnLongPress, object: coordinate)
+            NotificationCenter.default.post(name: map.notificationOnLongPress, object: coordinate)
 
             //            for mixin in mixins {
             //                mixin.mapLongPress(mapView: mapView, coordinate: coordinate)
@@ -117,7 +117,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
         if let renderableOverlay = overlay as? OverlayRenderable {
             return renderableOverlay.renderer
         }
-        for mixin in marlinMap.mixins.mixins {
+        for mixin in map.mixins.mixins {
             if let renderer = mixin.renderer(overlay: overlay) {
                 return renderer
             }
@@ -166,7 +166,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
         //            enlarged.annotationView = annotationView
         //            return annotationView
         //        }
-        for mixin in marlinMap.mixins.mixins {
+        for mixin in map.mixins.mixins {
             if let view = mixin.viewForAnnotation(annotation: annotation, mapView: mapView) {
                 return view
             }
@@ -175,7 +175,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        for mixin in marlinMap.mixins.mixins {
+        for mixin in map.mixins.mixins {
             mixin.regionDidChange(mapView: mapView, animated: animated) //, centerCoordinate: mapView.centerCoordinate)
         }
     }
@@ -185,12 +185,12 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
 
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
         DispatchQueue.main.async { [self] in
-            marlinMap.mapState.userTrackingMode = mode.rawValue
+            map.mapState.userTrackingMode = mode.rawValue
         }
     }
 
     func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        for mixin in marlinMap.mixins.mixins {
+        for mixin in map.mixins.mixins {
             mixin.traitCollectionUpdated(previous: previousTraitCollection)
         }
     }
@@ -288,7 +288,7 @@ extension MapCoordinator {
 
             var items: [Any] = []
             var itemKeys: [String: [String]] = [:]
-            for mixin in marlinMap.mixins.mixins.reversed() {
+            for mixin in map.mixins.mixins.reversed() {
                 if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
                     items.append(contentsOf: matchedItems)
                 }
@@ -298,7 +298,7 @@ extension MapCoordinator {
                 //                    current + new
                 //                }
             }
-            handleTappedItems(annotations: annotationsTapped, items: items, itemKeys: itemKeys, mapName: marlinMap.name)
+            handleTappedItems(annotations: annotationsTapped, items: items, itemKeys: itemKeys, mapName: map.name)
         }
     }
 }

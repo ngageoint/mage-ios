@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct MarlinMap: UIViewRepresentable, MarlinMapProtocol {
+struct MapRepresentable: UIViewRepresentable, MapProtocol {
     var notificationOnTap: NSNotification.Name = .MapItemsTapped
     var notificationOnLongPress: NSNotification.Name = .MapLongPress
     var focusNotification: NSNotification.Name = .FocusMapOnItem
