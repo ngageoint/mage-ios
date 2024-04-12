@@ -13,7 +13,7 @@ import UIKit
 import MagicalRecord
 import geopackage_ios
 
-enum State: Int, CustomStringConvertible {
+enum ObservationState: Int, CustomStringConvertible {
     case Archive, Active
     
     var description: String {
@@ -260,7 +260,7 @@ enum State: Int, CustomStringConvertible {
     }
     
     @objc public static func operationToPushObservation(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error?) -> Void)?) -> URLSessionDataTask? {
-        let archived = (observation.state?.intValue ?? 0) == State.Archive.rawValue
+        let archived = (observation.state?.intValue ?? 0) == ObservationState.Archive.rawValue
         if observation.remoteId != nil {
             if (archived) {
                 return Observation.operationToDelete(observation: observation, success: success, failure: failure);
@@ -431,8 +431,8 @@ enum State: Int, CustomStringConvertible {
         }
         observationJson[ObservationKey.type.key] = "Feature";
         
-        let state = self.state?.intValue ?? State.Active.rawValue
-        observationJson[ObservationKey.state.key] = ["name":(State(rawValue: state) ?? .Active).description]
+        let state = self.state?.intValue ?? ObservationState.Active.rawValue
+        observationJson[ObservationKey.state.key] = ["name":(ObservationState(rawValue: state) ?? .Active).description]
         
         if let geometry = self.geometry {
             observationJson[ObservationKey.geometry.key] = GeometrySerializer.serializeGeometry(geometry);
@@ -558,7 +558,7 @@ enum State: Int, CustomStringConvertible {
         observation.properties = properties;
         observation.user = User.fetchCurrentUser(context: context);
         observation.dirty = false;
-        observation.state = NSNumber(value: State.Active.rawValue)
+        observation.state = NSNumber(value: ObservationState.Active.rawValue)
         observation.eventId = Server.currentEventId();
 
         observation.createObservationLocations(context: context)
@@ -569,15 +569,15 @@ enum State: Int, CustomStringConvertible {
         return json[ObservationKey.id.key] as? String
     }
     
-    static func stateFromJson(json: [AnyHashable : Any]) -> State {
+    static func stateFromJson(json: [AnyHashable : Any]) -> ObservationState {
         if let stateJson = json[ObservationKey.state.key] as? [AnyHashable : Any], let stateName = stateJson["name"] as? String {
-            if stateName == State.Archive.description {
-                return State.Archive
+            if stateName == ObservationState.Archive.description {
+                return ObservationState.Archive
             } else {
-                return State.Active;
+                return ObservationState.Active;
             }
         }
-        return State.Active;
+        return ObservationState.Active;
     }
     
     @discardableResult
@@ -1281,7 +1281,7 @@ enum State: Int, CustomStringConvertible {
             return;
         }
         if self.remoteId != nil {
-            self.state = NSNumber(value: State.Archive.rawValue)
+            self.state = NSNumber(value: ObservationState.Archive.rawValue)
             self.dirty = true
             self.managedObjectContext?.mr_saveToPersistentStore(completion: completion)
         } else {
@@ -1292,6 +1292,7 @@ enum State: Int, CustomStringConvertible {
     }
 
     func createObservationLocations(context: NSManagedObjectContext) {
+        var order: Int64 = 0
         var observationLocations: Set<ObservationLocation> = Set<ObservationLocation>()
         // save the observations location
         if let geometry = geometry {
@@ -1316,7 +1317,11 @@ enum State: Int, CustomStringConvertible {
                 if let accuracy = self.properties?[ObservationKey.accuracy.key] as? Double {
                     observationLocation.accuracy = accuracy
                 }
-
+                if let provider = self.properties?[ObservationKey.provider.key] as? String {
+                    observationLocation.provider = provider
+                }
+                observationLocation.order = order
+                order += 1
                 observationLocations.insert(observationLocation)
             }
         }
@@ -1354,6 +1359,8 @@ enum State: Int, CustomStringConvertible {
                                     observationLocation.minLongitude = envelope.minX.doubleValue
                                     observationLocation.maxLongitude = envelope.maxX.doubleValue
                                 }
+                                observationLocation.order = order
+                                order += 1
                                 observationLocations.insert(observationLocation)
                             }
                         }
