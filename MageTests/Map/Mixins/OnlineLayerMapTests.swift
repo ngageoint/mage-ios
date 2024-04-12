@@ -16,7 +16,7 @@ import OHHTTPStubs
 import CoreLocation
 import MapKit
 
-class OnlineLayerMapTestImpl : NSObject, OnlineLayerMap {
+class OnlineLayerMapTestImpl : NSObject {
     var scheme: MDCContainerScheming?
     var mapView: MKMapView?
     
@@ -81,7 +81,7 @@ class OnlineLayerMapTests: KIFSpec {
                 testimpl.scheme = MAGEScheme.scheme()
                 mapView.delegate = testimpl
                 
-                mixin = OnlineLayerMapMixin(onlineLayerMap: testimpl)
+                mixin = OnlineLayerMapMixin()
                 testimpl.onlineLayerMapMixin = mixin
                 
                 navController = UINavigationController(rootViewController: controller);

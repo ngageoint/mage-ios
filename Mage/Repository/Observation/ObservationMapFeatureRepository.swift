@@ -43,6 +43,14 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
         }
         return AnnotationsAndOverlays(annotations: annotations, overlays: overlays)
     }
+
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]? {
+        return []
+    }
 }
 
 class ObservationMapItemAnnotation: NSObject, MKAnnotation {

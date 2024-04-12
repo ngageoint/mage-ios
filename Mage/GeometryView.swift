@@ -15,7 +15,10 @@ class GeometryView : BaseFieldView {
     private var provider: String?;
     private weak var observationActionsDelegate: ObservationActionsDelegate?;
     private weak var observation: Observation?;
-    
+    var mapItemsTappedObserver: Any?
+    var mapItemCount: Int = 1
+    var currentMapItem: Int = 1
+
     lazy var textField: MDCFilledTextField = {
         // this is just an estimated size
         let textField = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 300, height: 100));
@@ -36,6 +39,16 @@ class GeometryView : BaseFieldView {
     lazy var mapView: SingleFeatureMapView = {
         let mapView = SingleFeatureMapView(observation: nil, scheme: scheme)
         mapView.autoSetDimension(.height, toSize: editMode ? 150 : 200);
+
+        mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
+            if let mapView = mapView.mapView,
+               let notification = notification.object as? MapItemsTappedNotification,
+               notification.mapView == mapView
+            {
+                print("XXX map item clicked annotations \(notification.annotations) items \(notification.items)")
+            }
+        }
+
         return mapView;
     }()
     
@@ -108,7 +121,9 @@ class GeometryView : BaseFieldView {
     }
     
     func addToMapAsObservation() {
-        if (self.observation?.geometry) != nil {
+        if let locations = observation?.locations, locations.count != 0 {
+            mapItemCount = locations.count
+            currentMapItem = 0
             mapView.observation = self.observation
         }
     }

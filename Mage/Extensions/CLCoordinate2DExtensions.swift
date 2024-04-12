@@ -44,7 +44,7 @@ extension CLLocationCoordinate2D {
         } else if UserDefaults.standard.locationDisplay == .gars {
             return GridSystems.gars(self)
         } else {
-            return String(format: "%.5f, %.5f", self.latitude, self.longitude)
+            return String(format: "%.4f, %.4f", self.latitude, self.longitude)
         }
     }
     

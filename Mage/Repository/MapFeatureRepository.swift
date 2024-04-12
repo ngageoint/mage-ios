@@ -21,6 +21,11 @@ protocol MapFeatureRepository {
     var alwaysShow: Bool { get }
 
     func getAnnotationsAndOverlays() async -> AnnotationsAndOverlays
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]?
 }
 
 extension MapFeatureRepository {

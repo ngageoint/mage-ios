@@ -84,7 +84,9 @@ class ObservationCoreDataDataSource: ObservationLocalDataSource, ObservableObjec
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 if let observation = try? context.existingObject(with: id) as? Observation {
-                    return observation.locations?.map({ location in
+                    return observation.locations?.sorted(by: { one, two in
+                        one.order < two.order
+                    }).map({ location in
                         ObservationMapItem(observation: location)
                     }) ?? []
                 }

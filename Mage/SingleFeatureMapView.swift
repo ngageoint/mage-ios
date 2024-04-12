@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, SFGeometryMap {
+class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var onlineLayerMapMixin: OnlineLayerMapMixin?
     var observationMapMixin: ObservationMap = ObservationMap()
@@ -62,7 +62,7 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, OnlineLayerMap, SFG
     override func layoutView() {
         super.layoutView()
         
-        onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self)
+        onlineLayerMapMixin = OnlineLayerMapMixin()
         geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
         sfGeometryMapMixin = SFGeometryMapMixin(sfGeometryMap: self, sfGeometry: sfgeometry)
         mapMixins.append(onlineLayerMapMixin!)

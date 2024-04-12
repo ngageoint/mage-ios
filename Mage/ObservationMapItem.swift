@@ -17,6 +17,30 @@ struct ObservationMapItem {
     var fieldName: String?
     var eventId: Int64?
     var accuracy: Double?
+    var provider: String?
+
+    var coordinate: CLLocationCoordinate2D? {
+        guard let geometry = geometry, let point = geometry.centroid() else {
+            return nil
+        }
+        return CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
+    }
+
+    var accuracyDisplay: String? {
+        if self.provider == "manual" {
+            return nil
+        }
+        if let accuracy = accuracy, let provider = provider {
+            var formattedProvider: String = ""
+            if provider == "gps" {
+                formattedProvider = provider.uppercased()
+            } else {
+                formattedProvider = provider.capitalized
+            }
+            return String(format: "%@ ± %.02fm", formattedProvider, accuracy)
+        }
+        return nil
+    }
 }
 
 extension ObservationMapItem {
@@ -27,6 +51,7 @@ extension ObservationMapItem {
         self.eventId = observation.eventId
         self.geometry = observation.geometry
         self.accuracy = observation.accuracy
+        self.provider = observation.provider
 
         var primaryFieldText: String?
         var secondaryFieldText: String?

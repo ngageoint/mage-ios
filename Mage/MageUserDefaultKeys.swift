@@ -39,8 +39,19 @@ extension Notification.Name {
     case gars
 }
 
+extension UserDefaults {
+    var coordinateDisplay: CoordinateDisplayType {
+        get {
+            return CoordinateDisplayType(rawValue: integer(forKey: #function)) ?? .latitudeLongitude
+        }
+        set {
+            setValue(newValue.rawValue, forKey: #function)
+        }
+    }
+}
+
 @objc extension UserDefaults {
-    
+
     @objc func color(forKey key: String) -> UIColor? {
         var color: UIColor?
         if let colorData = data(forKey: key) {

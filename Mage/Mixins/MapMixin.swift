@@ -13,6 +13,7 @@ import CoreGraphics
 import DataSourceTileOverlay
 
 protocol MapMixin {
+    var uuid: UUID { get }
     func cleanupMixin()
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?
     func traitCollectionUpdated(previous: UITraitCollection?)
@@ -33,7 +34,6 @@ protocol MapMixin {
     func updateMixin(mapView: MKMapView, mapState: MapState)
 }
 
-
 class MapState: ObservableObject, Hashable {
     static func == (lhs: MapState, rhs: MapState) -> Bool {
         return lhs.id == rhs.id
@@ -47,9 +47,31 @@ class MapState: ObservableObject, Hashable {
 
     @Published var userTrackingMode: Int = Int(MKUserTrackingMode.none.rawValue)
     @Published var mixinStates: [String: Any] = [:]
+
+    var centerDate: Date?
+    @Published var center: MKCoordinateRegion? {
+        didSet {
+            centerDate = Date()
+        }
+    }
+    @Published var forceCenter: MKCoordinateRegion? {
+        didSet {
+            forceCenterDate = Date()
+        }
+    }
+    var forceCenterDate: Date?
+
+    @Published var coordinateCenter: CLLocationCoordinate2D? {
+        didSet {
+            forceCenterDate = Date()
+        }
+    }
 }
 
 extension MapMixin {
+    var uuid: UUID {
+        UUID()
+    }
 
     func cleanupMixin() {
     }
