@@ -244,32 +244,36 @@ class MageBottomSheetViewController: UIViewController {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
 
         Task {
+            var newBottomSheetView: BottomSheetView?
             if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
-                self.currentBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+                newBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
             } else if let bottomSheetItem = item.item as? Observation {
-                self.currentBottomSheetView = ObservationBottomSheetView(observation: bottomSheetItem, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
+                newBottomSheetView = ObservationBottomSheetView(observation: bottomSheetItem, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
             } else if let bottomSheetItem = item.item as? User {
-                self.currentBottomSheetView = UserBottomSheetView(user: bottomSheetItem, actionsDelegate: item.actionDelegate as? UserActionsDelegate, scheme: self.scheme);
+                newBottomSheetView = UserBottomSheetView(user: bottomSheetItem, actionsDelegate: item.actionDelegate as? UserActionsDelegate, scheme: self.scheme);
             } else if let bottomSheetItem = item.item as? FeatureItem {
-                self.currentBottomSheetView = FeatureBottomSheetView(featureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+                newBottomSheetView = FeatureBottomSheetView(featureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
             } else if let bottomSheetItem = item.item as? FeedItem {
-                self.currentBottomSheetView = FeedItemBottomSheetView(feedItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeedItemActionsDelegate, scheme: self.scheme);
+                newBottomSheetView = FeedItemBottomSheetView(feedItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeedItemActionsDelegate, scheme: self.scheme);
             } else if let bottomSheetItem = item.item as? ObservationMapItem {
                 if let observation = await RepositoryManager.shared.observationRepository?.getObservation(observationUri: bottomSheetItem.observationId) {
-                    self.currentBottomSheetView = ObservationBottomSheetView(observation: observation, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
+                    newBottomSheetView = ObservationBottomSheetView(observation: observation, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
                 }
             }
-            UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                if self.currentBottomSheetView?.superview != nil {
-                    self.currentBottomSheetView?.removeFromSuperview();
-                }
-                self.pageNumberLabel.text = "\(self.pageControl.currentPage+1) of \(self.pageControl.numberOfPages)";
-                if let currentBottomSheetView = self.currentBottomSheetView {
-                    self.stackView.addArrangedSubview(currentBottomSheetView)
-                }
-                self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
-                self.view.setNeedsUpdateConstraints();
-            }, completion: nil)
+            await MainActor.run {
+                UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    if self.currentBottomSheetView?.superview != nil {
+                        self.currentBottomSheetView?.removeFromSuperview();
+                    }
+                    self.currentBottomSheetView = newBottomSheetView
+                    self.pageNumberLabel.text = "\(self.pageControl.currentPage+1) of \(self.pageControl.numberOfPages)";
+                    if let currentBottomSheetView = self.currentBottomSheetView {
+                        self.stackView.addArrangedSubview(currentBottomSheetView)
+                    }
+                    self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
+                    self.view.setNeedsUpdateConstraints();
+                }, completion: nil)
+            }
         }
     }
     
