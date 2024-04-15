@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 import CoreData
 import geopackage_ios
 
@@ -149,9 +150,14 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         }
     }
     
-    func items(at location: CLLocationCoordinate2D) -> [Any]? {
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]? {
+//    func items(at location: CLLocationCoordinate2D) -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = (self.staticLayerMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
+        let tolerance = await (self.staticLayerMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
         var annotations: [Any] = []
         

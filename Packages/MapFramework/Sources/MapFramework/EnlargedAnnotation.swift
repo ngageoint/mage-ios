@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import MapKit
 
-class EnlargedAnnotation: NSObject, MKAnnotation {
+public class EnlargedAnnotation: NSObject, MKAnnotation {
     var enlarged: Bool = false
 
     var shouldEnlarge: Bool = false
@@ -25,12 +26,10 @@ class EnlargedAnnotation: NSObject, MKAnnotation {
         return UIColor.clear
     }
 
-    var coordinate: CLLocationCoordinate2D
-    //    var definition: any DataSourceDefinition
+    public var coordinate: CLLocationCoordinate2D
 
-    init(coordinate: CLLocationCoordinate2D) { //, definition: any DataSourceDefinition) {
+    init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
-        //        self.definition = definition
     }
 
     func markForEnlarging() {

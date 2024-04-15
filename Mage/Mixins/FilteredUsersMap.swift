@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 protocol FilteredUsersMap {
     var mapView: MKMapView? { get set }

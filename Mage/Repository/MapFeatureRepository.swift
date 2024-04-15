@@ -10,6 +10,7 @@ import Foundation
 import MapKit
 import geopackage_ios
 import DataSourceDefinition
+import MapFramework
 
 struct AnnotationsAndOverlays {
     let annotations: [MKAnnotation]

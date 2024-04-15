@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 import mgrs_ios
 import gars_ios

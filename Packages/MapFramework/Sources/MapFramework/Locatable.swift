@@ -9,13 +9,13 @@
 import Foundation
 import MapKit
 
-protocol Locatable {
+public protocol Locatable {
     var coordinate: CLLocationCoordinate2D { get }
     var coordinateRegion: MKCoordinateRegion? { get }
     static func getBoundingPredicate(minLat: Double, maxLat: Double, minLon: Double, maxLon: Double) -> NSPredicate
 }
 
-extension Locatable {
+public extension Locatable {
     var coordinateRegion: MKCoordinateRegion? {
         return nil
     }

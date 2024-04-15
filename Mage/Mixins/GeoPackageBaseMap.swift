@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 protocol GeoPackageBaseMap {
     var mapView: MKMapView? { get set }

@@ -8,11 +8,11 @@
 
 import Foundation
 import MapKit
-import geopackage_ios
 import CoreGraphics
 import DataSourceTileOverlay
+import SwiftUI
 
-protocol MapMixin {
+public protocol MapMixin {
     var uuid: UUID { get }
     func cleanupMixin()
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?
@@ -21,54 +21,23 @@ protocol MapMixin {
     func regionWillChange(mapView: MKMapView, animated: Bool)
     func didChangeUserTrackingMode(mapView: MKMapView, animated: Bool)
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView?
-    func items(at location: CLLocationCoordinate2D) -> [Any]?
-    func applyTheme(scheme: MDCContainerScheming?)
     func items(
         at location: CLLocationCoordinate2D,
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [Any]?
+    func itemKeys(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [String: [String]]
 
     func setupMixin(mapView: MKMapView, mapState: MapState)
     func removeMixin(mapView: MKMapView, mapState: MapState)
     func updateMixin(mapView: MKMapView, mapState: MapState)
 }
 
-class MapState: ObservableObject, Hashable {
-    static func == (lhs: MapState, rhs: MapState) -> Bool {
-        return lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    var id = UUID()
-
-    @Published var userTrackingMode: Int = Int(MKUserTrackingMode.none.rawValue)
-    @Published var mixinStates: [String: Any] = [:]
-
-    var centerDate: Date?
-    @Published var center: MKCoordinateRegion? {
-        didSet {
-            centerDate = Date()
-        }
-    }
-    @Published var forceCenter: MKCoordinateRegion? {
-        didSet {
-            forceCenterDate = Date()
-        }
-    }
-    var forceCenterDate: Date?
-
-    @Published var coordinateCenter: CLLocationCoordinate2D? {
-        didSet {
-            forceCenterDate = Date()
-        }
-    }
-}
-
-extension MapMixin {
+public extension MapMixin {
     var uuid: UUID {
         UUID()
     }
@@ -76,7 +45,7 @@ extension MapMixin {
     func cleanupMixin() {
     }
 
-    func polygonHitTest(polygonObservation: StyledPolygon, location: CLLocationCoordinate2D) -> Bool {
+    func polygonHitTest(polygonObservation: MKPolygon, location: CLLocationCoordinate2D) -> Bool {
         guard let renderer = (renderer(overlay: polygonObservation) as? MKPolygonRenderer ?? standardRenderer(overlay: polygonObservation) as? MKPolygonRenderer) else {
             return false
         }
@@ -86,16 +55,16 @@ extension MapMixin {
         var onShape = renderer.path.contains(point)
         // If not on the polygon, check the complementary polygon path in case it crosses -180 / 180 longitude
         if !onShape {
-            if let complementaryPath: Unmanaged<CGPath> = GPKGMapUtils.complementaryWorldPath(of: polygonObservation) {
-                let retained = complementaryPath.takeRetainedValue()
-                onShape = retained.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
+            if let complementaryPath = complementaryWorldPath(feature: polygonObservation) {
+//                let retained = complementaryPath.takeRetainedValue()
+                onShape = complementaryPath.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
             }
         }
 
         return onShape
     }
 
-    func lineHitTest(lineObservation: StyledPolyline, location: CLLocationCoordinate2D, tolerance: Double) -> Bool {
+    func lineHitTest(lineObservation: MKPolyline, location: CLLocationCoordinate2D, tolerance: Double) -> Bool {
         guard let renderer = (renderer(overlay: lineObservation) as? MKPolylineRenderer ?? standardRenderer(overlay: lineObservation) as? MKPolylineRenderer) else {
             return false
         }
@@ -106,14 +75,59 @@ extension MapMixin {
         var onShape = strokedPath.contains(point)
         // If not on the line, check the complementary polygon path in case it crosses -180 / 180 longitude
         if !onShape {
-            if let complementaryPath: Unmanaged<CGPath> = GPKGMapUtils.complementaryWorldPath(of: lineObservation) {
-                let retained = complementaryPath.takeRetainedValue()
-                let complimentaryStrokedPath = retained.copy(strokingWithWidth: tolerance, lineCap: .round, lineJoin: .round, miterLimit: 1)
+            if let complementaryPath = complementaryWorldPath(feature: lineObservation) {
+                let complimentaryStrokedPath = complementaryPath.copy(strokingWithWidth: tolerance, lineCap: .round, lineJoin: .round, miterLimit: 1)
                 onShape = complimentaryStrokedPath.contains(CGPoint(x: mapPoint.x, y: mapPoint.y))
             }
         }
 
         return onShape
+    }
+
+    func complementaryWorldPath(feature: MKMultiPoint) -> CGPath? {
+        self.complementaryWorldPath(points: feature.points(), pointCount: feature.pointCount)
+    }
+
+    func complementaryWorldPath(points: UnsafeMutablePointer<MKMapPoint>, pointCount: Int) -> CGPath? {
+        var path: CGMutablePath?
+
+        // Determine if the shape is drawn over the -180 / 180 longitude boundary and the direction
+        var worldOverlap = 0
+        for i in 0...pointCount {
+            let mapPoint = points[i]
+            if mapPoint.x < 0 {
+                worldOverlap = -1
+                break
+            } else if mapPoint.x > MKMapSize.world.width {
+                worldOverlap = 1
+            }
+        }
+
+        // Shape crosses the -180 / 180 longitude boundary
+        if worldOverlap != 0 {
+            // Build the complementary points in the opposite world width direction
+            var complementaryPoints: [MKMapPoint] = []
+            for i in 0...pointCount {
+                let mapPoint = points[i]
+                var x = mapPoint.x
+                if worldOverlap < 0 {
+                    x += MKMapSize.world.width
+                } else {
+                    x -= MKMapSize.world.width
+                }
+                complementaryPoints.append(MKMapPoint(x: x, y: mapPoint.y))
+            }
+
+            // Build the path
+            path = CGMutablePath()
+            let firstPoint = complementaryPoints.removeFirst()
+            path?.move(to: CGPoint(x: firstPoint.x, y: firstPoint.y))
+            for complementaryPoint in complementaryPoints {
+                path?.addLine(to: CGPoint(x: firstPoint.x, y: firstPoint.y))
+            }
+        }
+
+        return path
     }
 
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
@@ -148,10 +162,6 @@ extension MapMixin {
         return nil
     }
 
-    func items(at location: CLLocationCoordinate2D) -> [Any]? {
-        return nil
-    }
-
     func items(
         at location: CLLocationCoordinate2D,
         mapView: MKMapView,
@@ -160,6 +170,11 @@ extension MapMixin {
         return nil
     }
 
-    func applyTheme(scheme: MDCContainerScheming?) {
+    func itemKeys(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [String: [String]] {
+        return [:]
     }
 }

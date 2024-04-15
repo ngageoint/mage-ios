@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 protocol FeedItemDelegate {
     func addFeedItem(_ feedItem: FeedItem)

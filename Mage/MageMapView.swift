@@ -9,10 +9,7 @@
 import UIKit
 import geopackage_ios
 import MapKit
-
-protocol OverlayRenderable {
-    var renderer: MKOverlayRenderer { get }
-}
+import MapFramework
 
 class MageMapView: UIView, GeoPackageBaseMap {
     var mapView: MKMapView?
@@ -74,7 +71,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
         }
         for mixin in mapMixins {
             mixin.setupMixin(mapView: mapView, mapState: mapState)
-            mixin.applyTheme(scheme: scheme)
+//            mixin.applyTheme(scheme: scheme)
         }
     }
     
@@ -88,7 +85,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
     func applyTheme(scheme: MDCContainerScheming?) {
         self.scheme = scheme
         for mixin in mapMixins {
-            mixin.applyTheme(scheme: scheme)
+//            mixin.applyTheme(scheme: scheme)
         }
     }
     
@@ -124,16 +121,18 @@ class MageMapView: UIView, GeoPackageBaseMap {
         }
         Task {
             var items: [Any] = []
+            var itemKeys: [String: [String]] = [:]
             for mixin in mapMixins {
-                if let matchedItems = mixin.items(at: tapCoord) {
-                    items.append(contentsOf: matchedItems)
-                }
                 if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
                     items.append(contentsOf: matchedItems)
                 }
+                let matchedItemKeys = await mixin.itemKeys(at: tapCoord, mapView: mapView, touchPoint: tapPoint)
+                itemKeys.merge(matchedItemKeys) { current, new in
+                    current + new
+                }
             }
 
-            let notification = MapItemsTappedNotification(annotations: annotationsTapped, items: items, mapView: mapView)
+            let notification = MapItemsTappedNotification(annotations: annotationsTapped, items: items, itemKeys: itemKeys, mapView: mapView)
             NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
         }
     }

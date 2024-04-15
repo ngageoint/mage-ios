@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 import geopackage_ios
 
 protocol GeoPackageLayerMap {
@@ -63,7 +64,12 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
         
     }
     
-    func items(at location: CLLocationCoordinate2D) -> [Any]? {
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]? {
+//    func items(at location: CLLocationCoordinate2D) -> [Any]? {
         return geoPackage?.getFeaturesAtTap(location)
     }
 }

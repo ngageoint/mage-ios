@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import MaterialComponents
+import MapFramework
 
 protocol UserTrackingMap {
     var mapView: MKMapView? { get set }

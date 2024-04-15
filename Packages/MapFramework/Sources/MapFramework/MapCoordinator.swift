@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 import Combine
 
-class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
+public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
     var mapView: MKMapView?
     var mapScale: MKScaleView?
     var map: MapProtocol
@@ -88,7 +88,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
         }
     }
 
-    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+    public func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         for view in views {
 
             guard let annotation = view.annotation as? EnlargedAnnotation else {
@@ -113,7 +113,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
 
     }
 
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let renderableOverlay = overlay as? OverlayRenderable {
             return renderableOverlay.renderer
         }
@@ -125,7 +125,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
         return MKTileOverlayRenderer(overlay: overlay)
     }
 
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         //        if let enlarged = annotation as? EnlargedAnnotation {
         //            let annotationView = mapView.dequeueReusableAnnotationView(
         //                withIdentifier: EnlargedAnnotationView.ReuseID,
@@ -174,16 +174,16 @@ class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
         return nil
     }
 
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+    public func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         for mixin in map.mixins.mixins {
             mixin.regionDidChange(mapView: mapView, animated: animated) //, centerCoordinate: mapView.centerCoordinate)
         }
     }
 
-    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+    public func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
     }
 
-    func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
+    public func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
         DispatchQueue.main.async { [self] in
             map.mapState.userTrackingMode = mode.rawValue
         }
@@ -292,11 +292,10 @@ extension MapCoordinator {
                 if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
                     items.append(contentsOf: matchedItems)
                 }
-                let matchedItemKeys = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint)
-                items.append(matchedItemKeys)
-                //                    .merge(matchedItemKeys) { current, new in
-                //                    current + new
-                //                }
+                let matchedItemKeys = await mixin.itemKeys(at: tapCoord, mapView: mapView, touchPoint: tapPoint)
+                itemKeys.merge(matchedItemKeys) { current, new in
+                    current + new
+                }
             }
             handleTappedItems(annotations: annotationsTapped, items: items, itemKeys: itemKeys, mapName: map.name)
         }

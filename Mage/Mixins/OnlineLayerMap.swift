@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 class OnlineLayerMapMixin: NSObject, MapMixin {
     var mapView: MKMapView?

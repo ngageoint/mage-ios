@@ -18,12 +18,6 @@ struct MapAnnotationFocusedNotification {
     var mapView: MKMapView?
 }
 
-struct MapItemsTappedNotification {
-    var annotations: [Any]?
-    var items: [Any]?
-    var mapView: MKMapView?
-}
-
 struct DirectionsToItemNotification {
     var observation: Observation?
     var user: User?

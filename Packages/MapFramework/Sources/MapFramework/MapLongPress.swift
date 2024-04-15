@@ -1,5 +1,5 @@
 //
-//  MapSingleTap.swift
+//  MapLongPress.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 4/12/24.
@@ -7,8 +7,10 @@
 //
 
 import Foundation
+import UIKit
+import MapKit
 
-class MapSingleTap: UITapGestureRecognizer {
+class MapLongPress: UILongPressGestureRecognizer {
     var mapView: MKMapView?
     var coordinator: MapCoordinator
 
@@ -17,9 +19,19 @@ class MapSingleTap: UITapGestureRecognizer {
         self.coordinator = coordinator
         super.init(target: nil, action: nil)
         self.addTarget(self, action: #selector(execute))
+        self.delegate = self
     }
 
     @objc private func execute() {
-        coordinator.singleTapGesture(tapGestureRecognizer: self)
+        coordinator.longPressGesture(longPressGestureRecognizer: self)
+    }
+}
+
+extension MapLongPress: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        return true
     }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 protocol PersistedMapState {
     var mapView: MKMapView? { get set }

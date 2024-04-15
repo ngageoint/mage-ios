@@ -9,6 +9,7 @@
 import Foundation
 import MaterialComponents.MDCTextField;
 import MaterialComponents.MDCButton;
+import MapFramework
 
 class GeometryView : BaseFieldView {
     private var accuracy: Double?;

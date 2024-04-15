@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import MaterialComponents
+import MapFramework
 
 protocol CanReportLocation {
     var mapView: MKMapView? { get set }

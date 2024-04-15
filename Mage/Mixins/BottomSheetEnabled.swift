@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapFramework
 
 protocol BottomSheetEnabled {
     var mapView: MKMapView? { get set }

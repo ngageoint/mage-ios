@@ -8,8 +8,10 @@
 
 import Foundation
 import SwiftUI
+import MapKit
+import MAGEStyle
 
-struct MapRepresentable: UIViewRepresentable, MapProtocol {
+public struct MapRepresentable: UIViewRepresentable, MapProtocol {
     var notificationOnTap: NSNotification.Name = .MapItemsTapped
     var notificationOnLongPress: NSNotification.Name = .MapLongPress
     var focusNotification: NSNotification.Name = .FocusMapOnItem
@@ -19,7 +21,15 @@ struct MapRepresentable: UIViewRepresentable, MapProtocol {
     @StateObject var mapState: MapState = MapState()
     var allowMapTapsOnItems: Bool = true
 
-    func makeUIView(context: Context) -> MKMapView {
+    public init(name: String, mixins: MapMixins, mapState: MapState?) {
+        self.name = name
+        self.mixins = mixins
+        if let mapState = mapState {
+            _mapState = StateObject(wrappedValue: mapState)
+        }
+    }
+
+    public func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView(frame: UIScreen.main.bounds)
         // double tap recognizer has no action
         let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: nil)
@@ -64,12 +74,6 @@ struct MapRepresentable: UIViewRepresentable, MapProtocol {
         return mapView
     }
 
-    func setupScale(mapView: MKMapView, context: Context) {
-        let scale = context.coordinator.mapScale ?? mapView.subviews.first { view in
-            return (view as? MKScaleView) != nil
-        }
-    }
-
     func setMapLocation(context: Context) {
         if let center = mapState.center,
            center.center.latitude != context.coordinator.setCenter?.latitude,
@@ -90,52 +94,14 @@ struct MapRepresentable: UIViewRepresentable, MapProtocol {
     }
 
     func setMapType(mapView: MKMapView, context: Context) {
-        //        if mapState.mapType == ExtraMapTypes.osm.rawValue {
-        //            if context.coordinator.osmOverlay == nil {
-        //                context.coordinator.osmOverlay
-        //                = MKTileOverlay(urlTemplate: "https://osm.gs.mil/tiles/default/{z}/{x}/{y}.png")
-        //                context.coordinator.osmOverlay?.tileSize = CGSize(width: 512, height: 512)
-        //                context.coordinator.osmOverlay?.canReplaceMapContent = true
-        //            }
-        //            mapView.removeOverlay(context.coordinator.osmOverlay!)
-        //            mapView.insertOverlay(context.coordinator.osmOverlay!, at: 0, level: .aboveRoads)
-        //        } else if let mkmapType = MKMapType(rawValue: UInt(mapState.mapType)) {
-        //            mapView.mapType = mkmapType
-        //            if let osmOverlay = context.coordinator.osmOverlay {
-        //                mapView.removeOverlay(osmOverlay)
-        //            }
-        //        }
+        if let mkmapType = MKMapType(rawValue: UInt(mapState.mapType)) {
+            mapView.mapType = mkmapType
+        }
     }
 
-    func setGrids(mapView: MKMapView, context: Context) {
-        //        if mapState.showGARS {
-        //            if context.coordinator.garsOverlay == nil {
-        //                context.coordinator.garsOverlay = GARSTileOverlay(512, 512)
-        //            }
-        //            mapView.addOverlay(context.coordinator.garsOverlay!, level: .aboveRoads)
-        //        } else {
-        //            if let garsOverlay = context.coordinator.garsOverlay {
-        //                mapView.removeOverlay(garsOverlay)
-        //            }
-        //        }
-        //
-        //        if mapState.showMGRS {
-        //            if context.coordinator.mgrsOverlay == nil {
-        //                context.coordinator.mgrsOverlay = MGRSTileOverlay(512, 512)
-        //            }
-        //            mapView.addOverlay(context.coordinator.mgrsOverlay!, level: .aboveRoads)
-        //        } else {
-        //            if let mgrsOverlay = context.coordinator.mgrsOverlay {
-        //                mapView.removeOverlay(mgrsOverlay)
-        //            }
-        //        }
-    }
-
-    func updateUIView(_ mapView: MKMapView, context: Context) {
+    public func updateUIView(_ mapView: MKMapView, context: Context) {
         context.coordinator.mapView = mapView
         context.coordinator.allowMapTapsOnItems = allowMapTapsOnItems
-
-        setupScale(mapView: mapView, context: context)
 
         setMapLocation(context: context)
 
@@ -145,8 +111,6 @@ struct MapRepresentable: UIViewRepresentable, MapProtocol {
         }
 
         setMapType(mapView: mapView, context: context)
-
-        setGrids(mapView: mapView, context: context)
 
         // remove any mixins that were removed
         for mixin in context.coordinator.mixins
@@ -171,7 +135,7 @@ struct MapRepresentable: UIViewRepresentable, MapProtocol {
         context.coordinator.mixins = mixins.mixins
     }
 
-    func makeCoordinator() -> MapCoordinator {
+    public func makeCoordinator() -> MapCoordinator {
         return MapCoordinator(self, focusNotification: focusNotification)
     }
 

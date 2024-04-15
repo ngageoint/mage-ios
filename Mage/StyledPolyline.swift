@@ -4,7 +4,9 @@
 //
 //
 
+import MapKit
 import CoreLocation
+import MapFramework
 
 @objc class StyledPolyline : MKPolyline, OverlayRenderable {
     var renderer: MKOverlayRenderer {

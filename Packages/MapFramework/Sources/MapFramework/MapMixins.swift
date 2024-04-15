@@ -8,9 +8,14 @@
 
 import Foundation
 
-class MapMixins: ObservableObject {
-    @Published var mixins: [any MapMixin] = []
-    func addMixin(_ mixin: any MapMixin) {
+public class MapMixins: ObservableObject {
+    @Published public var mixins: [any MapMixin] = []
+
+    public init() {
+
+    }
+    
+    public func addMixin(_ mixin: any MapMixin) {
         mixins.append(mixin)
     }
 }

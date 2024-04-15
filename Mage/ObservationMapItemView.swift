@@ -10,6 +10,7 @@ import Foundation
 import MaterialViews
 import SwiftUI
 import MAGEStyle
+import MapFramework
 
 struct ObservationMapItemView: View {
     @EnvironmentObject var repository: ObservationRepository
@@ -42,7 +43,7 @@ struct ObservationMapItemView: View {
     }
 
     var map: some View {
-        MarlinMap(name: "Marlin Map", mixins: mixins, mapState: mapState)
+        MapRepresentable(name: "Marlin Map", mixins: mixins, mapState: mapState)
             .ignoresSafeArea()
     }
 

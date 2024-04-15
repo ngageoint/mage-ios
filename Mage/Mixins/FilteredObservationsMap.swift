@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import geopackage_ios
+import MapFramework
 
 protocol FilteredObservationsMap {
     var mapView: MKMapView? { get set }
@@ -88,9 +89,13 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         NotificationCenter.default.post(name: .ObservationFiltersChanged, object: nil)
     }
 
-    func items(at location: CLLocationCoordinate2D) -> [Any]? {
+    func items(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) async -> [Any]? {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
-        let tolerance = (self.filteredObservationsMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
+        let tolerance = await (self.filteredObservationsMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
         var annotations: [Any] = []
         for lineObservation in lineObservations {
@@ -109,7 +114,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         }
         return annotations
     }
-    
+
     func addFilteredObservations() {
         if let observations = observations, let fetchedObservations = observations.fetchedResultsController.fetchedObjects as? [Observation] {
             for observation in fetchedObservations {

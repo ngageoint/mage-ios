@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import DataSourceTileOverlay
 import MKMapViewExtensions
+import MapFramework
 
 class DataSourceMap: MapMixin {
     var REFRESH_KEY: String {

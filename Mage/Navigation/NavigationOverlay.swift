@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 class NavigationOverlay: MKPolyline, OverlayRenderable {
     var color: UIColor = UIColor.systemRed

@@ -7,6 +7,9 @@
 //
 //
 
+import MapKit
+import MapFramework
+
 @objc class StyledPolygon: MKPolygon, OverlayRenderable {
     var renderer: MKOverlayRenderer {
         get {

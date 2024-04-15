@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import Kingfisher
+import MapFramework
 
 protocol Navigable {
     var coordinate: CLLocationCoordinate2D { get }

@@ -15,7 +15,6 @@ extension Notification.Name {
     public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
     public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
     public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
-    public static let MapItemsTapped = Notification.Name("MapItemsTapped")
     public static let MapAnnotationFocused = Notification.Name("MapAnnotationFocused")
     public static let MapViewDisappearing = Notification.Name("MapViewDisappearing")
     public static let ObservationUpdated = Notification.Name("ObservationUpdated")
