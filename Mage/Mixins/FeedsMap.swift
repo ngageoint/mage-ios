@@ -169,6 +169,7 @@ class FeedsMapMixin: NSObject, MapMixin {
 extension FeedsMapMixin : FeedItemDelegate {
     func addFeedItem(_ feedItem: FeedItem) {
         if (feedItem.isMappable) {
+            print("add feed item at \(feedItem.coordinate)")
             feedsMap.mapView?.addAnnotation(feedItem);
         }
     }
