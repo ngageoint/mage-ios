@@ -75,7 +75,9 @@ import Kingfisher
     }
     
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
-        return User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: UserDefaults.standard.currentUserId ?? "", in: context);
+        return context.performAndWait {
+            return User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: UserDefaults.standard.currentUserId ?? "", in: context);
+        }
     }
     
     @objc public static func operationToFetchMyself(success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {

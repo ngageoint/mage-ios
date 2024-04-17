@@ -61,7 +61,6 @@ class DataSourceMap: MapMixin {
         self.mapView = mapView
         self.mapState = mapState
 
-        self.setupDataSourceUpdatedPublisher(mapState: mapState)
         self.setupUserDefaultsShowPublisher(mapState: mapState)
         self.setupOrderPublisher(mapState: mapState)
         updateMixin(mapView: mapView, mapState: mapState)
@@ -76,6 +75,14 @@ class DataSourceMap: MapMixin {
                     if let mapState = self?.mapState {
                         self?.updateMixin(mapView: mapView, mapState: mapState)
                     }
+                }
+            }
+            .store(in: &cancellable)
+
+        repository?.refreshPublisher?
+            .sink { date in
+                if let mapState = self.mapState {
+                    self.refreshMap(mapState: mapState)
                 }
             }
             .store(in: &cancellable)
@@ -108,9 +115,7 @@ class DataSourceMap: MapMixin {
                     annotations.append(contentsOf: features.annotations)
                     overlays.append(contentsOf: features.overlays)
                 }
-//                await MainActor.run {
                 await addFeatures(features: AnnotationsAndOverlays(annotations: annotations, overlays: overlays), mapView: mapView)
-//                }
             }
         }
     }
@@ -143,24 +148,6 @@ class DataSourceMap: MapMixin {
                 self.REFRESH_KEY
             ] = Date()
         }
-    }
-
-    func setupDataSourceUpdatedPublisher(mapState: MapState) {
-        NotificationCenter.default.publisher(for: .DataSourceUpdated)
-            .receive(on: RunLoop.main)
-            .compactMap {
-                $0.object as? DataSourceUpdatedNotification
-            }
-            .sink { item in
-                let key = self.dataSourceKey
-                if item.key == key {
-                    NSLog("New data for \(key), refresh overlay, clear the cache")
-                    self.repository?.clearCache(completion: {
-                        self.refreshMap(mapState: mapState)
-                    })
-                }
-            }
-            .store(in: &cancellable)
     }
 
     func setupUserDefaultsShowPublisher(mapState: MapState) {

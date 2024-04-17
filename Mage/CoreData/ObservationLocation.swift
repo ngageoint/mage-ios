@@ -8,8 +8,23 @@
 
 import Foundation
 import CoreData
+import MapKit
 
 class ObservationLocation: NSManagedObject {
+
+    var region: MKCoordinateRegion {
+        var center = CLLocationCoordinate2D(
+            latitude: maxLatitude - ((maxLatitude - minLatitude) / 2.0),
+            longitude: maxLongitude - ((maxLongitude - minLongitude) / 2.0)
+        )
+        return MKCoordinateRegion(
+            center: center,
+            span: MKCoordinateSpan(
+                latitudeDelta: maxLatitude - minLatitude,
+                longitudeDelta: maxLongitude - minLongitude
+            )
+        )
+    }
 
     public var geometry: SFGeometry? {
         get {

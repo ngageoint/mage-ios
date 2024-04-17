@@ -11,6 +11,8 @@ import Kingfisher
 import CoreLocation
 import UIKit
 import MapKit
+import CLLocationCoordinate2DExtensions
+import Combine
 
 public protocol TileRepository {
     var dataSource: any DataSourceDefinition { get }
@@ -20,6 +22,9 @@ public protocol TileRepository {
 
     var filterCacheKey: String { get }
     var alwaysShow: Bool { get }
+
+    var refreshPublisher: AnyPublisher<Date, Never>? { get }
+    var refreshSubject: PassthroughSubject<Date, Never>? { get }
 
     func getTileableItems(
         minLatitude: Double,
@@ -43,15 +48,51 @@ public protocol TileRepository {
         precise: Bool
     ) async -> [String]
 
-    func clearCache(completion: @escaping () -> Void)
+    func clearCache() async
+    func clearCache(regions: [MKCoordinateRegion]?) async
 }
 
 public extension TileRepository {
-    func clearCache(completion: @escaping () -> Void) {
+
+    var refreshPublisher: AnyPublisher<Date, Never>? {
+        nil
+    }
+
+    var refreshSubject: PassthroughSubject<Date, Never>? {
+        nil
+    }
+
+    func clearCache() async {
+        await clearCache(regions: nil)
+    }
+
+    func clearCache(regions: [MKCoordinateRegion]? = nil) async {
         if let imageCache = self.imageCache {
-            imageCache.clearCache(completion: completion)
-        } else {
-            completion()
+            var keysToClear: Set<String> = Set<String>()
+            if let regions = regions {
+                for region in regions {
+                    let intersectingTileBounds = region.intersectingTileBounds(minZoom: 0, maxZoom: 18)
+                    for (key, value) in intersectingTileBounds {
+                        let southWest = value.southWest
+                        let northEast = value.northEast
+                        for x in southWest.x...northEast.x {
+                            for y in southWest.y...northEast.y {
+                                keysToClear.insert("\(cacheSourceKey ?? "_dc")/\(key)/\(x)/\(y)")
+                            }
+                        }
+                    }
+                }
+                for key in keysToClear {
+                    await withCheckedContinuation { continuation in
+                        imageCache.removeImage(forKey: key, completionHandler: continuation.resume)
+                    }
+                }
+            } else {
+                await withCheckedContinuation { continuation in
+                    imageCache.clearCache(completion: continuation.resume)
+                }
+            }
+            refreshSubject?.send(Date())
         }
     }
 

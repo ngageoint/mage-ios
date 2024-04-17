@@ -137,12 +137,10 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(feedsMapMixin!)
             mapMixins.append(onlineLayerMapMixin!)
 
-            if let observationRepository = RepositoryManager.shared.observationRepository,
-               let observationIconRepository = RepositoryManager.shared.observationIconRepository {
-                observationMap = ObservationsMap(repository: ObservationsTileRepository(observationRepository: observationRepository, observationIconRepository: observationIconRepository))
+            if let observationsTileRepository = RepositoryManager.shared.observationsTileRepository {
+                observationMap = ObservationsMap(repository: observationsTileRepository)
                 mapMixins.append(observationMap!)
             }
-
         }
         
         initiateMapMixins()

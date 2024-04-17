@@ -1,4 +1,5 @@
 import CoreLocation
+import MapKit
 
 public struct DMSCoordinate {
     var degrees: Int?
@@ -363,3 +364,40 @@ extension CLLocationCoordinate2D {
         }
     }
 }
+
+public extension MKCoordinateRegion {
+
+    func corners() -> (southWest: CLLocationCoordinate2D, northEast: CLLocationCoordinate2D) {
+        let southWest = CLLocationCoordinate2D(
+            latitude: center.latitude - (span.latitudeDelta / 2.0),
+            longitude: center.longitude - (span.longitudeDelta / 2.0))
+        let northEast = CLLocationCoordinate2D(
+            latitude: center.latitude + (span.latitudeDelta / 2.0),
+            longitude: center.longitude + (span.longitudeDelta / 2.0))
+        return (southWest: southWest, northEast: northEast)
+    }
+
+    func intersectingTileBounds(
+        includeBorder: Bool = true,
+        minZoom: Int = 0,
+        maxZoom: Int = 18
+    ) -> [Int: (southWest: (x: Int, y: Int), northEast: (x: Int, y: Int))] {
+        var tiles: [Int: (southWest: (x: Int, y: Int), northEast: (x: Int, y: Int))] = [:]
+        let corners = corners()
+
+        for i in minZoom...maxZoom {
+            let southWestTile = corners.southWest.toTile(zoom: i)
+            let northEastTile = corners.northEast.toTile(zoom: i)
+            if includeBorder {
+                tiles[i] = (
+                    (x: southWestTile.x - 1, y: southWestTile.y - 1),
+                    (x: northEastTile.x + 1, y: northEastTile.y + 1)
+                )
+            } else {
+                tiles[i] = (southWestTile, northEastTile)
+            }
+        }
+        return tiles
+    }
+}
+

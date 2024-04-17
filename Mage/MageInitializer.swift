@@ -75,9 +75,22 @@ import Foundation
     }
 
     @objc public static func initializeRepositories() {
-        let observationRepository = ObservationRepository(localDataSource: ObservationCoreDataDataSource())
+        let observationLocalDataSource = ObservationCoreDataDataSource()
+        let observationRepository = ObservationRepository(
+            localDataSource: observationLocalDataSource,
+            remoteDataSource: ObservationRemoteDataSource()
+        )
         RepositoryManager.shared.observationRepository = observationRepository
-        RepositoryManager.shared.observationIconRepository = ObservationIconRepository(observationRepository: observationRepository)
+        RepositoryManager.shared.observationIconRepository = ObservationIconRepository(
+            localDataSource: observationLocalDataSource
+        )
+        RepositoryManager.shared.observationsTileRepository = ObservationsTileRepository(
+            localDataSource: observationLocalDataSource,
+            observationIconRepository: RepositoryManager.shared.observationIconRepository!
+        )
+        Task {
+            await RepositoryManager.shared.observationsTileRepository?.clearCache()
+        }
     }
 
 }

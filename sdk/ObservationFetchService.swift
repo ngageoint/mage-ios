@@ -62,23 +62,9 @@ public class ObservationFetchService: NSObject {
             scheduleTimer()
             return
         }
-        var observationFetchTask: URLSessionTask?;
-        
-        if initial {
-            observationFetchTask = Observation.operationToPullInitialObservations(success: { _, _ in
-                self.scheduleTimer()
-            }, failure: { _, _ in
-                self.scheduleTimer()
-            })
-        } else {
-            observationFetchTask = Observation.operationToPullObservations(success: { _, _ in
-                self.scheduleTimer()
-            }, failure: { _, _ in
-                self.scheduleTimer()
-            })
-        }
-        if let observationFetchTask = observationFetchTask {
-            MageSessionManager.shared().addTask(observationFetchTask);
+        Task {
+            let pulled = await RepositoryManager.shared.observationRepository?.fetchObservations()
+            self.scheduleTimer()
         }
     }
     

@@ -57,7 +57,7 @@ struct DataSourceTileProvider: ImageDataProvider {
     var tileSize: CGSize = CGSize(width: 512, height: 512)
 
     var cacheKey: String {
-        "\(tileRepository.cacheSourceKey ?? "_dc")/\(path.z)/\(path.x)/\(path.y)/\(tileRepository.filterCacheKey)"
+        "\(tileRepository.cacheSourceKey ?? "_dc")/\(path.z)/\(path.x)/\(path.y)"
     }
 
     func data(handler: @escaping (Result<Data, Error>) -> Void) {

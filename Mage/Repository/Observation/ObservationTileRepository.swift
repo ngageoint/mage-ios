@@ -10,6 +10,7 @@ import Foundation
 import DataSourceTileOverlay
 import Kingfisher
 import DataSourceDefinition
+import Combine
 
 enum DataSources {
     static let observation: ObservationDefinition = ObservationDefinition.definition
@@ -97,11 +98,11 @@ class ObservationTileRepository: TileRepository, ObservableObject {
     var alwaysShow: Bool = true
 
     var observationUrl: URL
-    let observationRepository: ObservationRepository
+    let localDataSource: ObservationLocalDataSource
 
-    init(observationUrl: URL, observationRepository: ObservationRepository) {
+    init(observationUrl: URL, localDataSource: ObservationLocalDataSource) {
         self.observationUrl = observationUrl
-        self.observationRepository = observationRepository
+        self.localDataSource = localDataSource
     }
 
     func getTileableItems(
@@ -114,7 +115,7 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [any DataSourceImage] {
-        if let observation = await observationRepository.getObservation(observationUri: observationUrl) {
+        if let observation = await localDataSource.getObservation(observationUri: observationUrl) {
             return observation.locations?.map({ location in
                 ObservationMapImage(mapItem: ObservationMapItem(observation: location))
             }) ?? []
@@ -137,13 +138,21 @@ class ObservationTileRepository: TileRepository, ObservableObject {
 }
 
 class ObservationsTileRepository: TileRepository, ObservableObject {
+    var cancellable = Set<AnyCancellable>()
+
+    var refreshPublisher: AnyPublisher<Date, Never>? {
+        refreshSubject?.eraseToAnyPublisher()
+    }
+
+    var refreshSubject: PassthroughSubject<Date, Never>? = PassthroughSubject<Date, Never>()
+
     var alwaysShow: Bool = true
     var dataSource: any DataSourceDefinition = DataSources.observation
     var cacheSourceKey: String? { dataSource.key }
     var imageCache: Kingfisher.ImageCache? {
-//        if let cacheSourceKey = cacheSourceKey {
-//            return Kingfisher.ImageCache(name: cacheSourceKey)
-//        }
+        if let cacheSourceKey = cacheSourceKey {
+            return Kingfisher.ImageCache(name: cacheSourceKey)
+        }
         return nil
     }
     var filterCacheKey: String {
@@ -153,13 +162,34 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
 
-    let observationRepository: ObservationRepository
+    let localDataSource: ObservationLocalDataSource
     let iconRepository: ObservationIconRepository
 
-    init(observationRepository: ObservationRepository, observationIconRepository: ObservationIconRepository) {
-        self.observationRepository = observationRepository
+    init(localDataSource: ObservationLocalDataSource, observationIconRepository: ObservationIconRepository) {
+        self.localDataSource = localDataSource
         self.iconRepository = observationIconRepository
         _ = getMaximumIconHeightToWidthRatio()
+
+        self.localDataSource.publisher()
+            .dropFirst()
+            .sink { changes in
+                Task {
+                    print("changes \(changes)")
+                    var regions: [MKCoordinateRegion] = []
+                    for change in changes {
+                        switch (change) {
+                        case .insert(offset: let offset, element: let element, associatedWith: let associatedWith):
+                            regions.append(element.region)
+                        case .remove(offset: let offset, element: let element, associatedWith: let associatedWith):
+                            regions.append(element.region)
+                        }
+                    }
+
+                    await self.clearCache(regions: regions)
+                    print("Cleared")
+                }
+            }
+            .store(in: &cancellable)
     }
 
     func getTileableItems(
@@ -233,7 +263,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         let queryLocationMinLatitude = minLatitude - iconToleranceHeightDegrees
         let queryLocationMaxLatitude = maxLatitude + iconToleranceHeightDegrees
 
-        let items = await observationRepository.getMapItems(
+        let items = await localDataSource.getMapItems(
             minLatitude: queryLocationMinLatitude,
             maxLatitude: queryLocationMaxLatitude,
             minLongitude: queryLocationMinLongitude,
@@ -246,7 +276,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                 guard let observationId = item.observationId else {
                     continue
                 }
-                let observationTileRepo = ObservationTileRepository(observationUrl: observationId, observationRepository: observationRepository)
+                let observationTileRepo = ObservationTileRepository(observationUrl: observationId, localDataSource: localDataSource)
                 let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
                 if item.geometry is SFPoint {
                     let include = await markerHitTest(

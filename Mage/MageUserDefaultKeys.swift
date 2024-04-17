@@ -14,7 +14,8 @@ extension Notification.Name {
     public static let MAGEFormFetched = Notification.Name(Form.MAGEFormFetched)
     public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
     public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
-    public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
+    public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired")
+    public static let MAGEServerContactedAfterOfflineLogin = Notification.Name("mil.nga.mage.server.contacted")
     public static let MapAnnotationFocused = Notification.Name("MapAnnotationFocused")
     public static let MapViewDisappearing = Notification.Name("MapViewDisappearing")
     public static let ObservationUpdated = Notification.Name("ObservationUpdated")

@@ -380,6 +380,17 @@
 		F776AC892BC98939000FAFB4 /* MageHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776AC882BC98939000FAFB4 /* MageHostingController.swift */; };
 		F776AC8B2BC9CC52000FAFB4 /* ObservationMapItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776AC8A2BC9CC52000FAFB4 /* ObservationMapItemViewModel.swift */; };
 		F776AC902BC9E178000FAFB4 /* MapFramework in Frameworks */ = {isa = PBXBuildFile; productRef = F776AC8F2BC9E178000FAFB4 /* MapFramework */; };
+		F776AC952BCD9DE3000FAFB4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F776AC942BCD9DE3000FAFB4 /* Alamofire */; };
+		F776AC972BCD9E6A000FAFB4 /* ObservationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776AC962BCD9E6A000FAFB4 /* ObservationService.swift */; };
+		F776AC992BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776AC982BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift */; };
+		F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776AC9A2BCDB23E000FAFB4 /* RemoteDataSource.swift */; };
+		F776AC9D2BCDB271000FAFB4 /* DataFetchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776AC9C2BCDB271000FAFB4 /* DataFetchOperation.swift */; };
+		F776AC9F2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776AC9E2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift */; };
+		F776ACA12BCDB892000FAFB4 /* MageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACA02BCDB892000FAFB4 /* MageSession.swift */; };
+		F776ACA32BCDC362000FAFB4 /* CoreDataDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACA22BCDC362000FAFB4 /* CoreDataDataSource.swift */; };
+		F776ACA52BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACA42BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift */; };
+		F776ACA72BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACA62BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift */; };
+		F776ACAB2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACAA2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift */; };
 		F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF52527D05200B88BD4 /* tokenSuccess.json */; };
 		F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF9252B541A00B88BD4 /* signupSuccess.json */; };
 		F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */; };
@@ -1134,6 +1145,16 @@
 		F776AC882BC98939000FAFB4 /* MageHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageHostingController.swift; sourceTree = "<group>"; };
 		F776AC8A2BC9CC52000FAFB4 /* ObservationMapItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapItemViewModel.swift; sourceTree = "<group>"; };
 		F776AC8E2BC9DADE000FAFB4 /* MapFramework */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MapFramework; path = Packages/MapFramework; sourceTree = "<group>"; };
+		F776AC962BCD9E6A000FAFB4 /* ObservationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationService.swift; sourceTree = "<group>"; };
+		F776AC982BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRemoteDataSource.swift; sourceTree = "<group>"; };
+		F776AC9A2BCDB23E000FAFB4 /* RemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataSource.swift; sourceTree = "<group>"; };
+		F776AC9C2BCDB271000FAFB4 /* DataFetchOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchOperation.swift; sourceTree = "<group>"; };
+		F776AC9E2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDataFetchOperation.swift; sourceTree = "<group>"; };
+		F776ACA02BCDB892000FAFB4 /* MageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageSession.swift; sourceTree = "<group>"; };
+		F776ACA22BCDC362000FAFB4 /* CoreDataDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataDataSource.swift; sourceTree = "<group>"; };
+		F776ACA42BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingDataLoadOperation.swift; sourceTree = "<group>"; };
+		F776ACA62BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDataLoadOperation.swift; sourceTree = "<group>"; };
+		F776ACAA2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectChangesPublisher.swift; sourceTree = "<group>"; };
 		F777AFF52527D05200B88BD4 /* tokenSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tokenSuccess.json; sourceTree = "<group>"; };
 		F777AFF9252B541A00B88BD4 /* signupSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signupSuccess.json; sourceTree = "<group>"; };
 		F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signupSuccessInactive.json; sourceTree = "<group>"; };
@@ -1455,6 +1476,7 @@
 				F776AC902BC9E178000FAFB4 /* MapFramework in Frameworks */,
 				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
 				F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */,
+				F776AC952BCD9DE3000FAFB4 /* Alamofire in Frameworks */,
 				F70688932BA3A85600D8E2EA /* StringExtensions in Frameworks */,
 				F7A94DAB18B5100B00CB9EE0 /* QuartzCore.framework in Frameworks */,
 				F7A94D6C18AD9CB000CB9EE0 /* CoreGraphics.framework in Frameworks */,
@@ -1915,6 +1937,11 @@
 				F70688B72BB5BDA400D8E2EA /* Observation */,
 				F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */,
 				F734C1D92BC03EB400B2E8C8 /* MapFeatureRepository.swift */,
+				F776AC9A2BCDB23E000FAFB4 /* RemoteDataSource.swift */,
+				F776AC9C2BCDB271000FAFB4 /* DataFetchOperation.swift */,
+				F776ACA22BCDC362000FAFB4 /* CoreDataDataSource.swift */,
+				F776ACA42BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift */,
+				F776ACAA2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -1927,6 +1954,7 @@
 				F70688982BA4920D00D8E2EA /* ObservationLocalDataSource.swift */,
 				F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */,
 				F734C1D72BBF565B00B2E8C8 /* ObservationMapFeatureRepository.swift */,
+				F776AC982BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -2478,6 +2506,25 @@
 			path = Framework;
 			sourceTree = "<group>";
 		};
+		F776AC912BCD9CB5000FAFB4 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				F776AC922BCD9CBC000FAFB4 /* Observation */,
+				F776ACA02BCDB892000FAFB4 /* MageSession.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		F776AC922BCD9CBC000FAFB4 /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F776AC962BCD9E6A000FAFB4 /* ObservationService.swift */,
+				F776AC9E2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift */,
+				F776ACA62BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift */,
+			);
+			path = Observation;
+			sourceTree = "<group>";
+		};
 		F77B7D7C24797B0400C51953 /* Form */ = {
 			isa = PBXGroup;
 			children = (
@@ -2699,6 +2746,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F776AC912BCD9CB5000FAFB4 /* Network */,
 				F734C1E62BC8474B00B2E8C8 /* UI */,
 				F70688B62BB5BD9C00D8E2EA /* Repository */,
 				2FAE23FB2B5596A900629721 /* Search */,
@@ -3080,6 +3128,7 @@
 				F734C1F02BC84B2000B2E8C8 /* ViewExtensions */,
 				F734C1F32BC84C8300B2E8C8 /* MaterialViews */,
 				F776AC8F2BC9E178000FAFB4 /* MapFramework */,
+				F776AC942BCD9DE3000FAFB4 /* Alamofire */,
 			);
 			productName = Mage;
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
@@ -3154,6 +3203,7 @@
 			mainGroup = F7A94D5D18AD9CAF00CB9EE0;
 			packageReferences = (
 				F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				F776AC932BCD9DE3000FAFB4 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
 			projectDirPath = "";
@@ -3478,6 +3528,7 @@
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
 				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
+				F776ACA72BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift in Sources */,
 				F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */,
 				F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.swift in Sources */,
 				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
@@ -3536,6 +3587,7 @@
 				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
+				F776AC9D2BCDB271000FAFB4 /* DataFetchOperation.swift in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
 				F7C812E925C1B37200D4332B /* ObservationDataStore.swift in Sources */,
 				F795ED0924B8F34D0028FBFC /* UserTableHeaderView.swift in Sources */,
@@ -3547,6 +3599,7 @@
 				F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */,
 				F7ECDC9E27A83C8600D0AF92 /* GeoPackage.m in Sources */,
 				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
+				F776ACA52BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift in Sources */,
 				F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */,
 				F72D42EC2694B60300F9AC3B /* Canary.swift in Sources */,
 				2F1542E11CF76FC90022AABA /* ObservationFields.m in Sources */,
@@ -3576,6 +3629,7 @@
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
+				F776AC9F2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
@@ -3637,6 +3691,8 @@
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				2FAC84A92B505A9800FCAB37 /* SearchMapViewController.swift in Sources */,
+				F776AC992BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift in Sources */,
+				F776ACA12BCDB892000FAFB4 /* MageSession.swift in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
 				F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */,
 				F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */,
@@ -3725,6 +3781,7 @@
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
+				F776ACA32BCDC362000FAFB4 /* CoreDataDataSource.swift in Sources */,
 				F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */,
 				F70688B42BB3574100D8E2EA /* ObservationsMap.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
@@ -3733,6 +3790,7 @@
 				F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */,
 				F75FC906233AAA4100547315 /* XYZTileOverlay.m in Sources */,
 				2FC8BBBE2602538300F73B0E /* AuthenticationCoordinator_Server5.m in Sources */,
+				F776AC972BCD9E6A000FAFB4 /* ObservationService.swift in Sources */,
 				F734C1DA2BC03EB400B2E8C8 /* MapFeatureRepository.swift in Sources */,
 				F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
@@ -3815,6 +3873,7 @@
 				F7813A8124621237003666ED /* ObservationFormView.swift in Sources */,
 				F72D43122694B60300F9AC3B /* MageServer.swift in Sources */,
 				F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */,
+				F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
@@ -3840,6 +3899,7 @@
 				F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,
 				F72D43052694B60300F9AC3B /* User+CoreDataProperties.swift in Sources */,
+				F776ACAB2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift in Sources */,
 				F7D43BE4269F357200561A8F /* FeedItemActionsView.swift in Sources */,
 				F7F08E9427E0EB7100640D89 /* GeoPackageImporter.m in Sources */,
 				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,
@@ -4362,6 +4422,14 @@
 				minimumVersion = 7.11.0;
 			};
 		};
+		F776AC932BCD9DE3000FAFB4 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -4413,6 +4481,11 @@
 		F776AC8F2BC9E178000FAFB4 /* MapFramework */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MapFramework;
+		};
+		F776AC942BCD9DE3000FAFB4 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F776AC932BCD9DE3000FAFB4 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 

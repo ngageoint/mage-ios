@@ -250,5 +250,4 @@ import Foundation
             self.authenticationModules = authenticationModules
         }
     }
-
 }

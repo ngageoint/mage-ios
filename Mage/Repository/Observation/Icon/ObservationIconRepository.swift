@@ -10,13 +10,13 @@ import Foundation
 import UIImageExtensions
 
 class ObservationIconRepository: ObservableObject {
-    let observationRepository: ObservationRepository
-    init(observationRepository: ObservationRepository) {
-        self.observationRepository = observationRepository
+    let localDataSource: ObservationLocalDataSource
+    init(localDataSource: ObservationLocalDataSource) {
+        self.localDataSource = localDataSource
     }
 
     func getIconPath(observationUri: URL) async -> String? {
-        if let observation = await observationRepository.getObservation(observationUri: observationUri) {
+        if let observation = await localDataSource.getObservation(observationUri: observationUri) {
             return getIconPath(observation: observation)
         }
         return nil
@@ -30,7 +30,10 @@ class ObservationIconRepository: ObservableObject {
         return iterateIconDirectoriesAtRoot(directory: rootIconFolder(eventId: eventId))
     }
 
-    func iterateIconDirectoriesAtRoot(directory: URL, currentLargest: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0)) -> CGSize {
+    func iterateIconDirectoriesAtRoot(
+        directory: URL,
+        currentLargest: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0)
+    ) -> CGSize {
         var largest = currentLargest
         do {
             let resourceKeys : [URLResourceKey] = [.creationDateKey, .isDirectoryKey]

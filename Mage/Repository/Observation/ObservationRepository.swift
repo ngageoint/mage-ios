@@ -10,9 +10,11 @@ import Foundation
 
 class ObservationRepository: ObservableObject {
     let localDataSource: ObservationLocalDataSource
+    let remoteDataSource: ObservationRemoteDataSource
 
-    init(localDataSource: ObservationLocalDataSource) {
+    init(localDataSource: ObservationLocalDataSource, remoteDataSource: ObservationRemoteDataSource) {
         self.localDataSource = localDataSource
+        self.remoteDataSource = remoteDataSource
     }
 
     func getObservation(remoteId: String?) async -> Observation? {
@@ -39,5 +41,19 @@ class ObservationRepository: ObservableObject {
             minLongitude: minLongitude,
             maxLongitude: maxLongitude
         )
+    }
+
+    func fetchObservations() async -> Int {
+        NSLog("Fetching Observations")
+
+        guard let eventId = Server.currentEventId() else {
+            return 0
+        }
+
+        let newestObservationDate = localDataSource.getLastObservationDate(eventId: eventId.intValue)
+        let observationJson = await remoteDataSource.fetch(eventId: eventId.intValue, date: newestObservationDate)
+        let inserted = await localDataSource.insert(task: nil, observations: observationJson, eventId: eventId.intValue)
+
+        return inserted
     }
 }
