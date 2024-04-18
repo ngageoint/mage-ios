@@ -98,9 +98,9 @@ class ObservationTileRepository: TileRepository, ObservableObject {
     var alwaysShow: Bool = true
 
     var observationUrl: URL
-    let localDataSource: ObservationLocalDataSource
+    let localDataSource: ObservationLocationLocalDataSource
 
-    init(observationUrl: URL, localDataSource: ObservationLocalDataSource) {
+    init(observationUrl: URL, localDataSource: ObservationLocationLocalDataSource) {
         self.observationUrl = observationUrl
         self.localDataSource = localDataSource
     }
@@ -115,12 +115,10 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [any DataSourceImage] {
-        if let observation = await localDataSource.getObservation(observationUri: observationUrl) {
-            return observation.locations?.map({ location in
-                ObservationMapImage(mapItem: ObservationMapItem(observation: location))
-            }) ?? []
-        }
-        return []
+        return await localDataSource.getMapItems(observationUri: observationUrl)
+            .map({ mapItem in
+                ObservationMapImage(mapItem: mapItem)
+            })
     }
     
     func getItemKeys(
@@ -162,10 +160,10 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
 
-    let localDataSource: ObservationLocalDataSource
+    let localDataSource: ObservationLocationLocalDataSource
     let iconRepository: ObservationIconRepository
 
-    init(localDataSource: ObservationLocalDataSource, observationIconRepository: ObservationIconRepository) {
+    init(localDataSource: ObservationLocationLocalDataSource, observationIconRepository: ObservationIconRepository) {
         self.localDataSource = localDataSource
         self.iconRepository = observationIconRepository
         _ = getMaximumIconHeightToWidthRatio()
@@ -174,19 +172,21 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             .dropFirst()
             .sink { changes in
                 Task {
-                    print("changes \(changes)")
                     var regions: [MKCoordinateRegion] = []
                     for change in changes {
                         switch (change) {
                         case .insert(offset: let offset, element: let element, associatedWith: let associatedWith):
-                            regions.append(element.region)
+                            if let region = element.region {
+                                regions.append(region)
+                            }
                         case .remove(offset: let offset, element: let element, associatedWith: let associatedWith):
-                            regions.append(element.region)
+                            if let region = element.region {
+                                regions.append(region)
+                            }
                         }
                     }
 
                     await self.clearCache(regions: regions)
-                    print("Cleared")
                 }
             }
             .store(in: &cancellable)

@@ -80,12 +80,16 @@ import Foundation
             localDataSource: observationLocalDataSource,
             remoteDataSource: ObservationRemoteDataSource()
         )
+        let observationLocationLocalDataSource = ObservationLocationCoreDataDataSource()
         RepositoryManager.shared.observationRepository = observationRepository
+        RepositoryManager.shared.observationMapItemRepository = ObservationMapItemRepository(
+            localDataSource: observationLocationLocalDataSource
+        )
         RepositoryManager.shared.observationIconRepository = ObservationIconRepository(
             localDataSource: observationLocalDataSource
         )
         RepositoryManager.shared.observationsTileRepository = ObservationsTileRepository(
-            localDataSource: observationLocalDataSource,
+            localDataSource: observationLocationLocalDataSource,
             observationIconRepository: RepositoryManager.shared.observationIconRepository!
         )
         Task {

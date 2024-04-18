@@ -9,7 +9,7 @@
 import Foundation
 import sf_ios
 
-struct ObservationMapItem {
+struct ObservationMapItem: Equatable {
     var observationId: URL?
     var geometry: SFGeometry?
     var iconPath: String?
@@ -18,6 +18,10 @@ struct ObservationMapItem {
     var eventId: Int64?
     var accuracy: Double?
     var provider: String?
+    var maxLatitude: Double?
+    var maxLongitude: Double?
+    var minLatitude: Double?
+    var minLongitude: Double?
 
     var coordinate: CLLocationCoordinate2D? {
         guard let geometry = geometry, let point = geometry.centroid() else {
@@ -41,6 +45,27 @@ struct ObservationMapItem {
         }
         return nil
     }
+
+    var region: MKCoordinateRegion? {
+        guard let maxLatitude = maxLatitude,
+              let maxLongitude = maxLongitude,
+              let minLatitude = minLatitude,
+              let minLongitude = minLongitude
+        else {
+            return nil
+        }
+        var center = CLLocationCoordinate2D(
+            latitude: maxLatitude - ((maxLatitude - minLatitude) / 2.0),
+            longitude: maxLongitude - ((maxLongitude - minLongitude) / 2.0)
+        )
+        return MKCoordinateRegion(
+            center: center,
+            span: MKCoordinateSpan(
+                latitudeDelta: maxLatitude - minLatitude,
+                longitudeDelta: maxLongitude - minLongitude
+            )
+        )
+    }
 }
 
 extension ObservationMapItem {
@@ -52,6 +77,10 @@ extension ObservationMapItem {
         self.geometry = observation.geometry
         self.accuracy = observation.accuracy
         self.provider = observation.provider
+        self.maxLatitude = observation.maxLatitude
+        self.maxLongitude = observation.maxLongitude
+        self.minLatitude = observation.minLatitude
+        self.minLongitude = observation.minLongitude
 
         var primaryFieldText: String?
         var secondaryFieldText: String?

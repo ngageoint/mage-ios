@@ -15,14 +15,14 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
     var alwaysShow: Bool = true
 
     let observationUri: URL
-    let repository: ObservationRepository
-    init(observationUri: URL, repository: ObservationRepository) {
+    let mapItemRepository: ObservationMapItemRepository
+    init(observationUri: URL, mapItemRepository: ObservationMapItemRepository) {
         self.observationUri = observationUri
-        self.repository = repository
+        self.mapItemRepository = mapItemRepository
     }
 
     func getAnnotationsAndOverlays() async -> AnnotationsAndOverlays {
-        let mapItems = await repository.getMapItems(observationUri: observationUri)
+        let mapItems = await mapItemRepository.getMapItems(observationUri: observationUri)
         let annotations = mapItems.map { item in
             ObservationMapItemAnnotation(mapItem: item)
         }

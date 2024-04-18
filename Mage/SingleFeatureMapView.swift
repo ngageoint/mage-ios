@@ -20,10 +20,10 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
             return _observation
         }
         set {
-            if let observationRepository = RepositoryManager.shared.observationRepository,
+            if let observationMapItemRepository = RepositoryManager.shared.observationMapItemRepository,
                 let observationUri = newValue?.objectID.uriRepresentation()
             {
-                observationMapMixin.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri, repository: observationRepository)
+                observationMapMixin.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri, mapItemRepository: observationMapItemRepository)
                 if let mapView = mapView {
                     observationMapMixin.refreshMap(mapState: mapState)
                 }

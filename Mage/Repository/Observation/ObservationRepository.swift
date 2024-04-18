@@ -25,24 +25,6 @@ class ObservationRepository: ObservableObject {
         await localDataSource.getObservation(observationUri: observationUri)
     }
 
-    func getMapItems(observationUri: URL?) async -> [ObservationMapItem] {
-        await localDataSource.getMapItems(observationUri: observationUri)
-    }
-
-    func getMapItems(
-        minLatitude: Double?,
-        maxLatitude: Double?,
-        minLongitude: Double?,
-        maxLongitude: Double?
-    ) async -> [ObservationMapItem] {
-        await localDataSource.getMapItems(
-            minLatitude: minLatitude,
-            maxLatitude: maxLatitude,
-            minLongitude: minLongitude,
-            maxLongitude: maxLongitude
-        )
-    }
-
     func fetchObservations() async -> Int {
         NSLog("Fetching Observations")
 

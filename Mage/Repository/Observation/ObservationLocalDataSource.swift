@@ -20,18 +20,10 @@ protocol ObservationLocalDataSource {
     @discardableResult
     func getObservation(remoteId: String?) async -> Observation?
     func getObservation(observationUri: URL?) async -> Observation?
-    func getMapItems(observationUri: URL?) async -> [ObservationMapItem]
-    func getMapItems(
-        minLatitude: Double?,
-        maxLatitude: Double?,
-        minLongitude: Double?,
-        maxLongitude: Double?
-    ) async -> [ObservationMapItem]
     func getCount(
     ) -> Int
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
-    func publisher() -> AnyPublisher<CollectionDifference<ObservationLocation>, Never>
 }
 
 class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSource, ObservableObject {
@@ -80,77 +72,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
                 return try? context.existingObject(with: id) as? Observation
             }
             return nil
-        }
-    }
-
-    func getObservationPredicates() -> [NSPredicate] {
-        var predicates: [NSPredicate] = []
-        predicates.append(NSPredicate(format: "observation.eventId == %@", Server.currentEventId() ?? -1))
-        if let timePredicate = TimeFilter.getObservationTimePredicate(forField: "observation.timestamp") {
-            predicates.append(timePredicate)
-        }
-        if Observations.getImportantFilter() {
-            predicates.append(NSPredicate(format: "observation.observationImportant.important = %@", NSNumber(value: true)))
-        }
-        if Observations.getFavoritesFilter(),
-           let currentUser = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()),
-           let remoteId = currentUser.remoteId
-        {
-            predicates.append(NSPredicate(format: "observation.favorites.favorite CONTAINS %@ AND observation.favorites.userId CONTAINS %@", NSNumber(value: true), remoteId))
-        }
-        return predicates
-    }
-
-    func getMapItems(observationUri: URL?) async -> [ObservationMapItem] {
-        guard let observationUri = observationUri else {
-            return []
-        }
-        let context = NSManagedObjectContext.mr_default()
-        return await context.perform {
-            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
-                if let observation = try? context.existingObject(with: id) as? Observation {
-                    return observation.locations?.sorted(by: { one, two in
-                        one.order < two.order
-                    }).map({ location in
-                        ObservationMapItem(observation: location)
-                    }) ?? []
-                }
-            }
-            return []
-        }
-    }
-
-    func getMapItems(
-        minLatitude: Double?,
-        maxLatitude: Double?,
-        minLongitude: Double?,
-        maxLongitude: Double?
-    ) async -> [ObservationMapItem] {
-        let context = NSManagedObjectContext.mr_default()
-
-        return await context.perform {
-            var predicates: [NSPredicate] = self.getObservationPredicates()
-            if let minLatitude = minLatitude,
-               let maxLatitude = maxLatitude,
-               let minLongitude = minLongitude,
-               let maxLongitude = maxLongitude
-            {
-                predicates.append(NSPredicate(
-                    format: "maxLatitude >= %lf AND minLatitude <= %lf AND maxLongitude >= %lf AND minLongitude <= %lf",
-                    minLatitude,
-                    maxLatitude,
-                    minLongitude,
-                    maxLongitude
-                ))
-            }
-            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-            let fetchRequest = ObservationLocation.fetchRequest()
-            fetchRequest.predicate = predicate
-
-            let results = context.fetch(request: fetchRequest)
-            return results?.compactMap { location in
-                return ObservationMapItem(observation: location)
-            } ?? []
         }
     }
 
@@ -250,21 +171,5 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
             NSLog("TIMING Saved Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
             return newObservationCount
         }
-    }
-
-    func publisher() -> AnyPublisher<CollectionDifference<ObservationLocation>, Never> {
-        let context = NSManagedObjectContext.mr_default()
-
-        var itemChanges: AnyPublisher<CollectionDifference<ObservationLocation>, Never> {
-            let fetchRequest: NSFetchRequest<ObservationLocation> = ObservationLocation.fetchRequest()
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "eventId", ascending: false)]
-            return context.changesPublisher(for: fetchRequest, transformer: { location in
-                location
-            })
-            .catch { _ in Empty() }
-            .eraseToAnyPublisher()
-        }
-
-        return itemChanges
     }
 }

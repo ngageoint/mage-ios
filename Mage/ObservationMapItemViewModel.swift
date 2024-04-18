@@ -9,7 +9,7 @@
 import Foundation
 
 class ObservationMapItemViewModel: ObservableObject {
-    var repository: ObservationRepository? {
+    var repository: ObservationMapItemRepository? {
         didSet {
             Task {
                 await getObservationMapItems()

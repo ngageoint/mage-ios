@@ -80,9 +80,9 @@ class ObservationHeaderView : MDCCard {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.observationActionsDelegate = observationActionsDelegate;
-        if let observationRepository = RepositoryManager.shared.observationRepository
+        if let observationMapItemRepository = RepositoryManager.shared.observationMapItemRepository
         {
-            let view = ObservationMapItemView(observationUri: observation.objectID.uriRepresentation()).environmentObject(observationRepository)
+            let view = ObservationMapItemView(observationUri: observation.objectID.uriRepresentation()).environmentObject(observationMapItemRepository)
             mapItemView = SwiftUIViewController(swiftUIView: view)
 
         }

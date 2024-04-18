@@ -391,6 +391,8 @@
 		F776ACA52BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACA42BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift */; };
 		F776ACA72BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACA62BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift */; };
 		F776ACAB2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACAA2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift */; };
+		F776ACAE2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACAD2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift */; };
+		F776ACB02BD18CED000FAFB4 /* ObservationMapItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F776ACAF2BD18CED000FAFB4 /* ObservationMapItemRepository.swift */; };
 		F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF52527D05200B88BD4 /* tokenSuccess.json */; };
 		F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF9252B541A00B88BD4 /* signupSuccess.json */; };
 		F777AFFE252CB4FE00B88BD4 /* signupSuccessInactive.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */; };
@@ -1155,6 +1157,8 @@
 		F776ACA42BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingDataLoadOperation.swift; sourceTree = "<group>"; };
 		F776ACA62BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDataLoadOperation.swift; sourceTree = "<group>"; };
 		F776ACAA2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectChangesPublisher.swift; sourceTree = "<group>"; };
+		F776ACAD2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocationLocalDataSource.swift; sourceTree = "<group>"; };
+		F776ACAF2BD18CED000FAFB4 /* ObservationMapItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapItemRepository.swift; sourceTree = "<group>"; };
 		F777AFF52527D05200B88BD4 /* tokenSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tokenSuccess.json; sourceTree = "<group>"; };
 		F777AFF9252B541A00B88BD4 /* signupSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signupSuccess.json; sourceTree = "<group>"; };
 		F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signupSuccessInactive.json; sourceTree = "<group>"; };
@@ -1934,6 +1938,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F776ACAC2BD181F4000FAFB4 /* ObservationLocation */,
 				F70688B72BB5BDA400D8E2EA /* Observation */,
 				F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */,
 				F734C1D92BC03EB400B2E8C8 /* MapFeatureRepository.swift */,
@@ -2523,6 +2528,15 @@
 				F776ACA62BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift */,
 			);
 			path = Observation;
+			sourceTree = "<group>";
+		};
+		F776ACAC2BD181F4000FAFB4 /* ObservationLocation */ = {
+			isa = PBXGroup;
+			children = (
+				F776ACAD2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift */,
+				F776ACAF2BD18CED000FAFB4 /* ObservationMapItemRepository.swift */,
+			);
+			path = ObservationLocation;
 			sourceTree = "<group>";
 		};
 		F77B7D7C24797B0400C51953 /* Form */ = {
@@ -3632,6 +3646,7 @@
 				F776AC9F2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
+				F776ACB02BD18CED000FAFB4 /* ObservationMapItemRepository.swift in Sources */,
 				04ED96571EBB60AC00B6AD8D /* MapUtils.m in Sources */,
 				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
 				F78D578D27B5841D003594D3 /* MageMapViewController.swift in Sources */,
@@ -3686,6 +3701,7 @@
 				F72D42EE2694B60300F9AC3B /* User.swift in Sources */,
 				F76FFBE6261D0D6900532330 /* ObservationBottomSheetView.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
+				F776ACAE2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
