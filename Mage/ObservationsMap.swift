@@ -29,7 +29,10 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshMap(mapState: mapState)
+                    Task { [self] in
+                        await repository?.clearCache()
+                        self?.refreshMap(mapState: mapState)
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -38,7 +41,10 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshMap(mapState: mapState)
+                    Task { [self] in
+                        await repository?.clearCache()
+                        self?.refreshMap(mapState: mapState)
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -47,7 +53,10 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshMap(mapState: mapState)
+                    Task { [self] in
+                        await repository?.clearCache()
+                        self?.refreshMap(mapState: mapState)
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -56,16 +65,21 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshMap(mapState: mapState)
+                    Task { [self] in
+                        await repository?.clearCache()
+                        self?.refreshMap(mapState: mapState)
+                    }
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.favoritesFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
                 if let mapState = self?.mapState {
-                    self?.refreshMap(mapState: mapState)
+                    Task { [self] in
+                        await repository?.clearCache()
+                        self?.refreshMap(mapState: mapState)
+                    }
                 }
             }
             .store(in: &cancellable)
@@ -74,7 +88,10 @@ class ObservationsMap: DataSourceMap {
             if let event: Event = notification.object as? Event {
                 if event.remoteId == Server.currentEventId() {
                     if let mapState = self?.mapState {
-                        self?.refreshMap(mapState: mapState)
+                        Task { [self] in
+                            await repository?.clearCache()
+                            self?.refreshMap(mapState: mapState)
+                        }
                     }
                 }
             }

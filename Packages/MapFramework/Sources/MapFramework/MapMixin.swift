@@ -149,6 +149,8 @@ public extension MapMixin {
             renderer.strokeColor = .black
             renderer.lineWidth = 1
             return renderer
+        } else if let overlay = overlay as? MKTileOverlay {
+            return HackTileOverlayRenderer(overlay: overlay)
         }
         return nil
     }
