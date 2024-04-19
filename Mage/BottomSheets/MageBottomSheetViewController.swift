@@ -241,23 +241,29 @@ class MageBottomSheetViewController: UIViewController {
     
     func populateView() {
         let item = self.items[self.pageControl.currentPage];
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
+
 
         Task {
             var newBottomSheetView: BottomSheetView?
             if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
                 newBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? Observation {
                 newBottomSheetView = ObservationBottomSheetView(observation: bottomSheetItem, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
+                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? User {
                 newBottomSheetView = UserBottomSheetView(user: bottomSheetItem, actionsDelegate: item.actionDelegate as? UserActionsDelegate, scheme: self.scheme);
+                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? FeatureItem {
                 newBottomSheetView = FeatureBottomSheetView(featureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? FeedItem {
                 newBottomSheetView = FeedItemBottomSheetView(feedItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeedItemActionsDelegate, scheme: self.scheme);
+                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? ObservationMapItem {
                 if let observation = await RepositoryManager.shared.observationRepository?.getObservation(observationUri: bottomSheetItem.observationId) {
                     newBottomSheetView = ObservationBottomSheetView(observation: observation, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
+                    NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(item: bottomSheetItem))
                 }
             }
             await MainActor.run {

@@ -9,18 +9,14 @@
 import Foundation
 import MapKit
 
-public class EnlargedAnnotation: NSObject, MKAnnotation {
-    var enlarged: Bool = false
+open class EnlargedAnnotation: NSObject, MKAnnotation {
+    public var enlarged: Bool = false
 
-    var shouldEnlarge: Bool = false
+    public var shouldEnlarge: Bool = false
 
-    var shouldShrink: Bool = false
+    public var shouldShrink: Bool = false
 
-    var clusteringIdentifierWhenShrunk: String?
-
-    var clusteringIdentifier: String?
-
-    var annotationView: MKAnnotationView?
+    public var annotationView: MKAnnotationView?
 
     var color: UIColor {
         return UIColor.clear
@@ -28,21 +24,19 @@ public class EnlargedAnnotation: NSObject, MKAnnotation {
 
     public var coordinate: CLLocationCoordinate2D
 
-    init(coordinate: CLLocationCoordinate2D) {
+    public init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
     }
 
-    func markForEnlarging() {
-        clusteringIdentifier = nil
+    public func markForEnlarging() {
         shouldEnlarge = true
     }
 
-    func markForShrinking() {
-        clusteringIdentifier = clusteringIdentifierWhenShrunk
+    public func markForShrinking() {
         shouldShrink = true
     }
 
-    func enlargeAnnoation() {
+    public func enlargeAnnoation() {
         guard let annotationView = annotationView else {
             return
         }
@@ -52,18 +46,23 @@ public class EnlargedAnnotation: NSObject, MKAnnotation {
         let currentOffset = annotationView.centerOffset
         annotationView.transform = annotationView.transform.scaledBy(x: 2.0, y: 2.0)
         annotationView.centerOffset = CGPoint(x: currentOffset.x * 2.0, y: currentOffset.y * 2.0)
+
+//        annotationView.transform = annotationView.transform.scaledBy(x: 2.0, y: 2.0)
+//        annotationView.centerOffset = CGPoint(x: 0, y: -(annotationView.image?.size.height ?? 0))
     }
 
-    func shrinkAnnotation() {
+    public func shrinkAnnotation() {
         guard let annotationView = annotationView else {
             return
         }
         enlarged = false
         shouldShrink = false
-        annotationView.clusteringIdentifier = clusteringIdentifier
         let currentOffset = annotationView.centerOffset
         annotationView.transform = annotationView.transform.scaledBy(x: 0.5, y: 0.5)
         annotationView.centerOffset = CGPoint(x: currentOffset.x * 0.5, y: currentOffset.y * 0.5)
+
+//        annotationView.transform = annotationView.transform.scaledBy(x: 0.5, y: 0.5)
+//        annotationView.centerOffset = CGPoint(x: 0, y: -((annotationView.image?.size.height ?? 0.0) / 2.0))
     }
 }
 

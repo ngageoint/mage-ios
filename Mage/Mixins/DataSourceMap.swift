@@ -16,7 +16,6 @@ class DataSourceMap: MapMixin {
     var REFRESH_KEY: String {
         "\(dataSourceKey)MapDateUpdated"
     }
-    var refreshDueToNewData: Bool = false
     var uuid: UUID = UUID()
     var cancellable = Set<AnyCancellable>()
     var minZoom = 2
@@ -86,7 +85,6 @@ class DataSourceMap: MapMixin {
         repository?.refreshPublisher?
             .sink { date in
                 if let mapState = self.mapState {
-                    self.refreshDueToNewData = true
                     self.refreshMap(mapState: mapState)
                 }
             }
@@ -125,15 +123,8 @@ class DataSourceMap: MapMixin {
                 await addFeatures(features: AnnotationsAndOverlays(annotations: annotations, overlays: overlays), mapView: mapView)
             }
 
-            // if we are refreshing b/c new data was retrieved from the server, give the map a chance to draw the new
-            // data before we rip the old one off the map to prevent flashing
-            if refreshDueToNewData {
-                Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(clearPrevious), userInfo: nil, repeats: false)
-            } else {
-                // if we are freshing due to a change in query, just take the data off now because the user
-                // will expect the data to change
-                clearPrevious()
-            }
+            // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
+            Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(clearPrevious), userInfo: nil, repeats: false)
         }
     }
 
@@ -144,6 +135,23 @@ class DataSourceMap: MapMixin {
         mapView?.removeAnnotations(previousAnnotations)
         previousOverlays = []
         previousAnnotations = []
+    }
+
+    var valueAnimator: ValueAnimator?
+
+    func fadeTiles() {
+        if let alpha = tileRenderer?.alpha {
+            if alpha == 1.0 {
+                valueAnimator = ValueAnimator(duration: 0.5, startValue: 1.0, endValue: 0.3, callback: { value in
+                    self.tileRenderer?.alpha = value
+                })
+            } else {
+                valueAnimator = ValueAnimator(duration: 0.5, startValue: 0.3, endValue: 1.0, callback: { value in
+                    self.tileRenderer?.alpha = value
+                })
+            }
+            valueAnimator?.start()
+        }
     }
 
     func getOverlays() -> [MKOverlay] {
@@ -264,8 +272,16 @@ class DataSourceMap: MapMixin {
         ]
     }
 
+    var tileRenderer: MKOverlayRenderer?
+
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
-        return standardRenderer(overlay: overlay)
+        if let overlay = overlay as? DataSourceTileOverlay {
+            let alpha = self.tileRenderer?.alpha ?? 1.0
+            self.tileRenderer = standardRenderer(overlay: overlay)
+            self.tileRenderer?.alpha = alpha
+            return self.tileRenderer
+        }
+        return nil
     }
 
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {

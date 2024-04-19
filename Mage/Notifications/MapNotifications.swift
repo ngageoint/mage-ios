@@ -16,6 +16,7 @@ extension Notification.Name {
 struct MapAnnotationFocusedNotification {
     var annotation: MKAnnotation?
     var mapView: MKMapView?
+    var item: Any?
 }
 
 struct DirectionsToItemNotification {

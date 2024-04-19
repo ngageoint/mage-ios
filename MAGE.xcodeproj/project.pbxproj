@@ -109,6 +109,7 @@
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
 		F7003949200D425400E6E660 /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
 		F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7012B9B248E96E8002BBDE8 /* FeedService.swift */; };
+		F7049F732BD2CE4D004C68A9 /* ValueAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7049F722BD2CE4D004C68A9 /* ValueAnimator.swift */; };
 		F7059AB520446BF100A6B7CC /* registrationSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7059AB320446B1D00A6B7CC /* registrationSuccess.json */; };
 		F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */; };
 		F70688832BA37ECE00D8E2EA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F70688822BA37ECE00D8E2EA /* Kingfisher */; };
@@ -831,6 +832,7 @@
 		F70039452006CB0700E6E660 /* apiFail.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiFail.json; sourceTree = "<group>"; };
 		F7003947200D3FFA00E6E660 /* loginSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = loginSuccess.json; sourceTree = "<group>"; };
 		F7012B9B248E96E8002BBDE8 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
+		F7049F722BD2CE4D004C68A9 /* ValueAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAnimator.swift; sourceTree = "<group>"; };
 		F7059AB320446B1D00A6B7CC /* registrationSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = registrationSuccess.json; sourceTree = "<group>"; };
 		F7059AB62044720F00A6B7CC /* DisconnectedLogin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DisconnectedLogin.m; sourceTree = "<group>"; };
 		F70688842BA37F7000D8E2EA /* CLLocationCoordinate2DExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CLLocationCoordinate2DExtensions; path = Packages/CLLocationCoordinate2DExtensions; sourceTree = "<group>"; };
@@ -2237,6 +2239,7 @@
 			children = (
 				F734C1E72BC8475800B2E8C8 /* Action */,
 				F776AC882BC98939000FAFB4 /* MageHostingController.swift */,
+				F7049F722BD2CE4D004C68A9 /* ValueAnimator.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -3743,6 +3746,7 @@
 				F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */,
 				F72D430D2694B60300F9AC3B /* Model5To15.xcmappingmodel in Sources */,
 				F7994AB7190EF7BD00A90A1D /* MageRootViewController.swift in Sources */,
+				F7049F732BD2CE4D004C68A9 /* ValueAnimator.swift in Sources */,
 				F7E40A6C2693B1A700E50E26 /* UserActionsView.swift in Sources */,
 				F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */,
 				F7F4754925BA3C7D006634F7 /* ObservationSummaryView.swift in Sources */,

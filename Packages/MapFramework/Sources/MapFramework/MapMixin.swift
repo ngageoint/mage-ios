@@ -131,7 +131,7 @@ public extension MapMixin {
     }
 
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
-        return standardRenderer(overlay: overlay)
+        return nil
     }
 
     func standardRenderer(overlay: MKOverlay) -> MKOverlayRenderer? {

@@ -8,8 +8,11 @@
 
 import Foundation
 import DataSourceTileOverlay
+import MapFramework
 
 class ObservationsMap: DataSourceMap {
+
+    let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
 
     override var minZoom: Int {
         get {
@@ -19,6 +22,8 @@ class ObservationsMap: DataSourceMap {
 
         }
     }
+
+    var enlargedAnnotation: EnlargedAnnotation?
 
     override init(repository: TileRepository? = nil, mapFeatureRepository: MapFeatureRepository? = nil) {
         super.init(repository: repository, mapFeatureRepository: mapFeatureRepository)
@@ -84,18 +89,29 @@ class ObservationsMap: DataSourceMap {
             }
             .store(in: &cancellable)
 
-        NotificationCenter.default.addObserver(forName: .MAGEFormFetched, object: nil, queue: .main) { [weak self] notification in
-            if let event: Event = notification.object as? Event {
-                if event.remoteId == Server.currentEventId() {
-                    if let mapState = self?.mapState {
-                        Task { [self] in
-                            await repository?.clearCache()
-                            self?.refreshMap(mapState: mapState)
+        NotificationCenter.default.publisher(for: .MAGEFormFetched)
+            .receive(on: DispatchQueue.main)
+            .sink { notification in
+                if let event: Event = notification.object as? Event {
+                    if event.remoteId == Server.currentEventId() {
+                        if let mapState = self.mapState {
+                            Task { [self] in
+                                await repository?.clearCache()
+                                self.refreshMap(mapState: mapState)
+                            }
                         }
                     }
                 }
             }
-        }
+            .store(in: &cancellable)
+
+        NotificationCenter.default.publisher(for: .MapAnnotationFocused)
+            .receive(on: DispatchQueue.main)
+            .map {$0.object as? MapAnnotationFocusedNotification}
+            .sink { output in
+                self.focusAnnotation(mapItem: output?.item as? ObservationMapItem)
+            }
+            .store(in: &cancellable)
     }
 
     override func items(
@@ -113,5 +129,91 @@ class ObservationsMap: DataSourceMap {
             }
             return nil
         }
+    }
+
+    func focusAnnotation(mapItem: ObservationMapItem?) {
+        fadeTiles()
+//        tileRenderer?.alpha = 0.3
+
+//        if let enlargedAnnotation = enlargedAnnotation {
+//            UIView.animate(
+//                withDuration: 0.5,
+//                delay: 0.0,
+//                options: .curveEaseInOut,
+//                animations: {
+//                    enlargedAnnotation.shrinkAnnotation()
+//                },
+//                completion: { _ in
+//                    self.mapView?.removeAnnotation(enlargedAnnotation)
+//                }
+//            )
+//            self.enlargedAnnotation = nil
+//        }
+//
+//        guard let mapItem = mapItem, let mapView = mapView else {
+//            return
+//        }
+//        let enlarged = ObservationMapItemAnnotation(mapItem: mapItem)
+//
+//        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
+//
+//        if let annotationView = annotationView {
+//            annotationView.annotation = enlarged
+//        } else {
+//            annotationView = MKAnnotationView(annotation: enlarged, reuseIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
+//            annotationView?.isEnabled = true
+//        }
+//
+//        if let iconPath = mapItem.iconPath, let annotationView = annotationView {
+//            let image = ObservationImage.imageAtPath(imagePath: iconPath)
+//            annotationView.image = image
+//            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
+//            annotationView.accessibilityLabel = "Observation"
+//            annotationView.accessibilityValue = "Observation"
+//            annotationView.displayPriority = .required
+//            annotationView.canShowCallout = true
+//        }
+//        enlarged.markForEnlarging()
+//        enlargedAnnotation = enlarged
+//        mapView.addAnnotation(enlarged)
+    }
+
+    override func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
+        guard let mapItemAnnotation = annotation as? ObservationMapItemAnnotation else {
+            return nil
+        }
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
+
+        if let annotationView = annotationView {
+            annotationView.annotation = annotation
+        } else {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
+            annotationView?.isEnabled = true
+        }
+
+        if let iconPath = mapItemAnnotation.mapItem.iconPath, let annotationView = annotationView {
+            let image = ObservationImage.imageAtPath(imagePath: iconPath)
+            annotationView.image = image
+
+            var size = CGSize(width: 40, height: 40)
+            let max = max(image.size.height, image.size.width)
+            size.width *= ((image.size.width) / max)
+            size.height *= ((image.size.height) / max)
+            annotationView.frame.size = size
+            annotationView.canShowCallout = false
+            annotationView.isEnabled = false
+            annotationView.accessibilityLabel = "Enlarged"
+            annotationView.zPriority = .max
+            annotationView.selectedZPriority = .max
+
+
+            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
+//            annotationView.accessibilityLabel = "Observation"
+//            annotationView.accessibilityValue = "Observation"
+            annotationView.displayPriority = .required
+//            annotationView.canShowCallout = true
+        }
+        mapItemAnnotation.annotationView = annotationView
+        return annotationView
     }
 }

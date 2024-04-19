@@ -178,6 +178,32 @@ extension MageMapView : MKMapViewDelegate {
             mixin.didChangeUserTrackingMode(mapView: mapView, animated: animated)
         }
     }
+
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        for view in views {
+
+            guard let annotation = view.annotation as? EnlargedAnnotation else {
+                continue
+            }
+            if annotation.shouldEnlarge {
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
+                        annotation.enlargeAnnoation()
+                    }
+                }
+            }
+
+            if annotation.shouldShrink {
+                // have to enlarge it without animmation because it is added to the map at the original size
+                annotation.enlargeAnnoation()
+                UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut) {
+                    annotation.shrinkAnnotation()
+                    mapView.removeAnnotation(annotation)
+                }
+            }
+        }
+
+    }
 }
 
 extension MageMapView : UIGestureRecognizerDelegate {

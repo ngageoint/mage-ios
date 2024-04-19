@@ -8,6 +8,7 @@
 
 import Foundation
 import DataSourceDefinition
+import MapFramework
 
 class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
     var dataSource: any DataSourceDefinition = DataSources.observation
@@ -53,8 +54,8 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
     }
 }
 
-class ObservationMapItemAnnotation: NSObject, MKAnnotation {
-    var coordinate: CLLocationCoordinate2D
+class ObservationMapItemAnnotation: EnlargedAnnotation {
+//    var coordinate: CLLocationCoordinate2D
     var mapItem: ObservationMapItem
     var title: String?
     var subtitle: String?
@@ -62,9 +63,9 @@ class ObservationMapItemAnnotation: NSObject, MKAnnotation {
     init(mapItem: ObservationMapItem) {
         self.mapItem = mapItem
         if let point = mapItem.geometry?.centroid() {
-            self.coordinate = CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
+            super.init(coordinate: CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue))
         } else {
-            self.coordinate = kCLLocationCoordinate2DInvalid
+            super.init(coordinate: kCLLocationCoordinate2DInvalid)
         }
     }
 }
