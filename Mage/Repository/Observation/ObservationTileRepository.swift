@@ -197,6 +197,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                     }
 
                     await self.clearCache(regions: regions)
+                    self.refreshSubject?.send(Date())
                 }
             }
             .store(in: &cancellable)
