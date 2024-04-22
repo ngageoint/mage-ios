@@ -70,13 +70,14 @@ import Foundation
     }
     
     func scheduleTimerToPullFeedItems(feedId: String, eventId: NSNumber, pullFrequency: NSNumber) {
+        // cancel any previously scheduled pull
+        stopPullingFeedItems(feedId: feedId)
         let context = ["feedId": feedId, "eventId": eventId, "pullFrequency": pullFrequency] as [String : Any];
         let timer = Timer.scheduledTimer(timeInterval: TimeInterval(exactly: pullFrequency)!, target: self, selector: #selector(fireTimer(timer: )), userInfo: context, repeats: false)
         feedTimers[feedId] = timer;
     }
     
     func stopPullingFeedItems(feedId: String) {
-        print("Stopping timer for feed", feedId);
         let timer: Timer? = (feedTimers[feedId] ?? nil) as Timer?;
         feedTimers[feedId] = nil;
         timer?.invalidate();
@@ -108,7 +109,6 @@ extension FeedService: NSFetchedResultsControllerDelegate {
             case .delete:
                 stopPullingFeedItems(feedId: feed.remoteId!);
             case .update:
-                stopPullingFeedItems(feedId: feed.remoteId!);
                 scheduleTimerToPullFeedItems(feedId: feed.remoteId!, eventId: feed.eventId!, pullFrequency: feed.pullFrequency ?? defaultPullFrequency);
             case .move:
                 print("...")
