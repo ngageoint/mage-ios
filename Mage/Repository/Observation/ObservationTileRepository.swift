@@ -97,10 +97,10 @@ class ObservationTileRepository: TileRepository, ObservableObject {
 
     var alwaysShow: Bool = true
 
-    var observationUrl: URL
+    var observationUrl: URL?
     let localDataSource: ObservationLocationLocalDataSource
 
-    init(observationUrl: URL, localDataSource: ObservationLocationLocalDataSource) {
+    init(observationUrl: URL?, localDataSource: ObservationLocationLocalDataSource) {
         self.observationUrl = observationUrl
         self.localDataSource = localDataSource
     }
@@ -115,10 +115,16 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [any DataSourceImage] {
-        return await localDataSource.getMapItems(observationUri: observationUrl)
-            .map({ mapItem in
-                ObservationMapImage(mapItem: mapItem)
-            })
+        return await localDataSource.getMapItems(
+            observationUri: observationUrl,
+            minLatitude: minLatitude,
+            maxLatitude: maxLatitude,
+            minLongitude: minLongitude,
+            maxLongitude: maxLongitude
+        )
+        .map({ mapItem in
+            ObservationMapImage(mapItem: mapItem)
+        })
     }
     
     func getItemKeys(
@@ -131,7 +137,10 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [String] {
-        return [observationUrl.absoluteString]
+        if let observationUrl = observationUrl {
+            return [observationUrl.absoluteString]
+        }
+        return []
     }
 }
 
@@ -146,13 +155,14 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 
     var alwaysShow: Bool = true
     var dataSource: any DataSourceDefinition = DataSources.observation
-    var cacheSourceKey: String? { dataSource.key }
-    var imageCache: Kingfisher.ImageCache? {
-        if let cacheSourceKey = cacheSourceKey {
-            return Kingfisher.ImageCache(name: cacheSourceKey)
-        }
-        return nil
-    }
+    var cacheSourceKey: String? = nil // { dataSource.key }
+    var imageCache: Kingfisher.ImageCache? = nil
+//    {
+//        if let cacheSourceKey = cacheSourceKey {
+//            return Kingfisher.ImageCache(name: cacheSourceKey)
+//        }
+//        return nil
+//    }
     var filterCacheKey: String {
         dataSource.key
 //        UserDefaults.standard.filter(DataSources.asam).getCacheKey()
@@ -373,6 +383,7 @@ class ObservationMapImage: DataSourceImage {
     func polygonImage(
         polygon: MKPolygon,
         zoomLevel: Int,
+        tileSize: Double,
         tileBounds3857: MapBoundingBox
     ) {
         let path = UIBezierPath()
@@ -384,7 +395,7 @@ class ObservationMapImage: DataSourceImage {
                 zoomLevel: zoomLevel,
                 swCorner: tileBounds3857.swCorner,
                 neCorner: tileBounds3857.neCorner,
-                tileSize: TILE_SIZE,
+                tileSize: tileSize,
                 canCross180thMeridian: polygon.boundingMapRect.spans180thMeridian)
             if first {
                 path.move(to: pixel)
@@ -406,6 +417,7 @@ class ObservationMapImage: DataSourceImage {
     func polylineImage(
         lineShape: MKPolyline,
         zoomLevel: Int,
+        tileSize: Double,
         tileBounds3857: MapBoundingBox
     ) {
         let path = UIBezierPath()
@@ -418,7 +430,7 @@ class ObservationMapImage: DataSourceImage {
                 zoomLevel: zoomLevel,
                 swCorner: tileBounds3857.swCorner,
                 neCorner: tileBounds3857.neCorner,
-                tileSize: TILE_SIZE)
+                tileSize: tileSize)
             if first {
                 path.move(to: pixel)
                 first = false

@@ -17,6 +17,12 @@ class ObservationMapItemRepository: ObservableObject {
     }
 
     func getMapItems(observationUri: URL?) async -> [ObservationMapItem] {
-        return await localDataSource.getMapItems(observationUri: observationUri)
+        return await localDataSource.getMapItems(
+            observationUri: observationUri,
+            minLatitude: nil,
+            maxLatitude: nil,
+            minLongitude: nil,
+            maxLongitude: nil
+        )
     }
 }

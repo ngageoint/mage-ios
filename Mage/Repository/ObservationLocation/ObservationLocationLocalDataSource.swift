@@ -10,7 +10,13 @@ import Foundation
 import Combine
 
 protocol ObservationLocationLocalDataSource {
-    func getMapItems(observationUri: URL?) async -> [ObservationMapItem]
+    func getMapItems(
+        observationUri: URL?,
+        minLatitude: Double?,
+        maxLatitude: Double?,
+        minLongitude: Double?,
+        maxLongitude: Double?
+    ) async -> [ObservationMapItem]
     func getMapItems(
         minLatitude: Double?,
         maxLatitude: Double?,
@@ -40,13 +46,41 @@ class ObservationLocationCoreDataDataSource: ObservationLocationLocalDataSource 
         return predicates
     }
 
-    func getMapItems(observationUri: URL?) async -> [ObservationMapItem] {
+    func getMapItems(
+        observationUri: URL?,
+        minLatitude: Double?,
+        maxLatitude: Double?,
+        minLongitude: Double?,
+        maxLongitude: Double?
+    ) async -> [ObservationMapItem] {
         guard let observationUri = observationUri else {
             return []
         }
         let context = NSManagedObjectContext.mr_default()
         return await context.perform {
+
+            var predicates: [NSPredicate] = []
+            if let minLatitude = minLatitude,
+               let maxLatitude = maxLatitude,
+               let minLongitude = minLongitude,
+               let maxLongitude = maxLongitude
+            {
+                predicates.append(NSPredicate(
+                    format: "maxLatitude >= %lf AND minLatitude <= %lf AND maxLongitude >= %lf AND minLongitude <= %lf",
+                    minLatitude,
+                    maxLatitude,
+                    minLongitude,
+                    maxLongitude
+                ))
+            }
+
+
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
+                predicates.append(NSPredicate(
+                    format: "self == %@",
+                    id
+                ))
+                let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
                 if let observation = try? context.existingObject(with: id) as? Observation {
                     return observation.locations?.sorted(by: { one, two in
                         one.order < two.order

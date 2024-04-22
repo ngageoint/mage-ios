@@ -159,7 +159,6 @@ class DataSourceMap: MapMixin {
             return []
         }
         let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: dataSourceKey)
-        newOverlay.tileSize = CGSize(width: 512, height: 512)
         newOverlay.minimumZ = self.minZoom
         return [newOverlay]
     }
@@ -276,10 +275,14 @@ class DataSourceMap: MapMixin {
 
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
         if let overlay = overlay as? DataSourceTileOverlay {
-            let alpha = self.tileRenderer?.alpha ?? 1.0
-            self.tileRenderer = standardRenderer(overlay: overlay)
-            self.tileRenderer?.alpha = alpha
-            return self.tileRenderer
+            if overlay.allowFade {
+                let alpha = self.tileRenderer?.alpha ?? 1.0
+                self.tileRenderer = standardRenderer(overlay: overlay)
+                self.tileRenderer?.alpha = alpha
+                return self.tileRenderer
+            } else {
+                return standardRenderer(overlay: overlay)
+            }
         }
         return nil
     }

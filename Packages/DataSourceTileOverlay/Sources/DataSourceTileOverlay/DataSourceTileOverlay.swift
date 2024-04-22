@@ -7,12 +7,14 @@ public protocol DataSourceOverlay {
 
 public class DataSourceTileOverlay: MKTileOverlay, DataSourceOverlay {
     public var key: String?
+    public var allowFade: Bool = true
     let tileRepository: TileRepository
 
     public init(tileRepository: TileRepository, key: String) {
         self.tileRepository = tileRepository
         self.key = key
         super.init(urlTemplate: nil)
+        self.tileSize = CGSize(width: 512, height: 512)
     }
 
     public override func loadTile(at path: MKTileOverlayPath, result: @escaping (Data?, Error?) -> Void) {

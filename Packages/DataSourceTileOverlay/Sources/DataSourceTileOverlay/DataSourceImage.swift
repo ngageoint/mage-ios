@@ -30,10 +30,6 @@ public extension DataSourceImage {
         Kingfisher.ImageCache(name: dataSource.key)
     }
 
-    var TILE_SIZE: Double {
-        return 512.0
-    }
-
     static func defaultCircleImage(dataSource: any DataSourceDefinition) -> [UIImage] {
         var images: [UIImage] = []
         if let circleImage = CircleImage(color: dataSource.color, radius: 40 * UIScreen.main.scale, fill: true) {

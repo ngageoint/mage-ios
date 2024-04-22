@@ -24,6 +24,7 @@ class ObservationsMap: DataSourceMap {
     }
 
     var enlargedAnnotation: EnlargedAnnotation?
+    var focusedObservationTileOverlay: DataSourceTileOverlay?
 
     override init(repository: TileRepository? = nil, mapFeatureRepository: MapFeatureRepository? = nil) {
         super.init(repository: repository, mapFeatureRepository: mapFeatureRepository)
@@ -133,49 +134,30 @@ class ObservationsMap: DataSourceMap {
 
     func focusAnnotation(mapItem: ObservationMapItem?) {
         fadeTiles()
-//        tileRenderer?.alpha = 0.3
 
-//        if let enlargedAnnotation = enlargedAnnotation {
-//            UIView.animate(
-//                withDuration: 0.5,
-//                delay: 0.0,
-//                options: .curveEaseInOut,
-//                animations: {
-//                    enlargedAnnotation.shrinkAnnotation()
-//                },
-//                completion: { _ in
-//                    self.mapView?.removeAnnotation(enlargedAnnotation)
-//                }
-//            )
-//            self.enlargedAnnotation = nil
-//        }
-//
-//        guard let mapItem = mapItem, let mapView = mapView else {
-//            return
-//        }
-//        let enlarged = ObservationMapItemAnnotation(mapItem: mapItem)
-//
-//        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
-//
-//        if let annotationView = annotationView {
-//            annotationView.annotation = enlarged
-//        } else {
-//            annotationView = MKAnnotationView(annotation: enlarged, reuseIdentifier: OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID)
-//            annotationView?.isEnabled = true
-//        }
-//
-//        if let iconPath = mapItem.iconPath, let annotationView = annotationView {
-//            let image = ObservationImage.imageAtPath(imagePath: iconPath)
-//            annotationView.image = image
-//            annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
-//            annotationView.accessibilityLabel = "Observation"
-//            annotationView.accessibilityValue = "Observation"
-//            annotationView.displayPriority = .required
-//            annotationView.canShowCallout = true
-//        }
-//        enlarged.markForEnlarging()
-//        enlargedAnnotation = enlarged
-//        mapView.addAnnotation(enlarged)
+        addOrRemoveFocusedOverlay(mapItem: mapItem)
+    }
+
+    func addOrRemoveFocusedOverlay(mapItem: ObservationMapItem?) {
+        DispatchQueue.main.async { [self] in
+            if let observationUrl = mapItem?.observationId,
+               let observationsTileRepository = repository as? ObservationsTileRepository
+            {
+                let observationTileRepo = ObservationTileRepository(
+                    observationUrl: observationUrl,
+                    localDataSource: observationsTileRepository.localDataSource
+                )
+                focusedObservationTileOverlay = DataSourceTileOverlay(
+                    tileRepository: observationTileRepo,
+                    key: "\(DataSources.observation.key)_\(observationUrl)"
+                )
+                focusedObservationTileOverlay?.allowFade = false
+                mapView?.addOverlay(focusedObservationTileOverlay!, level: .aboveLabels)
+            } else if let focusedObservationTileOverlay = focusedObservationTileOverlay {
+                mapView?.removeOverlay(focusedObservationTileOverlay)
+                self.focusedObservationTileOverlay = nil
+            }
+        }
     }
 
     override func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {

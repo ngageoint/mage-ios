@@ -56,6 +56,7 @@ class BottomSheetMixin: NSObject, MapMixin {
                 let bottomSheetNav = UINavigationController(rootViewController: mageBottomSheet)
                 let bottomSheet = MDCBottomSheetController(contentViewController: bottomSheetNav)
                 bottomSheet.navigationController?.navigationBar.isTranslucent = true
+                bottomSheet.scrimColor = .clear
                 bottomSheet.delegate = self
                 bottomSheet.trackingScrollView = mageBottomSheet.scrollView
                 self?.bottomSheetEnabled.navigationController?.present(bottomSheet, animated: true, completion: nil)

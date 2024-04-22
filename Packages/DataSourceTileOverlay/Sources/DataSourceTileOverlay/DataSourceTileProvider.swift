@@ -57,7 +57,7 @@ struct DataSourceTileProvider: ImageDataProvider {
     var tileSize: CGSize = CGSize(width: 512, height: 512)
 
     var cacheKey: String {
-        "\(tileRepository.cacheSourceKey ?? "_dc")/\(path.z)/\(path.x)/\(path.y)"
+        "\(tileRepository.cacheSourceKey ?? Date().formatted())"
     }
 
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
@@ -82,42 +82,41 @@ struct DataSourceTileProvider: ImageDataProvider {
                 swCorner: (x: minTileLon, y: minTileLat),
                 neCorner: (x: maxTileLon, y: maxTileLat))
 
+            let items = await tileRepository.getTileableItems(
+                minLatitude: queryBounds.swCorner.y,
+                maxLatitude: queryBounds.neCorner.y,
+                minLongitude: queryBounds.swCorner.x,
+                maxLongitude: queryBounds.neCorner.x,
+                latitudePerPixel: latitudePerPixel,
+                longitudePerPixel: longitudePerPixel,
+                zoom: zoomLevel,
+                precise: false
+            )
+            UIGraphicsBeginImageContext(self.tileSize)
 
-                let items = await tileRepository.getTileableItems(
-                    minLatitude: queryBounds.swCorner.y,
-                    maxLatitude: queryBounds.neCorner.y,
-                    minLongitude: queryBounds.swCorner.x,
-                    maxLongitude: queryBounds.neCorner.x,
-                    latitudePerPixel: latitudePerPixel,
-                    longitudePerPixel: longitudePerPixel,
+            items.forEach { dataSourceImage in
+                dataSourceImage.image(
+                    context: UIGraphicsGetCurrentContext(),
                     zoom: zoomLevel,
-                    precise: false
+                    tileBounds: tileBounds3857,
+                    tileSize: tileSize.width
                 )
-                UIGraphicsBeginImageContext(self.tileSize)
+            }
 
-                items.forEach { dataSourceImage in
-                    dataSourceImage.image(
-                        context: UIGraphicsGetCurrentContext(),
-                        zoom: zoomLevel,
-                        tileBounds: tileBounds3857,
-                        tileSize: tileSize.width
-                    )
-                }
+            let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
 
-                let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+            UIGraphicsEndImageContext()
 
-                UIGraphicsEndImageContext()
-
-                guard let cgImage = newImage.cgImage else {
-                    handler(.failure(DataTileError.notFound))
-                    return
-                }
-                let data = UIImage(cgImage: cgImage).pngData()
-                if let data = data {
-                    handler(.success(data))
-                } else {
-                    handler(.failure(DataTileError.notFound))
-                }
+            guard let cgImage = newImage.cgImage else {
+                handler(.failure(DataTileError.notFound))
+                return
+            }
+            let data = UIImage(cgImage: cgImage).pngData()
+            if let data = data {
+                handler(.success(data))
+            } else {
+                handler(.failure(DataTileError.notFound))
+            }
         }
     }
 }
