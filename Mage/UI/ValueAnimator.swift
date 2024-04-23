@@ -15,17 +15,20 @@ class ValueAnimator {
     let duration: CFTimeInterval
     var startTime: CFTimeInterval = 0
     let callback: ((_ value: Double) -> Void)
+    let finishCallback: ((_ value: Double) -> Void)
 
     init(
         duration: Double,
         startValue: Double,
         endValue: Double,
-        callback: @escaping ((_ value: Double) -> Void)
+        callback: @escaping ((_ value: Double) -> Void),
+        finishCallback: @escaping((_ value: Double) -> Void)
     ) {
         self.duration = duration
         self.startValue = startValue
         self.endValue = endValue
         self.callback = callback
+        self.finishCallback = finishCallback
     }
 
     func start() {
@@ -60,7 +63,7 @@ class ValueAnimator {
     }
 
     func finish() {
-        callback(endValue)
+        finishCallback(endValue)
         cleanup()
     }
 

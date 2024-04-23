@@ -26,7 +26,9 @@ public class DataSourceTileOverlay: MKTileOverlay, DataSourceOverlay {
             with: .provider(
                 DataSourceTileProvider(
                     tileRepository: tileRepository,
-                    path: path
+                    path: path,
+                    tileSize: tileSize,
+                    scale: path.contentScaleFactor
                 )
             ),
             options: options

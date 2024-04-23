@@ -55,6 +55,7 @@ struct DataSourceTileProvider: ImageDataProvider {
     let tileRepository: TileRepository
     let path: MKTileOverlayPath
     var tileSize: CGSize = CGSize(width: 512, height: 512)
+    var scale: CGFloat = 1.0
 
     var cacheKey: String {
         "\(tileRepository.cacheSourceKey ?? Date().formatted())"
@@ -72,8 +73,8 @@ struct DataSourceTileProvider: ImageDataProvider {
             let neCorner3857 = CLLocationCoordinate2D(latitude: maxTileLat, longitude: maxTileLon).degreesToMeters()
             let swCorner3857 = CLLocationCoordinate2D(latitude: minTileLat, longitude: minTileLon).degreesToMeters()
 
-            let latitudePerPixel: Double = (maxTileLat - minTileLat) / self.tileSize.height
-            let longitudePerPixel: Double = (maxTileLon - minTileLon) / self.tileSize.width
+            let latitudePerPixel: Double = (maxTileLat - minTileLat) / (self.tileSize.height / scale)
+            let longitudePerPixel: Double = (maxTileLon - minTileLon) / (self.tileSize.width /  scale)
 
             let tileBounds3857 = MapBoundingBox(
                 swCorner: (x: swCorner3857.x, y: swCorner3857.y),

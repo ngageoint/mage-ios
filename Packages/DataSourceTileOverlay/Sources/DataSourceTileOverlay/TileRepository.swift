@@ -48,7 +48,6 @@ public protocol TileRepository {
         precise: Bool
     ) async -> [String]
 
-    func clearCache() async
     func clearCache(regions: [MKCoordinateRegion]?) async
 }
 
@@ -92,7 +91,6 @@ public extension TileRepository {
                     imageCache.clearCache(completion: continuation.resume)
                 }
             }
-            refreshSubject?.send(Date())
         }
     }
 

@@ -139,18 +139,36 @@ class DataSourceMap: MapMixin {
 
     var valueAnimator: ValueAnimator?
 
-    func fadeTiles() {
-        if let alpha = tileRenderer?.alpha {
-            if alpha == 1.0 {
-                valueAnimator = ValueAnimator(duration: 0.5, startValue: 1.0, endValue: 0.3, callback: { value in
-                    self.tileRenderer?.alpha = value
-                })
-            } else {
-                valueAnimator = ValueAnimator(duration: 0.5, startValue: 0.3, endValue: 1.0, callback: { value in
-                    self.tileRenderer?.alpha = value
-                })
+    func fadeTiles() async {
+        return await withCheckedContinuation { continuation in
+            if let alpha = tileRenderer?.alpha {
+                if alpha == 1.0 {
+                    valueAnimator = ValueAnimator(
+                        duration: 0.5,
+                        startValue: 1.0,
+                        endValue: 0.3,
+                        callback: { value in
+                            self.tileRenderer?.alpha = value
+                        },
+                        finishCallback: { value in
+                            self.tileRenderer?.alpha = value
+                            continuation.resume()
+                        })
+                } else {
+                    valueAnimator = ValueAnimator(
+                        duration: 0.5,
+                        startValue: 0.3,
+                        endValue: 1.0,
+                        callback: { value in
+                            self.tileRenderer?.alpha = value
+                        },
+                        finishCallback: { value in
+                            self.tileRenderer?.alpha = value
+                            continuation.resume()
+                        })
+                }
+                valueAnimator?.start()
             }
-            valueAnimator?.start()
         }
     }
 

@@ -133,14 +133,20 @@ class ObservationsMap: DataSourceMap {
     }
 
     func focusAnnotation(mapItem: ObservationMapItem?) {
-        fadeTiles()
-
-        addOrRemoveFocusedOverlay(mapItem: mapItem)
+        Task {
+            if let mapItem = mapItem {
+                addFocusedOverlay(mapItem: mapItem)
+                await fadeTiles()
+            } else {
+                await fadeTiles()
+                removeFocusedOverlay()
+            }
+        }
     }
 
-    func addOrRemoveFocusedOverlay(mapItem: ObservationMapItem?) {
+    func addFocusedOverlay(mapItem: ObservationMapItem) {
         DispatchQueue.main.async { [self] in
-            if let observationUrl = mapItem?.observationId,
+            if let observationUrl = mapItem.observationId,
                let observationsTileRepository = repository as? ObservationsTileRepository
             {
                 let observationTileRepo = ObservationTileRepository(
@@ -153,7 +159,13 @@ class ObservationsMap: DataSourceMap {
                 )
                 focusedObservationTileOverlay?.allowFade = false
                 mapView?.addOverlay(focusedObservationTileOverlay!, level: .aboveLabels)
-            } else if let focusedObservationTileOverlay = focusedObservationTileOverlay {
+            }
+        }
+    }
+
+    func removeFocusedOverlay() {
+        DispatchQueue.main.async { [self] in
+            if let focusedObservationTileOverlay = focusedObservationTileOverlay {
                 mapView?.removeOverlay(focusedObservationTileOverlay)
                 self.focusedObservationTileOverlay = nil
             }
