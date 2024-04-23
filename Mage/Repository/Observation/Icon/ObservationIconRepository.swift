@@ -27,7 +27,15 @@ class ObservationIconRepository: ObservableObject {
     }
 
     func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize {
-        return iterateIconDirectoriesAtRoot(directory: rootIconFolder(eventId: eventId))
+        // start with the default marker
+        var size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0)
+        if let defaultMarker = UIImage(named: "defaultMarker") {
+            size = defaultMarker.size
+        }
+        return iterateIconDirectoriesAtRoot(
+            directory: rootIconFolder(eventId: eventId),
+            currentLargest: size
+        )
     }
 
     func iterateIconDirectoriesAtRoot(
