@@ -201,6 +201,23 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                 }
             }
             .store(in: &cancellable)
+
+        NotificationCenter.default.publisher(for: .MAGEFormFetched)
+            .receive(on: DispatchQueue.main)
+            .sink { notification in
+                if let event: Event = notification.object as? Event {
+                    if event.remoteId == Server.currentEventId() {
+                        Task {
+                            if let eventId = event.remoteId {
+                                self.eventIdToMaxIconSize[eventId.intValue] = nil
+                            }
+                            await self.clearCache()
+                            self.refreshSubject?.send(Date())
+                        }
+                    }
+                }
+            }
+            .store(in: &cancellable)
     }
 
     func getTileableItems(
