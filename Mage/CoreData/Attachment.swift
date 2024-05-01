@@ -61,4 +61,12 @@ import CoreData
             return URL(string: "\(self.url ?? "")?access_token=\(token ?? "")&size=\(size)")
         }
     }
+    
+    @objc public override func prepareForDeletion() {
+        super.prepareForDeletion()
+        // Delete the associated attachment from the filesystem
+        if let localPath = self.localPath, FileManager.default.fileExists(atPath: localPath) {
+            try? FileManager.default.removeItem(atPath: localPath)
+        }
+    }
 }

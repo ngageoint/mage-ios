@@ -663,10 +663,11 @@ enum State: Int, CustomStringConvertible {
                 }
                 
                 if let attachmentsJson = feature[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
+                    var remoteIdsFromJson :Set<String> = []
                     for (index, attachmentJson) in attachmentsJson.enumerated() {
                         var attachmentFound = false;
                         if let remoteId = attachmentJson[AttachmentKey.id.key] as? String, let attachments = existingObservation.attachments {
-                            
+                            remoteIdsFromJson.insert(remoteId)
                             for attachment in attachments {
                                 if remoteId == attachment.remoteId {
                                     attachment.contentType = attachmentJson[AttachmentKey.contentType.key] as? String
@@ -686,6 +687,15 @@ enum State: Int, CustomStringConvertible {
                                 existingObservation.addToAttachments(attachment);
                             }
                         }
+                    }
+                    
+                    // If a local attachment if absent on the server, delete it (and the locally cached file)
+                    let attachmentsDeletedOnServer = existingObservation.attachments?.filter {
+                        !remoteIdsFromJson.contains($0.remoteId ?? "")
+                    }
+                    attachmentsDeletedOnServer?.forEach {
+                        existingObservation.removeFromAttachments($0)
+                        $0.mr_deleteEntity(in: context)
                     }
                 }
             }
