@@ -246,6 +246,9 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 galleryPermissionDenied()
                 return
             }
+            guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                return
+            }
             let dateFormatter = DateFormatter();
             dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
 
