@@ -193,9 +193,9 @@ extension AttachmentCreationCoordinator: AttachmentCreationDelegate {
 
 extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     
-    func handlePhoto(photo: PHAsset?, utType: UTType?) {
+    func handlePhoto(selectedAsset: PHAsset?, utType: UTType?) {
         DispatchQueue.global(qos: .userInitiated).async { [self] in
-            guard let photo else {
+            guard let selectedAsset else {
                 galleryPermissionDenied()
                 return
             }
@@ -205,13 +205,11 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
-            let manager = PHImageManager.default()
             let requestOptions = PHImageRequestOptions()
             requestOptions.isSynchronous = true
             requestOptions.deliveryMode = .fastFormat
             requestOptions.isNetworkAccessAllowed = true
-
-            manager.requestImageDataAndOrientation(for: photo, options: requestOptions) { (data, fileName, orientation, info) in
+            PHImageManager.default().requestImageDataAndOrientation(for: selectedAsset, options: requestOptions) { (data, fileName, orientation, info) in
                 guard let data else {
                     return
                 }
@@ -240,9 +238,9 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
         }
     }
     
-    func handleVideo(phasset: PHAsset?, utType: UTType?) {
+    func handleVideo(selectedAsset: PHAsset?, utType: UTType?) {
         DispatchQueue.global(qos: .userInitiated).async { [self] in
-            guard let phasset else {
+            guard let selectedAsset else {
                 galleryPermissionDenied()
                 return
             }
@@ -252,53 +250,48 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
-            let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4")
-            let manager = PHImageManager.default()
-            let requestOptions = PHVideoRequestOptions()
-            requestOptions.deliveryMode = .highQualityFormat
-            requestOptions.isNetworkAccessAllowed = true
-
-            manager.requestAVAsset(forVideo: phasset, options: requestOptions) { avAsset, audioMix, info in
+            let videoExportPath = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4")
+            let assetRequestOptions = PHVideoRequestOptions()
+            assetRequestOptions.deliveryMode = .highQualityFormat
+            assetRequestOptions.isNetworkAccessAllowed = true
+            PHImageManager.default().requestAVAsset(forVideo: selectedAsset, options: assetRequestOptions) { avAsset, audioMix, info in
                 guard let avAsset = avAsset else {
                     return
                 }
                 let videoQuality: String = self.videoUploadQuality();
-                let compatiblePresets: [String] = AVAssetExportSession.exportPresets(compatibleWith: avAsset);
+                let compatiblePresets: [String] = AVAssetExportSession.exportPresets(compatibleWith: avAsset)
                 guard compatiblePresets.contains(videoQuality) else {
                     return
                 }
-                guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: videoQuality) else {
-                    print("Export session not created")
-                    return
-                }
                 do {
-                    try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                    try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
                 }
                 catch {
                     print("error creating directory \(attachmentsDirectory) to export attachment video", error)
                     return
                 }
-                exportSession.outputURL = fileToWriteTo;
-                exportSession.outputFileType = .mp4;
-                print("exporting async")
+                guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: videoQuality) else {
+                    print("failed to create export session for attachment video")
+                    return
+                }
+                exportSession.outputURL = videoExportPath
+                exportSession.outputFileType = .mp4
                 exportSession.exportAsynchronously {
-                    print("export session status \(exportSession.status)")
                     switch (exportSession.status) {
                     case .completed:
-                        print("Export complete")
-                        self.addAttachmentForSaving(location: fileToWriteTo, contentType: "video/mp4")
+                        self.addAttachmentForSaving(location: videoExportPath, contentType: "video/mp4")
                     case .failed:
-                        print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
+                        print("video export failed: \(String(describing: exportSession.error?.localizedDescription))")
                     case .cancelled:
-                        print("Export cancelled");
-                    case .unknown:
-                        print("Unknown")
+                        print("video export cancelled");
                     case .waiting:
-                        print("Waiting")
+                        print("video export waiting")
                     case .exporting:
-                        print("Exporting")
+                        print("video export in progress")
+                    case .unknown:
+                        print("video export status unknown")
                     @unknown default:
-                        print("Unknown")
+                        print("video export status unknown")
                     }
                 }
             }
@@ -352,7 +345,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                         let options = PHFetchOptions()
                         options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
                         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                        handlePhoto(photo: fetchResult.firstObject, utType: utType)
+                        handlePhoto(selectedAsset: fetchResult.firstObject, utType: utType)
                         picker.dismiss(animated: true, completion: nil)
                         return
                     }
@@ -361,7 +354,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 // otherwise it should be a movie
                 if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
                     let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
-                    handleVideo(phasset: fetchResult.firstObject, utType: utType)
+                    handleVideo(selectedAsset: fetchResult.firstObject, utType: utType)
                     picker.dismiss(animated: true, completion: nil)
                     return
                 }
