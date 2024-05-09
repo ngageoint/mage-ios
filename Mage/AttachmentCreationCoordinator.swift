@@ -199,11 +199,11 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 galleryPermissionDenied()
                 return
             }
-            let dateFormatter = DateFormatter();
-            dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
             guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
                 return
             }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
             let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
             let manager = PHImageManager.default()
             let requestOptions = PHImageRequestOptions()
@@ -249,9 +249,10 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
             guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
                 return
             }
-            let dateFormatter = DateFormatter();
-            dateFormatter.dateFormat = "yyyyMMdd_HHmmss";
-
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
+            let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
+            let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4")
             let manager = PHImageManager.default()
             let requestOptions = PHVideoRequestOptions()
             requestOptions.deliveryMode = .highQualityFormat
@@ -261,55 +262,47 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 guard let avAsset = avAsset else {
                     return
                 }
-
                 let videoQuality: String = self.videoUploadQuality();
-                print("video quality \(videoQuality)")
                 let compatiblePresets: [String] = AVAssetExportSession.exportPresets(compatibleWith: avAsset);
-                if (compatiblePresets.contains(videoQuality)) {
-                    guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: videoQuality) else {
-                        print("Export session not created")
-                        return
-                    }
-                    let fileType = utType?.preferredFilenameExtension ?? "mp4"
-                    let mimeType = utType?.preferredMIMEType ?? "video/mp4"
-                    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                        return;
-                    }
-                    let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
-                    let fileToWriteTo = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).\(fileType)");
-
-                    do {
-                        try FileManager.default.createDirectory(at: fileToWriteTo.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
-                        exportSession.outputURL = fileToWriteTo;
-                        exportSession.outputFileType = .mp4;
-                        print("exporting async")
-                        exportSession.exportAsynchronously {
-                            print("export session status \(exportSession.status)")
-                            switch (exportSession.status) {
-                            case .completed:
-                                print("Export complete")
-                                self.addAttachmentForSaving(location: fileToWriteTo, contentType: mimeType)
-                            case .failed:
-                                print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
-                            case .cancelled:
-                                print("Export cancelled");
-                            case .unknown:
-                                print("Unknown")
-                            case .waiting:
-                                print("Waiting")
-                            case .exporting:
-                                print("Exporting")
-                            @unknown default:
-                                print("Unknown")
-                            }
-                        }
-                    } catch {
-                        print("Error creating directory path \(fileToWriteTo.deletingLastPathComponent()): \(error)")
+                guard compatiblePresets.contains(videoQuality) else {
+                    return
+                }
+                guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: videoQuality) else {
+                    print("Export session not created")
+                    return
+                }
+                do {
+                    try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete]);
+                }
+                catch {
+                    print("error creating directory \(attachmentsDirectory) to export attachment video", error)
+                    return
+                }
+                exportSession.outputURL = fileToWriteTo;
+                exportSession.outputFileType = .mp4;
+                print("exporting async")
+                exportSession.exportAsynchronously {
+                    print("export session status \(exportSession.status)")
+                    switch (exportSession.status) {
+                    case .completed:
+                        print("Export complete")
+                        self.addAttachmentForSaving(location: fileToWriteTo, contentType: "video/mp4")
+                    case .failed:
+                        print("Export Failed: \(String(describing: exportSession.error?.localizedDescription))")
+                    case .cancelled:
+                        print("Export cancelled");
+                    case .unknown:
+                        print("Unknown")
+                    case .waiting:
+                        print("Waiting")
+                    case .exporting:
+                        print("Exporting")
+                    @unknown default:
+                        print("Unknown")
                     }
                 }
             }
         }
-    
     }
     
     func galleryPermissionDenied() {
