@@ -347,7 +347,6 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                         return
                     }
                 }
-                
                 // otherwise it should be a movie
                 if utType.conforms(to: .movie), let assetIdentifier = result.assetIdentifier {
                     let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
