@@ -239,65 +239,62 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
     }
     
     func handleVideo(selectedAsset: PHAsset?, utType: UTType?) {
-        DispatchQueue.global(qos: .userInitiated).async { [self] in
-            guard let selectedAsset else {
-                galleryPermissionDenied()
+        guard let selectedAsset else {
+            galleryPermissionDenied()
+            return
+        }
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
+        let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
+        let videoExportPath = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4")
+        let assetRequestOptions = PHVideoRequestOptions()
+        assetRequestOptions.deliveryMode = .highQualityFormat
+        assetRequestOptions.isNetworkAccessAllowed = true
+        Task(priority: .userInitiated) {
+            let avAsset = try await requestAVAssetAsync(forVideo: selectedAsset, options: assetRequestOptions)
+            guard let avAsset = avAsset else {
                 return
             }
-            guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            guard await AVAssetExportSession.compatibility(ofExportPreset: self.videoUploadQuality(), with: avAsset, outputFileType: .mp4) else {
                 return
             }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
-            let attachmentsDirectory = documentsDirectory.appendingPathComponent("attachments")
-            let videoExportPath = attachmentsDirectory.appendingPathComponent("MAGE_\(dateFormatter.string(from: Date())).mp4")
-            let assetRequestOptions = PHVideoRequestOptions()
-            assetRequestOptions.deliveryMode = .highQualityFormat
-            assetRequestOptions.isNetworkAccessAllowed = true
-            PHImageManager.default().requestAVAsset(forVideo: selectedAsset, options: assetRequestOptions) { avAsset, audioMix, info in
-                guard let avAsset = avAsset else {
-                    return
+            do {
+                try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
+            }
+            catch {
+                print("error creating directory \(attachmentsDirectory) to export attachment video", error)
+                return
+            }
+            guard let exportSession = AVAssetExportSession(asset: avAsset, presetName: self.videoUploadQuality()) else {
+                print("failed to create export session for attachment video")
+                return
+            }
+            exportSession.outputURL = videoExportPath
+            exportSession.outputFileType = .mp4
+            await exportSession.export()
+            if let error = exportSession.error {
+                print("video export failed: \(String(describing: error.localizedDescription))")
+                return
+            }
+            self.addAttachmentForSaving(location: videoExportPath, contentType: "video/mp4")
+        }
+    }
+
+    private func requestAVAssetAsync(forVideo: PHAsset, options: PHVideoRequestOptions?) async throws -> AVAsset? {
+        try await withCheckedThrowingContinuation { continuation in
+            PHImageManager.default().requestAVAsset(forVideo: forVideo, options: options) { avAsset, audioMix, info in
+                if let error = info?[PHImageErrorKey] as? Error {
+                    continuation.resume(throwing: error)
                 }
-                let videoQuality: String = self.videoUploadQuality();
-                let compatiblePresets: [String] = AVAssetExportSession.exportPresets(compatibleWith: avAsset)
-                guard compatiblePresets.contains(videoQuality) else {
-                    return
-                }
-                do {
-                    try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
-                }
-                catch {
-                    print("error creating directory \(attachmentsDirectory) to export attachment video", error)
-                    return
-                }
-                guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: videoQuality) else {
-                    print("failed to create export session for attachment video")
-                    return
-                }
-                exportSession.outputURL = videoExportPath
-                exportSession.outputFileType = .mp4
-                exportSession.exportAsynchronously {
-                    switch (exportSession.status) {
-                    case .completed:
-                        self.addAttachmentForSaving(location: videoExportPath, contentType: "video/mp4")
-                    case .failed:
-                        print("video export failed: \(String(describing: exportSession.error?.localizedDescription))")
-                    case .cancelled:
-                        print("video export cancelled");
-                    case .waiting:
-                        print("video export waiting")
-                    case .exporting:
-                        print("video export in progress")
-                    case .unknown:
-                        print("video export status unknown")
-                    @unknown default:
-                        print("video export status unknown")
-                    }
-                }
+                continuation.resume(returning: avAsset)
+                return
             }
         }
     }
-    
+
     func galleryPermissionDenied() {
         // The user selected certain photos to share with MAGE and this wasn't one of them
         // prompt the user to pick more photos to share
