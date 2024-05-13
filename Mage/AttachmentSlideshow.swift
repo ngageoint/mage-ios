@@ -217,11 +217,8 @@ class AttachmentSlideShow: UIView {
             } else if (attachment.contentType?.hasPrefix("video") ?? false) {
                 let url = self.getAttachmentUrl(attachment: attachment);
                 imageView.setAttachment(attachment: attachment);
-                var localPath: String? = nil;
-                if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
-                    localPath = attachment.localPath;
-                }
-                let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
+                let localPath: String? = (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) ? attachment.localPath : nil
+                let provider: VideoImageProvider = VideoImageProvider(sourceUrl: url, localPath: localPath);
                 imageView.contentMode = .scaleAspectFit;
                 DispatchQueue.main.async {
                     imageView.kf.setImage(with: provider, placeholder: UIImage(systemName: "play.circle.fill"), options: [
