@@ -61,57 +61,40 @@ import Kingfisher
     }
     
     @objc public func setImage(newAttachment: [String : AnyHashable], button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
-        layoutSubviews();
-        self.button = button;
-        self.imageView.kf.indicatorType = .activity;
+        layoutSubviews()
+        self.button = button
+        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
+        self.imageView.contentMode = .scaleAspectFill
+        self.imageView.kf.indicatorType = .activity
         guard let contentType = newAttachment["contentType"] as? String, let localPath = newAttachment["localPath"] as? String else {
             return
         }
         if (contentType.hasPrefix("image")) {
-            self.imageView.setImage(url: URL(fileURLWithPath: localPath), cacheOnly: !DataConnectionUtilities.shouldFetchAttachments());
-            self.imageView.accessibilityLabel = "attachment \(localPath) loaded";
-            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
-            self.imageView.contentMode = .scaleAspectFill;
+            self.imageView.setImage(url: URL(fileURLWithPath: localPath), cacheOnly: !DataConnectionUtilities.shouldFetchAttachments())
+            self.imageView.accessibilityLabel = "attachment \(localPath) loaded"
         } else if (contentType.hasPrefix("video")) {
             let provider: VideoImageProvider = VideoImageProvider(localPath: localPath);
-            self.imageView.contentMode = .scaleAspectFill;
+            let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"))
+            overlay.contentMode = .scaleAspectFit
+            self.imageView.addSubview(overlay)
+            overlay.autoCenterInSuperview()
             DispatchQueue.main.async {
                 self.imageView.kf.setImage(with: provider, placeholder: UIImage(systemName: "play.circle.fill"), options: [
                     .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                     .transition(.fade(0.2)),
                     .scaleFactor(UIScreen.main.scale),
                     .processor(DownsamplingImageProcessor(size: self.imageView.frame.size)),
-                    .cacheOriginalImage
-                ], completionHandler:
-                    { result in
-                        switch result {
-                        case .success(_):
-                            self.imageView.contentMode = .scaleAspectFill;
-                            self.imageView.accessibilityLabel = "local \(localPath) loaded";
-                            let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"));
-                            overlay.contentMode = .scaleAspectFit;
-                            self.imageView.addSubview(overlay);
-                            overlay.autoCenterInSuperview();
-                        case .failure(let error):
-                            print(error);
-                            self.imageView.backgroundColor = UIColor.init(white: 0, alpha: 0.06);
-                            let overlay: UIImageView = UIImageView(image: UIImage(systemName: "play.circle.fill"));
-                            overlay.contentMode = .scaleAspectFit;
-                            self.imageView.addSubview(overlay);
-                            overlay.autoCenterInSuperview();
-                        }
-                    });
+                    .diskCacheExpiration(StorageExpiration.seconds(300)),
+                ])
             }
         } else if (contentType.hasPrefix("audio")) {
-            self.imageView.image = UIImage(systemName: "speaker.wave.2.fill");
-            self.imageView.accessibilityLabel = "local \(localPath) loaded";
-            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
-            self.imageView.contentMode = .scaleAspectFit;
+            self.imageView.image = UIImage(systemName: "speaker.wave.2.fill")
+            self.imageView.accessibilityLabel = "audio attachment loaded"
+            self.imageView.contentMode = .scaleAspectFit
         } else {
-            self.imageView.image = UIImage(systemName: "paperclip");
-            self.imageView.accessibilityLabel = "local \(localPath) loaded";
-            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
-            self.imageView.contentMode = .scaleAspectFit;
+            self.imageView.image = UIImage(systemName: "paperclip")
+            self.imageView.accessibilityLabel = "\(contentType) loaded"
+            self.imageView.contentMode = .scaleAspectFit
             let label = UILabel.newAutoLayout()
             label.text = newAttachment["contentType"] as? String
             label.textColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
@@ -136,6 +119,7 @@ import Kingfisher
         layoutSubviews();
         self.button = button;
         self.imageView.kf.indicatorType = .activity;
+        self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
             self.imageView.setAttachment(attachment: attachment);
             self.imageView.tintColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.87);
@@ -155,14 +139,13 @@ import Kingfisher
             guard let url = self.getAttachmentUrl(attachment: attachment) else {
                 self.imageView.contentMode = .scaleAspectFit;
                 self.imageView.image = UIImage(named: "upload");
-                self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
                 return;
             }
             var localPath: String? = nil;
             if (attachment.localPath != nil && FileManager.default.fileExists(atPath: attachment.localPath!)) {
                 localPath = attachment.localPath;
             }
-            let provider: VideoImageProvider = VideoImageProvider(url: url, localPath: localPath);
+            let provider: VideoImageProvider = VideoImageProvider(sourceUrl: url, localPath: localPath);
             self.imageView.contentMode = .scaleAspectFit;
             DispatchQueue.main.async {
                 self.imageView.kf.setImage(with: provider, placeholder: UIImage(systemName: "play.circle.fill"), options: [
@@ -189,12 +172,10 @@ import Kingfisher
         } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
             self.imageView.image = UIImage(systemName: "speaker.wave.2.fill");
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
-            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
             self.imageView.contentMode = .scaleAspectFit;
         } else {
             self.imageView.image = UIImage(systemName: "paperclip");
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
-            self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
             self.imageView.contentMode = .scaleAspectFit;
             let label = UILabel.newAutoLayout()
             label.text = attachment.name
