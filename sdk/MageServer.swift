@@ -216,10 +216,11 @@ import Foundation
                     success?(server)
                 } else {
                     // we can't log in offline because there are no offline credentials stored
-                    failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Failed to connect to server.  Received error \(error.localizedDescription)"]))
+                    failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "\(error.localizedDescription)"]))
                 }
             } else {
-                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Failed to connect to server.  Received error \(error.localizedDescription)"]))
+                let statusCode:Int? = (task?.response as? HTTPURLResponse)?.statusCode ?? nil
+                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "\(error.localizedDescription)", "statusCode": statusCode, "originalError": error]))
             }
         })
         
