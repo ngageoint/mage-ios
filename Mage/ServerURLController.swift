@@ -262,12 +262,41 @@ class ServerURLController: UIViewController {
     }
     
     @objc func okTapped() {
-        if let urlString = serverURL.text, let url = URL(string: urlString), url.scheme != nil, url.host != nil {
+        
+        guard let urlString = serverURL.text else {
+            showError(error: "Invalid URL")
+            return
+        }
+        
+        guard var urlComponents = URLComponents(string: urlString) else {
+            showError(error: "Invalid URL")
+            return
+        }
+           
+        // Handle cases without path or scheme, e.g. "magedev.geointnext.com"
+        if urlComponents.path != "" && urlComponents.host == nil {
+            urlComponents.host = urlComponents.path
+            urlComponents.path = ""
+        }
+        
+        // Remove trailing "/" in the path if they entered one by accident
+        if urlComponents.path == "/" {
+            urlComponents.path = ""
+        }
+        
+        // Supply a default HTTPS scheme if none is specified
+        if urlComponents.scheme == nil {
+            urlComponents.scheme = "https"
+        }
+        
+        if let url = urlComponents.url {
+        
             errorStatus.isHidden = true
             errorInfoLink.isHidden = true
             errorImage.isHidden = true
             progressView.isHidden = false
             progressView.startAnimating()
+            print(url)
             delegate?.setServerURL(url: url)
             if let scheme = scheme {
                 serverURL.applyTheme(withScheme: scheme)
@@ -275,6 +304,7 @@ class ServerURLController: UIViewController {
         } else {
             showError(error: "Invalid URL")
         }
+        
     }
     
     @objc func cancelTapped() {
