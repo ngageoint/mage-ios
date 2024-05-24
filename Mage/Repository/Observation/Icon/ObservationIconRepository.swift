@@ -10,11 +10,36 @@ import Foundation
 import UIImageExtensions
 
 class ObservationIconRepository: ObservableObject {
+    let localDataSource: ObservationIconLocalDataSource
+    init(localDataSource: ObservationIconLocalDataSource) {
+        self.localDataSource = localDataSource
+    }
+
+    func getIconPath(observationUri: URL) async -> String? {
+        await localDataSource.getIconPath(observationUri: observationUri)
+    }
+
+    func getIconPath(observation: Observation) -> String? {
+        localDataSource.getIconPath(observation: observation)
+    }
+
+    func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize {
+        localDataSource.getMaximumIconHeightToWidthRatio(eventId: eventId)
+    }
+}
+
+protocol ObservationIconLocalDataSource {
+    func getIconPath(observationUri: URL) async -> String?
+    func getIconPath(observation: Observation) -> String?
+    func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize
+}
+
+class ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
     let localDataSource: ObservationLocalDataSource
     init(localDataSource: ObservationLocalDataSource) {
         self.localDataSource = localDataSource
     }
-
+    
     func getIconPath(observationUri: URL) async -> String? {
         if let observation = await localDataSource.getObservation(observationUri: observationUri) {
             return getIconPath(observation: observation)

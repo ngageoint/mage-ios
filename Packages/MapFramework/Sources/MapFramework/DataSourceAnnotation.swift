@@ -8,8 +8,44 @@
 
 import Foundation
 import MapKit
+import DataSourceDefinition
 
-open class EnlargedAnnotation: NSObject, MKAnnotation {
+//public protocol IdentifiableAnnotation: NSObjectProtocol, MKAnnotation, Identifiable, Hashable {
+//    var id: Any { get }
+//}
+
+class UnknownDefinition: DataSourceDefinition {
+    var mappable: Bool = false
+
+    var color: UIColor = .magenta
+
+    var imageName: String?
+    
+    var systemImageName: String? = "face.smiling"
+
+    var key: String = "unknown"
+
+    var name: String = "Unknown"
+
+    var fullName: String = "Unknown"
+
+    static let definition = UnknownDefinition()
+    private init() { }
+}
+
+open class DataSourceAnnotation: NSObject, MKAnnotation, Identifiable {
+    static func == (lhs: DataSourceAnnotation, rhs: DataSourceAnnotation) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    open override var hash: Int {
+        id.hashValue
+    }
+    
+    public var id: String
+    
+    open var dataSource: any DataSourceDefinition = UnknownDefinition.definition
+    
     public var enlarged: Bool = false
 
     public var shouldEnlarge: Bool = false
@@ -22,10 +58,12 @@ open class EnlargedAnnotation: NSObject, MKAnnotation {
         return UIColor.clear
     }
 
-    public var coordinate: CLLocationCoordinate2D
+    dynamic public var coordinate: CLLocationCoordinate2D
 
     public init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
+//        self.dataSource = dataSource
+        self.id = UUID().uuidString
     }
 
     public func markForEnlarging() {

@@ -23,10 +23,11 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
             if let observationMapItemRepository = RepositoryManager.shared.observationMapItemRepository,
                 let observationUri = newValue?.objectID.uriRepresentation()
             {
-                observationMapMixin.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri, mapItemRepository: observationMapItemRepository)
-                if let mapView = mapView {
-                    observationMapMixin.refreshMap(mapState: mapState)
-                }
+                observationMapMixin.viewModel.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri, mapItemRepository: observationMapItemRepository)
+                observationMapMixin.refresh()
+//                if let mapView = mapView {
+//                    observationMapMixin.refreshMap(mapState: mapState)
+//                }
             }
             _observation = newValue
         }

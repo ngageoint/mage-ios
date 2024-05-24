@@ -8,16 +8,27 @@
 
 import Foundation
 import Combine
+import DataSourceTileOverlay
 
 class ObservationMap: DataSourceMap {
     override var REFRESH_KEY: String {
         "ObservationMapDateUpdated"
     }
     let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
-
-    func addFeatures(features: AnnotationsAndOverlays, mapView: MKMapView) async {
-        await super.addFeatures(features: features, mapView: mapView)
-        await mapView.showAnnotations(features.annotations, animated: true)
+    
+    init(
+        repository: TileRepository? = nil,
+        mapFeatureRepository: MapFeatureRepository? = nil
+    ) {
+        super.init(dataSource: DataSources.observation, repository: repository, mapFeatureRepository: mapFeatureRepository)
+    }
+    
+    override func handleFeatureChanges(mapView: MKMapView) -> Bool {
+        let changed = super.handleFeatureChanges(mapView: mapView)
+        if changed {
+            mapView.showAnnotations(viewModel.annotations, animated: true)
+        }
+        return changed
     }
 
     override func viewForAnnotation(annotation: any MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {

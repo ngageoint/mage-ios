@@ -86,11 +86,14 @@ import Foundation
             localDataSource: observationLocationLocalDataSource
         )
         RepositoryManager.shared.observationIconRepository = ObservationIconRepository(
-            localDataSource: observationLocalDataSource
+            localDataSource: ObservationIconCoreDataDataSource(localDataSource: observationLocalDataSource)
         )
         RepositoryManager.shared.observationsTileRepository = ObservationsTileRepository(
             localDataSource: observationLocationLocalDataSource,
             observationIconRepository: RepositoryManager.shared.observationIconRepository!
+        )
+        RepositoryManager.shared.observationsMapFeatureRepository = ObservationsMapFeatureRepository(
+            localDataSource: observationLocationLocalDataSource
         )
         Task {
             await RepositoryManager.shared.observationsTileRepository?.clearCache()

@@ -14,7 +14,7 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
     var mapView: MKMapView?
     var mapScale: MKScaleView?
     var map: MapProtocol
-    var focusedAnnotation: EnlargedAnnotation?
+    var focusedAnnotation: DataSourceAnnotation?
     var focusMapOnItemSink: AnyCancellable?
 
     var setCenter: CLLocationCoordinate2D?
@@ -91,7 +91,7 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
     public func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         for view in views {
 
-            guard let annotation = view.annotation as? EnlargedAnnotation else {
+            guard let annotation = view.annotation as? DataSourceAnnotation else {
                 continue
             }
             NSLog("check if should enlarge \(annotation.shouldEnlarge)")

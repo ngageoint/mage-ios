@@ -366,6 +366,16 @@ extension CLLocationCoordinate2D {
 }
 
 public extension MKCoordinateRegion {
+    
+    func padded(percentage: Double) -> MKCoordinateRegion {
+        return MKCoordinateRegion(
+            center: center,
+            span: MKCoordinateSpan(
+                latitudeDelta: span.latitudeDelta * (1.0 + percentage),
+                longitudeDelta: span.longitudeDelta * (1.0 + percentage)
+            )
+        )
+    }
 
     func corners() -> (southWest: CLLocationCoordinate2D, northEast: CLLocationCoordinate2D) {
         let southWest = CLLocationCoordinate2D(

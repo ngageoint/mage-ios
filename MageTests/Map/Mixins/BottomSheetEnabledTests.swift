@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import MagicalRecord
 import OHHTTPStubs
+import MapFramework
 
 @testable import MAGE
 import CoreLocation

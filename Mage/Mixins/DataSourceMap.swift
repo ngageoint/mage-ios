@@ -11,45 +11,35 @@ import Combine
 import DataSourceTileOverlay
 import MKMapViewExtensions
 import MapFramework
+import DataSourceDefinition
 
 class DataSourceMap: MapMixin {
     var REFRESH_KEY: String {
-        "\(dataSourceKey)MapDateUpdated"
+        "\(dataSource.key)\(uuid.uuidString)MapDateUpdated"
     }
     var uuid: UUID = UUID()
     var cancellable = Set<AnyCancellable>()
-    var minZoom = 2
+    
+    var viewModel: DataSourceMapViewModel
 
-    var repository: TileRepository?
-    var mapFeatureRepository: MapFeatureRepository?
     var scheme: MDCContainerScheming?
     var mapState: MapState?
     var mapView: MKMapView?
-    var lastChange: Date?
-    var overlays: [MKOverlay] = []
-    var renderers: [MKOverlayRenderer] = []
-    var annotations: [MKAnnotation] = []
 
-    var previousOverlays: [MKOverlay] = []
-    var previousAnnotations: [MKAnnotation] = []
+    var dataSource: any DataSourceDefinition
 
-    var focusNotificationName: Notification.Name?
-
-    var userDefaultsShowPublisher: NSObject.KeyValueObservingPublisher<UserDefaults, Bool>?
-    var orderPublisher: NSObject.KeyValueObservingPublisher<UserDefaults, Int>?
-
-    var show = false
-    var repositoryAlwaysShow: Bool {
-        repository?.alwaysShow ?? mapFeatureRepository?.alwaysShow ?? false
-    }
-
-    var dataSourceKey: String {
-        repository?.dataSource.key ?? mapFeatureRepository?.dataSource.key ?? ""
-    }
-
-    init(repository: TileRepository? = nil, mapFeatureRepository: MapFeatureRepository? = nil) {
-        self.repository = repository
-        self.mapFeatureRepository = mapFeatureRepository
+    init(
+        dataSource: any DataSourceDefinition,
+        repository: TileRepository? = nil,
+        mapFeatureRepository: MapFeatureRepository? = nil
+    ) {
+        self.dataSource = dataSource
+        viewModel = DataSourceMapViewModel(
+            dataSource: dataSource,
+            key: uuid.uuidString,
+            repository: repository,
+            mapFeatureRepository: mapFeatureRepository
+        )
     }
 
     func cleanupMixin() {
@@ -64,77 +54,74 @@ class DataSourceMap: MapMixin {
         self.mapView = mapView
         self.mapState = mapState
 
-        self.setupUserDefaultsShowPublisher(mapState: mapState)
-        self.setupOrderPublisher(mapState: mapState)
         updateMixin(mapView: mapView, mapState: mapState)
 
-        // this would eventually be rendered unnecessary when we switch to SwiftUI as it would watch the
-        // StateObject and trigger an update when it changes
-        mapState.objectWillChange
-            .makeConnectable()
-            .autoconnect()
-            .sink { [weak self] in
-                DispatchQueue.main.async { [weak self] in
-                    if let mapState = self?.mapState {
-                        self?.updateMixin(mapView: mapView, mapState: mapState)
-                    }
-                }
-            }
-            .store(in: &cancellable)
+        viewModel.$annotations.sink { annotations in
+            self.updateFeatures()
+        }
+        .store(in: &cancellable)
+        
+        viewModel.$tileOverlays.sink { tileOverlays in
+            self.updateTileOverlays()
+        }
+        .store(in: &cancellable)
 
-        repository?.refreshPublisher?
+        viewModel.refreshPublisher?
             .sink { date in
-                if let mapState = self.mapState {
-                    self.refreshMap(mapState: mapState)
-                }
+                self.refresh()
             }
             .store(in: &cancellable)
     }
-
-    func updateMixin(mapView: MKMapView, mapState: MapState) {
-        if lastChange == nil
-            || lastChange != mapState.mixinStates[self.REFRESH_KEY] as? Date {
-            lastChange = mapState.mixinStates[self.REFRESH_KEY] as? Date ?? Date()
-
-            if mapState.mixinStates[self.REFRESH_KEY] as? Date == nil {
-                DispatchQueue.main.async {
-                    mapState.mixinStates[self.REFRESH_KEY] = self.lastChange
-                }
-            }
-
-            // if there are still previous overlays or annotations, just clear them now
-            clearPrevious()
-            previousOverlays = overlays
-            previousAnnotations = annotations
-
-            overlays = []
-            annotations = []
-
-            if !show && !repositoryAlwaysShow {
-                return
-            }
-            Task {
-                overlays = getOverlays()
-                let features = await mapFeatureRepository?.getAnnotationsAndOverlays()
-                if let features = features {
-                    annotations.append(contentsOf: features.annotations)
-                    overlays.append(contentsOf: features.overlays)
-                }
-                await addFeatures(features: AnnotationsAndOverlays(annotations: annotations, overlays: overlays), mapView: mapView)
-            }
-
-            // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
-            Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(clearPrevious), userInfo: nil, repeats: false)
+    
+    func refresh() {
+        updateFeatures()
+        viewModel.createTileOverlays()
+    }
+    
+    func updateTileOverlays() {
+        guard let mapView = mapView else {
+            return
+        }
+        // save these so we can remove them later
+        let previousTiles = mapView.overlays.compactMap({ overlay in
+            overlay as? DataSourceTileOverlay
+        }).filter({ overlay in
+            overlay.key == uuid.uuidString
+        })
+        if !viewModel.show && !viewModel.repositoryAlwaysShow {
+            clearPreviousTiles(previousTiles: previousTiles)
+            return
+        }
+        mapView.addOverlays(viewModel.tileOverlays, level: .aboveLabels)
+        // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
+        DispatchQueue.main.async {
+            Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
+        }
+    }
+    
+    func updateFeatures() {
+        guard let mapView = mapView else {
+            return
+        }
+        if !viewModel.show && !viewModel.repositoryAlwaysShow {
+            return
+        }
+        Task {
+            await handleFeatureChanges(mapView: mapView)
+            await mapView.addOverlays(viewModel.featureOverlays, level: .aboveLabels)
         }
     }
 
-    @objc func clearPrevious() {
-        for overlay in previousOverlays {
+    func updateMixin(mapView: MKMapView, mapState: MapState) { }
+
+    @objc func clearTimer(timer: Timer) {
+        clearPreviousTiles(previousTiles: timer.userInfo as? [MKTileOverlay])
+    }
+    
+    func clearPreviousTiles(previousTiles: [MKTileOverlay]?) {
+        for overlay in previousTiles ?? [] {
             mapView?.removeOverlay(overlay)
         }
-        mapView?.removeAnnotations(previousAnnotations)
-        previousOverlays = []
-        previousAnnotations = []
     }
 
     var valueAnimator: ValueAnimator?
@@ -172,56 +159,62 @@ class DataSourceMap: MapMixin {
         }
     }
 
-    func getOverlays() -> [MKOverlay] {
-        guard let repository = repository else {
-            return []
-        }
-        let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: dataSourceKey)
-        newOverlay.minimumZ = self.minZoom
-        return [newOverlay]
-    }
-
     @MainActor
-    func addFeatures(features: AnnotationsAndOverlays, mapView: MKMapView) {
-        mapView.addAnnotations(features.annotations)
-        mapView.showAnnotations(features.annotations, animated: true)
-        mapView.addOverlays(features.overlays, level: .aboveLabels)
+    func handleFeatureChanges(mapView: MKMapView) -> Bool {
+        let existingAnnotations = mapView.annotations.compactMap({ annotation in
+            (annotation as? DataSourceAnnotation)
+        }).filter({ annotation in
+            annotation.dataSource.key == self.dataSource.key
+        }).sorted(by: { first, second in
+            first.id < second.id
+        })
+        
+        // this is how to create the annotations array from the previous annotations array
+        let differences = viewModel.annotations.difference(from: existingAnnotations) { annotation1, annotation2 in
+            annotation1.id == annotation2.id
+        }
+        
+        var inserts: [DataSourceAnnotation] = []
+        var removals: [any MKAnnotation] = []
+        for change in differences {
+            switch change {
+            case .insert(let offset, let element, _):
+                let existing = mapView.annotations.first(where: { mapAnnotation in
+                    guard let mapAnnotation = mapAnnotation as? DataSourceAnnotation else {
+                        return false
+                    }
+                    return mapAnnotation.id == element.id
+                }) as? DataSourceAnnotation
+                if let existing = existing {
+                    existing.coordinate = element.coordinate
+                } else {
+                    inserts.append(element)
+                }
+                print("insert offset \(offset) for element \(element)")
+            case .remove(let offset, let element, _):
+                let existing = mapView.annotations.filter({ mapAnnotation in
+                    guard let mapAnnotation = mapAnnotation as? DataSourceAnnotation else {
+                        return false
+                    }
+                    return mapAnnotation.id == element.id
+                })
+                removals.append(contentsOf: existing)
+                print("remove offset \(offset) for element \(element)")
+            }
+        }
+        
+        NSLog("Inserting \(inserts.count), removing: \(removals.count)")
+        
+        mapView.addAnnotations(inserts)
+        mapView.removeAnnotations(removals)
+        NSLog("Annotation count: \(mapView.annotations.count)")
+        return !inserts.isEmpty || !removals.isEmpty
     }
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {
-        mapView.removeOverlays(overlays)
-        mapView.removeAnnotations(annotations)
-    }
-
-    func refreshMap(mapState: MapState) {
-        DispatchQueue.main.async {
-            self.mapState?.mixinStates[
-                self.REFRESH_KEY
-            ] = Date()
-        }
-    }
-
-    func setupUserDefaultsShowPublisher(mapState: MapState) {
-        userDefaultsShowPublisher?
-            .removeDuplicates()
-            .receive(on: RunLoop.main)
-            .sink { [weak self] show in
-                self?.show = !show
-                NSLog("Show \(self?.dataSourceKey ?? ""): \(!show)")
-                self?.refreshMap(mapState: mapState)
-            }
-            .store(in: &cancellable)
-    }
-
-    func setupOrderPublisher(mapState: MapState) {
-        orderPublisher?
-            .removeDuplicates()
-            .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-
-                self?.refreshMap(mapState: mapState)
-            }
-            .store(in: &cancellable)
+        mapView.removeOverlays(viewModel.featureOverlays)
+        mapView.removeAnnotations(viewModel.annotations)
+        mapView.removeOverlays(viewModel.tileOverlays)
     }
 
     func items(
@@ -229,27 +222,7 @@ class DataSourceMap: MapMixin {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [Any]? {
-        let viewWidth = await mapView.frame.size.width
-        let viewHeight = await mapView.frame.size.height
-
-        let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
-        let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
-
-        let queryLocationMinLongitude = location.longitude
-        let queryLocationMaxLongitude = location.longitude
-        let queryLocationMinLatitude = location.latitude
-        let queryLocationMaxLatitude = location.latitude
-
-        return await repository?.getTileableItems(
-            minLatitude: queryLocationMinLatitude,
-            maxLatitude: queryLocationMaxLatitude,
-            minLongitude: queryLocationMinLongitude,
-            maxLongitude: queryLocationMaxLongitude,
-            latitudePerPixel: latitudePerPixel,
-            longitudePerPixel: longitudePerPixel,
-            zoom: mapView.zoomLevel,
-            precise: true
-        )
+        return await viewModel.items(at: location, mapView: mapView, touchPoint: touchPoint)
     }
 
     func itemKeys(
@@ -257,36 +230,7 @@ class DataSourceMap: MapMixin {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [String: [String]] {
-        if await mapView.zoomLevel < minZoom {
-            return [:]
-        }
-        guard show == true else {
-            return [:]
-        }
-
-        let viewWidth = await mapView.frame.size.width
-        let viewHeight = await mapView.frame.size.height
-
-        let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
-        let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
-
-        let queryLocationMinLongitude = location.longitude
-        let queryLocationMaxLongitude = location.longitude
-        let queryLocationMinLatitude = location.latitude
-        let queryLocationMaxLatitude = location.latitude
-
-        return [
-            dataSourceKey: await repository?.getItemKeys(
-                minLatitude: queryLocationMinLatitude,
-                maxLatitude: queryLocationMaxLatitude,
-                minLongitude: queryLocationMinLongitude,
-                maxLongitude: queryLocationMaxLongitude,
-                latitudePerPixel: latitudePerPixel,
-                longitudePerPixel: longitudePerPixel,
-                zoom: mapView.zoomLevel,
-                precise: true
-            ) ?? []
-        ]
+        return await viewModel.itemKeys(at: location, mapView: mapView, touchPoint: touchPoint)
     }
 
     var tileRenderer: MKOverlayRenderer?
@@ -307,6 +251,13 @@ class DataSourceMap: MapMixin {
 
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
         return nil
+    }
+    
+    func regionDidChange(mapView: MKMapView, animated: Bool) {
+        Task {
+            NSLog("Region did change: \(await mapView.zoomLevel), \(await mapView.region)")
+            await viewModel.queryFeatures(zoom: mapView.zoomLevel, region: mapView.region)
+        }
     }
 
 }

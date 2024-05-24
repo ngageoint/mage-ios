@@ -13,7 +13,7 @@ import DataSourceDefinition
 import MapFramework
 
 struct AnnotationsAndOverlays {
-    let annotations: [MKAnnotation]
+    let annotations: [DataSourceAnnotation]
     let overlays: [MKOverlay]
 }
 
@@ -21,7 +21,7 @@ protocol MapFeatureRepository {
     var dataSource: any DataSourceDefinition { get }
     var alwaysShow: Bool { get }
 
-    func getAnnotationsAndOverlays() async -> AnnotationsAndOverlays
+    func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion?) async -> AnnotationsAndOverlays
     func items(
         at location: CLLocationCoordinate2D,
         mapView: MKMapView,

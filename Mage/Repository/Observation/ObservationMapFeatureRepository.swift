@@ -22,7 +22,7 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
         self.mapItemRepository = mapItemRepository
     }
 
-    func getAnnotationsAndOverlays() async -> AnnotationsAndOverlays {
+    func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion? = nil) async -> AnnotationsAndOverlays {
         let mapItems = await mapItemRepository.getMapItems(observationUri: observationUri)
         let annotations = mapItems.map { item in
             ObservationMapItemAnnotation(mapItem: item)
@@ -54,11 +54,19 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
     }
 }
 
-class ObservationMapItemAnnotation: EnlargedAnnotation {
+class ObservationMapItemAnnotation: DataSourceAnnotation {
+//    var id: URL?
 //    var coordinate: CLLocationCoordinate2D
     var mapItem: ObservationMapItem
     var title: String?
     var subtitle: String?
+    
+    override var dataSource: any DataSourceDefinition {
+        get {
+            DataSources.observation
+        }
+        set { }
+    }
 
     init(mapItem: ObservationMapItem) {
         self.mapItem = mapItem
@@ -67,5 +75,6 @@ class ObservationMapItemAnnotation: EnlargedAnnotation {
         } else {
             super.init(coordinate: kCLLocationCoordinate2DInvalid)
         }
+        self.id = mapItem.observationId?.absoluteString ?? UUID().uuidString
     }
 }

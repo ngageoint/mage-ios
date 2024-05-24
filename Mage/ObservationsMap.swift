@@ -11,81 +11,67 @@ import DataSourceTileOverlay
 import MapFramework
 
 class ObservationsMap: DataSourceMap {
-
     let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
-
-    override var minZoom: Int {
-        get {
-            return 2
-        }
-        set {
-
-        }
-    }
-
-    var enlargedAnnotation: EnlargedAnnotation?
+    var enlargedAnnotation: DataSourceAnnotation?
     var focusedObservationTileOverlay: DataSourceTileOverlay?
 
-    override init(repository: TileRepository? = nil, mapFeatureRepository: MapFeatureRepository? = nil) {
-        super.init(repository: repository, mapFeatureRepository: mapFeatureRepository)
-        userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
+    init(
+        repository: TileRepository? = nil,
+        mapFeatureRepository: MapFeatureRepository? = nil
+    ) {
+        super.init(
+            dataSource: DataSources.observation,
+            repository: repository,
+            mapFeatureRepository: mapFeatureRepository
+        )
+        viewModel.userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
 
         UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    Task { [self] in
-                        await repository?.clearCache()
-                        self?.refreshMap(mapState: mapState)
-                    }
+                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                Task { [self] in
+                    await repository?.clearCache()
+                    self?.refresh()
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.observationTimeFilterUnitKey)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    Task { [self] in
-                        await repository?.clearCache()
-                        self?.refreshMap(mapState: mapState)
-                    }
+                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                Task { [self] in
+                    await repository?.clearCache()
+                    self?.refresh()
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.observationTimeFilterNumberKey)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    Task { [self] in
-                        await repository?.clearCache()
-                        self?.refreshMap(mapState: mapState)
-                    }
+                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                Task { [self] in
+                    await repository?.clearCache()
+                    self?.refresh()
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.importantFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(self?.dataSourceKey ?? ""): \(order)")
-                if let mapState = self?.mapState {
-                    Task { [self] in
-                        await repository?.clearCache()
-                        self?.refreshMap(mapState: mapState)
-                    }
+                NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
+                Task { [self] in
+                    await repository?.clearCache()
+                    self?.refresh()
                 }
             }
             .store(in: &cancellable)
         UserDefaults.standard.publisher(for: \.favoritesFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in
-                if let mapState = self?.mapState {
-                    Task { [self] in
-                        await repository?.clearCache()
-                        self?.refreshMap(mapState: mapState)
-                    }
+                Task { [self] in
+                    await repository?.clearCache()
+                    self?.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -95,11 +81,9 @@ class ObservationsMap: DataSourceMap {
             .sink { notification in
                 if let event: Event = notification.object as? Event {
                     if event.remoteId == Server.currentEventId() {
-                        if let mapState = self.mapState {
-                            Task { [self] in
-                                await repository?.clearCache()
-                                self.refreshMap(mapState: mapState)
-                            }
+                        Task { [self] in
+                            await repository?.clearCache()
+                            self.refresh()
                         }
                     }
                 }
@@ -147,12 +131,16 @@ class ObservationsMap: DataSourceMap {
     func addFocusedOverlay(mapItem: ObservationMapItem) {
         DispatchQueue.main.async { [self] in
             if let observationUrl = mapItem.observationId,
-               let observationsTileRepository = repository as? ObservationsTileRepository
+               let observationsTileRepository = viewModel.repository as? ObservationsTileRepository
             {
                 let observationTileRepo = ObservationTileRepository(
                     observationUrl: observationUrl,
                     localDataSource: observationsTileRepository.localDataSource
                 )
+                if let focusedObservationTileOverlay = focusedObservationTileOverlay {
+                    mapView?.removeOverlay(focusedObservationTileOverlay)
+                    self.focusedObservationTileOverlay = nil
+                }
                 focusedObservationTileOverlay = DataSourceTileOverlay(
                     tileRepository: observationTileRepo,
                     key: "\(DataSources.observation.key)_\(observationUrl)"

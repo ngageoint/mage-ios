@@ -142,14 +142,14 @@ final class ObservationCoreDataSourceTests: XCTestCase {
             XCTAssertEqual(locations.count, 7)
         }
 
-        let dataSource = ObservationCoreDataDataSource()
+        let dataSource = ObservationLocationCoreDataDataSource()
 
         var minLatitude: Double = 0.0
         var maxLatitude: Double = 0.0
         var minLongitude: Double = 0.0
         var maxLongitude: Double = 0.0
 
-        var items = await dataSource.getObservationMapItems(
+        var items = await dataSource.getMapItems(
             minLatitude: minLatitude,
             maxLatitude: maxLatitude,
             minLongitude: minLongitude,
@@ -163,7 +163,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
         minLongitude = 0.9
         maxLongitude = 1.1
 
-        items = await dataSource.getObservationMapItems(
+        items = await dataSource.getMapItems(
             minLatitude: minLatitude,
             maxLatitude: maxLatitude,
             minLongitude: minLongitude,
@@ -178,7 +178,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
         minLongitude = 0.9
         maxLongitude = 1.1
 
-        items = await dataSource.getObservationMapItems(
+        items = await dataSource.getMapItems(
             minLatitude: minLatitude,
             maxLatitude: maxLatitude,
             minLongitude: minLongitude,

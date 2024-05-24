@@ -162,12 +162,14 @@ extension MageMapView : MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        NSLog("Mage map view region did change")
         for mixin in mapMixins {
             mixin.regionDidChange(mapView: mapView, animated: animated)
         }
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        NSLog("Mage map view region will change")
         for mixin in mapMixins {
             mixin.regionWillChange(mapView: mapView, animated: animated)
         }
@@ -182,7 +184,7 @@ extension MageMapView : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         for view in views {
 
-            guard let annotation = view.annotation as? EnlargedAnnotation else {
+            guard let annotation = view.annotation as? DataSourceAnnotation else {
                 continue
             }
             if annotation.shouldEnlarge {

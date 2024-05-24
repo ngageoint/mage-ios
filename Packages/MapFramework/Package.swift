@@ -13,14 +13,15 @@ let package = Package(
             targets: ["MapFramework"]),
     ],
     dependencies: [
-        .package(name: "MAGEStyle", path: "../MAGEStyle")
+        .package(name: "MAGEStyle", path: "../MAGEStyle"),
+        .package(name: "DataSourceTileOverlay", path: "../DataSourceTileOverlay")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "MapFramework",
-            dependencies: ["MAGEStyle"]
+            dependencies: ["MAGEStyle", "DataSourceTileOverlay"]
         ),
         .testTarget(
             name: "MapFrameworkTests",
