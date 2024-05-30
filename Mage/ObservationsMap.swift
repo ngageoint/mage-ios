@@ -120,9 +120,9 @@ class ObservationsMap: DataSourceMap {
         Task {
             if let mapItem = mapItem {
                 addFocusedOverlay(mapItem: mapItem)
-                await fadeTiles()
+                await fadeTiles(fade: true)
             } else {
-                await fadeTiles()
+                await fadeTiles(fade: false)
                 removeFocusedOverlay()
             }
         }
