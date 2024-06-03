@@ -86,6 +86,7 @@ class HasMapSearchMixin: NSObject, MapMixin {
         if let sheet = searchController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .large
+            sheet.delegate = self
         }
         self.navigationController?.present(searchController, animated: true, completion: nil)
     }
@@ -109,7 +110,20 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
 }
 
+extension HasMapSearchMixin: UISheetPresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        clearSearchResult()
+    }
+}
+
 extension HasMapSearchMixin: SearchControllerDelegate {
+    func clearSearchResult() {
+        guard let mapView = hasMapSearch.mapView else { return }
+        if let annotation = annotation {
+            mapView.removeAnnotation(annotation)
+        }
+    }
+    
     func onSearchResultSelected(type: SearchResponseType, result: GeocoderResult) {
         guard let location = result.location else { return }
         guard let mapView = hasMapSearch.mapView else { return }
