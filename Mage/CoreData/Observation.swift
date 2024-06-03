@@ -1303,6 +1303,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 }
                 observationLocation.fieldName = "primary-observation-geometry"
                 observationLocation.formId = (primaryObservationForm?[EventKey.formId.key] as? NSNumber)?.int64Value ?? -1
+                observationLocation.observationFormId = (primaryObservationForm?[FormKey.id.key] as? String) ?? ""
                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                 if let centroid = geometry.centroid() {
                     observationLocation.latitude = centroid.y.doubleValue
@@ -1348,6 +1349,7 @@ enum ObservationState: Int, CustomStringConvertible {
                                 }
                                 observationLocation.fieldName = geometryField[FieldKey.name.key] as? String
                                 observationLocation.formId = eventFormId.int64Value
+                                observationLocation.observationFormId = (form[FormKey.id.key] as? String) ?? ""
                                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                                 if let centroid = geometry.centroid() {
                                     observationLocation.latitude = centroid.y.doubleValue

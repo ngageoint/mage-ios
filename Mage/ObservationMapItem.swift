@@ -11,6 +11,7 @@ import sf_ios
 
 struct ObservationMapItem: Equatable {
     var observationId: URL?
+    var observationLocationId: URL?
     var geometry: SFGeometry?
     var iconPath: String?
     var formId: Int64?
@@ -22,6 +23,8 @@ struct ObservationMapItem: Equatable {
     var maxLongitude: Double?
     var minLatitude: Double?
     var minLongitude: Double?
+    var primaryFieldText: String?
+    var secondaryFieldText: String?
 
     var coordinate: CLLocationCoordinate2D? {
         guard let geometry = geometry, let point = geometry.centroid() else {
@@ -71,6 +74,7 @@ struct ObservationMapItem: Equatable {
 extension ObservationMapItem {
     init(observation: ObservationLocation) {
         self.observationId = observation.observation?.objectID.uriRepresentation()
+        self.observationLocationId = observation.objectID.uriRepresentation()
         self.formId = observation.formId
         self.fieldName = observation.fieldName
         self.eventId = observation.eventId
@@ -82,9 +86,6 @@ extension ObservationMapItem {
         self.minLatitude = observation.minLatitude
         self.minLongitude = observation.minLongitude
 
-        var primaryFieldText: String?
-        var secondaryFieldText: String?
-
         let form = observation.form
         if let eventForm = form,
            let primaryField =  eventForm.primaryMapField,
@@ -93,8 +94,8 @@ extension ObservationMapItem {
            observationForms.count > 0
         {
             for form in observationForms {
-                if let formId = form[FormKey.formId.key] as? Int,
-                   formId == observation.formId
+                if let formId = form[FormKey.id.key] as? String,
+                   formId == observation.observationFormId
                 {
                     let primaryValue = form[primaryFieldName]
                     primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)

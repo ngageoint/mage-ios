@@ -173,8 +173,8 @@ class ObservationsMap: DataSourceMap {
             annotationView?.isEnabled = true
         }
 
-        if let iconPath = mapItemAnnotation.mapItem.iconPath, let annotationView = annotationView {
-            let image = ObservationImage.imageAtPath(imagePath: iconPath)
+        let image = ObservationImage.imageAtPath(imagePath: mapItemAnnotation.mapItem.iconPath)
+        if let annotationView = annotationView {
             annotationView.image = image
 
             var size = CGSize(width: 40, height: 40)
