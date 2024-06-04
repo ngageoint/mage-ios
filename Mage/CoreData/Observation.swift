@@ -27,6 +27,8 @@ enum ObservationState: Int, CustomStringConvertible {
 }
 
 @objc public class Observation: NSManagedObject, Navigable {
+    
+    public static let PRIMARY_OBSERVATION_GEOMETRY = "primary-observation-geometry"
 
     var orderedAttachments: [Attachment]? {
         get {
@@ -1301,7 +1303,7 @@ enum ObservationState: Int, CustomStringConvertible {
                 if let eventId = eventId {
                     observationLocation.eventId = eventId.int64Value
                 }
-                observationLocation.fieldName = "primary-observation-geometry"
+                observationLocation.fieldName = Observation.PRIMARY_OBSERVATION_GEOMETRY
                 observationLocation.formId = (primaryObservationForm?[EventKey.formId.key] as? NSNumber)?.int64Value ?? -1
                 observationLocation.observationFormId = (primaryObservationForm?[FormKey.id.key] as? String) ?? ""
                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)

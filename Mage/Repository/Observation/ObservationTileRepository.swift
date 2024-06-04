@@ -144,6 +144,119 @@ class ObservationTileRepository: TileRepository, ObservableObject {
     }
 }
 
+class ObservationLocationTileRepository: TileRepository, ObservableObject {
+    var dataSource: any DataSourceDefinition = DataSources.observation
+
+    var cacheSourceKey: String?
+    
+    var imageCache: Kingfisher.ImageCache?
+    
+    var filterCacheKey: String {
+        dataSource.key
+    }
+
+    var alwaysShow: Bool = true
+
+    var observationLocationUrl: URL?
+    var observationUrl: URL?
+    let localDataSource: ObservationLocationLocalDataSource
+
+    init(observationLocationUrl: URL?, localDataSource: ObservationLocationLocalDataSource) {
+        self.observationLocationUrl = observationLocationUrl
+        self.localDataSource = localDataSource
+    }
+    
+    init(observationUrl: URL?, localDataSource: ObservationLocationLocalDataSource) {
+        self.observationUrl = observationUrl
+        self.localDataSource = localDataSource
+    }
+
+    func getTileableItems(
+        minLatitude: Double,
+        maxLatitude: Double,
+        minLongitude: Double,
+        maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
+        precise: Bool
+    ) async -> [any DataSourceImage] {
+        var items: [ObservationMapItem]?
+        if let observationLocationUrl = observationLocationUrl {
+            items = await localDataSource.getMapItems(
+                observationLocationUri: observationLocationUrl,
+                minLatitude: minLatitude,
+                maxLatitude: maxLatitude,
+                minLongitude: minLongitude,
+                maxLongitude: maxLongitude
+            )
+//            .map({ mapItem in
+//                ObservationMapImage(mapItem: mapItem)
+//            })
+        } else if let observationUrl = observationUrl {
+            items = await localDataSource.getMapItems(
+                observationUri: observationUrl,
+                minLatitude: minLatitude,
+                maxLatitude: maxLatitude,
+                minLongitude: minLongitude,
+                maxLongitude: maxLongitude
+            )
+//            .map({ mapItem in
+//                ObservationMapImage(mapItem: mapItem)
+//            })
+        }
+        
+        guard let items = items else {
+            return []
+        }
+        if precise {
+            var matchedItems: [ObservationMapItem] = []
+
+            for item in items {
+                guard let observationId = item.observationId else {
+                    continue
+                }
+                let observationTileRepo = ObservationTileRepository(observationUrl: observationId, localDataSource: localDataSource)
+                let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
+                if item.geometry is SFPoint {
+                    let include = await markerHitTest(
+                        location: CLLocationCoordinate2DMake(maxLatitude - ((maxLatitude - minLatitude) / 2.0), maxLongitude - ((maxLongitude - minLongitude) / 2.0)),
+                        zoom: zoom,
+                        tileProvider: tileProvider
+                    )
+                    if include {
+                        matchedItems.append(item)
+                    }
+                }
+            }
+
+            return matchedItems.map({ mapItem in
+                ObservationMapImage(mapItem: mapItem)
+            })
+        } else {
+            return items.map({ mapItem in
+                ObservationMapImage(mapItem: mapItem)
+            })
+        }
+    }
+    
+    func getItemKeys(
+        minLatitude: Double,
+        maxLatitude: Double,
+        minLongitude: Double,
+        maxLongitude: Double,
+        latitudePerPixel: Double,
+        longitudePerPixel: Double,
+        zoom: Int,
+        precise: Bool
+    ) async -> [String] {
+        if let observationLocationUrl = observationLocationUrl {
+            return [observationLocationUrl.absoluteString]
+        }
+        return []
+    }
+}
+
 class ObservationsTileRepository: TileRepository, ObservableObject {
     var cancellable = Set<AnyCancellable>()
 
@@ -301,10 +414,10 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             var matchedItems: [ObservationMapItem] = []
 
             for item in items {
-                guard let observationId = item.observationId else {
+                guard let observationLocationId = item.observationLocationId else {
                     continue
                 }
-                let observationTileRepo = ObservationTileRepository(observationUrl: observationId, localDataSource: localDataSource)
+                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId, localDataSource: localDataSource)
                 let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
                 if item.geometry is SFPoint {
                     let include = await markerHitTest(

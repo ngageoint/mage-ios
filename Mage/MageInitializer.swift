@@ -95,6 +95,7 @@ import Foundation
         RepositoryManager.shared.observationsMapFeatureRepository = ObservationsMapFeatureRepository(
             localDataSource: observationLocationLocalDataSource
         )
+        RepositoryManager.shared.observationLocationRepository = ObservationLocationRepository(localDataSource: observationLocationLocalDataSource)
         Task {
             await RepositoryManager.shared.observationsTileRepository?.clearCache()
         }

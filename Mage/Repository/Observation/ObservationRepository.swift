@@ -39,3 +39,15 @@ class ObservationRepository: ObservableObject {
         return inserted
     }
 }
+
+class ObservationLocationRepository: ObservableObject {
+    let localDataSource: ObservationLocationLocalDataSource
+    
+    init(localDataSource: ObservationLocationLocalDataSource) {
+        self.localDataSource = localDataSource
+    }
+    
+    func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation? {
+        await localDataSource.getObservationLocation(observationLocationUri: observationLocationUri)
+    }
+}

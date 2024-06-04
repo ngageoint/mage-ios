@@ -17,4 +17,5 @@ class RepositoryManager: ObservableObject {
     var observationsTileRepository: ObservationsTileRepository?
     var observationsMapFeatureRepository: ObservationsMapFeatureRepository?
     var observationMapItemRepository: ObservationMapItemRepository?
+    var observationLocationRepository: ObservationLocationRepository?
 }

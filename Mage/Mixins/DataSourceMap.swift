@@ -27,6 +27,8 @@ class DataSourceMap: MapMixin {
     var mapView: MKMapView?
 
     var dataSource: any DataSourceDefinition
+    
+    var currentAnnotationViews: [String: MKAnnotationView] = [:]
 
     init(
         dataSource: any DataSourceDefinition,
@@ -78,16 +80,20 @@ class DataSourceMap: MapMixin {
         viewModel.createTileOverlays()
     }
     
+    func currentTileOverlays() -> [DataSourceTileOverlay] {
+        mapView?.overlays.compactMap({ overlay in
+            overlay as? DataSourceTileOverlay
+        }).filter({ overlay in
+            overlay.key == uuid.uuidString
+        }) ?? []
+    }
+    
     func updateTileOverlays() {
         guard let mapView = mapView else {
             return
         }
         // save these so we can remove them later
-        let previousTiles = mapView.overlays.compactMap({ overlay in
-            overlay as? DataSourceTileOverlay
-        }).filter({ overlay in
-            overlay.key == uuid.uuidString
-        })
+        let previousTiles = currentTileOverlays()
         if !viewModel.show && !viewModel.repositoryAlwaysShow {
             clearPreviousTiles(previousTiles: previousTiles)
             return
@@ -174,7 +180,7 @@ class DataSourceMap: MapMixin {
         }
         
         var inserts: [DataSourceAnnotation] = []
-        var removals: [any MKAnnotation] = []
+        var removals: [DataSourceAnnotation] = []
         for change in differences {
             switch change {
             case .insert(let offset, let element, _):
@@ -187,21 +193,24 @@ class DataSourceMap: MapMixin {
                 if let existing = existing {
                     existing.coordinate = element.coordinate
                 } else {
+//                    currentAnnotations.insert(element)
                     inserts.append(element)
                 }
                 print("insert offset \(offset) for element \(element)")
             case .remove(let offset, let element, _):
-                let existing = mapView.annotations.filter({ mapAnnotation in
-                    guard let mapAnnotation = mapAnnotation as? DataSourceAnnotation else {
-                        return false
+                let existing = mapView.annotations.compactMap({ mapAnnotation in
+                    mapAnnotation as? DataSourceAnnotation
+                }).filter({ mapAnnotation in
+                    if mapAnnotation.id == element.id {
+                        currentAnnotationViews.removeValue(forKey: mapAnnotation.id)
+                        return true
                     }
-                    return mapAnnotation.id == element.id
+                    return false
                 })
                 removals.append(contentsOf: existing)
                 print("remove offset \(offset) for element \(element)")
             }
         }
-        
         NSLog("Inserting \(inserts.count), removing: \(removals.count)")
         
         mapView.addAnnotations(inserts)

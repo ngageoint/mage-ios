@@ -261,9 +261,18 @@ class MageBottomSheetViewController: UIViewController {
                 newBottomSheetView = FeedItemBottomSheetView(feedItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeedItemActionsDelegate, scheme: self.scheme);
                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? ObservationMapItem {
-                if let observation = await RepositoryManager.shared.observationRepository?.getObservation(observationUri: bottomSheetItem.observationId) {
-                    newBottomSheetView = ObservationBottomSheetView(observation: observation, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
-                    NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(item: bottomSheetItem))
+                if let observationLocation = await RepositoryManager.shared.observationLocationRepository?.getObservationLocation(
+                    observationLocationUri: bottomSheetItem.observationLocationId
+                ) {
+                    newBottomSheetView = ObservationLocationBottomSheetView(
+                        observationLocation: observationLocation,
+                        actionsDelegate: item.actionDelegate as? ObservationActionsDelegate,
+                        scheme: self.scheme
+                    )
+                    NotificationCenter.default.post(
+                        name: .MapAnnotationFocused,
+                        object: MapAnnotationFocusedNotification(item: bottomSheetItem)
+                    )
                 }
             }
             await MainActor.run {

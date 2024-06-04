@@ -117,24 +117,45 @@ class ObservationsMap: DataSourceMap {
     }
 
     func focusAnnotation(mapItem: ObservationMapItem?) {
-        Task {
+        if !self.currentAnnotationViews.isEmpty {
             if let mapItem = mapItem {
-                addFocusedOverlay(mapItem: mapItem)
-                await fadeTiles(fade: true)
+                for annotationView in self.currentAnnotationViews.values {
+                    if let annotation = annotationView.annotation as? DataSourceAnnotation {
+                        if annotation.id != mapItem.observationLocationId?.absoluteString {
+                            annotationView.alpha = 0.3
+                            annotationView.zPriority = .defaultUnselected
+                        } else {
+                            annotationView.alpha = 1.0
+                            annotationView.zPriority = .defaultSelected
+                        }
+                    }
+                }
             } else {
-                await fadeTiles(fade: false)
-                removeFocusedOverlay()
+                for annotationView in self.currentAnnotationViews.values {
+                    annotationView.alpha = 1.0
+                    annotationView.zPriority = .defaultSelected
+                }
+            }
+        } else {
+            Task {
+                if let mapItem = mapItem {
+                    addFocusedOverlay(mapItem: mapItem)
+                    await fadeTiles(fade: true)
+                } else {
+                    await fadeTiles(fade: false)
+                    removeFocusedOverlay()
+                }
             }
         }
     }
 
     func addFocusedOverlay(mapItem: ObservationMapItem) {
         DispatchQueue.main.async { [self] in
-            if let observationUrl = mapItem.observationId,
+            if let observationLocationUrl = mapItem.observationLocationId,
                let observationsTileRepository = viewModel.repository as? ObservationsTileRepository
             {
-                let observationTileRepo = ObservationTileRepository(
-                    observationUrl: observationUrl,
+                let observationTileRepo = ObservationLocationTileRepository(
+                    observationLocationUrl: observationLocationUrl,
                     localDataSource: observationsTileRepository.localDataSource
                 )
                 if let focusedObservationTileOverlay = focusedObservationTileOverlay {
@@ -143,7 +164,7 @@ class ObservationsMap: DataSourceMap {
                 }
                 focusedObservationTileOverlay = DataSourceTileOverlay(
                     tileRepository: observationTileRepo,
-                    key: "\(DataSources.observation.key)_\(observationUrl)"
+                    key: "\(DataSources.observation.key)_\(observationLocationUrl)"
                 )
                 focusedObservationTileOverlay?.allowFade = false
                 mapView?.addOverlay(focusedObservationTileOverlay!, level: .aboveLabels)
@@ -196,6 +217,7 @@ class ObservationsMap: DataSourceMap {
 //            annotationView.canShowCallout = true
         }
         mapItemAnnotation.annotationView = annotationView
+        currentAnnotationViews[mapItemAnnotation.id] = annotationView
         return annotationView
     }
 }

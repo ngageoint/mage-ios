@@ -75,6 +75,6 @@ class ObservationMapItemAnnotation: DataSourceAnnotation {
         } else {
             super.init(coordinate: kCLLocationCoordinate2DInvalid)
         }
-        self.id = mapItem.observationId?.absoluteString ?? UUID().uuidString
+        self.id = mapItem.observationLocationId?.absoluteString ?? UUID().uuidString
     }
 }

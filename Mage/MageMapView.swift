@@ -113,6 +113,9 @@ class MageMapView: UIView, GeoPackageBaseMap {
 
         for annotation in annotationsVisible {
             if let mkAnnotation = annotation as? MKAnnotation, let view = mapView.view(for: mkAnnotation) {
+                if mkAnnotation is DataSourceAnnotation {
+                    continue
+                }
                 let location = gesture.location(in: view)
                 if view.bounds.contains(location) {
                     annotationsTapped.append(annotation)
