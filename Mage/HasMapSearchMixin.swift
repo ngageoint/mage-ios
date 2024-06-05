@@ -112,7 +112,10 @@ class HasMapSearchMixin: NSObject, MapMixin {
 
 extension HasMapSearchMixin: UISheetPresentationControllerDelegate {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        clearSearchResult()
+        guard let mapView = hasMapSearch.mapView else { return }
+        
+        // reset the layout margin if it was updated
+        mapView.layoutMargins.bottom = 0.0
     }
 }
 
