@@ -10,7 +10,10 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap {
+class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap
+{
+    @Injected(\.observationsMapFeatureRepository)
+    var observationsMapFeatureRepository: ObservationsMapFeatureRepository
     
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
@@ -137,9 +140,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(feedsMapMixin!)
             mapMixins.append(onlineLayerMapMixin!)
 
-            if let observationsTileRepository = RepositoryManager.shared.observationsTileRepository,
-               let observationsMapFeatureRepository = RepositoryManager.shared.observationsMapFeatureRepository
-            {
+            if let observationsTileRepository = RepositoryManager.shared.observationsTileRepository {
                 observationMap = ObservationsMap(
                     repository: observationsTileRepository,
                     mapFeatureRepository: observationsMapFeatureRepository

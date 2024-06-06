@@ -11,6 +11,17 @@ import Foundation
 import DataSourceDefinition
 import MapFramework
 
+private struct ObservationsMapFeatureRepositoryProviderKey: InjectionKey {
+    static var currentValue: ObservationsMapFeatureRepository = ObservationsMapFeatureRepository()
+}
+
+extension InjectedValues {
+    var observationsMapFeatureRepository: ObservationsMapFeatureRepository {
+        get { Self[ObservationsMapFeatureRepositoryProviderKey.self] }
+        set { Self[ObservationsMapFeatureRepositoryProviderKey.self] = newValue }
+    }
+}
+
 class ObservationsMapFeatureRepository: MapFeatureRepository, ObservableObject {
     @Injected(\.observationLocationLocalDataSource)
     var localDataSource: ObservationLocationLocalDataSource
