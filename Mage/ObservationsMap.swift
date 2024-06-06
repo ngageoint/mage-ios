@@ -152,12 +152,9 @@ class ObservationsMap: DataSourceMap {
 
     func addFocusedOverlay(mapItem: ObservationMapItem) {
         DispatchQueue.main.async { [self] in
-            if let observationLocationUrl = mapItem.observationLocationId,
-               let observationsTileRepository = viewModel.repository as? ObservationsTileRepository
-            {
+            if let observationLocationUrl = mapItem.observationLocationId {
                 let observationTileRepo = ObservationLocationTileRepository(
-                    observationLocationUrl: observationLocationUrl,
-                    observationIconRepository: observationsTileRepository.iconRepository
+                    observationLocationUrl: observationLocationUrl
                 )
                 if let focusedObservationTileOverlay = focusedObservationTileOverlay {
                     mapView?.removeOverlay(focusedObservationTileOverlay)

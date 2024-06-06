@@ -9,6 +9,17 @@
 import Foundation
 import UIImageExtensions
 
+private struct ObservationIconRepositoryProviderKey: InjectionKey {
+    static var currentValue: ObservationIconRepository = ObservationIconRepository()
+}
+
+extension InjectedValues {
+    var observationIconRepository: ObservationIconRepository {
+        get { Self[ObservationIconRepositoryProviderKey.self] }
+        set { Self[ObservationIconRepositoryProviderKey.self] = newValue }
+    }
+}
+
 class ObservationIconRepository: ObservableObject {
     @Injected(\.observationIconLocalDataSource)
     var localDataSource: ObservationIconLocalDataSource

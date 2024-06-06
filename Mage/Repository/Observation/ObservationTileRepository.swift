@@ -155,6 +155,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
     @Injected(\.observationLocationLocalDataSource)
     var localDataSource: ObservationLocationLocalDataSource
     
+    @Injected(\.observationIconRepository)
     var iconRepository: ObservationIconRepository
 
     var dataSource: any DataSourceDefinition = DataSources.observation
@@ -174,16 +175,13 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
     
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
     
-
-    init(observationLocationUrl: URL?, observationIconRepository: ObservationIconRepository) {
+    init(observationLocationUrl: URL?) {
         self.observationLocationUrl = observationLocationUrl
-        self.iconRepository = observationIconRepository
         _ = getMaximumIconHeightToWidthRatio()
     }
     
-    init(observationUrl: URL?, observationIconRepository: ObservationIconRepository) {
+    init(observationUrl: URL?) {
         self.observationUrl = observationUrl
-        self.iconRepository = observationIconRepository
         _ = getMaximumIconHeightToWidthRatio()
     }
 
@@ -308,6 +306,9 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
 class ObservationsTileRepository: TileRepository, ObservableObject {
     @Injected(\.observationLocationLocalDataSource)
     var localDataSource: ObservationLocationLocalDataSource
+    
+    @Injected(\.observationIconRepository)
+    var iconRepository: ObservationIconRepository
 
     var cancellable = Set<AnyCancellable>()
 
@@ -334,10 +335,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
 
-    let iconRepository: ObservationIconRepository
-
-    init(observationIconRepository: ObservationIconRepository) {
-        self.iconRepository = observationIconRepository
+    init() {
         _ = getMaximumIconHeightToWidthRatio()
 
         self.localDataSource.publisher()
@@ -466,7 +464,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                 guard let observationLocationId = item.observationLocationId else {
                     continue
                 }
-                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId, observationIconRepository: iconRepository)
+                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
                 let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
                 if item.geometry is SFPoint {
                     let include = await markerHitTest(

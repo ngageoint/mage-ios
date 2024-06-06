@@ -75,10 +75,7 @@ import Foundation
     }
 
     @objc public static func initializeRepositories() {
-        RepositoryManager.shared.observationIconRepository = ObservationIconRepository()
-        RepositoryManager.shared.observationsTileRepository = ObservationsTileRepository(
-            observationIconRepository: RepositoryManager.shared.observationIconRepository!
-        )
+        RepositoryManager.shared.observationsTileRepository = ObservationsTileRepository()
         Task {
             await RepositoryManager.shared.observationsTileRepository?.clearCache()
         }
