@@ -16,8 +16,15 @@ class DataSourceMapViewModel {
     var dataSource: any DataSourceDefinition
     var key: String
     var repository: TileRepository?
-    var mapFeatureRepository: MapFeatureRepository?
+    var mapFeatureRepository: MapFeatureRepository? {
+        didSet {
+            refresh()
+        }
+    }
     var minZoom = 2
+    
+    var zoom: Int?
+    var region: MKCoordinateRegion?
     
     var show = false
     var repositoryAlwaysShow: Bool {
@@ -54,6 +61,7 @@ class DataSourceMapViewModel {
             .store(in: &cancellable)
         
         self.setupUserDefaultsShowPublisher()
+        createTileOverlays()
     }
     
     func setupUserDefaultsShowPublisher() {
@@ -68,7 +76,25 @@ class DataSourceMapViewModel {
             .store(in: &cancellable)
     }
     
-    func queryFeatures(zoom: Int, region: MKCoordinateRegion) async {
+    // this requeries for all features and recreates all tile overlays
+    func refresh() {
+        Task {
+            await queryFeatures()
+            createTileOverlays()
+        }
+    }
+    
+    // This sets the zoom and region to be queried and kicks off the query
+    func setZoomAndRegion(zoom: Int, region: MKCoordinateRegion) {
+        self.zoom = zoom
+        self.region = region
+        Task {
+            await queryFeatures()
+        }
+    }
+    
+    private func queryFeatures() async {
+        guard let zoom = zoom, let region = region else { return }
         let features = await mapFeatureRepository?.getAnnotationsAndOverlays(
             zoom: zoom,
             region: region.padded(percentage: 0.05)
@@ -80,13 +106,13 @@ class DataSourceMapViewModel {
     }
     
     @discardableResult
-    func createTileOverlays() -> [MKTileOverlay] {
+    private func createTileOverlays() -> [MKTileOverlay] {
         guard let repository = repository else {
             return []
         }
         let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: key)
         newOverlay.minimumZ = minZoom
-        newOverlay.maximumZ = 7
+        newOverlay.maximumZ = 6
         
         tileOverlays = [newOverlay]
         return tileOverlays

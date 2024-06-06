@@ -32,7 +32,7 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await repository?.clearCache()
-                    self?.refresh()
+                    self?.viewModel.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -42,7 +42,7 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await repository?.clearCache()
-                    self?.refresh()
+                    self?.viewModel.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -52,7 +52,7 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await repository?.clearCache()
-                    self?.refresh()
+                    self?.viewModel.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -62,7 +62,7 @@ class ObservationsMap: DataSourceMap {
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
                     await repository?.clearCache()
-                    self?.refresh()
+                    self?.viewModel.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -71,7 +71,7 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 Task { [self] in
                     await repository?.clearCache()
-                    self?.refresh()
+                    self?.viewModel.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -84,7 +84,7 @@ class ObservationsMap: DataSourceMap {
                         Task { [self] in
                             await repository?.clearCache()
                             await self.redrawFeatures()
-                            self.viewModel.createTileOverlays()
+                            self.viewModel.refresh()
                         }
                     }
                 }
@@ -157,7 +157,8 @@ class ObservationsMap: DataSourceMap {
             {
                 let observationTileRepo = ObservationLocationTileRepository(
                     observationLocationUrl: observationLocationUrl,
-                    localDataSource: observationsTileRepository.localDataSource
+                    localDataSource: observationsTileRepository.localDataSource,
+                    observationIconRepository: observationsTileRepository.iconRepository
                 )
                 if let focusedObservationTileOverlay = focusedObservationTileOverlay {
                     mapView?.removeOverlay(focusedObservationTileOverlay)

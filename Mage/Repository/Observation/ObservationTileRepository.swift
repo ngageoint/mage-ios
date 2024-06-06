@@ -160,15 +160,22 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
     var observationLocationUrl: URL?
     var observationUrl: URL?
     let localDataSource: ObservationLocationLocalDataSource
+    
+    var eventIdToMaxIconSize: [Int: CGSize?] = [:]
+    let iconRepository: ObservationIconRepository
 
-    init(observationLocationUrl: URL?, localDataSource: ObservationLocationLocalDataSource) {
+    init(observationLocationUrl: URL?, localDataSource: ObservationLocationLocalDataSource, observationIconRepository: ObservationIconRepository) {
         self.observationLocationUrl = observationLocationUrl
         self.localDataSource = localDataSource
+        self.iconRepository = observationIconRepository
+        _ = getMaximumIconHeightToWidthRatio()
     }
     
-    init(observationUrl: URL?, localDataSource: ObservationLocationLocalDataSource) {
+    init(observationUrl: URL?, localDataSource: ObservationLocationLocalDataSource, observationIconRepository: ObservationIconRepository) {
         self.observationUrl = observationUrl
         self.localDataSource = localDataSource
+        self.iconRepository = observationIconRepository
+        _ = getMaximumIconHeightToWidthRatio()
     }
 
     func getTileableItems(
@@ -182,13 +189,25 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         precise: Bool
     ) async -> [any DataSourceImage] {
         var items: [ObservationMapItem]?
+        
+        let iconPixelSize = getMaxHeightAndWidth(zoom: zoom)
+
+        // this is how many degrees to add and subtract to ensure we query for the item around the tap location
+        let iconToleranceHeightDegrees = latitudePerPixel * iconPixelSize.height
+        let iconToleranceWidthDegrees = longitudePerPixel * iconPixelSize.width
+
+        let queryLocationMinLongitude = minLongitude - iconToleranceWidthDegrees
+        let queryLocationMaxLongitude = maxLongitude + iconToleranceWidthDegrees
+        let queryLocationMinLatitude = minLatitude - iconToleranceHeightDegrees
+        let queryLocationMaxLatitude = maxLatitude + iconToleranceHeightDegrees
+        
         if let observationLocationUrl = observationLocationUrl {
             items = await localDataSource.getMapItems(
                 observationLocationUri: observationLocationUrl,
-                minLatitude: minLatitude,
-                maxLatitude: maxLatitude,
-                minLongitude: minLongitude,
-                maxLongitude: maxLongitude
+                minLatitude: queryLocationMinLatitude,
+                maxLatitude: queryLocationMaxLatitude,
+                minLongitude: queryLocationMinLongitude,
+                maxLongitude: queryLocationMaxLongitude
             )
 //            .map({ mapItem in
 //                ObservationMapImage(mapItem: mapItem)
@@ -196,10 +215,10 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         } else if let observationUrl = observationUrl {
             items = await localDataSource.getMapItems(
                 observationUri: observationUrl,
-                minLatitude: minLatitude,
-                maxLatitude: maxLatitude,
-                minLongitude: minLongitude,
-                maxLongitude: maxLongitude
+                minLatitude: queryLocationMinLatitude,
+                maxLatitude: queryLocationMaxLatitude,
+                minLongitude: queryLocationMinLongitude,
+                maxLongitude: queryLocationMaxLongitude
             )
 //            .map({ mapItem in
 //                ObservationMapImage(mapItem: mapItem)
@@ -254,6 +273,26 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
             return [observationLocationUrl.absoluteString]
         }
         return []
+    }
+    
+    func getMaximumIconHeightToWidthRatio() -> CGSize {
+        if let currentEvent = Server.currentEventId() {
+            if let calculatedSize = eventIdToMaxIconSize[currentEvent.intValue] as? CGSize {
+                return calculatedSize
+            }
+            let size = iconRepository.getMaximumIconHeightToWidthRatio(eventId: currentEvent.intValue)
+            eventIdToMaxIconSize[currentEvent.intValue] = size
+            return size
+        }
+        return .zero
+    }
+
+    func getMaxHeightAndWidth(zoom: Int) -> CGSize {
+        // icons should be a max of 35 wide
+        let pixelWidthTolerance = max(0.3, (CGFloat(zoom) / 18.0)) * 35
+        // if the icon is pixelWidthTolerance wide, the max height is this
+        let pixelHeightTolerance = (pixelWidthTolerance / getMaximumIconHeightToWidthRatio().width) * getMaximumIconHeightToWidthRatio().height
+        return CGSize(width: pixelWidthTolerance * UIScreen.main.scale, height: pixelHeightTolerance * UIScreen.main.scale)
     }
 }
 
@@ -417,7 +456,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                 guard let observationLocationId = item.observationLocationId else {
                     continue
                 }
-                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId, localDataSource: localDataSource)
+                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId, localDataSource: localDataSource, observationIconRepository: iconRepository)
                 let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
                 if item.geometry is SFPoint {
                     let include = await markerHitTest(

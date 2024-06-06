@@ -42,7 +42,6 @@ class DataSourceMap: MapMixin {
             repository: repository,
             mapFeatureRepository: mapFeatureRepository
         )
-        viewModel.createTileOverlays()
     }
 
     func cleanupMixin() {
@@ -60,7 +59,9 @@ class DataSourceMap: MapMixin {
         updateMixin(mapView: mapView, mapState: mapState)
 
         viewModel.$annotations.sink { annotations in
-            self.updateFeatures()
+            Task {
+                await self.handleFeatureChanges()
+            }
         }
         .store(in: &cancellable)
         
@@ -71,18 +72,9 @@ class DataSourceMap: MapMixin {
 
         viewModel.refreshPublisher?
             .sink { date in
-                self.refresh()
+                self.viewModel.refresh()
             }
             .store(in: &cancellable)
-    }
-    
-    func refresh() {
-        Task {
-            guard let mapView = mapView else { return }
-            await viewModel.queryFeatures(zoom: mapView.zoomLevel, region: mapView.region)
-            updateFeatures()
-            viewModel.createTileOverlays()
-        }
     }
     
     func currentTileOverlays() -> [DataSourceTileOverlay] {
@@ -121,19 +113,6 @@ class DataSourceMap: MapMixin {
         mapView?.addAnnotations(viewModel.annotations)
     }
     
-    func updateFeatures() {
-        guard let mapView = mapView else {
-            return
-        }
-        if !viewModel.show && !viewModel.repositoryAlwaysShow {
-            return
-        }
-        Task {
-            await handleFeatureChanges(mapView: mapView)
-            await mapView.addOverlays(viewModel.featureOverlays, level: .aboveLabels)
-        }
-    }
-
     func updateMixin(mapView: MKMapView, mapState: MapState) { }
 
     @objc func clearTimer(timer: Timer) {
@@ -181,7 +160,8 @@ class DataSourceMap: MapMixin {
 
     @discardableResult
     @MainActor
-    func handleFeatureChanges(mapView: MKMapView) -> Bool {
+    func handleFeatureChanges() -> Bool {
+        guard let mapView = mapView else { return false }
         let existingAnnotations = mapView.annotations.compactMap({ annotation in
             (annotation as? DataSourceAnnotation)
         }).filter({ annotation in
@@ -232,6 +212,8 @@ class DataSourceMap: MapMixin {
         mapView.addAnnotations(inserts)
         mapView.removeAnnotations(removals)
         NSLog("Annotation count: \(mapView.annotations.count)")
+        
+        mapView.addOverlays(viewModel.featureOverlays, level: .aboveLabels)
         return !inserts.isEmpty || !removals.isEmpty
     }
 
@@ -278,10 +260,7 @@ class DataSourceMap: MapMixin {
     }
     
     func regionDidChange(mapView: MKMapView, animated: Bool) {
-        Task {
-            NSLog("Region did change: \(await mapView.zoomLevel), \(await mapView.region)")
-            await viewModel.queryFeatures(zoom: mapView.zoomLevel, region: mapView.region)
-        }
+        NSLog("Region did change: \(mapView.zoomLevel), \(mapView.region)")
+        viewModel.setZoomAndRegion(zoom: mapView.zoomLevel, region: mapView.region)
     }
-
 }

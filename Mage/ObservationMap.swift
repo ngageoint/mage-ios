@@ -23,10 +23,10 @@ class ObservationMap: DataSourceMap {
         super.init(dataSource: DataSources.observation, repository: repository, mapFeatureRepository: mapFeatureRepository)
     }
     
-    override func handleFeatureChanges(mapView: MKMapView) -> Bool {
-        let changed = super.handleFeatureChanges(mapView: mapView)
+    override func handleFeatureChanges() -> Bool {
+        let changed = super.handleFeatureChanges()
         if changed {
-            mapView.showAnnotations(viewModel.annotations, animated: true)
+            mapView?.showAnnotations(viewModel.annotations, animated: true)
         }
         return changed
     }
