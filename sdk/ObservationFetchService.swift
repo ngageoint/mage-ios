@@ -7,6 +7,8 @@
 import Foundation
 
 public class ObservationFetchService: NSObject {
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
     
     public static let singleton = ObservationFetchService()
     public var started = false
@@ -63,7 +65,7 @@ public class ObservationFetchService: NSObject {
             return
         }
         Task {
-            let pulled = await RepositoryManager.shared.observationRepository?.fetchObservations()
+            let pulled = await observationRepository.fetchObservations()
             self.scheduleTimer()
         }
     }

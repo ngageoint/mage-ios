@@ -8,9 +8,16 @@
 
 import Foundation
 
-//private struct ObservationRepositoryProviderKey: InjectionKey {
-//    static var currentValue: ObservationRepository = ObservationRepository()
-//}
+private struct ObservationRepositoryProviderKey: InjectionKey {
+    static var currentValue: ObservationRepository = ObservationRepository()
+}
+
+extension InjectedValues {
+    var observationRepository: ObservationRepository {
+        get { Self[ObservationRepositoryProviderKey.self] }
+        set { Self[ObservationRepositoryProviderKey.self] = newValue }
+    }
+}
 
 class ObservationRepository: ObservableObject {
     @Injected(\.observationLocalDataSource) 

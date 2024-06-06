@@ -12,7 +12,6 @@ import Foundation
 class RepositoryManager: ObservableObject {
     static let shared = RepositoryManager()
 
-    var observationRepository: ObservationRepository?
     var observationIconRepository: ObservationIconRepository?
     var observationsTileRepository: ObservationsTileRepository?
     var observationsMapFeatureRepository: ObservationsMapFeatureRepository?
