@@ -22,6 +22,8 @@ class BottomSheetItem: NSObject {
 }
 
 class MageBottomSheetViewController: UIViewController {
+    @Injected(\.observationLocationRepository)
+    var observationLocationRepository: ObservationLocationRepository
     
     private var didSetUpConstraints = false;
     private var items: [BottomSheetItem] = [];
@@ -261,7 +263,7 @@ class MageBottomSheetViewController: UIViewController {
                 newBottomSheetView = FeedItemBottomSheetView(feedItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeedItemActionsDelegate, scheme: self.scheme);
                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? ObservationMapItem {
-                if let observationLocation = await RepositoryManager.shared.observationLocationRepository?.getObservationLocation(
+                if let observationLocation = await observationLocationRepository.getObservationLocation(
                     observationLocationUri: bottomSheetItem.observationLocationId
                 ) {
                     newBottomSheetView = ObservationLocationBottomSheetView(

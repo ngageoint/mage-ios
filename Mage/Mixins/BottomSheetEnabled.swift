@@ -17,6 +17,9 @@ protocol BottomSheetEnabled {
 }
 
 class BottomSheetMixin: NSObject, MapMixin {
+    @Injected(\.observationLocationRepository)
+    var observationLocationRepository: ObservationLocationRepository
+    
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         
     }
@@ -119,7 +122,7 @@ class BottomSheetMixin: NSObject, MapMixin {
             switch (dataSourceKey) {
             case DataSources.observation.key:
                 for observationLocationUriString in itemKeys {
-                    if let observationLocation = await RepositoryManager.shared.observationLocationRepository?.getObservationLocation(
+                    if let observationLocation = await observationLocationRepository.getObservationLocation(
                         observationLocationUri: URL(string: observationLocationUriString)
                     ) {
                         bottomSheetItems.append(BottomSheetItem(item: ObservationMapItem(observation: observationLocation)))

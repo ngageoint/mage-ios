@@ -558,6 +558,7 @@
 		F7DDF46F2748023A00689550 /* ObservationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46E2748023A00689550 /* ObservationImageTests.swift */; };
 		F7DE98712C122D64005372F8 /* BottomSheetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */; };
 		F7DE98742C123D8D005372F8 /* DependencyInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98732C123D8D005372F8 /* DependencyInjection.swift */; };
+		F7DE98762C12493B005372F8 /* ObservationLocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98752C12493B005372F8 /* ObservationLocationRepository.swift */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
@@ -1382,6 +1383,7 @@
 		F7DDF46E2748023A00689550 /* ObservationImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImageTests.swift; sourceTree = "<group>"; };
 		F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetRepository.swift; sourceTree = "<group>"; };
 		F7DE98732C123D8D005372F8 /* DependencyInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyInjection.swift; sourceTree = "<group>"; };
+		F7DE98752C12493B005372F8 /* ObservationLocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocationRepository.swift; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
@@ -2561,6 +2563,7 @@
 			children = (
 				F776ACAD2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift */,
 				F776ACAF2BD18CED000FAFB4 /* ObservationMapItemRepository.swift */,
+				F7DE98752C12493B005372F8 /* ObservationLocationRepository.swift */,
 			);
 			path = ObservationLocation;
 			sourceTree = "<group>";
@@ -3591,6 +3594,7 @@
 				F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */,
 				F7098F2A2497C75F00313703 /* FeedItemViewController.swift in Sources */,
 				F7D43BF226A5FCC800561A8F /* UserDataStore.swift in Sources */,
+				F7DE98762C12493B005372F8 /* ObservationLocationRepository.swift in Sources */,
 				F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */,
 				F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.swift in Sources */,
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,

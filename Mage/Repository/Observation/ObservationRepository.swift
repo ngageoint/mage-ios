@@ -48,12 +48,3 @@ class ObservationRepository: ObservableObject {
         return inserted
     }
 }
-
-class ObservationLocationRepository: ObservableObject {
-    @Injected(\.observationLocationLocalDataSource)
-    var localDataSource: ObservationLocationLocalDataSource
-    
-    func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation? {
-        await localDataSource.getObservationLocation(observationLocationUri: observationLocationUri)
-    }
-}

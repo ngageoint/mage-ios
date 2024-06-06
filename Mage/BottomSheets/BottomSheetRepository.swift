@@ -9,9 +9,7 @@
 import Foundation
 
 class BottomSheetRepository: ObservableObject {
-    let observationLocationRepository: ObservationLocationRepository
+    @Injected(\.observationLocationRepository)
+    var observationLocationRepository: ObservationLocationRepository
     
-    init(observationLocationRepository: ObservationLocationRepository) {
-        self.observationLocationRepository = observationLocationRepository
-    }
 }

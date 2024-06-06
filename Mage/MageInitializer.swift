@@ -82,7 +82,6 @@ import Foundation
             observationIconRepository: RepositoryManager.shared.observationIconRepository!
         )
         RepositoryManager.shared.observationsMapFeatureRepository = ObservationsMapFeatureRepository()
-        RepositoryManager.shared.observationLocationRepository = ObservationLocationRepository()
         Task {
             await RepositoryManager.shared.observationsTileRepository?.clearCache()
         }
