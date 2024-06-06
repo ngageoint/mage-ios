@@ -228,7 +228,8 @@ class DataSourceMap: MapMixin {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [Any]? {
-        return await viewModel.items(at: location, mapView: mapView, touchPoint: touchPoint)
+        return nil
+//        return await viewModel.items(at: location, mapView: mapView, touchPoint: touchPoint)
     }
 
     func itemKeys(

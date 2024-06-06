@@ -52,8 +52,8 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
             await MainActor.run {
                 let notification = MapItemsTappedNotification(
                     annotations: annotations,
-                    items: items
-                    //                    itemKeys: itemKeys,
+                    items: items,
+                                        itemKeys: itemKeys
                     //                    mapName: mapName
                 )
                 NotificationCenter.default.post(name: map.notificationOnTap, object: notification)

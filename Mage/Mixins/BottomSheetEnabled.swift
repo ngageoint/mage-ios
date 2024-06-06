@@ -44,40 +44,61 @@ class BottomSheetMixin: NSObject, MapMixin {
     
     func setupMixin(mapView: MKMapView, mapState: MapState) {
         mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
-            if let mapView = self?.bottomSheetEnabled.mapView, self?.isVisible(view: mapView) == true, let notification = notification.object as? MapItemsTappedNotification, notification.mapView == mapView {
-                var bottomSheetItems: [BottomSheetItem] = []
-                bottomSheetItems += self?.handleTappedAnnotations(annotations: notification.annotations) ?? []
-                bottomSheetItems += self?.handleTappedItems(items: notification.items) ?? []
-                if bottomSheetItems.count == 0 {
-                    return
-                }
-                
-                let mageBottomSheet = MageBottomSheetViewController(items: bottomSheetItems, mapView: mapView, scheme: self?.bottomSheetEnabled.scheme)
-                let bottomSheetNav = UINavigationController(rootViewController: mageBottomSheet)
-                let bottomSheet = MDCBottomSheetController(contentViewController: bottomSheetNav)
-                bottomSheet.navigationController?.navigationBar.isTranslucent = true
-                bottomSheet.scrimColor = .clear
-                bottomSheet.delegate = self
-                bottomSheet.trackingScrollView = mageBottomSheet.scrollView
-                self?.bottomSheetEnabled.navigationController?.present(bottomSheet, animated: true, completion: nil)
-                self?.bottomSheet = bottomSheet
-                self?.mageBottomSheet = mageBottomSheet
-                self?.mapViewDisappearingObserver = NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
-                    self?.bottomSheet?.dismiss(animated: true, completion: {
-                        self?.mageBottomSheet = nil
-                        self?.bottomSheet = nil
-                        NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
-                    })
-                }
-                NotificationCenter.default.addObserver(forName: .DismissBottomSheet, object: nil, queue: .main) { [weak self] notification in
-                    self?.bottomSheet?.dismiss(animated: true, completion: {
-                        self?.mageBottomSheet = nil
-                        self?.bottomSheet = nil
-                        NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
-                    })
+            if let mapView = self?.bottomSheetEnabled.mapView, 
+                self?.isVisible(view: mapView) == true,
+                let notification = notification.object as? MapItemsTappedNotification,
+                notification.mapView == mapView
+            {
+                Task { [weak self] in
+                    await self?.itemsTappedNotificationHandler(notification: notification, mapView: mapView)
                 }
             }
         }
+    }
+    
+    func itemsTappedNotificationHandler(notification: MapItemsTappedNotification, mapView: MKMapView) async {
+        var bottomSheetItems: [BottomSheetItem] = []
+        bottomSheetItems += self.handleTappedAnnotations(annotations: notification.annotations)
+        bottomSheetItems += self.handleTappedItems(items: notification.items)
+        bottomSheetItems += await self.handleItemKeys(itemKeys: notification.itemKeys ?? [:])
+        if bottomSheetItems.count == 0 {
+            return
+        }
+        await showBottomSheet(bottomSheetItems: bottomSheetItems, mapView: mapView)
+    }
+    
+    @MainActor
+    func showBottomSheet(bottomSheetItems: [BottomSheetItem], mapView: MKMapView) {
+        
+        let mageBottomSheet = MageBottomSheetViewController(items: bottomSheetItems, mapView: mapView, scheme: self.bottomSheetEnabled.scheme)
+        let bottomSheetNav = UINavigationController(rootViewController: mageBottomSheet)
+        let bottomSheet = MDCBottomSheetController(contentViewController: bottomSheetNav)
+        bottomSheet.navigationController?.navigationBar.isTranslucent = true
+        bottomSheet.scrimColor = .clear
+        bottomSheet.delegate = self
+        bottomSheet.trackingScrollView = mageBottomSheet.scrollView
+        self.bottomSheetEnabled.navigationController?.present(bottomSheet, animated: true, completion: nil)
+        self.bottomSheet = bottomSheet
+        self.mageBottomSheet = mageBottomSheet
+        self.mapViewDisappearingObserver = NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
+            Task { [weak self] in
+                await self?.dismissBottomSheet()
+            }
+        }
+        NotificationCenter.default.addObserver(forName: .DismissBottomSheet, object: nil, queue: .main) { [weak self] notification in
+            Task { [weak self] in
+                await self?.dismissBottomSheet()
+            }
+        }
+    }
+    
+    @MainActor
+    func dismissBottomSheet() {
+        self.bottomSheet?.dismiss(animated: true, completion: {
+            self.mageBottomSheet = nil
+            self.bottomSheet = nil
+            NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
+        })
     }
     
     func isVisible(view: UIView) -> Bool {
@@ -90,6 +111,25 @@ class BottomSheetMixin: NSObject, MapMixin {
             return false
         }
         return isVisible(view: view, inView: view.superview)
+    }
+    
+    func handleItemKeys(itemKeys: [String: [String]]) async -> [BottomSheetItem] {
+        var bottomSheetItems: [BottomSheetItem] = []
+        for (dataSourceKey, itemKeys) in itemKeys {
+            switch (dataSourceKey) {
+            case DataSources.observation.key:
+                for observationLocationUriString in itemKeys {
+                    if let observationLocation = await RepositoryManager.shared.observationLocationRepository?.getObservationLocation(
+                        observationLocationUri: URL(string: observationLocationUriString)
+                    ) {
+                        bottomSheetItems.append(BottomSheetItem(item: ObservationMapItem(observation: observationLocation)))
+                    }
+                }
+            default:
+                break
+            }
+        }
+        return bottomSheetItems
     }
     
     func handleTappedItems(items: [Any]?) -> [BottomSheetItem] {
@@ -140,6 +180,13 @@ class BottomSheetMixin: NSObject, MapMixin {
                 if !dedup.contains(annotation) {
                     _ = dedup.insert(annotation)
                     let bottomSheetItem = BottomSheetItem(item: annotation, actionDelegate: nil, annotationView: bottomSheetEnabled.mapView?.view(for: annotation))
+                    items.append(bottomSheetItem)
+                }
+            } else if let annotation = annotation as? ObservationMapItemAnnotation {
+                let mapItem = annotation.mapItem
+                if !dedup.contains(mapItem) {
+                    _ = dedup.insert(mapItem)
+                    let bottomSheetItem = BottomSheetItem(item: mapItem, actionDelegate: nil, annotationView: bottomSheetEnabled.mapView?.view(for: annotation))
                     items.append(bottomSheetItem)
                 }
             }

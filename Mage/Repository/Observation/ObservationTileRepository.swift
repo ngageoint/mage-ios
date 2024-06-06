@@ -77,8 +77,8 @@ class ObservationMapItemTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [String] {
-        if let observationId = observationMapItem.observationId {
-            return [observationId.absoluteString]
+        if let observationLocationId = observationMapItem.observationLocationId {
+            return [observationLocationId.absoluteString]
         }
         return []
     }
@@ -137,10 +137,16 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [String] {
-        if let observationUrl = observationUrl {
-            return [observationUrl.absoluteString]
-        }
-        return []
+        return await localDataSource.getMapItems(
+            observationUri: observationUrl,
+            minLatitude: minLatitude,
+            maxLatitude: maxLatitude,
+            minLongitude: minLongitude,
+            maxLongitude: maxLongitude
+        )
+        .compactMap({ mapItem in
+            mapItem.observationLocationId?.absoluteString
+        })
     }
 }
 
@@ -416,7 +422,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             zoom: zoom,
             precise: precise
         ).compactMap { item in
-            item.observationId?.absoluteString
+            item.observationLocationId?.absoluteString
         }
     }
 

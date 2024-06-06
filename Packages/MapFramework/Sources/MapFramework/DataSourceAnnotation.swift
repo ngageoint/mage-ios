@@ -43,6 +43,7 @@ open class DataSourceAnnotation: NSObject, MKAnnotation, Identifiable {
     }
     
     public var id: String
+    public var itemKey: String
     
     open var dataSource: any DataSourceDefinition = UnknownDefinition.definition
     
@@ -60,10 +61,11 @@ open class DataSourceAnnotation: NSObject, MKAnnotation, Identifiable {
 
     dynamic public var coordinate: CLLocationCoordinate2D
 
-    public init(coordinate: CLLocationCoordinate2D) {
+    public init(coordinate: CLLocationCoordinate2D, itemKey: String) {
         self.coordinate = coordinate
 //        self.dataSource = dataSource
         self.id = UUID().uuidString
+        self.itemKey = itemKey
     }
 
     public func markForEnlarging() {

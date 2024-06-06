@@ -9,11 +9,10 @@
 import Foundation
 import sf_ios
 
-struct ObservationMapItem: Equatable {
+struct ObservationMapItem: Equatable, Hashable {
     var observationId: URL?
     var observationLocationId: URL?
     var geometry: SFGeometry?
-    var iconPath: String?
     var formId: Int64?
     var fieldName: String?
     var eventId: Int64?
@@ -69,6 +68,15 @@ struct ObservationMapItem: Equatable {
             )
         )
     }
+    
+    var iconPath: String? {
+        ObservationImage.imageName(
+            eventId: eventId,
+            formId: formId,
+            primaryFieldText: primaryFieldText,
+            secondaryFieldText: secondaryFieldText
+        )
+    }
 }
 
 extension ObservationMapItem {
@@ -85,35 +93,7 @@ extension ObservationMapItem {
         self.maxLongitude = observation.maxLongitude
         self.minLatitude = observation.minLatitude
         self.minLongitude = observation.minLongitude
-
-        let form = observation.form
-        if let eventForm = form,
-           let primaryField =  eventForm.primaryMapField,
-           let observationForms = observation.observation?.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]],
-           let primaryFieldName = primaryField[FieldKey.name.key] as? String,
-           observationForms.count > 0
-        {
-            for form in observationForms {
-                if let formId = form[FormKey.id.key] as? String,
-                   formId == observation.observationFormId
-                {
-                    let primaryValue = form[primaryFieldName]
-                    primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
-                    if let secondaryField = eventForm.secondaryMapField,
-                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
-                    {
-                        let secondaryValue = form[secondaryFieldName]
-                        secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
-                    }
-                }
-            }
-        }
-
-        self.iconPath = ObservationImage.imageName(
-            eventId: eventId,
-            formId: formId,
-            primaryFieldText: primaryFieldText,
-            secondaryFieldText: secondaryFieldText
-        )
+        self.primaryFieldText = observation.primaryFieldText
+        self.secondaryFieldText = observation.secondaryFieldText
     }
 }

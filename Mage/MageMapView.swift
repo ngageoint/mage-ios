@@ -110,21 +110,24 @@ class MageMapView: UIView, GeoPackageBaseMap {
         var annotationsTapped: [Any] = []
         let visibleMapRect = mapView.visibleMapRect
         let annotationsVisible = mapView.annotations(in: visibleMapRect)
-
+        
+        var items: [Any] = []
+        var itemKeys: [String: [String]] = [:]
+        
         for annotation in annotationsVisible {
             if let mkAnnotation = annotation as? MKAnnotation, let view = mapView.view(for: mkAnnotation) {
-                if mkAnnotation is DataSourceAnnotation {
-                    continue
-                }
+                
                 let location = gesture.location(in: view)
                 if view.bounds.contains(location) {
-                    annotationsTapped.append(annotation)
+                    if let annotation = mkAnnotation as? DataSourceAnnotation {
+                        itemKeys[annotation.dataSource.key, default: [String]()].append(annotation.itemKey)
+                    } else {
+                        annotationsTapped.append(annotation)
+                    }
                 }
             }
         }
         Task {
-            var items: [Any] = []
-            var itemKeys: [String: [String]] = [:]
             for mixin in mapMixins {
                 if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
                     items.append(contentsOf: matchedItems)
