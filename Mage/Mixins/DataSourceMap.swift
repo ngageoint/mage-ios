@@ -42,6 +42,7 @@ class DataSourceMap: MapMixin {
             repository: repository,
             mapFeatureRepository: mapFeatureRepository
         )
+        viewModel.createTileOverlays()
     }
 
     func cleanupMixin() {
@@ -76,8 +77,12 @@ class DataSourceMap: MapMixin {
     }
     
     func refresh() {
-        updateFeatures()
-        viewModel.createTileOverlays()
+        Task {
+            guard let mapView = mapView else { return }
+            await viewModel.queryFeatures(zoom: mapView.zoomLevel, region: mapView.region)
+            updateFeatures()
+            viewModel.createTileOverlays()
+        }
     }
     
     func currentTileOverlays() -> [DataSourceTileOverlay] {
@@ -103,6 +108,17 @@ class DataSourceMap: MapMixin {
         DispatchQueue.main.async {
             Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
         }
+    }
+    
+    @MainActor
+    func redrawFeatures() {
+        let existingAnnotations = mapView?.annotations.compactMap({ annotation in
+            (annotation as? DataSourceAnnotation)
+        }).filter({ annotation in
+            annotation.dataSource.key == self.dataSource.key
+        }) ?? []
+        mapView?.removeAnnotations(existingAnnotations)
+        mapView?.addAnnotations(viewModel.annotations)
     }
     
     func updateFeatures() {

@@ -1305,7 +1305,27 @@ enum ObservationState: Int, CustomStringConvertible {
                 }
                 observationLocation.fieldName = Observation.PRIMARY_OBSERVATION_GEOMETRY
                 observationLocation.formId = (primaryObservationForm?[EventKey.formId.key] as? NSNumber)?.int64Value ?? -1
-                observationLocation.observationFormId = (primaryObservationForm?[FormKey.id.key] as? String) ?? ""
+                
+                let eventForm = Form.mr_findFirst(
+                    byAttribute: "formId",
+                    withValue: observationLocation.formId,
+                    in: context
+                )
+                
+                if let form = primaryObservationForm,
+                   let eventForm = eventForm,
+                   let primaryField = eventForm.primaryMapField,
+                   let primaryFieldName = primaryField[FieldKey.name.key] as? String
+                {
+                    let primaryValue = form[primaryFieldName]
+                    observationLocation.primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
+                    if let secondaryField = eventForm.secondaryMapField,
+                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
+                    {
+                        let secondaryValue = form[secondaryFieldName]
+                        observationLocation.secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
+                    }
+                }
                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                 if let centroid = geometry.centroid() {
                     observationLocation.latitude = centroid.y.doubleValue
@@ -1351,7 +1371,27 @@ enum ObservationState: Int, CustomStringConvertible {
                                 }
                                 observationLocation.fieldName = geometryField[FieldKey.name.key] as? String
                                 observationLocation.formId = eventFormId.int64Value
-                                observationLocation.observationFormId = (form[FormKey.id.key] as? String) ?? ""
+                                
+                                let eventForm = Form.mr_findFirst(
+                                    byAttribute: "formId",
+                                    withValue: observationLocation.formId,
+                                    in: context
+                                )
+                                
+                                if let eventForm = eventForm,
+                                   let primaryField = eventForm.primaryMapField,
+                                   let primaryFieldName = primaryField[FieldKey.name.key] as? String
+                                {
+                                    let primaryValue = form[primaryFieldName]
+                                    observationLocation.primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
+                                    if let secondaryField = eventForm.secondaryMapField,
+                                       let secondaryFieldName = secondaryField[FieldKey.name.key] as? String
+                                    {
+                                        let secondaryValue = form[secondaryFieldName]
+                                        observationLocation.secondaryFieldText = Observation.fieldValueText(value: secondaryValue, field: secondaryField)
+                                    }
+                                }
+                                
                                 observationLocation.geometryData = SFGeometryUtils.encode(geometry)
                                 if let centroid = geometry.centroid() {
                                     observationLocation.latitude = centroid.y.doubleValue

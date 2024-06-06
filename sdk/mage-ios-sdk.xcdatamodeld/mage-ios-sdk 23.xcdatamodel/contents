@@ -163,9 +163,10 @@
         <attribute name="maxLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="minLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="minLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="observationFormId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="primaryFieldText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="secondaryFieldText" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="observation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Observation" inverseName="locations" inverseEntity="Observation" syncable="YES"/>
     </entity>
     <entity name="Role" representedClassName=".Role" syncable="YES">

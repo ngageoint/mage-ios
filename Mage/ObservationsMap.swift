@@ -83,7 +83,8 @@ class ObservationsMap: DataSourceMap {
                     if event.remoteId == Server.currentEventId() {
                         Task { [self] in
                             await repository?.clearCache()
-                            self.refresh()
+                            await self.redrawFeatures()
+                            self.viewModel.createTileOverlays()
                         }
                     }
                 }

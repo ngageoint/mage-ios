@@ -89,6 +89,11 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
         if let sfgeometry = sfgeometry {
             // add the geometry to the map
             sfGeometryMapMixin?.sfGeometry = sfgeometry
+            if let centroid = sfgeometry.centroid() {
+                mapView?.setCenter(
+                    CLLocationCoordinate2D(latitude: centroid.y.doubleValue, longitude: centroid.x.doubleValue), animated: true
+                )
+            }
         }
     }
     

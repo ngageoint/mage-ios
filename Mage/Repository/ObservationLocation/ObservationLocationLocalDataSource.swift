@@ -147,14 +147,14 @@ class ObservationLocationCoreDataDataSource: ObservationLocationLocalDataSource 
 
             let results = context.fetch(request: fetchRequest)
             
-                return results?.sorted(by: { one, two in
-                    one.order < two.order
-                }).filter({ location in
-                    location.observation?.objectID.uriRepresentation() == observationUri
-                })
-                .map({ location in
-                    ObservationMapItem(observation: location)
-                }) ?? []
+            return results?.sorted(by: { one, two in
+                one.order < two.order
+            }).filter({ location in
+                location.observation?.objectID.uriRepresentation() == observationUri
+            })
+            .map({ location in
+                ObservationMapItem(observation: location)
+            }) ?? []
         }
     }
 

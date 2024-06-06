@@ -43,65 +43,78 @@ struct ObservationMapItemView: View {
     }
 
     var map: some View {
-        MapRepresentable(name: "Marlin Map", mixins: mixins, mapState: mapState)
+        MapRepresentable(name: "MAGE Map", mixins: mixins, mapState: mapState)
             .ignoresSafeArea()
     }
 
     var coordinateButton: some View {
         HStack(spacing: 0) {
-            Button(
-                action: {
-                    withAnimation {
-                        viewModel.selectedItem = max(0, viewModel.selectedItem  - 1)
-                    }
-                },
-                label: {
-                    Label(
-                        title: {},
-                        icon: {
-                            Image(systemName: "chevron.left")
-                                .renderingMode(.template)
-                                .foregroundColor(viewModel.selectedItem  != 0
-                                                 ? Color.primaryColorVariant : Color.disabledColor
-                                )
-                        })
+            if viewModel.observationMapItems.count == 1 {
+                if let item = viewModel.currentItem, let coordinate = item.coordinate {
+                    Spacer()
+                    CoordinateButton(action: Actions.Location(latLng: coordinate))
+                        .buttonStyle(MaterialButtonStyle())
+                        .padding(.trailing, 8)
+                    Text(item.accuracyDisplay ?? "")
+                        .font(Font.caption)
+                        .foregroundColor(Color.onSurfaceColor.opacity(0.6))
+                    Spacer()
                 }
-            )
-            .contentShape(Rectangle())
-            .buttonStyle(MaterialButtonStyle())
-            .accessibilityElement()
-            .accessibilityLabel("previous")
-            if let item = viewModel.currentItem, let coordinate = item.coordinate {
-                Spacer()
-                CoordinateButton(action: Actions.Location(latLng: coordinate))
-                    .buttonStyle(MaterialButtonStyle())
-                    .padding(.trailing, 8)
-                Text(item.accuracyDisplay ?? "")
-                    .font(Font.caption)
-                    .foregroundColor(Color.onSurfaceColor.opacity(0.6))
-                Spacer()
+            } else {
+                Button(
+                    action: {
+                        withAnimation {
+                            viewModel.selectedItem = max(0, viewModel.selectedItem  - 1)
+                        }
+                    },
+                    label: {
+                        Label(
+                            title: {},
+                            icon: {
+                                Image(systemName: "chevron.left")
+                                    .renderingMode(.template)
+                                    .foregroundColor(viewModel.selectedItem  != 0
+                                                     ? Color.primaryColorVariant : Color.disabledColor
+                                    )
+                            })
+                    }
+                )
+                .contentShape(Rectangle())
+                .buttonStyle(MaterialButtonStyle())
+                .accessibilityElement()
+                .accessibilityLabel("previous")
+                if let item = viewModel.currentItem, let coordinate = item.coordinate {
+                    Spacer()
+                    CoordinateButton(action: Actions.Location(latLng: coordinate))
+                        .buttonStyle(MaterialButtonStyle())
+                        .padding(.trailing, 8)
+                    Text(item.accuracyDisplay ?? "")
+                        .font(Font.caption)
+                        .foregroundColor(Color.onSurfaceColor.opacity(0.6))
+                    Spacer()
+                }
+                Button(
+                    action: {
+                        withAnimation {
+                            viewModel.selectedItem = min(viewModel.observationMapItems.count - 1, viewModel.selectedItem + 1)
+                        }
+                    },
+                    label: {
+                        Label(
+                            title: {},
+                            icon: {
+                                Image(systemName: "chevron.right")
+                                    .renderingMode(.template)
+                                    .foregroundColor(viewModel.observationMapItems.count - 1 != viewModel.selectedItem
+                                                     ? Color.primaryColorVariant : Color.disabledColor)
+                            })
+                    }
+                )
+                .contentShape(Rectangle())
+                .buttonStyle(MaterialButtonStyle())
+                .accessibilityElement()
+                .accessibilityLabel("next")
             }
-            Button(
-                action: {
-                    withAnimation {
-                        viewModel.selectedItem = min(viewModel.observationMapItems.count - 1, viewModel.selectedItem + 1)
-                    }
-                },
-                label: {
-                    Label(
-                        title: {},
-                        icon: {
-                            Image(systemName: "chevron.right")
-                                .renderingMode(.template)
-                                .foregroundColor(viewModel.observationMapItems.count - 1 != viewModel.selectedItem
-                                                 ? Color.primaryColorVariant : Color.disabledColor)
-                        })
-                }
-            )
-            .contentShape(Rectangle())
-            .buttonStyle(MaterialButtonStyle())
-            .accessibilityElement()
-            .accessibilityLabel("next")
         }
     }
 }
