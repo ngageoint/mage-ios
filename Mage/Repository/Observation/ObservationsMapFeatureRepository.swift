@@ -12,16 +12,14 @@ import DataSourceDefinition
 import MapFramework
 
 class ObservationsMapFeatureRepository: MapFeatureRepository, ObservableObject {
+    @Injected(\.observationLocationLocalDataSource)
+    var localDataSource: ObservationLocationLocalDataSource
+
     var dataSource: any DataSourceDefinition = DataSources.observation
 
     var alwaysShow: Bool = true
 
-    let localDataSource: ObservationLocationLocalDataSource
     var minimumZoom: Int = 7
-    init(localDataSource: ObservationLocationLocalDataSource) {
-        self.localDataSource = localDataSource
-    }
-
     func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion?) async -> AnnotationsAndOverlays {
         if zoom < minimumZoom {
             return AnnotationsAndOverlays(annotations: [], overlays: [])

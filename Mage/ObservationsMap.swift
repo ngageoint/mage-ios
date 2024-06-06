@@ -157,7 +157,6 @@ class ObservationsMap: DataSourceMap {
             {
                 let observationTileRepo = ObservationLocationTileRepository(
                     observationLocationUrl: observationLocationUrl,
-                    localDataSource: observationsTileRepository.localDataSource,
                     observationIconRepository: observationsTileRepository.iconRepository
                 )
                 if let focusedObservationTileOverlay = focusedObservationTileOverlay {

@@ -96,7 +96,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         NSLog("Received \(count) \(DataSources.observation.key) records.")
 
         // Create an operation that performs the main part of the background task.
-        operation = ObservationDataLoadOperation(observations: observations, localDataSource: self, eventId: eventId)
+        operation = ObservationDataLoadOperation(observations: observations, eventId: eventId)
         
         return await executeOperationInBackground(task: task)
     }

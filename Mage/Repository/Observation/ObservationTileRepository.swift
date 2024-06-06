@@ -85,6 +85,9 @@ class ObservationMapItemTileRepository: TileRepository, ObservableObject {
 }
 
 class ObservationTileRepository: TileRepository, ObservableObject {
+    @Injected(\.observationLocationLocalDataSource)
+    var localDataSource: ObservationLocationLocalDataSource
+
     var dataSource: any DataSourceDefinition = DataSources.observation
 
     var cacheSourceKey: String?
@@ -98,11 +101,9 @@ class ObservationTileRepository: TileRepository, ObservableObject {
     var alwaysShow: Bool = true
 
     var observationUrl: URL?
-    let localDataSource: ObservationLocationLocalDataSource
 
-    init(observationUrl: URL?, localDataSource: ObservationLocationLocalDataSource) {
+    init(observationUrl: URL?) {
         self.observationUrl = observationUrl
-        self.localDataSource = localDataSource
     }
 
     func getTileableItems(
@@ -151,6 +152,9 @@ class ObservationTileRepository: TileRepository, ObservableObject {
 }
 
 class ObservationLocationTileRepository: TileRepository, ObservableObject {
+    @Injected(\.observationLocationLocalDataSource)
+    var localDataSource: ObservationLocationLocalDataSource
+
     var dataSource: any DataSourceDefinition = DataSources.observation
 
     var cacheSourceKey: String?
@@ -165,21 +169,18 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
 
     var observationLocationUrl: URL?
     var observationUrl: URL?
-    let localDataSource: ObservationLocationLocalDataSource
     
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
     let iconRepository: ObservationIconRepository
 
-    init(observationLocationUrl: URL?, localDataSource: ObservationLocationLocalDataSource, observationIconRepository: ObservationIconRepository) {
+    init(observationLocationUrl: URL?, observationIconRepository: ObservationIconRepository) {
         self.observationLocationUrl = observationLocationUrl
-        self.localDataSource = localDataSource
         self.iconRepository = observationIconRepository
         _ = getMaximumIconHeightToWidthRatio()
     }
     
-    init(observationUrl: URL?, localDataSource: ObservationLocationLocalDataSource, observationIconRepository: ObservationIconRepository) {
+    init(observationUrl: URL?, observationIconRepository: ObservationIconRepository) {
         self.observationUrl = observationUrl
-        self.localDataSource = localDataSource
         self.iconRepository = observationIconRepository
         _ = getMaximumIconHeightToWidthRatio()
     }
@@ -241,7 +242,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
                 guard let observationId = item.observationId else {
                     continue
                 }
-                let observationTileRepo = ObservationTileRepository(observationUrl: observationId, localDataSource: localDataSource)
+                let observationTileRepo = ObservationTileRepository(observationUrl: observationId)
                 let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
                 if item.geometry is SFPoint {
                     let include = await markerHitTest(
@@ -303,6 +304,9 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
 }
 
 class ObservationsTileRepository: TileRepository, ObservableObject {
+    @Injected(\.observationLocationLocalDataSource)
+    var localDataSource: ObservationLocationLocalDataSource
+
     var cancellable = Set<AnyCancellable>()
 
     var refreshPublisher: AnyPublisher<Date, Never>? {
@@ -328,11 +332,9 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
 
-    let localDataSource: ObservationLocationLocalDataSource
     let iconRepository: ObservationIconRepository
 
-    init(localDataSource: ObservationLocationLocalDataSource, observationIconRepository: ObservationIconRepository) {
-        self.localDataSource = localDataSource
+    init(observationIconRepository: ObservationIconRepository) {
         self.iconRepository = observationIconRepository
         _ = getMaximumIconHeightToWidthRatio()
 
@@ -462,7 +464,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                 guard let observationLocationId = item.observationLocationId else {
                     continue
                 }
-                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId, localDataSource: localDataSource, observationIconRepository: iconRepository)
+                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId, observationIconRepository: iconRepository)
                 let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
                 if item.geometry is SFPoint {
                     let include = await markerHitTest(
