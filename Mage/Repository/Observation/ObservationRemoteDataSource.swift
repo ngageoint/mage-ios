@@ -10,6 +10,17 @@ import Foundation
 import UIKit
 import BackgroundTasks
 
+private struct ObservationRemoteDataSourceProviderKey: InjectionKey {
+    static var currentValue: ObservationRemoteDataSource = ObservationRemoteDataSource()
+}
+
+extension InjectedValues {
+    var observationRemoteDataSource: ObservationRemoteDataSource {
+        get { Self[ObservationRemoteDataSourceProviderKey.self] }
+        set { Self[ObservationRemoteDataSourceProviderKey.self] = newValue }
+    }
+}
+
 class ObservationRemoteDataSource: RemoteDataSource<[AnyHashable : Any]> {
     init(cleanup: (() -> Void)? = nil) {
         super.init(dataSource: DataSources.observation, cleanup: cleanup)

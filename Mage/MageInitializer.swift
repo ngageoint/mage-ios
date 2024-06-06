@@ -76,9 +76,7 @@ import Foundation
 
     @objc public static func initializeRepositories() {
         let observationLocalDataSource = ObservationCoreDataDataSource()
-        let observationRepository = ObservationRepository(
-            remoteDataSource: ObservationRemoteDataSource()
-        )
+        let observationRepository = ObservationRepository()
         let observationLocationLocalDataSource = ObservationLocationCoreDataDataSource()
         RepositoryManager.shared.observationRepository = observationRepository
 
@@ -92,7 +90,7 @@ import Foundation
         RepositoryManager.shared.observationsMapFeatureRepository = ObservationsMapFeatureRepository(
             localDataSource: observationLocationLocalDataSource
         )
-        RepositoryManager.shared.observationLocationRepository = ObservationLocationRepository(localDataSource: observationLocationLocalDataSource)
+        RepositoryManager.shared.observationLocationRepository = ObservationLocationRepository()
         Task {
             await RepositoryManager.shared.observationsTileRepository?.clearCache()
         }

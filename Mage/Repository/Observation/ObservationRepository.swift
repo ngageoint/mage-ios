@@ -13,15 +13,11 @@ import Foundation
 //}
 
 class ObservationRepository: ObservableObject {
-    @Injected(\.observationLocalDataSource) var localDataSource: ObservationLocalDataSource
+    @Injected(\.observationLocalDataSource) 
+    var localDataSource: ObservationLocalDataSource
     
-//    let localDataSource: ObservationLocalDataSource
-    let remoteDataSource: ObservationRemoteDataSource
-
-    init(remoteDataSource: ObservationRemoteDataSource) {
-//        self.localDataSource = localDataSource
-        self.remoteDataSource = remoteDataSource
-    }
+    @Injected(\.observationRemoteDataSource)
+    var remoteDataSource: ObservationRemoteDataSource
 
     func getObservation(remoteId: String?) async -> Observation? {
         await localDataSource.getObservation(remoteId: remoteId)
@@ -47,11 +43,8 @@ class ObservationRepository: ObservableObject {
 }
 
 class ObservationLocationRepository: ObservableObject {
-    let localDataSource: ObservationLocationLocalDataSource
-    
-    init(localDataSource: ObservationLocationLocalDataSource) {
-        self.localDataSource = localDataSource
-    }
+    @Injected(\.observationLocationLocalDataSource)
+    var localDataSource: ObservationLocationLocalDataSource
     
     func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation? {
         await localDataSource.getObservationLocation(observationLocationUri: observationLocationUri)
