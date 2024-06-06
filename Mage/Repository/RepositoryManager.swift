@@ -11,6 +11,4 @@ import Foundation
 // This is the equivalent of adding repositories to the environment in SwiftUI
 class RepositoryManager: ObservableObject {
     static let shared = RepositoryManager()
-
-    var observationsTileRepository: ObservationsTileRepository?
 }

@@ -303,6 +303,17 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
     }
 }
 
+private struct ObservationsTileRepositoryProviderKey: InjectionKey {
+    static var currentValue: ObservationsTileRepository = ObservationsTileRepository()
+}
+
+extension InjectedValues {
+    var observationsTileRepository: ObservationsTileRepository {
+        get { Self[ObservationsTileRepositoryProviderKey.self] }
+        set { Self[ObservationsTileRepositoryProviderKey.self] = newValue }
+    }
+}
+
 class ObservationsTileRepository: TileRepository, ObservableObject {
     @Injected(\.observationLocationLocalDataSource)
     var localDataSource: ObservationLocationLocalDataSource

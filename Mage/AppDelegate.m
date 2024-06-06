@@ -81,7 +81,6 @@
     
     [MageInitializer initializePreferences];
     [MageInitializer setupCoreData];
-    [MageInitializer initializeRepositories];
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {

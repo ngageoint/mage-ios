@@ -15,6 +15,9 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     @Injected(\.observationsMapFeatureRepository)
     var observationsMapFeatureRepository: ObservationsMapFeatureRepository
     
+    @Injected(\.observationsTileRepository)
+    var observationsTileRepository: ObservationsTileRepository
+    
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
 
@@ -140,13 +143,11 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(feedsMapMixin!)
             mapMixins.append(onlineLayerMapMixin!)
 
-            if let observationsTileRepository = RepositoryManager.shared.observationsTileRepository {
-                observationMap = ObservationsMap(
-                    repository: observationsTileRepository,
-                    mapFeatureRepository: observationsMapFeatureRepository
-                )
-                mapMixins.append(observationMap!)
-            }
+            observationMap = ObservationsMap(
+                repository: observationsTileRepository,
+                mapFeatureRepository: observationsMapFeatureRepository
+            )
+            mapMixins.append(observationMap!)
         }
         
         initiateMapMixins()

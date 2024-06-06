@@ -73,12 +73,4 @@ import Foundation
         
         return cleared;
     }
-
-    @objc public static func initializeRepositories() {
-        RepositoryManager.shared.observationsTileRepository = ObservationsTileRepository()
-        Task {
-            await RepositoryManager.shared.observationsTileRepository?.clearCache()
-        }
-    }
-
 }
