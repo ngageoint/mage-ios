@@ -13,7 +13,8 @@ import MAGEStyle
 import MapFramework
 
 struct ObservationMapItemView: View {
-    @EnvironmentObject var repository: ObservationMapItemRepository
+    @Injected(\.observationMapItemRepository)
+    var repository: ObservationMapItemRepository
     @StateObject var viewModel: ObservationMapItemViewModel = ObservationMapItemViewModel()
     @State var observationUri: URL
 
@@ -38,7 +39,7 @@ struct ObservationMapItemView: View {
             viewModel.repository = repository
             viewModel.observationUri = observationUri
             mixins.addMixin(OnlineLayerMapMixin())
-            mixins.addMixin(ObservationMap(mapFeatureRepository: ObservationMapFeatureRepository(observationUri: observationUri, mapItemRepository: repository)))
+            mixins.addMixin(ObservationMap(mapFeatureRepository: ObservationMapFeatureRepository(observationUri: observationUri)))
         }
     }
 

@@ -556,6 +556,8 @@
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
 		F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */; };
 		F7DDF46F2748023A00689550 /* ObservationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46E2748023A00689550 /* ObservationImageTests.swift */; };
+		F7DE98712C122D64005372F8 /* BottomSheetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */; };
+		F7DE98742C123D8D005372F8 /* DependencyInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98732C123D8D005372F8 /* DependencyInjection.swift */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
@@ -1378,6 +1380,8 @@
 		F7DCCC241F46366F00E4C616 /* ExternalDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExternalDevice.m; sourceTree = "<group>"; };
 		F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationPushDelegate.swift; sourceTree = "<group>"; };
 		F7DDF46E2748023A00689550 /* ObservationImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImageTests.swift; sourceTree = "<group>"; };
+		F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetRepository.swift; sourceTree = "<group>"; };
+		F7DE98732C123D8D005372F8 /* DependencyInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyInjection.swift; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
@@ -2280,6 +2284,7 @@
 				F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */,
 				F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */,
 				F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */,
+				F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */,
 			);
 			path = BottomSheets;
 			sourceTree = "<group>";
@@ -2781,6 +2786,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F7DE98722C123D58005372F8 /* DependencyInjection */,
 				F776AC912BCD9CB5000FAFB4 /* Network */,
 				F734C1E62BC8474B00B2E8C8 /* UI */,
 				F70688B62BB5BD9C00D8E2EA /* Repository */,
@@ -3061,6 +3067,14 @@
 				F7DCCC241F46366F00E4C616 /* ExternalDevice.m */,
 			);
 			name = ExternalDevice;
+			sourceTree = "<group>";
+		};
+		F7DE98722C123D58005372F8 /* DependencyInjection */ = {
+			isa = PBXGroup;
+			children = (
+				F7DE98732C123D8D005372F8 /* DependencyInjection.swift */,
+			);
+			path = DependencyInjection;
 			sourceTree = "<group>";
 		};
 		F7EBAEBD27623FEA00650F4F /* Notifications */ = {
@@ -3594,6 +3608,7 @@
 				04ED96541EBA3AE100B6AD8D /* MapAnnotation.m in Sources */,
 				F72D43172694B60300F9AC3B /* LdapAuthentication.m in Sources */,
 				2F2F58F61BFA504B00B78993 /* ServerURLController.swift in Sources */,
+				F7DE98712C122D64005372F8 /* BottomSheetRepository.swift in Sources */,
 				F78D579627B709D4003594D3 /* FollowUser.swift in Sources */,
 				F72D43012694B60300F9AC3B /* AttachmentRoutes_Server5.m in Sources */,
 				F7D9B81A255C5E9000A76E2C /* UILabelPadding.swift in Sources */,
@@ -3607,6 +3622,7 @@
 				F72D42F42694B60300F9AC3B /* SessionTask.m in Sources */,
 				F739EFE51AA64F19003A6E4B /* EventTableDataSource.swift in Sources */,
 				F7F2EDAF1F2659510083CD88 /* LocationFilterTableViewController.m in Sources */,
+				F7DE98742C123D8D005372F8 /* DependencyInjection.swift in Sources */,
 				F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */,
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,

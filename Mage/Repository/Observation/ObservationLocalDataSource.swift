@@ -14,6 +14,17 @@ import BackgroundTasks
 import MagicalRecord
 import NSManagedObjectContextExtensions
 
+private struct ObservationLocationDataSourceProviderKey: InjectionKey {
+    static var currentValue: ObservationLocalDataSource = ObservationCoreDataDataSource()
+}
+
+extension InjectedValues {
+    var observationLocalDataSource: ObservationLocalDataSource {
+        get { Self[ObservationLocationDataSourceProviderKey.self] }
+        set { Self[ObservationLocationDataSourceProviderKey.self] = newValue }
+    }
+}
+
 protocol ObservationLocalDataSource {
     func getLastObservationDate(eventId: Int) -> Date?
     func getLastObservation(eventId: Int) -> Observation?

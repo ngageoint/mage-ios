@@ -8,12 +8,18 @@
 
 import Foundation
 
+//private struct ObservationRepositoryProviderKey: InjectionKey {
+//    static var currentValue: ObservationRepository = ObservationRepository()
+//}
+
 class ObservationRepository: ObservableObject {
-    let localDataSource: ObservationLocalDataSource
+    @Injected(\.observationLocalDataSource) var localDataSource: ObservationLocalDataSource
+    
+//    let localDataSource: ObservationLocalDataSource
     let remoteDataSource: ObservationRemoteDataSource
 
-    init(localDataSource: ObservationLocalDataSource, remoteDataSource: ObservationRemoteDataSource) {
-        self.localDataSource = localDataSource
+    init(remoteDataSource: ObservationRemoteDataSource) {
+//        self.localDataSource = localDataSource
         self.remoteDataSource = remoteDataSource
     }
 

@@ -9,6 +9,9 @@
 import Foundation
 
 class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
+    @Injected(\.observationMapItemRepository)
+    var observationMapItemRepository: ObservationMapItemRepository
+    
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var onlineLayerMapMixin: OnlineLayerMapMixin?
     var observationMapMixin: ObservationMap = ObservationMap()
@@ -20,10 +23,8 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
             return _observation
         }
         set {
-            if let observationMapItemRepository = RepositoryManager.shared.observationMapItemRepository,
-                let observationUri = newValue?.objectID.uriRepresentation()
-            {
-                observationMapMixin.viewModel.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri, mapItemRepository: observationMapItemRepository)
+            if let observationUri = newValue?.objectID.uriRepresentation() {
+                observationMapMixin.viewModel.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri)
 //                observationMapMixin.refresh()
 //                if let mapView = mapView {
 //                    observationMapMixin.refreshMap(mapState: mapState)

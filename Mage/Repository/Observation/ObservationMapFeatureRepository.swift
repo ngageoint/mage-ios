@@ -11,15 +11,17 @@ import DataSourceDefinition
 import MapFramework
 
 class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
+    @Injected(\.observationMapItemRepository)
+    var mapItemRepository: ObservationMapItemRepository
+    
     var dataSource: any DataSourceDefinition = DataSources.observation
 
     var alwaysShow: Bool = true
 
     let observationUri: URL
-    let mapItemRepository: ObservationMapItemRepository
-    init(observationUri: URL, mapItemRepository: ObservationMapItemRepository) {
+
+    init(observationUri: URL) {
         self.observationUri = observationUri
-        self.mapItemRepository = mapItemRepository
     }
 
     func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion? = nil) async -> AnnotationsAndOverlays {
@@ -70,10 +72,11 @@ class ObservationMapItemAnnotation: DataSourceAnnotation {
 
     init(mapItem: ObservationMapItem) {
         self.mapItem = mapItem
+        let itemKey = mapItem.observationLocationId?.absoluteString ?? ""
         if let point = mapItem.geometry?.centroid() {
-            super.init(coordinate: CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue))
+            super.init(coordinate: CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue), itemKey: itemKey)
         } else {
-            super.init(coordinate: kCLLocationCoordinate2DInvalid)
+            super.init(coordinate: kCLLocationCoordinate2DInvalid, itemKey: itemKey)
         }
         self.id = mapItem.observationLocationId?.absoluteString ?? UUID().uuidString
     }

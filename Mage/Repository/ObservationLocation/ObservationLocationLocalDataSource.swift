@@ -9,6 +9,17 @@
 import Foundation
 import Combine
 
+private struct ObservationLocationLocalDataSourceProviderKey: InjectionKey {
+    static var currentValue: ObservationLocationLocalDataSource = ObservationLocationCoreDataDataSource()
+}
+
+extension InjectedValues {
+    var observationLocationLocalDataSource: ObservationLocationLocalDataSource {
+        get { Self[ObservationLocationLocalDataSourceProviderKey.self] }
+        set { Self[ObservationLocationLocalDataSourceProviderKey.self] = newValue }
+    }
+}
+
 protocol ObservationLocationLocalDataSource {
     func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation?
     func getMapItems(

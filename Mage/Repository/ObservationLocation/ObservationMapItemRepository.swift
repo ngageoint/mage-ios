@@ -8,13 +8,20 @@
 
 import Foundation
 
-class ObservationMapItemRepository: ObservableObject {
+private struct ObservationMapItemRepositoryProviderKey: InjectionKey {
+    static var currentValue: ObservationMapItemRepository = ObservationMapItemRepository()
+}
 
-    let localDataSource: ObservationLocationLocalDataSource
-
-    init(localDataSource: ObservationLocationLocalDataSource) {
-        self.localDataSource = localDataSource
+extension InjectedValues {
+    var observationMapItemRepository: ObservationMapItemRepository {
+        get { Self[ObservationMapItemRepositoryProviderKey.self] }
+        set { Self[ObservationMapItemRepositoryProviderKey.self] = newValue }
     }
+}
+
+class ObservationMapItemRepository: ObservableObject {
+    @Injected(\.observationLocationLocalDataSource)
+    var localDataSource: ObservationLocationLocalDataSource
 
     func getMapItems(observationUri: URL?) async -> [ObservationMapItem] {
         return await localDataSource.getMapItems(

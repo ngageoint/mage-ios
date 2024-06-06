@@ -9,7 +9,8 @@
 import Foundation
 
 class ObservationMapItemViewModel: ObservableObject {
-    var repository: ObservationMapItemRepository? {
+    @Injected(\.observationMapItemRepository)
+    var repository: ObservationMapItemRepository {
         didSet {
             Task {
                 await getObservationMapItems()
@@ -34,7 +35,7 @@ class ObservationMapItemViewModel: ObservableObject {
     }
 
     func getObservationMapItems() async {
-        guard let repository = repository, let observationUri = observationUri else {
+        guard let observationUri = observationUri else {
             return
         }
         let fetched = await repository.getMapItems(observationUri: observationUri)

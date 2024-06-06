@@ -14,6 +14,9 @@ import MaterialComponents.MaterialCards
 import SwiftUI
 
 class ObservationHeaderView : MDCCard {
+    @Injected(\.observationMapItemRepository)
+    var observationMapItemRepository: ObservationMapItemRepository
+    
     var didSetupConstraints = false;
     weak var observation: Observation?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
@@ -80,12 +83,9 @@ class ObservationHeaderView : MDCCard {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.observationActionsDelegate = observationActionsDelegate;
-        if let observationMapItemRepository = RepositoryManager.shared.observationMapItemRepository
-        {
-            let view = ObservationMapItemView(observationUri: observation.objectID.uriRepresentation()).environmentObject(observationMapItemRepository)
-            mapItemView = SwiftUIViewController(swiftUIView: view)
+        let view = ObservationMapItemView(observationUri: observation.objectID.uriRepresentation())
+        mapItemView = SwiftUIViewController(swiftUIView: view)
 
-        }
         self.configureForAutoLayout();
         layoutView();
         populate(observation: observation, animate: false);
