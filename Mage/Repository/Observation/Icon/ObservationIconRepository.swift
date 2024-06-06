@@ -35,10 +35,8 @@ protocol ObservationIconLocalDataSource {
 }
 
 class ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
-    let localDataSource: ObservationLocalDataSource
-    init(localDataSource: ObservationLocalDataSource) {
-        self.localDataSource = localDataSource
-    }
+    @Injected(\.observationLocalDataSource)
+    var localDataSource: ObservationLocalDataSource
     
     func getIconPath(observationUri: URL) async -> String? {
         if let observation = await localDataSource.getObservation(observationUri: observationUri) {

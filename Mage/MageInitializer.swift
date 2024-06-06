@@ -75,11 +75,10 @@ import Foundation
     }
 
     @objc public static func initializeRepositories() {
-        let observationLocalDataSource = ObservationCoreDataDataSource()
         let observationLocationLocalDataSource = ObservationLocationCoreDataDataSource()
 
         RepositoryManager.shared.observationIconRepository = ObservationIconRepository(
-            localDataSource: ObservationIconCoreDataDataSource(localDataSource: observationLocalDataSource)
+            localDataSource: ObservationIconCoreDataDataSource()
         )
         RepositoryManager.shared.observationsTileRepository = ObservationsTileRepository(
             localDataSource: observationLocationLocalDataSource,

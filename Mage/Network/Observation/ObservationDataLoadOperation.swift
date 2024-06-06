@@ -8,14 +8,14 @@
 
 import Foundation
 class ObservationDataLoadOperation: CountingDataLoadOperation {
+    @Injected(\.observationLocalDataSource)
+    var localDataSource: ObservationLocalDataSource
 
     var observations: [[AnyHashable: Any]] = []
-    var localDataSource: ObservationLocalDataSource
     var eventId: Int
 
-    init(observations: [[AnyHashable: Any]], localDataSource: ObservationLocalDataSource, eventId: Int) {
+    init(observations: [[AnyHashable: Any]], eventId: Int) {
         self.observations = observations
-        self.localDataSource = localDataSource
         self.eventId = eventId
     }
 
