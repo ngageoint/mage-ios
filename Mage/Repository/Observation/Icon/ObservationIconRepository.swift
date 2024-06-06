@@ -10,10 +10,8 @@ import Foundation
 import UIImageExtensions
 
 class ObservationIconRepository: ObservableObject {
-    let localDataSource: ObservationIconLocalDataSource
-    init(localDataSource: ObservationIconLocalDataSource) {
-        self.localDataSource = localDataSource
-    }
+    @Injected(\.observationIconLocalDataSource)
+    var localDataSource: ObservationIconLocalDataSource
 
     func getIconPath(observationUri: URL) async -> String? {
         await localDataSource.getIconPath(observationUri: observationUri)
@@ -25,6 +23,17 @@ class ObservationIconRepository: ObservableObject {
 
     func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize {
         localDataSource.getMaximumIconHeightToWidthRatio(eventId: eventId)
+    }
+}
+
+private struct ObservationIconLocalDataSourceProviderKey: InjectionKey {
+    static var currentValue: ObservationIconLocalDataSource = ObservationIconCoreDataDataSource()
+}
+
+extension InjectedValues {
+    var observationIconLocalDataSource: ObservationIconLocalDataSource {
+        get { Self[ObservationIconLocalDataSourceProviderKey.self] }
+        set { Self[ObservationIconLocalDataSourceProviderKey.self] = newValue }
     }
 }
 

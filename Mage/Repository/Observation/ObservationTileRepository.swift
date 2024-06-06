@@ -154,6 +154,8 @@ class ObservationTileRepository: TileRepository, ObservableObject {
 class ObservationLocationTileRepository: TileRepository, ObservableObject {
     @Injected(\.observationLocationLocalDataSource)
     var localDataSource: ObservationLocationLocalDataSource
+    
+    var iconRepository: ObservationIconRepository
 
     var dataSource: any DataSourceDefinition = DataSources.observation
 
@@ -171,7 +173,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
     var observationUrl: URL?
     
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
-    let iconRepository: ObservationIconRepository
+    
 
     init(observationLocationUrl: URL?, observationIconRepository: ObservationIconRepository) {
         self.observationLocationUrl = observationLocationUrl
