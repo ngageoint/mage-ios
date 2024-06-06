@@ -296,7 +296,6 @@ class ServerURLController: UIViewController {
             errorImage.isHidden = true
             progressView.isHidden = false
             progressView.startAnimating()
-            print(url)
             delegate?.setServerURL(url: url)
             if let scheme = scheme {
                 serverURL.applyTheme(withScheme: scheme)
