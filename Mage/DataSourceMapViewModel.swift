@@ -32,11 +32,10 @@ class DataSourceMapViewModel {
     }
     
     var cancellable = Set<AnyCancellable>()
-    var userDefaultsShowPublisher: NSObject.KeyValueObservingPublisher<UserDefaults, Bool>?
-    
-    var refreshSubject: PassthroughSubject<Date, Never>? = PassthroughSubject<Date, Never>()
-    var refreshPublisher: AnyPublisher<Date, Never>?  {
-        refreshSubject?.eraseToAnyPublisher()
+    var userDefaultsShowPublisher: NSObject.KeyValueObservingPublisher<UserDefaults, Bool>? {
+        didSet {
+            setupUserDefaultsShowPublisher()
+        }
     }
     
     @Published var annotations: [DataSourceAnnotation] = []
@@ -56,11 +55,10 @@ class DataSourceMapViewModel {
         
         repository?.refreshPublisher?
             .sink { date in
-                self.refreshSubject?.send(date)
+                self.refresh()
             }
             .store(in: &cancellable)
         
-        self.setupUserDefaultsShowPublisher()
         createTileOverlays()
     }
     
@@ -71,7 +69,7 @@ class DataSourceMapViewModel {
             .sink { [weak self] show in
                 self?.show = !show
                 NSLog("Show \(self?.dataSource.key ?? ""): \(!show)")
-                self?.refreshSubject?.send(Date())
+                self?.refresh()
             }
             .store(in: &cancellable)
     }

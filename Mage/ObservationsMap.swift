@@ -100,23 +100,6 @@ class ObservationsMap: DataSourceMap {
             .store(in: &cancellable)
     }
 
-    override func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [Any]? {
-        return await super.items(
-            at: location,
-            mapView: mapView,
-            touchPoint: touchPoint
-        )?.compactMap { image in
-            if let observationMapImage = image as? ObservationMapImage {
-                return observationMapImage.mapItem
-            }
-            return nil
-        }
-    }
-
     func focusAnnotation(mapItem: ObservationMapItem?) {
         if !self.currentAnnotationViews.isEmpty {
             if let mapItem = mapItem {

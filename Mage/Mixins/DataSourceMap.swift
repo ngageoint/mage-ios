@@ -60,21 +60,15 @@ class DataSourceMap: MapMixin {
 
         viewModel.$annotations.sink { annotations in
             Task {
-                await self.handleFeatureChanges()
+                await self.handleFeatureChanges(annotations: annotations)
             }
         }
         .store(in: &cancellable)
         
         viewModel.$tileOverlays.sink { tileOverlays in
-            self.updateTileOverlays()
+            self.updateTileOverlays(tileOverlays: tileOverlays)
         }
         .store(in: &cancellable)
-
-        viewModel.refreshPublisher?
-            .sink { date in
-                self.viewModel.refresh()
-            }
-            .store(in: &cancellable)
     }
     
     func currentTileOverlays() -> [DataSourceTileOverlay] {
@@ -85,7 +79,7 @@ class DataSourceMap: MapMixin {
         }) ?? []
     }
     
-    func updateTileOverlays() {
+    private func updateTileOverlays(tileOverlays: [DataSourceTileOverlay]) {
         guard let mapView = mapView else {
             return
         }
@@ -95,7 +89,7 @@ class DataSourceMap: MapMixin {
             clearPreviousTiles(previousTiles: previousTiles)
             return
         }
-        mapView.addOverlays(viewModel.tileOverlays, level: .aboveLabels)
+        mapView.addOverlays(tileOverlays, level: .aboveLabels)
         // give the map a chance to draw the new data before we take the old one off the map to prevent flashing
         DispatchQueue.main.async {
             Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.clearTimer), userInfo: previousTiles, repeats: false)
@@ -160,7 +154,7 @@ class DataSourceMap: MapMixin {
 
     @discardableResult
     @MainActor
-    func handleFeatureChanges() -> Bool {
+    func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
         guard let mapView = mapView else { return false }
         let existingAnnotations = mapView.annotations.compactMap({ annotation in
             (annotation as? DataSourceAnnotation)
@@ -171,7 +165,7 @@ class DataSourceMap: MapMixin {
         })
         
         // this is how to create the annotations array from the previous annotations array
-        let differences = viewModel.annotations.difference(from: existingAnnotations) { annotation1, annotation2 in
+        let differences = annotations.difference(from: existingAnnotations) { annotation1, annotation2 in
             annotation1.id == annotation2.id
         }
         
