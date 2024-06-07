@@ -131,7 +131,6 @@
 		F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */; };
 		F70688B42BB3574100D8E2EA /* ObservationsMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B22BB3572F00D8E2EA /* ObservationsMap.swift */; };
 		F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */; };
-		F70688BC2BB5D17E00D8E2EA /* RepositoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */; };
 		F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */; };
 		F70688C12BB7400C00D8E2EA /* MKMapViewExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = F70688C02BB7400C00D8E2EA /* MKMapViewExtensions */; };
 		F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */; };
@@ -564,6 +563,8 @@
 		F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE987B2C133A97005372F8 /* ObservationLocationTileRepository.swift */; };
 		F7DE987E2C133B21005372F8 /* ObservationsTileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE987D2C133B21005372F8 /* ObservationsTileRepository.swift */; };
 		F7DE98802C133B49005372F8 /* ObservationMapImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE987F2C133B49005372F8 /* ObservationMapImage.swift */; };
+		F7DE98832C133CDB005372F8 /* ObservationMapItemAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98822C133CDB005372F8 /* ObservationMapItemAnnotation.swift */; };
+		F7DE98852C13461B005372F8 /* ObservationIconLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98842C13461B005372F8 /* ObservationIconLocalDataSource.swift */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
@@ -868,7 +869,6 @@
 		F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTileRepository.swift; sourceTree = "<group>"; };
 		F70688B22BB3572F00D8E2EA /* ObservationsMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsMap.swift; sourceTree = "<group>"; };
 		F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationIconRepository.swift; sourceTree = "<group>"; };
-		F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryManager.swift; sourceTree = "<group>"; };
 		F70688BD2BB5D3BC00D8E2EA /* ObservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRepository.swift; sourceTree = "<group>"; };
 		F70688BF2BB73E5F00D8E2EA /* MKMapViewExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MKMapViewExtensions; path = Packages/MKMapViewExtensions; sourceTree = "<group>"; };
 		F706B2162554368800C19BA7 /* MockObservationEditCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditCardDelegate.swift; sourceTree = "<group>"; };
@@ -1394,6 +1394,8 @@
 		F7DE987B2C133A97005372F8 /* ObservationLocationTileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocationTileRepository.swift; sourceTree = "<group>"; };
 		F7DE987D2C133B21005372F8 /* ObservationsTileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsTileRepository.swift; sourceTree = "<group>"; };
 		F7DE987F2C133B49005372F8 /* ObservationMapImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapImage.swift; sourceTree = "<group>"; };
+		F7DE98822C133CDB005372F8 /* ObservationMapItemAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationMapItemAnnotation.swift; sourceTree = "<group>"; };
+		F7DE98842C13461B005372F8 /* ObservationIconLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationIconLocalDataSource.swift; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
@@ -1826,7 +1828,7 @@
 		4C546FE9195A27D1000CF230 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				F776AC752BC97F44000FAFB4 /* Framework */,
+				F7DE98812C133CAC005372F8 /* Observation */,
 				F7ECDC9B27A83AC500D0AF92 /* GeoPackage */,
 				F7EBAEBD27623FEA00650F4F /* Notifications */,
 				F752B5F52760DDC500BFA6EC /* Mixins */,
@@ -1972,7 +1974,6 @@
 			children = (
 				F776ACAC2BD181F4000FAFB4 /* ObservationLocation */,
 				F70688B72BB5BDA400D8E2EA /* Observation */,
-				F70688BB2BB5D17E00D8E2EA /* RepositoryManager.swift */,
 				F734C1D92BC03EB400B2E8C8 /* MapFeatureRepository.swift */,
 				F776AC9A2BCDB23E000FAFB4 /* RemoteDataSource.swift */,
 				F776AC9C2BCDB271000FAFB4 /* DataFetchOperation.swift */,
@@ -2005,6 +2006,7 @@
 			isa = PBXGroup;
 			children = (
 				F70688B92BB5BEE700D8E2EA /* ObservationIconRepository.swift */,
+				F7DE98842C13461B005372F8 /* ObservationIconLocalDataSource.swift */,
 			);
 			path = Icon;
 			sourceTree = "<group>";
@@ -2073,8 +2075,6 @@
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
 				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
 				F75DD30D1A97AABD0007FA3F /* View */,
-				F70688B22BB3572F00D8E2EA /* ObservationsMap.swift */,
-				F734C1DB2BC0767C00B2E8C8 /* ObservationMap.swift */,
 			);
 			name = Observation;
 			sourceTree = "<group>";
@@ -2544,13 +2544,6 @@
 				F776AC8A2BC9CC52000FAFB4 /* ObservationMapItemViewModel.swift */,
 			);
 			name = Fields;
-			sourceTree = "<group>";
-		};
-		F776AC752BC97F44000FAFB4 /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Framework;
 			sourceTree = "<group>";
 		};
 		F776AC912BCD9CB5000FAFB4 /* Network */ = {
@@ -3093,6 +3086,16 @@
 				F7DE98732C123D8D005372F8 /* DependencyInjection.swift */,
 			);
 			path = DependencyInjection;
+			sourceTree = "<group>";
+		};
+		F7DE98812C133CAC005372F8 /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F734C1DB2BC0767C00B2E8C8 /* ObservationMap.swift */,
+				F70688B22BB3572F00D8E2EA /* ObservationsMap.swift */,
+				F7DE98822C133CDB005372F8 /* ObservationMapItemAnnotation.swift */,
+			);
+			path = Observation;
 			sourceTree = "<group>";
 		};
 		F7EBAEBD27623FEA00650F4F /* Notifications */ = {
@@ -3784,6 +3787,7 @@
 				F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
+				F7DE98852C13461B005372F8 /* ObservationIconLocalDataSource.swift in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
@@ -3828,7 +3832,6 @@
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
-				F70688BC2BB5D17E00D8E2EA /* RepositoryManager.swift in Sources */,
 				F734C1E32BC844DE00B2E8C8 /* CoordinateButton.swift in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
@@ -3995,6 +3998,7 @@
 				F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */,
 				F7EBAEC12762537100650F4F /* BottomSheetEnabled.swift in Sources */,
 				F7B5772A245C97D400879C9C /* ObservationEditCardCollectionViewController.swift in Sources */,
+				F7DE98832C133CDB005372F8 /* ObservationMapItemAnnotation.swift in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */,
 				F7D43BEA269F505A00561A8F /* CommonSummaryView.swift in Sources */,
