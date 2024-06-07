@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import DataSourceTileOverlay
+import MapFramework
 
 class ObservationMap: DataSourceMap {
     override var REFRESH_KEY: String {
@@ -23,10 +24,10 @@ class ObservationMap: DataSourceMap {
         super.init(dataSource: DataSources.observation, repository: repository, mapFeatureRepository: mapFeatureRepository)
     }
     
-    override func handleFeatureChanges() -> Bool {
-        let changed = super.handleFeatureChanges()
+    override func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {
+        let changed = super.handleFeatureChanges(annotations: annotations)
         if changed {
-            mapView?.showAnnotations(viewModel.annotations, animated: true)
+            mapView?.showAnnotations(annotations, animated: true)
         }
         return changed
     }
