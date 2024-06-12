@@ -134,7 +134,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
                 }
                 let matchedItemKeys = await mixin.itemKeys(at: tapCoord, mapView: mapView, touchPoint: tapPoint)
                 itemKeys.merge(matchedItemKeys) { current, new in
-                    current + new
+                    Array(Set(current + new))
                 }
             }
 
