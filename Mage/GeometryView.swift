@@ -193,12 +193,12 @@ class GeometryView : BaseFieldView {
         if (value != nil) {
             latitudeLongitudeButton.isEnabled = true;
             setAccuracy(accuracy, provider: provider);
-            if (self.observation == nil) {
+//            if (self.observation == nil) {
                 addToMap();
-            } else {
-                self.observation?.geometry = value;
-                addToMapAsObservation();
-            }
+//            } else {
+//                self.observation?.geometry = value;
+//                addToMapAsObservation();
+//            }
             
             if let point: SFPoint = (self.value as? SFGeometry)!.centroid() {
                 let coordinate = CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
@@ -207,6 +207,7 @@ class GeometryView : BaseFieldView {
                     textField.text = "\(latitudeLongitudeButton.title(for: .normal) ?? "") \(accuracyLabel.text ?? "")"
                 }
                 mapView.isHidden = false;
+                
             }
         } else {
             if (editMode) {
