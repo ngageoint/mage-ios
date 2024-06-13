@@ -65,7 +65,7 @@ import Kingfisher
         self.button = button
         self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4)
         self.imageView.contentMode = .scaleAspectFill
-        self.imageView.kf.indicatorType = .activity
+        self.imageView.kf.indicatorType = .none
         guard let contentType = newAttachment["contentType"] as? String, let localPath = newAttachment["localPath"] as? String else {
             return
         }
@@ -118,7 +118,7 @@ import Kingfisher
     @objc public func setImage(attachment: Attachment, formatName:NSString, button: MDCFloatingButton? = nil, scheme: MDCContainerScheming? = nil) {
         layoutSubviews();
         self.button = button;
-        self.imageView.kf.indicatorType = .activity;
+        self.imageView.kf.indicatorType = .none;
         self.imageView.tintColor = scheme?.colorScheme.onBackgroundColor.withAlphaComponent(0.4);
         if (attachment.contentType?.hasPrefix("image") ?? false) {
             self.imageView.setAttachment(attachment: attachment);
