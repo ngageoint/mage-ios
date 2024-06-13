@@ -12,6 +12,9 @@ import MapKit
 import MapFramework
 
 class MageMapView: UIView, GeoPackageBaseMap {
+    @Injected(\.bottomSheetRepository)
+    var bottomSheetRepository: BottomSheetRepository
+    
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?;
     var mapMixins: [MapMixin] = []
@@ -107,7 +110,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
         }
 
         let tapCoord = mapView.convert(tapPoint, toCoordinateFrom: mapView)
-        var annotationsTapped: [Any] = []
+        var annotationsTapped: [any MKAnnotation] = []
         let visibleMapRect = mapView.visibleMapRect
         let annotationsVisible = mapView.annotations(in: visibleMapRect)
         
@@ -121,8 +124,12 @@ class MageMapView: UIView, GeoPackageBaseMap {
                 if view.bounds.contains(location) {
                     if let annotation = mkAnnotation as? DataSourceAnnotation {
                         itemKeys[annotation.dataSource.key, default: [String]()].append(annotation.itemKey)
+                    } else if let annotation = mkAnnotation as? LocationAnnotation {
+                        if let user = annotation.user {
+                            itemKeys[DataSources.user.key, default: [String]()].append(user.objectID.uriRepresentation().absoluteString)
+                        }
                     } else {
-                        annotationsTapped.append(annotation)
+                        annotationsTapped.append(mkAnnotation)
                     }
                 }
             }
@@ -137,9 +144,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
                     Array(Set(current + new))
                 }
             }
-
-            let notification = MapItemsTappedNotification(annotations: annotationsTapped, items: items, itemKeys: itemKeys, mapView: mapView)
-            NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+            await bottomSheetRepository.setItemKeys(itemKeys: itemKeys, annotations: annotationsTapped, items: items)
         }
     }
 }

@@ -22,6 +22,7 @@ class DataSourceMapViewModel {
         }
     }
     var minZoom = 2
+    var maximumTileZoom = 6
     
     var zoom: Int?
     var region: MKCoordinateRegion?
@@ -110,7 +111,7 @@ class DataSourceMapViewModel {
         }
         let newOverlay = DataSourceTileOverlay(tileRepository: repository, key: key)
         newOverlay.minimumZ = minZoom
-        newOverlay.maximumZ = 6
+        newOverlay.maximumZ = maximumTileZoom
         
         tileOverlays = [newOverlay]
         return tileOverlays
@@ -122,6 +123,9 @@ class DataSourceMapViewModel {
         touchPoint: CGPoint
     ) async -> [String: [String]] {
         if await mapView.zoomLevel < minZoom {
+            return [:]
+        }
+        if await mapView.zoomLevel > maximumTileZoom {
             return [:]
         }
         guard show == true else {
@@ -148,7 +152,7 @@ class DataSourceMapViewModel {
                 latitudePerPixel: latitudePerPixel,
                 longitudePerPixel: longitudePerPixel,
                 zoom: mapView.zoomLevel,
-                precise: true
+                precise: false
             ) ?? []
         ]
     }

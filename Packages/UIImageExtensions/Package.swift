@@ -11,11 +11,16 @@ let package = Package(
             name: "UIImageExtensions",
             targets: ["UIImageExtensions"]),
     ],
+    dependencies: [
+        .package(name: "DebugUtilities", path: "../DebugUtilities")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "UIImageExtensions"),
+            name: "UIImageExtensions",
+            dependencies: ["DebugUtilities"]
+        ),
         .testTarget(
             name: "UIImageExtensionsTests",
             dependencies: ["UIImageExtensions"]),

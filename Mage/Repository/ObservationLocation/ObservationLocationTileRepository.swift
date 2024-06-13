@@ -9,6 +9,7 @@
 import Foundation
 import DataSourceTileOverlay
 import DataSourceDefinition
+import DebugUtilities
 import Kingfisher
 
 class ObservationLocationTileRepository: TileRepository, ObservableObject {
@@ -55,6 +56,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         zoom: Int,
         precise: Bool
     ) async -> [any DataSourceImage] {
+        let watch = WatchDog(named: "Observation Location Tile Repository getTileableItems")
         var items: [ObservationMapItem]?
         
         let iconPixelSize = getMaxHeightAndWidth(zoom: zoom)

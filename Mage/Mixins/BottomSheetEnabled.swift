@@ -8,6 +8,7 @@
 
 import Foundation
 import MapFramework
+import Combine
 
 protocol BottomSheetEnabled {
     var mapView: MKMapView? { get set }
@@ -20,6 +21,11 @@ class BottomSheetMixin: NSObject, MapMixin {
     @Injected(\.observationLocationRepository)
     var observationLocationRepository: ObservationLocationRepository
     
+    @Injected(\.bottomSheetRepository)
+    var bottomSheetRepository: BottomSheetRepository
+    
+    var cancellable = Set<AnyCancellable>()
+    
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         
     }
@@ -29,45 +35,35 @@ class BottomSheetMixin: NSObject, MapMixin {
     }
     
     var bottomSheetEnabled: BottomSheetEnabled
-    var mapItemsTappedObserver: Any?
     var mapViewDisappearingObserver: Any?
     var mageBottomSheet: MageBottomSheetViewController?
     var bottomSheet:MDCBottomSheetController?
     
     init(bottomSheetEnabled: BottomSheetEnabled) {
         self.bottomSheetEnabled = bottomSheetEnabled
+        super.init()
+
     }
     
     func cleanupMixin() {
-        if let mapItemsTappedObserver = mapItemsTappedObserver {
-            NotificationCenter.default.removeObserver(mapItemsTappedObserver, name: .MapItemsTapped, object: nil)
+        cancellable.forEach { cancellable in
+            cancellable.cancel()
         }
-        mapItemsTappedObserver = nil
     }
     
     func setupMixin(mapView: MKMapView, mapState: MapState) {
-        mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
-            if let mapView = self?.bottomSheetEnabled.mapView, 
-                self?.isVisible(view: mapView) == true,
-                let notification = notification.object as? MapItemsTappedNotification,
-                notification.mapView == mapView
-            {
-                Task { [weak self] in
-                    await self?.itemsTappedNotificationHandler(notification: notification, mapView: mapView)
+        self.bottomSheetRepository.$bottomSheetItems
+            .receive(on: DispatchQueue.main)
+            .sink { bottomSheetItems in
+                Task {
+                    if let bottomSheetItems = bottomSheetItems, !bottomSheetItems.isEmpty {
+                        await self.showBottomSheet(bottomSheetItems: bottomSheetItems, mapView: mapView)
+                    } else {
+                        await self.dismissBottomSheet()
+                    }
                 }
             }
-        }
-    }
-    
-    func itemsTappedNotificationHandler(notification: MapItemsTappedNotification, mapView: MKMapView) async {
-        var bottomSheetItems: [BottomSheetItem] = []
-        bottomSheetItems += self.handleTappedAnnotations(annotations: notification.annotations)
-        bottomSheetItems += self.handleTappedItems(items: notification.items)
-        bottomSheetItems += await self.handleItemKeys(itemKeys: notification.itemKeys ?? [:])
-        if bottomSheetItems.count == 0 {
-            return
-        }
-        await showBottomSheet(bottomSheetItems: bottomSheetItems, mapView: mapView)
+            .store(in: &cancellable)
     }
     
     @MainActor
@@ -115,88 +111,6 @@ class BottomSheetMixin: NSObject, MapMixin {
         }
         return isVisible(view: view, inView: view.superview)
     }
-    
-    func handleItemKeys(itemKeys: [String: [String]]) async -> [BottomSheetItem] {
-        var bottomSheetItems: [BottomSheetItem] = []
-        for (dataSourceKey, itemKeys) in itemKeys {
-            switch (dataSourceKey) {
-            case DataSources.observation.key:
-                for observationLocationUriString in itemKeys {
-                    if let observationLocation = await observationLocationRepository.getObservationLocation(
-                        observationLocationUri: URL(string: observationLocationUriString)
-                    ) {
-                        bottomSheetItems.append(BottomSheetItem(item: ObservationMapItem(observation: observationLocation)))
-                    }
-                }
-            default:
-                break
-            }
-        }
-        return bottomSheetItems
-    }
-    
-    func handleTappedItems(items: [Any]?) -> [BottomSheetItem] {
-        var bottomSheetItems: [BottomSheetItem] = []
-        if let items = items {
-            for item in items {
-                let bottomSheetItem = BottomSheetItem(item: item, actionDelegate: self, annotationView: nil)
-                bottomSheetItems.append(bottomSheetItem)
-            }
-        }
-        return bottomSheetItems
-    }
-    
-    func handleTappedAnnotations(annotations: [Any]?) -> [BottomSheetItem] {
-        var dedup: Set<AnyHashable> = Set()
-        let bottomSheetItems: [BottomSheetItem] = createBottomSheetItems(annotations: annotations, dedup: &dedup)
-        return bottomSheetItems
-    }
-    
-    func createBottomSheetItems(annotations: [Any]?, dedup: inout Set<AnyHashable>) -> [BottomSheetItem] {
-        var items: [BottomSheetItem] = []
-        
-        guard let annotations = annotations else {
-            return items
-        }
-
-        for annotation in annotations {
-            if let annotation = annotation as? ObservationAnnotation {
-                if let observation = annotation.observation, !dedup.contains(observation) {
-                    _ = dedup.insert(observation)
-                    let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: nil, annotationView: annotation.view)
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? LocationAnnotation {
-                if let user = annotation.user, !dedup.contains(user) {
-                    _ = dedup.insert(user)
-                    let bottomSheetItem = BottomSheetItem(item: user, actionDelegate: nil, annotationView: annotation.view)
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? StaticPointAnnotation {
-                let featureItem = FeatureItem(annotation: annotation)
-                if !dedup.contains(featureItem) {
-                    _ = dedup.insert(featureItem)
-                    let bottomSheetItem = BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: bottomSheetEnabled.mapView?.view(for: annotation))
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? FeedItem {
-                if !dedup.contains(annotation) {
-                    _ = dedup.insert(annotation)
-                    let bottomSheetItem = BottomSheetItem(item: annotation, actionDelegate: nil, annotationView: bottomSheetEnabled.mapView?.view(for: annotation))
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? ObservationMapItemAnnotation {
-                let mapItem = annotation.mapItem
-                if !dedup.contains(mapItem) {
-                    _ = dedup.insert(mapItem)
-                    let bottomSheetItem = BottomSheetItem(item: mapItem, actionDelegate: nil, annotationView: bottomSheetEnabled.mapView?.view(for: annotation))
-                    items.append(bottomSheetItem)
-                }
-            }
-        }
-        
-        return Array(items)
-    }
 }
 
 extension BottomSheetMixin : MDCBottomSheetControllerDelegate {
@@ -204,6 +118,9 @@ extension BottomSheetMixin : MDCBottomSheetControllerDelegate {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         mageBottomSheet = nil
         bottomSheet = nil
+        Task {
+            await bottomSheetRepository.setItemKeys(itemKeys: nil)
+        }
         if let mapViewDisappearingObserver = mapViewDisappearingObserver {
             NotificationCenter.default.removeObserver(mapViewDisappearingObserver, name: .MapViewDisappearing, object: nil)
         }

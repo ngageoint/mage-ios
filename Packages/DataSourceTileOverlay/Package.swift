@@ -17,6 +17,7 @@ let package = Package(
         .package(name: "UIImageExtensions", path: "../UIImageExtensions"),
         .package(name: "StringExtensions", path: "../StringExtensions"),
         .package(name: "CLLocationCoordinate2DExtensions", path: "../CLLocationCoordinate2DExtensions"),
+        .package(name: "DebugUtilities", path: "../DebugUtilities"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0")
     ],
     targets: [
@@ -24,7 +25,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "DataSourceTileOverlay",
-            dependencies: ["DataSourceDefinition", "UIImageExtensions", "StringExtensions", "CLLocationCoordinate2DExtensions", "Kingfisher"]
+            dependencies: ["DataSourceDefinition", "UIImageExtensions", "StringExtensions", "CLLocationCoordinate2DExtensions", "DebugUtilities", "Kingfisher"]
         ),
         .testTarget(
             name: "DataSourceTileOverlayTests",

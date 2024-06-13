@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Kingfisher
+import DebugUtilities
 import DataSourceDefinition
 import DataSourceTileOverlay
 
@@ -29,6 +31,7 @@ class ObservationMapImage: DataSourceImage {
         tileBounds: MapBoundingBox,
         tileSize: Double
     ) -> [UIImage] {
+        let w = WatchDog(named: "image")
         let coordinate: CLLocationCoordinate2D = {
             if let point = SFGeometryUtils.centroid(of: feature) {
                 return CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
@@ -36,16 +39,7 @@ class ObservationMapImage: DataSourceImage {
             return kCLLocationCoordinate2DInvalid
         }()
 
-        var iconImage: UIImage?
-
-        if let iconPath = mapItem.iconPath {
-            if let image = UIImage(contentsOfFile: iconPath) {
-                let widthScale = max(0.3, (CGFloat(zoom) / 18.0)) * 35 * UIScreen.main.scale
-                let scaledImage = image.aspectResize(to: CGSize(width: widthScale, height: image.size.height / (image.size.width / widthScale)))
-                scaledImage.accessibilityIdentifier = iconPath
-                iconImage = scaledImage
-            }
-        }
+        var iconImage: UIImage? = iconImage(mapItem: mapItem, zoom: zoom)
         
         if let iconImage = iconImage ?? UIImage(named: "defaultMarker") {
             if context != nil, CLLocationCoordinate2DIsValid(coordinate) {
@@ -61,6 +55,29 @@ class ObservationMapImage: DataSourceImage {
         }
 
         return []
+    }
+    
+    public static var imageCache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = 100
+        return cache
+    }()
+    
+    func iconImage(mapItem: ObservationMapItem, zoom: Int) -> UIImage? {
+        let w = WatchDog(named: "icon image")
+        if let iconPath = mapItem.iconPath {
+            if let image = ObservationMapImage.imageCache.object(forKey: "\(iconPath)/\(zoom)" as NSString) {
+                return image
+            }
+            if let image = UIImage(contentsOfFile: iconPath) {
+                let widthScale = max(0.3, (CGFloat(zoom) / 18.0)) * 35 * UIScreen.main.scale
+                let scaledImage = image.aspectResize(to: CGSize(width: widthScale, height: image.size.height / (image.size.width / widthScale)))
+                scaledImage.accessibilityIdentifier = iconPath
+                ObservationMapImage.imageCache.setObject(scaledImage, forKey: "\(iconPath)/\(zoom)" as NSString)
+                return scaledImage
+            }
+        }
+        return nil
     }
 
     func polygonImage(

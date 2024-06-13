@@ -7,6 +7,7 @@
 
 import Foundation
 import DataSourceDefinition
+import DebugUtilities
 import Kingfisher
 import CoreLocation
 import UIKit
@@ -101,6 +102,7 @@ public extension TileRepository {
         zoom: Int,
         tileProvider: DataSourceTileOverlay
     ) async -> Bool {
+        let methodWatchDog = WatchDog(named: "Marker Hit Test")
         let tile = location.toTile(zoom: zoom)
 
         let minTileLon = CLLocationCoordinate2D.longitudeFromTile(x: tile.x, zoom: zoom)

@@ -60,7 +60,6 @@ enum ObservationService: URLRequestConvertible {
             if let date = date {
                 params["startDate"] = ISO8601DateFormatter.string(from: date, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
             }
-            NSLog("XXX params for observation search are \(params)")
             return params
         }
     }
