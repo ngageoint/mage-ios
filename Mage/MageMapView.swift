@@ -128,6 +128,8 @@ class MageMapView: UIView, GeoPackageBaseMap {
                         if let user = annotation.user {
                             itemKeys[DataSources.user.key, default: [String]()].append(user.objectID.uriRepresentation().absoluteString)
                         }
+                    } else if let annotation = mkAnnotation as? FeedItem {
+                        itemKeys[DataSources.feedItem.key, default: [String]()].append(annotation.objectID.uriRepresentation().absoluteString)
                     } else {
                         annotationsTapped.append(mkAnnotation)
                     }

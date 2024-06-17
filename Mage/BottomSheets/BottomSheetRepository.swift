@@ -26,6 +26,9 @@ class BottomSheetRepository: ObservableObject {
     @Injected(\.userRepository)
     var userRepository: UserRepository
     
+    @Injected(\.feedItemRepository)
+    var feedItemRepository: FeedItemRepository
+    
     private var itemKeys: [String: [String]]?
     
     @Published var bottomSheetItems: [BottomSheetItem]?
@@ -69,6 +72,12 @@ class BottomSheetRepository: ObservableObject {
                 for userUriString in itemKeys {
                     if let user = await userRepository.getUser(userUri: URL(string: userUriString)) {
                         bottomSheetItems.append(BottomSheetItem(item: user, actionDelegate: nil, annotationView: nil))
+                    }
+                }
+            case DataSources.feedItem.key:
+                for feedUriString in itemKeys {
+                    if let feedItem = await feedItemRepository.getFeedItem(feedItemrUri: URL(string: feedUriString)) {
+                        bottomSheetItems.append(BottomSheetItem(item: feedItem, actionDelegate: nil, annotationView: nil))
                     }
                 }
             default:

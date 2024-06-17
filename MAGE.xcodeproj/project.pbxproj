@@ -569,6 +569,9 @@
 		F7DE988A2C1A4431005372F8 /* UserDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98892C1A4431005372F8 /* UserDefinition.swift */; };
 		F7DE988C2C1A4478005372F8 /* UserLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE988B2C1A4478005372F8 /* UserLocalDataSource.swift */; };
 		F7DE98932C1B3B9B005372F8 /* DebugUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = F7DE98922C1B3B9B005372F8 /* DebugUtilities */; };
+		F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98952C20D4A9005372F8 /* FeedItemDefinition.swift */; };
+		F7DE98982C20D4D7005372F8 /* FeedItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98972C20D4D7005372F8 /* FeedItemRepository.swift */; };
+		F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98992C20D63F005372F8 /* FeedItemLocalDataSource.swift */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
@@ -1404,6 +1407,9 @@
 		F7DE98892C1A4431005372F8 /* UserDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefinition.swift; sourceTree = "<group>"; };
 		F7DE988B2C1A4478005372F8 /* UserLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocalDataSource.swift; sourceTree = "<group>"; };
 		F7DE98912C1B355D005372F8 /* DebugUtilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DebugUtilities; path = Packages/DebugUtilities; sourceTree = "<group>"; };
+		F7DE98952C20D4A9005372F8 /* FeedItemDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemDefinition.swift; sourceTree = "<group>"; };
+		F7DE98972C20D4D7005372F8 /* FeedItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRepository.swift; sourceTree = "<group>"; };
+		F7DE98992C20D63F005372F8 /* FeedItemLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemLocalDataSource.swift; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
@@ -1981,6 +1987,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F7DE98942C20D49A005372F8 /* Feed */,
 				F7DE98862C1A43E5005372F8 /* User */,
 				F776ACAC2BD181F4000FAFB4 /* ObservationLocation */,
 				F70688B72BB5BDA400D8E2EA /* Observation */,
@@ -3119,6 +3126,16 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		F7DE98942C20D49A005372F8 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				F7DE98952C20D4A9005372F8 /* FeedItemDefinition.swift */,
+				F7DE98972C20D4D7005372F8 /* FeedItemRepository.swift */,
+				F7DE98992C20D63F005372F8 /* FeedItemLocalDataSource.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
 		F7EBAEBD27623FEA00650F4F /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -3642,6 +3659,7 @@
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
+				F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */,
 				2FB41CE41DC79C8F005C18F9 /* ObservationFilterTableViewController.m in Sources */,
 				F7C5C8971F4B8F7E002C78D3 /* GeometryEditMapDelegate.m in Sources */,
 				F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */,
@@ -3855,6 +3873,7 @@
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
+				F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */,
 				F734C1E32BC844DE00B2E8C8 /* CoordinateButton.swift in Sources */,
 				2F81C4271C692F86006897E7 /* AttributionTableViewCell.m in Sources */,
 				F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */,
@@ -3878,6 +3897,7 @@
 				F744ACFD2BFE73A900A6E4CA /* DataSourceMapViewModel.swift in Sources */,
 				F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */,
 				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
+				F7DE98982C20D4D7005372F8 /* FeedItemRepository.swift in Sources */,
 				F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */,
 				F72D431B2694B60300F9AC3B /* Layer.swift in Sources */,
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,

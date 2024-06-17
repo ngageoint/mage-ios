@@ -12,7 +12,27 @@ import Combine
 @testable import MAGE
 
 class ObservationLocationStaticLocalDataSource: ObservationLocationLocalDataSource {
+    func getObservationLocation(observationLocationUri: URL?) async -> MAGE.ObservationLocation? {
+        return nil
+    }
+    
     var list: [ObservationMapItem] = []
+    
+    func getMapItems(observationLocationUri: URL?, minLatitude: Double?, maxLatitude: Double?, minLongitude: Double?, maxLongitude: Double?) async -> [ObservationMapItem] {
+        
+        guard let minLatitude = minLatitude, let maxLatitude = maxLatitude, let minLongitude = minLongitude, let maxLongitude = maxLongitude else {
+            return []
+        }
+        return list.filter { mapItem in
+            guard let latitude = mapItem.coordinate?.latitude,
+                  let longitude = mapItem.coordinate?.longitude,
+                  let observationLocationUri = observationLocationUri
+            else {
+                return false
+            }
+            return observationLocationUri == mapItem.observationLocationId && minLatitude...maxLatitude ~= latitude && minLongitude...maxLongitude ~= longitude
+        }
+    }
     
     func getMapItems(observationUri: URL?, minLatitude: Double?, maxLatitude: Double?, minLongitude: Double?, maxLongitude: Double?) async -> [ObservationMapItem] {
         
@@ -31,7 +51,6 @@ class ObservationLocationStaticLocalDataSource: ObservationLocationLocalDataSour
     }
     
     func getMapItems(minLatitude: Double?, maxLatitude: Double?, minLongitude: Double?, maxLongitude: Double?) async -> [MAGE.ObservationMapItem] {
-        NSLog("minLatitude \(minLatitude) maxLatitude \(maxLatitude) minLongitude \(minLongitude) maxLongitude \(maxLongitude)")
         guard let minLatitude = minLatitude, let maxLatitude = maxLatitude, let minLongitude = minLongitude, let maxLongitude = maxLongitude else {
             return []
         }
