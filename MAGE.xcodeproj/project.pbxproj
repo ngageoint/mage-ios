@@ -574,6 +574,9 @@
 		F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98992C20D63F005372F8 /* FeedItemLocalDataSource.swift */; };
 		F7DEF91D1912A6940026B9D0 /* preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = F7DEF91C1912A6940026B9D0 /* preferences.plist */; };
 		F7E0380C1992948A007CCF6C /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0380B1992948A007CCF6C /* AttachmentCell.swift */; };
+		F7E079412C2209A20029C88D /* GeoPackageDataSourceDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E079402C2209A20029C88D /* GeoPackageDataSourceDefinition.swift */; };
+		F7E079432C221B890029C88D /* GeoPackageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E079422C221B890029C88D /* GeoPackageRepository.swift */; };
+		F7E079462C2223B80029C88D /* ExceptionCatcher in Frameworks */ = {isa = PBXBuildFile; productRef = F7E079452C2223B80029C88D /* ExceptionCatcher */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */; };
 		F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */; };
@@ -1412,6 +1415,8 @@
 		F7DE98992C20D63F005372F8 /* FeedItemLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemLocalDataSource.swift; sourceTree = "<group>"; };
 		F7DEF91C1912A6940026B9D0 /* preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = preferences.plist; sourceTree = "<group>"; };
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
+		F7E079402C2209A20029C88D /* GeoPackageDataSourceDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageDataSourceDefinition.swift; sourceTree = "<group>"; };
+		F7E079422C221B890029C88D /* GeoPackageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageRepository.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
 		F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+IB.m"; sourceTree = "<group>"; };
 		F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationTopController.swift; sourceTree = "<group>"; };
@@ -1540,6 +1545,7 @@
 				F734C1E12BC83D4F00B2E8C8 /* MAGEStyle in Frameworks */,
 				F7A94D6A18AD9CB000CB9EE0 /* Foundation.framework in Frameworks */,
 				F734C1F12BC84B2000B2E8C8 /* ViewExtensions in Frameworks */,
+				F7E079462C2223B80029C88D /* ExceptionCatcher in Frameworks */,
 				BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */,
 				F706888D2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions in Frameworks */,
 			);
@@ -1987,6 +1993,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F7E0793F2C2209890029C88D /* GeoPackage */,
 				F7DE98942C20D49A005372F8 /* Feed */,
 				F7DE98862C1A43E5005372F8 /* User */,
 				F776ACAC2BD181F4000FAFB4 /* ObservationLocation */,
@@ -3136,6 +3143,15 @@
 			path = Feed;
 			sourceTree = "<group>";
 		};
+		F7E0793F2C2209890029C88D /* GeoPackage */ = {
+			isa = PBXGroup;
+			children = (
+				F7E079402C2209A20029C88D /* GeoPackageDataSourceDefinition.swift */,
+				F7E079422C221B890029C88D /* GeoPackageRepository.swift */,
+			);
+			path = GeoPackage;
+			sourceTree = "<group>";
+		};
 		F7EBAEBD27623FEA00650F4F /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -3238,6 +3254,7 @@
 				F776AC8F2BC9E178000FAFB4 /* MapFramework */,
 				F776AC942BCD9DE3000FAFB4 /* Alamofire */,
 				F7DE98922C1B3B9B005372F8 /* DebugUtilities */,
+				F7E079452C2223B80029C88D /* ExceptionCatcher */,
 			);
 			productName = Mage;
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
@@ -3313,6 +3330,7 @@
 			packageReferences = (
 				F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				F776AC932BCD9DE3000FAFB4 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				F7E079442C2223B80029C88D /* XCRemoteSwiftPackageReference "ExceptionCatcher" */,
 			);
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
 			projectDirPath = "";
@@ -3740,6 +3758,7 @@
 				F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */,
 				2F42586F2B51F05B00BF83B1 /* Settings.swift in Sources */,
 				F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */,
+				F7E079432C221B890029C88D /* GeoPackageRepository.swift in Sources */,
 				F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */,
 				F7EBAEBA2760F7EE00650F4F /* FilteredObservationsMap.swift in Sources */,
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
@@ -3810,6 +3829,7 @@
 				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				2FAC84A92B505A9800FCAB37 /* SearchMapViewController.swift in Sources */,
+				F7E079412C2209A20029C88D /* GeoPackageDataSourceDefinition.swift in Sources */,
 				F776AC992BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift in Sources */,
 				F776ACA12BCDB892000FAFB4 /* MageSession.swift in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
@@ -4563,6 +4583,14 @@
 				minimumVersion = 5.9.1;
 			};
 		};
+		F7E079442C2223B80029C88D /* XCRemoteSwiftPackageReference "ExceptionCatcher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/ExceptionCatcher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -4623,6 +4651,11 @@
 		F7DE98922C1B3B9B005372F8 /* DebugUtilities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DebugUtilities;
+		};
+		F7E079452C2223B80029C88D /* ExceptionCatcher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F7E079442C2223B80029C88D /* XCRemoteSwiftPackageReference "ExceptionCatcher" */;
+			productName = ExceptionCatcher;
 		};
 /* End XCSwiftPackageProductDependency section */
 

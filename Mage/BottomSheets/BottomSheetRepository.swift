@@ -29,6 +29,9 @@ class BottomSheetRepository: ObservableObject {
     @Injected(\.feedItemRepository)
     var feedItemRepository: FeedItemRepository
     
+    @Injected(\.geoPackageRepository)
+    var geoPackageRepository: GeoPackageRepository
+    
     private var itemKeys: [String: [String]]?
     
     @Published var bottomSheetItems: [BottomSheetItem]?
@@ -80,6 +83,15 @@ class BottomSheetRepository: ObservableObject {
                         bottomSheetItems.append(BottomSheetItem(item: feedItem, actionDelegate: nil, annotationView: nil))
                     }
                 }
+            case DataSources.geoPackage.key:
+                for key in itemKeys {
+                    if 
+                        let featureKey = GeoPackageFeatureKey.fromKey(jsonString: key),
+                        let featureItem = geoPackageRepository.getGeoPackageFeatureItem(key: featureKey)
+                    {
+                        bottomSheetItems.append(BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: nil))
+                    }
+                }
             default:
                 break
             }
@@ -112,38 +124,11 @@ class BottomSheetRepository: ObservableObject {
         }
 
         for annotation in annotations {
-            if let annotation = annotation as? ObservationAnnotation {
-                if let observation = annotation.observation, !dedup.contains(observation) {
-                    _ = dedup.insert(observation)
-                    let bottomSheetItem = BottomSheetItem(item: observation, actionDelegate: nil, annotationView: annotation.view)
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? LocationAnnotation {
-                if let user = annotation.user, !dedup.contains(user) {
-                    _ = dedup.insert(user)
-                    let bottomSheetItem = BottomSheetItem(item: user, actionDelegate: nil, annotationView: annotation.view)
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? StaticPointAnnotation {
+            if let annotation = annotation as? StaticPointAnnotation {
                 let featureItem = FeatureItem(annotation: annotation)
                 if !dedup.contains(featureItem) {
                     _ = dedup.insert(featureItem)
                     let bottomSheetItem = BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: nil)
-                    //bottomSheetEnabled.mapView?.view(for: annotation))
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? FeedItem {
-                if !dedup.contains(annotation) {
-                    _ = dedup.insert(annotation)
-                    let bottomSheetItem = BottomSheetItem(item: annotation, actionDelegate: nil, annotationView: nil)
-                    //bottomSheetEnabled.mapView?.view(for: annotation))
-                    items.append(bottomSheetItem)
-                }
-            } else if let annotation = annotation as? ObservationMapItemAnnotation {
-                let mapItem = annotation.mapItem
-                if !dedup.contains(mapItem) {
-                    _ = dedup.insert(mapItem)
-                    let bottomSheetItem = BottomSheetItem(item: mapItem, actionDelegate: nil, annotationView: nil)
                     //bottomSheetEnabled.mapView?.view(for: annotation))
                     items.append(bottomSheetItem)
                 }

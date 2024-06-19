@@ -10,6 +10,7 @@
 #import "GeoPackageTileTableCacheOverlay.h"
 
 @class GeoPackageFeatureItem;
+@class GeoPackageFeatureKey;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (id) initWithMapView: (MKMapView *) mapView;
 - (void) updateCacheOverlaysSynchronized:(NSArray<CacheOverlay *> *) cacheOverlays;
 - (NSArray<GeoPackageFeatureItem *>*) getFeaturesAtTap:(CLLocationCoordinate2D) tapCoord;
+- (NSArray<GeoPackageFeatureKey *>*) getFeatureKeysAtTap: (CLLocationCoordinate2D) tapCoord;
 
 @end
 
