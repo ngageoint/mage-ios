@@ -10,7 +10,7 @@ import Foundation
 import PureLayout
 import Kingfisher
 
-class FeatureItem: NSObject {
+class FeatureItem: NSObject, Codable {
     
     init(annotation: StaticPointAnnotation) {
         self.featureDetail = StaticLayer.featureDescription(feature: annotation.feature)
@@ -27,13 +27,12 @@ class FeatureItem: NSObject {
         }
     }
     
-    init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, layerName: String? = nil, iconURL: URL? = nil, images: [UIImage]? = nil) {
+    init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, layerName: String? = nil, iconURL: URL? = nil) {
         self.featureId = featureId
         self.featureDetail = featureDetail
         self.coordinate = coordinate
         self.featureTitle = featureTitle
         self.iconURL = iconURL
-        self.images = images
         self.layerName = layerName;
     }
     
@@ -42,7 +41,6 @@ class FeatureItem: NSObject {
     var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid;
     var featureTitle: String?;
     var iconURL: URL?;
-    var images: [UIImage]?;
     var layerName: String?
     var featureDate: Date?
     
@@ -50,6 +48,22 @@ class FeatureItem: NSObject {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         return documentsDirectory as String
+    }
+    
+    @objc public func toKey() -> String {
+        let jsonEncoder = JSONEncoder()
+        if let jsonData = try? jsonEncoder.encode(self) {
+            return String(data: jsonData, encoding: String.Encoding.utf8) ?? ""
+        }
+        return ""
+    }
+    
+    static func fromKey(jsonString: String) -> FeatureItem? {
+        if let jsonData = jsonString.data(using: .utf8) {
+            let jsonDecoder = JSONDecoder()
+            return try? jsonDecoder.decode(FeatureItem.self, from: jsonData)
+        }
+        return nil
     }
 }
 

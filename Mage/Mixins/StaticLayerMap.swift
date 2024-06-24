@@ -150,35 +150,36 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         }
     }
     
-    func items(
+    func itemKeys(
         at location: CLLocationCoordinate2D,
         mapView: MKMapView,
         touchPoint: CGPoint
-    ) async -> [Any]? {
-//    func items(at location: CLLocationCoordinate2D) -> [Any]? {
+    ) async -> [String : [String]] {
         let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
         let tolerance = await (self.staticLayerMap.mapView?.visibleMapRect.size.width ?? 0) * Double(screenPercentage)
         
-        var annotations: [Any] = []
+        var annotations: [FeatureItem] = []
         
         for (layerId, features) in staticLayers {
             for feature in features {
                 if let polyline = feature as? StyledPolyline {
                     if lineHitTest(lineObservation: polyline, location: location, tolerance: tolerance) {
                         if let currentEventId = Server.currentEventId(), let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", layerId, currentEventId), in: NSManagedObjectContext.mr_default()) {
-                            annotations.append(FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: location, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil, images: nil))
+                            annotations.append(FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: location, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil))
                         }
                     }
                 } else if let polygon = feature as? StyledPolygon {
                     if polygonHitTest(polygonObservation: polygon, location: location) {
                         if let currentEventId = Server.currentEventId(), let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", layerId, currentEventId), in: NSManagedObjectContext.mr_default()) {
-                            annotations.append(FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: location, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil, images: nil))
+                            annotations.append(FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: location, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil))
                         }
                     }
                 }
             }
         }
-        return annotations
+        return [DataSources.featureItem.key: annotations.map({ featureItem in
+            featureItem.toKey()
+        })]
     }
     
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {

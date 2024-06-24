@@ -21,11 +21,6 @@ public protocol MapMixin {
     func regionWillChange(mapView: MKMapView, animated: Bool)
     func didChangeUserTrackingMode(mapView: MKMapView, animated: Bool)
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView?
-    func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [Any]?
     func itemKeys(
         at location: CLLocationCoordinate2D,
         mapView: MKMapView,
@@ -161,14 +156,6 @@ public extension MapMixin {
     func didChangeUserTrackingMode(mapView: MKMapView, animated: Bool) { }
 
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
-        return nil
-    }
-
-    func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [Any]? {
         return nil
     }
 

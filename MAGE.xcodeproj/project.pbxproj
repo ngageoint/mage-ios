@@ -577,6 +577,8 @@
 		F7E079412C2209A20029C88D /* GeoPackageDataSourceDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E079402C2209A20029C88D /* GeoPackageDataSourceDefinition.swift */; };
 		F7E079432C221B890029C88D /* GeoPackageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E079422C221B890029C88D /* GeoPackageRepository.swift */; };
 		F7E079462C2223B80029C88D /* ExceptionCatcher in Frameworks */ = {isa = PBXBuildFile; productRef = F7E079452C2223B80029C88D /* ExceptionCatcher */; };
+		F7E079492C29EC870029C88D /* FeatureItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E079482C29EC870029C88D /* FeatureItemRepository.swift */; };
+		F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0794A2C29F0160029C88D /* FeatureItemDefinition.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */; };
 		F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */; };
@@ -1417,6 +1419,8 @@
 		F7E0380B1992948A007CCF6C /* AttachmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		F7E079402C2209A20029C88D /* GeoPackageDataSourceDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageDataSourceDefinition.swift; sourceTree = "<group>"; };
 		F7E079422C221B890029C88D /* GeoPackageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageRepository.swift; sourceTree = "<group>"; };
+		F7E079482C29EC870029C88D /* FeatureItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureItemRepository.swift; sourceTree = "<group>"; };
+		F7E0794A2C29F0160029C88D /* FeatureItemDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureItemDefinition.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
 		F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+IB.m"; sourceTree = "<group>"; };
 		F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationTopController.swift; sourceTree = "<group>"; };
@@ -1993,6 +1997,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F7E079472C29EC790029C88D /* FeatureItem */,
 				F7E0793F2C2209890029C88D /* GeoPackage */,
 				F7DE98942C20D49A005372F8 /* Feed */,
 				F7DE98862C1A43E5005372F8 /* User */,
@@ -3152,6 +3157,15 @@
 			path = GeoPackage;
 			sourceTree = "<group>";
 		};
+		F7E079472C29EC790029C88D /* FeatureItem */ = {
+			isa = PBXGroup;
+			children = (
+				F7E079482C29EC870029C88D /* FeatureItemRepository.swift */,
+				F7E0794A2C29F0160029C88D /* FeatureItemDefinition.swift */,
+			);
+			path = FeatureItem;
+			sourceTree = "<group>";
+		};
 		F7EBAEBD27623FEA00650F4F /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -4038,6 +4052,7 @@
 				F7DE98802C133B49005372F8 /* ObservationMapImage.swift in Sources */,
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.swift in Sources */,
+				F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,
@@ -4051,6 +4066,7 @@
 				F776ACAB2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift in Sources */,
 				F7D43BE4269F357200561A8F /* FeedItemActionsView.swift in Sources */,
 				F7F08E9427E0EB7100640D89 /* GeoPackageImporter.m in Sources */,
+				F7E079492C29EC870029C88D /* FeatureItemRepository.swift in Sources */,
 				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,
 				04E2C89E28D37D0E001F0812 /* GridType.swift in Sources */,
 				2F8A2C1722012D1C007FE473 /* EventInformationView.m in Sources */,

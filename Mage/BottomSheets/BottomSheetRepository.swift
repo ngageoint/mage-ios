@@ -32,6 +32,9 @@ class BottomSheetRepository: ObservableObject {
     @Injected(\.geoPackageRepository)
     var geoPackageRepository: GeoPackageRepository
     
+    @Injected(\.featureItemRepository)
+    var featureItemRepository: FeatureItemRepository
+    
     private var itemKeys: [String: [String]]?
     
     @Published var bottomSheetItems: [BottomSheetItem]?
@@ -88,6 +91,14 @@ class BottomSheetRepository: ObservableObject {
                     if 
                         let featureKey = GeoPackageFeatureKey.fromKey(jsonString: key),
                         let featureItem = geoPackageRepository.getGeoPackageFeatureItem(key: featureKey)
+                    {
+                        bottomSheetItems.append(BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: nil))
+                    }
+                }
+            case DataSources.featureItem.key:
+                for key in itemKeys {
+                    if
+                        let featureItem = featureItemRepository.getFeatureItem(key: key)
                     {
                         bottomSheetItems.append(BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: nil))
                     }

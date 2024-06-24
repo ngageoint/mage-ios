@@ -114,7 +114,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
         let visibleMapRect = mapView.visibleMapRect
         let annotationsVisible = mapView.annotations(in: visibleMapRect)
         
-        var items: [Any] = []
+//        var items: [Any] = []
         var itemKeys: [String: [String]] = [:]
         
         for annotation in annotationsVisible {
@@ -130,6 +130,9 @@ class MageMapView: UIView, GeoPackageBaseMap {
                         }
                     } else if let annotation = mkAnnotation as? FeedItem {
                         itemKeys[DataSources.feedItem.key, default: [String]()].append(annotation.objectID.uriRepresentation().absoluteString)
+                    } else if let annotation = mkAnnotation as? StaticPointAnnotation {
+                        let featureItem = FeatureItem(annotation: annotation)
+                        itemKeys[DataSources.featureItem.key, default: [String]()].append(featureItem.toKey())
                     } else {
                         annotationsTapped.append(mkAnnotation)
                     }
@@ -138,15 +141,15 @@ class MageMapView: UIView, GeoPackageBaseMap {
         }
         Task {
             for mixin in mapMixins {
-                if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
-                    items.append(contentsOf: matchedItems)
-                }
+//                if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
+//                    items.append(contentsOf: matchedItems)
+//                }
                 let matchedItemKeys = await mixin.itemKeys(at: tapCoord, mapView: mapView, touchPoint: tapPoint)
                 itemKeys.merge(matchedItemKeys) { current, new in
                     Array(Set(current + new))
                 }
             }
-            await bottomSheetRepository.setItemKeys(itemKeys: itemKeys, annotations: annotationsTapped, items: items)
+            await bottomSheetRepository.setItemKeys(itemKeys: itemKeys)
         }
     }
 }

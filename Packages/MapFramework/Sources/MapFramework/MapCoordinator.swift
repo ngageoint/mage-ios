@@ -43,16 +43,12 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
     }
 
     func handleTappedItems(
-        annotations: [MKAnnotation],
-        items: [Any],
         itemKeys: [String: [String]],
         mapName: String
     ) {
         Task {
             await MainActor.run {
                 let notification = MapItemsTappedNotification(
-                    annotations: annotations,
-                    items: items,
                                         itemKeys: itemKeys
                     //                    mapName: mapName
                 )
@@ -289,15 +285,12 @@ extension MapCoordinator {
             var items: [Any] = []
             var itemKeys: [String: [String]] = [:]
             for mixin in map.mixins.mixins.reversed() {
-                if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
-                    items.append(contentsOf: matchedItems)
-                }
                 let matchedItemKeys = await mixin.itemKeys(at: tapCoord, mapView: mapView, touchPoint: tapPoint)
                 itemKeys.merge(matchedItemKeys) { current, new in
                     current + new
                 }
             }
-            handleTappedItems(annotations: annotationsTapped, items: items, itemKeys: itemKeys, mapName: map.name)
+            handleTappedItems(itemKeys: itemKeys, mapName: map.name)
         }
     }
 }
