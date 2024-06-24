@@ -39,16 +39,6 @@ class BottomSheetRepository: ObservableObject {
     
     @Published var bottomSheetItems: [BottomSheetItem]?
     
-    @available(*, deprecated, renamed: "setItemKeys", message: "don't send annotations or items anymore")
-    func setItemKeys(itemKeys: [String: [String]]?, annotations: [MKAnnotation], items: [Any]?) async {
-        var bottomSheetItems: [BottomSheetItem] = []
-        bottomSheetItems += self.handleTappedAnnotations(annotations: annotations)
-        bottomSheetItems += self.handleTappedItems(items: items)
-        bottomSheetItems += await self.handleItemKeys(itemKeys: itemKeys ?? [:])
-        self.itemKeys = itemKeys
-        self.bottomSheetItems = bottomSheetItems
-    }
-    
     func setItemKeys(itemKeys: [String: [String]]?) async {
         self.itemKeys = itemKeys
         
@@ -108,44 +98,5 @@ class BottomSheetRepository: ObservableObject {
             }
         }
         return bottomSheetItems
-    }
-    
-    func handleTappedItems(items: [Any]?) -> [BottomSheetItem] {
-        var bottomSheetItems: [BottomSheetItem] = []
-        if let items = items {
-            for item in items {
-                let bottomSheetItem = BottomSheetItem(item: item, actionDelegate: self, annotationView: nil)
-                bottomSheetItems.append(bottomSheetItem)
-            }
-        }
-        return bottomSheetItems
-    }
-    
-    func handleTappedAnnotations(annotations: [Any]?) -> [BottomSheetItem] {
-        var dedup: Set<AnyHashable> = Set()
-        let bottomSheetItems: [BottomSheetItem] = createBottomSheetItems(annotations: annotations, dedup: &dedup)
-        return bottomSheetItems
-    }
-    
-    func createBottomSheetItems(annotations: [Any]?, dedup: inout Set<AnyHashable>) -> [BottomSheetItem] {
-        var items: [BottomSheetItem] = []
-        
-        guard let annotations = annotations else {
-            return items
-        }
-
-        for annotation in annotations {
-            if let annotation = annotation as? StaticPointAnnotation {
-                let featureItem = FeatureItem(annotation: annotation)
-                if !dedup.contains(featureItem) {
-                    _ = dedup.insert(featureItem)
-                    let bottomSheetItem = BottomSheetItem(item: featureItem, actionDelegate: nil, annotationView: nil)
-                    //bottomSheetEnabled.mapView?.view(for: annotation))
-                    items.append(bottomSheetItem)
-                }
-            }
-        }
-        
-        return Array(items)
     }
 }
