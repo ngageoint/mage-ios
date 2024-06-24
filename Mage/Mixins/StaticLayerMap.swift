@@ -19,6 +19,9 @@ protocol StaticLayerMap {
 }
 
 class StaticLayerMapMixin: NSObject, MapMixin {
+    @Injected(\.staticLayerRepository)
+    var repository: StaticLayerRepository
+    
     var mapAnnotationFocusedObserver: AnyObject?
 
     var staticLayerMap: StaticLayerMap
@@ -70,7 +73,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         
         let staticLayersInEvent = staticLayersPerEvent[currentEvent.stringValue] ?? []
         for staticLayerId in staticLayersInEvent {
-            guard let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", staticLayerId, currentEvent), in: NSManagedObjectContext.mr_default()) else {
+            guard let staticLayer = repository.getStaticLayer(remoteId: staticLayerId, eventId: currentEvent) else {
                 continue
             }
             if !unselectedStaticLayerIds.contains(staticLayerId) {
@@ -136,7 +139,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         }
         
         for unselectedStaticLayerId in unselectedStaticLayerIds {
-            if let unselectedStaticLayer = StaticLayer.mr_findFirst(byAttribute: "remoteId", withValue: unselectedStaticLayerId), let staticItems = staticLayers[unselectedStaticLayerId] {
+            if let unselectedStaticLayer = repository.getStaticLayer(remoteId: unselectedStaticLayerId), let staticItems = staticLayers[unselectedStaticLayerId] {
                 print("removing the layer \(unselectedStaticLayer.name ?? "No Name") from the map")
                 for staticItem in staticItems {
                     if let overlay = staticItem as? MKOverlay {
@@ -164,13 +167,17 @@ class StaticLayerMapMixin: NSObject, MapMixin {
             for feature in features {
                 if let polyline = feature as? StyledPolyline {
                     if lineHitTest(lineObservation: polyline, location: location, tolerance: tolerance) {
-                        if let currentEventId = Server.currentEventId(), let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", layerId, currentEventId), in: NSManagedObjectContext.mr_default()) {
+                        if let currentEventId = Server.currentEventId(), 
+                            let staticLayer = repository.getStaticLayer(remoteId: layerId, eventId: currentEventId)
+                        {
                             annotations.append(FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: location, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil))
                         }
                     }
                 } else if let polygon = feature as? StyledPolygon {
                     if polygonHitTest(polygonObservation: polygon, location: location) {
-                        if let currentEventId = Server.currentEventId(), let staticLayer = StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", layerId, currentEventId), in: NSManagedObjectContext.mr_default()) {
+                        if let currentEventId = Server.currentEventId(), 
+                            let staticLayer = repository.getStaticLayer(remoteId: layerId, eventId: currentEventId)
+                        {
                             annotations.append(FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: location, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil))
                         }
                     }
