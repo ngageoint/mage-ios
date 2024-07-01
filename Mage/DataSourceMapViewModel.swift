@@ -137,6 +137,9 @@ class DataSourceMapViewModel {
 
         let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
         let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
+        
+        let screenPercentage = 0.03
+        let distanceTolerance = await mapView.visibleMapRect.size.width * Double(screenPercentage)
 
         let queryLocationMinLongitude = location.longitude
         let queryLocationMaxLongitude = location.longitude
@@ -152,7 +155,8 @@ class DataSourceMapViewModel {
                 latitudePerPixel: latitudePerPixel,
                 longitudePerPixel: longitudePerPixel,
                 zoom: mapView.zoomLevel,
-                precise: false
+                precise: true,
+                distanceTolerance: distanceTolerance
             ) ?? []
         ]
     }

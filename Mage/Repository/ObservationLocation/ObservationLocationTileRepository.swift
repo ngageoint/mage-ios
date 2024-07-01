@@ -136,7 +136,8 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
         latitudePerPixel: Double,
         longitudePerPixel: Double,
         zoom: Int,
-        precise: Bool
+        precise: Bool,
+        distanceTolerance: Double
     ) async -> [String] {
         if let observationLocationUrl = observationLocationUrl {
             return [observationLocationUrl.absoluteString]

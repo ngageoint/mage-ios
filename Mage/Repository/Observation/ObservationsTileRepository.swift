@@ -132,7 +132,8 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         latitudePerPixel: Double,
         longitudePerPixel: Double,
         zoom: Int,
-        precise: Bool
+        precise: Bool,
+        distanceTolerance: Double
     ) async -> [String] {
         await getObservationMapItems(
             minLatitude: minLatitude,
@@ -142,7 +143,8 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             latitudePerPixel: latitudePerPixel,
             longitudePerPixel: longitudePerPixel,
             zoom: zoom,
-            precise: precise
+            precise: precise,
+            distanceTolerance: distanceTolerance
         ).compactMap { item in
             item.observationLocationId?.absoluteString
         }
@@ -156,7 +158,8 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         latitudePerPixel: Double,
         longitudePerPixel: Double,
         zoom: Int,
-        precise: Bool
+        precise: Bool,
+        distanceTolerance: Double = 0
     ) async -> [ObservationMapItem] {
 
         // determine widest and tallest icon at this zoom level pixels
@@ -177,31 +180,51 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             minLongitude: queryLocationMinLongitude,
             maxLongitude: queryLocationMaxLongitude)
 
-        if precise {
-            var matchedItems: [ObservationMapItem] = []
+        var matchedItems: [ObservationMapItem] = []
+        
+        let tapLocation = CLLocationCoordinate2DMake(maxLatitude - ((maxLatitude - minLatitude) / 2.0), maxLongitude - ((maxLongitude - minLongitude) / 2.0))
 
-            for item in items {
-                guard let observationLocationId = item.observationLocationId else {
-                    continue
-                }
-                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
-                let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
-                if item.geometry is SFPoint {
-                    let include = await markerHitTest(
-                        location: CLLocationCoordinate2DMake(maxLatitude - ((maxLatitude - minLatitude) / 2.0), maxLongitude - ((maxLongitude - minLongitude) / 2.0)),
-                        zoom: zoom,
-                        tileProvider: tileProvider
+        for item in items {
+            guard let observationLocationId = item.observationLocationId else {
+                continue
+            }
+            if !precise {
+                matchedItems.append(item)
+                continue
+            }
+            
+            let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
+            let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
+            if item.geometry is SFPoint {
+                matchedItems.append(item)
+//                let include = await markerHitTest(
+//                    location: tapLocation,
+//                    zoom: zoom,
+//                    tileProvider: tileProvider
+//                )
+//                if include {
+//                    matchedItems.append(item)
+//                }
+            } else {
+                let mkshape = MKShape.fromGeometry(geometry: item.geometry, distance: nil)
+                if let polygon = mkshape as? MKPolygon {
+                    let include = polygonHitTest(
+                        polygon: polygon,
+                        location: tapLocation
                     )
+                    if include {
+                        matchedItems.append(item)
+                    }
+                } else if let line = mkshape as? MKPolyline {
+                    let include = lineHitTest(line: line, location: tapLocation, tolerance: distanceTolerance)
                     if include {
                         matchedItems.append(item)
                     }
                 }
             }
-
-            return matchedItems
-        } else {
-            return items
         }
+
+        return matchedItems
     }
 
     func getMaximumIconHeightToWidthRatio() -> CGSize {

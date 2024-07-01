@@ -24,6 +24,9 @@ struct ObservationMapItem: Equatable, Hashable {
     var minLongitude: Double?
     var primaryFieldText: String?
     var secondaryFieldText: String?
+    var strokeColor: UIColor?
+    var fillColor: UIColor?
+    var lineWidth: CGFloat?
 
     var coordinate: CLLocationCoordinate2D? {
         guard let geometry = geometry, let point = geometry.centroid() else {
@@ -56,7 +59,7 @@ struct ObservationMapItem: Equatable, Hashable {
         else {
             return nil
         }
-        var center = CLLocationCoordinate2D(
+        let center = CLLocationCoordinate2D(
             latitude: maxLatitude - ((maxLatitude - minLatitude) / 2.0),
             longitude: maxLongitude - ((maxLongitude - minLongitude) / 2.0)
         )
@@ -95,5 +98,11 @@ extension ObservationMapItem {
         self.minLongitude = observation.minLongitude
         self.primaryFieldText = observation.primaryFieldText
         self.secondaryFieldText = observation.secondaryFieldText
+        if let observation = observation.observation {
+            let style = ObservationShapeStyleParser.style(of: observation)
+            self.strokeColor = style?.strokeColor
+            self.fillColor = style?.fillColor
+            self.lineWidth = style?.lineWidth
+        }
     }
 }

@@ -581,6 +581,7 @@
 		F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0794A2C29F0160029C88D /* FeatureItemDefinition.swift */; };
 		F7E0794E2C29F4560029C88D /* StaticLayerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0794D2C29F4560029C88D /* StaticLayerRepository.swift */; };
 		F7E079502C29F5430029C88D /* StaticLayerLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0794F2C29F5430029C88D /* StaticLayerLocalDataSource.swift */; };
+		F7E079522C32EB750029C88D /* MKShapeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E079512C32EB750029C88D /* MKShapeExtensions.swift */; };
 		F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */; };
 		F7E2DF0725672C6900CD2ABA /* UIApplicationTopController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */; };
 		F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF0A2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift */; };
@@ -1425,6 +1426,7 @@
 		F7E0794A2C29F0160029C88D /* FeatureItemDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureItemDefinition.swift; sourceTree = "<group>"; };
 		F7E0794D2C29F4560029C88D /* StaticLayerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerRepository.swift; sourceTree = "<group>"; };
 		F7E0794F2C29F5430029C88D /* StaticLayerLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerLocalDataSource.swift; sourceTree = "<group>"; };
+		F7E079512C32EB750029C88D /* MKShapeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKShapeExtensions.swift; sourceTree = "<group>"; };
 		F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+IB.h"; sourceTree = "<group>"; };
 		F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+IB.m"; sourceTree = "<group>"; };
 		F7E2DF0625672C6900CD2ABA /* UIApplicationTopController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationTopController.swift; sourceTree = "<group>"; };
@@ -2390,6 +2392,7 @@
 				F7F4754025B76BD2006634F7 /* UITableViewExtensions.swift */,
 				F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */,
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
+				F7E079512C32EB750029C88D /* MKShapeExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3703,6 +3706,7 @@
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
+				F7E079522C32EB750029C88D /* MKShapeExtensions.swift in Sources */,
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
 				F7DE989A2C20D63F005372F8 /* FeedItemLocalDataSource.swift in Sources */,

@@ -28,20 +28,14 @@ class GeoPackageRepository: ObservableObject {
                 let manager = GPKGGeoPackageFactory.manager(),
                 let geoPackage = manager.open(key.geoPackageName),
                 let featureDao = geoPackage.featureDao(withTableName: key.tableName),
-                let resultSet = featureDao.query(forIdInt: Int32(key.featureId))
+                let featureRow = featureDao.query(forIdRow: Int32(key.featureId)) as? GPKGFeatureRow
             else {
                 return nil
             }
-            if resultSet.moveToNext() {
-                guard let featureRow = featureDao.featureRow(resultSet) else {
-                    return nil
-                }
-                let item = GeoPackageFeatureItem(featureRow: featureRow, geoPackage: geoPackage, layerName: key.layerName, projection: featureDao.projection)
-                return item
-            }
+            let item = GeoPackageFeatureItem(featureRow: featureRow, geoPackage: geoPackage, layerName: key.layerName, projection: featureDao.projection)
+            return item
         } else {
             return GeoPackageFeatureItem(maxFeaturesReached: true, featureCount: key.featureCount, layerName: key.layerName)
         }
-        return nil
     }
 }

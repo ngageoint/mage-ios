@@ -64,7 +64,8 @@ class ObservationTileRepository: TileRepository, ObservableObject {
         latitudePerPixel: Double,
         longitudePerPixel: Double,
         zoom: Int,
-        precise: Bool
+        precise: Bool,
+        distanceTolerance: Double
     ) async -> [String] {
         return await localDataSource.getMapItems(
             observationUri: observationUrl,

@@ -39,19 +39,31 @@ class ObservationMapImage: DataSourceImage {
             return kCLLocationCoordinate2DInvalid
         }()
 
-        var iconImage: UIImage? = iconImage(mapItem: mapItem, zoom: zoom)
-        
-        if let iconImage = iconImage ?? UIImage(named: "defaultMarker") {
-            if context != nil, CLLocationCoordinate2DIsValid(coordinate) {
-                let pixel = coordinate.toPixel(
-                    zoomLevel: zoom,
-                    swCorner: tileBounds.swCorner,
-                    neCorner: tileBounds.neCorner,
-                    tileSize: tileSize)
-                iconImage.draw(at: CGPoint(x: pixel.x - (iconImage.size.width / 2.0), y: pixel.y - iconImage.size.height))
+        let shape = MKShape.fromGeometry(geometry: feature, distance: nil)
+        if shape is MKPointAnnotation {
+            var iconImage: UIImage? = iconImage(mapItem: mapItem, zoom: zoom)
+            
+            if let iconImage = iconImage ?? UIImage(named: "defaultMarker") {
+                if context != nil, CLLocationCoordinate2DIsValid(coordinate) {
+                    let pixel = coordinate.toPixel(
+                        zoomLevel: zoom,
+                        swCorner: tileBounds.swCorner,
+                        neCorner: tileBounds.neCorner,
+                        tileSize: tileSize)
+                    iconImage.draw(at: CGPoint(x: pixel.x - (iconImage.size.width / 2.0), y: pixel.y - iconImage.size.height))
+                }
+                
+                return [iconImage]
             }
-
-            return [iconImage]
+        } else if let shape = shape as? MKPolygon {
+            polygonImage(
+                polygon: shape,
+                zoomLevel: zoom,
+                tileSize: tileSize,
+                tileBounds3857: tileBounds
+            )
+        } else if let shape = shape as? MKPolyline {
+            polylineImage(lineShape: shape, zoomLevel: zoom, tileSize: tileSize, tileBounds3857: tileBounds)
         }
 
         return []
@@ -106,12 +118,16 @@ class ObservationMapImage: DataSourceImage {
 
         }
 
-        path.lineWidth = 4
+        path.lineWidth = mapItem.lineWidth ?? 0
         path.close()
-        DataSources.observation.color.withAlphaComponent(0.3).setFill()
-        DataSources.observation.color.setStroke()
-        path.fill()
-        path.stroke()
+        if let fillColor = mapItem.fillColor {
+            fillColor.setFill()
+            path.fill()
+        }
+        if let strokeColor = mapItem.strokeColor {
+            strokeColor.setStroke()
+            path.stroke()
+        }
     }
 
     func polylineImage(
@@ -140,8 +156,10 @@ class ObservationMapImage: DataSourceImage {
 
         }
 
-        path.lineWidth = 4
-        DataSources.observation.color.setStroke()
-        path.stroke()
+        path.lineWidth = mapItem.lineWidth ?? 0
+        if let strokeColor = mapItem.strokeColor {
+            strokeColor.setStroke()
+            path.stroke()
+        }
     }
 }
