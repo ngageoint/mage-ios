@@ -99,14 +99,14 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
         
         var annotations: [Any] = []
         for lineObservation in lineObservations {
-            if lineHitTest(lineObservation: lineObservation, location: location, tolerance: tolerance) {
+            if lineObservation.hitTest(location: location, distanceTolerance: tolerance) {
                if let observation = lineObservation.observation {
                     annotations.append(observation)
                }
             }
         }
         for polygonObservation in polygonObservations {
-            if polygonHitTest(polygonObservation: polygonObservation, location: location) {
+            if polygonObservation.hitTest(location: location) {
                 if let observation = polygonObservation.observation {
                     annotations.append(observation)
                 }

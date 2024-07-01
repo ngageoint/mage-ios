@@ -114,7 +114,6 @@ class MageMapView: UIView, GeoPackageBaseMap {
         let visibleMapRect = mapView.visibleMapRect
         let annotationsVisible = mapView.annotations(in: visibleMapRect)
         
-//        var items: [Any] = []
         var itemKeys: [String: [String]] = [:]
         
         for annotation in annotationsVisible {
@@ -139,11 +138,25 @@ class MageMapView: UIView, GeoPackageBaseMap {
                 }
             }
         }
+        
+        // need to search visible overlays mkpolygon and mklines
+        let screenPercentage = UserDefaults.standard.shapeScreenClickPercentage
+        let distanceTolerance = (mapView.visibleMapRect.size.width) * Double(screenPercentage)
+        for overlay in mapView.overlays.compactMap({ overlay in
+            overlay as? DataSourceIdentifiable
+        }) {
+            if let polygon = overlay as? MKPolygon {
+                if polygon.hitTest(location: tapCoord) {
+                    itemKeys[overlay.dataSource.key, default: [String]()].append(overlay.itemKey)
+                }
+            } else if let polyline = overlay as? MKPolyline {
+                if polyline.hitTest(location: tapCoord, distanceTolerance: distanceTolerance) {
+                    itemKeys[overlay.dataSource.key, default: [String]()].append(overlay.itemKey)
+                }
+            }
+        }
         Task {
             for mixin in mapMixins {
-//                if let matchedItems = await mixin.items(at: tapCoord, mapView: mapView, touchPoint: tapPoint) {
-//                    items.append(contentsOf: matchedItems)
-//                }
                 let matchedItemKeys = await mixin.itemKeys(at: tapCoord, mapView: mapView, touchPoint: tapPoint)
                 itemKeys.merge(matchedItemKeys) { current, new in
                     Array(Set(current + new))

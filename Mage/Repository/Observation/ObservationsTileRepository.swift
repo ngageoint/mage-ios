@@ -208,15 +208,14 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             } else {
                 let mkshape = MKShape.fromGeometry(geometry: item.geometry, distance: nil)
                 if let polygon = mkshape as? MKPolygon {
-                    let include = polygonHitTest(
-                        polygon: polygon,
+                    let include = polygon.hitTest(
                         location: tapLocation
                     )
                     if include {
                         matchedItems.append(item)
                     }
                 } else if let line = mkshape as? MKPolyline {
-                    let include = lineHitTest(line: line, location: tapLocation, tolerance: distanceTolerance)
+                    let include = line.hitTest(location: tapLocation, distanceTolerance: distanceTolerance)
                     if include {
                         matchedItems.append(item)
                     }

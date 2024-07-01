@@ -166,16 +166,16 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         for (layerId, features) in staticLayers {
             for feature in features {
                 if let polyline = feature as? StyledPolyline {
-                    if lineHitTest(lineObservation: polyline, location: location, tolerance: tolerance) {
-                        if let currentEventId = Server.currentEventId(), 
+                    if polyline.hitTest(location: location, distanceTolerance: tolerance) {
+                        if let currentEventId = Server.currentEventId(),
                             let staticLayer = repository.getStaticLayer(remoteId: layerId, eventId: currentEventId)
                         {
                             annotations.append(FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: location, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil))
                         }
                     }
                 } else if let polygon = feature as? StyledPolygon {
-                    if polygonHitTest(polygonObservation: polygon, location: location) {
-                        if let currentEventId = Server.currentEventId(), 
+                    if polygon.hitTest(location: location) {
+                        if let currentEventId = Server.currentEventId(),
                             let staticLayer = repository.getStaticLayer(remoteId: layerId, eventId: currentEventId)
                         {
                             annotations.append(FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: location, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil))

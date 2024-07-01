@@ -10,30 +10,33 @@ import Foundation
 import MapKit
 import DataSourceDefinition
 
-//public protocol IdentifiableAnnotation: NSObjectProtocol, MKAnnotation, Identifiable, Hashable {
-//    var id: Any { get }
-//}
-
-class UnknownDefinition: DataSourceDefinition {
-    var mappable: Bool = false
-
-    var color: UIColor = .magenta
-
-    var imageName: String?
+public protocol DataSourceIdentifiable {
+    var id: String { get set }
+    var itemKey: String { get set }
     
-    var systemImageName: String? = "face.smiling"
+    var dataSource: any DataSourceDefinition { get set }
+}
 
-    var key: String = "unknown"
+public class UnknownDefinition: DataSourceDefinition {
+    public var mappable: Bool = false
 
-    var name: String = "Unknown"
+    public var color: UIColor = .magenta
 
-    var fullName: String = "Unknown"
+    public var imageName: String?
+    
+    public var systemImageName: String? = "face.smiling"
 
-    static let definition = UnknownDefinition()
+    public var key: String = "unknown"
+
+    public var name: String = "Unknown"
+
+    public var fullName: String = "Unknown"
+
+    public static let definition = UnknownDefinition()
     private init() { }
 }
 
-open class DataSourceAnnotation: NSObject, MKAnnotation, Identifiable {
+open class DataSourceAnnotation: NSObject, MKAnnotation, Identifiable, DataSourceIdentifiable {
     static func == (lhs: DataSourceAnnotation, rhs: DataSourceAnnotation) -> Bool {
         lhs.id == rhs.id
     }
