@@ -1,30 +1,26 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
 import MapKit
 
 extension MKMapView {
 
     static let MAX_CLUSTER_ZOOM = 17
 
+    // modified from https://github.com/d-babych/mapkit-wrap/blob/master/MapKitWrap/MyMap.swift
     public var zoomLevel: Int {
-        let maxZoom: Double = 20
-        var width = self.frame.size.width
-        if width == 0.0 {
-            let windowSize = UIApplication.shared.connectedScenes
-                .compactMap({ scene -> UIWindow? in
-                    (scene as? UIWindowScene)?.keyWindow
-                })
-                .first?
-                .frame
-                .size
-            width = windowSize?.width ?? 0.0
+        // function returns current zoom of the map
+        var angleCamera = self.camera.heading
+        if angleCamera > 270 {
+            angleCamera = 360 - angleCamera
+        } else if angleCamera > 90 {
+            angleCamera = fabs(angleCamera - 180)
         }
-        if width != 0.0 {
-            let zoomScale = self.visibleMapRect.size.width / Double(width)
-            let zoomExponent = log2(zoomScale)
-            return Int(maxZoom - ceil(zoomExponent))
-        }
-        return 0
-    }
+        let angleRad = .pi * angleCamera / 180 // camera heading in radians
+        let width = Double(self.frame.size.width)
+        let height = Double(self.frame.size.height)
+        let heightOffset : Double = 20 // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
+        // calculating Longitude span corresponding to normal (non-rotated) width
+        let spanStraight = width * self.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad))
+        let double = log2(360 * ((width / 256) / spanStraight)) + 1
+        return Int(double)
+      }
 
 }
