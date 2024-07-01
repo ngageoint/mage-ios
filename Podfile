@@ -7,7 +7,6 @@ project 'MAGE.xcodeproj'
 use_modular_headers!
 
 def common_pods
-  pod 'UIImage-Categories', '~> 0.0.1'
   pod 'HexColors', '~> 4.0.0'
   pod 'libPhoneNumber-iOS', '~> 0.9.15'
   pod 'zxcvbn-ios'

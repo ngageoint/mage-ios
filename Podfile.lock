@@ -723,7 +723,6 @@ PODS:
     - sf-ios (~> 4.1.3)
   - SSZipArchive (2.2.3)
   - tiff-ios (4.0.2)
-  - UIImage-Categories (0.0.1)
   - zxcvbn-ios (1.0.4)
 
 DEPENDENCIES:
@@ -746,7 +745,6 @@ DEPENDENCIES:
   - PureLayout
   - Quick (from `https://github.com/Quick/Quick.git`, commit `a0a5fc857cea079fbe973e4faa80b6ceaf17bd46`)
   - SSZipArchive (~> 2.2.2)
-  - UIImage-Categories (~> 0.0.1)
   - zxcvbn-ios
 
 SPEC REPOS:
@@ -783,7 +781,6 @@ SPEC REPOS:
     - sf-wkt-ios
     - SSZipArchive
     - tiff-ios
-    - UIImage-Categories
     - zxcvbn-ios
 
 EXTERNAL SOURCES:
@@ -830,9 +827,8 @@ SPEC CHECKSUMS:
   sf-wkt-ios: dd33f0c9905428834ff6d1ee6e55cfeaa7349985
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   tiff-ios: 1ad6750cd8bb3db75bd2977e40145813389786b9
-  UIImage-Categories: 5103b772ae91894f4d650eb696b006f4a2487ec3
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: e557879bf92806b29cf2424408d078cced195e74
+PODFILE CHECKSUM: 73af766e5ac25b2946d50fd3d63489fc17691b43
 
 COCOAPODS: 1.15.2
