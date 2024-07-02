@@ -40,7 +40,12 @@ class StaticPointAnnotation: MapAnnotation {
                 annotationView.annotation = self
                 return annotationView
             }
-            return MKMarkerAnnotationView(annotation: self, reuseIdentifier: "pinAnnotation")
+            let annotationView = MKMarkerAnnotationView(annotation: self, reuseIdentifier: "pinAnnotation")
+            annotationView.titleVisibility = .hidden
+            annotationView.subtitleVisibility = .hidden
+            annotationView.canShowCallout = false
+            annotationView.isEnabled = false
+            return annotationView
         }()
         
         self.view = annotationView
