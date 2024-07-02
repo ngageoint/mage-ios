@@ -185,6 +185,7 @@ extension FeedsMapMixin : FeedItemDelegate {
     func removeFeedItem(_ feedItem: FeedItem) {
         if (feedItem.isMappable) {
             feedsMap.mapView?.removeAnnotation(feedItem);
+            feedItem.view = nil
         }
     }
 }
