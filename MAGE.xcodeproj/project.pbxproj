@@ -523,6 +523,7 @@
 		F7CE2304254369BD00D710DE /* checkboxForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2303254369BD00D710DE /* checkboxForm.json */; };
 		F7CE230A2544676800D710DE /* AttachmentFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE23092544676800D710DE /* AttachmentFieldView.swift */; };
 		F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */; };
+		F7CE8D172C335DA9002A47F7 /* StaticLayerFeatureDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE8D162C335DA9002A47F7 /* StaticLayerFeatureDefinition.swift */; };
 		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
@@ -588,7 +589,7 @@
 		F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */; };
 		F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */; };
 		F7E2DF5525792E5D00CD2ABA /* FieldSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */; };
-		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */; };
+		F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.swift */; };
 		F7E40A6626939A4200E50E26 /* UserBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */; };
 		F7E40A6826939B4100E50E26 /* UserSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A6726939B4100E50E26 /* UserSummaryView.swift */; };
 		F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */; };
@@ -1361,6 +1362,7 @@
 		F7CE2303254369BD00D710DE /* checkboxForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = checkboxForm.json; sourceTree = "<group>"; };
 		F7CE23092544676800D710DE /* AttachmentFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFieldView.swift; sourceTree = "<group>"; };
 		F7CE230D2544714900D710DE /* AttachmentFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFieldViewTests.swift; sourceTree = "<group>"; };
+		F7CE8D162C335DA9002A47F7 /* StaticLayerFeatureDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerFeatureDefinition.swift; sourceTree = "<group>"; };
 		F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingFisherUIImageView.swift; sourceTree = "<group>"; };
 		F7CFC09B2020C9FB003250A3 /* GeometryEditCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeometryEditCoordinator.h; sourceTree = "<group>"; };
 		F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeometryEditCoordinator.m; sourceTree = "<group>"; };
@@ -1434,8 +1436,7 @@
 		F7E2DF1625768CD100CD2ABA /* ObservationEditCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCoordinator.swift; sourceTree = "<group>"; };
 		F7E2DF502576CA4700CD2ABA /* MockObservationEditDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationEditDelegate.swift; sourceTree = "<group>"; };
 		F7E2DF5425792E5D00CD2ABA /* FieldSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldSelectionDelegate.swift; sourceTree = "<group>"; };
-		F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticPointAnnotation.h; sourceTree = "<group>"; };
-		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticPointAnnotation.m; sourceTree = "<group>"; };
+		F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticPointAnnotation.swift; sourceTree = "<group>"; };
 		F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBottomSheetView.swift; sourceTree = "<group>"; };
 		F7E40A6726939B4100E50E26 /* UserSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSummaryView.swift; sourceTree = "<group>"; };
 		F7E40A692693A22E00E50E26 /* UserAvatarUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarUIImageView.swift; sourceTree = "<group>"; };
@@ -1877,8 +1878,7 @@
 				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
 				F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */,
 				F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */,
-				F7E3D4B41A7ACCBB003B7D02 /* StaticPointAnnotation.h */,
-				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.m */,
+				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.swift */,
 				F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.swift */,
 				F7FD4DF81A80126300DAABA6 /* StyledPolyline.swift */,
 				F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */,
@@ -3179,6 +3179,7 @@
 			children = (
 				F7E0794D2C29F4560029C88D /* StaticLayerRepository.swift */,
 				F7E0794F2C29F5430029C88D /* StaticLayerLocalDataSource.swift */,
+				F7CE8D162C335DA9002A47F7 /* StaticLayerFeatureDefinition.swift */,
 			);
 			path = StaticLayer;
 			sourceTree = "<group>";
@@ -3852,6 +3853,7 @@
 				F795ED0524B8DFB80028FBFC /* LocationUtilities.swift in Sources */,
 				F72D430B2694B60300F9AC3B /* NSString+Contains.m in Sources */,
 				F72D42EE2694B60300F9AC3B /* User.swift in Sources */,
+				F7CE8D172C335DA9002A47F7 /* StaticLayerFeatureDefinition.swift in Sources */,
 				F76FFBE6261D0D6900532330 /* ObservationBottomSheetView.swift in Sources */,
 				2F320B701BEBB90300C7F66C /* SignUpViewController.m in Sources */,
 				F7DE98782C13390B005372F8 /* ObservationDefinition.swift in Sources */,
@@ -4005,7 +4007,7 @@
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
 				F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
-				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.m in Sources */,
+				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.swift in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
 				F7F8B4B726CE88B500DACCC7 /* AttachmentProgressViewController.swift in Sources */,
 				F730B94B2683D273004AD64A /* CardHeader.swift in Sources */,

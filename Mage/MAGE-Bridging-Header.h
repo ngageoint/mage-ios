@@ -56,7 +56,6 @@
 #import "UINavigationItem+Subtitle.h"
 #import "ObservationFilterTableViewController.h"
 #import "ObservationTableHeaderView.h"
-#import "StaticPointAnnotation.h"
 #import "LocationFilterTableViewController.h"
 
 #import "AttachmentPushService.h"

@@ -11,6 +11,7 @@ import MapKit
 import MapFramework
 import CoreData
 import geopackage_ios
+import DataSourceDefinition
 
 protocol StaticLayerMap {
     var mapView: MKMapView? { get set }
@@ -87,13 +88,12 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                         continue
                     }
                     if featureType == "Point" {
-                        if let annotation = StaticPointAnnotation(feature: feature) {
-                            annotation.layerName = staticLayer.name
-                            annotation.title = StaticLayer.featureName(feature: feature)
-                            annotation.subtitle = StaticLayer.featureDescription(feature: feature)
-                            staticLayerMap.mapView?.addAnnotation(annotation)
-                            annotations.append(annotation)
-                        }
+                        let annotation = StaticPointAnnotation(feature: feature)
+                        annotation.layerName = staticLayer.name
+                        annotation.title = StaticLayer.featureName(feature: feature)
+                        annotation.subtitle = StaticLayer.featureDescription(feature: feature)
+                        staticLayerMap.mapView?.addAnnotation(annotation)
+                        annotations.append(annotation)
                     } else if featureType == "Polygon" {
                         if let coordinates = StaticLayer.featureCoordinates(feature: feature) {
                             let polygon = StyledPolygon.generate(coordinates: coordinates as? [[[NSNumber]]] ?? [])
@@ -110,6 +110,10 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             polygon.title = StaticLayer.featureName(feature: feature)
                             polygon.subtitle = StaticLayer.featureDescription(feature: feature)
                             
+                            polygon.itemKey = FeatureItem(featureId: 0, featureDetail: polygon.subtitle, coordinate: polygon.coordinate, featureTitle: polygon.title, layerName: staticLayer.name, iconURL: nil).toKey()
+                            polygon.id = polygon.itemKey
+                            polygon.dataSource = DataSources.staticLayerFeature
+                            
                             annotations.append(polygon)
                             staticLayerMap.mapView?.addOverlay(polygon)
                         }
@@ -124,6 +128,10 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                             
                             polyline.title = StaticLayer.featureName(feature: feature)
                             polyline.subtitle = StaticLayer.featureDescription(feature: feature)
+                            
+                            polyline.itemKey = FeatureItem(featureId: 0, featureDetail: polyline.subtitle, coordinate: polyline.coordinate, featureTitle: polyline.title, layerName: staticLayer.name, iconURL: nil).toKey()
+                            polyline.id = polyline.itemKey
+                            polyline.dataSource = DataSources.staticLayerFeature
                             
                             annotations.append(polyline)
                             staticLayerMap.mapView?.addOverlay(polyline)
