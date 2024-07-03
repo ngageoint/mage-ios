@@ -65,11 +65,11 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                     var regions: [MKCoordinateRegion] = []
                     for change in changes {
                         switch (change) {
-                        case .insert(offset: let offset, element: let element, associatedWith: let associatedWith):
+                        case .insert(offset: _, element: let element, associatedWith: _):
                             if let region = element.region {
                                 regions.append(region)
                             }
-                        case .remove(offset: let offset, element: let element, associatedWith: let associatedWith):
+                        case .remove(offset: _, element: let element, associatedWith: _):
                             if let region = element.region {
                                 regions.append(region)
                             }
@@ -196,6 +196,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
             let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
             if item.geometry is SFPoint {
+                // for now don't do precise matching on points.  Needs to be sped up a lot
                 matchedItems.append(item)
 //                let include = await markerHitTest(
 //                    location: tapLocation,

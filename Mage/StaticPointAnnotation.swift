@@ -103,8 +103,8 @@ class StaticPointAnnotation: DataSourceAnnotation {
                 }
                 return UIImage(named: "marker")
             }()
-            if let image = image, let cgImage = image.cgImage {
-                let widthScale = 35.0 // * UIScreen.main.scale
+            if let image = image {
+                let widthScale = 35.0
                 let scaledImage = image.aspectResize(to: CGSize(width: widthScale, height: image.size.height / (image.size.width / widthScale)))
                 Task { @MainActor in
                     annotationView.image = scaledImage

@@ -78,9 +78,6 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
                 minLongitude: queryLocationMinLongitude,
                 maxLongitude: queryLocationMaxLongitude
             )
-//            .map({ mapItem in
-//                ObservationMapImage(mapItem: mapItem)
-//            })
         } else if let observationUrl = observationUrl {
             items = await localDataSource.getMapItems(
                 observationUri: observationUrl,
@@ -89,9 +86,6 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
                 minLongitude: queryLocationMinLongitude,
                 maxLongitude: queryLocationMaxLongitude
             )
-//            .map({ mapItem in
-//                ObservationMapImage(mapItem: mapItem)
-//            })
         }
         
         guard let items = items else {
