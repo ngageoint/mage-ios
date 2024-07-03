@@ -27,13 +27,14 @@ class FeatureItem: NSObject, Codable {
         }
     }
     
-    init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, layerName: String? = nil, iconURL: URL? = nil) {
+    init(featureId: Int = 0, featureDetail: String? = nil, coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid, featureTitle: String? = nil, layerName: String? = nil, iconURL: URL? = nil, featureDate: Date? = nil) {
         self.featureId = featureId
         self.featureDetail = featureDetail
         self.coordinate = coordinate
         self.featureTitle = featureTitle
         self.iconURL = iconURL
         self.layerName = layerName;
+        self.featureDate = featureDate
     }
     
     var featureId: Int = 0;

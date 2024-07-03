@@ -3,20 +3,31 @@
 //  MAGE
 //
 //
+import MapKit
+import MapFramework
+import DataSourceDefinition
 
-class StaticPointAnnotation: MapAnnotation {
-    
+class StaticPointAnnotation: DataSourceAnnotation {
+    override var dataSource: any DataSourceDefinition {
+        get {
+            DataSources.featureItem
+        }
+        set { }
+    }
     var feature: [AnyHashable: Any]?
     var iconUrl: String?
     var layerName: String?
+    var title: String?
+    var subtitle: String?
+    var view: MKAnnotationView?
     
-    public convenience init(feature: [AnyHashable: Any]) {
-        self.init()
+    public init(feature: [AnyHashable: Any]) {
         self.feature = feature
         // set a title so that the annotation tap event will actually occur on the map delegate
         self.title = " "
+        var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid
         if let coordinates = (feature["geometry"] as? [AnyHashable: Any])?["coordinates"] as? [Double] {
-            self.coordinate = CLLocationCoordinate2D(latitude: coordinates[1], longitude: coordinates[0])
+            coordinate = CLLocationCoordinate2D(latitude: coordinates[1], longitude: coordinates[0])
         }
         if let properties = feature["properties"] as? [AnyHashable: Any],
            let style = properties["style"] as? [AnyHashable: Any],
@@ -25,9 +36,26 @@ class StaticPointAnnotation: MapAnnotation {
            let href = icon["href"] as? String {
             self.iconUrl = href
         }
+        var iconURL: URL?
+        if let iconUrlStr = self.iconUrl {
+            if iconUrlStr.hasPrefix("http") {
+                iconURL = URL(string: iconUrlStr)
+            } else {
+                iconURL = URL(fileURLWithPath: "\(FeatureItem.getDocumentsDirectory())/\(iconUrlStr)")
+            }
+        }
+        let fi = FeatureItem(
+            featureDetail: StaticLayer.featureDescription(feature: feature),
+            coordinate: coordinate,
+            featureTitle: StaticLayer.featureName(feature: feature),
+            layerName: "",
+            iconURL: iconURL,
+            featureDate: StaticLayer.featureTimestamp(feature: feature)
+        )
+        super.init(coordinate: coordinate, itemKey: fi.toKey())
     }
     
-    public override func viewForAnnotation(on mapView: MKMapView, scheme: MDCContainerScheming?) -> MKAnnotationView {
+    func viewForAnnotation(on mapView: MKMapView, scheme: MDCContainerScheming?) -> MKAnnotationView {
         if let iconUrl = self.iconUrl {
             return customAnnotationView(mapView: mapView, iconUrl: iconUrl)
         }

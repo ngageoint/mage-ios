@@ -129,9 +129,6 @@ class MageMapView: UIView, GeoPackageBaseMap {
                         }
                     } else if let annotation = mkAnnotation as? FeedItem {
                         itemKeys[DataSources.feedItem.key, default: [String]()].append(annotation.objectID.uriRepresentation().absoluteString)
-                    } else if let annotation = mkAnnotation as? StaticPointAnnotation {
-                        let featureItem = FeatureItem(annotation: annotation)
-                        itemKeys[DataSources.featureItem.key, default: [String]()].append(featureItem.toKey())
                     } else {
                         annotationsTapped.append(mkAnnotation)
                     }
