@@ -171,9 +171,9 @@ public class MapCoordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDel
     }
 
     public func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        for mixin in map.mixins.mixins {
-            mixin.regionDidChange(mapView: mapView, animated: animated) //, centerCoordinate: mapView.centerCoordinate)
-        }
+//        for mixin in map.mixins.mixins {
+//            mixin.regionDidChange(mapView: mapView, animated: animated) //, centerCoordinate: mapView.centerCoordinate)
+//        }
     }
 
     public func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {

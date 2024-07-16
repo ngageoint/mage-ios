@@ -14,25 +14,35 @@ class ObservationsMap: DataSourceMap {
     let OBSERVATION_MAP_ITEM_ANNOTATION_VIEW_REUSE_ID = "OBSERVATION_ICON"
     var enlargedAnnotation: DataSourceAnnotation?
     var focusedObservationTileOverlay: DataSourceTileOverlay?
+    
+    @Injected(\.observationsMapFeatureRepository)
+    var mapFeatureRepository: ObservationsMapFeatureRepository
+    
+    @Injected(\.observationsTileRepository)
+    var repository: ObservationsTileRepository
 
-    init(
-        repository: TileRepository? = nil,
-        mapFeatureRepository: MapFeatureRepository? = nil
-    ) {
+    init() {
         super.init(
-            dataSource: DataSources.observation,
+            dataSource: DataSources.observation
+//            ,
+//            repository: repository,
+//            mapFeatureRepository: mapFeatureRepository
+        )
+        viewModel = DataSourceMapViewModel(
+            dataSource: dataSource,
+            key: uuid.uuidString,
             repository: repository,
             mapFeatureRepository: mapFeatureRepository
         )
-        viewModel.userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
+        viewModel?.userDefaultsShowPublisher = UserDefaults.standard.publisher(for: \.hideObservations)
 
         UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
             .removeDuplicates()
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
-                    await repository?.clearCache()
-                    self?.viewModel.refresh()
+                    await self?.repository.clearCache()
+                    self?.viewModel?.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -41,8 +51,8 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
-                    await repository?.clearCache()
-                    self?.viewModel.refresh()
+                    await self?.repository.clearCache()
+                    self?.viewModel?.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -51,8 +61,8 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
-                    await repository?.clearCache()
-                    self?.viewModel.refresh()
+                    await self?.repository.clearCache()
+                    self?.viewModel?.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -61,8 +71,8 @@ class ObservationsMap: DataSourceMap {
             .sink { [weak self] order in
                 NSLog("Order update \(self?.dataSource.key ?? ""): \(order)")
                 Task { [self] in
-                    await repository?.clearCache()
-                    self?.viewModel.refresh()
+                    await self?.repository.clearCache()
+                    self?.viewModel?.refresh()
                 }
             }
             .store(in: &cancellable)
@@ -70,21 +80,21 @@ class ObservationsMap: DataSourceMap {
             .removeDuplicates()
             .sink { [weak self] order in
                 Task { [self] in
-                    await repository?.clearCache()
-                    self?.viewModel.refresh()
+                    await self?.repository.clearCache()
+                    self?.viewModel?.refresh()
                 }
             }
             .store(in: &cancellable)
 
         NotificationCenter.default.publisher(for: .MAGEFormFetched)
             .receive(on: DispatchQueue.main)
-            .sink { notification in
+            .sink { [weak self] notification in
                 if let event: Event = notification.object as? Event {
                     if event.remoteId == Server.currentEventId() {
                         Task { [self] in
-                            await repository?.clearCache()
-                            await self.redrawFeatures()
-                            self.viewModel.refresh()
+                            await self?.repository.clearCache()
+                            await self?.redrawFeatures()
+                            self?.viewModel?.refresh()
                         }
                     }
                 }

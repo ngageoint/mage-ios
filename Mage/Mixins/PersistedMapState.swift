@@ -9,23 +9,19 @@
 import Foundation
 import MapKit
 import MapFramework
-
-protocol PersistedMapState {
-    var mapView: MKMapView? { get set }
-    var persistedMapStateMixin: PersistedMapStateMixin? { get set }
-}
+import Combine
 
 class PersistedMapStateMixin: NSObject, MapMixin {
-    var mapView: MKMapView?
-    var persistedMapState: PersistedMapState?
+    var cancellables = Set<AnyCancellable>()
     
-    init(persistedMapState: PersistedMapState) {
-        self.persistedMapState = persistedMapState
-        self.mapView = self.persistedMapState?.mapView
-    }
+    @Injected(\.mapStateRepository)
+    var mapStateRepository: MapStateRepository
     
     func removeMixin(mapView: MKMapView, mapState: MapState) {
-
+        for cancellable in cancellables {
+            cancellable.cancel()
+            cancellables.remove(cancellable)
+        }
     }
 
     func updateMixin(mapView: MKMapView, mapState: MapState) {
@@ -33,17 +29,19 @@ class PersistedMapStateMixin: NSObject, MapMixin {
     }
 
     func setupMixin(mapView: MKMapView, mapState: MapState) {
-        setMapState()
+        mapStateRepository.$region.sink { region in
+            if let region = region {
+                UserDefaults.standard.mapRegion = region
+            }
+        }
+        .store(in: &cancellables)
+        setMapState(mapView: mapView)
     }
     
-    func setMapState() {
+    func setMapState(mapView: MKMapView) {
         let region = UserDefaults.standard.mapRegion
         if CLLocationCoordinate2DIsValid(region.center) {
-            persistedMapState?.mapView?.region = region
+            mapView.region = region
         }
-    }
-    
-    func regionDidChange(mapView: MKMapView, animated: Bool) {
-        UserDefaults.standard.mapRegion = mapView.region
     }
 }

@@ -17,7 +17,6 @@ public protocol MapMixin {
     func cleanupMixin()
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer?
     func traitCollectionUpdated(previous: UITraitCollection?)
-    func regionDidChange(mapView: MKMapView, animated: Bool)
     func regionWillChange(mapView: MKMapView, animated: Bool)
     func didChangeUserTrackingMode(mapView: MKMapView, animated: Bool)
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView?
@@ -66,7 +65,6 @@ public extension MapMixin {
     }
 
     func traitCollectionUpdated(previous: UITraitCollection?){ }
-    func regionDidChange(mapView: MKMapView, animated: Bool) { }
     func regionWillChange(mapView: MKMapView, animated: Bool) { }
     func didChangeUserTrackingMode(mapView: MKMapView, animated: Bool) { }
 

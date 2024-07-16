@@ -10,14 +10,8 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap
+class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, GeoPackageLayerMap, FeedsMap
 {
-    @Injected(\.observationsMapFeatureRepository)
-    var observationsMapFeatureRepository: ObservationsMapFeatureRepository
-    
-    @Injected(\.observationsTileRepository)
-    var observationsTileRepository: ObservationsTileRepository
-    
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
 
@@ -117,7 +111,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
                 mapMixins.append(mapDirectionsMixin!)
             }
             
-            persistedMapStateMixin = PersistedMapStateMixin(persistedMapState: self)
+            persistedMapStateMixin = PersistedMapStateMixin()
             hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, rootView: self)
             canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, shouldShowFab: UIDevice.current.userInterfaceIdiom != .pad, rootView: self, mapStackView: mapStack, locationService: nil)
             canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 2)
@@ -143,10 +137,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(feedsMapMixin!)
             mapMixins.append(onlineLayerMapMixin!)
 
-            observationMap = ObservationsMap(
-                repository: observationsTileRepository,
-                mapFeatureRepository: observationsMapFeatureRepository
-            )
+            observationMap = ObservationsMap()
             mapMixins.append(observationMap!)
         }
         

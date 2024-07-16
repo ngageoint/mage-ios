@@ -346,6 +346,7 @@
 		F752B5F42760DD7600BFA6EC /* MageMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F32760DD7600BFA6EC /* MageMapView.swift */; };
 		F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752B5F62760DDEC00BFA6EC /* GeoPackageBaseMap.swift */; };
 		F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */; };
+		F754C6532C35E66E00E408E9 /* MapStateRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F754C6522C35E66E00E408E9 /* MapStateRepository.swift */; };
 		F755B55B25E41BFF008E8D41 /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
 		F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F75A10E320486489002F9906 /* StoredPasswordTests.m */; };
 		F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */; };
@@ -1141,6 +1142,7 @@
 		F752B5F32760DD7600BFA6EC /* MageMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageMapView.swift; sourceTree = "<group>"; };
 		F752B5F62760DDEC00BFA6EC /* GeoPackageBaseMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageBaseMap.swift; sourceTree = "<group>"; };
 		F7538139243BBB7900F23BF8 /* NavigationControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerObserver.swift; sourceTree = "<group>"; };
+		F754C6522C35E66E00E408E9 /* MapStateRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStateRepository.swift; sourceTree = "<group>"; };
 		F755B55A25E41BFF008E8D41 /* testRecording.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = testRecording.mp4; sourceTree = "<group>"; };
 		F75A10E320486489002F9906 /* StoredPasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoredPasswordTests.m; sourceTree = "<group>"; };
 		F75BF90C272762BC00D913D2 /* ThemeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewController.swift; sourceTree = "<group>"; };
@@ -2003,6 +2005,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F754C6512C35E64F00E408E9 /* Map */,
 				F7E0794C2C29F4460029C88D /* StaticLayer */,
 				F7E079472C29EC790029C88D /* FeatureItem */,
 				F7E0793F2C2209890029C88D /* GeoPackage */,
@@ -2438,6 +2441,14 @@
 				F706888A2BA3A7D900D8E2EA /* DataSourceMap.swift */,
 			);
 			path = Mixins;
+			sourceTree = "<group>";
+		};
+		F754C6512C35E64F00E408E9 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				F754C6522C35E66E00E408E9 /* MapStateRepository.swift */,
+			);
+			path = Map;
 			sourceTree = "<group>";
 		};
 		F75DD30B1A97A9B50007FA3F /* Segues */ = {
@@ -4043,6 +4054,7 @@
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
 				F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */,
+				F754C6532C35E66E00E408E9 /* MapStateRepository.swift in Sources */,
 				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
 				F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */,
 				F7D43BE6269F3C1800561A8F /* FeedItemActionsDelegate.swift in Sources */,

@@ -21,7 +21,14 @@ class ObservationMap: DataSourceMap {
         repository: TileRepository? = nil,
         mapFeatureRepository: MapFeatureRepository? = nil
     ) {
-        super.init(dataSource: DataSources.observation, repository: repository, mapFeatureRepository: mapFeatureRepository)
+        super.init(dataSource: DataSources.observation)
+        viewModel = DataSourceMapViewModel(
+            dataSource: dataSource,
+            key: uuid.uuidString,
+            repository: repository,
+            mapFeatureRepository: mapFeatureRepository
+        )
+//        , repository: repository, mapFeatureRepository: mapFeatureRepository)
     }
     
     override func handleFeatureChanges(annotations: [DataSourceAnnotation]) -> Bool {

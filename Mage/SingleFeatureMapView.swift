@@ -24,7 +24,7 @@ class SingleFeatureMapView: MageMapView, GeoPackageLayerMap, SFGeometryMap {
         }
         set {
             if let observationUri = newValue?.objectID.uriRepresentation() {
-                observationMapMixin.viewModel.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri)
+                observationMapMixin.viewModel?.mapFeatureRepository = ObservationMapFeatureRepository(observationUri: observationUri)
 //                observationMapMixin.refresh()
 //                if let mapView = mapView {
 //                    observationMapMixin.refreshMap(mapState: mapState)

@@ -20,7 +20,7 @@ class DataSourceMap: MapMixin {
     var uuid: UUID = UUID()
     var cancellable = Set<AnyCancellable>()
     
-    var viewModel: DataSourceMapViewModel
+    var viewModel: DataSourceMapViewModel?
 
     var scheme: MDCContainerScheming?
     var mapState: MapState?
@@ -29,19 +29,20 @@ class DataSourceMap: MapMixin {
     var dataSource: any DataSourceDefinition
     
     var currentAnnotationViews: [String: MKAnnotationView] = [:]
+//    var region: MKCoordinateRegion?
 
     init(
-        dataSource: any DataSourceDefinition,
-        repository: TileRepository? = nil,
-        mapFeatureRepository: MapFeatureRepository? = nil
+        dataSource: any DataSourceDefinition
+//        repository: TileRepository? = nil,
+//        mapFeatureRepository: MapFeatureRepository? = nil
     ) {
         self.dataSource = dataSource
-        viewModel = DataSourceMapViewModel(
-            dataSource: dataSource,
-            key: uuid.uuidString,
-            repository: repository,
-            mapFeatureRepository: mapFeatureRepository
-        )
+//        viewModel = DataSourceMapViewModel(
+//            dataSource: dataSource,
+//            key: uuid.uuidString,
+//            repository: repository,
+//            mapFeatureRepository: mapFeatureRepository
+//        )
     }
 
     func cleanupMixin() {
@@ -58,14 +59,14 @@ class DataSourceMap: MapMixin {
 
         updateMixin(mapView: mapView, mapState: mapState)
 
-        viewModel.$annotations.sink { annotations in
+        viewModel?.$annotations.sink { annotations in
             Task {
                 await self.handleFeatureChanges(annotations: annotations)
             }
         }
         .store(in: &cancellable)
         
-        viewModel.$tileOverlays.sink { tileOverlays in
+        viewModel?.$tileOverlays.sink { tileOverlays in
             self.updateTileOverlays(tileOverlays: tileOverlays)
         }
         .store(in: &cancellable)
@@ -80,7 +81,7 @@ class DataSourceMap: MapMixin {
     }
     
     private func updateTileOverlays(tileOverlays: [DataSourceTileOverlay]) {
-        guard let mapView = mapView else {
+        guard let mapView = mapView, let viewModel = viewModel else {
             return
         }
         // save these so we can remove them later
@@ -104,7 +105,7 @@ class DataSourceMap: MapMixin {
             annotation.dataSource.key == self.dataSource.key
         }) ?? []
         mapView?.removeAnnotations(existingAnnotations)
-        mapView?.addAnnotations(viewModel.annotations)
+        mapView?.addAnnotations(viewModel?.annotations ?? [])
     }
     
     func updateMixin(mapView: MKMapView, mapState: MapState) { }
@@ -207,14 +208,14 @@ class DataSourceMap: MapMixin {
         mapView.removeAnnotations(removals)
         NSLog("Annotation count: \(mapView.annotations.count)")
         
-        mapView.addOverlays(viewModel.featureOverlays, level: .aboveLabels)
+        mapView.addOverlays(viewModel?.featureOverlays ?? [], level: .aboveLabels)
         return !inserts.isEmpty || !removals.isEmpty
     }
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {
-        mapView.removeOverlays(viewModel.featureOverlays)
-        mapView.removeAnnotations(viewModel.annotations)
-        mapView.removeOverlays(viewModel.tileOverlays)
+        mapView.removeOverlays(viewModel?.featureOverlays ?? [])
+        mapView.removeAnnotations(viewModel?.annotations ?? [])
+        mapView.removeOverlays(viewModel?.tileOverlays ?? [])
     }
 
     func items(
@@ -231,7 +232,7 @@ class DataSourceMap: MapMixin {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [String: [String]] {
-        return await viewModel.itemKeys(at: location, mapView: mapView, touchPoint: touchPoint)
+        return await viewModel?.itemKeys(at: location, mapView: mapView, touchPoint: touchPoint) ?? [:]
     }
 
     var tileRenderer: MKOverlayRenderer?
@@ -252,10 +253,5 @@ class DataSourceMap: MapMixin {
 
     func viewForAnnotation(annotation: MKAnnotation, mapView: MKMapView) -> MKAnnotationView? {
         return nil
-    }
-    
-    func regionDidChange(mapView: MKMapView, animated: Bool) {
-        NSLog("Region did change: \(mapView.zoomLevel), \(mapView.region)")
-        viewModel.setZoomAndRegion(zoom: mapView.zoomLevel, region: mapView.region)
     }
 }

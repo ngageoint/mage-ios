@@ -15,6 +15,9 @@ class MageMapView: UIView, GeoPackageBaseMap {
     @Injected(\.bottomSheetRepository)
     var bottomSheetRepository: BottomSheetRepository
     
+    @Injected(\.mapStateRepository)
+    var mapStateRepository: MapStateRepository
+    
     var mapView: MKMapView?
     var scheme: MDCContainerScheming?;
     var mapMixins: [MapMixin] = []
@@ -189,9 +192,10 @@ extension MageMapView : MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         NSLog("Mage map view region did change")
-        for mixin in mapMixins {
-            mixin.regionDidChange(mapView: mapView, animated: animated)
-        }
+        let zoomLevel = mapView.zoomLevel
+        
+        mapStateRepository.zoom = Int(zoomLevel)
+        mapStateRepository.region = mapView.region
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {

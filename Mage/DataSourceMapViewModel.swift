@@ -24,8 +24,8 @@ class DataSourceMapViewModel {
     var minZoom = 2
     var maximumTileZoom = 6
     
-    var zoom: Int?
-    var region: MKCoordinateRegion?
+    @Injected(\.mapStateRepository)
+    var mapStateRepository: MapStateRepository
     
     var show = false
     var repositoryAlwaysShow: Bool {
@@ -43,6 +43,8 @@ class DataSourceMapViewModel {
     @Published var featureOverlays: [MKOverlay] = []
     @Published var tileOverlays: [DataSourceTileOverlay] = []
     
+    let requerySubject = PassthroughSubject<Void, Never>()
+    
     init(
         dataSource: any DataSourceDefinition,
         key: String,
@@ -53,6 +55,23 @@ class DataSourceMapViewModel {
         self.key = key
         self.repository = repository
         self.mapFeatureRepository = mapFeatureRepository
+        
+        requerySubject
+            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
+            .sink { index in
+                Task {
+                    await self.queryFeatures()
+                }
+            }
+            .store(in: &cancellable)
+        
+        mapStateRepository.$zoom.sink { zoom in
+            self.requerySubject.send(())
+        }.store(in: &cancellable)
+        
+        mapStateRepository.$region.sink { region in
+            self.requerySubject.send(())
+        }.store(in: &cancellable)
         
         repository?.refreshPublisher?
             .sink { date in
@@ -77,23 +96,12 @@ class DataSourceMapViewModel {
     
     // this requeries for all features and recreates all tile overlays
     func refresh() {
-        Task {
-            await queryFeatures()
-            createTileOverlays()
-        }
-    }
-    
-    // This sets the zoom and region to be queried and kicks off the query
-    func setZoomAndRegion(zoom: Int, region: MKCoordinateRegion) {
-        self.zoom = zoom
-        self.region = region
-        Task {
-            await queryFeatures()
-        }
+        requerySubject.send(())
+        createTileOverlays()
     }
     
     private func queryFeatures() async {
-        guard let zoom = zoom, let region = region else { return }
+        guard let zoom = mapStateRepository.zoom, let region = mapStateRepository.region else { return }
         let features = await mapFeatureRepository?.getAnnotationsAndOverlays(
             zoom: zoom,
             region: region.padded(percentage: 0.05)
@@ -122,10 +130,11 @@ class DataSourceMapViewModel {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [String: [String]] {
-        if await mapView.zoomLevel < minZoom {
+        guard let zoom = mapStateRepository.zoom else { return [:] }
+        if zoom < minZoom {
             return [:]
         }
-        if await mapView.zoomLevel > maximumTileZoom {
+        if zoom > maximumTileZoom {
             return [:]
         }
         guard show == true else {
@@ -154,7 +163,7 @@ class DataSourceMapViewModel {
                 maxLongitude: queryLocationMaxLongitude,
                 latitudePerPixel: latitudePerPixel,
                 longitudePerPixel: longitudePerPixel,
-                zoom: mapView.zoomLevel,
+                zoom: zoom,
                 precise: true,
                 distanceTolerance: distanceTolerance
             ) ?? []
@@ -166,6 +175,7 @@ class DataSourceMapViewModel {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [any DataSourceImage]? {
+        guard let zoom = mapStateRepository.zoom else { return nil }
         let viewWidth = await mapView.frame.size.width
         let viewHeight = await mapView.frame.size.height
 
@@ -184,7 +194,7 @@ class DataSourceMapViewModel {
             maxLongitude: queryLocationMaxLongitude,
             latitudePerPixel: latitudePerPixel,
             longitudePerPixel: longitudePerPixel,
-            zoom: mapView.zoomLevel,
+            zoom: zoom,
             precise: true
         )
     }
