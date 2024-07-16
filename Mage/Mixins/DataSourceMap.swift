@@ -29,6 +29,7 @@ class DataSourceMap: MapMixin {
     var dataSource: any DataSourceDefinition
     
     var currentAnnotationViews: [String: MKAnnotationView] = [:]
+    var currentFeatureOverlays: [String: MKOverlay] = [:]
 //    var region: MKCoordinateRegion?
 
     init(
@@ -62,6 +63,13 @@ class DataSourceMap: MapMixin {
         viewModel?.$annotations.sink { annotations in
             Task {
                 await self.handleFeatureChanges(annotations: annotations)
+            }
+        }
+        .store(in: &cancellable)
+        
+        viewModel?.$featureOverlays.sink { featureOverlays in
+            Task {
+                await self.handleFeatureOverlayChanges(featureOverlays: featureOverlays)
             }
         }
         .store(in: &cancellable)
@@ -208,9 +216,67 @@ class DataSourceMap: MapMixin {
         mapView.removeAnnotations(removals)
         NSLog("Annotation count: \(mapView.annotations.count)")
         
-        mapView.addOverlays(viewModel?.featureOverlays ?? [], level: .aboveLabels)
         return !inserts.isEmpty || !removals.isEmpty
     }
+    
+    @discardableResult
+    @MainActor
+    func handleFeatureOverlayChanges(featureOverlays: [MKOverlay]) -> Bool {
+        guard let mapView = mapView else { return false }
+        let existingFeatureOverlays = mapView.overlays.compactMap({ overlay in
+            (overlay as? DataSourceIdentifiable)
+        }).filter({ featureOverlay in
+            featureOverlay.dataSource.key == self.dataSource.key
+        }).sorted(by: { first, second in
+            first.id < second.id
+        })
+        
+        // this is how to create the annotations array from the previous annotations array
+        let differences = featureOverlays.compactMap({ overlay in
+            (overlay as? DataSourceIdentifiable)
+        }).difference(from: existingFeatureOverlays) { overlay1, overlay2 in
+            overlay1.id == overlay2.id
+        }
+        
+        var inserts: [MKOverlay] = []
+        var removals: [MKOverlay] = []
+        for change in differences {
+            switch change {
+            case .insert(let offset, let element, _):
+                let existing = mapView.overlays.first(where: { mapOverlay in
+                    guard let mapOverlay = mapOverlay as? DataSourceIdentifiable else {
+                        return false
+                    }
+                    return mapOverlay.id == element.id
+                })
+                if existing == nil, let element = element as? MKOverlay {
+                    inserts.append(element)
+                }
+                print("insert offset \(offset) for element \(element)")
+            case .remove(let offset, let element, _):
+                let existing = mapView.overlays.compactMap({ mapOverlay in
+                    mapOverlay as? DataSourceIdentifiable
+                }).filter({ mapOverlay in
+                    if mapOverlay.id == element.id {
+                        currentFeatureOverlays.removeValue(forKey: mapOverlay.id)
+                        return true
+                    }
+                    return false
+                }).compactMap { identifiable in
+                    identifiable as? MKOverlay
+                }
+                removals.append(contentsOf: existing)
+                print("remove offset \(offset) for element \(element)")
+            }
+        }
+        NSLog("Inserting \(inserts.count), removing: \(removals.count)")
+        
+        mapView.addOverlays(inserts)
+        mapView.removeOverlays(removals)
+        NSLog("Annotation count: \(mapView.overlays.count)")
+        return !inserts.isEmpty || !removals.isEmpty
+    }
+
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         mapView.removeOverlays(viewModel?.featureOverlays ?? [])
