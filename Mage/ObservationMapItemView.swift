@@ -53,7 +53,7 @@ struct ObservationMapItemView: View {
             if viewModel.observationMapItems.count == 1 {
                 if let item = viewModel.currentItem, let coordinate = item.coordinate {
                     Spacer()
-                    CoordinateButton(action: Actions.Location(latLng: coordinate))
+                    CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
                         .buttonStyle(MaterialButtonStyle())
                         .padding(.trailing, 8)
                     Text(item.accuracyDisplay ?? "")
@@ -86,7 +86,7 @@ struct ObservationMapItemView: View {
                 .accessibilityLabel("previous")
                 if let item = viewModel.currentItem, let coordinate = item.coordinate {
                     Spacer()
-                    CoordinateButton(action: Actions.Location(latLng: coordinate))
+                    CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
                         .buttonStyle(MaterialButtonStyle())
                         .padding(.trailing, 8)
                     Text(item.accuracyDisplay ?? "")

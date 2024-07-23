@@ -27,11 +27,16 @@ public enum FloatingButtonSize {
 
 public struct MaterialButtonLabelStyle: LabelStyle {
 
-    let color: Color
-    let size: FloatingButtonSize
+    public let color: Color
+    public let size: FloatingButtonSize
+    
+    public init(color: Color, size: FloatingButtonSize) {
+        self.color = color
+        self.size = size
+    }
 
     public func makeBody(configuration: Configuration) -> some View {
-        HStack {
+        HStack(spacing: 0) {
             configuration.icon
                 .foregroundColor(color)
                 .font(.system(size: size == .mini ? 18 : 24))
@@ -40,6 +45,7 @@ public struct MaterialButtonLabelStyle: LabelStyle {
                 .foregroundColor(color)
                 .font(.system(size: 14))
         }
+        .padding(0)
     }
 }
 
@@ -178,6 +184,7 @@ public struct MaterialButtonStyleBackground: View {
     let isEnabled: Bool
     let isPressed: Bool
     let cornerRadius: CGFloat
+    let backgroundColor: Color?
 
     public var body: some View {
         GeometryReader { metrics in
@@ -188,7 +195,7 @@ public struct MaterialButtonStyleBackground: View {
                 if type == .contained {
                     // Solid fill
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(isEnabled ? Color.primaryColor : Color.disabledBackground)
+                        .fill(isEnabled ? (backgroundColor ?? Color.primaryColor) : Color.disabledBackground)
                         .shadow(
                             color: Color(.sRGB, white: 0, opacity: 0.3),
                             radius: (isPressed ? 8 : 2),
@@ -204,7 +211,7 @@ public struct MaterialButtonStyleBackground: View {
                 } else if type == .text {
                     // tap effect
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(isEnabled ? Color.primaryColor : Color.disabledBackground)
+                        .fill(isEnabled ? (backgroundColor ?? Color.primaryColor) : Color.disabledBackground)
                         .scaleEffect(isPressed ? scale : 0.0001)
                         .opacity(isPressed ? 0.16 : 0.0)
                         .cornerRadius(cornerRadius)
@@ -219,6 +226,8 @@ public struct MaterialButtonStyle: ButtonStyle {
     let cornerRadius: CGFloat = 22.0
     let maxWidth: Bool = false
     let type: ButtonType
+    var foregroundColor: Color? = nil
+    var backgroundColor: Color? = nil
     @Environment(\.isEnabled) private var isEnabled: Bool
 
     public func makeBody(configuration: Configuration) -> some View {
@@ -228,9 +237,9 @@ public struct MaterialButtonStyle: ButtonStyle {
         } else if type == .text {
             borderWidth = 0.0
         }
-        var foregroundColor = isEnabled ? Color.primaryColorVariant : Color.disabledColor
+        var foregroundColor = isEnabled ? (self.foregroundColor ?? Color.primaryColorVariant) : Color.disabledColor
         if type == ButtonType.contained {
-            foregroundColor = Color.onPrimaryColor
+            foregroundColor = self.foregroundColor ?? Color.onPrimaryColor
         }
 
         return configuration
@@ -245,7 +254,8 @@ public struct MaterialButtonStyle: ButtonStyle {
                     type: type,
                     isEnabled: isEnabled,
                     isPressed: configuration.isPressed,
-                    cornerRadius: cornerRadius
+                    cornerRadius: cornerRadius,
+                    backgroundColor: backgroundColor
                 )
             )
             .overlay(
@@ -256,7 +266,9 @@ public struct MaterialButtonStyle: ButtonStyle {
             )
     }
 
-    public init(type: ButtonType = .text) {
+    public init(type: ButtonType = .text, foregroundColor: Color? = nil, backgroundColor: Color? = nil) {
         self.type = type
+        self.foregroundColor = foregroundColor
+        self.backgroundColor = backgroundColor
     }
 }

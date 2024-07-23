@@ -12,6 +12,12 @@ import CoreData
 
 class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, GeoPackageLayerMap, FeedsMap
 {
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
+    
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
 
@@ -144,14 +150,20 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         initiateMapMixins()
         
         viewObservationNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
-            if let observation = notification.object as? Observation {
-                self?.viewObservation(observation)
+            if let observation = notification.object as? URL {
+                Task {
+                    await self?.viewObservation(observation)
+                }
             }
         }
 
         viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
             if let user = notification.object as? User {
                 self?.viewUser(user)
+            } else if let user = notification.object as? URL {
+                Task {
+                    await self?.viewUserUri(user)
+                }
             }
         }
 
@@ -174,13 +186,33 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         navigationController?.pushViewController(fivc, animated: true)
     }
     
-    func viewObservation(_ observation: Observation) {
+    @MainActor
+    func viewUserUri(_ userUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
-        navigationController?.pushViewController(ovc, animated: true)
+        if let user = await userRepository.getUser(userUri: userUri) {
+            let uvc = UserViewController(user: user, scheme: scheme)
+            navigationController?.pushViewController(uvc, animated: true)
+        }
+    }
+    
+    @MainActor
+    func viewObservation(_ observationUri: URL) async {
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        if let observation = await observationRepository.getObservation(observationUri: observationUri) {
+            let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
+            navigationController?.pushViewController(ovc, animated: true)
+        }
     }
     
     func onSearchResultSelected(result: GeocoderResult) {
         // no-op
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        NSLog("Mage map view region did change")
+        let zoomLevel = mapView.zoomLevel
+        
+        mapStateRepository.zoom = Int(zoomLevel)
+        mapStateRepository.region = mapView.region
     }
 }

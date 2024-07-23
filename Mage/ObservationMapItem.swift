@@ -27,6 +27,11 @@ struct ObservationMapItem: Equatable, Hashable {
     var strokeColor: UIColor?
     var fillColor: UIColor?
     var lineWidth: CGFloat?
+    var timestamp: Date?
+    var user: String?
+    var error: Bool = false
+    var syncing: Bool = false
+    var important: ObservationImportantModel?
 
     var coordinate: CLLocationCoordinate2D? {
         guard let geometry = geometry, let point = geometry.centroid() else {
@@ -98,11 +103,35 @@ extension ObservationMapItem {
         self.minLongitude = observation.minLongitude
         self.primaryFieldText = observation.primaryFieldText
         self.secondaryFieldText = observation.secondaryFieldText
+        // TODO: should we store the primary and secondary feed field text too?
         if let observation = observation.observation {
             let style = ObservationShapeStyleParser.style(of: observation)
             self.strokeColor = style?.strokeColor
             self.fillColor = style?.fillColor
             self.lineWidth = style?.lineWidth
+            self.timestamp = observation.timestamp
+            self.user = observation.user?.name
+            self.error = observation.error != nil && observation.hasValidationError
+            self.syncing = observation.error != nil && !observation.hasValidationError
+            if let observationImportant = observation.observationImportant {
+                self.important = ObservationImportantModel(observationImportant: observationImportant)
+            }
         }
+    }
+}
+
+struct ObservationImportantModel: Equatable, Hashable {
+    var important: Bool
+    var userId: String?
+    var reason: String?
+    var timestamp: Date?
+}
+
+extension ObservationImportantModel {
+    init(observationImportant: ObservationImportant) {
+        self.important = observationImportant.important
+        self.userId = observationImportant.userId
+        self.reason = observationImportant.reason
+        self.timestamp = Date(timeIntervalSince1970: .random(in: 0...1000000000)) // observationImportant.timestamp
     }
 }

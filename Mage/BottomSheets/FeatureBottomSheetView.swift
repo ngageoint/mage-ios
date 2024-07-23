@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FeatureBottomSheetView: BottomSheetView {
+class FeatureBottomSheetView: UIView, BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var actionsDelegate: FeatureActionsDelegate?;
@@ -131,7 +131,7 @@ class FeatureBottomSheetView: BottomSheetView {
         return featureItem.featureDetail?.htmlAttributedString(font: self.scheme?.typographyScheme.body1, color: self.scheme?.colorScheme.onSurfaceColor) ?? NSAttributedString(string: "")
     }
     
-    override func refresh() {
+    func refresh() {
         textView.attributedText = getAttributedMessage();
     }
 }

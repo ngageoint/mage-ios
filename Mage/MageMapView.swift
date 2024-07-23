@@ -190,14 +190,6 @@ extension MageMapView : MKMapViewDelegate {
         return nil
     }
     
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        NSLog("Mage map view region did change")
-        let zoomLevel = mapView.zoomLevel
-        
-        mapStateRepository.zoom = Int(zoomLevel)
-        mapStateRepository.region = mapView.region
-    }
-    
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
         NSLog("Mage map view region will change")
         for mixin in mapMixins {

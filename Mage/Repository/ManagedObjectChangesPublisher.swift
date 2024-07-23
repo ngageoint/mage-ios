@@ -196,3 +196,119 @@ struct ManagedObjectChangesPublisher<Object: NSManagedObject, TransformedObject:
         }
     }
 }
+
+extension NSManagedObjectContext {
+    func listPublisher<Object: NSManagedObject, TransformedObject: Equatable>(
+        for fetchRequest: NSFetchRequest<Object>,
+        transformer: @escaping (Object) -> TransformedObject?
+    ) -> ManagedObjectListPublisher<Object, TransformedObject?> {
+        ManagedObjectListPublisher(fetchRequest: fetchRequest, context: self, transformer: transformer)
+    }
+}
+
+struct ManagedObjectListPublisher<Object: NSManagedObject, TransformedObject: Equatable>: Publisher {
+    typealias Output = Array<TransformedObject>
+    typealias Failure = Error
+
+    let fetchRequest: NSFetchRequest<Object>
+    let context: NSManagedObjectContext
+    let transformer: (Object) -> TransformedObject
+
+    init(
+        fetchRequest: NSFetchRequest<Object>,
+        context: NSManagedObjectContext,
+        transformer: @escaping (Object) -> TransformedObject
+    ) {
+        self.fetchRequest = fetchRequest
+        self.context = context
+        self.transformer = transformer
+    }
+
+    func receive<S: Subscriber>(subscriber: S) where Failure == S.Failure, Output == S.Input {
+        let inner = Inner(
+            downstream: subscriber,
+            fetchRequest: fetchRequest,
+            context: context,
+            transformer: transformer
+        )
+        subscriber.receive(subscription: inner)
+    }
+
+    private final class Inner<Downstream: Subscriber>: NSObject, Subscription,
+                                                       NSFetchedResultsControllerDelegate
+    where Downstream.Input == Array<TransformedObject>, Downstream.Failure == Error {
+        private let downstream: Downstream
+        private var fetchedResultsController: NSFetchedResultsController<Object>?
+        private let transformer: (Object) -> TransformedObject
+        init(
+            downstream: Downstream,
+            fetchRequest: NSFetchRequest<Object>,
+            context: NSManagedObjectContext,
+            transformer: @escaping (Object) -> TransformedObject
+        ) {
+            self.transformer = transformer
+            self.downstream = downstream
+            fetchedResultsController
+            = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context,
+                sectionNameKeyPath: nil,
+                cacheName: nil)
+
+            super.init()
+
+            fetchedResultsController!.delegate = self
+
+            do {
+                try fetchedResultsController!.performFetch()
+                updateDiff()
+            } catch {
+                downstream.receive(completion: .failure(error))
+            }
+        }
+
+        private var demand: Subscribers.Demand = .none
+
+        func request(_ demand: Subscribers.Demand) {
+            self.demand += demand
+            fulfillDemand()
+        }
+
+        private var firstTime: Bool = true
+        private var lastSentState: [TransformedObject] = []
+        private var currentList = Array<TransformedObject>()
+
+        private func updateDiff() {
+            currentList
+            = Array(fetchedResultsController?.fetchedObjects ?? []).map(transformer)
+            fulfillDemand()
+        }
+
+        private func fulfillDemand() {
+            if demand > 0 && (!currentList.isEmpty || firstTime) {
+                firstTime = false
+                let newDemand = downstream.receive(currentList)
+                lastSentState = Array(fetchedResultsController?.fetchedObjects ?? []).map(transformer)
+//                currentDifferences = lastSentState.difference(from: lastSentState)
+
+                demand += newDemand
+                demand -= 1
+            }
+        }
+
+        func cancel() {
+            fetchedResultsController?.delegate = nil
+            fetchedResultsController = nil
+        }
+
+        func controllerDidChangeContent(
+            _ controller: NSFetchedResultsController<NSFetchRequestResult>
+        ) {
+            updateDiff()
+        }
+
+        override var description: String {
+            "ManagedObjectChanges(\(Object.self))"
+        }
+    }
+}

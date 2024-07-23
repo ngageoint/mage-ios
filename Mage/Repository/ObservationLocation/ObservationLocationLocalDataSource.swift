@@ -42,10 +42,33 @@ protocol ObservationLocationLocalDataSource {
         minLongitude: Double?,
         maxLongitude: Double?
     ) async -> [ObservationMapItem]
-    func publisher() -> AnyPublisher<CollectionDifference<ObservationMapItem>, Never>
+    func locationsPublisher() -> AnyPublisher<CollectionDifference<ObservationMapItem>, Never>
+    func observeObservationLocation(
+        observationLocationUri: URL?
+    ) -> AnyPublisher<ObservationMapItem, Never>?
 }
 
-class ObservationLocationCoreDataDataSource: ObservationLocationLocalDataSource {
+class ObservationLocationCoreDataDataSource: CoreDataDataSource, ObservationLocationLocalDataSource {
+    
+    func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<ObservationMapItem, Never>? {
+        guard let observationLocationUri = observationLocationUri else {
+            return nil
+        }
+        let context = NSManagedObjectContext.mr_default()
+        return context.performAndWait {
+            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationLocationUri) {
+                if let observationLocation = try? context.existingObject(with: id) as? ObservationLocation {
+                    return publisher(for: observationLocation, in: context)
+                        .prepend(observationLocation)
+                        .map({ observationLocation in
+                            return ObservationMapItem(observation: observationLocation)
+                        })
+                        .eraseToAnyPublisher()
+                }
+            }
+            return nil
+        }
+    }
     
     func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation? {
         guard let observationLocationUri = observationLocationUri else {
@@ -203,7 +226,7 @@ class ObservationLocationCoreDataDataSource: ObservationLocationLocalDataSource 
         }
     }
 
-    func publisher() -> AnyPublisher<CollectionDifference<ObservationMapItem>, Never> {
+    func locationsPublisher() -> AnyPublisher<CollectionDifference<ObservationMapItem>, Never> {
         let context = NSManagedObjectContext.mr_default()
 
         var itemChanges: AnyPublisher<CollectionDifference<ObservationMapItem>, Never> {

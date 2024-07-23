@@ -35,7 +35,7 @@ public extension Font {
         return Font.system(size: 24, weight: .regular)
     }
     static var headline6: Font {
-        return Font.system(size: 16, weight: .regular)
+        return Font.system(size: 20, weight: .medium)
     }
     static var subtitle1: Font {
         return Font.system(size: 16, weight: .regular)
@@ -158,6 +158,14 @@ public extension Color {
 
     static var ngaBlue: Color {
         return Color(uiColor: UIColor(rgbValue: 0x154572))
+    }
+    
+    static var favoriteColor: Color {
+        return Color(uiColor: UIColor(rgbValue: 0x00C853))
+    }
+    
+    static var importantColor: Color {
+        return Color(uiColor: UIColor(rgbValue: 0xFF9100))
     }
 
 }

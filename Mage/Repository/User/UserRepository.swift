@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Combine
+import CLLocationCoordinate2DExtensions
 
 private struct UserRepositoryProviderKey: InjectionKey {
     static var currentValue: UserRepository = UserRepository()
@@ -19,11 +21,45 @@ extension InjectedValues {
     }
 }
 
+struct UserModel: Equatable, Hashable {
+    var userId: URL?
+    var remoteId: String?
+    var name: String?
+    var coordinate: CLLocationCoordinate2D?
+    var email: String?
+    var phone: String?
+    var lastUpdated: Date?
+    var avatarUrl: String?
+    var username: String?
+    var timestamp: Date?
+    
+    init(user: User) {
+        remoteId = user.remoteId
+        name = user.name
+        coordinate = user.coordinate
+        email = user.email
+        phone = user.phone
+        lastUpdated = user.lastUpdated
+        avatarUrl = user.avatarUrl
+        username = user.username
+        timestamp = user.location?.timestamp
+        userId = user.objectID.uriRepresentation()
+    }
+}
+
 class UserRepository: ObservableObject {
     @Injected(\.userLocalDataSource)
     var localDataSource: UserLocalDataSource
 
     func getUser(userUri: URL?) async -> User? {
         await localDataSource.getUser(userUri: userUri)
+    }
+    
+    func getCurrentUser() -> User? {
+        localDataSource.getCurrentUser()
+    }
+    
+    func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>? {
+        localDataSource.observeUser(userUri: userUri)
     }
 }

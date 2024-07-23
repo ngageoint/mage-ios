@@ -30,20 +30,11 @@ class DataSourceMap: MapMixin {
     
     var currentAnnotationViews: [String: MKAnnotationView] = [:]
     var currentFeatureOverlays: [String: MKOverlay] = [:]
-//    var region: MKCoordinateRegion?
 
     init(
         dataSource: any DataSourceDefinition
-//        repository: TileRepository? = nil,
-//        mapFeatureRepository: MapFeatureRepository? = nil
     ) {
         self.dataSource = dataSource
-//        viewModel = DataSourceMapViewModel(
-//            dataSource: dataSource,
-//            key: uuid.uuidString,
-//            repository: repository,
-//            mapFeatureRepository: mapFeatureRepository
-//        )
     }
 
     func cleanupMixin() {
@@ -57,8 +48,6 @@ class DataSourceMap: MapMixin {
     func setupMixin(mapView: MKMapView, mapState: MapState) {
         self.mapView = mapView
         self.mapState = mapState
-
-        updateMixin(mapView: mapView, mapState: mapState)
 
         viewModel?.$annotations.sink { annotations in
             Task {
@@ -192,7 +181,6 @@ class DataSourceMap: MapMixin {
                 if let existing = existing {
                     existing.coordinate = element.coordinate
                 } else {
-//                    currentAnnotations.insert(element)
                     inserts.append(element)
                 }
                 print("insert offset \(offset) for element \(element)")

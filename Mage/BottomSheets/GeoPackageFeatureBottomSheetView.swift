@@ -9,7 +9,7 @@
 import UIKit
 import geopackage_ios
 
-class GeoPackageFeatureBottomSheetView: BottomSheetView {
+class GeoPackageFeatureBottomSheetView: UIView, BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var actionsDelegate: FeatureActionsDelegate?;

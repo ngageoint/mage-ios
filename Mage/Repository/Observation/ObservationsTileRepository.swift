@@ -58,7 +58,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
     init() {
         _ = getMaximumIconHeightToWidthRatio()
 
-        self.localDataSource.publisher()
+        self.localDataSource.locationsPublisher()
             .dropFirst()
             .sink { changes in
                 Task {

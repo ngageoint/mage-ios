@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 private struct ObservationRepositoryProviderKey: InjectionKey {
     static var currentValue: ObservationRepository = ObservationRepository()
@@ -46,5 +47,13 @@ class ObservationRepository: ObservableObject {
         let inserted = await localDataSource.insert(task: nil, observations: observationJson, eventId: eventId.intValue)
 
         return inserted
+    }
+    
+    func toggleFavorite(observationUri: URL?) {
+        localDataSource.toggleFavorite(observationUri: observationUri)
+    }
+    
+    func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {
+        localDataSource.observeObservationFavorites(observationUri: observationUri)
     }
 }

@@ -43,7 +43,7 @@ class CoreDataDataSource {
                                        in context: NSManagedObjectContext
     ) -> AnyPublisher<T, Never> {
         let notification = NSManagedObjectContext.didSaveObjectsNotification
-        return NotificationCenter.default.publisher(for: notification) // , object: context)
+        return NotificationCenter.default.publisher(for: notification) //, object: context)
             .compactMap({ notification in
                 if let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>,
                    let updatedObject = updated.first(where: { object in

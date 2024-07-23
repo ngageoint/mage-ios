@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FeedItemBottomSheetView: BottomSheetView {
+class FeedItemBottomSheetView: UIView, BottomSheetView {
     
     private var didSetUpConstraints = false;
     private var feedItem: FeedItem?;
@@ -118,7 +118,7 @@ class FeedItemBottomSheetView: BottomSheetView {
         super.updateConstraints();
     }
     
-    override func refresh() {
+    func refresh() {
         guard let feedItem = self.feedItem else {
             return
         }

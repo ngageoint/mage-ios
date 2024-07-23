@@ -7,25 +7,25 @@
 
 import SwiftUI
 import MapKit
+import MaterialViews
 
 struct CoordinateButton: View {
-    var action: Actions.Location
-
-    @AppStorage("coordinateDisplay") var coordinateDisplay: CoordinateDisplayType = .latitudeLongitude
+    var action: CoordinateActions
 
     var body: some View {
-        if CLLocationCoordinate2DIsValid(action.latLng) {
-            Button(action: action.action) {
-                HStack {
+        if let coordinate = action.getCoordinate() {
+            Button {
+                action()
+            } label: {
+                Label {
+                    Text(coordinate.toDisplay(short: true))
+                } icon: {
                     Image(uiImage: UIImage(named: "location_tracking_on")!.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate))
-                    Text(action.latLng.toDisplay(short: true))
-                        .foregroundColor(Color.primaryColorVariant)
-                        .fixedSize(horizontal: true, vertical: false)
                 }
             }
-            .padding(8)
             .accessibilityElement()
             .accessibilityLabel("Location")
+            .buttonStyle(MaterialButtonStyle())
         }
     }
 }

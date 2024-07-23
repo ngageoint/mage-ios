@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 private struct ObservationLocationRepositoryProviderKey: InjectionKey {
     static var currentValue: ObservationLocationRepository = ObservationLocationRepository()
@@ -25,5 +26,9 @@ class ObservationLocationRepository: ObservableObject {
     
     func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation? {
         await localDataSource.getObservationLocation(observationLocationUri: observationLocationUri)
+    }
+    
+    func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<ObservationMapItem, Never>? {
+        localDataSource.observeObservationLocation(observationLocationUri: observationLocationUri)
     }
 }

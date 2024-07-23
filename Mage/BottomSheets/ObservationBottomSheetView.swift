@@ -7,281 +7,134 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
+import MaterialViews
 
-class ObservationBottomSheetView: BottomSheetView {
+class ObservationLocationBottomSheetViewModel: ObservableObject {
+    @Injected(\.observationLocationRepository)
+    var repository: ObservationLocationRepository
     
-    private var didSetUpConstraints = false;
-    private var observation: Observation?;
-    private var actionsDelegate: ObservationActionsDelegate?;
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    var scheme: MDCContainerScheming?;
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
     
-    private lazy var stackView: PassThroughStackView = {
-        let stackView = PassThroughStackView(forAutoLayout: ());
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 0
-        stackView.distribution = .fill;
-        stackView.directionalLayoutMargins = .zero;
-        stackView.isLayoutMarginsRelativeArrangement = false;
-        stackView.translatesAutoresizingMaskIntoConstraints = false;
-        stackView.clipsToBounds = true;
-        return stackView;
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
+    var disposables = Set<AnyCancellable>()
+    var observationObserver: AnyCancellable?
+    
+    var observationLocationUri: URL?
+    
+    @Published
+    var observationMapItem: ObservationMapItem?
+    
+    lazy var currentUser: User? = {
+        userRepository.getCurrentUser()
     }()
     
-    private lazy var compactView: ObservationCompactView = {
-        return ObservationCompactView(cornerRadius: 0.0, includeAttachments: false);
-    }()
-    
-    private lazy var detailsButton: MDCButton = {
-        let detailsButton = MDCButton(forAutoLayout: ());
-        detailsButton.accessibilityLabel = "More Details";
-        detailsButton.setTitle("More Details", for: .normal);
-        detailsButton.clipsToBounds = true;
-        detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside);
-        return detailsButton;
-    }()
-    
-    private lazy var viewObservationButtonView: UIView = {
-        let view = UIView();
-        view.addSubview(detailsButton);
-        detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
-        detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
-        detailsButton.autoPinEdge(.top, to: .top, of: view);
-        detailsButton.autoPinEdge(.bottom, to: .bottom, of: view);
-        return view;
-    }()
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("This class does not support NSCoding")
+    var currentUserFavorite: Bool {
+        ((observationFavoritesModel?.favoriteUsers?.contains(where: { userId in
+            userId == currentUser?.remoteId
+        })) == true)
     }
     
-    init(observation: Observation, actionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-        self.actionsDelegate = actionsDelegate;
-        self.observation = observation;
-        self.scheme = scheme;
-        super.init(frame: CGRect.zero);
-        self.translatesAutoresizingMaskIntoConstraints = false;
+    @Published
+    var totalFavorites: Int = 0
+    
+    @Published
+    var observationFavoritesModel: ObservationFavoritesModel?
+    
+    var favoriteCount: Int? {
+        observationFavoritesModel?.favoriteUsers?.count
+    }
+    
+    init(observationLocationUri: URL?) {
+        self.observationLocationUri = observationLocationUri
+        repository.observeObservationLocation(observationLocationUri: observationLocationUri)?
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { updatedObject in
+                self.observationMapItem = updatedObject
+            })
+            .store(in: &disposables)
         
-        stackView.addArrangedSubview(compactView);
-        stackView.addArrangedSubview(viewObservationButtonView);
-        self.addSubview(stackView);
-        populateView();
-        applyTheme(withScheme: self.scheme);
-        NotificationCenter.default.addObserver(forName: .ObservationUpdated, object: observation, queue: .main) { [weak self] notification in
-            self?.refresh()
-        }
-    }
-    
-    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let scheme = scheme else {
-            return;
-        }
-        self.scheme = scheme;
-        self.backgroundColor = scheme.colorScheme.surfaceColor;
-        compactView.applyTheme(withScheme: scheme);
-        detailsButton.applyContainedTheme(withScheme: scheme);
-    }
-    
-    func populateView() {
-        guard let observation = self.observation else {
-            return
-        }
-        
-        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
+        $observationMapItem
+            .receive(on: DispatchQueue.main)
+            .sink { mapItem in
+                if let observationObserver = self.observationObserver {
+                    observationObserver.cancel()
+                }
+                self.observationObserver = self.observationRepository.observeObservationFavorites(observationUri: mapItem?.observationId)?
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveValue: { updatedObject in
+                        self.observationFavoritesModel = updatedObject
+                    })
+            }
+            .store(in: &disposables)
 
-        applyTheme(withScheme: scheme);
-        
-        self.setNeedsUpdateConstraints();
     }
     
-    override func getHeaderColor() -> UIColor? {
-        guard let observation = self.observation else {
-            return .clear
-        }
-        if (observation.isImportant) {
-            return compactView.importantView.backgroundColor;
-        } else {
-            return .clear;
-        }
+    @MainActor
+    func setTotalFavorites(count: Int) {
+        totalFavorites = count
     }
     
-    override func refresh() {
-        guard let observation = self.observation else {
-            return
-        }
-        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
-    }
-    
-    override func updateConstraints() {
-        if (!didSetUpConstraints) {
-            stackView.autoPinEdgesToSuperviewEdges();
-            didSetUpConstraints = true;
-        }
-        
-        super.updateConstraints();
-    }
-    
-    @objc func tap(_ card: MDCCard) {
-        if let observation = observation {
-            // let the ripple dissolve before transitioning otherwise it looks weird
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewObservation?(observation);
-            }
-        }
-    }
-    
-    @objc func detailsButtonTapped() {
-        if let observation = observation {
-            // let the ripple dissolve before transitioning otherwise it looks weird
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                NotificationCenter.default.post(name: .ViewObservation, object: observation)
-                self.actionsDelegate?.viewObservation?(observation);
-            }
-        }
+    func toggleFavorite() {
+        observationRepository.toggleFavorite(observationUri: observationMapItem?.observationId)
     }
 }
 
-class ObservationLocationBottomSheetView: BottomSheetView {
+struct ObservationLocationBottomSheet: View {
+    @ObservedObject
+    var viewModel: ObservationLocationBottomSheetViewModel
     
-    private var didSetUpConstraints = false;
-    private var observation: Observation?;
-    private var actionsDelegate: ObservationActionsDelegate?;
-    private var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
-    
-    private var observationLocation: ObservationLocation?
-    var scheme: MDCContainerScheming?;
-    
-    private lazy var stackView: PassThroughStackView = {
-        let stackView = PassThroughStackView(forAutoLayout: ());
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 0
-        stackView.distribution = .fill;
-        stackView.directionalLayoutMargins = .zero;
-        stackView.isLayoutMarginsRelativeArrangement = false;
-        stackView.translatesAutoresizingMaskIntoConstraints = false;
-        stackView.clipsToBounds = true;
-        return stackView;
-    }()
-    
-    private lazy var compactView: ObservationCompactView = {
-        return ObservationCompactView(cornerRadius: 0.0, includeAttachments: false);
-    }()
-    private lazy var locationView: ObservationLocationCompactView = {
-        return ObservationLocationCompactView(cornerRadius: 0.0, includeAttachments: false);
-    }()
-    
-    private lazy var detailsButton: MDCButton = {
-        let detailsButton = MDCButton(forAutoLayout: ());
-        detailsButton.accessibilityLabel = "More Details";
-        detailsButton.setTitle("More Details", for: .normal);
-        detailsButton.clipsToBounds = true;
-        detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside);
-        return detailsButton;
-    }()
-    
-    private lazy var viewObservationButtonView: UIView = {
-        let view = UIView();
-        view.addSubview(detailsButton);
-        detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
-        detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
-        detailsButton.autoPinEdge(.top, to: .top, of: view);
-        detailsButton.autoPinEdge(.bottom, to: .bottom, of: view);
-        return view;
-    }()
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("This class does not support NSCoding")
-    }
-    
-    init(observationLocation: ObservationLocation, actionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-        self.observationLocation = observationLocation
-        self.actionsDelegate = actionsDelegate;
-        self.observation = observationLocation.observation
-        self.scheme = scheme;
-        super.init(frame: CGRect.zero);
-        self.translatesAutoresizingMaskIntoConstraints = false;
-        if observationLocation.fieldName == Observation.PRIMARY_OBSERVATION_GEOMETRY {
-            stackView.addArrangedSubview(compactView);
-        } else {
-            stackView.addArrangedSubview(locationView)
-        }
-        stackView.addArrangedSubview(viewObservationButtonView);
-        self.addSubview(stackView);
-        populateView();
-        applyTheme(withScheme: self.scheme);
-        NotificationCenter.default.addObserver(forName: .ObservationUpdated, object: observation, queue: .main) { [weak self] notification in
-            self?.refresh()
-        }
-    }
-    
-    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let scheme = scheme else {
-            return;
-        }
-        self.scheme = scheme;
-        self.backgroundColor = scheme.colorScheme.surfaceColor;
-        compactView.applyTheme(withScheme: scheme);
-        detailsButton.applyContainedTheme(withScheme: scheme);
-    }
-    
-    func populateView() {
-        guard let observation = self.observation, let observationLocation = self.observationLocation else {
-            return
-        }
-        locationView.configure(observationLocation: observationLocation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
-        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
-
-        applyTheme(withScheme: scheme);
-        
-        self.setNeedsUpdateConstraints();
-    }
-    
-    override func getHeaderColor() -> UIColor? {
-        guard let observation = self.observation else {
-            return .clear
-        }
-        if (observation.isImportant) {
-            return compactView.importantView.backgroundColor;
-        } else {
-            return .clear;
-        }
-    }
-    
-    override func refresh() {
-        guard let observation = self.observation else {
-            return
-        }
-        compactView.configure(observation: observation, scheme: scheme, actionsDelegate: actionsDelegate, attachmentSelectionDelegate: attachmentSelectionDelegate);
-    }
-    
-    override func updateConstraints() {
-        if (!didSetUpConstraints) {
-            stackView.autoPinEdgesToSuperviewEdges();
-            didSetUpConstraints = true;
-        }
-        
-        super.updateConstraints();
-    }
-    
-    @objc func tap(_ card: MDCCard) {
-        if let observation = observation {
-            // let the ripple dissolve before transitioning otherwise it looks weird
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.actionsDelegate?.viewObservation?(observation);
+    var body: some View {
+        Group {
+            if let observationMapItem = viewModel.observationMapItem {
+                VStack(spacing: 0) {
+                    if let important = observationMapItem.important {
+                        ObservationImportantViewSwiftUI(important: important)
+                    }
+                    
+                    ObservationLocationSummary(
+                        timestamp: observationMapItem.timestamp,
+                        user: observationMapItem.user,
+                        primaryFieldText: observationMapItem.primaryFieldText,
+                        secondaryFieldText: observationMapItem.secondaryFieldText,
+                        iconPath: observationMapItem.iconPath,
+                        error: observationMapItem.error,
+                        syncing: observationMapItem.syncing
+                    )
+                    
+                    ObservationLocationBottomSheetActionBar(
+                        coordinate: observationMapItem.coordinate,
+                        favoriteCount: viewModel.favoriteCount,
+                        currentUserFavorite: viewModel.currentUserFavorite,
+                        favoriteAction: ObservationActions.favorite(viewModel: viewModel),
+                        navigateToAction: CoordinateActions.navigateTo(
+                            coordinate: observationMapItem.coordinate,
+                            itemKey: observationMapItem.observationLocationId?.absoluteString,
+                            dataSource: DataSources.observation
+                        )
+                    )
+                    .padding(4)
+                    Button {
+                        // let the ripple dissolve before transitioning otherwise it looks weird
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            NotificationCenter.default.post(name: .ViewObservation, object: observationMapItem.observationId)
+                        }
+                    } label: {
+                        Text("More Details")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(MaterialButtonStyle(type: .contained))
+                    .padding(8)
+                }
+                .id(observationMapItem.observationLocationId)
+                .ignoresSafeArea()
+                
             }
         }
-    }
-    
-    @objc func detailsButtonTapped() {
-        if let observation = observation {
-            // let the ripple dissolve before transitioning otherwise it looks weird
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                NotificationCenter.default.post(name: .ViewObservation, object: observation)
-                self.actionsDelegate?.viewObservation?(observation);
-            }
-        }
+        .animation(.default, value: self.viewModel.observationMapItem != nil)
     }
 }
-

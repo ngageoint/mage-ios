@@ -35,9 +35,56 @@ protocol ObservationLocalDataSource {
     ) -> Int
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
+    func toggleFavorite(observationUri: URL?)
+    func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
 }
 
 class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSource, ObservableObject {
+    
+    func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {
+        guard let observationUri = observationUri else {
+            return nil
+        }
+        let context = NSManagedObjectContext.mr_default()
+        if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
+            if let observation = try? context.existingObject(with: id) as? Observation {
+                
+                var itemChanges: AnyPublisher<ObservationFavoritesModel, Never> {
+                    let fetchRequest: NSFetchRequest<ObservationFavorite> = ObservationFavorite.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "observation = %@", observation)
+                    fetchRequest.sortDescriptors = [NSSortDescriptor(key: "userId", ascending: false)]
+                    return context.listPublisher(for: fetchRequest, transformer: { favorite in
+                        favorite.favorite ? favorite.userId : nil
+                    })
+                    .map({ userIds in
+                        return ObservationFavoritesModel(
+                            observationId: observationUri,
+                            favoriteUsers: userIds.compactMap { $0 }
+                        )
+                    })
+                    .catch { _ in Empty() }
+                    .eraseToAnyPublisher()
+                }
+                return itemChanges
+            }
+        }
+        return nil
+    }
+    
+    func toggleFavorite(observationUri: URL?) {
+        guard let observationUri = observationUri else { return }
+        let context = NSManagedObjectContext.mr_default()
+        context.perform {
+            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
+                if let observation = try? context.existingObject(with: id) as? Observation {
+                    observation.toggleFavorite { success, error in
+                        observation.managedObjectContext?.refresh(observation, mergeChanges: false)
+                    }
+                }
+            }
+        }
+    }
+    
     func getLastObservationDate(eventId: Int) -> Date? {
         getLastObservation(eventId: eventId)?.lastModified
     }

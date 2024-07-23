@@ -8,6 +8,9 @@
 
 import UIKit
 import MapKit
+import SwiftUI
+import Combine
+//import SwiftUIKitView
 
 class BottomSheetItem: NSObject {
     var item: Any
@@ -21,6 +24,94 @@ class BottomSheetItem: NSObject {
     }
 }
 
+class MageBottomSheetViewModel: ObservableObject {
+    @Injected(\.bottomSheetRepository)
+    var bottomSheetRepository: BottomSheetRepository
+    
+    var cancellable: Set<AnyCancellable> = Set()
+    
+    var count: Int {
+        bottomSheetItems.count
+    }
+    
+    @Published
+    var selectedItem: Int = 0
+    
+    @Published
+    var bottomSheetItems: [BottomSheetItem] = []
+    
+    var currentBottomSheetItem: BottomSheetItem? {
+        if count > selectedItem {
+            return bottomSheetItems[selectedItem]
+        }
+        return nil
+    }
+    
+    init() {
+        self.bottomSheetRepository.$bottomSheetItems
+            .receive(on: DispatchQueue.main)
+            .sink { bottomSheetItems in
+                self.bottomSheetItems = bottomSheetItems ?? []
+            }
+            .store(in: &cancellable)
+    }
+}
+
+struct MageBottomSheet: View {
+    var scheme: MDCContainerScheming?
+    
+    @StateObject
+    var viewModel: MageBottomSheetViewModel = MageBottomSheetViewModel()
+    @State private var first = true
+    @State private var isBack = false
+    
+    var body: some View {
+        VStack {
+            if viewModel.count > 1 {
+                PageController(count: viewModel.count, selectedItem: viewModel.selectedItem) {
+                    if viewModel.selectedItem == 0 {
+                        return
+                    }
+                    first = false
+                    isBack = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                        viewModel.selectedItem = max(0, viewModel.selectedItem - 1)
+                    }
+                } rightTap: {
+                    if viewModel.selectedItem == viewModel.count - 1 {
+                        return
+                    }
+                    first = false
+                    isBack = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                        viewModel.selectedItem = min(viewModel.count - 1, viewModel.selectedItem + 1)
+                    }
+                }
+            }
+            
+            Group {
+                if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? ObservationMapItem {
+                    ObservationLocationBottomSheet(viewModel: ObservationLocationBottomSheetViewModel(observationLocationUri: bottomSheetItem.observationLocationId))
+                } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? User {
+                    UserBottomSheet(viewModel: UserBottomSheetViewModel(userUri: bottomSheetItem.objectID.uriRepresentation()))
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .id(viewModel.selectedItem)
+            .transition(AnyTransition.asymmetric(
+                insertion: first ? .identity : .move(edge: isBack ? .leading : .trailing),
+                removal:
+                    (viewModel.selectedItem == viewModel.count - 1) ? .move(edge: .trailing) :
+                    (viewModel.selectedItem == 0) ? .move(edge: .leading) : .move(edge: isBack ? .trailing : .leading))
+            )
+            .animation(.default, value: self.viewModel.selectedItem)
+            
+            Spacer()
+        }
+        
+    }
+}
+
 class MageBottomSheetViewController: UIViewController {
     @Injected(\.observationLocationRepository)
     var observationLocationRepository: ObservationLocationRepository
@@ -30,15 +121,15 @@ class MageBottomSheetViewController: UIViewController {
     var scheme: MDCContainerScheming?;
     private var rightConstraint: NSLayoutConstraint?;
     private var leftConstraint: NSLayoutConstraint?;
-    var currentBottomSheetView: BottomSheetView?
+    var currentBottomSheetView: UIView?
     var mapView: MKMapView?
     
-    @objc public lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView.newAutoLayout();
-        scrollView.accessibilityIdentifier = "feature bottom sheet";
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        return scrollView;
-    }()
+//    @objc public lazy var scrollView: UIScrollView = {
+//        let scrollView = UIScrollView.newAutoLayout();
+//        scrollView.accessibilityIdentifier = "feature bottom sheet";
+//        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        return scrollView;
+//    }()
     
     private lazy var stackView: PassThroughStackView = {
         let stackView = PassThroughStackView(forAutoLayout: ());
@@ -159,8 +250,8 @@ class MageBottomSheetViewController: UIViewController {
             stackView.addArrangedSubview(dragHandleView);
         }
         
-        scrollView.addSubview(stackView);
-        self.view.addSubview(scrollView);
+//        scrollView.addSubview(stackView);
+        self.view.addSubview(stackView);
         
         applyTheme(withScheme: scheme);
         
@@ -216,27 +307,27 @@ class MageBottomSheetViewController: UIViewController {
     
     override func updateViewConstraints() {
         if (!didSetUpConstraints) {
-            scrollView.autoPinEdge(toSuperviewEdge: .top);
-            scrollView.autoPinEdge(toSuperviewEdge: .bottom);
+//            scrollView.autoPinEdge(toSuperviewEdge: .top);
+//            scrollView.autoPinEdge(toSuperviewEdge: .bottom);
 
             stackView.autoPinEdge(toSuperviewEdge: .left)
             stackView.autoPinEdge(toSuperviewEdge: .right)
             stackView.autoPinEdge(toSuperviewEdge: .top)
             stackView.autoPinEdge(toSuperviewMargin: .bottom)
-            stackView.autoMatch(.width, to: .width, of: scrollView);
+            stackView.autoMatch(.width, to: .width, of: view);
             stackView.autoAlignAxis(toSuperviewAxis: .vertical)
             didSetUpConstraints = true;
         }
         
         leftConstraint?.autoRemove();
         rightConstraint?.autoRemove();
-        if (self.traitCollection.horizontalSizeClass == .regular) {
-            leftConstraint = scrollView.autoPinEdge(toSuperviewMargin: .left);
-            rightConstraint = scrollView.autoPinEdge(toSuperviewMargin: .right);
-        } else {
-            leftConstraint = scrollView.autoPinEdge(toSuperviewEdge: .left);
-            rightConstraint = scrollView.autoPinEdge(toSuperviewEdge: .right);
-        }
+//        if (self.traitCollection.horizontalSizeClass == .regular) {
+//            leftConstraint = scrollView.autoPinEdge(toSuperviewMargin: .left);
+//            rightConstraint = scrollView.autoPinEdge(toSuperviewMargin: .right);
+//        } else {
+//            leftConstraint = scrollView.autoPinEdge(toSuperviewEdge: .left);
+//            rightConstraint = scrollView.autoPinEdge(toSuperviewEdge: .right);
+//        }
         
         super.updateViewConstraints();
     }
@@ -246,17 +337,17 @@ class MageBottomSheetViewController: UIViewController {
 
 
         Task {
-            var newBottomSheetView: BottomSheetView?
+            var newBottomSheetView: UIView?
+//            var bottomsheet2: UIView?
             if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
                 newBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
-            } else if let bottomSheetItem = item.item as? Observation {
-                newBottomSheetView = ObservationBottomSheetView(observation: bottomSheetItem, actionsDelegate: item.actionDelegate as? ObservationActionsDelegate, scheme: self.scheme);
-                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
-            } else if let bottomSheetItem = item.item as? User {
-                newBottomSheetView = UserBottomSheetView(user: bottomSheetItem, actionsDelegate: item.actionDelegate as? UserActionsDelegate, scheme: self.scheme);
-                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
-            } else if let bottomSheetItem = item.item as? FeatureItem {
+            }
+//            else if let bottomSheetItem = item.item as? User {
+//                newBottomSheetView = UserBottomSheetView(user: bottomSheetItem, actionsDelegate: item.actionDelegate as? UserActionsDelegate, scheme: self.scheme);
+//                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
+//            } 
+            else if let bottomSheetItem = item.item as? FeatureItem {
                 newBottomSheetView = FeatureBottomSheetView(featureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
             } else if let bottomSheetItem = item.item as? FeedItem {
@@ -266,11 +357,17 @@ class MageBottomSheetViewController: UIViewController {
                 if let observationLocation = await observationLocationRepository.getObservationLocation(
                     observationLocationUri: bottomSheetItem.observationLocationId
                 ) {
-                    newBottomSheetView = ObservationLocationBottomSheetView(
-                        observationLocation: observationLocation,
-                        actionsDelegate: item.actionDelegate as? ObservationActionsDelegate,
-                        scheme: self.scheme
-                    )
+                    let locationSummary = ObservationLocationBottomSheet(viewModel: ObservationLocationBottomSheetViewModel(observationLocationUri: bottomSheetItem.observationLocationId))
+//                    ObservationLocationSummary(observationMapItem: ObservationMapItem(observation: observationLocation))
+                    
+                    let viewController = SwiftUIViewController(swiftUIView: locationSummary)
+                    newBottomSheetView = viewController.view
+                    
+//                    bottomsheet2 = ObservationLocationBottomSheetView(
+//                        observationLocation: observationLocation,
+//                        actionsDelegate: item.actionDelegate as? ObservationActionsDelegate,
+//                        scheme: self.scheme
+//                    )
                     NotificationCenter.default.post(
                         name: .MapAnnotationFocused,
                         object: MapAnnotationFocusedNotification(item: bottomSheetItem)
@@ -279,15 +376,18 @@ class MageBottomSheetViewController: UIViewController {
             }
             await MainActor.run {
                 UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                    if self.currentBottomSheetView?.superview != nil {
-                        self.currentBottomSheetView?.removeFromSuperview();
+                    if let view = self.currentBottomSheetView as? UIView, view.superview != nil {
+                        view.removeFromSuperview();
                     }
                     self.currentBottomSheetView = newBottomSheetView
                     self.pageNumberLabel.text = "\(self.pageControl.currentPage+1) of \(self.pageControl.numberOfPages)";
-                    if let currentBottomSheetView = self.currentBottomSheetView {
+                    if let currentBottomSheetView = self.currentBottomSheetView as? UIView {
                         self.stackView.addArrangedSubview(currentBottomSheetView)
                     }
-                    self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
+//                    if let bottomsheet2 = bottomsheet2 {
+//                        self.stackView.addArrangedSubview(bottomsheet2)
+//                    }
+//                    self.stackView.arrangedSubviews[0].backgroundColor = self.currentBottomSheetView?.getHeaderColor();
                     self.view.setNeedsUpdateConstraints();
                 }, completion: nil)
             }
