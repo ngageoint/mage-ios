@@ -510,6 +510,8 @@
 		F7BFB8DE2C50145A00901479 /* UserBottomSheetActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8DD2C50145A00901479 /* UserBottomSheetActionBar.swift */; };
 		F7BFB8E02C5019BA00901479 /* EmailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8DF2C5019BA00901479 /* EmailButton.swift */; };
 		F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8E12C501E5E00901479 /* PhoneButton.swift */; };
+		F7BFB8E52C504A4A00901479 /* StaticLayerFeatureSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8E42C504A4A00901479 /* StaticLayerFeatureSummary.swift */; };
+		F7BFB8E72C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8E62C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift */; };
 		F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */; };
 		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
 		F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */; };
@@ -1356,6 +1358,8 @@
 		F7BFB8DD2C50145A00901479 /* UserBottomSheetActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBottomSheetActionBar.swift; sourceTree = "<group>"; };
 		F7BFB8DF2C5019BA00901479 /* EmailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailButton.swift; sourceTree = "<group>"; };
 		F7BFB8E12C501E5E00901479 /* PhoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneButton.swift; sourceTree = "<group>"; };
+		F7BFB8E42C504A4A00901479 /* StaticLayerFeatureSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerFeatureSummary.swift; sourceTree = "<group>"; };
+		F7BFB8E62C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerFeatureBottomSheetActionBar.swift; sourceTree = "<group>"; };
 		F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCompactView.swift; sourceTree = "<group>"; };
 		F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListCardCellTests.swift; sourceTree = "<group>"; };
 		F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetTests.swift; sourceTree = "<group>"; };
@@ -2341,6 +2345,7 @@
 		F734C1E62BC8474B00B2E8C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				F7BFB8E32C504A3800901479 /* StaticLayer */,
 				F7BFB8DA2C50102600901479 /* User */,
 				F754C6572C484C9A00E408E9 /* Shapes */,
 				F754C6542C48061500E408E9 /* ObservationLocation */,
@@ -3123,6 +3128,15 @@
 			path = User;
 			sourceTree = "<group>";
 		};
+		F7BFB8E32C504A3800901479 /* StaticLayer */ = {
+			isa = PBXGroup;
+			children = (
+				F7BFB8E42C504A4A00901479 /* StaticLayerFeatureSummary.swift */,
+				F7BFB8E62C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift */,
+			);
+			path = StaticLayer;
+			sourceTree = "<group>";
+		};
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -3815,6 +3829,7 @@
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
 				F781609E273EE1A50055B5D2 /* ObjC.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
+				F7BFB8E72C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift in Sources */,
 				045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */,
 				F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */,
 				F7D43BEE269F8F4D00561A8F /* LocationDataStore.swift in Sources */,
@@ -3868,6 +3883,7 @@
 				2F42586F2B51F05B00BF83B1 /* Settings.swift in Sources */,
 				F72D431F2694B60300F9AC3B /* Model14To16.xcmappingmodel in Sources */,
 				F7E079432C221B890029C88D /* GeoPackageRepository.swift in Sources */,
+				F7BFB8E52C504A4A00901479 /* StaticLayerFeatureSummary.swift in Sources */,
 				F72D42FB2694B60300F9AC3B /* Feed.swift in Sources */,
 				F7EBAEBA2760F7EE00650F4F /* FilteredObservationsMap.swift in Sources */,
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
