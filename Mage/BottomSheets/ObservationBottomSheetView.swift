@@ -53,21 +53,21 @@ class ObservationLocationBottomSheetViewModel: ObservableObject {
         self.observationLocationUri = observationLocationUri
         repository.observeObservationLocation(observationLocationUri: observationLocationUri)?
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { updatedObject in
-                self.observationMapItem = updatedObject
+            .sink(receiveValue: { [weak self] updatedObject in
+                self?.observationMapItem = updatedObject
             })
             .store(in: &disposables)
         
         $observationMapItem
             .receive(on: DispatchQueue.main)
-            .sink { mapItem in
-                if let observationObserver = self.observationObserver {
+            .sink { [weak self] mapItem in
+                if let observationObserver = self?.observationObserver {
                     observationObserver.cancel()
                 }
-                self.observationObserver = self.observationRepository.observeObservationFavorites(observationUri: mapItem?.observationId)?
+                self?.observationObserver = self?.observationRepository.observeObservationFavorites(observationUri: mapItem?.observationId)?
                     .receive(on: DispatchQueue.main)
-                    .sink(receiveValue: { updatedObject in
-                        self.observationFavoritesModel = updatedObject
+                    .sink(receiveValue: { [weak self] updatedObject in
+                        self?.observationFavoritesModel = updatedObject
                     })
             }
             .store(in: &disposables)

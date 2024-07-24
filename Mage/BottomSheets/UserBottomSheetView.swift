@@ -26,8 +26,8 @@ class UserBottomSheetViewModel: ObservableObject {
         self.userUri = userUri
         repository.observeUser(userUri: userUri)?
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { updatedObject in
-                self.user = updatedObject
+            .sink(receiveValue: { [weak self] updatedObject in
+                self?.user = updatedObject
             })
             .store(in: &disposables)
     }

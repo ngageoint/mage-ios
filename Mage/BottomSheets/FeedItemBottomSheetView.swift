@@ -26,8 +26,8 @@ class FeedItemBottomSheeViewModel: ObservableObject {
         self.feedItemUri = feedItemUri
         repository.observeFeedItem(feedItemUri: feedItemUri)?
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { updatedObject in
-                self.feedItem = updatedObject
+            .sink(receiveValue: { [weak self] updatedObject in
+                self?.feedItem = updatedObject
             })
             .store(in: &disposables)
     }
