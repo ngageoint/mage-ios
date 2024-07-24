@@ -24,39 +24,6 @@ class BottomSheetItem: NSObject {
     }
 }
 
-class MageBottomSheetViewModel: ObservableObject {
-    @Injected(\.bottomSheetRepository)
-    var bottomSheetRepository: BottomSheetRepository
-    
-    var cancellable: Set<AnyCancellable> = Set()
-    
-    var count: Int {
-        bottomSheetItems.count
-    }
-    
-    @Published
-    var selectedItem: Int = 0
-    
-    @Published
-    var bottomSheetItems: [BottomSheetItem] = []
-    
-    var currentBottomSheetItem: BottomSheetItem? {
-        if count > selectedItem {
-            return bottomSheetItems[selectedItem]
-        }
-        return nil
-    }
-    
-    init() {
-        self.bottomSheetRepository.$bottomSheetItems
-            .receive(on: DispatchQueue.main)
-            .sink { bottomSheetItems in
-                self.bottomSheetItems = bottomSheetItems ?? []
-            }
-            .store(in: &cancellable)
-    }
-}
-
 struct MageBottomSheet: View {
     var scheme: MDCContainerScheming?
     

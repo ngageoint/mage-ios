@@ -302,7 +302,7 @@
 		F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */; };
 		F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */; };
 		F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */; };
-		F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */; };
+		F73607DC26F90C79008CF824 /* MageBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DB26F90C79008CF824 /* MageBottomSheet.swift */; };
 		F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */; };
 		F73607E026F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */; };
 		F73607E226FA1256008CF824 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607E126FA1256008CF824 /* BottomSheetView.swift */; };
@@ -517,6 +517,7 @@
 		F7BFB8EE2C51572600901479 /* GeoPackageMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8ED2C51572600901479 /* GeoPackageMediaView.swift */; };
 		F7BFB8F02C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8EF2C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift */; };
 		F7BFB8F32C516C0C00901479 /* FeedItemSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8F22C516C0C00901479 /* FeedItemSummaryView.swift */; };
+		F7BFB8F52C518A2D00901479 /* MageBottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8F42C518A2D00901479 /* MageBottomSheetViewModel.swift */; };
 		F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */; };
 		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
 		F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */; };
@@ -1112,7 +1113,7 @@
 		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
 		F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummaryView.swift; sourceTree = "<group>"; };
 		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageBottomSheetViewController.swift; sourceTree = "<group>"; };
+		F73607DB26F90C79008CF824 /* MageBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageBottomSheet.swift; sourceTree = "<group>"; };
 		F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureItem.swift; sourceTree = "<group>"; };
 		F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetView.swift; sourceTree = "<group>"; };
 		F73607E126FA1256008CF824 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
@@ -1370,6 +1371,7 @@
 		F7BFB8ED2C51572600901479 /* GeoPackageMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageMediaView.swift; sourceTree = "<group>"; };
 		F7BFB8EF2C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetViewModel.swift; sourceTree = "<group>"; };
 		F7BFB8F22C516C0C00901479 /* FeedItemSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemSummaryView.swift; sourceTree = "<group>"; };
+		F7BFB8F42C518A2D00901479 /* MageBottomSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageBottomSheetViewModel.swift; sourceTree = "<group>"; };
 		F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCompactView.swift; sourceTree = "<group>"; };
 		F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListCardCellTests.swift; sourceTree = "<group>"; };
 		F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetTests.swift; sourceTree = "<group>"; };
@@ -2384,11 +2386,12 @@
 				F7D43BE1269F329D00561A8F /* FeedItemBottomSheetView.swift */,
 				F73607DF26F91CEB008CF824 /* GeoPackageFeatureBottomSheetView.swift */,
 				F73607DD26F91BBD008CF824 /* GeoPackageFeatureItem.swift */,
-				F73607DB26F90C79008CF824 /* MageBottomSheetViewController.swift */,
+				F73607DB26F90C79008CF824 /* MageBottomSheet.swift */,
 				F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */,
 				F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */,
 				F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */,
 				F7BFB8EF2C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift */,
+				F7BFB8F42C518A2D00901479 /* MageBottomSheetViewModel.swift */,
 			);
 			path = BottomSheets;
 			sourceTree = "<group>";
@@ -3929,7 +3932,7 @@
 				F77ECB6E242E53C40030EE73 /* VideoImageProvider.swift in Sources */,
 				F78D578D27B5841D003594D3 /* MageMapViewController.swift in Sources */,
 				F7402C86276B80B600531613 /* FilteredUsersMap.swift in Sources */,
-				F73607DC26F90C79008CF824 /* MageBottomSheetViewController.swift in Sources */,
+				F73607DC26F90C79008CF824 /* MageBottomSheet.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				F7FD5AA42809F3800032384B /* EmptyState.swift in Sources */,
 				2FAE23FF2B5599A100629721 /* NativeService.swift in Sources */,
@@ -3992,6 +3995,7 @@
 				F7E079412C2209A20029C88D /* GeoPackageDataSourceDefinition.swift in Sources */,
 				F776AC992BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift in Sources */,
 				F776ACA12BCDB892000FAFB4 /* MageSession.swift in Sources */,
+				F7BFB8F52C518A2D00901479 /* MageBottomSheetViewModel.swift in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
 				F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */,
 				F7DE988A2C1A4431005372F8 /* UserDefinition.swift in Sources */,
