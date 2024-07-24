@@ -23,11 +23,14 @@ protocol ObservationIconLocalDataSource {
     func getIconPath(observationUri: URL) async -> String?
     func getIconPath(observation: Observation) -> String?
     func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize
+    func resetEventIconSize(eventId: Int)
 }
 
 class ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
     @Injected(\.observationLocalDataSource)
     var localDataSource: ObservationLocalDataSource
+    
+    var iconSizePerEvent: [Int: CGSize] = [:]
     
     func getIconPath(observationUri: URL) async -> String? {
         if let observation = await localDataSource.getObservation(observationUri: observationUri) {
@@ -40,16 +43,35 @@ class ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
         ObservationImage.imageName(observation: observation)
     }
 
+    let queue = DispatchQueue(label: "Queue")
+
     func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize {
-        // start with the default marker
-        var size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0)
-        if let defaultMarker = UIImage(named: "defaultMarker") {
-            size = defaultMarker.size
+        if let eventIconSize = iconSizePerEvent[eventId] {
+            return eventIconSize
         }
-        return iterateIconDirectoriesAtRoot(
-            directory: rootIconFolder(eventId: eventId),
-            currentLargest: size
-        )
+        // doing this to synchronize access to the size
+        // see: https://www.donnywals.com/an-introduction-to-synchronizing-access-with-swifts-actors/
+        return queue.asyncAndWait {
+            if let iconSize = self.iconSizePerEvent[eventId] {
+                return iconSize
+            } else {
+                // start with the default marker
+                var size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 0)
+                if let defaultMarker = UIImage(named: "defaultMarker") {
+                    size = defaultMarker.size
+                }
+                let iconSize = self.iterateIconDirectoriesAtRoot(
+                    directory: self.rootIconFolder(eventId: eventId),
+                    currentLargest: size
+                )
+                self.iconSizePerEvent[eventId] = iconSize
+                return iconSize
+            }
+        }
+    }
+    
+    func resetEventIconSize(eventId: Int) {
+        iconSizePerEvent.removeValue(forKey: eventId)
     }
 
     func iterateIconDirectoriesAtRoot(

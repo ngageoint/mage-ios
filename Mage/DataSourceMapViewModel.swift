@@ -58,9 +58,9 @@ class DataSourceMapViewModel {
         
         requerySubject
             .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
-            .sink { index in
-                Task {
-                    await self.queryFeatures()
+            .sink { [weak self] index in
+                Task { [weak self] in
+                    await self?.queryFeatures()
                 }
             }
             .store(in: &cancellable)
@@ -74,8 +74,8 @@ class DataSourceMapViewModel {
         }.store(in: &cancellable)
         
         repository?.refreshPublisher?
-            .sink { date in
-                self.refresh()
+            .sink { [weak self] date in
+                self?.refresh()
             }
             .store(in: &cancellable)
         
@@ -155,6 +155,7 @@ class DataSourceMapViewModel {
         let queryLocationMinLatitude = location.latitude
         let queryLocationMaxLatitude = location.latitude
 
+        print("XXX ITEM KEYS \(repository)")
         return [
             dataSource.key: await repository?.getItemKeys(
                 minLatitude: queryLocationMinLatitude,
@@ -168,34 +169,5 @@ class DataSourceMapViewModel {
                 distanceTolerance: distanceTolerance
             ) ?? []
         ]
-    }
-    
-    func items(
-        at location: CLLocationCoordinate2D,
-        mapView: MKMapView,
-        touchPoint: CGPoint
-    ) async -> [any DataSourceImage]? {
-        guard let zoom = mapStateRepository.zoom else { return nil }
-        let viewWidth = await mapView.frame.size.width
-        let viewHeight = await mapView.frame.size.height
-
-        let latitudePerPixel = await mapView.region.span.latitudeDelta / viewHeight
-        let longitudePerPixel = await mapView.region.span.longitudeDelta / viewWidth
-
-        let queryLocationMinLongitude = location.longitude
-        let queryLocationMaxLongitude = location.longitude
-        let queryLocationMinLatitude = location.latitude
-        let queryLocationMaxLatitude = location.latitude
-
-        return await repository?.getTileableItems(
-            minLatitude: queryLocationMinLatitude,
-            maxLatitude: queryLocationMaxLatitude,
-            minLongitude: queryLocationMinLongitude,
-            maxLongitude: queryLocationMaxLongitude,
-            latitudePerPixel: latitudePerPixel,
-            longitudePerPixel: longitudePerPixel,
-            zoom: zoom,
-            precise: true
-        )
     }
 }

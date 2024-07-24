@@ -33,9 +33,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
 
     var observationLocationUrl: URL?
     var observationUrl: URL?
-    
-    var eventIdToMaxIconSize: [Int: CGSize?] = [:]
-    
+        
     init(observationLocationUrl: URL?) {
         self.observationLocationUrl = observationLocationUrl
         _ = getMaximumIconHeightToWidthRatio()
@@ -141,12 +139,7 @@ class ObservationLocationTileRepository: TileRepository, ObservableObject {
     
     func getMaximumIconHeightToWidthRatio() -> CGSize {
         if let currentEvent = Server.currentEventId() {
-            if let calculatedSize = eventIdToMaxIconSize[currentEvent.intValue] as? CGSize {
-                return calculatedSize
-            }
-            let size = iconRepository.getMaximumIconHeightToWidthRatio(eventId: currentEvent.intValue)
-            eventIdToMaxIconSize[currentEvent.intValue] = size
-            return size
+            return iconRepository.getMaximumIconHeightToWidthRatio(eventId: currentEvent.intValue)
         }
         return .zero
     }

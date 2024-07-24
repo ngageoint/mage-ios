@@ -23,6 +23,12 @@ extension InjectedValues {
 class ObservationIconRepository: ObservableObject {
     @Injected(\.observationIconLocalDataSource)
     var localDataSource: ObservationIconLocalDataSource
+    
+    init() {
+        if let currentEventId = Server.currentEventId() {
+            self.resetEventIconSize(eventId: Int(truncating: currentEventId))
+        }
+    }
 
     func getIconPath(observationUri: URL) async -> String? {
         await localDataSource.getIconPath(observationUri: observationUri)
@@ -34,5 +40,9 @@ class ObservationIconRepository: ObservableObject {
 
     func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize {
         localDataSource.getMaximumIconHeightToWidthRatio(eventId: eventId)
+    }
+    
+    func resetEventIconSize(eventId: Int) {
+        localDataSource.resetEventIconSize(eventId: eventId)
     }
 }

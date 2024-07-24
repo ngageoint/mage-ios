@@ -56,8 +56,6 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
     var eventIdToMaxIconSize: [Int: CGSize?] = [:]
 
     init() {
-        _ = getMaximumIconHeightToWidthRatio()
-
         self.localDataSource.locationsPublisher()
             .dropFirst()
             .sink { changes in
@@ -161,7 +159,6 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         precise: Bool,
         distanceTolerance: Double = 0
     ) async -> [ObservationMapItem] {
-
         // determine widest and tallest icon at this zoom level pixels
         let iconPixelSize = getMaxHeightAndWidth(zoom: zoom)
 
@@ -193,11 +190,12 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
                 continue
             }
             
-            let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
-            let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
+
             if item.geometry is SFPoint {
                 // for now don't do precise matching on points.  Needs to be sped up a lot
                 matchedItems.append(item)
+//                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
+//                let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
 //                let include = await markerHitTest(
 //                    location: tapLocation,
 //                    zoom: zoom,
@@ -229,12 +227,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
 
     func getMaximumIconHeightToWidthRatio() -> CGSize {
         if let currentEvent = Server.currentEventId() {
-            if let calculatedSize = eventIdToMaxIconSize[currentEvent.intValue] as? CGSize {
-                return calculatedSize
-            }
-            let size = iconRepository.getMaximumIconHeightToWidthRatio(eventId: currentEvent.intValue)
-            eventIdToMaxIconSize[currentEvent.intValue] = size
-            return size
+            return iconRepository.getMaximumIconHeightToWidthRatio(eventId: currentEvent.intValue)
         }
         return .zero
     }

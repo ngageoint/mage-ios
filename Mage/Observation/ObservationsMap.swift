@@ -20,6 +20,9 @@ class ObservationsMap: DataSourceMap {
     
     @Injected(\.observationsTileRepository)
     var repository: ObservationsTileRepository
+    
+    @Injected(\.observationIconRepository)
+    var iconRepository: ObservationIconRepository
 
     init() {
         super.init(
@@ -90,8 +93,9 @@ class ObservationsMap: DataSourceMap {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] notification in
                 if let event: Event = notification.object as? Event {
-                    if event.remoteId == Server.currentEventId() {
+                    if let eventId = event.remoteId, eventId == Server.currentEventId() {
                         Task { [self] in
+                            self?.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
                             await self?.repository.clearCache()
                             await self?.redrawFeatures()
                             self?.viewModel?.refresh()

@@ -52,12 +52,12 @@ class BottomSheetMixin: NSObject, MapMixin {
     func setupMixin(mapView: MKMapView, mapState: MapState) {
         self.bottomSheetRepository.$bottomSheetItems
             .receive(on: DispatchQueue.main)
-            .sink { bottomSheetItems in
-                Task {
+            .sink { [weak self] bottomSheetItems in
+                Task { [weak self] in
                     if let bottomSheetItems = bottomSheetItems, !bottomSheetItems.isEmpty {
-                        await self.showBottomSheet(bottomSheetItems: bottomSheetItems, mapView: mapView)
+                        await self?.showBottomSheet(bottomSheetItems: bottomSheetItems, mapView: mapView)
                     } else {
-                        await self.dismissBottomSheet()
+                        await self?.dismissBottomSheet()
                     }
                 }
             }
