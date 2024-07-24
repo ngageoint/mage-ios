@@ -52,3 +52,17 @@ public extension View {
         modifier(SecondaryText())
     }
 }
+
+public struct PropertyValueText: ViewModifier {
+    public func body(content: Content) -> some View {
+        content
+            .font(Font.body1)
+            .foregroundColor(Color.onSurfaceColor)
+    }
+}
+
+public extension View {
+    func propertyValueText() -> some View {
+        modifier(PropertyValueText())
+    }
+}

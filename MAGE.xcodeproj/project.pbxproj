@@ -512,6 +512,10 @@
 		F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8E12C501E5E00901479 /* PhoneButton.swift */; };
 		F7BFB8E52C504A4A00901479 /* StaticLayerFeatureSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8E42C504A4A00901479 /* StaticLayerFeatureSummary.swift */; };
 		F7BFB8E72C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8E62C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift */; };
+		F7BFB8EA2C5055A800901479 /* GeoPackageFeatureSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8E92C5055A800901479 /* GeoPackageFeatureSummary.swift */; };
+		F7BFB8EC2C513E0B00901479 /* GeoPackagePropertyRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8EB2C513E0B00901479 /* GeoPackagePropertyRows.swift */; };
+		F7BFB8EE2C51572600901479 /* GeoPackageMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8ED2C51572600901479 /* GeoPackageMediaView.swift */; };
+		F7BFB8F02C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8EF2C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift */; };
 		F7C01CD026619DEC002D7684 /* ObservationCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */; };
 		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
 		F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */; };
@@ -1360,6 +1364,10 @@
 		F7BFB8E12C501E5E00901479 /* PhoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneButton.swift; sourceTree = "<group>"; };
 		F7BFB8E42C504A4A00901479 /* StaticLayerFeatureSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerFeatureSummary.swift; sourceTree = "<group>"; };
 		F7BFB8E62C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLayerFeatureBottomSheetActionBar.swift; sourceTree = "<group>"; };
+		F7BFB8E92C5055A800901479 /* GeoPackageFeatureSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummary.swift; sourceTree = "<group>"; };
+		F7BFB8EB2C513E0B00901479 /* GeoPackagePropertyRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackagePropertyRows.swift; sourceTree = "<group>"; };
+		F7BFB8ED2C51572600901479 /* GeoPackageMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageMediaView.swift; sourceTree = "<group>"; };
+		F7BFB8EF2C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureBottomSheetViewModel.swift; sourceTree = "<group>"; };
 		F7C01CCF26619DEC002D7684 /* ObservationCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCompactView.swift; sourceTree = "<group>"; };
 		F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListCardCellTests.swift; sourceTree = "<group>"; };
 		F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetTests.swift; sourceTree = "<group>"; };
@@ -2345,6 +2353,7 @@
 		F734C1E62BC8474B00B2E8C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				F7BFB8E82C50559D00901479 /* GeoPackage */,
 				F7BFB8E32C504A3800901479 /* StaticLayer */,
 				F7BFB8DA2C50102600901479 /* User */,
 				F754C6572C484C9A00E408E9 /* Shapes */,
@@ -2376,6 +2385,7 @@
 				F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */,
 				F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */,
 				F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */,
+				F7BFB8EF2C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift */,
 			);
 			path = BottomSheets;
 			sourceTree = "<group>";
@@ -3137,6 +3147,16 @@
 			path = StaticLayer;
 			sourceTree = "<group>";
 		};
+		F7BFB8E82C50559D00901479 /* GeoPackage */ = {
+			isa = PBXGroup;
+			children = (
+				F7BFB8E92C5055A800901479 /* GeoPackageFeatureSummary.swift */,
+				F7BFB8EB2C513E0B00901479 /* GeoPackagePropertyRows.swift */,
+				F7BFB8ED2C51572600901479 /* GeoPackageMediaView.swift */,
+			);
+			path = GeoPackage;
+			sourceTree = "<group>";
+		};
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -3794,6 +3814,7 @@
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
+				F7BFB8EE2C51572600901479 /* GeoPackageMediaView.swift in Sources */,
 				F7E079522C32EB750029C88D /* MKShapeExtensions.swift in Sources */,
 				F70688BA2BB5BEE700D8E2EA /* ObservationIconRepository.swift in Sources */,
 				4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */,
@@ -3913,6 +3934,7 @@
 				F7F2EDAC1F21351B0083CD88 /* FilterTableViewController.m in Sources */,
 				F72D43002694B60300F9AC3B /* Model4To15.xcmappingmodel in Sources */,
 				8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */,
+				F7BFB8EA2C5055A800901479 /* GeoPackageFeatureSummary.swift in Sources */,
 				F78D578F27B58901003594D3 /* SingleUserMapView.swift in Sources */,
 				2F4E10B9220E387D001C9F12 /* RightDetailSubtitleTableViewCell.m in Sources */,
 				F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */,
@@ -4105,6 +4127,7 @@
 				F7BFB8D02C4AAE5500901479 /* FavoriteButton.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.swift in Sources */,
 				F7148D3724002FD100F9F879 /* ImageCacheProvider.swift in Sources */,
+				F7BFB8EC2C513E0B00901479 /* GeoPackagePropertyRows.swift in Sources */,
 				F7F8B4B726CE88B500DACCC7 /* AttachmentProgressViewController.swift in Sources */,
 				F730B94B2683D273004AD64A /* CardHeader.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
@@ -4136,6 +4159,7 @@
 				2F8A2C0F2200FC2C007FE473 /* EventInformationCoordinator.m in Sources */,
 				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
+				F7BFB8F02C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift in Sources */,
 				F70688A22BA4CF8900D8E2EA /* ObservationLocation.swift in Sources */,
 				F727517119C88CAE006C63CB /* Observations.m in Sources */,
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,

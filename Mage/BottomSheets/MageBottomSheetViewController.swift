@@ -89,13 +89,19 @@ struct MageBottomSheet: View {
                 }
             }
             
-            Group {
+            ScrollView(.vertical) {
                 if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? ObservationMapItem {
                     ObservationLocationBottomSheet(viewModel: ObservationLocationBottomSheetViewModel(observationLocationUri: bottomSheetItem.observationLocationId))
                 } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? User {
                     UserBottomSheet(viewModel: UserBottomSheetViewModel(userUri: bottomSheetItem.objectID.uriRepresentation()))
                 } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? FeatureItem {
                     FeatureBottomSheet(viewModel: StaticLayerBottomSheetViewModel(featureItem: bottomSheetItem))
+                } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? GeoPackageFeatureItem {
+                    GeoPackageFeatureBottomSheet(viewModel: GeoPackageFeatureBottomSheetViewModel(featureItem: bottomSheetItem))
+//                    UIViewContainer(GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: nil, scheme: self.scheme))
+                    
+//                    newBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+//                    NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
                 }
             }
             .frame(maxWidth: .infinity)

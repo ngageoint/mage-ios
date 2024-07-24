@@ -35,7 +35,7 @@ class GeoPackageRepository: ObservableObject {
             let item = GeoPackageFeatureItem(featureRow: featureRow, geoPackage: geoPackage, layerName: key.layerName, projection: featureDao.projection)
             return item
         } else {
-            return GeoPackageFeatureItem(maxFeaturesReached: true, featureCount: key.featureCount, layerName: key.layerName)
+            return GeoPackageFeatureItem(maxFeaturesReached: true, featureCount: key.featureCount, geoPackageName: key.geoPackageName, layerName: key.layerName, tableName: key.tableName)
         }
     }
 }

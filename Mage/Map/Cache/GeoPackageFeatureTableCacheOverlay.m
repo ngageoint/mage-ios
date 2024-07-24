@@ -153,7 +153,12 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
             
             // Build the max features message
             if(self.featureOverlayQuery.maxFeaturesInfo){
-                GeoPackageFeatureItem *featureItem = [[GeoPackageFeatureItem alloc] initWithMaxFeaturesReached:true featureCount:tileFeatureCount layerName:[self getName]];
+                GeoPackageFeatureItem *featureItem = [[GeoPackageFeatureItem alloc]
+                                                      initWithMaxFeaturesReached:true
+                                                      featureCount:tileFeatureCount
+                                                      geoPackageName: [self getGeoPackage]
+                                                      layerName:[self getName]
+                                                      tableName: self.featureOverlayQuery.featureTiles.featureDao.tableName];
                 [featureItems addObject:featureItem];
                 return featureItems;
             }
@@ -221,7 +226,12 @@ NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
             
             // Build the max features message
             if(self.featureOverlayQuery.maxFeaturesInfo){
-                GeoPackageFeatureItem *featureItem = [[GeoPackageFeatureItem alloc] initWithMaxFeaturesReached:true featureCount:tileFeatureCount layerName:[self getName]];
+                GeoPackageFeatureItem *featureItem = [[GeoPackageFeatureItem alloc]
+                                                      initWithMaxFeaturesReached:true
+                                                      featureCount:tileFeatureCount
+                                                      geoPackageName: [self getGeoPackage]
+                                                      layerName:[self getName]
+                                                      tableName: self.featureOverlayQuery.featureTiles.featureDao.tableName];
                 [featureItems addObject:featureItem];
             }
         }

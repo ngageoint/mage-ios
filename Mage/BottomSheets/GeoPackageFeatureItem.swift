@@ -53,27 +53,32 @@ import ExceptionCatcher
 }
 
 @objc class GeoPackageFeatureItem: NSObject {
-    @objc public override init() {
-        
-    }
+//    @objc public override init() {
+//        
+//    }
     
-    @objc public init(maxFeaturesReached: Bool, featureCount: Int = 0, layerName: String? = nil) {
+    @objc public init(maxFeaturesReached: Bool, featureCount: Int = 0, geoPackageName: String, layerName: String, tableName: String) {
         self.maxFeaturesReached = maxFeaturesReached;
         self.featureCount = featureCount;
         self.layerName = layerName;
+        self.tableName = tableName;
+        self.geoPackageName = geoPackageName
     }
     
     @objc public init(
         featureId: Int = 0,
+        geoPackageName: String,
         featureRowData:GPKGFeatureRowData?,
         featureDataTypes: [String : String]? = nil,
         coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid,
-        layerName: String? = nil,
+        layerName: String,
+        tableName: String,
         icon: UIImage? = nil,
         style: GPKGStyleRow? = nil,
         mediaRows: [GPKGMediaRow]? = nil,
         attributeRows: [GeoPackageFeatureItem]? = nil
     ) {
+        self.geoPackageName = geoPackageName
         self.featureId = featureId
         self.coordinate = coordinate
         self.icon = icon
@@ -83,6 +88,11 @@ import ExceptionCatcher
         self.featureDataTypes = featureDataTypes
         self.style = style;
         self.attributeRows = attributeRows;
+        self.tableName = tableName
+    }
+    
+    func toKey() -> GeoPackageFeatureKey {
+        GeoPackageFeatureKey(geoPackageName: geoPackageName, featureId: featureId, layerName: layerName, tableName: layerName)
     }
     
     @objc public var featureId: Int = 0;
@@ -93,22 +103,52 @@ import ExceptionCatcher
     @objc public var attributeRows: [GeoPackageFeatureItem]?;
     @objc public var featureRowData: GPKGFeatureRowData?;
     @objc public var featureDataTypes: [String : String]?;
-    @objc public var layerName: String?;
+    @objc public var layerName: String;
     @objc public var style: GPKGStyleRow?;
     @objc public var maxFeaturesReached: Bool = false;
     @objc public var featureCount: Int = 1;
+    @objc public var geoPackageName: String
+    @objc public var tableName: String
     
     @objc public init?(featureRow: GPKGFeatureRow, geoPackage: GPKGGeoPackage, layerName: String, projection: PROJProjection) {
+        self.layerName = layerName
+        self.geoPackageName = geoPackage.name
+        self.tableName = featureRow.tableName()
         super.init()
         do {
             try ExceptionCatcher.catch {
                 let rte = GPKGRelatedTablesExtension(geoPackage: geoPackage)
-                let mediaTables: [GPKGExtendedRelation] = []
-                let attributeTables: [GPKGExtendedRelation] = []
+                var mediaTables: [GPKGExtendedRelation] = []
+                var attributeTables: [GPKGExtendedRelation] = []
                 let styles = GPKGFeatureTableStyles(geoPackage: geoPackage, andTable: featureRow.featureTable)
                 
                 var medias: [GPKGMediaRow] = []
                 var attributes: [GPKGAttributesRow] = []
+                
+                if let relationsDao = GPKGExtendedRelationsDao.create(withDatabase: geoPackage.database),
+                    relationsDao.tableExists()
+                {
+                    if let relations = relationsDao.relations(toBaseTable: featureRow.tableName()) {
+                        do {
+                            try ExceptionCatcher.catch {
+                                while relations.moveToNext() {
+                                    if let extendedRelation = relationsDao.relation(relations),
+                                       extendedRelation.relationType() == GPKGRelationTypes.fromName(GPKG_RT_MEDIA_NAME) {
+                                        mediaTables.append(extendedRelation)
+                                    } else if let extendedRelation = relationsDao.relation(relations),
+                                              extendedRelation.relationType() == GPKGRelationTypes.fromName(GPKG_RT_ATTRIBUTES_NAME) {
+                                        attributeTables.append(extendedRelation)
+                                    }
+                                }
+                                relations.close()
+                            }
+                        } catch {
+                            relations.close()
+                        }
+                    }
+                }
+                
+                
                 let featureId = featureRow.idValue()
                 for relation in mediaTables {
                     let relatedMedia = rte?.mappings(forTableName: relation.mappingTableName, withBaseId: featureId)
@@ -205,6 +245,8 @@ import ExceptionCatcher
     }
     
     @objc public init?(row: GPKGAttributesRow, geoPackage: GPKGGeoPackage, layerName: String) {
+        self.geoPackageName = geoPackage.name
+        self.tableName = row.tableName()
         let rte = GPKGRelatedTablesExtension(geoPackage: geoPackage)
         let dataColumnsDao = GPKGDataColumnsDao(database: geoPackage.database)
         
@@ -267,5 +309,38 @@ import ExceptionCatcher
         self.featureDataTypes = attributeDataTypes
         self.layerName = layerName
         self.mediaRows = attributeMedias
+    }
+    
+    func getDate() -> Date? {
+        if let values = self.featureRowData?.values(), let titleKey = values.keys.first(where: { key in
+            return ["date", "timestamp"].contains((key as? String)?.lowercased());
+        }) {
+            return values[titleKey] as? Date;
+        }
+        return nil;
+    }
+    
+    func createTitle() -> String {
+        let title = "GeoPackage Feature";
+        if maxFeaturesReached {
+            return "\(featureCount) Features";
+        }
+        if let values = featureRowData?.values(), let titleKey = values.keys.first(where: { key in
+            return ["name", "title", "primaryfield"].contains((key as? String)?.lowercased());
+        }) {
+            return values[titleKey] as? String ?? title;
+        }
+        return title;
+    }
+    
+    func createSecondaryTitle() -> String? {
+        if let values = featureRowData?.values(), let titleKey = values.keys.first(where: { key in
+            return ["secondaryfield", "subtitle", "variantfield"].contains((key as? String)?.lowercased());
+        }) {
+            if let title = values[titleKey] as? String {
+                return title;
+            }
+        }
+        return nil
     }
 }
