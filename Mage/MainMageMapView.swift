@@ -18,6 +18,9 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     @Injected(\.userRepository)
     var userRepository: UserRepository
     
+    @Injected(\.feedItemRepository)
+    var feedItemRepository: FeedItemRepository
+    
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
 
@@ -170,6 +173,10 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         viewFeedItemNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
             if let feedItem = notification.object as? FeedItem {
                 self?.viewFeedItem(feedItem)
+            } else if let feedItemUri = notification.object as? URL {
+                Task {
+                    await self?.viewFeedItemUri(feedItemUri)
+                }
             }
         }
     }
@@ -184,6 +191,15 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
         navigationController?.pushViewController(fivc, animated: true)
+    }
+    
+    @MainActor
+    func viewFeedItemUri(_ feedItemUri: URL) async {
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        if let feedItem = await feedItemRepository.getFeedItem(feedItemrUri: feedItemUri) {
+            let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
+            navigationController?.pushViewController(fivc, animated: true)
+        }
     }
     
     @MainActor

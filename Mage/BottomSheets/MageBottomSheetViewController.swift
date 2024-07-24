@@ -102,6 +102,8 @@ struct MageBottomSheet: View {
                     
 //                    newBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
 //                    NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
+                } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? FeedItem {
+                    FeedItemBottomSheet(viewModel: FeedItemBottomSheeViewModel(feedItemUri: bottomSheetItem.objectID.uriRepresentation()))
                 }
             }
             .frame(maxWidth: .infinity)
@@ -347,10 +349,10 @@ class MageBottomSheetViewController: UIViewController {
         Task {
             var newBottomSheetView: UIView?
 //            var bottomsheet2: UIView?
-            if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
-                newBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
-                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
-            }
+//            if let bottomSheetItem = item.item as? GeoPackageFeatureItem {
+//                newBottomSheetView = GeoPackageFeatureBottomSheetView(geoPackageFeatureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
+//                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
+//            }
 //            else if let bottomSheetItem = item.item as? User {
 //                newBottomSheetView = UserBottomSheetView(user: bottomSheetItem, actionsDelegate: item.actionDelegate as? UserActionsDelegate, scheme: self.scheme);
 //                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
@@ -359,30 +361,31 @@ class MageBottomSheetViewController: UIViewController {
 //                newBottomSheetView = FeatureBottomSheetView(featureItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeatureActionsDelegate, scheme: self.scheme);
 //                NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
 //            } 
-            else if let bottomSheetItem = item.item as? FeedItem {
+            if let bottomSheetItem = item.item as? FeedItem {
                 newBottomSheetView = FeedItemBottomSheetView(feedItem: bottomSheetItem, actionsDelegate: item.actionDelegate as? FeedItemActionsDelegate, scheme: self.scheme);
                 NotificationCenter.default.post(name: .MapAnnotationFocused, object: MapAnnotationFocusedNotification(annotation: item.annotationView?.annotation, mapView: mapView))
-            } else if let bottomSheetItem = item.item as? ObservationMapItem {
-                if let observationLocation = await observationLocationRepository.getObservationLocation(
-                    observationLocationUri: bottomSheetItem.observationLocationId
-                ) {
-                    let locationSummary = ObservationLocationBottomSheet(viewModel: ObservationLocationBottomSheetViewModel(observationLocationUri: bottomSheetItem.observationLocationId))
-//                    ObservationLocationSummary(observationMapItem: ObservationMapItem(observation: observationLocation))
-                    
-                    let viewController = SwiftUIViewController(swiftUIView: locationSummary)
-                    newBottomSheetView = viewController.view
-                    
-//                    bottomsheet2 = ObservationLocationBottomSheetView(
-//                        observationLocation: observationLocation,
-//                        actionsDelegate: item.actionDelegate as? ObservationActionsDelegate,
-//                        scheme: self.scheme
-//                    )
-                    NotificationCenter.default.post(
-                        name: .MapAnnotationFocused,
-                        object: MapAnnotationFocusedNotification(item: bottomSheetItem)
-                    )
-                }
             }
+//            else if let bottomSheetItem = item.item as? ObservationMapItem {
+//                if let observationLocation = await observationLocationRepository.getObservationLocation(
+//                    observationLocationUri: bottomSheetItem.observationLocationId
+//                ) {
+//                    let locationSummary = ObservationLocationBottomSheet(viewModel: ObservationLocationBottomSheetViewModel(observationLocationUri: bottomSheetItem.observationLocationId))
+////                    ObservationLocationSummary(observationMapItem: ObservationMapItem(observation: observationLocation))
+//                    
+//                    let viewController = SwiftUIViewController(swiftUIView: locationSummary)
+//                    newBottomSheetView = viewController.view
+//                    
+////                    bottomsheet2 = ObservationLocationBottomSheetView(
+////                        observationLocation: observationLocation,
+////                        actionsDelegate: item.actionDelegate as? ObservationActionsDelegate,
+////                        scheme: self.scheme
+////                    )
+//                    NotificationCenter.default.post(
+//                        name: .MapAnnotationFocused,
+//                        object: MapAnnotationFocusedNotification(item: bottomSheetItem)
+//                    )
+//                }
+//            }
             await MainActor.run {
                 UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
                     if let view = self.currentBottomSheetView as? UIView, view.superview != nil {
