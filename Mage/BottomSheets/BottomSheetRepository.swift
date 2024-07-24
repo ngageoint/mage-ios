@@ -42,8 +42,10 @@ class BottomSheetRepository: ObservableObject {
     func setItemKeys(itemKeys: [String: [String]]?) async {
         self.itemKeys = itemKeys
         
-        guard let itemKeys = itemKeys else {
-            self.bottomSheetItems = nil
+        guard let itemKeys = itemKeys, !itemKeys.isEmpty else {
+            if self.bottomSheetItems != nil {
+                self.bottomSheetItems = nil
+            }
             return
         }
                 

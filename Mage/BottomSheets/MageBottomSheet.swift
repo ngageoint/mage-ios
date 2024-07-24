@@ -24,9 +24,7 @@ class BottomSheetItem: NSObject {
     }
 }
 
-struct MageBottomSheet: View {
-    var scheme: MDCContainerScheming?
-    
+struct MageBottomSheet: View {    
     @StateObject
     var viewModel: MageBottomSheetViewModel = MageBottomSheetViewModel()
     @State private var first = true

@@ -13,7 +13,6 @@ import Combine
 protocol BottomSheetEnabled {
     var mapView: MKMapView? { get set }
     var navigationController: UINavigationController?  { get set }
-    var scheme: MDCContainerScheming? { get set }
     var bottomSheetMixin: BottomSheetMixin? { get set }
 }
 
@@ -37,7 +36,6 @@ class BottomSheetMixin: NSObject, MapMixin {
     var bottomSheetEnabled: BottomSheetEnabled
     var mapViewDisappearingObserver: Any?
     var mageBottomSheet: UIViewController?
-    var bottomSheet:MDCBottomSheetController?
     
     init(bottomSheetEnabled: BottomSheetEnabled) {
         self.bottomSheetEnabled = bottomSheetEnabled
@@ -68,24 +66,13 @@ class BottomSheetMixin: NSObject, MapMixin {
     
     @MainActor
     func showBottomSheet(bottomSheetItems: [BottomSheetItem], mapView: MKMapView) {
-        
-//        let mageBottomSheet = MageBottomSheetViewController(items: bottomSheetItems, mapView: mapView, scheme: self.bottomSheetEnabled.scheme)
-        
-        let mageBottomSheet = SwiftUIViewController(swiftUIView: MageBottomSheet(scheme: self.bottomSheetEnabled.scheme))
+        let mageBottomSheet = SwiftUIViewController(swiftUIView: MageBottomSheet())
         mageBottomSheet.modalPresentationStyle = .pageSheet
         if let sheet = mageBottomSheet.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
         }
         self.bottomSheetEnabled.navigationController?.present(mageBottomSheet, animated: true, completion: nil)
         
-//        let bottomSheetNav = UINavigationController(rootViewController: mageBottomSheet)
-//        let bottomSheet = MDCBottomSheetController(contentViewController: bottomSheetNav)
-//        bottomSheet.navigationController?.navigationBar.isTranslucent = true
-//        bottomSheet.scrimColor = .clear
-//        bottomSheet.delegate = self
-//        bottomSheet.trackingScrollView = mageBottomSheet.scrollView
-//        self.bottomSheetEnabled.navigationController?.present(bottomSheet, animated: true, completion: nil)
-//        self.bottomSheet = bottomSheet
         self.mageBottomSheet = mageBottomSheet
         self.mapViewDisappearingObserver = NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
             Task { [weak self] in
@@ -102,8 +89,14 @@ class BottomSheetMixin: NSObject, MapMixin {
     @MainActor
     func dismissBottomSheet() {
         self.mageBottomSheet?.dismiss(animated: true, completion: {
+            NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
             self.mageBottomSheet = nil
-            self.bottomSheet = nil
+            Task { [weak self] in
+                await self?.bottomSheetRepository.setItemKeys(itemKeys: nil)
+            }
+            if let mapViewDisappearingObserver = self.mapViewDisappearingObserver {
+                NotificationCenter.default.removeObserver(mapViewDisappearingObserver, name: .MapViewDisappearing, object: nil)
+            }
             NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
         })
     }
@@ -118,19 +111,5 @@ class BottomSheetMixin: NSObject, MapMixin {
             return false
         }
         return isVisible(view: view, inView: view.superview)
-    }
-}
-
-extension BottomSheetMixin : MDCBottomSheetControllerDelegate {
-    func bottomSheetControllerDidDismissBottomSheet(_ controller: MDCBottomSheetController) {
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        mageBottomSheet = nil
-        bottomSheet = nil
-        Task {
-            await bottomSheetRepository.setItemKeys(itemKeys: nil)
-        }
-        if let mapViewDisappearingObserver = mapViewDisappearingObserver {
-            NotificationCenter.default.removeObserver(mapViewDisappearingObserver, name: .MapViewDisappearing, object: nil)
-        }
     }
 }

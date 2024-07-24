@@ -192,6 +192,9 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                 }
             }
         }
+        if annotations.isEmpty {
+            return [:]
+        }
         return [DataSources.featureItem.key: annotations.map({ featureItem in
             featureItem.toKey()
         })]

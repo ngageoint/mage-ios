@@ -78,7 +78,7 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [String : [String]] {
-        if let keys = geoPackage?.getFeatureKeys(atTap: location) {
+        if let keys = geoPackage?.getFeatureKeys(atTap: location), !keys.isEmpty {
             return [DataSources.geoPackage.key: keys.map({ key in
                 key.toKey()
             })]
