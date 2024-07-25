@@ -94,7 +94,7 @@ class FeedsMapMixin: NSObject, MapMixin {
                 for item in items {
                     if let feedAnnotation = feedsMap.mapView?.annotations.first(where: { annotation in
                         if let annotation = annotation as? FeedItemAnnotation {
-                            return annotation.feedItemId == item.feedItemId
+                            return annotation.id == item.id
                         }
                         return false
                     }) as? FeedItemAnnotation {
@@ -141,7 +141,7 @@ class FeedsMapMixin: NSObject, MapMixin {
         
         FeedItemRetriever.setAnnotationImage(feedItem: annotation, annotationView: annotationView)
         annotationView.annotation = annotation
-        annotationView.accessibilityLabel = "Feed \(annotation.feedId?.absoluteString ?? "") Item \(annotation.feedItemId.absoluteString)"
+        annotationView.accessibilityLabel = "FeedItem \(annotation.id)"
         annotation.view = annotationView
         return annotationView
     }
@@ -191,7 +191,7 @@ extension FeedsMapMixin : FeedItemDelegate {
     func removeFeedItem(_ feedItem: FeedItemAnnotation) {
         if let feedAnnotation = feedsMap.mapView?.annotations.first(where: { annotation in
             if let annotation = annotation as? FeedItemAnnotation {
-                return annotation.feedItemId == feedItem.feedItemId
+                return annotation.id == feedItem.id
             }
             return false
         }) as? FeedItemAnnotation {
