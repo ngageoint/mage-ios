@@ -19,36 +19,28 @@ extension CGImage {
 }
 
 struct VideoImageProvider: ImageDataProvider {
-    var cacheKey: String { return url?.absoluteString ?? "" }
-    let url: URL?
-    let localFile: URL?
-    
-    init(url: URL, localPath: String?) {
-        self.url = url
-        if let localPath = localPath, FileManager.default.fileExists(atPath: localPath) {
-            self.localFile = URL(fileURLWithPath: localPath)
-        } else {
-            self.localFile = nil;
-        }
+    var cacheKey: String { return sourceUrl.absoluteString }
+    let sourceUrl: URL
+    let localUrl: URL?
+
+    init(sourceUrl: URL, localPath: String?) {
+        self.sourceUrl = sourceUrl
+        self.localUrl = if let localPath { URL(fileURLWithPath: localPath) } else { nil }
     }
     
     init(url: URL) {
-        self.url = url;
-        self.localFile = nil;
+        self.sourceUrl = url;
+        self.localUrl = nil;
     }
     
     init(localPath: String) {
-        if FileManager.default.fileExists(atPath: localPath) {
-            self.localFile = URL(fileURLWithPath: localPath)
-        } else {
-            self.localFile = nil;
-        }
-        self.url = nil;
+        self.localUrl = URL(fileURLWithPath: localPath)
+        self.sourceUrl = self.localUrl!
     }
     
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            if let localFile = self.localFile, FileManager.default.fileExists(atPath: localFile.path) {
+            if let localFile = self.localUrl, FileManager.default.fileExists(atPath: localFile.path) {
                 let asset: AVURLAsset = AVURLAsset(url: localFile);
                 do {
                     handler(.success(try self.generateThumb(asset: asset)));
@@ -58,14 +50,11 @@ struct VideoImageProvider: ImageDataProvider {
                 }
                 return;
             }
-            
             if (!DataConnectionUtilities.shouldFetchAttachments()) {
-                return handler(.failure(NSError(domain:"", code:-1, userInfo:nil)))
+                return handler(.failure(NSError(domain: "MAGE", code: -1, userInfo: [ NSLocalizedDescriptionKey: "attachment fetching is disabled" ])))
             }
             let token: String = StoredPassword.retrieveStoredToken();
-        
-            guard let url = self.url else { return }
-            var urlComponents: URLComponents? = URLComponents(url: url, resolvingAgainstBaseURL: false);
+            var urlComponents: URLComponents? = URLComponents(url: sourceUrl, resolvingAgainstBaseURL: false);
             if (urlComponents?.queryItems) != nil {
                 urlComponents?.queryItems?.append(URLQueryItem(name: "access_token", value: token));
             } else {
@@ -85,7 +74,6 @@ struct VideoImageProvider: ImageDataProvider {
     func generateThumb(asset: AVURLAsset) throws -> Data {
         let generator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset);
         generator.appliesPreferredTrackTransform = true;
-        
         let time: CMTime = CMTimeMakeWithSeconds(0, preferredTimescale: 30);
         let imageRef = try generator.copyCGImage(at: time, actualTime: nil)
         let data: Data = imageRef.png!;

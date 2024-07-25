@@ -132,7 +132,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
 
                 // there is no way to call the delegate method picker(picker:didFinishPicking:) because
                 // the sdk provides no accessible constructor for the PHPickerResult struct. thanks, apple
-                attachmentCreationCoordinator.handlePhoto(photo: selectedAsset, utType: UTType.png)
+                attachmentCreationCoordinator.handlePhoto(selectedAsset: selectedAsset, utType: UTType.png)
                 self.wait(for: [ delegate.attachmentCreatedCalled ], timeout: 5.0)
 
                 let createdAttachment: Attachment = delegate.createdAttachment!

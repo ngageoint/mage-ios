@@ -8,6 +8,7 @@
 
 import Foundation
 import Kingfisher
+import UIKit
 
 protocol FeedItemSelectionDelegate {
     func feedItemSelected(_ feedItem: FeedItem)
@@ -16,7 +17,6 @@ protocol FeedItemSelectionDelegate {
 @objc class FeedItemsViewController : UITableViewController {
     
     var scheme: MDCContainerScheming?;
-    
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
@@ -33,17 +33,15 @@ protocol FeedItemSelectionDelegate {
         
         return fetchedResultsController
     }()
-    
     private lazy var emptyView : EmptyState = {
         let view = EmptyState(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
         view.configure(image: UIImage(systemName: "dot.radiowaves.up.forward"), title: "No Feed Items", description: "No feed items have been returned for this feed.", scheme: scheme)
         
         return view
     }()
-    
-    let cellReuseIdentifier = "cell";
-    
-    let feed : Feed
+    let cellReuseIdentifier = "feed_item";
+    let feed: Feed
+    var dataSource: UITableViewDiffableDataSource<Int, NSManagedObjectID>?
     var selectionDelegate: FeedItemSelectionDelegate?
     
     required init(coder aDecoder: NSCoder) {
@@ -55,39 +53,49 @@ protocol FeedItemSelectionDelegate {
         self.scheme = scheme;
         self.selectionDelegate = selectionDelegate;
         super.init(style: .grouped)
-        self.title = feed.title;
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
     }
     
     @objc public func applyTheme(withContainerScheme containerScheme: MDCContainerScheming?) {
         guard let containerScheme = containerScheme else {
             return
         }
-
         self.scheme = containerScheme;
         self.tableView.separatorStyle = .none;
         self.view.backgroundColor = containerScheme.colorScheme.backgroundColor;
-        
         self.tableView.backgroundColor = containerScheme.colorScheme.backgroundColor;
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = feed.title;
         tableView.rowHeight = UITableView.automaticDimension
-
+        self.dataSource = UITableViewDiffableDataSource<Int, NSManagedObjectID>(
+            tableView: tableView,
+            cellProvider: { (tableView, indexPath, feedItemId) in
+                guard let feedItem = try? self.fetchedResultsController.managedObjectContext.existingObject(with: feedItemId) as? FeedItem else {
+                    fatalError("feed item \(feedItemId) not found in managed object context")
+                }
+                let feedCell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseIdentifier, for: indexPath) as! FeedItemTableViewCell
+                feedCell.configure(feedItem: feedItem, actionsDelegate: self, scheme: self.scheme);
+                return feedCell
+            }
+        )
+        tableView.delegate = self
+        tableView.register(FeedItemTableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         if (self.feed.itemTemporalProperty == nil) {
             tableView.estimatedRowHeight = 72
         } else {
             tableView.estimatedRowHeight = 88
         }
-        
+        var emptySnapshot = NSDiffableDataSourceSnapshot<Int, NSManagedObjectID>()
+        emptySnapshot.appendSections([ 0 ])
+        emptySnapshot.appendItems([])
+        dataSource?.apply(emptySnapshot)
         do {
             try self.fetchedResultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("Unable to Perform Fetch Request")
+            print("Unable to perform fetch request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
     }
@@ -99,15 +107,13 @@ protocol FeedItemSelectionDelegate {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let items = fetchedResultsController.fetchedObjects
-        let number = items?.count ?? 0
-        if number == 0 {
+        let rowCount = dataSource?.snapshot().numberOfItems ?? 0
+        if rowCount == 0 {
             tableView.backgroundView = emptyView
         } else {
             tableView.backgroundView = nil
         }
-        return number
-
+        return rowCount
     }
     
     override func numberOfSections(in: UITableView) -> Int {
@@ -116,16 +122,6 @@ protocol FeedItemSelectionDelegate {
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView();
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell;
-        let feedCell: FeedItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! FeedItemTableViewCell;
-        let feedItem = fetchedResultsController.object(at: indexPath)
-        feedCell.configure(feedItem: feedItem, actionsDelegate: self, scheme: self.scheme);
-        cell = feedCell;
-        
-        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -140,27 +136,25 @@ protocol FeedItemSelectionDelegate {
 }
 
 extension FeedItemsViewController : NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            tableView.insertRows(at: [newIndexPath!], with: .fade)
-        case .delete:
-            tableView.deleteRows(at: [indexPath!], with: .fade)
-        case .update:
-            tableView.reloadRows(at: [indexPath!], with: .fade)
-        case .move:
-            tableView.moveRow(at: indexPath!, to: newIndexPath!)
-        @unknown default:
-            print("...")
+    func controller(_ controller: NSFetchedResultsController<any NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+        guard let dataSource = tableView?.dataSource as? UITableViewDiffableDataSource<Int, NSManagedObjectID> else {
+            assertionFailure("The data source has not implemented snapshot support while it should")
+            return
         }
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
+        var snapshot = snapshot as NSDiffableDataSourceSnapshot<Int, NSManagedObjectID>
+        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<Int, NSManagedObjectID>
+
+        let reloadIdentifiers: [NSManagedObjectID] = snapshot.itemIdentifiers.compactMap { itemIdentifier in
+            guard let currentIndex = currentSnapshot.indexOfItem(itemIdentifier), let index = snapshot.indexOfItem(itemIdentifier), index == currentIndex else {
+                return nil
+            }
+            guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemIdentifier), existingObject.isUpdated else { return nil }
+            return itemIdentifier
+        }
+        snapshot.reloadItems(reloadIdentifiers)
+
+        let shouldAnimate = tableView?.numberOfSections != 0
+        dataSource.apply(snapshot as NSDiffableDataSourceSnapshot<Int, NSManagedObjectID>, animatingDifferences: shouldAnimate)
     }
 }
 
