@@ -28,11 +28,21 @@ enum CoordinateActions {
                         message: "Location \(coordinateDisplay.format(coordinate: coordinate)) copied to clipboard")
                 )
             )
-            
-            print("Copied")
-            
+                        
         case .navigateTo(coordinate: let coordinate, itemKey: let itemKey, dataSource: let dataSource):
-            print("navigate to")
+            NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+            NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
+            
+            if let coordinate = coordinate {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    let notification = DirectionsToItemNotification(
+                        location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude),
+                        itemKey: itemKey,
+                        dataSource: dataSource
+                    )
+                    NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
+                }
+            }
         }
     }
     

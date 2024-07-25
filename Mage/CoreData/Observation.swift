@@ -1048,7 +1048,10 @@ enum ObservationState: Int, CustomStringConvertible {
         get {
             
             if let primaryObservationForm = primaryObservationForm, let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber {
-                return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: managedObjectContext ?? NSManagedObjectContext.mr_default())
+                let context = managedObjectContext ?? NSManagedObjectContext.mr_default()
+                return (context).performAndWait {
+                    return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context)
+                }
             }
             return nil;
         }

@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import DataSourceDefinition
 
 extension Notification.Name {
     public static let DataSourceUpdated = Notification.Name("DataSourceUpdated")
@@ -28,6 +29,9 @@ struct DirectionsToItemNotification {
     var image: UIImage?
     var imageUrl: URL?
     var sourceView: UIView?
+    
+    var itemKey: String?
+    var dataSource: any DataSourceDefinition
 }
 
 struct DataSourceUpdatedNotification {
