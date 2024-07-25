@@ -61,11 +61,17 @@ class MageMapView: UIView, GeoPackageBaseMap {
             mapStack.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .top)
         }
         
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action:nil)
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        doubleTapGestureRecognizer.numberOfTouchesRequired = 1
+        self.mapView?.addGestureRecognizer(doubleTapGestureRecognizer)
+        
         let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(singleTapGensture(tapGestureRecognizer:)))
         singleTapGestureRecognizer.numberOfTapsRequired = 1
         singleTapGestureRecognizer.delaysTouchesBegan = true
         singleTapGestureRecognizer.cancelsTouchesInView = true
         singleTapGestureRecognizer.delegate = self
+        singleTapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
         self.mapView?.addGestureRecognizer(singleTapGestureRecognizer)
         geoPackageBaseMapMixin = GeoPackageBaseMapMixin(mapView: mapView)
         mapMixins.append(geoPackageBaseMapMixin!)
