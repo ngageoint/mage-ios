@@ -192,18 +192,21 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
             
 
             if item.geometry is SFPoint {
-                // for now don't do precise matching on points.  Needs to be sped up a lot
-                matchedItems.append(item)
-//                let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
-//                let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
-//                let include = await markerHitTest(
-//                    location: tapLocation,
-//                    zoom: zoom,
-//                    tileProvider: tileProvider
-//                )
-//                if include {
-//                    matchedItems.append(item)
-//                }
+                // if we matched more than 50 things, just return them, they need to zoom in more
+                if items.count > 50 {
+                    matchedItems.append(item)
+                } else {
+                    let observationTileRepo = ObservationLocationTileRepository(observationLocationUrl: observationLocationId)
+                    let tileProvider = DataSourceTileOverlay(tileRepository: observationTileRepo, key: DataSources.observation.key)
+                    let include = await markerHitTest(
+                        location: tapLocation,
+                        zoom: zoom,
+                        tileProvider: tileProvider
+                    )
+                    if include {
+                        matchedItems.append(item)
+                    }
+                }
             } else {
                 let mkshape = MKShape.fromGeometry(geometry: item.geometry, distance: nil)
                 if let polygon = mkshape as? MKPolygon {
