@@ -119,7 +119,6 @@ extension UIImage {
     }
 
     public func hasNonTransparentPixelInBounds(minPoint: CGPoint, maxPoint: CGPoint) -> Bool {
-        let watch = WatchDog(named: "hasNonTransparentPixelInBounds")
         var pixelData: [UInt8] = [0]
         guard let context = CGContext(data: &pixelData,
                                       width: 1,

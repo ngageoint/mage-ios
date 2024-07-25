@@ -38,8 +38,8 @@ class ObservationIconRepository: ObservableObject {
         localDataSource.getIconPath(observation: observation)
     }
 
-    func getMaximumIconHeightToWidthRatio(eventId: Int) -> CGSize {
-        localDataSource.getMaximumIconHeightToWidthRatio(eventId: eventId)
+    func getMaximumIconHeightToWidthRatio(eventId: Int) async -> CGSize {
+        await localDataSource.getMaximumIconHeightToWidthRatio(eventId: eventId)
     }
     
     func resetEventIconSize(eventId: Int) {

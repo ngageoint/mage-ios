@@ -31,7 +31,6 @@ class ObservationMapImage: DataSourceImage {
         tileBounds: MapBoundingBox,
         tileSize: Double
     ) -> [UIImage] {
-        let w = WatchDog(named: "image")
         let coordinate: CLLocationCoordinate2D = {
             if let point = SFGeometryUtils.centroid(of: feature) {
                 return CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
@@ -41,7 +40,7 @@ class ObservationMapImage: DataSourceImage {
 
         let shape = MKShape.fromGeometry(geometry: feature, distance: nil)
         if shape is MKPointAnnotation {
-            var iconImage: UIImage? = iconImage(mapItem: mapItem, zoom: zoom)
+            let iconImage: UIImage? = iconImage(mapItem: mapItem, zoom: zoom)
             
             if let iconImage = iconImage ?? UIImage(named: "defaultMarker") {
                 if context != nil, CLLocationCoordinate2DIsValid(coordinate) {
@@ -76,7 +75,6 @@ class ObservationMapImage: DataSourceImage {
     }()
     
     func iconImage(mapItem: ObservationMapItem, zoom: Int) -> UIImage? {
-        let w = WatchDog(named: "icon image")
         if let iconPath = mapItem.iconPath {
             if let image = ObservationMapImage.imageCache.object(forKey: "\(iconPath)/\(zoom)" as NSString) {
                 return image
