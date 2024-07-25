@@ -100,11 +100,18 @@ import MapKit
         return kCLLocationCoordinate2DInvalid
     }
 
-    @objc public static func getFeedItems(feedId: String, eventId: Int) -> [FeedItem]? {
-        if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)", feedId, eventId)) {
-            return FeedItem.mr_findAll(with: NSPredicate(format: "(feed == %@)", feed)) as? [FeedItem];
+    @objc public static func getFeedItems(feedId: String, eventId: Int) -> [FeedItemAnnotation]? {
+        let context = NSManagedObjectContext.mr_default()
+        
+        return context.performAndWait {
+            if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)", feedId, eventId), in: context) {
+                return (FeedItem.mr_findAll(with: NSPredicate(format: "(feed == %@)", feed), in: context) as? [FeedItem])?.map({ feedItem in
+                    FeedItemAnnotation(feedItem: feedItem)
+                })
+            }
+            return [];
         }
-        return [];
+        
     }
     
     @objc public static func feedItemIdFromJson(json: [AnyHashable: Any]) -> String? {
