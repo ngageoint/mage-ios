@@ -74,6 +74,7 @@ class BottomSheetMixin: NSObject, MapMixin {
         self.bottomSheetEnabled.navigationController?.present(mageBottomSheet, animated: true, completion: nil)
         
         self.mageBottomSheet = mageBottomSheet
+        self.mageBottomSheet?.presentationController?.delegate = self
         self.mapViewDisappearingObserver = NotificationCenter.default.addObserver(forName: .MapViewDisappearing, object: nil, queue: .main) { [weak self] notification in
             Task { [weak self] in
                 await self?.dismissBottomSheet()
@@ -89,15 +90,7 @@ class BottomSheetMixin: NSObject, MapMixin {
     @MainActor
     func dismissBottomSheet() {
         self.mageBottomSheet?.dismiss(animated: true, completion: {
-            NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-            self.mageBottomSheet = nil
-            Task { [weak self] in
-                await self?.bottomSheetRepository.setItemKeys(itemKeys: nil)
-            }
-            if let mapViewDisappearingObserver = self.mapViewDisappearingObserver {
-                NotificationCenter.default.removeObserver(mapViewDisappearingObserver, name: .MapViewDisappearing, object: nil)
-            }
-            NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
+            self.finishDismiss()
         })
     }
     
@@ -111,5 +104,25 @@ class BottomSheetMixin: NSObject, MapMixin {
             return false
         }
         return isVisible(view: view, inView: view.superview)
+    }
+    
+    func finishDismiss() {
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        self.mageBottomSheet = nil
+        Task { [weak self] in
+            await self?.bottomSheetRepository.setItemKeys(itemKeys: nil)
+        }
+        if let mapViewDisappearingObserver = self.mapViewDisappearingObserver {
+            NotificationCenter.default.removeObserver(mapViewDisappearingObserver, name: .MapViewDisappearing, object: nil)
+        }
+        NotificationCenter.default.post(name: .BottomSheetDismissed, object: nil)
+    }
+}
+
+extension BottomSheetMixin: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        if self.mageBottomSheet != nil {
+            finishDismiss()
+        }
     }
 }

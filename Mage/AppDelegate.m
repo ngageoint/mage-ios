@@ -374,8 +374,10 @@
 
 - (void)tokenDidExpire:(NSNotification *)notification {
     [[Mage singleton] stopServices];
-    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-    [self createRootView];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+        [self createRootView];
+    });
 }
 
 #pragma mark - Application's Documents directory
