@@ -64,20 +64,20 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
         
     }
     
-//    func items(
-//        at location: CLLocationCoordinate2D,
-//        mapView: MKMapView,
-//        touchPoint: CGPoint
-//    ) async -> [Any]? {
-////    func items(at location: CLLocationCoordinate2D) -> [Any]? {
-//        return geoPackage?.getFeaturesAtTap(location)
-//    }
-    
     func itemKeys(
         at location: CLLocationCoordinate2D,
         mapView: MKMapView,
         touchPoint: CGPoint
     ) async -> [String : [String]] {
+        await mainActorItemKeys(at: location, mapView: mapView, touchPoint: touchPoint)
+    }
+    
+    @MainActor
+    func mainActorItemKeys(
+        at location: CLLocationCoordinate2D,
+        mapView: MKMapView,
+        touchPoint: CGPoint
+    ) -> [String : [String]] {
         if let keys = geoPackage?.getFeatureKeys(atTap: location), !keys.isEmpty {
             return [DataSources.geoPackage.key: keys.map({ key in
                 key.toKey()
