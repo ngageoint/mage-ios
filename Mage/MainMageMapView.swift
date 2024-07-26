@@ -153,6 +153,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         initiateMapMixins()
         
         viewObservationNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
+            self?.bottomSheetMixin?.dismissBottomSheet()
             if let observation = notification.object as? URL {
                 Task {
                     await self?.viewObservation(observation)
@@ -161,6 +162,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         }
 
         viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
+            self?.bottomSheetMixin?.dismissBottomSheet()
             if let user = notification.object as? User {
                 self?.viewUser(user)
             } else if let user = notification.object as? URL {
@@ -171,6 +173,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         }
 
         viewFeedItemNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
+            self?.bottomSheetMixin?.dismissBottomSheet()
             if let feedItem = notification.object as? FeedItem {
                 self?.viewFeedItem(feedItem)
             } else if let feedItemUri = notification.object as? URL {

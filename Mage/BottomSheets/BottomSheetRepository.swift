@@ -39,7 +39,7 @@ class BottomSheetRepository: ObservableObject {
     
     @Published var bottomSheetItems: [BottomSheetItem]?
     
-    func setItemKeys(itemKeys: [String: [String]]?) async {
+    func setItemKeys(itemKeys: [String: [String]]?) {
         self.itemKeys = itemKeys
         
         guard let itemKeys = itemKeys, !itemKeys.isEmpty else {
@@ -48,8 +48,10 @@ class BottomSheetRepository: ObservableObject {
             }
             return
         }
-                
-        self.bottomSheetItems = await handleItemKeys(itemKeys: itemKeys)
+        
+        Task {
+            self.bottomSheetItems = await handleItemKeys(itemKeys: itemKeys)
+        }
     }
     
     func handleItemKeys(itemKeys: [String: [String]]?) async -> [BottomSheetItem] {

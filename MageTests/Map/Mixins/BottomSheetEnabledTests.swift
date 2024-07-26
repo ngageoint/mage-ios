@@ -213,7 +213,6 @@ class BottomSheetEnabledTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Point")
                 expect(iconStubCalled).toEventually(beTrue())
                 
-                NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Point")
                 
                 mixin.cleanupMixin()
