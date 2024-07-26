@@ -165,15 +165,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                 annotation.animateDrop = animated
                 filteredObservationsMap.mapView?.addAnnotation(annotation)
             } else {
-                let style = ObservationShapeStyleParser.style(of: observation)
+                let style = ObservationShapeStyleParser.style(observation: observation)
                 let shapeConverter = GPKGMapShapeConverter()
                 let shape = shapeConverter?.toShape(with: geometry)
                 shapeConverter?.close()
                 
                 if let mkpolyline = shape?.shape as? MKPolyline {
                     let styledPolyline = StyledPolyline.create(polyline: mkpolyline)
-                    styledPolyline.lineColor = style?.strokeColor ?? .black
-                    styledPolyline.lineWidth = style?.lineWidth ?? 1
+                    styledPolyline.lineColor = style.strokeColor ?? .black
+                    styledPolyline.lineWidth = style.lineWidth ?? 1
                     styledPolyline.observationRemoteId = observation.remoteId
                     styledPolyline.observation = observation
                     lineObservations.append(styledPolyline)
@@ -182,9 +182,9 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
                     }
                 } else if let mkpolygon = shape?.shape as? MKPolygon {
                     let styledPolygon = StyledPolygon.create(polygon: mkpolygon)
-                    styledPolygon.lineColor = style?.strokeColor ?? .black
-                    styledPolygon.lineWidth = style?.lineWidth ?? 1
-                    styledPolygon.fillColor = style?.fillColor ?? .clear
+                    styledPolygon.lineColor = style.strokeColor ?? .black
+                    styledPolygon.lineWidth = style.lineWidth ?? 1
+                    styledPolygon.fillColor = style.fillColor ?? .clear
                     styledPolygon.observation = observation
                     styledPolygon.observationRemoteId = observation.remoteId
                     polygonObservations.append(styledPolygon)

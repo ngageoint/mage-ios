@@ -105,10 +105,14 @@ extension ObservationMapItem {
         self.secondaryFieldText = observation.secondaryFieldText
         // TODO: should we store the primary and secondary feed field text too?
         if let observation = observation.observation {
-            let style = ObservationShapeStyleParser.style(of: observation)
-            self.strokeColor = style?.strokeColor
-            self.fillColor = style?.fillColor
-            self.lineWidth = style?.lineWidth
+            let style = ObservationShapeStyleParser.style(
+                observation: observation,
+                primaryFieldText: primaryFieldText,
+                secondaryFieldText: secondaryFieldText
+            )
+            self.strokeColor = style.strokeColor
+            self.fillColor = style.fillColor
+            self.lineWidth = style.lineWidth
             self.timestamp = observation.timestamp
             self.user = observation.user?.name
             self.error = observation.error != nil && observation.hasValidationError

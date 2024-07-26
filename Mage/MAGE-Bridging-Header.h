@@ -11,7 +11,6 @@
 #import "ObservationAccuracyRenderer.h"
 #import "MapObservation.h"
 #import "MapObservationManager.h"
-#import "ObservationShapeStyleParser.h"
 
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"

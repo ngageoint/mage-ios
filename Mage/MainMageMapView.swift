@@ -163,9 +163,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
 
         viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
             self?.bottomSheetMixin?.dismissBottomSheet()
-            if let user = notification.object as? User {
-                self?.viewUser(user)
-            } else if let user = notification.object as? URL {
+            if let user = notification.object as? URL {
                 Task {
                     await self?.viewUserUri(user)
                 }

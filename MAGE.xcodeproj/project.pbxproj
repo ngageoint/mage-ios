@@ -187,6 +187,8 @@
 		F71EFE4C2757F824001E6134 /* DataConnectionUtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71EFE4B2757F824001E6134 /* DataConnectionUtilitiesTests.swift */; };
 		F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */; };
 		F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */; };
+		F7225F3D2C542BC300B7D935 /* FormRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7225F3C2C542BC300B7D935 /* FormRepository.swift */; };
+		F7225F3F2C542C1400B7D935 /* FormLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7225F3E2C542C1400B7D935 /* FormLocalDataSource.swift */; };
 		F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723232B251CE92800AD168A /* MapSettingsTests.swift */; };
 		F72329CE2784BA790036F964 /* CanReportLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72329CD2784BA790036F964 /* CanReportLocation.swift */; };
 		F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723D608253F66AC00C6BE34 /* MAGEScheme.swift */; };
@@ -573,8 +575,8 @@
 		F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D9B82E2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift */; };
 		F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */; };
 		F7DBBAF823D904170052D86C /* AdvancedWiFiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */; };
-		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */; };
-		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */; };
+		F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.swift */; };
+		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.swift */; };
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
 		F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */; };
 		F7DDF46F2748023A00689550 /* ObservationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46E2748023A00689550 /* ObservationImageTests.swift */; };
@@ -969,6 +971,8 @@
 		F72088A81E73600100EBFF81 /* TimeSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeSettingsTableViewController.m; sourceTree = "<group>"; };
 		F721B3641913E61B00F1CAB4 /* ValuePickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValuePickerTableViewController.h; sourceTree = "<group>"; };
 		F721B3651913E61B00F1CAB4 /* ValuePickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValuePickerTableViewController.m; sourceTree = "<group>"; };
+		F7225F3C2C542BC300B7D935 /* FormRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRepository.swift; sourceTree = "<group>"; };
+		F7225F3E2C542C1400B7D935 /* FormLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormLocalDataSource.swift; sourceTree = "<group>"; };
 		F723232B251CE92800AD168A /* MapSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsTests.swift; sourceTree = "<group>"; };
 		F72329CD2784BA790036F964 /* CanReportLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanReportLocation.swift; sourceTree = "<group>"; };
 		F723D608253F66AC00C6BE34 /* MAGEScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAGEScheme.swift; sourceTree = "<group>"; };
@@ -1438,10 +1442,8 @@
 		F7DBBAF423D8B7050052D86C /* ObservationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObservationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
 		F7DBBAF623D904170052D86C /* AdvancedWiFiTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedWiFiTableViewController.h; sourceTree = "<group>"; };
 		F7DBBAF723D904170052D86C /* AdvancedWiFiTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvancedWiFiTableViewController.m; sourceTree = "<group>"; };
-		F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyleParser.m; sourceTree = "<group>"; };
-		F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservationShapeStyle.m; sourceTree = "<group>"; };
-		F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyle.h; sourceTree = "<group>"; };
-		F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservationShapeStyleParser.h; sourceTree = "<group>"; };
+		F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationShapeStyleParser.swift; sourceTree = "<group>"; };
+		F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationShapeStyle.swift; sourceTree = "<group>"; };
 		F7DCCC231F46366F00E4C616 /* ExternalDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDevice.h; sourceTree = "<group>"; };
 		F7DCCC241F46366F00E4C616 /* ExternalDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExternalDevice.m; sourceTree = "<group>"; };
 		F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationPushDelegate.swift; sourceTree = "<group>"; };
@@ -2051,6 +2053,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F7225F3B2C542BB600B7D935 /* Form */,
 				F754C6512C35E64F00E408E9 /* Map */,
 				F7E0794C2C29F4460029C88D /* StaticLayer */,
 				F7E079472C29EC790029C88D /* FeatureItem */,
@@ -2151,10 +2154,8 @@
 				2F1542DF1CF76FC90022AABA /* ObservationFields.h */,
 				2F1542E01CF76FC90022AABA /* ObservationFields.m */,
 				F7F4754425BA357E006634F7 /* ObservationListCardCell.swift */,
-				F7DBD2B21FBB938700D4DDE9 /* ObservationShapeStyle.h */,
-				F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.m */,
-				F7DBD2B31FBB938800D4DDE9 /* ObservationShapeStyleParser.h */,
-				F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.m */,
+				F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.swift */,
+				F7DBD2B01FBB938700D4DDE9 /* ObservationShapeStyleParser.swift */,
 				F7F4754825BA3C7D006634F7 /* ObservationSummaryView.swift */,
 				F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */,
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
@@ -2208,6 +2209,15 @@
 				F71EFE4B2757F824001E6134 /* DataConnectionUtilitiesTests.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		F7225F3B2C542BB600B7D935 /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				F7225F3C2C542BC300B7D935 /* FormRepository.swift */,
+				F7225F3E2C542C1400B7D935 /* FormLocalDataSource.swift */,
+			);
+			path = Form;
 			sourceTree = "<group>";
 		};
 		F7232329251CE90C00AD168A /* Settings */ = {
@@ -4015,7 +4025,7 @@
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
 				F75BF90D272762BC00D913D2 /* ThemeTableViewController.swift in Sources */,
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */,
-				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.m in Sources */,
+				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.swift in Sources */,
 				F7DE98852C13461B005372F8 /* ObservationIconLocalDataSource.swift in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F7BFB8F32C516C0C00901479 /* FeedItemSummaryView.swift in Sources */,
@@ -4060,6 +4070,7 @@
 				F7929C7623C66CD000396D11 /* BaseMapOverlay.swift in Sources */,
 				F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */,
 				F76949161AA6436000CB680B /* EventChooserController.swift in Sources */,
+				F7225F3F2C542C1400B7D935 /* FormLocalDataSource.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
@@ -4100,6 +4111,7 @@
 				F776ACA32BCDC362000FAFB4 /* CoreDataDataSource.swift in Sources */,
 				F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */,
 				F70688B42BB3574100D8E2EA /* ObservationsMap.swift in Sources */,
+				F7225F3D2C542BC300B7D935 /* FormRepository.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,
 				F7A7B6F225DDA5BF00DAB232 /* MultiDropdownFieldView.swift in Sources */,
 				F72D431E2694B60300F9AC3B /* FeedItem+CoreDataProperties.swift in Sources */,
@@ -4257,7 +4269,7 @@
 				F72D42E12694B60300F9AC3B /* RouteMethod.m in Sources */,
 				F752B5F2275FF83F00BFA6EC /* FormJson+CoreDataProperties.swift in Sources */,
 				F7F4753525B764A8006634F7 /* ObservationFormReorder.swift in Sources */,
-				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.m in Sources */,
+				F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */,
 				F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */,
 				F7B3B3EC1B863A0E00EC0349 /* DisclaimerViewController.swift in Sources */,
 				F72D43192694B60300F9AC3B /* Model6To15.xcmappingmodel in Sources */,
