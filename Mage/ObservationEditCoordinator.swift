@@ -297,7 +297,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
             delegate?.editComplete(observation, coordinator: self as NSObject);
             rootViewController?.dismiss(animated: true, completion: nil);
             observationEditController = nil;
-            navigationController = nil;
+//            navigationController = nil;
         }
     }
     
