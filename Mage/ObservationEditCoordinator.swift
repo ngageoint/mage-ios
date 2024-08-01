@@ -309,7 +309,7 @@ extension ObservationEditCoordinator: ObservationEditCardDelegate {
             self.managedObjectContext.reset();
             delegate?.editCancel(self as NSObject);
             observationEditController = nil;
-            navigationController = nil;
+//            navigationController = nil;
         }));
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil));
         self.navigationController?.present(alert, animated: true, completion: nil);
