@@ -8,6 +8,8 @@ import Foundation
 import CoreData
 
 public class ObservationPushService: NSObject {
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
     
     public static let ObservationErrorStatusCode = "errorStatusCode"
     public static let ObservationErrorDescription = "errorDescription"
@@ -106,6 +108,12 @@ public class ObservationPushService: NSObject {
         self.delegates.removeAll(where: { delegateInArray in
             delegate == delegateInArray
         });
+    }
+    
+    public func pushObservation(observationUri: URL) async {
+        if let observation = await observationRepository.getObservation(observationUri: observationUri) {
+            pushObservations(observations: [observation])
+        }
     }
     
     public func pushObservations(observations: [Observation]?) {

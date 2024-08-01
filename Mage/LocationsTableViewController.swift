@@ -235,10 +235,10 @@ extension LocationsTableViewController: UserActionsDelegate {
                     case .failure(_):
                         image = UIImage(systemName: "person.fill")?.withRenderingMode(.alwaysTemplate);
                     }
-                    NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: user))
+                    NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location))
                 }
             } else {
-                NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: user))
+                NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location))
             }
         }));
         ObservationActionHandler.getDirections(latitude: location.latitude, longitude: location.longitude, title: user.name ?? "User", viewController: self.navigationController!, extraActions: extraActions, sourceView: sourceView);

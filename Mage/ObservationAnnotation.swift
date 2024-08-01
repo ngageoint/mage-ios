@@ -63,7 +63,7 @@ import DateTools
         }
       
         self.coordinate = location
-        self.title = observation.primaryFeedFieldText
+//        self.title = observation.primaryFeedFieldText
         if self.title == nil || self.title.count == 0 {
             self.title = "Observation"
         }

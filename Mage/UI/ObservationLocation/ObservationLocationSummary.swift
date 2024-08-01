@@ -67,8 +67,10 @@ struct ObservationLocationSummary: View {
                     }
                 }
                 Spacer()
-                Image(uiImage: ObservationImage.imageAtPath(imagePath: iconPath))
-                    .frame(maxWidth: 48, maxHeight: 48)
+                if let iconPath = iconPath {
+                    Image(uiImage: ObservationImage.imageAtPath(imagePath: iconPath))
+                        .frame(maxWidth: 48, maxHeight: 48)
+                }
             }
             .padding()
         }

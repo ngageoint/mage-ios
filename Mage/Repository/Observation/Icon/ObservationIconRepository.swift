@@ -30,13 +30,13 @@ class ObservationIconRepository: ObservableObject {
         }
     }
 
-    func getIconPath(observationUri: URL) async -> String? {
-        await localDataSource.getIconPath(observationUri: observationUri)
-    }
-
-    func getIconPath(observation: Observation) -> String? {
-        localDataSource.getIconPath(observation: observation)
-    }
+//    func getIconPath(observationUri: URL) async -> String? {
+//        await localDataSource.getIconPath(observationUri: observationUri)
+//    }
+//
+//    func getIconPath(observation: Observation) -> String? {
+//        localDataSource.getIconPath(observation: observation)
+//    }
 
     func getMaximumIconHeightToWidthRatio(eventId: Int) async -> CGSize {
         await localDataSource.getMaximumIconHeightToWidthRatio(eventId: eventId)

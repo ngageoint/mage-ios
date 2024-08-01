@@ -79,6 +79,7 @@ struct MageBottomSheet: View {
             
             Spacer()
         }
+        .background(Color.surfaceColor)
         
     }
 }

@@ -42,7 +42,8 @@ class SwiftUIViewController: UIViewController {
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(controller.view)
         controller.didMove(toParent: self)
-
+        view.backgroundColor = UIColor.clear
+        controller.view.backgroundColor = UIColor.clear
         NSLayoutConstraint.activate([
             controller.view.widthAnchor.constraint(equalTo: view.widthAnchor),
             controller.view.heightAnchor.constraint(equalTo: view.heightAnchor),

@@ -200,7 +200,7 @@ extension FeedItemViewController: FeedItemActionsDelegate {
                 }
             }
             
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: feedItem.coordinate, feedItem: feedItem))
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: feedItem.coordinate))
         }));
         ObservationActionHandler.getDirections(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude, title: feedItem.title ?? "Feed item", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }

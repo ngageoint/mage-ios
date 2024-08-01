@@ -11,12 +11,50 @@ import UIKit
 import MaterialComponents.MaterialCollections
 import MaterialComponents.MDCCard
 import MaterialComponents.MDCContainerScheme;
+import Combine
+import SwiftUI
+
+struct ObservationFullView: View {
+    @ObservedObject
+    var viewModel: ObservationViewViewModel
+    
+    var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
+    var moreActions: () -> Void
+    
+    var body: some View {
+        VStack {
+            ObservationHeaderViewSwiftUI(
+                viewModel: viewModel,
+                showFavorites: showFavorites,
+                moreActions: moreActions
+            )
+            
+            Text("Forms \(viewModel.observationForms?.count ?? 0)")
+            ForEach(viewModel.observationForms ?? []) { form in
+                ObservationFormViewSwiftUI(viewModel: ObservationFormViewModel(form: form))
+            }
+        }
+    }
+}
 
 class ObservationViewCardCollectionViewController: UIViewController {
+    var observation: Observation? {
+        didSet {
+            if observation != nil && event != nil {
+                setupObservation()
+            }
+        }
+    }
+    var event: Event? {
+        didSet {
+            if observation != nil && event != nil {
+                setupObservation()
+            }
+        }
+    }
     
     var didSetupConstraints = false;
     
-    weak var observation: Observation?;
     var observationForms: [[String: Any]] = [];
     var cards: [ExpandableCard] = [];
     var attachmentViewCoordinator: AttachmentViewCoordinator?;
@@ -28,16 +66,13 @@ class ObservationViewCardCollectionViewController: UIViewController {
     let attachmentHeader: CardHeader = CardHeader(headerText: "ATTACHMENTS");
     let formsHeader = FormsHeader(forAutoLayout: ());
     
-    private lazy var event: Event? = {
-        guard let observation = observation, let eventId = observation.eventId, let context = observation.managedObjectContext else {
-            return nil
-        }
-        
-        return Event.getEvent(eventId: eventId, context: context)
-    }()
+    var swiftUIView: ObservationFullView?
     
+    var viewModel: ObservationViewViewModel?
+    var disposables = Set<AnyCancellable>()
+
     private lazy var eventForms: [Form] = {
-        return event?.forms ?? []
+        return self.event?.forms ?? []
     }()
     
     private lazy var editFab : MDCFloatingButton = {
@@ -67,7 +102,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
     }()
     
     private lazy var syncStatusView: ObservationSyncStatus = {
-        let syncStatusView = ObservationSyncStatus(observation: observation);
+        let syncStatusView = ObservationSyncStatus(observation: self.observation);
         stackView.addArrangedSubview(syncStatusView);
         return syncStatusView;
     }()
@@ -116,9 +151,23 @@ class ObservationViewCardCollectionViewController: UIViewController {
         super.init(nibName: nil, bundle: nil);
     }
     
-    convenience public init(observation: Observation, scheme: MDCContainerScheming?) {
+    convenience public init(viewModel: ObservationViewViewModel, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
-        self.observation = observation;
+        
+        self.viewModel = viewModel
+        self.viewModel?.$observation.compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { observation in
+                self.observation = observation
+            })
+            .store(in: &disposables)
+        
+        self.viewModel?.$event.compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { event in
+                self.event = event
+            })
+            .store(in: &disposables)
         self.scheme = scheme;
     }
     
@@ -136,7 +185,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         ObservationPushService.singleton.addDelegate(delegate: self);
-        setupObservation();
+//        setupObservation();
         if let scheme = self.scheme {
             applyTheme(withContainerScheme: scheme);
         }
@@ -170,7 +219,25 @@ class ObservationViewCardCollectionViewController: UIViewController {
             observationForms = [];
         }
         
-        syncStatusView.updateObservationStatus(observation: observation);
+//        if swiftUIView == nil, let viewModel = viewModel {
+//            swiftUIView = ObservationFullView(
+//                viewModel: viewModel,
+//                showFavorites: { favoritesModel in
+//                    guard let favoritesModel = favoritesModel,
+//                            let favoriteUsers = favoritesModel.favoriteUsers
+//                    else {
+//                        return
+//                    }
+//                    self.showFavorites(userIds: favoriteUsers)
+//                },
+//                moreActions: {
+//                    self.moreActionsTapped()
+//                }
+//            )
+//            stackView.addArrangedSubview(SwiftUIViewController(swiftUIView: swiftUIView).view)
+//        }
+        
+        syncStatusView.updateObservationStatus(observation: self.observation);
         addHeaderCard(stackView: stackView);
         var headerViews = 2
         if (stackView.arrangedSubviews.count > headerViews) {
@@ -183,7 +250,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
     }
     
     func addHeaderCard(stackView: UIStackView) {
-        if let observation = observation {
+        if let observation = self.observation {
             if let headerCard = headerCard {
                 headerCard.populate(observation: observation);
             } else {
@@ -200,13 +267,14 @@ class ObservationViewCardCollectionViewController: UIViewController {
         formsHeader.reorderButton.isHidden = true;
         stackView.addArrangedSubview(formsHeader);
         for (index, form) in self.observationForms.enumerated() {
-            let card: ExpandableCard = addObservationFormView(observationForm: form, index: index);
-            card.expanded = index == 0;
+            if let card: ExpandableCard = addObservationFormView(observationForm: form, index: index) {
+                card.expanded = index == 0;
+            }
         }
     }
     
-    func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard {
-        let eventForm = event?.form(id: observationForm[EventKey.formId.key] as? NSNumber)
+    func addObservationFormView(observationForm: [String: Any], index: Int) -> ExpandableCard? {
+        let eventForm = self.event?.form(id: observationForm[EventKey.formId.key] as? NSNumber)
         
         var formPrimaryValue: String? = nil;
         var formSecondaryValue: String? = nil;
@@ -221,35 +289,37 @@ class ObservationViewCardCollectionViewController: UIViewController {
                 formSecondaryValue = Observation.fieldValueText(value: obsfield, field: secondaryField)
             }
         }
-        
-        let formView = ObservationFormView(observation: self.observation!, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, attachmentSelectionDelegate: self, observationActionsDelegate: self);
-        if let scheme = self.scheme {
-            formView.applyTheme(withScheme: scheme);
+        if let observation = self.observation {
+            let formView = ObservationFormView(observation: observation, form: observationForm, eventForm: eventForm, formIndex: index, editMode: false, viewController: self, attachmentSelectionDelegate: self, observationActionsDelegate: self);
+            if let scheme = self.scheme {
+                formView.applyTheme(withScheme: scheme);
+            }
+            var formSpacerView: UIView?;
+            if (!formView.isEmpty()) {
+                formSpacerView = UIView(forAutoLayout: ());
+                let divider = UIView(forAutoLayout: ());
+                divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12);
+                divider.autoSetDimension(.height, toSize: 1);
+                formSpacerView?.addSubview(divider);
+                formSpacerView?.addSubview(formView);
+                divider.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
+                formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
+            }
+            var tintColor: UIColor? = nil;
+            if let color = eventForm?.color {
+                tintColor = UIColor(hex: color);
+            } else {
+                tintColor = scheme?.colorScheme.primaryColor
+            }
+            let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, systemImageName: "doc.text.fill", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView);
+            if let scheme = self.scheme {
+                card.applyTheme(withScheme: scheme);
+            }
+            stackView.addArrangedSubview(card)
+            cards.append(card);
+            return card;
         }
-        var formSpacerView: UIView?;
-        if (!formView.isEmpty()) {
-            formSpacerView = UIView(forAutoLayout: ());
-            let divider = UIView(forAutoLayout: ());
-            divider.backgroundColor = scheme?.colorScheme.onSurfaceColor.withAlphaComponent(0.12) ?? UIColor.black.withAlphaComponent(0.12);
-            divider.autoSetDimension(.height, toSize: 1);
-            formSpacerView?.addSubview(divider);
-            formSpacerView?.addSubview(formView);
-            divider.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom);
-            formView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16));
-        }
-        var tintColor: UIColor? = nil;
-        if let color = eventForm?.color {
-            tintColor = UIColor(hex: color);
-        } else {
-            tintColor = scheme?.colorScheme.primaryColor
-        }
-        let card = ExpandableCard(header: formPrimaryValue, subheader: formSecondaryValue, systemImageName: "doc.text.fill", title: eventForm?.name, imageTint: tintColor, expandedView: formSpacerView);
-        if let scheme = self.scheme {
-            card.applyTheme(withScheme: scheme);
-        }
-        stackView.addArrangedSubview(card)
-        cards.append(card);
-        return card;
+        return nil
     }
     
     @objc func startObservationEditCoordinator() {
@@ -316,11 +386,13 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
 
 extension ObservationViewCardCollectionViewController: ObservationActionsDelegate {
     
-    func moreActionsTapped(_ observation: Observation) {
-        let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-        actionsSheet.applyTheme(withContainerScheme: scheme);
-        bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-        self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
+    func moreActionsTapped() {
+        if let observation = viewModel?.observation {
+            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
+            actionsSheet.applyTheme(withContainerScheme: scheme);
+            bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+            self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
+        }
     }
     
     func showFavorites(_ observation: Observation) {
@@ -332,6 +404,10 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
                 }
             }
         }
+        showFavorites(userIds: userIds)
+    }
+    
+    func showFavorites(userIds: [String]) {
         if (userIds.count != 0) {
             let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
             locationViewController.title = "Favorited By";
@@ -354,7 +430,7 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func getDirectionsToObservation(_ observation: Observation, sourceView: UIView? = nil) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            let notification = DirectionsToItemNotification(observation: observation, user: nil, feedItem: nil, sourceView: sourceView, dataSource: DataSources.observation)
+            let notification = DirectionsToItemNotification(itemKey: observation.objectID.uriRepresentation().absoluteString, dataSource: DataSources.observation)
             NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
     }
@@ -382,9 +458,11 @@ extension ObservationViewCardCollectionViewController: ObservationActionsDelegat
     
     func reorderForms(_ observation: Observation) {
         bottomSheet?.dismiss(animated: true, completion: nil);
-        observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: self.observation!);
-        observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
-        observationEditCoordinator?.startFormReorder();
+        if let observation = self.observation {
+            observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
+            observationEditCoordinator?.applyTheme(withContainerScheme: self.scheme);
+            observationEditCoordinator?.startFormReorder();
+        }
     }
     
     func deleteObservation(_ observation: Observation) {
@@ -415,7 +493,7 @@ extension ObservationViewCardCollectionViewController: ObservationEditDelegate {
         guard let observation = self.observation else {
             return;
         }
-        self.observation!.managedObjectContext?.refresh(observation, mergeChanges: false);
+        observation.managedObjectContext?.refresh(observation, mergeChanges: false);
         // reload the observation
         setupObservation();
     }

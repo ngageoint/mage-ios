@@ -44,7 +44,6 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     var viewObservationNotificationObserver: Any?
     var viewUserNotificationObserver: Any?
     var viewFeedItemNotificationObserver: Any?
-    var startStraightLineNavigationNotificationObserver: Any?
     
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView.newAutoLayout()
@@ -76,9 +75,6 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         }
         if let viewFeedItemNotificationObserver = viewFeedItemNotificationObserver {
             NotificationCenter.default.removeObserver(viewFeedItemNotificationObserver, name: .ViewFeedItem, object: nil)
-        }
-        if let startStraightLineNavigationNotificationObserver = startStraightLineNavigationNotificationObserver {
-            NotificationCenter.default.removeObserver(startStraightLineNavigationNotificationObserver, name: .StartStraightLineNavigation, object: nil)
         }
         viewController = nil
         navigationController = nil
@@ -213,10 +209,8 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     @MainActor
     func viewObservation(_ observationUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        if let observation = await observationRepository.getObservation(observationUri: observationUri) {
-            let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
-            navigationController?.pushViewController(ovc, animated: true)
-        }
+        let ovc = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observationUri), scheme: scheme)
+        navigationController?.pushViewController(ovc, animated: true)
     }
     
     func onSearchResultSelected(result: GeocoderResult) {

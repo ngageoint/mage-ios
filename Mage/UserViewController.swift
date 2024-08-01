@@ -73,7 +73,7 @@ class UserViewController : UITableViewController {
 
 extension UserViewController : ObservationActionsDelegate {
     func viewObservation(_ observation: Observation) {
-        let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme);
+        let ovc = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme);
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
@@ -95,9 +95,9 @@ extension UserViewController : ObservationActionsDelegate {
         }
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(observation: observation), coordinate: observationLocation.coordinate))
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: UIImage(named: "observations"), coordinate: observationLocation.coordinate))
         }));
-        ObservationActionHandler.getDirections(latitude: observationLocation.coordinate.latitude, longitude: observationLocation.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
+        ObservationActionHandler.getDirections(latitude: observationLocation.coordinate.latitude, longitude: observationLocation.coordinate.longitude, title: "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
 }
 

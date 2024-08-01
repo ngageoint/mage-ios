@@ -157,16 +157,16 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func selectedObservation(_ observation: Observation!) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
+        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme!);
         self.masterViewController?.pushViewController(observationViewController, animated: true);
     }
     
     func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
+        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme!);
         self.masterViewController?.pushViewController(observationViewController, animated: true);    }
     
     func observationDetailSelected(_ observation: Observation!) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
+        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme!);
         self.masterViewController?.pushViewController(observationViewController, animated: true);
     }
     
@@ -186,7 +186,7 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func viewObservation(_ observation: Observation) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
+        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme!);
         self.masterViewController?.pushViewController(observationViewController, animated: true);
     }
     

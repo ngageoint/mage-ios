@@ -20,8 +20,8 @@ extension InjectedValues {
 }
 
 protocol ObservationIconLocalDataSource {
-    func getIconPath(observationUri: URL) async -> String?
-    func getIconPath(observation: Observation) -> String?
+//    func getIconPath(observationUri: URL) async -> String?
+//    func getIconPath(observation: Observation) -> String?
     func getMaximumIconHeightToWidthRatio(eventId: Int) async -> CGSize
     func resetEventIconSize(eventId: Int)
 }
@@ -32,16 +32,16 @@ class ObservationIconCoreDataDataSource: ObservationIconLocalDataSource {
     
     var iconSizePerEvent: [Int: CGSize] = [:]
     
-    func getIconPath(observationUri: URL) async -> String? {
-        if let observation = await localDataSource.getObservation(observationUri: observationUri) {
-            return getIconPath(observation: observation)
-        }
-        return nil
-    }
-
-    func getIconPath(observation: Observation) -> String? {
-        ObservationImage.imageName(observation: observation)
-    }
+//    func getIconPath(observationUri: URL) async -> String? {
+//        if let observation = await localDataSource.getObservation(observationUri: observationUri) {
+//            return getIconPath(observation: observation)
+//        }
+//        return nil
+//    }
+//
+//    func getIconPath(observation: Observation) -> String? {
+//        ObservationImage.imageName(observation: observation)
+//    }
 
     let queue = DispatchQueue(label: "Queue")
 

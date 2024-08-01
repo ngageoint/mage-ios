@@ -1054,6 +1054,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryEventForm: Form? {
         get {
             
@@ -1067,6 +1068,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryField: String? {
         get {
             if let primaryEventForm = primaryEventForm {
@@ -1076,6 +1078,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var secondaryField: String? {
         get {
             if let primaryEventForm = primaryEventForm {
@@ -1085,6 +1088,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryFieldText: String? {
         get {
             if let primaryField = primaryEventForm?.primaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFieldName = primaryField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1095,6 +1099,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var secondaryFieldText: String? {
         get {
             if let variantField = primaryEventForm?.secondaryMapField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let variantFieldName = variantField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1105,6 +1110,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var primaryFeedFieldText: String? {
         get {
             if let primaryFeedField = primaryEventForm?.primaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let primaryFeedFieldName = primaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1115,6 +1121,7 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    @available(*, deprecated, message: "Don't use this anymore")
     @objc public var secondaryFeedFieldText: String? {
         get {
             if let secondaryFeedField = primaryEventForm?.secondaryFeedField, let observationForms = self.properties?[ObservationKey.forms.key] as? [[AnyHashable : Any]], let secondaryFeedFieldName = secondaryFeedField[FieldKey.name.key] as? String, observationForms.count > 0 {
@@ -1125,6 +1132,14 @@ enum ObservationState: Int, CustomStringConvertible {
         }
     }
     
+    public func getAccuracy() -> Double? {
+        return self.properties?[ObservationKey.accuracy.key] as? Double
+    }
+    
+    public func getProvider() -> String? {
+        return self.properties?[ObservationKey.provider.key] as? String
+    }
+        
     @objc public static func fieldValueText(value: Any?, field: [AnyHashable : Any]) -> String {
         guard let value = value, let type = field[FieldKey.type.key] as? String else {
             return "";

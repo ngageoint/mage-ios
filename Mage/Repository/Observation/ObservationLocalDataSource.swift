@@ -37,6 +37,7 @@ protocol ObservationLocalDataSource {
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
     func toggleFavorite(observationUri: URL?)
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
+    func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>?
 }
 
 class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSource, ObservableObject {
@@ -128,6 +129,26 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 return try? context.existingObject(with: id) as? Observation
+            }
+            return nil
+        }
+    }
+    
+    func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>? {
+        guard let observationUri = observationUri else {
+            return nil
+        }
+        let context = NSManagedObjectContext.mr_default()
+        return context.performAndWait {
+            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
+                if let observation = try? context.existingObject(with: id) as? Observation {
+                    return publisher(for: observation, in: context)
+                        .prepend(observation)
+                        .map({ observation in
+                            return ObservationModel(observation: observation)
+                        })
+                        .eraseToAnyPublisher()
+                }
             }
             return nil
         }

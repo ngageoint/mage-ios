@@ -318,7 +318,7 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
 
 extension ObservationTableViewController: ObservationActionsDelegate {
     func viewObservation(_ observation: Observation) {
-        let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
+        let ovc = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme!);
         self.navigationController?.pushViewController(ovc, animated: true);
     }
     
@@ -340,9 +340,9 @@ extension ObservationTableViewController: ObservationActionsDelegate {
         }
         var extraActions: [UIAlertAction] = [];
         extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
-            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: ObservationImage.image(observation: observation), coordinate: location.coordinate))
+            NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: UIImage(named: "defaultMarker"), coordinate: location.coordinate))
         }));
         
-        ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: observation.primaryFeedFieldText ?? "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
+        ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
     }
 }

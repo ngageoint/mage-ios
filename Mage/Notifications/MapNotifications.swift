@@ -21,9 +21,9 @@ struct MapAnnotationFocusedNotification {
 }
 
 struct DirectionsToItemNotification {
-    var observation: Observation?
-    var user: User?
-    var feedItem: FeedItem?
+//    var observation: Observation?
+//    var user: User?
+//    var feedItem: FeedItem?
     var location: CLLocation?
     var annotation: MKAnnotationView?
     var image: UIImage?

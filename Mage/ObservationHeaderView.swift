@@ -13,6 +13,80 @@ import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
 import SwiftUI
 
+struct ObservationHeaderViewSwiftUI: View {
+    @ObservedObject
+    var viewModel: ObservationViewViewModel
+    
+    var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
+    var moreActions: () -> Void
+    
+    var body: some View {
+        VStack {
+            ObservationSyncStatusSwiftUI(
+                hasError: viewModel.observationModel?.error,
+                isDirty: viewModel.observationModel?.isDirty,
+                errorMessage: viewModel.observationModel?.errorMessage,
+                pushedDate: viewModel.observationModel?.lastModified,
+                syncNow: ObservationActions.syncNow(observationUri: viewModel.observationModel?.observationId)
+            )
+            .frame(maxWidth: .infinity)
+            .background(Color.surfaceColor)
+            .card()
+            
+            VStack {
+                if let important = viewModel.observationModel?.important {
+                    ObservationImportantViewSwiftUI(important: important)
+                }
+                ObservationLocationSummary(
+                    timestamp: viewModel.observationModel?.timestamp,
+                    user: viewModel.user?.name,
+                    primaryFieldText: viewModel.primaryFieldText,
+                    secondaryFieldText: viewModel.secondaryFieldText,
+                    iconPath: nil, //viewModel.observationModel?.iconPath,
+                    error: viewModel.observationModel?.error ?? false,
+                    syncing: viewModel.observationModel?.syncing ?? false
+                )
+                if let observationId = viewModel.observationModel?.observationId {
+                    ObservationMapItemView(observationUri: observationId)
+                }
+                Divider()
+                if viewModel.settingImportant {
+                    Text("Set important")
+                        .primaryText()
+                }
+                ObservationViewActionBar(
+                    isImportant: viewModel.observationModel?.important != nil,
+                    importantAction: {
+                        viewModel.settingImportant = !viewModel.settingImportant
+                    },
+                    favoriteCount: viewModel.favoriteCount,
+                    currentUserFavorite: viewModel.currentUserFavorite,
+                    favoriteAction:
+                        ObservationActions.favorite(
+                            viewModel: ObservationLocationBottomSheetViewModel(
+                                observationLocationUri: viewModel.observationModel?.observationId)
+                        ),
+                    showFavoritesAction: {
+                        showFavorites(viewModel.observationFavoritesModel)
+                    },
+                    navigateToAction:
+                        CoordinateActions.navigateTo(
+                            coordinate: viewModel.observationModel?.coordinate,
+                            itemKey: viewModel.observationModel?.observationId?.absoluteString,
+                            dataSource: DataSources.observation
+                        ),
+                    moreActions: {
+                        moreActions()
+                    }
+                )
+            }
+            .frame(maxWidth: .infinity)
+            .background(Color.surfaceColor)
+            .card()
+        }
+    }
+}
+
 class ObservationHeaderView : MDCCard {
     @Injected(\.observationMapItemRepository)
     var observationMapItemRepository: ObservationMapItemRepository

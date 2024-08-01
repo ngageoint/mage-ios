@@ -22,6 +22,7 @@ struct ObservationImportantViewSwiftUI: View {
                 .padding(.top, 8)
                 .padding(.bottom, 8)
                 .frame(width: 32, height: 32)
+                .foregroundStyle(Color.onSurfaceColor)
             VStack(alignment: .leading, spacing: 8) {
                 Text("\(important.userId ?? "no")")
                     .overlineText()

@@ -65,19 +65,21 @@ enum CoordinateActions {
 
 enum ObservationActions {
     case favorite(viewModel: ObservationLocationBottomSheetViewModel)
+    case syncNow(observationUri: URL?)
+    case toggleImportant(observationUri: URL?)
     
     func callAsFunction() {
         switch (self) {
  
         case .favorite(viewModel: let viewModel):
             viewModel.toggleFavorite()
-        }
-    }
-    
-    func getObservationMapItem() -> ObservationMapItem? {
-        switch (self) {
-        case .favorite(viewModel: let viewModel):
-            return viewModel.observationMapItem
+        case .syncNow(observationUri: let observationUri):
+            print("sync now")
+            @Injected(\.observationRepository)
+            var observationRepository: ObservationRepository
+            observationRepository.syncObservation(uri: observationUri)
+        case .toggleImportant(observationUri: let observationUri):
+            print("toggle important")
         }
     }
 }
@@ -106,3 +108,46 @@ struct ObservationLocationBottomSheetActionBar: View {
     }
 }
 
+struct ObservationViewActionBar: View {
+    var isImportant: Bool
+    var importantAction: () -> Void
+    var favoriteCount: Int?
+    var currentUserFavorite: Bool
+    var favoriteAction: ObservationActions
+    var showFavoritesAction: () -> Void
+    var navigateToAction: CoordinateActions
+    var moreActions: () -> Void
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            ShowFavoritesButton(
+                favoriteCount: favoriteCount,
+                favoriteAction: showFavoritesAction
+            )
+            
+            Spacer()
+            
+            ImportantButton(
+                importantAction: importantAction,
+                isImportant: isImportant
+            )
+            
+            FavoriteButton(
+                currentUserFavorite: currentUserFavorite,
+                favoriteAction: favoriteAction
+            )
+            
+            NavigateToButton(navigateToAction: navigateToAction)
+            
+            Button(action: moreActions) {
+                Label {
+                    Text("")
+                } icon: {
+                    Image(systemName: "ellipsis")
+                        .rotationEffect(.degrees(90))
+                }
+            }
+            .buttonStyle(MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6)))
+        }
+    }
+}
