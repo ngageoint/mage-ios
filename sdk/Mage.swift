@@ -109,6 +109,7 @@ import Foundation
             }
             let formTask = Form.operationToPullFormIcons(eventId: remoteId) {
                 NSLog("Pulled form for event")
+                ObservationImage.imageCache.removeAllObjects()
                 NotificationCenter.default.post(name: .MAGEFormFetched, object: e)
             } failure: { error in
                 NSLog("Failed to pull form for event")

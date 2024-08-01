@@ -10,7 +10,16 @@ import UIKit
 import MaterialComponents
 import CoreData
 
-class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, PersistedMapState, GeoPackageLayerMap, FeedsMap, OnlineLayerMap {
+class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, BottomSheetEnabled, MapDirections, HasMapSettings, HasMapSearch, CanCreateObservation, CanReportLocation, UserHeadingDisplay, UserTrackingMap, StaticLayerMap, GeoPackageLayerMap, FeedsMap
+{
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
+    
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
+    @Injected(\.feedItemRepository)
+    var feedItemRepository: FeedItemRepository
     
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
@@ -30,7 +39,8 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
     var geoPackageLayerMapMixin: GeoPackageLayerMapMixin?
     var feedsMapMixin: FeedsMapMixin?
     var onlineLayerMapMixin: OnlineLayerMapMixin?
-    
+    var observationMap: ObservationsMap?
+
     var viewObservationNotificationObserver: Any?
     var viewUserNotificationObserver: Any?
     var viewFeedItemNotificationObserver: Any?
@@ -91,6 +101,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         geoPackageLayerMapMixin = nil
         feedsMapMixin = nil
         onlineLayerMapMixin = nil
+        observationMap = nil
     }
     
     override func layoutView() {
@@ -101,7 +112,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             buttonStack.autoPinEdge(.top, to: .top, of: mapView, withOffset: 25)
             buttonStack.autoPinEdge(toSuperviewMargin: .left)
             
-            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
+//            filteredObservationsMapMixin = FilteredObservationsMapMixin(filteredObservationsMap: self)
             filteredUsersMapMixin = FilteredUsersMapMixin(filteredUsersMap: self, scheme: scheme)
             bottomSheetMixin = BottomSheetMixin(bottomSheetEnabled: self)
             if let viewController = viewController {
@@ -109,7 +120,7 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
                 mapMixins.append(mapDirectionsMixin!)
             }
             
-            persistedMapStateMixin = PersistedMapStateMixin(persistedMapState: self)
+            persistedMapStateMixin = PersistedMapStateMixin()
             hasMapSettingsMixin = HasMapSettingsMixin(hasMapSettings: self, rootView: self)
             canCreateObservationMixin = CanCreateObservationMixin(canCreateObservation: self, shouldShowFab: UIDevice.current.userInterfaceIdiom != .pad, rootView: self, mapStackView: mapStack, locationService: nil)
             canReportLocationMixin = CanReportLocationMixin(canReportLocation: self, buttonParentView: buttonStack, indexInView: 2)
@@ -119,8 +130,8 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             staticLayerMapMixin = StaticLayerMapMixin(staticLayerMap: self)
             geoPackageLayerMapMixin = GeoPackageLayerMapMixin(geoPackageLayerMap: self)
             feedsMapMixin = FeedsMapMixin(feedsMap: self)
-            onlineLayerMapMixin = OnlineLayerMapMixin(onlineLayerMap: self)
-            mapMixins.append(filteredObservationsMapMixin!)
+            onlineLayerMapMixin = OnlineLayerMapMixin()
+//            mapMixins.append(filteredObservationsMapMixin!)
             mapMixins.append(filteredUsersMapMixin!)
             mapMixins.append(bottomSheetMixin!)
             mapMixins.append(persistedMapStateMixin!)
@@ -134,25 +145,37 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
             mapMixins.append(geoPackageLayerMapMixin!)
             mapMixins.append(feedsMapMixin!)
             mapMixins.append(onlineLayerMapMixin!)
+
+            observationMap = ObservationsMap()
+            mapMixins.append(observationMap!)
         }
         
         initiateMapMixins()
         
         viewObservationNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
-            if let observation = notification.object as? Observation {
-                self?.viewObservation(observation)
+            self?.bottomSheetMixin?.dismissBottomSheet()
+            if let observation = notification.object as? URL {
+                Task {
+                    await self?.viewObservation(observation)
+                }
             }
         }
 
         viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
-            if let user = notification.object as? User {
-                self?.viewUser(user)
+            self?.bottomSheetMixin?.dismissBottomSheet()
+            if let user = notification.object as? URL {
+                Task {
+                    await self?.viewUserUri(user)
+                }
             }
         }
 
         viewFeedItemNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
-            if let feedItem = notification.object as? FeedItem {
-                self?.viewFeedItem(feedItem)
+            self?.bottomSheetMixin?.dismissBottomSheet()
+            if let feedItemUri = notification.object as? URL {
+                Task {
+                    await self?.viewFeedItemUri(feedItemUri)
+                }
             }
         }
     }
@@ -169,13 +192,42 @@ class MainMageMapView: MageMapView, FilteredObservationsMap, FilteredUsersMap, B
         navigationController?.pushViewController(fivc, animated: true)
     }
     
-    func viewObservation(_ observation: Observation) {
+    @MainActor
+    func viewFeedItemUri(_ feedItemUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
-        navigationController?.pushViewController(ovc, animated: true)
+        if let feedItem = await feedItemRepository.getFeedItem(feedItemrUri: feedItemUri) {
+            let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
+            navigationController?.pushViewController(fivc, animated: true)
+        }
+    }
+    
+    @MainActor
+    func viewUserUri(_ userUri: URL) async {
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        if let user = await userRepository.getUser(userUri: userUri) {
+            let uvc = UserViewController(user: user, scheme: scheme)
+            navigationController?.pushViewController(uvc, animated: true)
+        }
+    }
+    
+    @MainActor
+    func viewObservation(_ observationUri: URL) async {
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        if let observation = await observationRepository.getObservation(observationUri: observationUri) {
+            let ovc = ObservationViewCardCollectionViewController(observation: observation, scheme: scheme)
+            navigationController?.pushViewController(ovc, animated: true)
+        }
     }
     
     func onSearchResultSelected(result: GeocoderResult) {
         // no-op
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        NSLog("Mage map view region did change")
+        let zoomLevel = mapView.zoomLevel
+        
+        mapStateRepository.zoom = Int(zoomLevel)
+        mapStateRepository.region = mapView.region
     }
 }

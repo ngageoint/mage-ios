@@ -184,7 +184,7 @@ class ObservationListActionsView: UIView {
         NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
         // let the bottom sheet dismiss because we cannot present two alert dialogs
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            let notification = DirectionsToItemNotification(observation: self.observation, user: nil, feedItem: nil)
+            let notification = DirectionsToItemNotification(observation: self.observation, user: nil, feedItem: nil, dataSource: DataSources.observation)
             NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }
     }

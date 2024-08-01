@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import MaterialComponents
+import MapFramework
 
 protocol UserTrackingMap {
     var mapView: MKMapView? { get set }
@@ -59,7 +60,15 @@ class UserTrackingMapMixin: NSObject, MapMixin {
         self.trackingButton.setImageTintColor(scheme.colorScheme.primaryColorVariant, for: .normal)
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         guard let buttonParentView = buttonParentView else {
             return
         }

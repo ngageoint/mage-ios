@@ -14,10 +14,9 @@ extension Notification.Name {
     public static let MAGEFormFetched = Notification.Name(Form.MAGEFormFetched)
     public static let GeoPackageDownloaded = Notification.Name(Layer.GeoPackageDownloaded)
     public static let StaticLayerLoaded = Notification.Name(StaticLayer.StaticLayerLoaded)
-    public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired");
-    public static let MapItemsTapped = Notification.Name("MapItemsTapped")
+    public static let MAGETokenExpiredNotification = Notification.Name("mil.nga.giat.mage.token.expired")
+    public static let MAGEServerContactedAfterOfflineLogin = Notification.Name("mil.nga.mage.server.contacted")
     public static let MapAnnotationFocused = Notification.Name("MapAnnotationFocused")
-    public static let MapViewDisappearing = Notification.Name("MapViewDisappearing")
     public static let ObservationUpdated = Notification.Name("ObservationUpdated")
     public static let DirectionsToItem = Notification.Name("DirectionsToItem")
     public static let DismissBottomSheet = Notification.Name("DismissBottomSheet")
@@ -39,8 +38,19 @@ extension Notification.Name {
     case gars
 }
 
+extension UserDefaults {
+    var coordinateDisplay: CoordinateDisplayType {
+        get {
+            return CoordinateDisplayType(rawValue: integer(forKey: #function)) ?? .latitudeLongitude
+        }
+        set {
+            setValue(newValue.rawValue, forKey: #function)
+        }
+    }
+}
+
 @objc extension UserDefaults {
-    
+
     @objc func color(forKey key: String) -> UIColor? {
         var color: UIColor?
         if let colorData = data(forKey: key) {

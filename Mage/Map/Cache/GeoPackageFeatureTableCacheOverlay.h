@@ -94,5 +94,6 @@ extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 
 -(GPKGFeatureTableData *) getFeatureTableDataWithLocationCoordinate: (CLLocationCoordinate2D) locationCoordinate andMap: (MKMapView *) mapView;
 - (NSArray<GeoPackageFeatureItem *> *) getFeaturesNearTap: (CLLocationCoordinate2D) tapLocation andMap: (MKMapView *) mapView;
+- (NSArray<GeoPackageFeatureKey *> *) getFeatureKeysNearTap: (CLLocationCoordinate2D) tapLocation andMap: (MKMapView *) mapView;
 
 @end

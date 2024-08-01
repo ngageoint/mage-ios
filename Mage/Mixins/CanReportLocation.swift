@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import MaterialComponents
+import MapFramework
 
 protocol CanReportLocation {
     var mapView: MKMapView? { get set }
@@ -51,7 +52,15 @@ class CanReportLocationMixin: NSObject, MapMixin {
         reportLocationButton.backgroundColor = scheme.colorScheme.surfaceColor;
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         guard let buttonParentView = buttonParentView else {
             return
         }

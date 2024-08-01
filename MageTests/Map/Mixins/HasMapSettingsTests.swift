@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import MagicalRecord
 import OHHTTPStubs
+import MapFramework
 
 @testable import MAGE
 import CoreLocation
@@ -108,8 +109,9 @@ class HasMapSettingsTests: KIFSpec {
             }
             
             it("initialize the HasMapSettings") {
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 tester().waitForView(withAccessibilityLabel: "map_settings")
                 
                 mixin.cleanupMixin()
@@ -142,8 +144,8 @@ class HasMapSettingsTests: KIFSpec {
                 expect(Layer.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find layer");
                 
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 tester().waitForView(withAccessibilityLabel: "layer_download_circle")
                 
                 MagicalRecord.save(blockAndWait:{ (localContext: NSManagedObjectContext) in
@@ -159,8 +161,8 @@ class HasMapSettingsTests: KIFSpec {
             }
             
             it("tap the map settings button") {
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 tester().waitForView(withAccessibilityLabel: "map_settings")
                 tester().tapView(withAccessibilityLabel: "map_settings")
                 

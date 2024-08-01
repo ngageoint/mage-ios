@@ -11,12 +11,13 @@ import Quick
 import Nimble
 import MagicalRecord
 import OHHTTPStubs
+import MapFramework
 
 @testable import MAGE
 import CoreLocation
 import MapKit
 
-class OnlineLayerMapTestImpl : NSObject, OnlineLayerMap {
+class OnlineLayerMapTestImpl : NSObject {
     var scheme: MDCContainerScheming?
     var mapView: MKMapView?
     
@@ -81,7 +82,7 @@ class OnlineLayerMapTests: KIFSpec {
                 testimpl.scheme = MAGEScheme.scheme()
                 mapView.delegate = testimpl
                 
-                mixin = OnlineLayerMapMixin(onlineLayerMap: testimpl)
+                mixin = OnlineLayerMapMixin()
                 testimpl.onlineLayerMapMixin = mixin
                 
                 navController = UINavigationController(rootViewController: controller);
@@ -167,7 +168,8 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
                 expect(testimpl.mapView?.overlays[0]).to(beAKindOf(TMSTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
@@ -194,7 +196,8 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
                 expect(testimpl.mapView?.overlays[0]).to(beAKindOf(XYZTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
@@ -239,7 +242,8 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
                 expect(testimpl.mapView?.overlays[0]).to(beAKindOf(WMSTileOverlay.self))
                 // no real way to calculate this, so if phone sizes change this may change as well
@@ -264,9 +268,10 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 MageCoreDataFixtures.addImageryLayer()
                                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
-                
+
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
 
                 expect(testimpl.mapView?.overlays.count).to(equal(1))
@@ -293,9 +298,10 @@ class OnlineLayerMapTests: KIFSpec {
                 
                 MageCoreDataFixtures.addImageryLayer()
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
-                
+
                 UserDefaults.standard.selectedOnlineLayers = ["1": [1]]
                 
                 expect(testimpl.mapView?.overlays.count).to(equal(1))

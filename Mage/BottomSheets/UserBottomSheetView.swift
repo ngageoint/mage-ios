@@ -7,122 +7,73 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
+import MaterialViews
 
-class UserBottomSheetView: BottomSheetView {
+class UserBottomSheetViewModel: ObservableObject {
+    @Injected(\.userRepository)
+    var repository: UserRepository
     
-    private var didSetUpConstraints = false;
-    private var user: User?;
-    private var actionsDelegate: UserActionsDelegate?;
-    var scheme: MDCContainerScheming?;
+    var disposables = Set<AnyCancellable>()
     
-    private lazy var stackView: PassThroughStackView = {
-        let stackView = PassThroughStackView(forAutoLayout: ());
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 0
-        stackView.distribution = .fill;
-        stackView.directionalLayoutMargins = .zero;
-        stackView.isLayoutMarginsRelativeArrangement = false;
-        stackView.translatesAutoresizingMaskIntoConstraints = false;
-        stackView.clipsToBounds = true;
-        return stackView;
-    }()
+    @Published
+    var user: UserModel?
     
-    private lazy var summaryView: UserSummaryView = {
-        let view = UserSummaryView();
-        return view;
-    }()
+    var userUri: URL?
     
-    private lazy var userActionsView: UserActionsView = {
-        let view = UserActionsView(user: user, userActionsDelegate: actionsDelegate, scheme: scheme)
-        return view;
-    }()
-    
-    private lazy var detailsButton: MDCButton = {
-        let detailsButton = MDCButton(forAutoLayout: ());
-        detailsButton.accessibilityLabel = "More Details";
-        detailsButton.setTitle("More Details", for: .normal);
-        detailsButton.clipsToBounds = true;
-        detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside);
-        return detailsButton;
-    }()
-    
-    private lazy var detailsButtonView: UIView = {
-        let view = UIView();
-        view.addSubview(detailsButton);
-        detailsButton.autoAlignAxis(toSuperviewAxis: .vertical);
-        detailsButton.autoMatch(.width, to: .width, of: view, withMultiplier: 0.9);
-        detailsButton.autoPinEdge(.top, to: .top, of: view);
-        detailsButton.autoPinEdge(.bottom, to: .bottom, of: view);
-        return view;
-    }()
-    
-    private lazy var expandView: UIView = {
-        let view = UIView(forAutoLayout: ());
-        view.setContentHuggingPriority(.defaultLow, for: .vertical);
-        return view;
-    }();
+    init(userUri: URL?) {
+        self.userUri = userUri
+        repository.observeUser(userUri: userUri)?
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] updatedObject in
+                self?.user = updatedObject
+            })
+            .store(in: &disposables)
+    }
+}
 
-    required init(coder aDecoder: NSCoder) {
-        fatalError("This class does not support NSCoding")
-    }
+struct UserBottomSheet: View {
+    @ObservedObject
+    var viewModel: UserBottomSheetViewModel
     
-    init(user: User, actionsDelegate: UserActionsDelegate? = nil, scheme: MDCContainerScheming?) {
-        super.init(frame: CGRect.zero);
-        self.translatesAutoresizingMaskIntoConstraints = false;
-        self.actionsDelegate = actionsDelegate;
-        self.user = user;
-        self.scheme = scheme;
-        stackView.addArrangedSubview(summaryView);
-        stackView.addArrangedSubview(userActionsView);
-        stackView.addArrangedSubview(detailsButtonView);
-        self.addSubview(stackView);
-        stackView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0));
-        
-        summaryView.populate(item: user, actionsDelegate: actionsDelegate);
-        userActionsView.populate(user: user, delegate: actionsDelegate);
-        
-        if let scheme = scheme {
-            applyTheme(withScheme: scheme);
-        }
-        
-        self.setNeedsUpdateConstraints();
-    }
-    
-    func applyTheme(withScheme scheme: MDCContainerScheming? = nil) {
-        guard let scheme = scheme else {
-            return;
-        }
-        self.scheme = scheme;
-        self.backgroundColor = scheme.colorScheme.surfaceColor;
-        summaryView.applyTheme(withScheme: scheme);
-        userActionsView.applyTheme(withScheme: scheme);
-        detailsButton.applyContainedTheme(withScheme: scheme);
-    }
-    
-    override func updateConstraints() {
-        if (!didSetUpConstraints) {
-            stackView.autoPinEdgesToSuperviewEdges(with: .zero);
-            didSetUpConstraints = true;
-        }
-        
-        super.updateConstraints();
-    }
-    
-    override func refresh() {
-        guard let user = self.user else {
-            return
-        }
-        summaryView.populate(item: user, actionsDelegate: actionsDelegate);
-    }
-    
-    @objc func detailsButtonTapped() {
-        if let user = user {
-            // let the ripple dissolve before transitioning otherwise it looks weird
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                NotificationCenter.default.post(name: .ViewUser, object: user)
-                self.actionsDelegate?.viewUser?(user);
+    var body: some View {
+        Group {
+            if let user = viewModel.user {
+                VStack(spacing: 0) {
+                    
+                    UserSummary(
+                        timestamp: user.timestamp,
+                        name: user.name,
+                        avatarUrl: user.avatarUrl
+                    )
+                    
+                    UserBottomSheetActionBar(
+                        coordinate: user.coordinate,
+                        email: user.email,
+                        phone: user.phone,
+                        navigateToAction: CoordinateActions.navigateTo(
+                            coordinate: user.coordinate,
+                            itemKey: user.userId?.absoluteString,
+                            dataSource: DataSources.user
+                        )
+                    )
+                    Button {
+                        // let the ripple dissolve before transitioning otherwise it looks weird
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            NotificationCenter.default.post(name: .ViewUser, object: user.userId)
+                        }
+                    } label: {
+                        Text("More Details")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(MaterialButtonStyle(type: .contained))
+                    .padding(8)
+                }
+                .id(user.remoteId)
+                .ignoresSafeArea()
             }
         }
+        .animation(.default, value: self.viewModel.user != nil)
     }
 }

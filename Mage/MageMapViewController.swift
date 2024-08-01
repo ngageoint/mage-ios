@@ -43,7 +43,6 @@ class MageMapViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
     }
     
     deinit {

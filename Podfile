@@ -7,14 +7,12 @@ project 'MAGE.xcodeproj'
 use_modular_headers!
 
 def common_pods
-  pod 'UIImage-Categories', '~> 0.0.1'
   pod 'HexColors', '~> 4.0.0'
   pod 'libPhoneNumber-iOS', '~> 0.9.15'
   pod 'zxcvbn-ios'
   pod 'DateTools', '~> 2.0.0'
   pod 'MaterialComponents'
   pod 'MDFInternationalization'
-  pod 'Kingfisher', '~> 7.0'
   pod 'PureLayout'
   pod "AFNetworking", "~> 4.0.1"
   pod "DateTools", "~> 2.0.0"

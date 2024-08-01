@@ -29,7 +29,7 @@ extension UIImage {
 
 @objc class FeedItemRetriever : NSObject {
     
-    @objc public static func setAnnotationImage(feedItem: FeedItem, annotationView: MKAnnotationView) {
+    @objc public static func setAnnotationImage(feedItem: FeedItemAnnotation, annotationView: MKAnnotationView) {
         if let url: URL = feedItem.iconURL {
             let size = 35;
             
@@ -59,44 +59,58 @@ extension UIImage {
     
     public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
-        if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
+        let context = NSManagedObjectContext.mr_default()
         
-            for feed: Feed in feeds {
-                let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
-                feedRetrievers.append(retriever);
-            }
-        }
-        return feedRetrievers;
-    }
-    
-    public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag) {
-            return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
-        }
-        return nil;
-    }
-    
-    public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        if let feed: Feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId)) {
-            if (feed.itemsHaveSpatialDimension) {
-                return FeedItemRetriever(feed: feed, delegate: delegate);
-            }
-        }
-        return nil;
-    }
-    
-    public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
-        var feedRetrievers: [FeedItemRetriever] = [];
-        if let feeds: [Feed] = Feed.mr_findAll() as? [Feed] {
+        return context.performAndWait {
+            if let feeds: [Feed] = Feed.mr_findAll(in: context) as? [Feed] {
             
-            for feed: Feed in feeds {
-                if (feed.itemsHaveSpatialDimension) {
+                for feed: Feed in feeds {
                     let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
                     feedRetrievers.append(retriever);
                 }
             }
+            return feedRetrievers;
         }
-        return feedRetrievers;
+    }
+    
+    public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+        let context = NSManagedObjectContext.mr_default()
+        return context.performAndWait {
+            if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag, in: context) {
+                return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
+            }
+            return nil
+        }
+    }
+    
+    public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
+        let context = NSManagedObjectContext.mr_default()
+        return context.performAndWait {
+            if let feed: Feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId), in: context) {
+                if (feed.itemsHaveSpatialDimension) {
+                    return FeedItemRetriever(feed: feed, delegate: delegate);
+                }
+            }
+            return nil
+        }
+    }
+    
+    public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
+        var feedRetrievers: [FeedItemRetriever] = [];
+        let context = NSManagedObjectContext.mr_default()
+        
+        return context.performAndWait {
+            if let feeds: [Feed] = Feed.mr_findAll(in: context) as? [Feed] {
+                
+                for feed: Feed in feeds {
+                    if (feed.itemsHaveSpatialDimension) {
+                        let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
+                        feedRetrievers.append(retriever);
+                    }
+                }
+            }
+            return feedRetrievers
+        }
     }
 
     @objc public let feed: Feed;
@@ -124,7 +138,7 @@ extension UIImage {
         self.delegate = delegate;
     }
     
-    @objc public func startRetriever() -> [FeedItem]? {
+    @objc public func startRetriever() -> [FeedItemAnnotation]? {
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -132,24 +146,29 @@ extension UIImage {
             print("Unable to Perform Fetch Request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
-        return fetchedResultsController.fetchedObjects;
+        return fetchedResultsController.fetchedObjects?.compactMap({ feedItem in
+            if feedItem.isMappable {
+                return FeedItemAnnotation(feedItem: feedItem)
+            }
+            return nil
+        });
     }
     
 }
 
 extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let feedItem = anObject as? FeedItem else {
+        guard let feedItem = anObject as? FeedItem, feedItem.isMappable else {
             return
         }
         switch type {
         case .insert:
-            delegate.addFeedItem(feedItem)
+            delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
         case .delete:
-            delegate.removeFeedItem(feedItem)
+            delegate.removeFeedItem(FeedItemAnnotation(feedItem: feedItem))
         case .update:
-            delegate.removeFeedItem(feedItem)
-            delegate.addFeedItem(feedItem)
+            delegate.removeFeedItem(FeedItemAnnotation(feedItem: feedItem))
+            delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
         case .move:
             print("...")
         @unknown default:

@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import MagicalRecord
 import OHHTTPStubs
+import MapFramework
 
 @testable import MAGE
 import CoreLocation
@@ -127,8 +128,8 @@ class BottomSheetEnabledTests: KIFSpec {
             it("observation bottom sheet") {
                 let observation = MageCoreDataFixtures.addObservationToEvent()!
                 let oa = ObservationAnnotation(observation: observation, geometry: observation.geometry)
-                
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
                 let notification = MapItemsTappedNotification(annotations: [oa], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
@@ -146,8 +147,9 @@ class BottomSheetEnabledTests: KIFSpec {
                 let location = MageCoreDataFixtures.addLocation()
                 let ua = LocationAnnotation(location: location)
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let notification = MapItemsTappedNotification(annotations: [ua], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
@@ -202,15 +204,15 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 let sa = StaticPointAnnotation(feature: feature)
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let notification = MapItemsTappedNotification(annotations: [sa], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Point")
                 expect(iconStubCalled).toEventually(beTrue())
                 
-                NotificationCenter.default.post(name: .MapViewDisappearing, object: nil)
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Point")
                 
                 mixin.cleanupMixin()
@@ -220,8 +222,9 @@ class BottomSheetEnabledTests: KIFSpec {
                 MageCoreDataFixtures.addFeedToEvent()
                 let feedItem = MageCoreDataFixtures.addFeedItemToFeed(simpleFeature: SFPoint(x: -105, andY: 40.01))
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let notification = MapItemsTappedNotification(annotations: [feedItem], items: nil, mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
@@ -298,10 +301,10 @@ class BottomSheetEnabledTests: KIFSpec {
                         "field0": "Super Cool"
                     ]
                 ]
-                
-                
-                mixin.setupMixin()
-                
+
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 let notification = MapItemsTappedNotification(annotations: [oa, ua, sa, feedItem], items: [lineObs,polygonObs], mapView: testimpl.mapView)
                 NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 

@@ -7,7 +7,17 @@
 //
 //
 
-@objc class StyledPolygon: MKPolygon, OverlayRenderable {
+import MapKit
+import MapFramework
+import DataSourceDefinition
+
+@objc class StyledPolygon: MKPolygon, OverlayRenderable, DataSourceIdentifiable {
+    var id: String = ""
+    
+    var itemKey: String = ""
+    
+    var dataSource: any DataSourceDefinition = UnknownDefinition.definition
+    
     var renderer: MKOverlayRenderer {
         get {
             let renderer = MKPolygonRenderer(polygon: self)

@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import MagicalRecord
 import OHHTTPStubs
+import MapFramework
 
 @testable import MAGE
 import CoreLocation
@@ -125,8 +126,9 @@ class UserTrackingMapTests: KIFSpec {
             }
             
             it("initialize the UserTrackingMap with the button at index 0") {
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 tester().waitForView(withAccessibilityLabel: "track location")
                 expect(buttonStack.arrangedSubviews[0]).to(beAKindOf(MDCFloatingButton.self))
                 
@@ -137,8 +139,9 @@ class UserTrackingMapTests: KIFSpec {
                 mixin.mapView?.userTrackingMode = .none
                 mockCLLocationManager.authorizationStatus = .authorizedAlways
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+
                 tester().waitForView(withAccessibilityLabel: "track location")
                 let button = viewTester().usingLabel("track location").view as! MDCFloatingButton
                 expect(button.currentImage).to(equal(UIImage(systemName: "location")))
@@ -163,7 +166,8 @@ class UserTrackingMapTests: KIFSpec {
                 mixin.mapView?.userTrackingMode = .none
                 mockCLLocationManager.authorizationStatus = .denied
                 
-                mixin.setupMixin()
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 
                 tester().waitForView(withAccessibilityLabel: "track location")
                 let button = viewTester().usingLabel("track location").view as! MDCFloatingButton

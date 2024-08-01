@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import MapFramework
 
 protocol FilteredUsersMap {
     var mapView: MKMapView? { get set }
@@ -55,7 +56,15 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         locations = nil
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilter), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterUnit), options: [.new], context: nil)
         UserDefaults.standard.addObserver(self, forKeyPath: #keyPath(UserDefaults.locationTimeFilterNumber), options: [.new], context: nil)

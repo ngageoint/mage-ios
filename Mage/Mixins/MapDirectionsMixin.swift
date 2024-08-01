@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 import Kingfisher
+import MapFramework
 
 protocol Navigable {
     var coordinate: CLLocationCoordinate2D { get }
@@ -20,6 +21,15 @@ protocol MapDirections {
 }
 
 class MapDirectionsMixin: NSObject, MapMixin {
+    @Injected(\.observationLocationRepository)
+    var observationLocationRepository: ObservationLocationRepository
+    
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
+    @Injected(\.feedItemRepository)
+    var feedItemRepository: FeedItemRepository
+    
     var directionsToItemObserver: Any?
     var startStraightLineNavigationObserver: Any?
     var mapView: MKMapView?
@@ -28,7 +38,6 @@ class MapDirectionsMixin: NSObject, MapMixin {
     var mapDirections: MapDirections
     weak var viewController: UIViewController?
     var sourceView: UIView?
-    var itemToNavigateTo: Any?
     var straightLineNotification: StraightLineNavigationNotification?
     var straightLineNavigation: StraightLineNavigation?
     var locationManager: CLLocationManager?
@@ -47,10 +56,20 @@ class MapDirectionsMixin: NSObject, MapMixin {
         self.locationManager = locationManager
     }
     
-    func setupMixin() {
+    func removeMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func updateMixin(mapView: MKMapView, mapState: MapState) {
+
+    }
+
+    func setupMixin(mapView: MKMapView, mapState: MapState) {
         directionsToItemObserver = NotificationCenter.default.addObserver(forName: .DirectionsToItem, object: nil, queue: .main) { [weak self] notification in
             if let directionsNotification = notification.object as? DirectionsToItemNotification {
-                self?.getDirections(notification: directionsNotification)
+                Task { [weak self] in
+                    await self?.getDirections(notification: directionsNotification)
+                }
             }
         }
         
@@ -77,15 +96,12 @@ class MapDirectionsMixin: NSObject, MapMixin {
     func startStraightLineNavigation(notification: StraightLineNavigationNotification) {
         self.straightLineNotification = notification
         if let observation = notification.observation {
-            itemToNavigateTo = observation
             observationFetchedResultsController = Observation.fetchedResultsController(observation, delegate: self)
             try? observationFetchedResultsController?.performFetch()
         } else if let user = notification.user {
-            itemToNavigateTo = user
             locationFetchedResultsController = Location.mostRecentLocationFetchedResultsController(user, delegate: self)
             try? locationFetchedResultsController?.performFetch()
         } else if let feedItem = notification.feedItem {
-            itemToNavigateTo = feedItem
             feedItemFetchedResultsController = FeedItem.fetchedResultsController(feedItem, delegate: self)
             try? feedItemFetchedResultsController?.performFetch()
         }
@@ -109,10 +125,94 @@ class MapDirectionsMixin: NSObject, MapMixin {
         straightLineNavigation?.startNavigation(manager: locationManager, destinationCoordinate: notification.coordinate, delegate: self, image: notification.image, imageURL: notification.imageURL, scheme: scheme)
     }
     
-    func getDirections(notification: DirectionsToItemNotification) {
+    func getDirections(notification: DirectionsToItemNotification) async {
         var location: CLLocation?
         var title: String?
         var image: UIImage?
+        
+        if notification.dataSource.key == DataSources.observation.key,
+           let observationLocationUri = notification.itemKey,
+           let uri = URL(string: observationLocationUri)
+        {
+            if let observationLocation = await observationLocationRepository.getObservationLocation(observationLocationUri: uri)
+            {
+                title = observationLocation.primaryFieldText ?? "Observation"
+                if let imageName = ObservationImage.imageName(
+                    eventId: observationLocation.eventId,
+                    formId: observationLocation.formId,
+                    primaryFieldText: observationLocation.primaryFieldText,
+                    secondaryFieldText: observationLocation.secondaryFieldText
+                ) {
+                    image = UIImage(named: imageName)
+                }
+            }
+        }
+        
+        if notification.dataSource.key == DataSources.user.key,
+           let userUri = notification.itemKey,
+           let uri = URL(string: userUri)
+        {
+            if let user = await userRepository.getUser(userUri: uri) {
+                title = user.name ?? "User"
+                image = UIImage(systemName: "person.fill")
+            }
+        }
+        
+        if notification.dataSource.key == DataSources.feedItem.key,
+           let key = notification.itemKey,
+           let uri = URL(string: key)
+        {
+            if let feedItem = await feedItemRepository.getFeedItem(feedItemrUri: uri) {
+                title = feedItem.title ?? "Feed Item"
+                image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                if let url: URL = feedItem.iconURL {
+                    let size = 24;
+                    
+                    let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
+                    await KingfisherManager.shared.retrieveImage(with: url, options: [
+                        .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                        .processor(processor),
+                        .scaleFactor(UIScreen.main.scale),
+                        .transition(.fade(1)),
+                        .cacheOriginalImage
+                    ]) { result in
+                        switch result {
+                        case .success(let value):
+                            image = value.image.aspectResize(to: CGSize(width: size, height: size));
+                        case .failure(_):
+                            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if notification.dataSource.key == DataSources.featureItem.key,
+           let key = notification.itemKey,
+           let featureItem = FeatureItem.fromKey(jsonString: key)
+        {
+            title = featureItem.featureTitle ?? "Feature"
+            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+            if let url: URL = featureItem.iconURL {
+                let size = 24;
+                
+                let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
+                await KingfisherManager.shared.retrieveImage(with: url, options: [
+                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]) { result in
+                    switch result {
+                    case .success(let value):
+                        image = value.image.aspectResize(to: CGSize(width: size, height: size));
+                    case .failure(_):
+                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
+                    }
+                }
+            }
+        }
         
         if let observation = notification.observation {
             location = observation.location
@@ -134,7 +234,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
                 let size = 24;
                 
                 let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
-                KingfisherManager.shared.retrieveImage(with: url, options: [
+                await KingfisherManager.shared.retrieveImage(with: url, options: [
                     .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
                     .processor(processor),
                     .scaleFactor(UIScreen.main.scale),
@@ -155,9 +255,9 @@ class MapDirectionsMixin: NSObject, MapMixin {
             location = notificationLocation
         }
         
-        if let notificationAnnotation = notification.annotation, let coordinate = notificationAnnotation.annotation?.coordinate {
+        if let notificationAnnotation = notification.annotation, let coordinate = await notificationAnnotation.annotation?.coordinate {
             location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-            image = notificationAnnotation.image
+            image = await notificationAnnotation.image
         }
                 
         guard let location = location else {
@@ -165,7 +265,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
         }
         
         var extraActions: [UIAlertAction] = [];
-        extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
+        await extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             var straightLineNavigationNotification = StraightLineNavigationNotification(coordinate: location.coordinate)
             straightLineNavigationNotification.observation = notification.observation
             straightLineNavigationNotification.feedItem = notification.feedItem
@@ -183,36 +283,37 @@ class MapDirectionsMixin: NSObject, MapMixin {
         
         let googleMapsUrl = URL(string: "https://maps.google.com/?\(appleMapsQueryString ?? "")");
         
-        let alert = UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
-        alert.addAction(UIAlertAction(title: "Apple Maps", style: .default, handler: { (action) in
+        let alert = await UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
+        
+        await alert.addAction(UIAlertAction(title: "Apple Maps", style: .default, handler: { (action) in
             UIApplication.shared.open(appleMapsUrl!, options: [:]) { (success) in
                 print("opened? \(success)")
             }
         }))
-        alert.addAction(UIAlertAction(title:"Google Maps", style: .default, handler: { (action) in
+        await alert.addAction(UIAlertAction(title:"Google Maps", style: .default, handler: { (action) in
             UIApplication.shared.open(googleMapsUrl!, options: [:]) { (success) in
                 print("opened? \(success)")
             }
         }))
         for action in extraActions {
-            alert.addAction(action);
+            await alert.addAction(action);
         }
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
+        await alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
         
-        if let popoverController = alert.popoverPresentationController {
+        if let popoverController = await alert.popoverPresentationController {
             var view: UIView? = notification.sourceView ?? sourceView
             if view == nil {
                 popoverController.permittedArrowDirections = []
-                view = viewController?.view
+                view = await viewController?.view
             }
             if let view = view {
                 popoverController.sourceView = view
-                popoverController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+                popoverController.sourceRect = await CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
             }
         }
         
-        viewController?.present(alert, animated: true, completion: nil);
+        await viewController?.present(alert, animated: true, completion: nil);
     }
     
     func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
@@ -256,7 +357,6 @@ extension MapDirectionsMixin : CLLocationManagerDelegate {
 
 extension MapDirectionsMixin : StraightLineNavigationDelegate {
     func cancelStraightLineNavigation() {
-        itemToNavigateTo = nil
         straightLineNotification?.imageURL = nil
         straightLineNotification = nil
         straightLineNavigation?.stopNavigation()

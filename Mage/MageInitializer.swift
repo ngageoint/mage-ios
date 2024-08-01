@@ -73,5 +73,4 @@ import Foundation
         
         return cleared;
     }
-
 }

@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import OHHTTPStubs
 import MagicalRecord
+import MapFramework
 
 @testable import MAGE
 
@@ -106,7 +107,10 @@ class GeoPackageBaseMapTests: KIFSpec {
                     window.overrideUserInterfaceStyle = .dark
                 }
                 tester().wait(forTimeInterval: 0.5)
-                gpmixin.setupMixin()
+
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
+
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0] as? BaseMapOverlay).to(equal(darkBackgroundOverlay))
             }
@@ -123,7 +127,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                     window.overrideUserInterfaceStyle = .light
                 }
                 tester().wait(forTimeInterval: 0.5)
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0] as? BaseMapOverlay).to(equal(backgroundOverlay))
             }
@@ -136,7 +141,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                           return
                       }
                 UserDefaults.standard.mapType = 3
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0]).to(beAKindOf(BaseMapOverlay.self))
                 if UITraitCollection.current.userInterfaceStyle == .dark {
@@ -159,7 +165,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                     window.overrideUserInterfaceStyle = .unspecified
                 }
                 tester().wait(forTimeInterval: 0.5)
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0]).to(beAKindOf(BaseMapOverlay.self))
                 if UITraitCollection.current.userInterfaceStyle == .dark {
@@ -183,7 +190,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                     window.overrideUserInterfaceStyle = .unspecified
                 }
                 tester().wait(forTimeInterval: 0.5)
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0]).to(beAKindOf(BaseMapOverlay.self))
                 if UITraitCollection.current.userInterfaceStyle == .dark {
@@ -204,7 +212,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                       }
                 UserDefaults.standard.mapType = Int(MKMapType.standard.rawValue)
                 UserDefaults.standard.mapShowTraffic = false
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(0))
                 expect(gpmixin.mapView?.mapType).to(equal(.standard))
                 expect(gpmixin.mapView?.showsTraffic).to(beFalse())
@@ -219,7 +228,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                       }
                 UserDefaults.standard.mapType = Int(MKMapType.standard.rawValue)
                 UserDefaults.standard.mapShowTraffic = true
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(0))
                 expect(gpmixin.mapView?.mapType).to(equal(.standard))
                 expect(gpmixin.mapView?.showsTraffic).to(beTrue())
@@ -234,7 +244,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                       }
                 UserDefaults.standard.mapType = Int(MKMapType.satellite.rawValue)
                 UserDefaults.standard.mapShowTraffic = false
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(0))
                 expect(gpmixin.mapView?.mapType).to(equal(.satellite))
                 expect(gpmixin.mapView?.showsTraffic).to(beFalse())
@@ -249,7 +260,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                       }
                 UserDefaults.standard.mapType = Int(MKMapType.satellite.rawValue)
                 UserDefaults.standard.mapShowTraffic = true
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(0))
                 expect(gpmixin.mapView?.mapType).to(equal(.satellite))
                 // this should still be false because we don't show traffic on satelite maps
@@ -265,7 +277,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                       }
                 UserDefaults.standard.mapType = 87
                 UserDefaults.standard.mapShowTraffic = false
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(0))
                 expect(gpmixin.mapView?.mapType).to(equal(.standard))
                 expect(gpmixin.mapView?.showsTraffic).to(beFalse())
@@ -280,8 +293,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                       }
                 UserDefaults.standard.mapType = Int(MKMapType.standard.rawValue)
                 UserDefaults.standard.mapShowTraffic = false
-                gpmixin.setupMixin()
-                
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.renderer(overlay: backgroundOverlay)).to(beAKindOf(MKTileOverlayRenderer.self))
                 expect(gpmixin.renderer(overlay: darkBackgroundOverlay)).to(beAKindOf(MKTileOverlayRenderer.self))
             }
@@ -295,8 +308,9 @@ class GeoPackageBaseMapTests: KIFSpec {
                       }
                 UserDefaults.standard.mapType = Int(MKMapType.standard.rawValue)
                 UserDefaults.standard.mapShowTraffic = false
-                gpmixin.setupMixin()
-                
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
+
                 let overlay = MKTileOverlay()
                 
                 expect(gpmixin.renderer(overlay: overlay)).to(beNil())
@@ -315,7 +329,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                     window.overrideUserInterfaceStyle = .dark
                 }
                 tester().wait(forTimeInterval: 0.5)
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0] as? BaseMapOverlay).to(equal(darkBackgroundOverlay))
                 if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
@@ -341,7 +356,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                 }
                 tester().wait(forTimeInterval: 0.5)
                 let traitCollection = window.traitCollection
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0] as? BaseMapOverlay).to(equal(darkBackgroundOverlay))
                 // this would never happen like this in real life because something would have changed, but, just for a test
@@ -364,7 +380,8 @@ class GeoPackageBaseMapTests: KIFSpec {
                 }
                 tester().wait(forTimeInterval: 0.5)
                 let traitCollection = window.traitCollection
-                gpmixin.setupMixin()
+                let mapState = MapState()
+                gpmixin.setupMixin(mapView: gptest.mapView!, mapState: mapState)
                 expect(gpmixin.mapView?.overlays.count).to(equal(1))
                 expect(gpmixin.mapView?.overlays[0] as? BaseMapOverlay).to(equal(darkBackgroundOverlay))
                 if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {

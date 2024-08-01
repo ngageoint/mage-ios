@@ -11,6 +11,7 @@ import Quick
 import Nimble
 import MagicalRecord
 import OHHTTPStubs
+import MapFramework
 
 @testable import MAGE
 import CoreLocation
@@ -137,8 +138,8 @@ class MapDirectionsTests: KIFSpec {
             it("get directions to an observation") {
                 let observation = Observation.create(geometry: SFPoint(x: -105, andY: 40.01), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
@@ -207,8 +208,8 @@ class MapDirectionsTests: KIFSpec {
                 let observation = Observation.create(geometry: SFPoint(x: -105, andY: 40.01), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 observation.remoteId = "observationabc"
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
@@ -277,8 +278,8 @@ class MapDirectionsTests: KIFSpec {
                 let observation = Observation.create(geometry: SFPoint(x: -105, andY: 40.01), accuracy: 4.5, provider: "gps", delta: 2, context: NSManagedObjectContext.mr_default());
                 observation.remoteId = "observationabc"
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
@@ -350,8 +351,8 @@ class MapDirectionsTests: KIFSpec {
                 MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01), completion: nil)
                 user = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
@@ -422,8 +423,8 @@ class MapDirectionsTests: KIFSpec {
                 MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01), completion: nil)
                 user = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
                 
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
@@ -493,8 +494,8 @@ class MapDirectionsTests: KIFSpec {
             it("get directions to a feed item") {
                 MageCoreDataFixtures.addFeedToEvent()
                 let feedItem = MageCoreDataFixtures.addFeedItemToFeed(simpleFeature: SFPoint(x: -105, andY: 40.01))
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
@@ -574,8 +575,8 @@ class MapDirectionsTests: KIFSpec {
                 
                 MageCoreDataFixtures.addFeedToEvent(mapStyle: [FeedMapStyleKey.icon.key: [FeedMapStyleKey.id.key: "iconid"]])
                 let feedItem = MageCoreDataFixtures.addFeedItemToFeed(simpleFeature: SFPoint(x: -105, andY: 40.01))
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
@@ -657,8 +658,8 @@ class MapDirectionsTests: KIFSpec {
                 
                 MageCoreDataFixtures.addFeedToEvent(mapStyle: [FeedMapStyleKey.icon.key: [FeedMapStyleKey.id.key: "iconid"]])
                 let feedItem = MageCoreDataFixtures.addFeedItemToFeed(simpleFeature: SFPoint(x: -105, andY: 40.01))
-                mixin.setupMixin()
-                
+                let mapState = MapState()
+                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
                 if let region = mixin.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: mockCLLocationManager.mockedLocation!.coordinate.latitude, longitude: mockCLLocationManager.mockedLocation!.coordinate.longitude), latitudinalMeters: 100000, longitudinalMeters: 10000)) {
                     mixin.mapView?.setRegion(region, animated: false)
                 }

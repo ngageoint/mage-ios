@@ -51,6 +51,21 @@
     return self;
 }
 
+- (nonnull NSArray<GeoPackageFeatureKey *> *) getFeatureKeysAtTap:(CLLocationCoordinate2D) tapCoord {
+    NSMutableArray<GeoPackageFeatureKey *> *array = [[NSMutableArray alloc] init];
+    if ([self.mapCacheOverlays count] > 0) {
+        for (CacheOverlay * cacheOverlay in [self.mapCacheOverlays allValues]){
+            if ([cacheOverlay isKindOfClass:[GeoPackageFeatureTableCacheOverlay class]]) {
+                GeoPackageFeatureTableCacheOverlay *featureOverlay = (GeoPackageFeatureTableCacheOverlay *)cacheOverlay;
+                
+                NSArray <GeoPackageFeatureKey *> *items = [featureOverlay getFeatureKeysNearTap:tapCoord andMap:self.mapView];
+                [array addObjectsFromArray:items];
+            }
+        }
+    }
+    return array;
+}
+
 - (NSArray<GeoPackageFeatureItem *>*) getFeaturesAtTap:(CLLocationCoordinate2D) tapCoord {
     NSMutableArray<GeoPackageFeatureItem *> *array = [[NSMutableArray alloc] init];
     if ([self.mapCacheOverlays count] > 0) {

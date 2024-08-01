@@ -4,9 +4,18 @@
 //
 //
 
+import MapKit
 import CoreLocation
+import MapFramework
+import DataSourceDefinition
 
-@objc class StyledPolyline : MKPolyline, OverlayRenderable {
+@objc class StyledPolyline : MKPolyline, OverlayRenderable, DataSourceIdentifiable {
+    var id: String = ""
+    
+    var itemKey: String = ""
+    
+    var dataSource: any DataSourceDefinition = UnknownDefinition.definition
+    
     var renderer: MKOverlayRenderer {
         get {
             let renderer = MKPolylineRenderer(polyline: self)

@@ -11,8 +11,12 @@ import PureLayout
 import Kingfisher
 import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
+import SwiftUI
 
 class ObservationHeaderView : MDCCard {
+    @Injected(\.observationMapItemRepository)
+    var observationMapItemRepository: ObservationMapItemRepository
+    
     var didSetupConstraints = false;
     weak var observation: Observation?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
@@ -29,7 +33,9 @@ class ObservationHeaderView : MDCCard {
         stack.translatesAutoresizingMaskIntoConstraints = false;
         stack.addArrangedSubview(importantView);
         stack.addArrangedSubview(observationSummaryView);
-        stack.addArrangedSubview(geometryView);
+        if let mapItemView = mapItemView {
+            stack.addArrangedSubview(mapItemView.view)
+        }
         stack.addArrangedSubview(divider);
         stack.addArrangedSubview(observationActionsView);
         return stack;
@@ -54,7 +60,9 @@ class ObservationHeaderView : MDCCard {
             ];
         return locationField;
     }()
-    
+
+    private var mapItemView: SwiftUIViewController?
+
     private lazy var geometryView: GeometryView = {
         let geometryView = GeometryView(field: locationField, editMode: false, delegate: nil, observation: self.observation, mapEventDelegate: nil, observationActionsDelegate: observationActionsDelegate);
         
@@ -75,6 +83,9 @@ class ObservationHeaderView : MDCCard {
         self.init(frame: CGRect.zero);
         self.observation = observation;
         self.observationActionsDelegate = observationActionsDelegate;
+        let view = ObservationMapItemView(observationUri: observation.objectID.uriRepresentation())
+        mapItemView = SwiftUIViewController(swiftUIView: view)
+
         self.configureForAutoLayout();
         layoutView();
         populate(observation: observation, animate: false);
@@ -103,7 +114,6 @@ class ObservationHeaderView : MDCCard {
     
     @objc public func populate(observation: Observation, animate: Bool = true, ignoreGeometry: Bool = false) {
         observationSummaryView.populate(observation: observation);
-        
         if (animate) {
             UIView.animate(withDuration: 0.2) {
                 self.importantView.isHidden = !observation.isImportant
