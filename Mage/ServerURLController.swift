@@ -19,6 +19,7 @@ class ServerURLController: UIViewController {
     @objc public var delegate: ServerURLDelegate?
     var scheme: MDCContainerScheming?
     var error: String?
+    var additionalErrorInfo: Dictionary<String, Any>?
     
     lazy var progressView: MDCProgressView = {
         let progressView = MDCProgressView(forAutoLayout: ())
@@ -30,9 +31,9 @@ class ServerURLController: UIViewController {
     private lazy var serverURL: MDCFilledTextField = {
         let serverURL = MDCFilledTextField(frame: CGRect(x: 0, y: 0, width: 200, height: 100));
         serverURL.autocapitalizationType = .none;
-        serverURL.accessibilityLabel = "Server URL";
-        serverURL.label.text = "Server URL"
-        serverURL.placeholder = "Server URL"
+        serverURL.accessibilityLabel = "MAGE Server URL";
+        serverURL.label.text = "MAGE Server URL"
+        serverURL.placeholder = "MAGE Server URL"
         let worldImage = UIImageView(image: UIImage(systemName: "globe.americas.fill")?.aspectResize(to: CGSize(width: 24, height: 24)).withRenderingMode(.alwaysTemplate))
         serverURL.leadingView = worldImage
         serverURL.leadingViewMode = .always
@@ -44,10 +45,9 @@ class ServerURLController: UIViewController {
         return serverURL;
     }()
     
-    lazy var setServerUrlTitle: UITextView = {
-        let setServerUrlTitle = UITextView(forAutoLayout: ())
+    lazy var setServerUrlTitle: UILabel = {
+        let setServerUrlTitle = UILabel(forAutoLayout: ())
         setServerUrlTitle.textAlignment = .center
-        setServerUrlTitle.isSelectable = false
         setServerUrlTitle.backgroundColor = .clear
         setServerUrlTitle.text = "Set MAGE Server URL"
         return setServerUrlTitle
@@ -55,6 +55,7 @@ class ServerURLController: UIViewController {
     
     lazy var wandMageContainer: UIView = {
         let container = UIView(forAutoLayout: ())
+        container.backgroundColor = .clear
         container.clipsToBounds = false
         container.addSubview(wandLabel)
         container.addSubview(mageLabel)
@@ -119,10 +120,20 @@ class ServerURLController: UIViewController {
         let errorStatus = UITextView(forAutoLayout: ())
         errorStatus.accessibilityLabel = "Server URL Error"
         errorStatus.textAlignment = .left
-        errorStatus.isSelectable = true
         errorStatus.backgroundColor = .clear
         errorStatus.isHidden = true
         return errorStatus
+    }()
+    
+    lazy var errorInfoLink: UILabel = {
+        let errorInfoLink = UILabel(forAutoLayout: ())
+        errorInfoLink.textAlignment = .center
+        errorInfoLink.backgroundColor = .clear
+        errorInfoLink.text = "more info"
+        errorInfoLink.isHidden = true
+        errorInfoLink.isUserInteractionEnabled = true
+        errorInfoLink.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(errorInfoLinkTapped)))
+        return errorInfoLink
     }()
     
     init(frame: CGRect) {
@@ -156,6 +167,8 @@ class ServerURLController: UIViewController {
         serverURL.applyTheme(withScheme: scheme)
         serverURL.leadingView?.tintColor = scheme.colorScheme.onSurfaceColor.withAlphaComponent(0.6)
         errorImage.tintColor = scheme.colorScheme.errorColor
+        errorInfoLink.textColor = scheme.colorScheme.primaryColorVariant
+        errorInfoLink.font = UIFont.systemFont(ofSize: 12)
     }
     
     public override func viewDidLoad() {
@@ -167,6 +180,7 @@ class ServerURLController: UIViewController {
         view.addSubview(progressView)
         view.addSubview(errorImage)
         view.addSubview(errorStatus)
+        view.addSubview(errorInfoLink)
         
         applyTheme(withContainerScheme: scheme)
     }
@@ -193,13 +207,14 @@ class ServerURLController: UIViewController {
         }
     }
     
-    @objc public func showError(error: String) {
+    @objc public func showError(error: String, userInfo:Dictionary<String, Any>? = nil) {
         errorStatus.isHidden = false
+        errorInfoLink.isHidden = false
         errorImage.isHidden = false
         progressView.isHidden = true
         progressView.stopAnimating()
-        errorStatus.text = error
-        serverURL.leadingAssistiveLabel.text = error
+        errorStatus.text = "This URL does not appear to be a MAGE server."
+        additionalErrorInfo = userInfo
         if let scheme = scheme {
             serverURL.applyErrorTheme(withScheme: scheme)
         }
@@ -227,12 +242,19 @@ class ServerURLController: UIViewController {
             progressView.autoPinEdge(toSuperviewEdge: .right, withInset: 16)
             progressView.autoSetDimension(.height, toSize: 5)
             progressView.autoPinEdge(.top, to: .bottom, of: serverURL)
-            errorImage.autoPinEdge(.top, to: .bottom, of: buttonStack, withOffset: 16)
+            errorImage.autoPinEdge(.top, to: .bottom, of: buttonStack, withOffset: 21)
             errorImage.autoPinEdge(toSuperviewMargin: .left, withInset: 16)
-            errorStatus.autoPinEdge(toSuperviewMargin: .bottom)
+
             errorStatus.autoPinEdge(toSuperviewMargin: .right, withInset: 16)
             errorStatus.autoPinEdge(.left, to: .right, of: errorImage, withOffset: 8)
             errorStatus.autoPinEdge(.top, to: .bottom, of: buttonStack, withOffset: 16)
+            errorStatus.autoSetDimension(.height, toSize: 32)
+            
+            errorInfoLink.autoPinEdge(toSuperviewMargin: .left, withInset: 16)
+            errorInfoLink.autoPinEdge(toSuperviewMargin: .right, withInset: 16)
+            errorInfoLink.autoPinEdge(.top, to: .bottom, of: errorStatus, withOffset: 12)
+            errorInfoLink.autoSetDimension(.height, toSize: 16)
+
             didSetupConstraints = true;
         }
         
@@ -240,8 +262,37 @@ class ServerURLController: UIViewController {
     }
     
     @objc func okTapped() {
-        if let urlString = serverURL.text, let url = URL(string: urlString), url.scheme != nil, url.host != nil {
+        
+        guard let urlString = serverURL.text else {
+            showError(error: "Invalid URL")
+            return
+        }
+        
+        guard var urlComponents = URLComponents(string: urlString) else {
+            showError(error: "Invalid URL")
+            return
+        }
+           
+        // Handle cases without path or scheme, e.g. "magedev.geointnext.com"
+        if urlComponents.path != "" && urlComponents.host == nil {
+            urlComponents.host = urlComponents.path
+            urlComponents.path = ""
+        }
+        
+        // Remove trailing "/" in the path if they entered one by accident
+        if urlComponents.path == "/" {
+            urlComponents.path = ""
+        }
+        
+        // Supply a default HTTPS scheme if none is specified
+        if urlComponents.scheme == nil {
+            urlComponents.scheme = "https"
+        }
+        
+        if let url = urlComponents.url {
+        
             errorStatus.isHidden = true
+            errorInfoLink.isHidden = true
             errorImage.isHidden = true
             progressView.isHidden = false
             progressView.startAnimating()
@@ -252,10 +303,29 @@ class ServerURLController: UIViewController {
         } else {
             showError(error: "Invalid URL")
         }
+        
     }
     
     @objc func cancelTapped() {
         delegate?.cancelSetServerURL()
+    }
+    
+    @objc func errorInfoLinkTapped() {
+        
+        var errorTitle = "Error"
+        var errorMessage = "Failed to connect to server."
+        
+        if let additionalErrorInfo = additionalErrorInfo {
+            if let statusCode = additionalErrorInfo["statusCode"] as? Int {
+                errorTitle = String(statusCode)
+            }
+            if let desc = additionalErrorInfo["NSLocalizedDescription"] as? String {
+                errorMessage = desc
+            }
+        }
+        let alert = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
     }
 
 }

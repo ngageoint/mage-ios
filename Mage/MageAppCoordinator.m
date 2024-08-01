@@ -116,7 +116,7 @@
             [weakSelf startAuthentication:mageServer];
         });
     } failure:^(NSError *error) {
-        [weakSelf.urlController showErrorWithError:error.localizedDescription];
+        [weakSelf.urlController showErrorWithError:error.localizedDescription userInfo:error.userInfo];
     }];
 }
 
