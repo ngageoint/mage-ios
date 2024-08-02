@@ -16,19 +16,19 @@ struct ShowFavoritesButton: View {
     var favoriteAction: () -> Void
     
     var body: some View {
-        Button {
-            favoriteAction()
-        } label: {
-            Label {
-                if let count = favoriteCount {
-                    Text("\(count) Favorites").padding(.leading, 8)
+        if let count = favoriteCount, count != 0 {
+            Button {
+                favoriteAction()
+            } label: {
+                Label {
+                    Text("\(count) Favorite\(count > 1 ? "s" : "")").padding(.leading, 8)
+                } icon: {
                 }
-            } icon: {
             }
+            .buttonStyle(
+                MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6))
+            )
+            .transformEffect(.identity)
         }
-        .buttonStyle(
-            MaterialButtonStyle(foregroundColor: .onSurfaceColor.opacity(0.6))
-        )
-        .transformEffect(.identity)
     }
 }
