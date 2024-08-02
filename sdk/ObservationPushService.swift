@@ -174,31 +174,47 @@ public class ObservationPushService: NSObject {
                     } else {
                         // when the observation comes back from a new server the attachments will have moved from the field to the attachments array
                         if let attachmentsInResponse = response[ObservationKey.attachments.key] as? [[AnyHashable : Any]] {
-                            // only look for attachments without a url that match a field we tried to save
-                            for attachmentResponse in attachmentsInResponse where (attachmentResponse[ObservationKey.url.key] == nil) {
+                            var remoteIdsFromJson :Set<String> = []
+                            
+                            for attachmentResponse in attachmentsInResponse {
                                 guard let fieldName = attachmentResponse[AttachmentKey.fieldName.key] as? String,
                                       let name = attachmentResponse[AttachmentKey.name.key] as? String,
                                       let forms = propertiesToSave?[ObservationKey.forms.key] as? [[AnyHashable: Any]] else {
                                     continue;
                                 }
-                                // search through each form for attachments that needed saving
-                                for form in forms {
-                                    guard let formValue = form[fieldName] else {
-                                        continue;
-                                    }
-                                    // name will be unique because when the attachment is pulled in, we rename it to MAGE_yyyyMMdd_HHmmss.extension
-                                    if let unfilteredFieldAttachments = formValue as? [[AnyHashable: Any]] {
-                                        if let fieldAttachment = unfilteredFieldAttachments.first(where: { attachmentJson in
-                                            return attachmentJson[AttachmentKey.name.key] as? String == name
-                                        }) {
-                                            let attachment = Attachment.attachment(json: attachmentResponse, context: context)
-                                            attachment?.observation = localObservation;
-                                            attachment?.observationRemoteId = localObservation.remoteId;
-                                            attachment?.dirty = true;
-                                            attachment?.localPath = fieldAttachment[AttachmentKey.localPath.key] as? String
+                                if let remoteId = attachmentResponse[AttachmentKey.id.key] as? String {
+                                    remoteIdsFromJson.insert(remoteId)
+                                }
+                                
+                                // only look for attachments without a url that match a field we tried to save
+                                if attachmentResponse[ObservationKey.url.key] == nil {
+                                    // search through each form for attachments that needed saving
+                                    for form in forms {
+                                        guard let formValue = form[fieldName] else {
+                                            continue;
+                                        }
+                                        // name will be unique because when the attachment is pulled in, we rename it to MAGE_yyyyMMdd_HHmmss.extension
+                                        if let unfilteredFieldAttachments = formValue as? [[AnyHashable: Any]] {
+                                            if let fieldAttachment = unfilteredFieldAttachments.first(where: { attachmentJson in
+                                                return attachmentJson[AttachmentKey.name.key] as? String == name
+                                            }) {
+                                                let attachment = Attachment.attachment(json: attachmentResponse, context: context)
+                                                attachment?.observation = localObservation;
+                                                attachment?.observationRemoteId = localObservation.remoteId;
+                                                attachment?.dirty = true;
+                                                attachment?.localPath = fieldAttachment[AttachmentKey.localPath.key] as? String
+                                            }
                                         }
                                     }
                                 }
+                            }
+                            // If a local attachment if absent on the server, delete it (and the locally cached file)
+                            let attachmentsDeletedOnServer = observation.attachments?.filter {
+                                !remoteIdsFromJson.contains($0.remoteId ?? "")
+                            }
+                            attachmentsDeletedOnServer?.forEach {
+                                observation.removeFromAttachments($0)
+                                $0.mr_deleteEntity(in: context)
                             }
                         }
                     }
