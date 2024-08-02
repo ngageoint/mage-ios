@@ -18,9 +18,13 @@ class AttachmentFieldViewModel: ObservableObject {
     @Published
     var attachments: [AttachmentModel]?
     
+    @Published
+    var fieldTitle: String
+    
     var cancellable = Set<AnyCancellable>()
     
-    init(observationUri: URL?, observationFormId: String, fieldName: String) {
+    init(observationUri: URL?, observationFormId: String, fieldName: String, fieldTitle: String) {
+        self.fieldTitle = fieldTitle
         self.repository.observeAttachments(
             observationUri: observationUri,
             observationFormId: observationFormId,
@@ -57,31 +61,37 @@ struct AttachmentFieldViewSwiftUI: View {
     ]
     
     var body: some View {
-        LazyVGrid(columns:layout) {
-            ForEach(viewModel.attachments ?? []) { attachment in
-                VStack{
-                    if let url = URL(string: attachment.url ?? "") {
-                        KFImage(url)
-                            .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
-                            .forceRefresh()
-                            .cacheOriginalImage()
-                            .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
-                            .placeholder {
-                                Image("observations")
-                                    .symbolRenderingMode(.monochrome)
+        if !(viewModel.attachments ?? []).isEmpty {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(viewModel.fieldTitle)
+                    .secondaryText()
+                LazyVGrid(columns:layout) {
+                    ForEach(viewModel.attachments ?? []) { attachment in
+                        VStack{
+                            if let url = URL(string: attachment.url ?? "") {
+                                KFImage(url)
+                                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
+                                    .forceRefresh()
+                                    .cacheOriginalImage()
+                                    .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
+                                    .placeholder {
+                                        Image("observations")
+                                            .symbolRenderingMode(.monochrome)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                                    }
+                                
+                                    .fade(duration: 0.3)
                                     .resizable()
-                                    .scaledToFit()
-                                    .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity, maxHeight: 150)
+                                    .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
+                                    .onTapGesture {
+                                        selectedAttachment(attachment.attachmentUri)
+                                    }
                             }
-                        
-                            .fade(duration: 0.3)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity, maxHeight: 150)
-                            .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
-                            .onTapGesture {
-                                selectedAttachment(attachment.attachmentUri)
-                            }
+                        }
                     }
                 }
             }

@@ -52,8 +52,10 @@ struct ObservationFormViewSwiftUI: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         ForEach(viewModel.formFields) { field in
-                            Text(field.title)
-                                .secondaryText()
+                            if field.type != FieldType.attachment.key {
+                                Text(field.title)
+                                    .secondaryText()
+                            }
                             switch (field.type) {
                             case FieldType.password.key:
                                 Text(viewModel.fieldStringValue(fieldName: field.name) ?? "")
@@ -63,20 +65,24 @@ struct ObservationFormViewSwiftUI: View {
                                 if (viewModel.fieldStringValue(fieldName: field.name) ?? "false") == "true" {
                                     Image(systemName:"checkmark.square.fill")
                                         .foregroundStyle(Color.primaryColorVariant)
+                                        .padding(.bottom, 8)
                                 } else {
                                     Image(systemName:"square")
                                         .foregroundStyle(Color.primaryColorVariant)
+                                        .padding(.bottom, 8)
                                 }
                             case FieldType.attachment.key:
                                 AttachmentFieldViewSwiftUI(
                                     viewModel: AttachmentFieldViewModel(
                                         observationUri: viewModel.form.observationId,
                                         observationFormId: viewModel.form.id,
-                                        fieldName: field.name
+                                        fieldName: field.name,
+                                        fieldTitle: field.title
                                     ),
                                     selectedAttachment: selectedAttachment,
                                     selectedUnsentAttachment: selectedUnsentAttachment
                                 )
+                                .padding(.bottom, 8)
                             case FieldType.geometry.key:
                                 if let observationUri = viewModel.form.observationId {
                                     ObservationLocationFieldView(
@@ -84,6 +90,7 @@ struct ObservationFormViewSwiftUI: View {
                                         observationFormId: viewModel.form.id,
                                         fieldName: field.name
                                     )
+                                    .padding(.bottom, 8)
                                 }
                             default:
                                 Text(viewModel.fieldStringValue(fieldName: field.name) ?? "")
