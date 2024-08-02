@@ -1345,6 +1345,7 @@ enum ObservationState: Int, CustomStringConvertible {
                    let primaryField = eventForm.primaryMapField,
                    let primaryFieldName = primaryField[FieldKey.name.key] as? String
                 {
+                    observationLocation.observationFormId = form[FormKey.id.key] as? String
                     let primaryValue = form[primaryFieldName]
                     observationLocation.primaryFieldText = Observation.fieldValueText(value: primaryValue, field: primaryField)
                     if let secondaryField = eventForm.secondaryMapField,
@@ -1399,6 +1400,7 @@ enum ObservationState: Int, CustomStringConvertible {
                                 }
                                 observationLocation.fieldName = geometryField[FieldKey.name.key] as? String
                                 observationLocation.formId = eventFormId.int64Value
+                                observationLocation.observationFormId = form[FormKey.id.key] as? String
                                 
                                 let eventForm = Form.mr_findFirst(
                                     byAttribute: "formId",

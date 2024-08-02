@@ -13,27 +13,65 @@ import MaterialComponents.MDCCard
 import MaterialComponents.MDCContainerScheme;
 import Combine
 import SwiftUI
+import MaterialViews
+import MAGEStyle
 
 struct ObservationFullView: View {
-    @ObservedObject
+    @StateObject
     var viewModel: ObservationViewViewModel
     
     var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
     var moreActions: () -> Void
+    var editObservation: (_ observationUri: URL) -> Void
     
     var body: some View {
-        VStack {
-            ObservationHeaderViewSwiftUI(
-                viewModel: viewModel,
-                showFavorites: showFavorites,
-                moreActions: moreActions
-            )
-            
-            Text("Forms \(viewModel.observationForms?.count ?? 0)")
-            ForEach(viewModel.observationForms ?? []) { form in
-                ObservationFormViewSwiftUI(viewModel: ObservationFormViewModel(form: form))
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ObservationHeaderViewSwiftUI(
+                        viewModel: viewModel,
+                        showFavorites: showFavorites,
+                        moreActions: moreActions
+                    )
+                    
+                    Text("Forms")
+                        .overlineText()
+                        .padding()
+                    ForEach(viewModel.observationForms ?? []) { form in
+                        ObservationFormViewSwiftUI(viewModel: ObservationFormViewModel(form: form))
+                    }
+                }
+                .padding(.bottom, 36)
+                .padding([.top, .leading, .trailing], 8)
             }
-        }
+            .overlay(alignment: .bottomTrailing) {
+                if viewModel.currentUserCanEdit {
+                    Button {
+                        if let observationUri = viewModel.observationModel?.observationId {
+                            editObservation(observationUri)
+                        }
+                    } label: {
+                        Label {
+                            Text("")
+                        } icon: {
+                            Image(systemName: "pencil")
+                                .fontWeight(.black)
+                        }
+                        
+                    }
+                    .fixedSize()
+                    .buttonStyle(
+                        MaterialFloatingButtonStyle(
+                            type: .secondary,
+                            size: .mini,
+                            foregroundColor: .white,
+                            backgroundColor: .secondaryColor
+                        )
+                    )
+                    .padding(.trailing, 16)
+                    .padding(.bottom, 16)
+                }
+            }
+            .background(Color.backgroundColor)
     }
 }
 
@@ -68,6 +106,8 @@ class ObservationViewCardCollectionViewController: UIViewController {
     
     var swiftUIView: ObservationFullView?
     
+    var fullView: UIView?
+    
     var viewModel: ObservationViewViewModel?
     var disposables = Set<AnyCancellable>()
 
@@ -75,35 +115,35 @@ class ObservationViewCardCollectionViewController: UIViewController {
         return self.event?.forms ?? []
     }()
     
-    private lazy var editFab : MDCFloatingButton = {
-        let fab = MDCFloatingButton(shape: .default);
-        fab.setImage(UIImage(systemName: "pencil", withConfiguration: UIImage.SymbolConfiguration(weight: .black)), for: .normal);
-        fab.addTarget(self, action: #selector(startObservationEditCoordinator), for: .touchUpInside);
-        return fab;
-    }()
+//    private lazy var editFab : MDCFloatingButton = {
+//        let fab = MDCFloatingButton(shape: .default);
+//        fab.setImage(UIImage(systemName: "pencil", withConfiguration: UIImage.SymbolConfiguration(weight: .black)), for: .normal);
+//        fab.addTarget(self, action: #selector(startObservationEditCoordinator), for: .touchUpInside);
+//        return fab;
+//    }()
     
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView.newAutoLayout();
-        scrollView.accessibilityIdentifier = "card scroll";
-        scrollView.accessibilityLabel = "card scroll";
-        scrollView.contentInset.bottom = 100;
-        return scrollView;
-    }()
+//    private lazy var scrollView: UIScrollView = {
+//        let scrollView = UIScrollView.newAutoLayout();
+//        scrollView.accessibilityIdentifier = "card scroll";
+//        scrollView.accessibilityLabel = "card scroll";
+//        scrollView.contentInset.bottom = 100;
+//        return scrollView;
+//    }()
     
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView.newAutoLayout();
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 8
-        stackView.distribution = .fill
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-        stackView.isLayoutMarginsRelativeArrangement = true;
-        return stackView;
-    }()
+//    private lazy var stackView: UIStackView = {
+//        let stackView = UIStackView.newAutoLayout();
+//        stackView.axis = .vertical
+//        stackView.alignment = .fill
+//        stackView.spacing = 8
+//        stackView.distribution = .fill
+//        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+//        stackView.isLayoutMarginsRelativeArrangement = true;
+//        return stackView;
+//    }()
     
     private lazy var syncStatusView: ObservationSyncStatus = {
         let syncStatusView = ObservationSyncStatus(observation: self.observation);
-        stackView.addArrangedSubview(syncStatusView);
+//        stackView.addArrangedSubview(syncStatusView);
         return syncStatusView;
     }()
     
@@ -118,29 +158,49 @@ class ObservationViewCardCollectionViewController: UIViewController {
         attachmentCard?.applyTheme(withScheme: containerScheme);
         formsHeader.applyTheme(withScheme: containerScheme);
         attachmentHeader.applyTheme(withScheme: containerScheme);
-        editFab.applySecondaryTheme(withScheme: containerScheme);
+//        editFab.applySecondaryTheme(withScheme: containerScheme);
     }
     
     override func loadView() {
         view = UIView();
         
-        view.addSubview(scrollView);
-        scrollView.addSubview(stackView);
-        view.addSubview(editFab);
+//        if let viewModel = viewModel {
+//            swiftUIView = ObservationFullView(
+//                viewModel: viewModel,
+//                showFavorites: { favoritesModel in
+//                    guard let favoritesModel = favoritesModel,
+//                          let favoriteUsers = favoritesModel.favoriteUsers
+//                    else {
+//                        return
+//                    }
+//                    self.showFavorites(userIds: favoriteUsers)
+//                },
+//                moreActions: {
+//                    self.moreActionsTapped()
+//                }
+//            )
+//            fullView = SwiftUIViewController(swiftUIView: swiftUIView).view
+//            view.addSubview(fullView!)
+//        }
+        
+//        view.addSubview(scrollView);
+//        scrollView.addSubview(stackView);
+//        view.addSubview(editFab);
         
         let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default())
-        editFab.isHidden = !(user?.hasEditPermission ?? false)
+//        editFab.isHidden = !(user?.hasEditPermission ?? false)
         
         view.setNeedsUpdateConstraints();
     }
     
     override func updateViewConstraints() {
         if (!didSetupConstraints) {
-            scrollView.autoPinEdgesToSuperviewEdges(with: .zero);
-            stackView.autoPinEdgesToSuperviewEdges();
-            stackView.autoMatch(.width, to: .width, of: view);
-            editFab.autoPinEdge(toSuperviewMargin: .right);
-            editFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
+            view.autoPinEdgesToSuperviewEdges()
+//            scrollView.autoPinEdgesToSuperviewEdges(with: .zero);
+//            stackView.autoPinEdgesToSuperviewEdges();
+//            stackView.autoMatch(.width, to: .width, of: view);
+//            editFab.autoPinEdge(toSuperviewMargin: .right);
+//            editFab.autoPinEdge(toSuperviewMargin: .bottom, withInset: 25);
             didSetupConstraints = true;
         }
         
@@ -155,12 +215,12 @@ class ObservationViewCardCollectionViewController: UIViewController {
         self.init(frame: CGRect.zero);
         
         self.viewModel = viewModel
-        self.viewModel?.$observation.compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { observation in
-                self.observation = observation
-            })
-            .store(in: &disposables)
+//        self.viewModel?.$observation.compactMap { $0 }
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveValue: { observation in
+//                self.observation = observation
+//            })
+//            .store(in: &disposables)
         
         self.viewModel?.$event.compactMap { $0 }
             .receive(on: DispatchQueue.main)
@@ -194,16 +254,16 @@ class ObservationViewCardCollectionViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated);
         
-        let removedSubviews = cards.reduce([]) { (allSubviews, subview) -> [UIView] in
-            stackView.removeArrangedSubview(subview)
-            return allSubviews + [subview]
-        }
-        
-        for v in removedSubviews {
-            if v.superview != nil {
-                v.removeFromSuperview()
-            }
-        }
+//        let removedSubviews = cards.reduce([]) { (allSubviews, subview) -> [UIView] in
+//            stackView.removeArrangedSubview(subview)
+//            return allSubviews + [subview]
+//        }
+//        
+//        for v in removedSubviews {
+//            if v.superview != nil {
+//                v.removeFromSuperview()
+//            }
+//        }
         cards = [];
         ObservationPushService.singleton.removeDelegate(delegate: self);
     }
@@ -211,14 +271,14 @@ class ObservationViewCardCollectionViewController: UIViewController {
     func setupObservation() {
         self.title = "Observation";
 
-        if let properties = self.observation?.properties as? [String: Any] {
-            if (properties.keys.contains("forms")) {
-                observationForms = properties["forms"] as! [[String: Any]];
-            }
-        } else {
-            observationForms = [];
-        }
-        
+//        if let properties = self.observation?.properties as? [String: Any] {
+//            if (properties.keys.contains("forms")) {
+//                observationForms = properties["forms"] as! [[String: Any]];
+//            }
+//        } else {
+//            observationForms = [];
+//        }
+//        
 //        if swiftUIView == nil, let viewModel = viewModel {
 //            swiftUIView = ObservationFullView(
 //                viewModel: viewModel,
@@ -234,19 +294,20 @@ class ObservationViewCardCollectionViewController: UIViewController {
 //                    self.moreActionsTapped()
 //                }
 //            )
-//            stackView.addArrangedSubview(SwiftUIViewController(swiftUIView: swiftUIView).view)
+////            stackView.addArrangedSubview()
+//            view.addSubview(SwiftUIViewController(swiftUIView: swiftUIView).view)
 //        }
         
-        syncStatusView.updateObservationStatus(observation: self.observation);
-        addHeaderCard(stackView: stackView);
-        var headerViews = 2
-        if (stackView.arrangedSubviews.count > headerViews) {
-            for v in stackView.arrangedSubviews.suffix(from: headerViews) {
-                v.removeFromSuperview();
-            }
-        }
-        
-        addFormViews(stackView: stackView);
+//        syncStatusView.updateObservationStatus(observation: self.observation);
+//        addHeaderCard(stackView: stackView);
+//        var headerViews = 3
+//        if (stackView.arrangedSubviews.count > headerViews) {
+//            for v in stackView.arrangedSubviews.suffix(from: headerViews) {
+//                v.removeFromSuperview();
+//            }
+//        }
+//        
+//        addFormViews(stackView: stackView);
     }
     
     func addHeaderCard(stackView: UIStackView) {
@@ -315,7 +376,7 @@ class ObservationViewCardCollectionViewController: UIViewController {
             if let scheme = self.scheme {
                 card.applyTheme(withScheme: scheme);
             }
-            stackView.addArrangedSubview(card)
+//            stackView.addArrangedSubview(card)
             cards.append(card);
             return card;
         }
@@ -387,12 +448,12 @@ extension ObservationViewCardCollectionViewController: ObservationPushDelegate {
 extension ObservationViewCardCollectionViewController: ObservationActionsDelegate {
     
     func moreActionsTapped() {
-        if let observation = viewModel?.observation {
-            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-            actionsSheet.applyTheme(withContainerScheme: scheme);
-            bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-            self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
-        }
+//        if let observation = viewModel?.observation {
+//            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
+//            actionsSheet.applyTheme(withContainerScheme: scheme);
+//            bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+//            self.navigationController?.present(bottomSheet!, animated: true, completion: nil);
+//        }
     }
     
     func showFavorites(_ observation: Observation) {

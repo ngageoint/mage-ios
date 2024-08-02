@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import Kingfisher
 
 class AttachmentFieldViewModel: ObservableObject {
     @Injected(\.attachmentRepository)
@@ -29,7 +30,37 @@ class AttachmentFieldViewModel: ObservableObject {
 struct AttachmentFieldViewSwiftUI: View {
     @StateObject var viewModel: AttachmentFieldViewModel
     
+    let layout = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
-        Text("attachment count \(viewModel.attachments?.count ?? -1)")
+        LazyVGrid(columns:layout) {
+            ForEach(viewModel.attachments ?? []) { attachment in
+                VStack{
+                    if let url = URL(string: attachment.url ?? "") {
+                        KFImage(url)
+                            .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
+                            .forceRefresh()
+                            .cacheOriginalImage()
+                            .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
+                            .placeholder {
+                                Image("observations")
+                                    .symbolRenderingMode(.monochrome)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                            }
+                        
+                            .fade(duration: 0.3)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity, maxHeight: 150)
+                            .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
+                    }
+                }
+            }
+        }
     }
 }

@@ -64,15 +64,18 @@ enum CoordinateActions {
 }
 
 enum ObservationActions {
-    case favorite(viewModel: ObservationLocationBottomSheetViewModel)
+    case favorite(observationUri: URL?)
     case syncNow(observationUri: URL?)
     case toggleImportant(observationUri: URL?)
     
     func callAsFunction() {
         switch (self) {
  
-        case .favorite(viewModel: let viewModel):
-            viewModel.toggleFavorite()
+        case .favorite(observationUri: let observationUri):
+            print("favorite")
+            @Injected(\.observationRepository)
+            var observationRepository: ObservationRepository
+            observationRepository.toggleFavorite(observationUri: observationUri)
         case .syncNow(observationUri: let observationUri):
             print("sync now")
             @Injected(\.observationRepository)

@@ -10,6 +10,8 @@ import Foundation
 import MaterialComponents.MaterialSnackbar
 
 class ObservationTableViewController: UITableViewController {
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
     
     weak var attachmentDelegate: AttachmentSelectionDelegate?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
@@ -18,6 +20,7 @@ class ObservationTableViewController: UITableViewController {
     var updateTimer: Timer?;
     var listenersSetUp = false;
     var attachmentPushedObserver:Any?
+    var bottomSheet: MDCBottomSheetController?;
     
     private lazy var createFab : MDCFloatingButton = {
         let fab = MDCFloatingButton(shape: .default);
@@ -318,8 +321,32 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
 
 extension ObservationTableViewController: ObservationActionsDelegate {
     func viewObservation(_ observation: Observation) {
-        let ovc = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme!);
-        self.navigationController?.pushViewController(ovc, animated: true);
+        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation())) { favoritesModel in
+            guard let favoritesModel = favoritesModel,
+                  let favoriteUsers = favoritesModel.favoriteUsers
+            else {
+                return
+            }
+            self.showFavorites(userIds: favoriteUsers)
+        } moreActions: {
+            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
+            actionsSheet.applyTheme(withContainerScheme: self.scheme);
+            self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+            self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
+        } editObservation: { observationUri in
+            Task {
+                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
+                    return;
+                }
+                let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
+                observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
+                observationEditCoordinator.start();
+                self.childCoordinators.append(observationEditCoordinator)
+            }
+        }
+
+        let ovc2 = SwiftUIViewController(swiftUIView: observationView)
+        navigationController?.pushViewController(ovc2, animated: true)
     }
     
     func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
@@ -344,5 +371,30 @@ extension ObservationTableViewController: ObservationActionsDelegate {
         }));
         
         ObservationActionHandler.getDirections(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, title: "Observation", viewController: self, extraActions: extraActions, sourceView: sourceView);
+    }
+    
+    func deleteObservation(_ observation: Observation) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        ObservationActionHandler.deleteObservation(observation: observation, viewController: self) { (success, error) in
+            self.navigationController?.popViewController(animated: true);
+        }
+    }
+    
+    func cancelAction() {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+    }
+    
+    func viewUser(_ user: User) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        let uvc = UserViewController(user: user, scheme: self.scheme!);
+        self.navigationController?.pushViewController(uvc, animated: true);
+    }
+    
+    func showFavorites(userIds: [String]) {
+        if (userIds.count != 0) {
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            locationViewController.title = "Favorited By";
+            self.navigationController?.pushViewController(locationViewController, animated: true);
+        }
     }
 }

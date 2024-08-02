@@ -200,6 +200,8 @@
 		F7225F552C5A775400B7D935 /* AttachmentFieldViewSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7225F542C5A775400B7D935 /* AttachmentFieldViewSwiftUI.swift */; };
 		F7225F582C5A783B00B7D935 /* AttachmentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7225F572C5A783B00B7D935 /* AttachmentRepository.swift */; };
 		F7225F5A2C5A784700B7D935 /* AttachmentLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7225F592C5A784700B7D935 /* AttachmentLocalDataSource.swift */; };
+		F7225F5C2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7225F5B2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift */; };
+		F7225F5E2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7225F5D2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift */; };
 		F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723232B251CE92800AD168A /* MapSettingsTests.swift */; };
 		F72329CE2784BA790036F964 /* CanReportLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72329CD2784BA790036F964 /* CanReportLocation.swift */; };
 		F723D609253F66AC00C6BE34 /* MAGEScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F723D608253F66AC00C6BE34 /* MAGEScheme.swift */; };
@@ -995,6 +997,8 @@
 		F7225F542C5A775400B7D935 /* AttachmentFieldViewSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentFieldViewSwiftUI.swift; sourceTree = "<group>"; };
 		F7225F572C5A783B00B7D935 /* AttachmentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentRepository.swift; sourceTree = "<group>"; };
 		F7225F592C5A784700B7D935 /* AttachmentLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentLocalDataSource.swift; sourceTree = "<group>"; };
+		F7225F5B2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocationFieldView.swift; sourceTree = "<group>"; };
+		F7225F5D2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocationFieldViewModel.swift; sourceTree = "<group>"; };
 		F723232B251CE92800AD168A /* MapSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsTests.swift; sourceTree = "<group>"; };
 		F72329CD2784BA790036F964 /* CanReportLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanReportLocation.swift; sourceTree = "<group>"; };
 		F723D608253F66AC00C6BE34 /* MAGEScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAGEScheme.swift; sourceTree = "<group>"; };
@@ -2728,6 +2732,8 @@
 				F7813A8224632E9A003666ED /* TextFieldView.swift */,
 				F734C1DD2BC72FA600B2E8C8 /* ObservationMapItemView.swift */,
 				F776AC8A2BC9CC52000FAFB4 /* ObservationMapItemViewModel.swift */,
+				F7225F5B2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift */,
+				F7225F5D2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift */,
 			);
 			name = Fields;
 			sourceTree = "<group>";
@@ -4199,6 +4205,7 @@
 				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.swift in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
+				F7225F5E2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
 				2F3C9EE02B179E8F00FF5570 /* HasMapSearchMixin.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
@@ -4297,6 +4304,7 @@
 				F73607DE26F91BBD008CF824 /* GeoPackageFeatureItem.swift in Sources */,
 				F72D431A2694B60300F9AC3B /* Attachment+CoreDataProperties.swift in Sources */,
 				F7E0794B2C29F0160029C88D /* FeatureItemDefinition.swift in Sources */,
+				F7225F5C2C5C1B6D00B7D935 /* ObservationLocationFieldView.swift in Sources */,
 				F77C21A6254C6E7000D9257F /* HexColor.swift in Sources */,
 				F72D43152694B60300F9AC3B /* Form.swift in Sources */,
 				F72D430C2694B60300F9AC3B /* ImageryLayer+CoreDataProperties.swift in Sources */,

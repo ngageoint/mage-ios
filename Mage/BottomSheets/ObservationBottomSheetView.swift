@@ -110,7 +110,9 @@ struct ObservationLocationBottomSheet: View {
                         coordinate: observationMapItem.coordinate,
                         favoriteCount: viewModel.favoriteCount,
                         currentUserFavorite: viewModel.currentUserFavorite,
-                        favoriteAction: ObservationActions.favorite(viewModel: viewModel),
+                        favoriteAction: ObservationActions.favorite(
+                            observationUri: viewModel.observationMapItem?.observationId
+                        ),
                         navigateToAction: CoordinateActions.navigateTo(
                             coordinate: observationMapItem.coordinate,
                             itemKey: observationMapItem.observationLocationId?.absoluteString,

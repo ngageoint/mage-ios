@@ -32,6 +32,7 @@ struct UserModel: Equatable, Hashable {
     var avatarUrl: String?
     var username: String?
     var timestamp: Date?
+    var hasEditPermissions: Bool = false
     
     init(user: User) {
         remoteId = user.remoteId
@@ -44,6 +45,7 @@ struct UserModel: Equatable, Hashable {
         username = user.username
         timestamp = user.location?.timestamp
         userId = user.objectID.uriRepresentation()
+        hasEditPermissions = user.hasEditPermission
     }
 }
 

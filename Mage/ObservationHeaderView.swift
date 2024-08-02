@@ -42,7 +42,7 @@ struct ObservationHeaderViewSwiftUI: View {
                     user: viewModel.user?.name,
                     primaryFieldText: viewModel.primaryFieldText,
                     secondaryFieldText: viewModel.secondaryFieldText,
-                    iconPath: nil, //viewModel.observationModel?.iconPath,
+                    iconPath: nil, 
                     error: viewModel.observationModel?.error ?? false,
                     syncing: viewModel.observationModel?.syncing ?? false
                 )
@@ -63,8 +63,7 @@ struct ObservationHeaderViewSwiftUI: View {
                     currentUserFavorite: viewModel.currentUserFavorite,
                     favoriteAction:
                         ObservationActions.favorite(
-                            viewModel: ObservationLocationBottomSheetViewModel(
-                                observationLocationUri: viewModel.observationModel?.observationId)
+                            observationUri: viewModel.observationModel?.observationId
                         ),
                     showFavoritesAction: {
                         showFavorites(viewModel.observationFavoritesModel)

@@ -22,8 +22,8 @@ class ObservationViewViewModel: ObservableObject {
     @Injected(\.formRepository)
     var formRepository: FormRepository
         
-    @Published
-    var observation: Observation?
+//    @Published
+//    var observation: Observation?
     
     @Published
     var event: Event?
@@ -62,37 +62,31 @@ class ObservationViewViewModel: ObservableObject {
             userId == currentUser?.remoteId
         })) == true)
     }
+    
+    @Published
+    var currentUserCanEdit: Bool = false
         
     var cancellables = Set<AnyCancellable>()
     
     init(uri: URL) {
-        $observation.sink { observation in
-            
-        }.store(in: &cancellables)
-        
         $observationModel.sink { [weak self] observationModel in
             guard let observationModel = observationModel else {
                 return
             }
-            if let eventId = observationModel.eventId {
-                self?.event = self?.eventRepository.getEvent(eventId: eventId as NSNumber)
-            }
-            
             Task { @MainActor [weak self] in
+                if let eventId = observationModel.eventId {
+                    self?.event = self?.eventRepository.getEvent(eventId: eventId as NSNumber)
+                }
                 if let userId = observationModel.userId {
                     self?.user = await self?.userRepository.getUser(userUri: userId).map({ user in
                         UserModel(user: user)
                     })
                 }
+                self?.currentUserCanEdit = self?.userRepository.getCurrentUser()?.hasEditPermission ?? false
             }
             
             self?.setupFavorites(observationModel: observationModel)
             self?.setupForms(observationModel: observationModel)
-            
-            // this is just for testing
-            Task { @MainActor [weak self] in
-                self?.observation = await self?.repository.getObservation(observationUri: observationModel.observationId)
-            }
         }.store(in: &cancellables)
         
         repository.observeObservation(observationUri: uri)?

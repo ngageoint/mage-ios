@@ -67,6 +67,14 @@ struct ObservationFormViewSwiftUI: View {
                                 }
                             case FieldType.attachment.key:
                                 AttachmentFieldViewSwiftUI(viewModel: AttachmentFieldViewModel(observationUri: viewModel.form.observationId, observationFormId: viewModel.form.id, fieldName: field.name))
+                            case FieldType.geometry.key:
+                                if let observationUri = viewModel.form.observationId {
+                                    ObservationLocationFieldView(
+                                        observationUri: observationUri,
+                                        observationFormId: viewModel.form.id,
+                                        fieldName: field.name
+                                    )
+                                }
                             default:
                                 Text(viewModel.fieldStringValue(fieldName: field.name) ?? "")
                                     .padding(.bottom, 8)

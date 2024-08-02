@@ -35,27 +35,28 @@ public class ObservationPushService: NSObject {
         NSLog("start pushing observations");
         self.started = true;
         let context = NSManagedObjectContext.mr_default();
-        
-        self.fetchedResultsController = Observation.mr_fetchAllSorted(by: ObservationKey.timestamp.key,
-                                                                      ascending: false,
-                                                                      with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                      groupBy: nil,
-                                                                      delegate: self,
-                                                                      in: context);
-        
-        self.favoritesFetchedResultsController = ObservationFavorite.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
-                                                                      ascending: false,
-                                                                      with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                      groupBy: nil,
-                                                                      delegate: self,
-                                                                      in: context);
-        
-        self.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
-                                                                               ascending: false,
-                                                                               with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                               groupBy: nil,
-                                                                               delegate: self,
-                                                                               in: context);
+        context.perform {
+            self.fetchedResultsController = Observation.mr_fetchAllSorted(by: ObservationKey.timestamp.key,
+                                                                          ascending: false,
+                                                                          with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
+                                                                          groupBy: nil,
+                                                                          delegate: self,
+                                                                          in: context);
+            
+            self.favoritesFetchedResultsController = ObservationFavorite.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
+                                                                                           ascending: false,
+                                                                                           with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
+                                                                                           groupBy: nil,
+                                                                                           delegate: self,
+                                                                                           in: context);
+            
+            self.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
+                                                                                            ascending: false,
+                                                                                            with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
+                                                                                            groupBy: nil,
+                                                                                            delegate: self,
+                                                                                            in: context);
+        }
         onTimerFire();
         scheduleTimer();
     }

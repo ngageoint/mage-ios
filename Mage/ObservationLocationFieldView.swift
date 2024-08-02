@@ -1,21 +1,23 @@
 //
-//  ObservationMapItemView.swift
+//  ObservationLocationFieldView.swift
 //  MAGE
 //
-//  Created by Daniel Barela on 4/10/24.
+//  Created by Dan Barela on 8/1/24.
 //  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import Foundation
-import MaterialViews
 import SwiftUI
-import MAGEStyle
 import MapFramework
+import MAGEStyle
+import MaterialViews
 
-struct ObservationMapItemView: View {
+struct ObservationLocationFieldView: View {
 
-    @StateObject var viewModel: ObservationMapItemViewModel = ObservationMapItemViewModel()
+    @StateObject var viewModel: ObservationLocationFieldViewModel = ObservationLocationFieldViewModel()
     @State var observationUri: URL
+    @State var observationFormId: String
+    @State var fieldName: String
 
     @StateObject var mixins: MapMixins = MapMixins()
     @StateObject var mapState: MapState = MapState()
@@ -36,8 +38,14 @@ struct ObservationMapItemView: View {
         }
         .onAppear {
             viewModel.observationUri = observationUri
+            viewModel.observationFormId = observationFormId
+            viewModel.fieldName = fieldName
             mixins.addMixin(OnlineLayerMapMixin())
-            mixins.addMixin(ObservationMap(mapFeatureRepository: ObservationMapFeatureRepository(observationUri: observationUri)))
+            mixins.addMixin(ObservationMap(mapFeatureRepository: ObservationMapFeatureRepository(
+                observationUri: observationUri,
+                observationFormId: observationFormId,
+                fieldName: fieldName
+            )))
         }
     }
 

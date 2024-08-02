@@ -18,14 +18,31 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
 
     var alwaysShow: Bool = true
 
-    let observationUri: URL
+    var observationUri: URL?
+    var observationFormId: String?
+    var fieldName: String?
 
-    init(observationUri: URL) {
+    init(observationUri: URL, observationFormId: String? = nil, fieldName: String? = nil) {
         self.observationUri = observationUri
+        self.observationFormId = observationFormId
+        self.fieldName = fieldName
     }
-
+    
     func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion? = nil) async -> AnnotationsAndOverlays {
-        let mapItems = await mapItemRepository.getMapItems(observationUri: observationUri)
+        let mapItems = await {
+            if let observationUri = observationUri {
+                if let observationFormId = observationFormId, let fieldName = fieldName {
+                    return await mapItemRepository.getMapItems(
+                        observationUri: observationUri,
+                        observationFormId: observationFormId,
+                        fieldName: fieldName
+                    )
+                } else {
+                    return await mapItemRepository.getMapItems(observationUri: observationUri)
+                }
+            }
+            return []
+        }()
         let annotations = mapItems.compactMap { item in
             if item.geometry is SFPoint {
                 return ObservationMapItemAnnotation(mapItem: item)
