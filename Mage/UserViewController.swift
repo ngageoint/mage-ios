@@ -142,6 +142,13 @@ extension UserViewController : ObservationActionsDelegate {
             self.navigationController?.pushViewController(locationViewController, animated: true);
         }
     }
+    
+    func viewUser(_ user: User) {
+        bottomSheet?.dismiss(animated: true, completion: nil);
+        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
+        let uvc = UserViewController(user: user, scheme: scheme)
+        navigationController?.pushViewController(uvc, animated: true)
+    }
 }
 
 extension UserViewController : AttachmentSelectionDelegate {
