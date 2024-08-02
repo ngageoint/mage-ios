@@ -259,7 +259,7 @@ class MainMageMapView:
 
             }
         } selectedAttachment: { attachmentUri in
-            
+            self.selectedAttachment(attachmentUri)
         } selectedUnsentAttachment: { localPath, contentType in
             
         }

@@ -68,7 +68,15 @@ struct ObservationFormViewSwiftUI: View {
                                         .foregroundStyle(Color.primaryColorVariant)
                                 }
                             case FieldType.attachment.key:
-                                AttachmentFieldViewSwiftUI(viewModel: AttachmentFieldViewModel(observationUri: viewModel.form.observationId, observationFormId: viewModel.form.id, fieldName: field.name))
+                                AttachmentFieldViewSwiftUI(
+                                    viewModel: AttachmentFieldViewModel(
+                                        observationUri: viewModel.form.observationId,
+                                        observationFormId: viewModel.form.id,
+                                        fieldName: field.name
+                                    ),
+                                    selectedAttachment: selectedAttachment,
+                                    selectedUnsentAttachment: selectedUnsentAttachment
+                                )
                             case FieldType.geometry.key:
                                 if let observationUri = viewModel.form.observationId {
                                     ObservationLocationFieldView(

@@ -109,7 +109,7 @@ extension UserViewController : ObservationActionsDelegate {
             }
 //            }
         } selectedAttachment: { attachmentUri in
-            
+            self.selectedAttachment(attachmentUri)
         } selectedUnsentAttachment: { localPath, contentType in
             
         }

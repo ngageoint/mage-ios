@@ -21,35 +21,25 @@ class AttachmentFieldViewModel: ObservableObject {
     var cancellable = Set<AnyCancellable>()
     
     init(observationUri: URL?, observationFormId: String, fieldName: String) {
-//        Task {
-//            let attachments = await repository.getAttachments(observationUri: observationUri, observationFormId: observationFormId, fieldName: fieldName)
-//            await MainActor.run {
-//                self.attachments = attachments
-//            }
-//        }
-        
         self.repository.observeAttachments(
             observationUri: observationUri,
             observationFormId: observationFormId,
             fieldName: fieldName
         )?
-            .receive(on: DispatchQueue.main)
-//        .dropFirst()
+        .receive(on: DispatchQueue.main)
         .sink { changes in
-//            Task {
-                var attachments: [AttachmentModel] = []
-                for change in changes {
-                    switch (change) {
-                    case .insert(offset: _, element: let element, associatedWith: _):
-                        attachments.append(element)
-                    case .remove(offset: _, element: let element, associatedWith: _):
-                        attachments.removeAll { model in
-                            model.attachmentUri == element.attachmentUri
-                        }
+            var attachments: [AttachmentModel] = []
+            for change in changes {
+                switch (change) {
+                case .insert(offset: _, element: let element, associatedWith: _):
+                    attachments.append(element)
+                case .remove(offset: _, element: let element, associatedWith: _):
+                    attachments.removeAll { model in
+                        model.attachmentUri == element.attachmentUri
                     }
                 }
-                self.attachments = attachments
-//            }
+            }
+            self.attachments = attachments
         }
         .store(in: &cancellable)
     }
@@ -57,6 +47,9 @@ class AttachmentFieldViewModel: ObservableObject {
 
 struct AttachmentFieldViewSwiftUI: View {
     @StateObject var viewModel: AttachmentFieldViewModel
+    
+    var selectedAttachment: (_ attachmentUri: URL) -> Void
+    var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     let layout = [
         GridItem(.flexible()),
@@ -86,6 +79,9 @@ struct AttachmentFieldViewSwiftUI: View {
                             .scaledToFill()
                             .frame(maxWidth: .infinity, maxHeight: 150)
                             .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
+                            .onTapGesture {
+                                selectedAttachment(attachment.attachmentUri)
+                            }
                     }
                 }
             }

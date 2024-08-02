@@ -355,7 +355,7 @@ extension ObservationTableViewController: ObservationActionsDelegate {
                 self.childCoordinators.append(observationEditCoordinator)
             }
         } selectedAttachment: { attachmentUri in
-            
+            self.selectedAttachment(attachmentUri)
         } selectedUnsentAttachment: { localPath, contentType in
             
         }
