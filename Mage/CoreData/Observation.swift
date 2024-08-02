@@ -30,7 +30,7 @@ enum ObservationState: Int, CustomStringConvertible {
     
     public static let PRIMARY_OBSERVATION_GEOMETRY = "primary-observation-geometry"
 
-    var orderedAttachments: [Attachment]? {
+    var orderedAttachments: [AttachmentModel]? {
         get {
             var observationForms: [[String: Any]] = []
             if let properties = self.properties as? [String: Any] {
@@ -73,6 +73,8 @@ enum ObservationState: Int, CustomStringConvertible {
                     } ?? 0
                     return firstFormIndex < secondFormIndex
                 }
+            }).map({ attachment in
+                AttachmentModel(attachment: attachment)
             })
         }
     }

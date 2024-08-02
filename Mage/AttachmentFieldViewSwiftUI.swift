@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Kingfisher
+import Combine
 
 class AttachmentFieldViewModel: ObservableObject {
     @Injected(\.attachmentRepository)
@@ -17,13 +18,40 @@ class AttachmentFieldViewModel: ObservableObject {
     @Published
     var attachments: [AttachmentModel]?
     
+    var cancellable = Set<AnyCancellable>()
+    
     init(observationUri: URL?, observationFormId: String, fieldName: String) {
-        Task {
-            let attachments = await repository.getAttachments(observationUri: observationUri, observationFormId: observationFormId, fieldName: fieldName)
-            await MainActor.run {
+//        Task {
+//            let attachments = await repository.getAttachments(observationUri: observationUri, observationFormId: observationFormId, fieldName: fieldName)
+//            await MainActor.run {
+//                self.attachments = attachments
+//            }
+//        }
+        
+        self.repository.observeAttachments(
+            observationUri: observationUri,
+            observationFormId: observationFormId,
+            fieldName: fieldName
+        )?
+            .receive(on: DispatchQueue.main)
+//        .dropFirst()
+        .sink { changes in
+//            Task {
+                var attachments: [AttachmentModel] = []
+                for change in changes {
+                    switch (change) {
+                    case .insert(offset: _, element: let element, associatedWith: _):
+                        attachments.append(element)
+                    case .remove(offset: _, element: let element, associatedWith: _):
+                        attachments.removeAll { model in
+                            model.attachmentUri == element.attachmentUri
+                        }
+                    }
+                }
                 self.attachments = attachments
-            }
+//            }
         }
+        .store(in: &cancellable)
     }
 }
 

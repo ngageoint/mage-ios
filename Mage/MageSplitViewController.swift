@@ -9,6 +9,9 @@
 import Foundation
 
 @objc class MageSplitViewController : UISplitViewController {
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
     var startStraightLineNavigationObserver: AnyObject?
 
     var scheme: MDCContainerScheming?;
@@ -129,13 +132,17 @@ extension MageSplitViewController: UISplitViewControllerDelegate {
 }
 
 extension MageSplitViewController: ObservationActionsDelegate & UserActionsDelegate & AttachmentSelectionDelegate & FeedItemSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
-        if let attachmentCoordinator = self.attachmentCoordinator {
-            attachmentCoordinator.setAttachment(attachment: attachment);
-        } else if let nav = self.mapViewController?.navigationController {
-            self.attachmentCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme)
-            self.childCoordinators.append(self.attachmentCoordinator!);
-            self.attachmentCoordinator?.start();
+    func selectedAttachment(_ attachmentUri: URL!) {
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                if let attachmentCoordinator = self.attachmentCoordinator {
+                    attachmentCoordinator.setAttachment(attachment: attachment);
+                } else if let nav = self.mapViewController?.navigationController {
+                    self.attachmentCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme)
+                    self.childCoordinators.append(self.attachmentCoordinator!);
+                    self.attachmentCoordinator?.start();
+                }
+            }
         }
     }
     
@@ -147,7 +154,7 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
         }
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
         
     }
     

@@ -13,6 +13,9 @@ class ObservationTableViewController: UITableViewController {
     @Injected(\.observationRepository)
     var observationRepository: ObservationRepository
     
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
     weak var attachmentDelegate: AttachmentSelectionDelegate?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
@@ -274,13 +277,17 @@ extension ObservationTableViewController: AttachmentViewDelegate {
 }
 
 extension ObservationTableViewController: AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
-        if let attachmentDelegate = self.attachmentDelegate {
-            attachmentDelegate.selectedAttachment(attachment);
-        } else {
-            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
-            self.childCoordinators.append(attachmentCoordinator);
-            attachmentCoordinator.start();
+    func selectedAttachment(_ attachmentUri: URL!) {
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                if let attachmentDelegate = self.attachmentDelegate {
+                    attachmentDelegate.selectedAttachment(attachmentUri);
+                } else {
+                    let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+                    self.childCoordinators.append(attachmentCoordinator);
+                    attachmentCoordinator.start();
+                }
+            }
         }
     }
     
@@ -294,25 +301,29 @@ extension ObservationTableViewController: AttachmentSelectionDelegate {
         }
     }
 
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
         if let attachmentDelegate = self.attachmentDelegate {
-            attachmentDelegate.selectedNotCachedAttachment(attachment, completionHandler: handler);
+            attachmentDelegate.selectedNotCachedAttachment(attachmentUri, completionHandler: handler);
         } else {
             if (!DataConnectionUtilities.shouldFetchAttachments()) {
-                if (attachment.contentType?.hasPrefix("image") == true) {
-                    let alert = UIAlertController(title: "View Image", message: "Your attachment fetch settings do not allow auto downloading of images.  Would you like to view the image?", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
-                        handler(true);
-                    }))
-                    alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil));
-                    self.present(alert, animated: true, completion: nil);
-                } else if (attachment.contentType?.hasPrefix("video") == true) {
-                    if (attachment.url == nil) {
-                        return;
+                Task {
+                    if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                        if (attachment.contentType?.hasPrefix("image") == true) {
+                            let alert = UIAlertController(title: "View Image", message: "Your attachment fetch settings do not allow auto downloading of images.  Would you like to view the image?", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+                                handler(true);
+                            }))
+                            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil));
+                            self.present(alert, animated: true, completion: nil);
+                        } else if (attachment.contentType?.hasPrefix("video") == true) {
+                            if (attachment.url == nil) {
+                                return;
+                            }
+                            let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+                            self.childCoordinators.append(attachmentCoordinator);
+                            attachmentCoordinator.start();
+                        }
                     }
-                    let attachmentCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
-                    self.childCoordinators.append(attachmentCoordinator);
-                    attachmentCoordinator.start();
                 }
             }
         }
@@ -343,6 +354,10 @@ extension ObservationTableViewController: ObservationActionsDelegate {
                 observationEditCoordinator.start();
                 self.childCoordinators.append(observationEditCoordinator)
             }
+        } selectedAttachment: { attachmentUri in
+            
+        } selectedUnsentAttachment: { localPath, contentType in
+            
         }
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)

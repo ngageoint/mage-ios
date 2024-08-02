@@ -43,12 +43,13 @@ struct ObservationFormFieldModel: Identifiable {
     }
 }
 
-struct AttachmentModel: Identifiable {
+// TODO: this is only a class so that it can be in a method marked @objc fix this later
+@objc class AttachmentModel: NSObject, Identifiable {
     var id: URL {
         attachmentUri
     }
     
-    var attachmentUri: URL
+    @objc var attachmentUri: URL
     var unsent: Bool = false
     var formId: String?
     var remoteId: String?
@@ -60,10 +61,11 @@ struct AttachmentModel: Identifiable {
     var dirty: Bool = false
     var localPath: String?
     var lastModified: Date?
-    var markedForDeletion: Bool = false
-}
-
-extension AttachmentModel {
+    var contentType: String?
+    @objc var markedForDeletion: Bool = false
+//}
+//
+//extension AttachmentModel {
     init(attachment: Attachment) {
         attachmentUri = attachment.objectID.uriRepresentation()
         url = attachment.url
@@ -76,6 +78,7 @@ extension AttachmentModel {
         dirty = attachment.dirty
         localPath = attachment.localPath
         lastModified = attachment.lastModified
+        contentType = attachment.contentType
         markedForDeletion = attachment.markedForDeletion
     }
 }

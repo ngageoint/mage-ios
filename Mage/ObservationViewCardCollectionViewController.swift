@@ -23,6 +23,8 @@ struct ObservationFullView: View {
     var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
     var moreActions: () -> Void
     var editObservation: (_ observationUri: URL) -> Void
+    var selectedAttachment: (_ attachmentUri: URL) -> Void
+    var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     var body: some View {
             ScrollView {
@@ -37,7 +39,11 @@ struct ObservationFullView: View {
                         .overlineText()
                         .padding()
                     ForEach(viewModel.observationForms ?? []) { form in
-                        ObservationFormViewSwiftUI(viewModel: ObservationFormViewModel(form: form))
+                        ObservationFormViewSwiftUI(
+                            viewModel: ObservationFormViewModel(form: form),
+                            selectedAttachment: selectedAttachment,
+                            selectedUnsentAttachment: selectedUnsentAttachment
+                        )
                     }
                 }
                 .padding(.bottom, 36)
@@ -90,6 +96,9 @@ class ObservationViewCardCollectionViewController: UIViewController {
             }
         }
     }
+    
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
     
     var didSetupConstraints = false;
     
@@ -394,15 +403,16 @@ class ObservationViewCardCollectionViewController: UIViewController {
 }
 
 extension ObservationViewCardCollectionViewController: AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
-        if (attachment.url == nil) {
-            return;
-        }
+    func selectedAttachment(_ attachmentUri: URL!) {
         guard let nav = self.navigationController else {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
-        attachmentViewCoordinator?.start();
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
@@ -413,15 +423,16 @@ extension ObservationViewCardCollectionViewController: AttachmentSelectionDelega
         attachmentViewCoordinator?.start();
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        if (attachment.url == nil) {
-            return;
-        }
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
         guard let nav = self.navigationController else {
             return;
         }
-        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
-        attachmentViewCoordinator?.start();
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
     }
 }
 

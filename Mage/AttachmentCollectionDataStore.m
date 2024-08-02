@@ -48,7 +48,7 @@
         button.tag = indexPath.row;
     }
     
-    Attachment *attachment = [self attachmentAtIndex:[indexPath row]];
+    AttachmentModel *attachment = [self attachmentAtIndex:[indexPath row]];
     if (attachment != nil) {
         [cell setImageWithAttachment:attachment formatName:self.attachmentFormatName button: button scheme: self.containerScheme];
     } else {
@@ -61,9 +61,9 @@
 
 - (void) attachmentFabTapped: (MDCFloatingButton *) sender {
     if (self.attachmentSelectionDelegate) {
-        Attachment *attachment = [self attachmentAtIndex:sender.tag];
+        AttachmentModel *attachment = [self attachmentAtIndex:sender.tag];
         if (attachment != nil) {
-            [self.attachmentSelectionDelegate attachmentFabTapped:attachment completionHandler:^(BOOL deleted) {
+            [self.attachmentSelectionDelegate attachmentFabTapped:attachment.attachmentUri completionHandler:^(BOOL deleted) {
             }];
         } else {
             NSDictionary *unsentAttachment = [self unsentAttachmentAtIndex:sender.tag];
@@ -73,7 +73,7 @@
     }
 }
 
-- (NSArray<Attachment *> *) filteredAttachments {
+- (NSArray<AttachmentModel *> *) filteredAttachments {
     return [self.attachments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"markedForDeletion != true"]];
 }
 
@@ -97,9 +97,9 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     if (self.attachmentSelectionDelegate) {
-        Attachment *attachment = [self attachmentAtIndex:[indexPath row]];
+        AttachmentModel *attachment = [self attachmentAtIndex:[indexPath row]];
         if (attachment != nil) {
-            [self.attachmentSelectionDelegate selectedAttachment:attachment];
+            [self.attachmentSelectionDelegate selectedAttachment:attachment.attachmentUri];
         } else {
             [self.attachmentSelectionDelegate selectedUnsentAttachment:[self unsentAttachmentAtIndex:[indexPath row]]];
         }
@@ -110,7 +110,7 @@
     return [[self filteredUnsentAttachments] objectAtIndex:(index - [[self filteredAttachments] count])];
 }
 
-- (Attachment *) attachmentAtIndex:(NSUInteger) index {
+- (AttachmentModel *) attachmentAtIndex:(NSUInteger) index {
     @try {
         return [[self filteredAttachments] objectAtIndex:index];
     }

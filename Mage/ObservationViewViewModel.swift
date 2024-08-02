@@ -21,9 +21,6 @@ class ObservationViewViewModel: ObservableObject {
     
     @Injected(\.formRepository)
     var formRepository: FormRepository
-        
-//    @Published
-//    var observation: Observation?
     
     @Published
     var event: Event?

@@ -14,6 +14,8 @@ struct ObservationFormViewSwiftUI: View {
     var expanded: Bool = true
     
     var viewModel: ObservationFormViewModel
+    var selectedAttachment: (_ attachmentUri: URL) -> Void
+    var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     var body: some View {
         VStack(alignment: .leading) {

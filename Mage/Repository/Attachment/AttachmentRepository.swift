@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 private struct AttachmentRepositoryProviderKey: InjectionKey {
     static var currentValue: AttachmentRepository = AttachmentRepository()
@@ -29,5 +30,25 @@ class AttachmentRepository: ObservableObject {
             observationFormId: observationFormId,
             fieldName: fieldName
         )
+    }
+    
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>? {
+        localDataSource.observeAttachments(observationUri: observationUri, observationFormId: observationFormId, fieldName: fieldName)
+    }
+    
+    func getAttachment(attachmentUri: URL?) async -> AttachmentModel? {
+        await localDataSource.getAttachment(attachmentUri: attachmentUri)
+    }
+    
+    func saveLocalPath(attachmentUri: URL?, localPath: String) {
+        localDataSource.saveLocalPath(attachmentUri: attachmentUri, localPath: localPath)
+    }
+    
+    func markForDeletion(attachmentUri: URL?) {
+        localDataSource.markForDeletion(attachmentUri: attachmentUri)
+    }
+    
+    func undelete(attachmentUri: URL?) {
+        localDataSource.undelete(attachmentUri: attachmentUri)
     }
 }

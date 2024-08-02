@@ -12,6 +12,9 @@ class UserViewController : UITableViewController {
     @Injected(\.observationRepository)
     var observationRepository: ObservationRepository
     
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
     let user : User
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
@@ -105,6 +108,10 @@ extension UserViewController : ObservationActionsDelegate {
 
             }
 //            }
+        } selectedAttachment: { attachmentUri in
+            
+        } selectedUnsentAttachment: { localPath, contentType in
+            
         }
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
@@ -152,11 +159,16 @@ extension UserViewController : ObservationActionsDelegate {
 }
 
 extension UserViewController : AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
-        if (attachment.url != nil) {
-            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
-            childCoordinators.append(attachmentCoordinator);
-            attachmentCoordinator.start();
+    func selectedAttachment(_ attachmentUri: URL!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+                childCoordinators.append(attachmentCoordinator);
+                attachmentCoordinator.start();
+            }
         }
     }
     
@@ -166,11 +178,16 @@ extension UserViewController : AttachmentSelectionDelegate {
         attachmentCoordinator.start();
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        if (attachment.url != nil) {
-            let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
-            childCoordinators.append(attachmentCoordinator);
-            attachmentCoordinator.start();
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                let attachmentCoordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: self.navigationController!, attachment: attachment, delegate: self, scheme: scheme);
+                childCoordinators.append(attachmentCoordinator);
+                attachmentCoordinator.start();
+            }
         }
     }
 }

@@ -35,11 +35,15 @@ class MainMageMapView:
     @Injected(\.feedItemRepository)
     var feedItemRepository: FeedItemRepository
     
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
     var childCoordinators: [NSObject] = [];
     
     weak var navigationController: UINavigationController?
     weak var viewController: UIViewController?
     var bottomSheet: MDCBottomSheetController?
+    var attachmentViewCoordinator: AttachmentViewCoordinator?;
 
     var filteredObservationsMapMixin: FilteredObservationsMapMixin?
     var filteredUsersMapMixin: FilteredUsersMapMixin?
@@ -244,7 +248,6 @@ class MainMageMapView:
                 }
             }
         } editObservation: { observationUri in
-//            @objc func startObservationEditCoordinator() {
             Task {
                 guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
                     return;
@@ -255,11 +258,13 @@ class MainMageMapView:
                 self.childCoordinators.append(observationEditCoordinator)
 
             }
-//            }
+        } selectedAttachment: { attachmentUri in
+            
+        } selectedUnsentAttachment: { localPath, contentType in
+            
         }
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
-//        let ovc = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observationUri), scheme: scheme)
         navigationController?.pushViewController(ovc2, animated: true)
     }
     
@@ -294,32 +299,9 @@ extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
     }
     
     func viewObservation(_ observation: Observation) {
-        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation())) { favoritesModel in
-            guard let favoritesModel = favoritesModel,
-                  let favoriteUsers = favoritesModel.favoriteUsers
-            else {
-                return
-            }
-            self.showFavorites(userIds: favoriteUsers)
-        } moreActions: {
-            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-            actionsSheet.applyTheme(withContainerScheme: self.scheme);
-            self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-            self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-        } editObservation: { observationUri in
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
-                    return;
-                }
-                let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
-                observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
-                observationEditCoordinator.start();
-                self.childCoordinators.append(observationEditCoordinator)
-            }
+        Task {
+            await viewObservation(observation.objectID.uriRepresentation())
         }
-
-        let ovc2 = SwiftUIViewController(swiftUIView: observationView)
-        navigationController?.pushViewController(ovc2, animated: true)
     }
     
     func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
@@ -367,5 +349,45 @@ extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
             locationViewController.title = "Favorited By";
             self.navigationController?.pushViewController(locationViewController, animated: true);
         }
+    }
+}
+
+extension MainMageMapView: AttachmentSelectionDelegate {
+    func selectedAttachment(_ attachmentUri: URL!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
+    }
+    
+    func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, url: URL(fileURLWithPath: unsentAttachment["localPath"] as! String), contentType: unsentAttachment["contentType"] as! String, delegate: self, scheme: scheme);
+        attachmentViewCoordinator?.start();
+    }
+    
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
+        guard let nav = self.navigationController else {
+            return;
+        }
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
+    }
+}
+
+extension MainMageMapView: AttachmentViewDelegate {
+    func doneViewing(coordinator: NSObject) {
+        attachmentViewCoordinator = nil;
     }
 }
