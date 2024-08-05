@@ -14,6 +14,9 @@ class ObservationViewViewModel: ObservableObject {
     @Injected(\.observationRepository)
     var repository: ObservationRepository
     
+    @Injected(\.observationImportantRepository)
+    var importantRepository: ObservationImportantRepository
+    
     @Injected(\.eventRepository)
     var eventRepository: EventRepository
     
@@ -131,13 +134,13 @@ class ObservationViewViewModel: ObservableObject {
     
     func makeImportant() {
         settingImportant = false
-        repository.flagImportant(observationUri: observationModel?.observationId, reason: importantDescription)
+        importantRepository.flagImportant(observationUri: observationModel?.observationId, reason: importantDescription)
     }
     
     func cancelAction() {
         settingImportant = false
         if isImportant {
-            repository.removeImportant(observationUri: observationModel?.observationId)
+            importantRepository.removeImportant(observationUri: observationModel?.observationId)
         }
     }
     
@@ -154,7 +157,7 @@ class ObservationViewViewModel: ObservableObject {
     
     private func setupImportant(observationModel: ObservationModel) {
         if let observationUri = observationModel.observationId {
-            self.repository.observeObservationImportant(observationUri: observationUri)?
+            self.importantRepository.observeObservationImportant(observationUri: observationUri)?
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [weak self] updatedObject in
                     if let important = updatedObject.first, let important = important {

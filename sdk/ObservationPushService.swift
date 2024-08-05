@@ -11,6 +11,9 @@ public class ObservationPushService: NSObject {
     @Injected(\.observationRepository)
     var observationRepository: ObservationRepository
     
+    @Injected(\.observationImportantRepository)
+    var observationImportantRepository: ObservationImportantRepository
+    
     public static let ObservationErrorStatusCode = "errorStatusCode"
     public static let ObservationErrorDescription = "errorDescription"
     public static let ObservationErrorMessage = "errorMessage"
@@ -26,7 +29,6 @@ public class ObservationPushService: NSObject {
     var importantFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
     var pushingObservations: [NSManagedObjectID : Observation] = [:]
     var pushingFavorites: [NSManagedObjectID : ObservationFavorite] = [:]
-    var pushingImportant: [String : ObservationImportant] = [:]
     
     private override init() {
     }
@@ -49,13 +51,6 @@ public class ObservationPushService: NSObject {
                                                                                            groupBy: nil,
                                                                                            delegate: self,
                                                                                            in: context);
-            
-            self.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
-                                                                                            ascending: false,
-                                                                                            with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                                            groupBy: nil,
-                                                                                            delegate: self,
-                                                                                            in: context);
         }
         onTimerFire();
         scheduleTimer();
@@ -93,7 +88,7 @@ public class ObservationPushService: NSObject {
         if !UserUtility.singleton.isTokenExpired && DataConnectionUtilities.shouldPushObservations() {
             pushObservations(observations: fetchedResultsController?.fetchedObjects as? [Observation])
             pushFavorites(favorites: self.favoritesFetchedResultsController?.fetchedObjects as? [ObservationFavorite])
-            pushImportant(importants: self.importantFetchedResultsController?.fetchedObjects as? [ObservationImportant])
+            observationImportantRepository.sync()
         }
     }
 
@@ -307,62 +302,12 @@ public class ObservationPushService: NSObject {
         }
     }
     
-    func pushImportant(importants: [ObservationImportant]?) {
-        guard let importants = importants else {
-            return
-        }
-
-        // only push important changes that haven't already been told to be pushed
-        var importantsToPush: [String : ObservationImportant] = [:]
-        for important in importants {
-            if let observationRemoteId = important.observation?.remoteId, pushingImportant[observationRemoteId] == nil {
-                NSLog("adding important to push \(observationRemoteId)")
-                pushingImportant[observationRemoteId] = important
-                importantsToPush[observationRemoteId] = important
-            }
-        }
-        
-        NSLog("about to push an additional \(importantsToPush.count) importants")
-        let manager = MageSessionManager.shared();
-        for (observationId, important) in importantsToPush {
-            let importantPushTask = Observation.operationToPushImportant(important: important) { task, response in
-                // verify that the current state in our data is the same as returned from the server
-                MagicalRecord.save { context in
-                    if let response = response as? [AnyHashable : Any], let localImportant = important.mr_(in: context) {
-                        let serverImportant = response[ObservationKey.important.key] != nil
-                        if localImportant.important == serverImportant {
-                            localImportant.dirty = false
-                        } else {
-                            // force a push again
-                            localImportant.timestamp = Date()
-                        }
-                        if let observation = localImportant.observation {
-                            localImportant.managedObjectContext?.refresh(observation, mergeChanges: false);
-                        }
-                    }
-                } completion: { contextDidSave, error in
-                    self.pushingImportant.removeValue(forKey: observationId)
-                }
-            } failure: { task, error in
-                NSLog("Error submitting important")
-                self.pushingImportant.removeValue(forKey: observationId)
-            }
-            if let importantPushTask = importantPushTask {
-                manager?.addTask(importantPushTask);
-            }
-        }
-    }
-    
     func isPushingFavorites() -> Bool {
         return !pushingFavorites.isEmpty
     }
     
     func isPushingObservations() -> Bool {
         return !pushingObservations.isEmpty
-    }
-    
-    func isPushingImportant() -> Bool {
-        return !pushingImportant.isEmpty
     }
 }
 
@@ -399,25 +344,6 @@ extension ObservationPushService : NSFetchedResultsControllerDelegate {
                 NSLog("favorites updated, push em")
                 if observationFavorite.observation?.remoteId != nil {
                     pushFavorites(favorites: [observationFavorite])
-                }
-            @unknown default:
-                break
-            }
-        } else if let observationImportant = anObject as? ObservationImportant {
-            switch type {
-            case .insert:
-                NSLog("important inserted, push em")
-                if observationImportant.observation?.remoteId != nil {
-                    pushImportant(importants: [observationImportant])
-                }
-            case .delete:
-                break
-            case .move:
-                break
-            case .update:
-                NSLog("important updated, push em")
-                if observationImportant.observation?.remoteId != nil {
-                    pushImportant(importants: [observationImportant])
                 }
             @unknown default:
                 break

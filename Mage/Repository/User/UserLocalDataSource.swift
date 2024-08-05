@@ -27,7 +27,7 @@ protocol UserLocalDataSource {
         userUri: URL?
     ) -> AnyPublisher<UserModel, Never>?
     
-    func getUser(remoteId: String) async -> User?
+    func getUser(remoteId: String) -> User?
 }
 
 class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, ObservableObject {
@@ -48,9 +48,9 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         User.fetchCurrentUser(context: NSManagedObjectContext.mr_default())
     }
     
-    func getUser(remoteId: String) async -> User? {
+    func getUser(remoteId: String) -> User? {
         let context = NSManagedObjectContext.mr_default()
-        return await context.perform {
+        return context.performAndWait {
             return context.fetchFirst(User.self, key: "remoteId", value: remoteId)
         }
     }

@@ -141,20 +141,25 @@ class ObservationImportantModel: Equatable, Hashable, ObservableObject {
     var userId: String?
     var reason: String?
     var timestamp: Date?
+    var observationRemoteId: String?
+    var importantUri: URL
+    var eventId: NSNumber?
     
-    @Published
-    var userName: String?
+    var userName: String? {
+        if let userId = userId {
+            let user = userRepository.getUser(remoteId: userId)
+            return user?.name
+        }
+        return nil
+    }
 
     init(observationImportant: ObservationImportant) {
+        self.importantUri = observationImportant.objectID.uriRepresentation()
+        self.observationRemoteId = observationImportant.observation?.remoteId
         self.important = observationImportant.important
         self.userId = observationImportant.userId
         self.reason = observationImportant.reason
-        self.timestamp = Date(timeIntervalSince1970: .random(in: 0...1000000000)) // observationImportant.timestamp
-        Task {
-            if let userId = userId {
-                let user = await userRepository.getUser(remoteId: userId)
-                userName = user?.name
-            }
-        }
+        self.timestamp = observationImportant.timestamp
+        self.eventId = observationImportant.observation?.eventId
     }
 }

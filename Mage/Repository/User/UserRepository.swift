@@ -65,7 +65,7 @@ class UserRepository: ObservableObject {
         localDataSource.observeUser(userUri: userUri)
     }
     
-    func getUser(remoteId: String) async -> User? {
-        await localDataSource.getUser(remoteId: remoteId)
+    func getUser(remoteId: String) -> User? {
+        localDataSource.getUser(remoteId: remoteId)
     }
 }

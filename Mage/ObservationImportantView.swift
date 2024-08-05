@@ -29,7 +29,7 @@ struct ObservationImportantViewSwiftUI: View {
                         Text(userName)
                             .overlineText()
                     }
-                    if let reason = important.reason {
+                    if let reason = important.reason, !reason.isEmpty {
                         Text(reason)
                             .secondaryText()
                     }
