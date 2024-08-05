@@ -64,4 +64,8 @@ class UserRepository: ObservableObject {
     func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>? {
         localDataSource.observeUser(userUri: userUri)
     }
+    
+    func getUser(remoteId: String) async -> User? {
+        await localDataSource.getUser(remoteId: remoteId)
+    }
 }

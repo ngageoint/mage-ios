@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class ObservationViewViewModel: ObservableObject {
     @Injected(\.observationRepository)
@@ -44,7 +45,17 @@ class ObservationViewViewModel: ObservableObject {
     var observationFavoritesModel: ObservationFavoritesModel?
     
     @Published
+    var observationImportantModel: ObservationImportantModel?
+    
+    @Published
     var settingImportant: Bool = false
+    
+    @Published
+    var importantDescription: String = ""
+    
+    var isImportant: Bool {
+        observationImportantModel?.important ?? false
+    }
     
     lazy var currentUser: User? = {
         userRepository.getCurrentUser()
@@ -62,6 +73,13 @@ class ObservationViewViewModel: ObservableObject {
     
     @Published
     var currentUserCanEdit: Bool = false
+    
+    @Published
+    var currentUserCanUpdateImportant: Bool = false
+    
+    var cancelButtonText: String {
+        isImportant ? "Remove Important" : "Cancel"
+    }
         
     var cancellables = Set<AnyCancellable>()
     
@@ -79,10 +97,29 @@ class ObservationViewViewModel: ObservableObject {
                         UserModel(user: user)
                     })
                 }
-                self?.currentUserCanEdit = self?.userRepository.getCurrentUser()?.hasEditPermission ?? false
+                self?.currentUserCanEdit = self?.currentUser?.hasEditPermission ?? false
+                
+                if let userRemoteId = self?.currentUser?.remoteId,
+                   let acl = self?.event?.acl,
+                   let userAcl = acl[userRemoteId] as? [String : Any],
+                   let userPermissions = userAcl[PermissionsKey.permissions.key] as? [String] {
+                    if (userPermissions.contains(PermissionsKey.update.key)) {
+                        self?.currentUserCanUpdateImportant = true
+                    }
+                }
+                
+                // if the user has UPDATE_EVENT permission
+                if let role = self?.currentUser?.role, let rolePermissions = role.permissions {
+                    if rolePermissions.contains(PermissionsKey.UPDATE_EVENT.key) {
+                        self?.currentUserCanUpdateImportant = true
+                    }
+                }
+
+                self?.currentUserCanUpdateImportant = false
             }
             
             self?.setupFavorites(observationModel: observationModel)
+            self?.setupImportant(observationModel: observationModel)
             self?.setupForms(observationModel: observationModel)
         }.store(in: &cancellables)
         
@@ -92,12 +129,42 @@ class ObservationViewViewModel: ObservableObject {
             .assign(to: &$observationModel)
     }
     
+    func makeImportant() {
+        settingImportant = false
+        repository.flagImportant(observationUri: observationModel?.observationId, reason: importantDescription)
+    }
+    
+    func cancelAction() {
+        settingImportant = false
+        if isImportant {
+            repository.removeImportant(observationUri: observationModel?.observationId)
+        }
+    }
+    
     private func setupFavorites(observationModel: ObservationModel) {
         if let observationUri = observationModel.observationId {
             self.repository.observeObservationFavorites(observationUri: observationUri)?
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [weak self] updatedObject in
                     self?.observationFavoritesModel = updatedObject
+                })
+                .store(in: &cancellables)
+        }
+    }
+    
+    private func setupImportant(observationModel: ObservationModel) {
+        if let observationUri = observationModel.observationId {
+            self.repository.observeObservationImportant(observationUri: observationUri)?
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [weak self] updatedObject in
+                    if let important = updatedObject.first, let important = important {
+                        self?.observationImportantModel = important
+                        self?.importantDescription = important.reason ?? ""
+
+                    } else {
+                        self?.observationImportantModel = nil
+                        self?.importantDescription = ""
+                    }
                 })
                 .store(in: &cancellables)
         }

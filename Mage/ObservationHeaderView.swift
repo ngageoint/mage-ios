@@ -12,6 +12,7 @@ import Kingfisher
 import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
 import SwiftUI
+import MaterialViews
 
 struct ObservationHeaderViewSwiftUI: View {
     @ObservedObject
@@ -34,7 +35,7 @@ struct ObservationHeaderViewSwiftUI: View {
             .card()
             
             VStack {
-                if let important = viewModel.observationModel?.important {
+                if let important = viewModel.observationImportantModel {
                     ObservationImportantViewSwiftUI(important: important)
                 }
                 ObservationLocationSummary(
@@ -51,11 +52,39 @@ struct ObservationHeaderViewSwiftUI: View {
                 }
                 Divider()
                 if viewModel.settingImportant {
-                    Text("Set important")
-                        .primaryText()
+                    VStack {
+                        TextField("Important Description", text: $viewModel.importantDescription, axis: .vertical)
+                            .lineLimit(2...4)
+                            .textFieldStyle(.roundedBorder)
+                        HStack {
+                            Spacer()
+                            
+                            Button {
+                                viewModel.cancelAction()
+                            } label: {
+                                Label {
+                                    Text(viewModel.cancelButtonText)
+                                } icon: {
+                                    
+                                }
+                            }
+                            .buttonStyle(MaterialButtonStyle(type: .text))
+                            
+                            Button {
+                                viewModel.makeImportant()
+                            } label: {
+                                Label {
+                                    Text("Flag As Important")
+                                } icon: {
+                                    
+                                }
+                            }
+                            .buttonStyle(MaterialButtonStyle(type: .contained))
+                        }
+                    }.padding()
                 }
                 ObservationViewActionBar(
-                    isImportant: viewModel.observationModel?.important != nil,
+                    isImportant: viewModel.isImportant,
                     importantAction: {
                         viewModel.settingImportant = !viewModel.settingImportant
                     },

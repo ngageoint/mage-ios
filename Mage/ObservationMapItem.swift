@@ -124,18 +124,37 @@ extension ObservationMapItem {
     }
 }
 
-struct ObservationImportantModel: Equatable, Hashable {
+class ObservationImportantModel: Equatable, Hashable, ObservableObject {
+    static func == (lhs: ObservationImportantModel, rhs: ObservationImportantModel) -> Bool {
+        lhs.userId == rhs.userId && lhs.timestamp == rhs.timestamp
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(userId)
+        hasher.combine(timestamp)
+    }
+    
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
     var important: Bool
     var userId: String?
     var reason: String?
     var timestamp: Date?
-}
+    
+    @Published
+    var userName: String?
 
-extension ObservationImportantModel {
     init(observationImportant: ObservationImportant) {
         self.important = observationImportant.important
         self.userId = observationImportant.userId
         self.reason = observationImportant.reason
         self.timestamp = Date(timeIntervalSince1970: .random(in: 0...1000000000)) // observationImportant.timestamp
+        Task {
+            if let userId = userId {
+                let user = await userRepository.getUser(remoteId: userId)
+                userName = user?.name
+            }
+        }
     }
 }

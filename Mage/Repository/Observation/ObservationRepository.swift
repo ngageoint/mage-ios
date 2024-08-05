@@ -64,4 +64,16 @@ class ObservationRepository: ObservableObject {
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {
         localDataSource.observeObservationFavorites(observationUri: observationUri)
     }
+    
+    func observeObservationImportant(observationUri: URL?) -> AnyPublisher<[ObservationImportantModel?], Never>? {
+        localDataSource.observeObservationImportant(observationUri: observationUri)
+    }
+    
+    func flagImportant(observationUri: URL?, reason: String) {
+        localDataSource.flagImportant(observationUri: observationUri, reason: reason)
+    }
+    
+    func removeImportant(observationUri: URL?) {
+        localDataSource.removeImportant(observationUri: observationUri)
+    }
 }

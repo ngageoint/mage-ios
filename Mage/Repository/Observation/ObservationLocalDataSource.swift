@@ -38,6 +38,9 @@ protocol ObservationLocalDataSource {
     func toggleFavorite(observationUri: URL?)
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
     func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>?
+    func observeObservationImportant(observationUri: URL?) -> AnyPublisher<[ObservationImportantModel?], Never>?
+    func flagImportant(observationUri: URL?, reason: String)
+    func removeImportant(observationUri: URL?)
 }
 
 class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSource, ObservableObject {
@@ -62,6 +65,30 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
                             observationId: observationUri,
                             favoriteUsers: userIds.compactMap { $0 }
                         )
+                    })
+                    .catch { _ in Empty() }
+                    .eraseToAnyPublisher()
+                }
+                return itemChanges
+            }
+        }
+        return nil
+    }
+    
+    func observeObservationImportant(observationUri: URL?) -> AnyPublisher<[ObservationImportantModel?], Never>? {
+        guard let observationUri = observationUri else {
+            return nil
+        }
+        let context = NSManagedObjectContext.mr_default()
+        if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
+            if let observation = try? context.existingObject(with: id) as? Observation {
+                
+                var itemChanges: AnyPublisher<[ObservationImportantModel?], Never> {
+                    let fetchRequest: NSFetchRequest<ObservationImportant> = ObservationImportant.fetchRequest()
+                    fetchRequest.predicate = NSPredicate(format: "observation = %@", observation)
+                    fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+                    return context.listPublisher(for: fetchRequest, transformer: { important in
+                        ObservationImportantModel(observationImportant: important)
                     })
                     .catch { _ in Empty() }
                     .eraseToAnyPublisher()
@@ -151,6 +178,106 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
                 }
             }
             return nil
+        }
+    }
+    
+    private func userCanUpdateImportant(observation: Observation, user: User) -> Bool {
+        guard let event = observation.event
+        else {
+            return false
+        }
+        
+        // if the user has update on the event
+        if let userRemoteId = user.remoteId,
+           let acl = event.acl,
+           let userAcl = acl[userRemoteId] as? [String : Any],
+           let userPermissions = userAcl[PermissionsKey.permissions.key] as? [String] {
+            if (userPermissions.contains(PermissionsKey.update.key)) {
+                return true
+            }
+        }
+        
+        // if the user has UPDATE_EVENT permission
+        if let role = user.role, let rolePermissions = role.permissions {
+            if rolePermissions.contains(PermissionsKey.UPDATE_EVENT.key) {
+                return true
+            }
+        }
+
+        return false
+    }
+    
+    func flagImportant(observationUri: URL?, reason: String) {
+        guard let observationUri = observationUri else {
+            return
+        }
+        let context = NSManagedObjectContext.mr_default()
+        
+        return context.performAndWait {
+            
+            if let currentUser = User.fetchCurrentUser(context: context),
+               let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri),
+               let observation = try? context.existingObject(with: id) as? Observation,
+               userCanUpdateImportant(observation: observation, user: currentUser),
+               let userRemoteId = currentUser.remoteId
+            {
+                if let important = observation.observationImportant {
+                    important.dirty = true;
+                    important.important = true;
+                    important.userId = userRemoteId;
+                    important.reason = reason
+                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
+                    important.timestamp = Date();
+                } else {
+                    if let important = ObservationImportant.mr_createEntity(in: context) {
+                        important.observation = observation
+                        observation.observationImportant = important;
+                        important.dirty = true;
+                        important.important = true;
+                        important.userId = userRemoteId;
+                        important.reason = reason
+                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
+                        important.timestamp = Date();
+                    }
+                }
+            }
+        }
+    }
+    
+    func removeImportant(observationUri: URL?) {
+        guard let observationUri = observationUri else {
+            return
+        }
+        let context = NSManagedObjectContext.mr_default()
+        
+        return context.performAndWait {
+            
+            if let currentUser = User.fetchCurrentUser(context: context),
+               let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri),
+               let observation = try? context.existingObject(with: id) as? Observation,
+               userCanUpdateImportant(observation: observation, user: currentUser),
+               let userRemoteId = currentUser.remoteId
+            {
+                if let important = observation.observationImportant {
+                    important.dirty = true;
+                    important.important = false;
+                    important.userId = userRemoteId;
+                    important.reason = nil
+                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
+                    important.timestamp = Date();
+                } else {
+                    if let important = ObservationImportant.mr_createEntity(in: context) {
+                        important.observation = observation
+                        observation.observationImportant = important;
+                        important.dirty = true;
+                        important.important = false;
+                        important.userId = userRemoteId;
+                        important.reason = nil
+                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
+                        important.timestamp = Date();
+                    }
+                }
+            }
         }
     }
 
