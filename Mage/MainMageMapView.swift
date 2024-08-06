@@ -305,10 +305,7 @@ extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
     }
     
     func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
-        observation.toggleFavorite { (_, _) in
-            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-            completion?(observation);
-        }
+        ObservationActions.favorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: userRepository.getCurrentUser()?.remoteId)()
     }
     
     func copyLocation(_ locationString: String) {

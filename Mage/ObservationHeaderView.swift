@@ -92,7 +92,8 @@ struct ObservationHeaderViewSwiftUI: View {
                     currentUserFavorite: viewModel.currentUserFavorite,
                     favoriteAction:
                         ObservationActions.favorite(
-                            observationUri: viewModel.observationModel?.observationId
+                            observationUri: viewModel.observationModel?.observationId,
+                            userRemoteId: viewModel.currentUser?.remoteId
                         ),
                     showFavoritesAction: {
                         showFavorites(viewModel.observationFavoritesModel)

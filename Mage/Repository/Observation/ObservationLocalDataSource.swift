@@ -35,7 +35,6 @@ protocol ObservationLocalDataSource {
     ) -> Int
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
-    func toggleFavorite(observationUri: URL?)
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
     func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>?
 }
@@ -70,20 +69,6 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
             }
         }
         return nil
-    }
-    
-    func toggleFavorite(observationUri: URL?) {
-        guard let observationUri = observationUri else { return }
-        let context = NSManagedObjectContext.mr_default()
-        context.perform {
-            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
-                if let observation = try? context.existingObject(with: id) as? Observation {
-                    observation.toggleFavorite { success, error in
-                        observation.managedObjectContext?.refresh(observation, mergeChanges: false)
-                    }
-                }
-            }
-        }
     }
     
     func getLastObservationDate(eventId: Int) -> Date? {

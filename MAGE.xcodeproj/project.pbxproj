@@ -318,6 +318,10 @@
 		F73564CE2C613BB400466813 /* ObservationImportantLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564CD2C613BB400466813 /* ObservationImportantLocalDataSource.swift */; };
 		F73564D02C61401300466813 /* ObservationImportantRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564CF2C61401300466813 /* ObservationImportantRemoteDataSource.swift */; };
 		F73564D22C61430900466813 /* ObservationImportantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564D12C61430900466813 /* ObservationImportantService.swift */; };
+		F73564D52C6180C500466813 /* ObservationFavoriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564D42C6180C500466813 /* ObservationFavoriteRepository.swift */; };
+		F73564D72C62547600466813 /* ObservationFavoriteLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564D62C62547600466813 /* ObservationFavoriteLocalDataSource.swift */; };
+		F73564D92C62548900466813 /* ObservationFavoriteRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564D82C62548900466813 /* ObservationFavoriteRemoteDataSource.swift */; };
+		F73564DB2C6256F400466813 /* ObservationFavoriteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564DA2C6256F400466813 /* ObservationFavoriteService.swift */; };
 		F73607D326EFC977008CF824 /* MagePropertiesTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */; };
 		F73607D526F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */; };
 		F73607D926F542A8008CF824 /* UIImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */; };
@@ -1149,6 +1153,10 @@
 		F73564CD2C613BB400466813 /* ObservationImportantLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantLocalDataSource.swift; sourceTree = "<group>"; };
 		F73564CF2C61401300466813 /* ObservationImportantRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantRemoteDataSource.swift; sourceTree = "<group>"; };
 		F73564D12C61430900466813 /* ObservationImportantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantService.swift; sourceTree = "<group>"; };
+		F73564D42C6180C500466813 /* ObservationFavoriteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFavoriteRepository.swift; sourceTree = "<group>"; };
+		F73564D62C62547600466813 /* ObservationFavoriteLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFavoriteLocalDataSource.swift; sourceTree = "<group>"; };
+		F73564D82C62548900466813 /* ObservationFavoriteRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFavoriteRemoteDataSource.swift; sourceTree = "<group>"; };
+		F73564DA2C6256F400466813 /* ObservationFavoriteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFavoriteService.swift; sourceTree = "<group>"; };
 		F73607D226EFC977008CF824 /* MagePropertiesTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagePropertiesTransformer.swift; sourceTree = "<group>"; };
 		F73607D426F22E6E008CF824 /* GeoPackageFeatureSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureSummaryView.swift; sourceTree = "<group>"; };
 		F73607D826F542A8008CF824 /* UIImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -2112,6 +2120,7 @@
 		F70688B72BB5BDA400D8E2EA /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F73564D32C6180A000466813 /* Favorite */,
 				F73564CA2C613B9700466813 /* Important */,
 				F70688B82BB5BED200D8E2EA /* Icon */,
 				F70688AF2BB354AC00D8E2EA /* ObservationTileRepository.swift */,
@@ -2466,6 +2475,16 @@
 			path = Important;
 			sourceTree = "<group>";
 		};
+		F73564D32C6180A000466813 /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				F73564D42C6180C500466813 /* ObservationFavoriteRepository.swift */,
+				F73564D62C62547600466813 /* ObservationFavoriteLocalDataSource.swift */,
+				F73564D82C62548900466813 /* ObservationFavoriteRemoteDataSource.swift */,
+			);
+			path = Favorite;
+			sourceTree = "<group>";
+		};
 		F73607DA26F90C41008CF824 /* BottomSheets */ = {
 			isa = PBXGroup;
 			children = (
@@ -2773,6 +2792,7 @@
 				F776AC9E2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift */,
 				F776ACA62BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift */,
 				F73564D12C61430900466813 /* ObservationImportantService.swift */,
+				F73564DA2C6256F400466813 /* ObservationFavoriteService.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -4250,6 +4270,7 @@
 				F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */,
 				F7A7B6DE25D1DC6400DAB232 /* FormDefaultsViewController.swift in Sources */,
 				F72D42FE2694B60300F9AC3B /* FeedItem.swift in Sources */,
+				F73564D92C62548900466813 /* ObservationFavoriteRemoteDataSource.swift in Sources */,
 				F7813A8624647B10003666ED /* CommonFieldsView.swift in Sources */,
 				F7BFB8D02C4AAE5500901479 /* FavoriteButton.swift in Sources */,
 				F7E3D4B61A7ACCBB003B7D02 /* StaticPointAnnotation.swift in Sources */,
@@ -4287,6 +4308,7 @@
 				F72D42F22694B60300F9AC3B /* SessionTaskQueue.m in Sources */,
 				2F8A2C0F2200FC2C007FE473 /* EventInformationCoordinator.m in Sources */,
 				F7AA6AFC206EA9F7004F9437 /* IDPLoginView.m in Sources */,
+				F73564DB2C6256F400466813 /* ObservationFavoriteService.swift in Sources */,
 				2F8A2C0C21FFA572007FE473 /* SettingsDataSource.m in Sources */,
 				F7BFB8F02C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift in Sources */,
 				F70688A22BA4CF8900D8E2EA /* ObservationLocation.swift in Sources */,
@@ -4312,12 +4334,14 @@
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
 				F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
+				F73564D52C6180C500466813 /* ObservationFavoriteRepository.swift in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
 				F7E40A6826939B4100E50E26 /* UserSummaryView.swift in Sources */,
 				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
+				F73564D72C62547600466813 /* ObservationFavoriteLocalDataSource.swift in Sources */,
 				F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */,
 				F72D43252694B60300F9AC3B /* Role.swift in Sources */,
 				F72D43162694B60300F9AC3B /* GeometryDeserializer.swift in Sources */,

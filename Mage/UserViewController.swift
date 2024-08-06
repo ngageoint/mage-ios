@@ -15,6 +15,9 @@ class UserViewController : UITableViewController {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
     let user : User
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
@@ -80,9 +83,6 @@ class UserViewController : UITableViewController {
 
 extension UserViewController : ObservationActionsDelegate {
     func viewObservation(_ observation: Observation) {
-//        let ovc = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()), scheme: self.scheme);
-//        self.navigationController?.pushViewController(ovc, animated: true);
-        
         let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation())) { favoritesModel in
             guard let favoritesModel = favoritesModel,
                   let favoriteUsers = favoritesModel.favoriteUsers
@@ -96,7 +96,6 @@ extension UserViewController : ObservationActionsDelegate {
             self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
             self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
         } editObservation: { observationUri in
-//            @objc func startObservationEditCoordinator() {
             Task {
                 guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
                     return;
@@ -107,7 +106,6 @@ extension UserViewController : ObservationActionsDelegate {
                 self.childCoordinators.append(observationEditCoordinator)
 
             }
-//            }
         } selectedAttachment: { attachmentUri in
             self.selectedAttachment(attachmentUri)
         } selectedUnsentAttachment: { localPath, contentType in
@@ -115,15 +113,11 @@ extension UserViewController : ObservationActionsDelegate {
         }
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
-//        let ovc = ObservationViewCardCollectionViewController(viewModel: ObservationViewViewModel(uri: observationUri), scheme: scheme)
         navigationController?.pushViewController(ovc2, animated: true)
     }
     
     func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
-        observation.toggleFavorite { (_, _) in
-            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-            completion?(observation);
-        }
+        ObservationActions.favorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: userRepository.getCurrentUser()?.remoteId)()
     }
     
     func copyLocation(_ locationString: String) {

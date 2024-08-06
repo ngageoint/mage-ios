@@ -19,6 +19,9 @@ class ObservationListActionsView: UIView {
     var bottomSheet: MDCBottomSheetController?;
     internal var scheme: MDCContainerScheming?;
     
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
     private lazy var actionButtonView: UIView = {
         let actionButtonView = UIView.newAutoLayout();
         actionButtonView.addSubview(latitudeLongitudeButton);
@@ -169,12 +172,8 @@ class ObservationListActionsView: UIView {
         if let observation = observation {
             // let the ripple dissolve before transitioning otherwise it looks weird
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                
-                observation.toggleFavorite { (_, _) in
-                    observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-                    self.populate(observation: observation, delegate: self.observationActionsDelegate)
+                ObservationActions.favorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: self.userRepository.getCurrentUser()?.remoteId)()
                     NotificationCenter.default.post(name: .ObservationUpdated, object: observation)
-                }
             }
         }
     }

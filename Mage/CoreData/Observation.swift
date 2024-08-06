@@ -1198,35 +1198,6 @@ enum ObservationState: Int, CustomStringConvertible {
         return "";
     }
     
-    @objc public func toggleFavorite(completion:((Bool,Error?) -> Void)?) {
-        MagicalRecord.save({ [weak self] localContext in
-            if let localObservation = self?.mr_(in: localContext),
-               let user = User.fetchCurrentUser(context: localContext),
-               let userRemoteId = user.remoteId {
-                if let favorite = localObservation.favoritesMap[userRemoteId], favorite.favorite {
-                    // toggle off
-                    favorite.dirty = true;
-                    favorite.favorite = false
-                } else {
-                    // toggle on
-                    if let favorite = localObservation.favoritesMap[userRemoteId] {
-                        favorite.dirty = true;
-                        favorite.favorite = true
-                        favorite.userId = userRemoteId
-                    } else {
-                        if let favorite = ObservationFavorite.mr_createEntity(in: localContext) {
-                            localObservation.addToFavorites(favorite);
-                            favorite.observation = localObservation;
-                            favorite.dirty = true;
-                            favorite.favorite = true
-                            favorite.userId = userRemoteId
-                        }
-                    }
-                }
-            }
-        }, completion: completion)
-    }
-    
     @objc public var favoritesMap: [String : ObservationFavorite] {
         get {
             var favoritesMap: [String:ObservationFavorite] = [:]
@@ -1239,72 +1210,6 @@ enum ObservationState: Int, CustomStringConvertible {
             }
             return favoritesMap
         }
-    }
-    
-    @objc public func flagImportant(description: String, completion:((Bool,Error?) -> Void)?) {
-        if !self.currentUserCanUpdateImportant {
-            completion?(false, nil);
-            return;
-        }
-        
-        MagicalRecord.save({ [weak self] localContext in
-            if let localObservation = self?.mr_(in: localContext),
-               let user = User.fetchCurrentUser(context: localContext),
-               let userRemoteId = user.remoteId {
-                if let important = self?.observationImportant {
-                    important.dirty = true;
-                    important.important = true;
-                    important.userId = userRemoteId;
-                    important.reason = description
-                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                    important.timestamp = Date();
-                } else {
-                    if let important = ObservationImportant.mr_createEntity(in: localContext) {
-                        important.observation = localObservation
-                        localObservation.observationImportant = important;
-                        important.dirty = true;
-                        important.important = true;
-                        important.userId = userRemoteId;
-                        important.reason = description
-                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                        important.timestamp = Date();
-                    }
-                }
-            }
-        }, completion: completion)
-    }
-    
-    @objc public func removeImportant(completion:((Bool,Error?) -> Void)?) {
-        if !self.currentUserCanUpdateImportant {
-            completion?(false, nil);
-            return;
-        }
-        
-        MagicalRecord.save({ [weak self] localContext in
-            if let localObservation = self?.mr_(in: localContext),
-               let user = User.fetchCurrentUser(context: localContext),
-               let userRemoteId = user.remoteId {
-                if let important = self?.observationImportant {
-                    important.dirty = true;
-                    important.important = false;
-                    important.userId = userRemoteId;
-                    important.reason = nil
-                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                    important.timestamp = Date();
-                } else {
-                    if let important = ObservationImportant.mr_createEntity(in: localContext) {
-                        important.observation = localObservation
-                        localObservation.observationImportant = important;
-                        important.dirty = true;
-                        important.important = false;
-                        important.userId = userRemoteId;
-                        important.reason = nil
-                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                        important.timestamp = Date();
-                    }
-                }
-            }
-        }, completion: completion)
     }
     
     @objc public func delete(completion:((Bool,Error?) -> Void)?) {

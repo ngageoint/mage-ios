@@ -57,10 +57,6 @@ class ObservationRepository: ObservableObject {
         return inserted
     }
     
-    func toggleFavorite(observationUri: URL?) {
-        localDataSource.toggleFavorite(observationUri: observationUri)
-    }
-    
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {
         localDataSource.observeObservationFavorites(observationUri: observationUri)
     }

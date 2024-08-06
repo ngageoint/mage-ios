@@ -33,10 +33,7 @@ enum ObservationImportantService: URLRequestConvertible {
     
     var parameters: Parameters? {
         switch self {
-        case .pushImportant(_, _, let reason): //(let eventId, let date):
-            // we cannot reliably query for asams that occured after the date we have because
-            // records can be inserted with an occurance date in the past
-            // we have to query for all records all the time
+        case .pushImportant(_, _, let reason):
             let params: [String: Any] = [
                 ObservationImportantKey.description.key: reason ?? NSNull()
             ]

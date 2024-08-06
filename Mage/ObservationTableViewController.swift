@@ -16,6 +16,9 @@ class ObservationTableViewController: UITableViewController {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
     weak var attachmentDelegate: AttachmentSelectionDelegate?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
@@ -365,10 +368,7 @@ extension ObservationTableViewController: ObservationActionsDelegate {
     }
     
     func favoriteObservation(_ observation: Observation, completion: ((Observation?) -> Void)?) {
-        observation.toggleFavorite { (_, _) in
-            observation.managedObjectContext?.refresh(observation, mergeChanges: false);
-            completion?(observation);
-        }
+        ObservationActions.favorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: userRepository.getCurrentUser()?.remoteId)()
     }
     
     func copyLocation(_ locationString: String) {

@@ -64,18 +64,20 @@ enum CoordinateActions {
 }
 
 enum ObservationActions {
-    case favorite(observationUri: URL?)
+    case favorite(observationUri: URL?, userRemoteId: String?)
     case syncNow(observationUri: URL?)
     case toggleImportant(observationUri: URL?)
     
     func callAsFunction() {
         switch (self) {
  
-        case .favorite(observationUri: let observationUri):
+        case .favorite(observationUri: let observationUri, userRemoteId: let userRemoteId):
             print("favorite")
-            @Injected(\.observationRepository)
-            var observationRepository: ObservationRepository
-            observationRepository.toggleFavorite(observationUri: observationUri)
+            if let userRemoteId = userRemoteId {
+                @Injected(\.observationFavoriteRepository)
+                var observationFavoriteRepository: ObservationFavoriteRepository
+                observationFavoriteRepository.toggleFavorite(observationUri: observationUri, userRemoteId: userRemoteId)
+            }
         case .syncNow(observationUri: let observationUri):
             print("sync now")
             @Injected(\.observationRepository)

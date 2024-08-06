@@ -14,6 +14,9 @@ public class ObservationPushService: NSObject {
     @Injected(\.observationImportantRepository)
     var observationImportantRepository: ObservationImportantRepository
     
+    @Injected(\.observationFavoriteRepository)
+    var observationFavoriteRepository: ObservationFavoriteRepository
+    
     public static let ObservationErrorStatusCode = "errorStatusCode"
     public static let ObservationErrorDescription = "errorDescription"
     public static let ObservationErrorMessage = "errorMessage"
@@ -28,7 +31,7 @@ public class ObservationPushService: NSObject {
     var favoritesFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
     var importantFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
     var pushingObservations: [NSManagedObjectID : Observation] = [:]
-    var pushingFavorites: [NSManagedObjectID : ObservationFavorite] = [:]
+    
     
     private override init() {
     }
@@ -44,13 +47,6 @@ public class ObservationPushService: NSObject {
                                                                           groupBy: nil,
                                                                           delegate: self,
                                                                           in: context);
-            
-            self.favoritesFetchedResultsController = ObservationFavorite.mr_fetchAllSorted(by: "observation.\(ObservationKey.timestamp.key)",
-                                                                                           ascending: false,
-                                                                                           with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
-                                                                                           groupBy: nil,
-                                                                                           delegate: self,
-                                                                                           in: context);
         }
         onTimerFire();
         scheduleTimer();
@@ -87,7 +83,7 @@ public class ObservationPushService: NSObject {
     @objc func onTimerFire() {
         if !UserUtility.singleton.isTokenExpired && DataConnectionUtilities.shouldPushObservations() {
             pushObservations(observations: fetchedResultsController?.fetchedObjects as? [Observation])
-            pushFavorites(favorites: self.favoritesFetchedResultsController?.fetchedObjects as? [ObservationFavorite])
+            observationFavoriteRepository.sync()
             observationImportantRepository.sync()
         }
     }
@@ -263,49 +259,6 @@ public class ObservationPushService: NSObject {
         }
     }
     
-    func pushFavorites(favorites: [ObservationFavorite]?) {
-        guard let favorites = favorites else {
-            return
-        }
-
-        if !DataConnectionUtilities.shouldPushObservations() {
-            return
-        }
-        
-        // only push favorites that haven't already been told to be pushed
-        var favoritesToPush: [NSManagedObjectID : ObservationFavorite] = [:]
-        for favorite in favorites {
-            if pushingFavorites[favorite.objectID] == nil {
-                pushingFavorites[favorite.objectID] = favorite
-                favoritesToPush[favorite.objectID] = favorite
-            }
-        }
-        
-        NSLog("about to push an additional \(favoritesToPush.count) favorites")
-        let manager = MageSessionManager.shared()
-        for favorite in favoritesToPush.values {
-            let favoritePushTask = Observation.operationToPushFavorite(favorite: favorite) { task, response in
-                NSLog("Successfuly submitted favorite")
-                MagicalRecord.save { context in
-                    let localFavorite = favorite.mr_(in: context)
-                    localFavorite?.dirty = false;
-                } completion: { contextDidSave, error in
-                    self.pushingFavorites.removeValue(forKey: favorite.objectID)
-                }
-            } failure: { task, error in
-                NSLog("Error submitting favorite")
-                self.pushingFavorites.removeValue(forKey: favorite.objectID)
-            }
-            if let favoritePushTask = favoritePushTask {
-                manager?.addTask(favoritePushTask);
-            }
-        }
-    }
-    
-    func isPushingFavorites() -> Bool {
-        return !pushingFavorites.isEmpty
-    }
-    
     func isPushingObservations() -> Bool {
         return !pushingObservations.isEmpty
     }
@@ -327,23 +280,6 @@ extension ObservationPushService : NSFetchedResultsControllerDelegate {
                 NSLog("observations updated, push em")
                 if observation.remoteId != nil {
                     pushObservations(observations: [observation])
-                }
-            @unknown default:
-                break
-            }
-        } else if let observationFavorite = anObject as? ObservationFavorite {
-            switch type {
-            case .insert:
-                NSLog("favorites inserted, push em")
-                pushFavorites(favorites: [observationFavorite])
-            case .delete:
-                break
-            case .move:
-                break
-            case .update:
-                NSLog("favorites updated, push em")
-                if observationFavorite.observation?.remoteId != nil {
-                    pushFavorites(favorites: [observationFavorite])
                 }
             @unknown default:
                 break
