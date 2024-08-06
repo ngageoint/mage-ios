@@ -27,7 +27,7 @@ class ObservationFavoriteRepository: ObservableObject {
     @Injected(\.observationFavoriteRemoteDataSource)
     var remoteDataSource: ObservationFavoriteRemoteDataSource
     
-    var pushingFavorites: [NSManagedObjectID : ObservationFavorite] = [:]
+    var pushingFavorites: [URL : ObservationFavoriteModel] = [:]
     var cancellables: Set<AnyCancellable> = Set()
     
     init() {
@@ -49,7 +49,7 @@ class ObservationFavoriteRepository: ObservableObject {
         localDataSource.toggleFavorite(observationUri: observationUri, userRemoteId: userRemoteId)
     }
     
-    func pushFavorites(favorites: [ObservationFavorite]?) async {
+    func pushFavorites(favorites: [ObservationFavoriteModel]?) async {
         guard let favorites = favorites, !favorites.isEmpty else {
             return
         }
@@ -59,11 +59,11 @@ class ObservationFavoriteRepository: ObservableObject {
         }
         
         // only push favorites that haven't already been told to be pushed
-        var favoritesToPush: [NSManagedObjectID : ObservationFavorite] = [:]
+        var favoritesToPush: [URL : ObservationFavoriteModel] = [:]
         for favorite in favorites {
-            if pushingFavorites[favorite.objectID] == nil {
-                pushingFavorites[favorite.objectID] = favorite
-                favoritesToPush[favorite.objectID] = favorite
+            if pushingFavorites[favorite.observationFavoriteUri] == nil {
+                pushingFavorites[favorite.observationFavoriteUri] = favorite
+                favoritesToPush[favorite.observationFavoriteUri] = favorite
             }
         }
         
@@ -71,7 +71,7 @@ class ObservationFavoriteRepository: ObservableObject {
         for favorite in favoritesToPush.values {
             let response = await remoteDataSource.pushFavorite(favorite: favorite)
             localDataSource.handleServerPushResponse(favorite: favorite, response: response)
-            self.pushingFavorites.removeValue(forKey: favorite.objectID)
+            self.pushingFavorites.removeValue(forKey: favorite.observationFavoriteUri)
         }
     }
 }

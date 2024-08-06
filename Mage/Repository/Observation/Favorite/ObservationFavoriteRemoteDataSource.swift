@@ -21,9 +21,9 @@ extension InjectedValues {
 
 class ObservationFavoriteRemoteDataSource {
     
-    func pushFavorite(favorite: ObservationFavorite) async -> [AnyHashable: Any] {
-        guard let eventId = favorite.observation?.eventId,
-              let observationRemoteId = favorite.observation?.remoteId
+    func pushFavorite(favorite: ObservationFavoriteModel) async -> [AnyHashable: Any] {
+        guard let eventId = favorite.eventId,
+              let observationRemoteId = favorite.observationRemoteId
         else {
             return [:]
         }
