@@ -27,6 +27,12 @@ class ObservationRepository: ObservableObject {
     @Injected(\.observationRemoteDataSource)
     var remoteDataSource: ObservationRemoteDataSource
     
+    func observations(
+        paginatedBy paginator: Trigger.Signal? = nil
+    ) -> AnyPublisher<[ObservationItem], Error> {
+        localDataSource.observations(paginatedBy: paginator)
+    }
+    
     func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>? {
         localDataSource.observeObservation(observationUri: observationUri)
     }

@@ -36,18 +36,19 @@ class AttachmentCoreDataDataSource: CoreDataDataSource, AttachmentLocalDataSourc
         let context = NSManagedObjectContext.mr_default()
         
         guard let observationUri = observationUri,
-              let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri),
-              let observationFormId = observationFormId,
-              let fieldName = fieldName
+              let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri)
         else {
             return nil
         }
         return await context.perform {
-            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "observation == %@", objectId),
-                NSPredicate(format: "observationFormId == %@", observationFormId),
-                NSPredicate(format: "fieldName == %@", fieldName)
-            ])
+            var andPredicates = [NSPredicate(format: "observation == %@", objectId)]
+            if let observationFormId = observationFormId {
+                andPredicates.append(NSPredicate(format: "observationFormId == %@", observationFormId))
+            }
+            if let fieldName = fieldName {
+                andPredicates.append(NSPredicate(format: "fieldName == %@", fieldName))
+            }
+            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: andPredicates)
             
             let fetchRequest = Attachment.fetchRequest()
             fetchRequest.predicate = predicate

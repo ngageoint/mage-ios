@@ -38,6 +38,10 @@ class MainMageMapView:
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
+    // this initializes the location manager, this should go somewhere else in the future
+    @Injected(\.currentLocationRepository)
+    var currentLocationRepository: CurrentLocationRepository
+    
     var childCoordinators: [NSObject] = [];
     
     weak var navigationController: UINavigationController?
@@ -81,6 +85,8 @@ class MainMageMapView:
         self.viewController = viewController
         self.navigationController = navigationController
         super.init(scheme: scheme)
+        // this initializes the location manager, this should go somewhere else in the future
+        _ = currentLocationRepository.getLastLocation()
     }
     
     required init(coder aDecoder: NSCoder) {

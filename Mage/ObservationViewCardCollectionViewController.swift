@@ -27,56 +27,56 @@ struct ObservationFullView: View {
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     var body: some View {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ObservationHeaderViewSwiftUI(
-                        viewModel: viewModel,
-                        showFavorites: showFavorites,
-                        moreActions: moreActions
+        ScrollView {
+            VStack(alignment: .leading) {
+                ObservationHeaderViewSwiftUI(
+                    viewModel: viewModel,
+                    showFavorites: showFavorites,
+                    moreActions: moreActions
+                )
+                
+                Text("Forms")
+                    .overlineText()
+                    .padding()
+                ForEach(viewModel.observationForms ?? []) { form in
+                    ObservationFormViewSwiftUI(
+                        viewModel: ObservationFormViewModel(form: form),
+                        selectedAttachment: selectedAttachment,
+                        selectedUnsentAttachment: selectedUnsentAttachment
                     )
+                }
+            }
+            .padding(.bottom, 36)
+            .padding([.top, .leading, .trailing], 8)
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if viewModel.currentUserCanEdit {
+                Button {
+                    if let observationUri = viewModel.observationModel?.observationId {
+                        editObservation(observationUri)
+                    }
+                } label: {
+                    Label {
+                        Text("")
+                    } icon: {
+                        Image(systemName: "pencil")
+                            .fontWeight(.black)
+                    }
                     
-                    Text("Forms")
-                        .overlineText()
-                        .padding()
-                    ForEach(viewModel.observationForms ?? []) { form in
-                        ObservationFormViewSwiftUI(
-                            viewModel: ObservationFormViewModel(form: form),
-                            selectedAttachment: selectedAttachment,
-                            selectedUnsentAttachment: selectedUnsentAttachment
-                        )
-                    }
                 }
-                .padding(.bottom, 36)
-                .padding([.top, .leading, .trailing], 8)
-            }
-            .overlay(alignment: .bottomTrailing) {
-                if viewModel.currentUserCanEdit {
-                    Button {
-                        if let observationUri = viewModel.observationModel?.observationId {
-                            editObservation(observationUri)
-                        }
-                    } label: {
-                        Label {
-                            Text("")
-                        } icon: {
-                            Image(systemName: "pencil")
-                                .fontWeight(.black)
-                        }
-                        
-                    }
-                    .fixedSize()
-                    .buttonStyle(
-                        MaterialFloatingButtonStyle(
-                            type: .secondary,
-                            size: .mini,
-                            foregroundColor: .white,
-                            backgroundColor: .secondaryColor
-                        )
+                .fixedSize()
+                .buttonStyle(
+                    MaterialFloatingButtonStyle(
+                        type: .secondary,
+                        size: .mini,
+                        foregroundColor: .white,
+                        backgroundColor: .secondaryColor
                     )
-                    .padding(.trailing, 16)
-                    .padding(.bottom, 16)
-                }
+                )
+                .padding(.trailing, 16)
+                .padding(.bottom, 16)
             }
-            .background(Color.backgroundColor)
+        }
+        .background(Color.backgroundColor)
     }
 }

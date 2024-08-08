@@ -17,7 +17,11 @@ class MageHostingController<Content>: UIHostingController<Content> where Content
 }
 
 class SwiftUIViewController: UIViewController {
-    var swiftUIView: AnyView
+    var swiftUIView: AnyView?
+    
+    public init() {
+        super.init(nibName: nil, bundle: nil)
+    }
 
     public init(swiftUIView: some View) {
         self.swiftUIView = AnyView(swiftUIView)
@@ -35,20 +39,22 @@ class SwiftUIViewController: UIViewController {
     }
 
     func addSwiftUIView() {
-        let controller = MageHostingController(
-            rootView: swiftUIView
-        )
-        addChild(controller)
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(controller.view)
-        controller.didMove(toParent: self)
-        view.backgroundColor = UIColor.clear
-        controller.view.backgroundColor = UIColor.clear
-        NSLayoutConstraint.activate([
-            controller.view.widthAnchor.constraint(equalTo: view.widthAnchor),
-            controller.view.heightAnchor.constraint(equalTo: view.heightAnchor),
-            controller.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            controller.view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        if let swiftUIView = swiftUIView {
+            let controller = MageHostingController(
+                rootView: swiftUIView
+            )
+            addChild(controller)
+            controller.view.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(controller.view)
+            controller.didMove(toParent: self)
+            view.backgroundColor = UIColor.clear
+            controller.view.backgroundColor = UIColor.clear
+            NSLayoutConstraint.activate([
+                controller.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+                controller.view.heightAnchor.constraint(equalTo: view.heightAnchor),
+                controller.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                controller.view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+        }
     }
 }

@@ -19,7 +19,7 @@ struct FavoriteButton: View {
             favoriteAction()
         } label: {
             Label {
-                if let count = favoriteCount {
+                if let count = favoriteCount, count != 0 {
                     Text("\(count)").padding(.leading, 8)
                 }
             } icon: {

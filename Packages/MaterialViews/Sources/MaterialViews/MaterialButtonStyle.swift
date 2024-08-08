@@ -245,6 +245,7 @@ public struct MaterialButtonStyle: ButtonStyle {
 
         return configuration
             .label
+            .contentShape(RoundedRectangle(cornerRadius: 22.0))
             .labelStyle(MaterialButtonLabelStyle(color: foregroundColor, size: .mini))
             .frame(minWidth: 44.0, maxWidth: maxWidth ? .infinity : nil, minHeight: 44.0)
             .padding([.trailing, .leading], 8)

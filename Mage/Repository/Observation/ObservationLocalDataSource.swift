@@ -37,9 +37,100 @@ protocol ObservationLocalDataSource {
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
     func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>?
+    func observations(
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[ObservationItem], Error>
+}
+
+struct ObservationModelPage {
+    var observationList: [ObservationItem]
+    var next: Int?
+    var currentHeader: String?
 }
 
 class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSource, ObservableObject {
+    private lazy var context: NSManagedObjectContext = {
+        NSManagedObjectContext.mr_default()
+    }()
+    
+    func observations(
+        paginatedBy paginator: Trigger.Signal? = nil
+    ) -> AnyPublisher<[ObservationItem], Error> {
+        return observations(
+            at: nil,
+            currentHeader: nil,
+            paginatedBy: paginator
+        )
+        .map(\.observationList)
+        .eraseToAnyPublisher()
+    }
+    
+    func observations(
+        at page: Page?,
+        currentHeader: String?,
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<ObservationModelPage, Error> {
+        return observations(
+            at: page,
+            currentHeader: currentHeader
+        )
+        .map { result -> AnyPublisher<ObservationModelPage, Error> in
+            if let paginator = paginator, let next = result.next {
+                return self.observations(
+                    at: next,
+                    currentHeader: result.currentHeader,
+                    paginatedBy: paginator
+                )
+                .wait(untilOutputFrom: paginator)
+                .retry(.max)
+                .prepend(result)
+                .eraseToAnyPublisher()
+            } else {
+                return Just(result)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+        }
+        .switchToLatest()
+        .eraseToAnyPublisher()
+    }
+    
+    func observations(
+        at page: Page?,
+        currentHeader: String?
+    ) -> AnyPublisher<ObservationModelPage, Error> {
+
+        let request = Observation.fetchRequest()
+        let predicates: [NSPredicate] = Observations.getPredicatesForObservations() as? [NSPredicate] ?? []
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        request.predicate = predicate
+
+        request.includesSubentities = false
+        request.includesPropertyValues = false
+        request.fetchLimit = 100
+        request.fetchOffset = (page ?? 0) * request.fetchLimit
+        request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+        let previousHeader: String? = currentHeader
+        var observations: [ObservationItem] = []
+        context.performAndWait {
+            if let fetched = context.fetch(request: request) {
+
+                observations = fetched.flatMap { observation in
+                    return [ObservationItem.listItem(observation.objectID.uriRepresentation())]
+                }
+            }
+        }
+
+        let observationPage: ObservationModelPage = ObservationModelPage(
+            observationList: observations, next: (page ?? 0) + 1,
+            currentHeader: previousHeader
+        )
+
+        return Just(observationPage)
+            .setFailureType(to: Error.self)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
     
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {
         guard let observationUri = observationUri else {

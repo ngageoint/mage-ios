@@ -156,3 +156,30 @@ struct ObservationViewActionBar: View {
         }
     }
 }
+
+struct ObservationListActionBar: View {
+    var coordinate: CLLocationCoordinate2D?
+    var isImportant: Bool
+    var importantAction: () -> Void
+    var favoriteCount: Int?
+    var currentUserFavorite: Bool
+    var favoriteAction: ObservationActions
+    var navigateToAction: CoordinateActions
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            if let coordinate = coordinate {
+                CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
+            }
+            Spacer()
+            
+            FavoriteButton(
+                favoriteCount: favoriteCount,
+                currentUserFavorite: currentUserFavorite,
+                favoriteAction: favoriteAction
+            )
+            
+            NavigateToButton(navigateToAction: navigateToAction)
+        }
+    }
+}

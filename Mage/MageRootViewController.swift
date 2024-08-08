@@ -7,6 +7,8 @@ import Foundation
 import Kingfisher
 
 @objc class MageRootViewController : UITabBarController {
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
     
     var profileTabBarItem: UITabBarItem?;
     var moreTabBarItem: UITabBarItem?;
@@ -14,6 +16,7 @@ import Kingfisher
     var scheme: MDCContainerScheming?;
     var feedViewControllers: [UINavigationController] = [];
     var mapRequestFocusObserver: Any?
+    var attachmentViewCoordinator: AttachmentViewCoordinator?
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
         let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self);
@@ -29,13 +32,25 @@ import Kingfisher
     
     private lazy var locationsTab: UINavigationController = {
         let locationTableViewController: LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
-        let nc = UINavigationController(rootViewController: locationTableViewController);
+        
+        let nc = UINavigationController()
         nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2);
-        return nc;
+        nc.pushViewController(locationTableViewController, animated: false)
+
+        return nc
     }()
     
+    func selectedAttachment(_ attachmentUri: URL!, navigationController: UINavigationController) {
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                attachmentViewCoordinator = AttachmentViewCoordinator(rootViewController: navigationController, attachment: attachment, delegate: self, scheme: scheme);
+                attachmentViewCoordinator?.start();
+            }
+        }
+    }
+    
     private lazy var observationsTab: UINavigationController = {
-        let observationTableViewController: ObservationTableViewController = ObservationTableViewController(scheme: self.scheme);
+        let observationTableViewController = ObservationListWrapperViewController(scheme: scheme)
         let nc = UINavigationController(rootViewController: observationTableViewController);
         nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
         return nc;
@@ -227,5 +242,11 @@ extension MageRootViewController: OfflineObservationDelegate {
         } else {
             self.profileTabBarItem?.badgeValue = nil;
         }
+    }
+}
+
+extension MageRootViewController: AttachmentViewDelegate {
+    func doneViewing(coordinator: NSObject) {
+        attachmentViewCoordinator = nil;
     }
 }
