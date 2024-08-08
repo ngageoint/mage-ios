@@ -16,9 +16,12 @@ import QuickLook
 }
 
 @objc class AttachmentViewCoordinator: NSObject, NavigationControllerObserverDelegate, AskToDownloadDelegate {
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
     var scheme: MDCContainerScheming?;
 
-    var attachment: Attachment?
+    var attachment: AttachmentModel?
     weak var delegate: AttachmentViewDelegate?
     var rootViewController: UINavigationController
     var navigationControllerObserver: NavigationControllerObserver
@@ -36,7 +39,7 @@ import QuickLook
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
-    @objc public init(rootViewController: UINavigationController, attachment: Attachment, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
+    @objc public init(rootViewController: UINavigationController, attachment: AttachmentModel, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
         self.rootViewController = rootViewController;
         self.attachment = attachment;
         self.delegate = delegate;
@@ -108,7 +111,7 @@ import QuickLook
         }
     }
     
-    @objc public func setAttachment(attachment: Attachment) {
+    @objc public func setAttachment(attachment: AttachmentModel) {
         self.attachment = attachment;
         if (hasPushedViewController) {
             self.ignoreNextDelegateCall = true;
@@ -259,13 +262,7 @@ extension AttachmentViewCoordinator : MediaLoaderDelegate {
     func mediaLoadComplete(filePath: String, newFile: Bool) {
         print("Media load complete");
         if (newFile) {
-            MagicalRecord.save({ (localContext : NSManagedObjectContext!) in
-                if let attachment = self.attachment {
-                    let localAttachment = attachment.mr_(in: localContext);
-                    localAttachment?.localPath = filePath;
-                }
-            }) { (success, error) in
-            };
+            attachmentRepository.saveLocalPath(attachmentUri: attachment?.attachmentUri, localPath: filePath)
         }
     }
 }

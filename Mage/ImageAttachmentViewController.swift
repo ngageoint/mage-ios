@@ -21,7 +21,7 @@ extension PlaceholderImage: Placeholder {}
     @IBOutlet weak var downloadProgressBar: UIProgressView?
     @IBOutlet weak var downloadingLabel: UILabel!
     
-    var attachment: Attachment? = nil;
+    var attachment: AttachmentModel? = nil;
     var url: URL? = nil;
     var imageSize: Int!
     
@@ -44,7 +44,7 @@ extension PlaceholderImage: Placeholder {}
         }
     }
     
-    @objc public convenience init(attachment: Attachment) {
+    @objc public convenience init(attachment: AttachmentModel) {
         self.init(nibName: "AttachmentView", bundle: nil);
         self.imageSize = 0;
         self.attachment = attachment;

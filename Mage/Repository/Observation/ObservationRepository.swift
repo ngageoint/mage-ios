@@ -26,6 +26,16 @@ class ObservationRepository: ObservableObject {
     
     @Injected(\.observationRemoteDataSource)
     var remoteDataSource: ObservationRemoteDataSource
+    
+    func observations(
+        paginatedBy paginator: Trigger.Signal? = nil
+    ) -> AnyPublisher<[ObservationItem], Error> {
+        localDataSource.observations(paginatedBy: paginator)
+    }
+    
+    func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>? {
+        localDataSource.observeObservation(observationUri: observationUri)
+    }
 
     func getObservation(remoteId: String?) async -> Observation? {
         await localDataSource.getObservation(remoteId: remoteId)
@@ -33,6 +43,10 @@ class ObservationRepository: ObservableObject {
 
     func getObservation(observationUri: URL?) async -> Observation? {
         await localDataSource.getObservation(observationUri: observationUri)
+    }
+    
+    func syncObservation(uri: URL?) {
+        print("XXX SYNC IT")
     }
 
     func fetchObservations() async -> Int {
@@ -47,10 +61,6 @@ class ObservationRepository: ObservableObject {
         let inserted = await localDataSource.insert(task: nil, observations: observationJson, eventId: eventId.intValue)
 
         return inserted
-    }
-    
-    func toggleFavorite(observationUri: URL?) {
-        localDataSource.toggleFavorite(observationUri: observationUri)
     }
     
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {

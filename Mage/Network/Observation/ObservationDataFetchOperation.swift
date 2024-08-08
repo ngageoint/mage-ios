@@ -25,7 +25,6 @@ class ObservationDataFetchOperation: DataFetchOperation<[AnyHashable : Any]> {
         }
 
         let request = ObservationService.getObservations(eventId: eventId, date: date)
-        let queue = DispatchQueue(label: "mil.nga.msi.MAGE.api", qos: .background)
 
         return await withCheckedContinuation { continuation in
             MageSession.shared.session.request(request)
@@ -40,6 +39,7 @@ class ObservationDataFetchOperation: DataFetchOperation<[AnyHashable : Any]> {
                             }
                         } catch {
                             print("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
+                            continuation.resume(returning: [])
                         }
                     case .failure(let error):
                         print("Error \(error)")

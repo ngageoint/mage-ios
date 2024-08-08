@@ -32,4 +32,12 @@ class ObservationMapItemRepository: ObservableObject {
             maxLongitude: nil
         )
     }
+    
+    func getMapItems(observationUri: URL, observationFormId: String, fieldName: String) async -> [ObservationMapItem] {
+        return await localDataSource.getObservationMapItems(
+            observationUri: observationUri,
+            formId: observationFormId,
+            fieldName: fieldName
+        ) ?? []
+    }
 }

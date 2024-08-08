@@ -175,9 +175,9 @@ import CoreData
         return false;
     }
     
-    @objc public func form(observation: Observation) -> Form? {
-        return observation.primaryEventForm;
-    }
+//    @objc public func form(observation: Observation) -> Form? {
+//        return observation.primaryEventForm;
+//    }
     
     @objc public func form(id: NSNumber?) -> Form? {
         guard let id = id, let managedObjectContext = self.managedObjectContext, let remoteId = remoteId else {

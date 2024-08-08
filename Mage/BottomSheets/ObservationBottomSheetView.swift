@@ -18,6 +18,9 @@ class ObservationLocationBottomSheetViewModel: ObservableObject {
     @Injected(\.observationRepository)
     var observationRepository: ObservationRepository
     
+    @Injected(\.observationFavoriteRepository)
+    var observationFavoriteRepository: ObservationFavoriteRepository
+    
     @Injected(\.userRepository)
     var userRepository: UserRepository
     
@@ -80,7 +83,9 @@ class ObservationLocationBottomSheetViewModel: ObservableObject {
     }
     
     func toggleFavorite() {
-        observationRepository.toggleFavorite(observationUri: observationMapItem?.observationId)
+        if let remoteId = currentUser?.remoteId {
+            observationFavoriteRepository.toggleFavorite(observationUri: observationMapItem?.observationId, userRemoteId: remoteId)
+        }
     }
 }
 
@@ -110,7 +115,10 @@ struct ObservationLocationBottomSheet: View {
                         coordinate: observationMapItem.coordinate,
                         favoriteCount: viewModel.favoriteCount,
                         currentUserFavorite: viewModel.currentUserFavorite,
-                        favoriteAction: ObservationActions.favorite(viewModel: viewModel),
+                        favoriteAction: ObservationActions.favorite(
+                            observationUri: viewModel.observationMapItem?.observationId,
+                            userRemoteId: viewModel.currentUser?.remoteId
+                        ),
                         navigateToAction: CoordinateActions.navigateTo(
                             coordinate: observationMapItem.coordinate,
                             itemKey: observationMapItem.observationLocationId?.absoluteString,

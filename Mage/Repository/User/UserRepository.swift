@@ -32,6 +32,7 @@ struct UserModel: Equatable, Hashable {
     var avatarUrl: String?
     var username: String?
     var timestamp: Date?
+    var hasEditPermissions: Bool = false
     
     init(user: User) {
         remoteId = user.remoteId
@@ -44,6 +45,7 @@ struct UserModel: Equatable, Hashable {
         username = user.username
         timestamp = user.location?.timestamp
         userId = user.objectID.uriRepresentation()
+        hasEditPermissions = user.hasEditPermission
     }
 }
 
@@ -61,5 +63,9 @@ class UserRepository: ObservableObject {
     
     func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>? {
         localDataSource.observeUser(userUri: userUri)
+    }
+    
+    func getUser(remoteId: String) -> User? {
+        localDataSource.getUser(remoteId: remoteId)
     }
 }

@@ -18,7 +18,7 @@ import UIKit
 }
 
 class AttachmentFieldView : BaseFieldView {
-    private var attachments: [Attachment]?;
+    private var attachments: [AttachmentModel]?;
     private weak var attachmentSelectionDelegate: AttachmentSelectionDelegate?;
     var attachmentCreationCoordinator: AttachmentCreationCoordinator?;
     private var heightConstraint: NSLayoutConstraint?;
@@ -199,7 +199,7 @@ class AttachmentFieldView : BaseFieldView {
         fatalError("This class does not support NSCoding")
     }
     
-    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [Attachment]? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
+    init(field: [String: Any], editMode: Bool = true, delegate: (ObservationFormFieldListener & FieldSelectionDelegate)? = nil, value: [AttachmentModel]? = nil, attachmentSelectionDelegate: AttachmentSelectionDelegate? = nil, attachmentCreationCoordinator: AttachmentCreationCoordinator? = nil) {
         super.init(field: field, delegate: delegate, value: value, editMode: editMode);
         
         self.min = field[FieldKey.min.key] as? NSNumber;
@@ -308,26 +308,26 @@ class AttachmentFieldView : BaseFieldView {
     }
     
     override func setValue(_ value: Any?) {
-        setValue(value as? [Attachment]);
+        setValue(value as? [AttachmentModel]);
     }
     
-    func setValue(_ value: [Attachment]? = nil) {
+    func setValue(_ value: [AttachmentModel]? = nil) {
         self.attachments = value;
         setCollectionData(attachments: self.attachments);
     }
     
-    func setValue(set: Set<Attachment>? = nil) {
+    func setValue(set: Set<AttachmentModel>? = nil) {
         setValue(Array(set ?? Set()))
     }
     
-    func addAttachment(_ attachment: Attachment) {
+    func addAttachment(_ attachment: AttachmentModel) {
         var attachments = self.attachments ?? [];
         attachments.append(attachment);
         self.attachments = attachments
         setCollectionData(attachments: attachments);
     }
     
-    func removeAttachment(_ attachment: Attachment) {
+    func removeAttachment(_ attachment: AttachmentModel) {
         if var attachments = self.attachments, let index = attachments.firstIndex(of: attachment) {
             attachments.remove(at: index)
             self.attachments = attachments
@@ -335,7 +335,7 @@ class AttachmentFieldView : BaseFieldView {
         }
     }
     
-    func setCollectionData(attachments: [Attachment]?) {
+    func setCollectionData(attachments: [AttachmentModel]?) {
         attachmentCollectionDataStore.attachments = attachments;
         attachmentCollectionView.reloadData();
         setNeedsUpdateConstraints();
@@ -428,9 +428,9 @@ class AttachmentFieldView : BaseFieldView {
 }
 
 extension AttachmentFieldView : AttachmentCreationCoordinatorDelegate {
-    func attachmentCreated(attachment: Attachment) {
+    func attachmentCreated(attachment: AttachmentModel) {
         self.addAttachment(attachment);
-        delegate?.fieldValueChanged(field, value: [attachment] as Set<Attachment>);
+        delegate?.fieldValueChanged(field, value: [attachment] as Set<AttachmentModel>);
     }
     
     func attachmentCreated(fieldValue: [String : AnyHashable]) {
@@ -447,20 +447,20 @@ extension AttachmentFieldView : AttachmentCreationCoordinatorDelegate {
 }
 
 extension AttachmentFieldView : AttachmentSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
-        attachmentSelectionDelegate?.selectedAttachment(attachment);
+    func selectedAttachment(_ attachmentUri: URL!) {
+        attachmentSelectionDelegate?.selectedAttachment(attachmentUri);
     }
     
     func selectedUnsentAttachment(_ unsentAttachment: [AnyHashable : Any]!) {
         attachmentSelectionDelegate?.selectedUnsentAttachment(unsentAttachment);
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        attachmentSelectionDelegate?.selectedNotCachedAttachment(attachment, completionHandler: handler);
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
+        attachmentSelectionDelegate?.selectedNotCachedAttachment(attachmentUri, completionHandler: handler);
     }
     
-    func attachmentFabTapped(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
-        attachmentSelectionDelegate?.attachmentFabTapped?(attachment, completionHandler: { [self] deleted in
+    func attachmentFabTapped(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
+        attachmentSelectionDelegate?.attachmentFabTapped?(attachmentUri, completionHandler: { [self] deleted in
             attachmentCollectionView.reloadData();
             setNeedsUpdateConstraints();
             handler(deleted);

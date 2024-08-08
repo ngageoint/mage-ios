@@ -12,6 +12,109 @@ import Kingfisher
 import MaterialComponents.MaterialTypographyScheme
 import MaterialComponents.MaterialCards
 import SwiftUI
+import MaterialViews
+
+struct ObservationHeaderViewSwiftUI: View {
+    @ObservedObject
+    var viewModel: ObservationViewViewModel
+    
+    var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
+    var moreActions: () -> Void
+    
+    var body: some View {
+        VStack {
+            ObservationSyncStatusSwiftUI(
+                hasError: viewModel.observationModel?.error,
+                isDirty: viewModel.observationModel?.isDirty,
+                errorMessage: viewModel.observationModel?.errorMessage,
+                pushedDate: viewModel.observationModel?.lastModified,
+                syncNow: ObservationActions.syncNow(observationUri: viewModel.observationModel?.observationId)
+            )
+            .frame(maxWidth: .infinity)
+            .background(Color.surfaceColor)
+            .card()
+            
+            VStack {
+                if let important = viewModel.observationImportantModel {
+                    ObservationImportantViewSwiftUI(important: important)
+                }
+                ObservationLocationSummary(
+                    timestamp: viewModel.observationModel?.timestamp,
+                    user: viewModel.user?.name,
+                    primaryFieldText: viewModel.primaryFieldText,
+                    secondaryFieldText: viewModel.secondaryFieldText,
+                    iconPath: nil, 
+                    error: viewModel.observationModel?.error ?? false,
+                    syncing: viewModel.observationModel?.syncing ?? false
+                )
+                if let observationId = viewModel.observationModel?.observationId {
+                    ObservationMapItemView(observationUri: observationId)
+                }
+                Divider()
+                if viewModel.settingImportant {
+                    VStack {
+                        TextField("Important Description", text: $viewModel.importantDescription, axis: .vertical)
+                            .lineLimit(2...4)
+                            .textFieldStyle(.roundedBorder)
+                        HStack {
+                            Spacer()
+                            
+                            Button {
+                                viewModel.cancelAction()
+                            } label: {
+                                Label {
+                                    Text(viewModel.cancelButtonText)
+                                } icon: {
+                                    
+                                }
+                            }
+                            .buttonStyle(MaterialButtonStyle(type: .text))
+                            
+                            Button {
+                                viewModel.makeImportant()
+                            } label: {
+                                Label {
+                                    Text("Flag As Important")
+                                } icon: {
+                                    
+                                }
+                            }
+                            .buttonStyle(MaterialButtonStyle(type: .contained))
+                        }
+                    }.padding()
+                }
+                ObservationViewActionBar(
+                    isImportant: viewModel.isImportant,
+                    importantAction: {
+                        viewModel.settingImportant = !viewModel.settingImportant
+                    },
+                    favoriteCount: viewModel.favoriteCount,
+                    currentUserFavorite: viewModel.currentUserFavorite,
+                    favoriteAction:
+                        ObservationActions.favorite(
+                            observationUri: viewModel.observationModel?.observationId,
+                            userRemoteId: viewModel.currentUser?.remoteId
+                        ),
+                    showFavoritesAction: {
+                        showFavorites(viewModel.observationFavoritesModel)
+                    },
+                    navigateToAction:
+                        CoordinateActions.navigateTo(
+                            coordinate: viewModel.observationModel?.coordinate,
+                            itemKey: viewModel.observationModel?.observationId?.absoluteString,
+                            dataSource: DataSources.observation
+                        ),
+                    moreActions: {
+                        moreActions()
+                    }
+                )
+            }
+            .frame(maxWidth: .infinity)
+            .background(Color.surfaceColor)
+            .card()
+        }
+    }
+}
 
 class ObservationHeaderView : MDCCard {
     @Injected(\.observationMapItemRepository)

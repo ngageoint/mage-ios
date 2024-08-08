@@ -11,7 +11,7 @@ import BackgroundTasks
 import CoreData
 import Combine
 
-class CoreDataDataSource {
+class CoreDataDataSource: NSObject {
     typealias Page = Int
 
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid

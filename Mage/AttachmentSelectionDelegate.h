@@ -13,12 +13,12 @@
 
 @required
 
-- (void) selectedAttachment:(Attachment *) attachment;
+- (void) selectedAttachment:(NSURL *) attachmentUri;
 - (void) selectedUnsentAttachment: (NSDictionary *) unsentAttachment;
-- (void) selectedNotCachedAttachment: (Attachment *) attachment completionHandler: (void(^)(BOOL))handler;
+- (void) selectedNotCachedAttachment: (NSURL *) attachmentUri completionHandler: (void(^)(BOOL))handler;
 
 @optional
-- (void) attachmentFabTapped:(Attachment *) attachment completionHandler: (void(^)(BOOL))handler;
+- (void) attachmentFabTapped:(NSURL *) attachmentUri completionHandler: (void(^)(BOOL))handler;
 - (void) attachmentFabTappedField:(NSDictionary *) field completionHandler: (void(^)(BOOL))handler;
 
 @end

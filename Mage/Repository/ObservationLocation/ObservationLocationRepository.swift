@@ -31,4 +31,12 @@ class ObservationLocationRepository: ObservableObject {
     func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<ObservationMapItem, Never>? {
         localDataSource.observeObservationLocation(observationLocationUri: observationLocationUri)
     }
+    
+    func getObservationMapItems(observationUri: URL, formId: String, fieldName: String) async -> [ObservationMapItem]? {
+        await localDataSource.getObservationMapItems(
+            observationUri: observationUri,
+            formId: formId,
+            fieldName: fieldName
+        )
+    }
 }

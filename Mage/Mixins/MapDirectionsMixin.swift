@@ -95,16 +95,16 @@ class MapDirectionsMixin: NSObject, MapMixin {
     
     func startStraightLineNavigation(notification: StraightLineNavigationNotification) {
         self.straightLineNotification = notification
-        if let observation = notification.observation {
-            observationFetchedResultsController = Observation.fetchedResultsController(observation, delegate: self)
-            try? observationFetchedResultsController?.performFetch()
-        } else if let user = notification.user {
-            locationFetchedResultsController = Location.mostRecentLocationFetchedResultsController(user, delegate: self)
-            try? locationFetchedResultsController?.performFetch()
-        } else if let feedItem = notification.feedItem {
-            feedItemFetchedResultsController = FeedItem.fetchedResultsController(feedItem, delegate: self)
-            try? feedItemFetchedResultsController?.performFetch()
-        }
+//        if let observation = notification.observation {
+//            observationFetchedResultsController = Observation.fetchedResultsController(observation, delegate: self)
+//            try? observationFetchedResultsController?.performFetch()
+//        } else if let user = notification.user {
+//            locationFetchedResultsController = Location.mostRecentLocationFetchedResultsController(user, delegate: self)
+//            try? locationFetchedResultsController?.performFetch()
+//        } else if let feedItem = notification.feedItem {
+//            feedItemFetchedResultsController = FeedItem.fetchedResultsController(feedItem, delegate: self)
+//            try? feedItemFetchedResultsController?.performFetch()
+//        }
         
         self.locationManager = self.locationManager ?? CLLocationManager()
         self.locationManager?.delegate = self;
@@ -214,43 +214,6 @@ class MapDirectionsMixin: NSObject, MapMixin {
             }
         }
         
-        if let observation = notification.observation {
-            location = observation.location
-            title = observation.primaryFieldText ?? "Observation"
-            image = ObservationImage.image(observation: observation)
-        }
-        
-        if let user = notification.user {
-            location = user.location?.location
-            title = user.name ?? "User"
-            image = UIImage(systemName: "person.fill")
-        }
-        
-        if let feedItem = notification.feedItem {
-            location = CLLocation(latitude: feedItem.coordinate.latitude, longitude: feedItem.coordinate.longitude)
-            title = feedItem.title ?? "Feed Item"
-            image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
-            if let url: URL = feedItem.iconURL {
-                let size = 24;
-                
-                let processor = DownsamplingImageProcessor(size: CGSize(width: size, height: size))
-                await KingfisherManager.shared.retrieveImage(with: url, options: [
-                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
-                    .processor(processor),
-                    .scaleFactor(UIScreen.main.scale),
-                    .transition(.fade(1)),
-                    .cacheOriginalImage
-                ]) { result in
-                    switch result {
-                    case .success(let value):
-                        image = value.image.aspectResize(to: CGSize(width: size, height: size));
-                    case .failure(_):
-                        image = UIImage.init(named: "observations")?.withRenderingMode(.alwaysTemplate).colorized(color: globalContainerScheme().colorScheme.primaryColor);
-                    }
-                }
-            }
-        }
-        
         if let notificationLocation = notification.location {
             location = notificationLocation
         }
@@ -267,9 +230,9 @@ class MapDirectionsMixin: NSObject, MapMixin {
         var extraActions: [UIAlertAction] = [];
         await extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             var straightLineNavigationNotification = StraightLineNavigationNotification(coordinate: location.coordinate)
-            straightLineNavigationNotification.observation = notification.observation
-            straightLineNavigationNotification.feedItem = notification.feedItem
-            straightLineNavigationNotification.user = notification.user
+//            straightLineNavigationNotification.observation = notification.observation
+//            straightLineNavigationNotification.feedItem = notification.feedItem
+//            straightLineNavigationNotification.user = notification.user
             straightLineNavigationNotification.title = title
             straightLineNavigationNotification.image = image
             straightLineNavigationNotification.imageURL = notification.imageUrl
@@ -372,18 +335,18 @@ extension MapDirectionsMixin : StraightLineNavigationDelegate {
     }
 }
 
-extension MapDirectionsMixin : NSFetchedResultsControllerDelegate {
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let locationManager = locationManager else {
-            return
-        }
-        
-        if type != .update {
-            return
-        }
-        
-        if let navigable = anObject as? Navigable {
-            straightLineNavigation?.updateNavigationLines(manager: locationManager, destinationCoordinate: navigable.coordinate)
-        }
-    }
-}
+//extension MapDirectionsMixin : NSFetchedResultsControllerDelegate {
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//        guard let locationManager = locationManager else {
+//            return
+//        }
+//        
+//        if type != .update {
+//            return
+//        }
+//        
+//        if let navigable = anObject as? Navigable {
+//            straightLineNavigation?.updateNavigationLines(manager: locationManager, destinationCoordinate: navigable.coordinate)
+//        }
+//    }
+//}

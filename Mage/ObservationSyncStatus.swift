@@ -9,6 +9,84 @@
 import Foundation
 import MaterialComponents.MDCBannerView
 import MaterialComponents.MDCPalettes
+import SwiftUI
+import MAGEStyle
+import MaterialViews
+
+struct ObservationSyncStatusSwiftUI: View {
+    
+    var hasError: Bool?
+    var isDirty: Bool?
+    var errorMessage: String?
+    var pushedDate: Date?
+    var syncing: Bool?
+    var syncNow: ObservationActions
+    
+    var body: some View {
+        Group {
+            if !(isDirty ?? false), !(hasError ?? false), let pushedDate = pushedDate {
+                successfulPush(pushedDate: pushedDate)
+            } else if (hasError ?? false) {
+                error(errorMessage: errorMessage)
+            } else if (syncing ?? false) {
+                syncInProgress()
+            }
+        }
+    }
+    
+    // if the observation is not dirty and has no error, show the push date
+    @ViewBuilder
+    func successfulPush(pushedDate: Date) -> some View {
+        HStack {
+            Image(systemName: "checkmark")
+            Text("Pushed on \((pushedDate as NSDate).formattedDisplay())")
+        }
+        .font(Font.overline)
+        .foregroundColor(Color.favoriteColor)
+        .opacity(0.6)
+        .padding([.top, .bottom], 8)
+    }
+    
+    // if the observation has an error
+    @ViewBuilder
+    func error(errorMessage: String?) -> some View {
+        HStack {
+            Image(systemName: "exclamationmark.circle")
+            VStack {
+                Text("Error Pushing Changes")
+                if let errorMessage = errorMessage, !errorMessage.isEmpty {
+                    Text(errorMessage)
+                }
+            }
+            .font(Font.overline)
+        }
+        
+        .foregroundColor(Color.errorColor)
+        .opacity(0.6)
+        .padding([.top, .bottom], 8)
+    }
+    
+    // If the observation is syncing
+    @ViewBuilder
+    func syncInProgress() -> some View {
+        HStack {
+            Group {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                Text("Changes Queued...")
+            }
+            .font(Font.overline)
+            .foregroundColor(Color.onSurfaceColor)
+            .opacity(0.6)
+            
+            Button {
+                syncNow()
+            } label: {
+                Text("Sync Now")
+            }
+            .buttonStyle(MaterialButtonStyle(type: .text))
+        }
+    }
+}
 
 class ObservationSyncStatus: UIView {
     private var didSetupConstraints = false;
@@ -45,7 +123,6 @@ class ObservationSyncStatus: UIView {
         } else {
             syncStatusView.textView.textColor = scheme.colorScheme.secondaryColor;
             syncStatusView.imageView.tintColor = scheme.colorScheme.secondaryColor;
-
         }
     }
 

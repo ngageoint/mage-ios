@@ -11,7 +11,7 @@ import Kingfisher
 
 @objc class AttachmentUIImageView: UIImageView {
 
-    public var attachment: Attachment? = nil;
+    public var attachment: AttachmentModel? = nil;
     var url: URL? = nil;
     var largeSizeCached: Bool = false;
     public var placeholderIsRealImage: Bool = false;
@@ -71,7 +71,7 @@ import Kingfisher
         self.setImage(url: self.getAttachmentUrl(size: getImageSize()), cacheOnly: cacheOnly, thumbnail: true, indicator: indicator, progressBlock: progressBlock, completionHandler: completionHandler);
     }
     
-    public func setAttachment(attachment: Attachment) {
+    public func setAttachment(attachment: AttachmentModel) {
         self.placeholderIsRealImage = false;
         self.attachment = attachment;
     }

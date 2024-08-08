@@ -15,23 +15,30 @@ struct ObservationImportantViewSwiftUI: View {
     var important: ObservationImportantModel
     
     var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "flag.fill")
-                .fontWeight(.semibold)
-                .padding(.leading, 16)
-                .padding(.top, 8)
-                .padding(.bottom, 8)
-                .frame(width: 32, height: 32)
-            VStack(alignment: .leading, spacing: 8) {
-                Text("\(important.userId ?? "no")")
-                    .overlineText()
-                Text("\(important.reason ?? "no")")
-                    .secondaryText()
+        if important.important {
+            HStack(spacing: 8) {
+                Image(systemName: "flag.fill")
+                    .fontWeight(.semibold)
+                    .padding(.leading, 16)
+                    .padding(.top, 8)
+                    .padding(.bottom, 8)
+                    .frame(width: 32, height: 32)
+                    .foregroundStyle(Color.onSurfaceColor)
+                VStack(alignment: .leading, spacing: 8) {
+                    if let userName = important.userName {
+                        Text(userName)
+                            .overlineText()
+                    }
+                    if let reason = important.reason, !reason.isEmpty {
+                        Text(reason)
+                            .secondaryText()
+                    }
+                }
+                .padding([.top, .bottom], 8)
             }
-            .padding([.top, .bottom], 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.importantColor)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.importantColor)
     }
 }
 

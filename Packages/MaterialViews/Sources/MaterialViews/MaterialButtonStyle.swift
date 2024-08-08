@@ -150,6 +150,7 @@ public struct MaterialFloatingButtonStyle: ButtonStyle {
                     .stroke(Color.primaryColor, lineWidth: borderWidth)
                     .opacity(0.2)
             )
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 
     public init(
@@ -203,7 +204,7 @@ public struct MaterialButtonStyleBackground: View {
                             y: 2)
 
                     // tap effect
-                    Circle()
+                    RoundedRectangle(cornerRadius: cornerRadius)
                         .fill(Color.white)
                         .scaleEffect(isPressed ? scale : 0.0001)
                         .opacity(isPressed ? 0.32 : 0.0)
@@ -244,6 +245,7 @@ public struct MaterialButtonStyle: ButtonStyle {
 
         return configuration
             .label
+            .contentShape(RoundedRectangle(cornerRadius: 22.0))
             .labelStyle(MaterialButtonLabelStyle(color: foregroundColor, size: .mini))
             .frame(minWidth: 44.0, maxWidth: maxWidth ? .infinity : nil, minHeight: 44.0)
             .padding([.trailing, .leading], 8)
@@ -264,6 +266,7 @@ public struct MaterialButtonStyle: ButtonStyle {
                     .stroke(isEnabled ? Color.primaryColor : Color.disabledColor, lineWidth: borderWidth)
                     .opacity(0.2)
             )
+            .animation(.easeInOut(duration: 0.25), value: configuration.isPressed)
     }
 
     public init(type: ButtonType = .text, foregroundColor: Color? = nil, backgroundColor: Color? = nil) {

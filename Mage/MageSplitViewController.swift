@@ -9,6 +9,14 @@
 import Foundation
 
 @objc class MageSplitViewController : UISplitViewController {
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
+    
+    var bottomSheet: MDCBottomSheetController?
+    
     var startStraightLineNavigationObserver: AnyObject?
 
     var scheme: MDCContainerScheming?;
@@ -129,13 +137,17 @@ extension MageSplitViewController: UISplitViewControllerDelegate {
 }
 
 extension MageSplitViewController: ObservationActionsDelegate & UserActionsDelegate & AttachmentSelectionDelegate & FeedItemSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate {
-    func selectedAttachment(_ attachment: Attachment!) {
-        if let attachmentCoordinator = self.attachmentCoordinator {
-            attachmentCoordinator.setAttachment(attachment: attachment);
-        } else if let nav = self.mapViewController?.navigationController {
-            self.attachmentCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme)
-            self.childCoordinators.append(self.attachmentCoordinator!);
-            self.attachmentCoordinator?.start();
+    func selectedAttachment(_ attachmentUri: URL!) {
+        Task {
+            if let attachment = await attachmentRepository.getAttachment(attachmentUri: attachmentUri) {
+                if let attachmentCoordinator = self.attachmentCoordinator {
+                    attachmentCoordinator.setAttachment(attachment: attachment);
+                } else if let nav = self.mapViewController?.navigationController {
+                    self.attachmentCoordinator = AttachmentViewCoordinator(rootViewController: nav, attachment: attachment, delegate: self, scheme: scheme)
+                    self.childCoordinators.append(self.attachmentCoordinator!);
+                    self.attachmentCoordinator?.start();
+                }
+            }
         }
     }
     
@@ -147,7 +159,7 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
         }
     }
     
-    func selectedNotCachedAttachment(_ attachment: Attachment!, completionHandler handler: ((Bool) -> Void)!) {
+    func selectedNotCachedAttachment(_ attachmentUri: URL!, completionHandler handler: ((Bool) -> Void)!) {
         
     }
     
@@ -157,17 +169,45 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func selectedObservation(_ observation: Observation!) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);
+        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation())) { favoritesModel in
+            guard let favoritesModel = favoritesModel,
+                  let favoriteUsers = favoritesModel.favoriteUsers
+            else {
+                return
+            }
+            self.showFavorites(userIds: favoriteUsers)
+        } moreActions: {
+            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
+            actionsSheet.applyTheme(withContainerScheme: self.scheme);
+            self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+            self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
+        } editObservation: { observationUri in
+            Task {
+                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
+                    return;
+                }
+                let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
+                observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
+                observationEditCoordinator.start();
+                self.childCoordinators.append(observationEditCoordinator)
+
+            }
+        } selectedAttachment: { attachmentUri in
+            self.selectedAttachment(attachmentUri)
+        } selectedUnsentAttachment: { localPath, contentType in
+            
+        }
+
+        let ovc2 = SwiftUIViewController(swiftUIView: observationView)
+        self.masterViewController?.pushViewController(ovc2, animated: true)
     }
     
     func selectedObservation(_ observation: Observation!, region: MKCoordinateRegion) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);    }
+        selectedObservation(observation)
+    }
     
     func observationDetailSelected(_ observation: Observation!) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);
+        selectedObservation(observation)
     }
     
     func selectedUser(_ user: User!) {
@@ -186,8 +226,7 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func viewObservation(_ observation: Observation) {
-        let observationViewController: ObservationViewCardCollectionViewController = ObservationViewCardCollectionViewController(observation: observation, scheme: self.scheme!);
-        self.masterViewController?.pushViewController(observationViewController, animated: true);
+        selectedObservation(observation)
     }
     
     func viewUser(_ user: User) {
@@ -198,5 +237,31 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
         let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
+    
+    func showFavorites(userIds: [String]) {
+        if (userIds.count != 0) {
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            locationViewController.title = "Favorited By";
+            self.masterViewController?.pushViewController(locationViewController, animated: true);
+        }
+    }
 
+}
+
+extension MageSplitViewController: ObservationEditDelegate {
+    func editCancel(_ coordinator: NSObject) {
+        removeChildCoordinator(coordinator);
+    }
+    
+    func editComplete(_ observation: Observation, coordinator: NSObject) {
+        removeChildCoordinator(coordinator);
+    }
+    
+    func removeChildCoordinator(_ coordinator: NSObject) {
+        if let index = self.childCoordinators.firstIndex(where: { (child) -> Bool in
+            return coordinator == child;
+        }) {
+            self.childCoordinators.remove(at: index);
+        }
+    }
 }

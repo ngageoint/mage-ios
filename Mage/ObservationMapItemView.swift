@@ -13,8 +13,7 @@ import MAGEStyle
 import MapFramework
 
 struct ObservationMapItemView: View {
-    @Injected(\.observationMapItemRepository)
-    var repository: ObservationMapItemRepository
+
     @StateObject var viewModel: ObservationMapItemViewModel = ObservationMapItemViewModel()
     @State var observationUri: URL
 
@@ -36,7 +35,6 @@ struct ObservationMapItemView: View {
             mapState.coordinateCenter = viewModel.currentItem?.coordinate
         }
         .onAppear {
-            viewModel.repository = repository
             viewModel.observationUri = observationUri
             mixins.addMixin(OnlineLayerMapMixin())
             mixins.addMixin(ObservationMap(mapFeatureRepository: ObservationMapFeatureRepository(observationUri: observationUri)))
@@ -61,7 +59,7 @@ struct ObservationMapItemView: View {
                         .foregroundColor(Color.onSurfaceColor.opacity(0.6))
                     Spacer()
                 }
-            } else {
+            } else if viewModel.observationMapItems.count > 1 {
                 Button(
                     action: {
                         withAnimation {

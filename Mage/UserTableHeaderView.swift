@@ -389,10 +389,10 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
                     case .failure(_):
                         image = UIImage(systemName: "person.fill")?.withRenderingMode(.alwaysTemplate);
                     }
-                    NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: self.user))
+                    NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location))
                 }
             } else {
-                NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location, user: self.user))
+                NotificationCenter.default.post(name: .StartStraightLineNavigation, object:StraightLineNavigationNotification(image: image, coordinate: location))
             }
         }))
         

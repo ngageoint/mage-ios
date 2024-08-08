@@ -8,6 +8,28 @@
 import Foundation
 import SwiftUI
 
+public struct CardModifier: ViewModifier {
+
+    public func body(content: Content) -> some View {
+        content
+            .background(Color.surfaceColor)
+            .mask(Rectangle()
+                .cornerRadius(5.0)
+            )
+            .overlay( /// apply a rounded border
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(Color.onSurfaceColor.opacity(0.15), lineWidth: 0.25)
+            )
+    }
+
+}
+
+extension View {
+    public func card() -> some View {
+        modifier(CardModifier())
+    }
+}
+
 public struct OverlineText: ViewModifier {
     public func body(content: Content) -> some View {
         content

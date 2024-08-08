@@ -7,6 +7,15 @@
 //
 
 import Foundation
+import SwiftUI
+
+struct ObservationSummary: View {
+    
+    var body: some View {
+        Text("HI")
+    }
+    
+}
 
 class ObservationSummaryView: CommonSummaryView<Observation, ObservationActionsDelegate> {
     

@@ -26,6 +26,8 @@ protocol UserLocalDataSource {
     func observeUser(
         userUri: URL?
     ) -> AnyPublisher<UserModel, Never>?
+    
+    func getUser(remoteId: String) -> User?
 }
 
 class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, ObservableObject {
@@ -44,6 +46,13 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
     
     func getCurrentUser() -> User? {
         User.fetchCurrentUser(context: NSManagedObjectContext.mr_default())
+    }
+    
+    func getUser(remoteId: String) -> User? {
+        let context = NSManagedObjectContext.mr_default()
+        return context.performAndWait {
+            return context.fetchFirst(User.self, key: "remoteId", value: remoteId)
+        }
     }
     
     func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>? {

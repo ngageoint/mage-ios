@@ -17,7 +17,7 @@ import UniformTypeIdentifiers
 
 protocol AttachmentCreationCoordinatorDelegate: AnyObject {
     // can be removed after server 5
-    func attachmentCreated(attachment: Attachment);
+    func attachmentCreated(attachment: AttachmentModel);
     
     func attachmentCreated(fieldValue: [String : AnyHashable]);
     func attachmentCreationCancelled();
@@ -78,7 +78,7 @@ class AttachmentCreationCoordinator: NSObject {
                 attachmentJson["dirty"] = 1;
                 if let attachment = Attachment.attachment(json: attachmentJson, context: (observation.managedObjectContext)!) {
                     attachment.observation = observation;
-                    delegate?.attachmentCreated(attachment: attachment);
+                    delegate?.attachmentCreated(attachment: AttachmentModel(attachment: attachment));
                 }
             }
         }
