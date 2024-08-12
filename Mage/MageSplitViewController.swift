@@ -211,17 +211,17 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func selectedUser(_ user: User!) {
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
     func selectedUser(_ user: User!, region: MKCoordinateRegion) {
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
     func userDetailSelected(_ user: User!) {
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
@@ -234,7 +234,7 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
             // already showing
             return
         }
-        let userViewController: UserViewController = UserViewController(user: user, scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     

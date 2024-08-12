@@ -12,7 +12,12 @@ import DataSourceDefinition
 
 enum CoordinateActions {
     case copyCoordinate(coordinate: CLLocationCoordinate2D?)
-    case navigateTo(coordinate: CLLocationCoordinate2D?, itemKey: String?, dataSource: any DataSourceDefinition)
+    case navigateTo(
+        coordinate: CLLocationCoordinate2D?,
+        itemKey: String?,
+        dataSource: any DataSourceDefinition,
+        includeCopy: Bool = false
+    )
     
     func callAsFunction() {
         switch (self) {
@@ -29,7 +34,7 @@ enum CoordinateActions {
                 )
             )
                         
-        case .navigateTo(coordinate: let coordinate, itemKey: let itemKey, dataSource: let dataSource):
+        case .navigateTo(coordinate: let coordinate, itemKey: let itemKey, dataSource: let dataSource, includeCopy: let includeCopy):
             NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
             NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
             
@@ -38,7 +43,8 @@ enum CoordinateActions {
                     let notification = DirectionsToItemNotification(
                         location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude),
                         itemKey: itemKey,
-                        dataSource: dataSource
+                        dataSource: dataSource,
+                        includeCopy: includeCopy
                     )
                     NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 }
@@ -53,7 +59,7 @@ enum CoordinateActions {
             if let coordinate = coordinate, CLLocationCoordinate2DIsValid(coordinate) {
                 return coordinate
             }
-        case .navigateTo(coordinate: let coordinate, itemKey: _, dataSource: _):
+        case .navigateTo(coordinate: let coordinate, itemKey: _, dataSource: _, includeCopy: _):
             if let coordinate = coordinate, CLLocationCoordinate2DIsValid(coordinate) {
                 return coordinate
             }

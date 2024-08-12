@@ -206,7 +206,7 @@ class MainMageMapView:
     func viewUser(_ user: User) {
         bottomSheet?.dismiss(animated: true, completion: nil);
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let uvc = UserViewController(user: user, scheme: scheme)
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme)
         navigationController?.pushViewController(uvc, animated: true)
     }
     
@@ -229,7 +229,7 @@ class MainMageMapView:
     func viewUserUri(_ userUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         if let user = await userRepository.getUser(userUri: userUri) {
-            let uvc = UserViewController(user: user, scheme: scheme)
+            let uvc = UserViewController(userModel: user, scheme: scheme)
             navigationController?.pushViewController(uvc, animated: true)
         }
     }

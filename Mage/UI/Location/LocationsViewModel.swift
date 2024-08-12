@@ -1,5 +1,5 @@
 //
-//  ObservationsViewModel.swift
+//  LocationsViewModel.swift
 //  MAGE
 //
 //  Created by Dan Barela on 8/8/24.
@@ -10,47 +10,16 @@ import Foundation
 import Combine
 import SwiftUI
 
-enum ObservationItem: Hashable, Identifiable {
-    var id: String {
-        switch self {
-        case .listItem(let observationId):
-            return observationId.absoluteString
-        case .sectionHeader(let header):
-            return header
-        }
-    }
-
-    case listItem(_ observationId: URL)
-    case sectionHeader(header: String)
-}
-
-class ObservationsViewModel: ObservableObject {
-    @Injected(\.observationRepository)
-    var repository: ObservationRepository
-    
-    @Injected(\.userRepository)
-    var userRepository: UserRepository
-    
-    @Published private(set) var state: State = .loading
-    @Published var loaded: Bool = false
-    private var disposables = Set<AnyCancellable>()
-    
-    var currentUserCanEdit: Bool {
-        self.currentUser?.hasEditPermissions ?? false
-    }
-    
-    lazy var currentUser: UserModel? = {
-        userRepository.getCurrentUser()
-    }()
-        
-    private let trigger = Trigger()
+class LocationsViewModel: ObservableObject {
+    @Injected(\.locationRepository)
+    var repository: LocationRepository
     
     enum State {
         case loading
-        case loaded(rows: [ObservationItem])
+        case loaded(rows: [URIItem])
         case failure(error: Error)
         
-        fileprivate var rows: [ObservationItem] {
+        fileprivate var rows: [URIItem] {
             if case let .loaded(rows: rows) = self {
                 return rows
             } else {
@@ -59,6 +28,12 @@ class ObservationsViewModel: ObservableObject {
         }
     }
     
+    @Published private(set) var state: State = .loading
+    @Published var userIds: [URL] = []
+    @Published var loaded: Bool = false
+    private var disposables = Set<AnyCancellable>()
+        
+    private let trigger = Trigger()
     private enum TriggerId: Hashable {
         case reload
         case loadMore
@@ -72,11 +47,11 @@ class ObservationsViewModel: ObservableObject {
         trigger.activate(for: TriggerId.loadMore)
     }
     
-    func fetchObservations(limit: Int = 100) {
+    func fetchLocations(limit: Int = 100) {
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, repository] in
-            repository.observations(
+            repository.locations(
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([]) { $0 + $1 }

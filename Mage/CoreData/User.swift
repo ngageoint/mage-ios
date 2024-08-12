@@ -14,31 +14,12 @@ import Kingfisher
     
     var cllocation: CLLocation? {
         get {
-            if remoteId == UserDefaults.standard.currentUserId {
-                let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
-                if (locations.count != 0) {
-                    let location: GPSLocation = locations[0]
-                    return location.cllocation
-                }
-            } else {
-                return location?.location
-            }
-            
-            return nil
+            return location?.location
         }
     }
     
     var coordinate: CLLocationCoordinate2D {
         get {
-            if remoteId == UserDefaults.standard.currentUserId {
-                let locations: [GPSLocation] = GPSLocation.fetchGPSLocations(limit: 1, context: NSManagedObjectContext.mr_default())
-                if (locations.count != 0) {
-                    let location: GPSLocation = locations[0]
-                    return location.cllocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
-                }
-                    
-                return CLLocationCoordinate2D(latitude: 0, longitude: 0)
-            }
             return location?.location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
         }
     }

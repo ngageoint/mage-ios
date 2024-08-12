@@ -186,7 +186,8 @@ class ObservationListActionsView: UIView {
             let notification = DirectionsToItemNotification(
                 location: self.observation?.location,
                 itemKey: self.observation?.objectID.uriRepresentation().absoluteString,
-                dataSource: DataSources.observation
+                dataSource: DataSources.observation,
+                includeCopy: false
             )
             NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
         }

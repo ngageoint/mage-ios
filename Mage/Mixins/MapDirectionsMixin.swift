@@ -248,6 +248,13 @@ class MapDirectionsMixin: NSObject, MapMixin {
         
         let alert = await UIAlertController(title: "Navigate With...", message: nil, preferredStyle: .actionSheet);
         
+        if notification.includeCopy {
+            await alert.addAction(UIAlertAction(title: "Copy To Clipboard", style: .default, handler: { (action) in
+                    UIPasteboard.general.string = location.coordinate.toDisplay()
+                    MDCSnackbarManager.default.show(MDCSnackbarMessage(text: "Location \(location.coordinate.toDisplay()) copied to clipboard"))
+            }))
+        }
+        
         await alert.addAction(UIAlertAction(title: "Apple Maps", style: .default, handler: { (action) in
             UIApplication.shared.open(appleMapsUrl!, options: [:]) { (success) in
                 print("opened? \(success)")

@@ -171,7 +171,7 @@ extension ObservationListWrapperViewController: ObservationActionsDelegate {
     
     func viewUser(_ user: User) {
         self.bottomSheet?.dismiss(animated: true, completion: nil);
-        let uvc = UserViewController(user: user, scheme: scheme)
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme)
         navigationController?.pushViewController(uvc, animated: true)
     }
     

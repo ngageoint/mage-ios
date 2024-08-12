@@ -67,7 +67,7 @@ class ObservationViewViewModel: ObservableObject {
         observationImportantModel?.important ?? false
     }
     
-    lazy var currentUser: User? = {
+    lazy var currentUser: UserModel? = {
         userRepository.getCurrentUser()
     }()
     
@@ -103,29 +103,17 @@ class ObservationViewViewModel: ObservableObject {
                     self?.event = self?.eventRepository.getEvent(eventId: eventId as NSNumber)
                 }
                 if let userId = observationModel.userId {
-                    self?.user = await self?.userRepository.getUser(userUri: userId).map({ user in
-                        UserModel(user: user)
-                    })
+                    self?.user = await self?.userRepository.getUser(userUri: userId)
                 }
-                self?.currentUserCanEdit = self?.currentUser?.hasEditPermission ?? false
-                
-                if let userRemoteId = self?.currentUser?.remoteId,
-                   let acl = self?.event?.acl,
-                   let userAcl = acl[userRemoteId] as? [String : Any],
-                   let userPermissions = userAcl[PermissionsKey.permissions.key] as? [String] {
-                    if (userPermissions.contains(PermissionsKey.update.key)) {
-                        self?.currentUserCanUpdateImportant = true
-                    }
+                self?.currentUserCanEdit = self?.currentUser?.hasEditPermissions ?? false
+                if let eventId = observationModel.eventId,
+                   let currentUserUri = self?.currentUser?.userId
+                {
+                    self?.currentUserCanUpdateImportant = await self?.userRepository.canUserUpdateImportant(
+                        eventId: eventId as NSNumber,
+                        userUri: currentUserUri
+                    ) ?? false
                 }
-                
-                // if the user has UPDATE_EVENT permission
-                if let role = self?.currentUser?.role, let rolePermissions = role.permissions {
-                    if rolePermissions.contains(PermissionsKey.UPDATE_EVENT.key) {
-                        self?.currentUserCanUpdateImportant = true
-                    }
-                }
-
-                self?.currentUserCanUpdateImportant = false
             }
             
             self?.setupFavorites(observationModel: observationModel)

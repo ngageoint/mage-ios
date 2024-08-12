@@ -158,7 +158,7 @@ class UserActionsView: UIView {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
         // let the bottom sheet dismiss
-        var notification = DirectionsToItemNotification(itemKey: user?.objectID.uriRepresentation().absoluteString, dataSource: DataSources.user)
+        var notification = DirectionsToItemNotification(itemKey: user?.objectID.uriRepresentation().absoluteString, dataSource: DataSources.user, includeCopy: false)
         if let cacheIconUrl = user?.cacheIconUrl {
             notification.imageUrl = URL(string: cacheIconUrl)
         }

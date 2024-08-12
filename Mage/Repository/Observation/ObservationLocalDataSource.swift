@@ -40,6 +40,10 @@ protocol ObservationLocalDataSource {
     func observations(
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<[ObservationItem], Error>
+    func userObservations(
+        userUri: URL,
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[ObservationItem], Error>
 }
 
 struct ObservationModelPage {
@@ -53,10 +57,24 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         NSManagedObjectContext.mr_default()
     }()
     
+    func userObservations(
+        userUri: URL,
+        paginatedBy paginator: Trigger.Signal? = nil
+    ) -> AnyPublisher<[ObservationItem], Error> {
+        uris(
+            at: nil,
+            currentHeader: nil,
+            userUri: userUri,
+            paginatedBy: paginator
+        )
+        .map(\.observationList)
+        .eraseToAnyPublisher()
+    }
+    
     func observations(
         paginatedBy paginator: Trigger.Signal? = nil
     ) -> AnyPublisher<[ObservationItem], Error> {
-        return observations(
+        return uris(
             at: nil,
             currentHeader: nil,
             paginatedBy: paginator
@@ -65,20 +83,23 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         .eraseToAnyPublisher()
     }
     
-    func observations(
+    private func uris(
         at page: Page?,
         currentHeader: String?,
+        userUri: URL? = nil,
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<ObservationModelPage, Error> {
-        return observations(
+        return uris(
             at: page,
-            currentHeader: currentHeader
+            currentHeader: currentHeader,
+            userUri: userUri
         )
         .map { result -> AnyPublisher<ObservationModelPage, Error> in
             if let paginator = paginator, let next = result.next {
-                return self.observations(
+                return self.uris(
                     at: next,
                     currentHeader: result.currentHeader,
+                    userUri: userUri,
                     paginatedBy: paginator
                 )
                 .wait(untilOutputFrom: paginator)
@@ -95,24 +116,39 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         .eraseToAnyPublisher()
     }
     
-    func observations(
+    private func uris(
         at page: Page?,
-        currentHeader: String?
+        currentHeader: String?,
+        userUri: URL? = nil
     ) -> AnyPublisher<ObservationModelPage, Error> {
-
-        let request = Observation.fetchRequest()
-        let predicates: [NSPredicate] = Observations.getPredicatesForObservations() as? [NSPredicate] ?? []
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-        request.predicate = predicate
-
-        request.includesSubentities = false
-        request.includesPropertyValues = false
-        request.fetchLimit = 100
-        request.fetchOffset = (page ?? 0) * request.fetchLimit
-        request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
         let previousHeader: String? = currentHeader
         var observations: [ObservationItem] = []
+        
         context.performAndWait {
+            let request = Observation.fetchRequest()
+            let predicates: [NSPredicate] = {
+                if let userUri = userUri {
+                    if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri),
+                       let user = try? context.existingObject(with: id) as? User
+                    {
+                        return [
+                            NSPredicate(format: "user == %@ AND eventId == %@", argumentArray: [user, Server.currentEventId() ?? -1])
+                        ]
+                    }
+                } else {
+                    return Observations.getPredicatesForObservations() as? [NSPredicate] ?? []
+                }
+                return []
+            }()
+            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            request.predicate = predicate
+
+            request.includesSubentities = false
+            request.includesPropertyValues = false
+            request.fetchLimit = 100
+            request.fetchOffset = (page ?? 0) * request.fetchLimit
+            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+
             if let fetched = context.fetch(request: request) {
 
                 observations = fetched.flatMap { observation in
