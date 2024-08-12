@@ -20,7 +20,7 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableArray *predicates = [NSMutableArray arrayWithObjects:
                                   [NSPredicate predicateWithFormat:@"eventId == %@", [Server currentEventId]],
-                                  [NSPredicate predicateWithFormat:@"user.remoteId != %@", [prefs valueForKey:@"currentUserId"]],
+//                                  [NSPredicate predicateWithFormat:@"user.remoteId != %@", [prefs valueForKey:@"currentUserId"]],
                                   nil];
 
     NSPredicate *timePredicate = [TimeFilter getLocationTimePredicateForField:@"timestamp"];

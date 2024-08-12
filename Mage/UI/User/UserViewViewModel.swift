@@ -1,48 +1,33 @@
 //
-//  ObservationsViewModel.swift
+//  UserViewViewModel.swift
 //  MAGE
 //
-//  Created by Dan Barela on 8/8/24.
+//  Created by Dan Barela on 8/9/24.
 //  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import Foundation
-import Combine
 import SwiftUI
+import Combine
 
-enum ObservationItem: Hashable, Identifiable {
-    var id: String {
-        switch self {
-        case .listItem(let observationId):
-            return observationId.absoluteString
-        case .sectionHeader(let header):
-            return header
-        }
-    }
-
-    case listItem(_ observationId: URL)
-    case sectionHeader(header: String)
-}
-
-class ObservationsViewModel: ObservableObject {
-    @Injected(\.observationRepository)
-    var repository: ObservationRepository
-    
+class UserViewViewModel: ObservableObject {
     @Injected(\.userRepository)
     var userRepository: UserRepository
+    
+    @Injected(\.observationRepository)
+    var observationRepository: ObservationRepository
+    
+    @Published
+    var user: UserModel?
+    
+    var currentUserIsMe: Bool {
+        UserDefaults.standard.currentUserId == user?.remoteId
+    }
     
     @Published private(set) var state: State = .loading
     @Published var loaded: Bool = false
     private var disposables = Set<AnyCancellable>()
     
-    var currentUserCanEdit: Bool {
-        self.currentUser?.hasEditPermissions ?? false
-    }
-    
-    lazy var currentUser: UserModel? = {
-        userRepository.getCurrentUser()
-    }()
-        
     private let trigger = Trigger()
     
     enum State {
@@ -72,11 +57,23 @@ class ObservationsViewModel: ObservableObject {
         trigger.activate(for: TriggerId.loadMore)
     }
     
+    var uri: URL
+    
+    init(uri: URL) {
+        self.uri = uri
+        
+        userRepository.observeUser(userUri: uri)?
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .assign(to: &$user)
+    }
+    
     func fetchObservations(limit: Int = 100) {
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
-        ) { [trigger, repository] in
-            repository.observations(
+        ) { [trigger, observationRepository, uri] in
+            observationRepository.userObservations(
+                userUri: uri,
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([]) { $0 + $1 }

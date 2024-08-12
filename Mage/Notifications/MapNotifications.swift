@@ -32,6 +32,7 @@ struct DirectionsToItemNotification {
     
     var itemKey: String?
     var dataSource: any DataSourceDefinition
+    var includeCopy: Bool
 }
 
 struct DataSourceUpdatedNotification {

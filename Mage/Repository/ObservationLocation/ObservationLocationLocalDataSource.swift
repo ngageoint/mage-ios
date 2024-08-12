@@ -51,6 +51,9 @@ protocol ObservationLocationLocalDataSource {
         formId: String,
         fieldName: String
     ) async -> [ObservationMapItem]?
+    func getObservationMapItems(
+        userUri: URL
+    ) async -> [ObservationMapItem]?
 }
 
 class ObservationLocationCoreDataDataSource: CoreDataDataSource, ObservationLocationLocalDataSource {
@@ -98,6 +101,23 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource, ObservationLoca
                     NSPredicate(format: "observationFormId == %@", formId),
                     NSPredicate(format: "fieldName == %@", fieldName)
                 ])
+                let fetchRequest = ObservationLocation.fetchRequest()
+                fetchRequest.predicate = predicate
+                let results = context.fetch(request: fetchRequest)
+                return results?.compactMap({ observationLocation in
+                    ObservationMapItem(observation: observationLocation)
+                })
+            }
+            return []
+        }
+    }
+    
+    func getObservationMapItems(userUri: URL) async -> [ObservationMapItem]? {
+        let context = NSManagedObjectContext.mr_default()
+        return await context.perform {
+            if let userObjectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri)
+            {
+                let predicate = NSPredicate(format: "observation.user == %@", userObjectId)
                 let fetchRequest = ObservationLocation.fetchRequest()
                 fetchRequest.predicate = predicate
                 let results = context.fetch(request: fetchRequest)

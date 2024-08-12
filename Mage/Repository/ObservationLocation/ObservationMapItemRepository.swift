@@ -40,4 +40,10 @@ class ObservationMapItemRepository: ObservableObject {
             fieldName: fieldName
         ) ?? []
     }
+    
+    func getMapItems(userUri: URL) async -> [ObservationMapItem] {
+        return await localDataSource.getObservationMapItems(
+            userUri: userUri
+        ) ?? []
+    }
 }

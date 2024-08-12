@@ -118,7 +118,7 @@ class FeatureActionsView: UIView {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
         // let the bottom sheet dismiss
-        var notification = DirectionsToItemNotification(dataSource: DataSources.featureItem)
+        var notification = DirectionsToItemNotification(dataSource: DataSources.featureItem, includeCopy: false)
         notification.imageUrl = featureItem?.iconURL
         notification.location = CLLocation(latitude: location.latitude, longitude: location.longitude)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {

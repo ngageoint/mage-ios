@@ -15,8 +15,6 @@ import MaterialViews
 struct ObservationList: View {
     @StateObject var viewModel: ObservationsViewModel = ObservationsViewModel()
 
-    @State var sortOpen: Bool = false
-    @State var filterOpen: Bool = false
     var selectedAttachment: (_ attachmentUri: URL) -> Void
     var selectedObservation: (_ observationUri: URL) -> Void
     var createNew: () -> Void
@@ -50,14 +48,17 @@ struct ObservationList: View {
                 .background(Color.backgroundColor)
                 .transition(AnyTransition.opacity)
             case let .loaded(rows: rows):
-                    List(rows) { asamItem in
-                        switch asamItem {
+                    List(rows) { uriItem in
+                        switch uriItem {
                         case .listItem(let uri):
-                            VStack {
-                                ObservationSummaryViewSwiftUI(
-                                    viewModel: ObservationListViewModel(uri: uri),
-                                    selectedAttachment: selectedAttachment
-                                )
+                            ObservationSummaryViewSwiftUI(
+                                viewModel: ObservationListViewModel(uri: uri),
+                                selectedAttachment: selectedAttachment
+                            )
+                            .onAppear {
+                                if rows.last == uriItem {
+                                    viewModel.loadMore()
+                                }
                             }
                             .onTapGesture {
                                 selectedObservation(uri)
@@ -79,7 +80,7 @@ struct ObservationList: View {
                                 Image("outline_not_listed_location")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: 200)
+                                    .frame(maxWidth: 200, maxHeight: 200)
                                     .padding([.trailing, .leading], 24)
                                     .foregroundColor(Color.onSurfaceColor.opacity(0.45))
                                 Spacer()

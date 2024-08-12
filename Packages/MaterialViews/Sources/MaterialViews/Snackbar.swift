@@ -11,9 +11,9 @@ import MAGEStyle
 import ViewExtensions
 
 public struct SnackbarModel {
-    let message: String?
-    let actionText: String?
-    let action: (() -> Void)?
+    public let message: String?
+    public let actionText: String?
+    public let action: (() -> Void)?
 
     public init(message: String?) {
         self.init(message: message, actionText: nil, action: nil)

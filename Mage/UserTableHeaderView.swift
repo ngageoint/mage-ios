@@ -215,7 +215,7 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
         return emailLabel;
     }()
     
-    convenience init(user: User, scheme: MDCContainerScheming?) {
+    convenience init(user: User?, scheme: MDCContainerScheming?) {
         self.init(frame: CGRect.zero);
         self.scheme = scheme;
         self.user = user
@@ -280,9 +280,12 @@ class UserTableHeaderView : UIView, UINavigationControllerDelegate {
     func stop() {
     }
     
-    func populate(user: User) {
+    func populate(user: User?) {
         layoutView();
         self.user = user;
+        guard let user = user else {
+            return
+        }
         currentUserIsMe = UserDefaults.standard.currentUserId == user.remoteId;
         
         nameField.text = user.name;

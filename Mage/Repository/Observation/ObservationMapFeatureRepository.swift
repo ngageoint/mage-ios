@@ -21,11 +21,17 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
     var observationUri: URL?
     var observationFormId: String?
     var fieldName: String?
+    
+    var userUri: URL?
 
     init(observationUri: URL, observationFormId: String? = nil, fieldName: String? = nil) {
         self.observationUri = observationUri
         self.observationFormId = observationFormId
         self.fieldName = fieldName
+    }
+    
+    init(userUri: URL) {
+        self.userUri = userUri
     }
     
     func getAnnotationsAndOverlays(zoom: Int, region: MKCoordinateRegion? = nil) async -> AnnotationsAndOverlays {
@@ -40,6 +46,10 @@ class ObservationMapFeatureRepository: MapFeatureRepository, ObservableObject {
                 } else {
                     return await mapItemRepository.getMapItems(observationUri: observationUri)
                 }
+            } else if let userUri = userUri {
+                return await mapItemRepository.getMapItems(
+                    userUri: userUri
+                )
             }
             return []
         }()

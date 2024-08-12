@@ -5,6 +5,7 @@
 
 import Foundation
 import Kingfisher
+import MaterialViews
 
 @objc class MageRootViewController : UITabBarController {
     @Injected(\.attachmentRepository)
@@ -16,6 +17,7 @@ import Kingfisher
     var scheme: MDCContainerScheming?;
     var feedViewControllers: [UINavigationController] = [];
     var mapRequestFocusObserver: Any?
+    var snackbarNotificationObserver: Any?
     var attachmentViewCoordinator: AttachmentViewCoordinator?
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
@@ -31,7 +33,7 @@ import Kingfisher
     }();
     
     private lazy var locationsTab: UINavigationController = {
-        let locationTableViewController: LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
+        let locationTableViewController = LocationListWrapperViewController(scheme: scheme)
         
         let nc = UINavigationController()
         nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2);
@@ -67,7 +69,8 @@ import Kingfisher
         guard let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
             return nil
         }
-        let uvc = UserViewController(user: user, scheme: self.scheme);
+//        return nil
+        let uvc = UserViewWrapperViewController(userUri: user.objectID.uriRepresentation(), scheme: scheme)
         let nc = UINavigationController(rootViewController: uvc);
         nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3);
         return nc;
@@ -131,6 +134,14 @@ import Kingfisher
             self?.selectedViewController = self?.mapTab;
             
         }
+        
+        snackbarNotificationObserver = NotificationCenter.default.addObserver(forName: .SnackbarNotification, object: nil, queue: .main, using: { notification in
+            if let object = notification.object as? SnackbarNotification,
+               let message = object.snackbarModel?.message
+            {
+                MDCSnackbarManager.default.show(MDCSnackbarMessage(text: message))
+            }
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -142,6 +153,10 @@ import Kingfisher
         offlineObservationManager.delegate = nil
         if let mapRequestFocusObserver = mapRequestFocusObserver {
             NotificationCenter.default.removeObserver(mapRequestFocusObserver, name: .MapRequestFocus, object: nil);
+        }
+        
+        if let snackbarNotificationObserver = snackbarNotificationObserver {
+            NotificationCenter.default.removeObserver(snackbarNotificationObserver, name: .SnackbarNotification, object: nil);
         }
         self.delegate = nil
         UserDefaults.standard.removeObserver(self, forKeyPath: "loginType")

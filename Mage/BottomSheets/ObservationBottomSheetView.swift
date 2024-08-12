@@ -32,7 +32,7 @@ class ObservationLocationBottomSheetViewModel: ObservableObject {
     @Published
     var observationMapItem: ObservationMapItem?
     
-    lazy var currentUser: User? = {
+    lazy var currentUser: UserModel? = {
         userRepository.getCurrentUser()
     }()
     

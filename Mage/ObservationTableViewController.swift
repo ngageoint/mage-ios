@@ -401,7 +401,7 @@ extension ObservationTableViewController: ObservationActionsDelegate {
     
     func viewUser(_ user: User) {
         bottomSheet?.dismiss(animated: true, completion: nil);
-        let uvc = UserViewController(user: user, scheme: self.scheme!);
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
         self.navigationController?.pushViewController(uvc, animated: true);
     }
     

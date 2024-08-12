@@ -158,9 +158,6 @@ import MagicalRecord
                     guard let userId = userJson[UserKey.id.key] as? String, let locations = userJson[UserKey.locations.key] as? [[AnyHashable : Any]] else {
                         continue;
                     }
-                    if (currentUser?.remoteId == userId) {
-                        continue;
-                    }
                     if let user = userIdMap[userId] {
                         if let location = user.location {
                             // already exists in core data, lets update the object we have

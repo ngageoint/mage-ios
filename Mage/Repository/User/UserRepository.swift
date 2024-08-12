@@ -33,6 +33,7 @@ struct UserModel: Equatable, Hashable {
     var username: String?
     var timestamp: Date?
     var hasEditPermissions: Bool = false
+    var cllocation: CLLocation?
     
     init(user: User) {
         remoteId = user.remoteId
@@ -46,18 +47,22 @@ struct UserModel: Equatable, Hashable {
         timestamp = user.location?.timestamp
         userId = user.objectID.uriRepresentation()
         hasEditPermissions = user.hasEditPermission
+        cllocation = user.cllocation
     }
 }
 
 class UserRepository: ObservableObject {
+    @Injected(\.eventRepository)
+    var eventRepository: EventRepository
+    
     @Injected(\.userLocalDataSource)
     var localDataSource: UserLocalDataSource
 
-    func getUser(userUri: URL?) async -> User? {
+    func getUser(userUri: URL?) async -> UserModel? {
         await localDataSource.getUser(userUri: userUri)
     }
     
-    func getCurrentUser() -> User? {
+    func getCurrentUser() -> UserModel? {
         localDataSource.getCurrentUser()
     }
     
@@ -65,7 +70,23 @@ class UserRepository: ObservableObject {
         localDataSource.observeUser(userUri: userUri)
     }
     
-    func getUser(remoteId: String) -> User? {
+    func getUser(remoteId: String) -> UserModel? {
         localDataSource.getUser(remoteId: remoteId)
+    }
+    
+    func users(
+        paginatedBy paginator: Trigger.Signal? = nil
+    ) -> AnyPublisher<[URIItem], Error> {
+        localDataSource.users(paginatedBy: paginator)
+    }
+    
+    func canUserUpdateImportant(
+        eventId: NSNumber,
+        userUri: URL
+    ) async -> Bool {
+        if let event = eventRepository.getEvent(eventId: eventId) {
+            return await localDataSource.canUserUpdateImportant(event: event, userUri: userUri)
+        }
+        return false
     }
 }
