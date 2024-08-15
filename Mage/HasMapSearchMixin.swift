@@ -54,13 +54,15 @@ class HasMapSearchMixin: NSObject, MapMixin {
     }
     
     func setupMixin() {
-        if rootView.arrangedSubviews.count < indexInView {
-            rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
-        } else {
-            rootView.insertArrangedSubview(mapSearchButton, at: indexInView)
+        if UserDefaults.standard.showMapSearch {
+            if rootView.arrangedSubviews.count < indexInView {
+                rootView.insertArrangedSubview(mapSearchButton, at: rootView.arrangedSubviews.count)
+            } else {
+                rootView.insertArrangedSubview(mapSearchButton, at: indexInView)
+            }
+            
+            applyTheme(scheme: hasMapSearch.scheme)
         }
-
-        applyTheme(scheme: hasMapSearch.scheme)
     }
     
     func cleanupMixin() {

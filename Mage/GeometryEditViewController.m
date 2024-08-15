@@ -418,15 +418,17 @@ static NSString *garsTitle = @"GARS";
     [self.hintView autoPinEdgeToSuperviewEdge:ALEdgeRight];
     [self.hintView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.slidescroll];
     
-    self.searchButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
-    self.searchButton.accessibilityLabel = @"search";
-    [self.searchButton setImage:[UIImage systemImageNamed:@"magnifyingglass"] forState:UIControlStateNormal];
-    [self.searchButton addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.searchButton setTintColor:self.scheme.colorScheme.primaryColor];
-    [self.searchButton setBackgroundColor:self.scheme.colorScheme.surfaceColor];
-    [self.view addSubview:self.searchButton];
-    [self.searchButton autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.hintView withOffset:16];
-    [self.searchButton autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:16];
+    if (defaults.showMapSearch) {
+        self.searchButton = [MDCFloatingButton floatingButtonWithShape:MDCFloatingButtonShapeMini];
+        self.searchButton.accessibilityLabel = @"search";
+        [self.searchButton setImage:[UIImage systemImageNamed:@"magnifyingglass"] forState:UIControlStateNormal];
+        [self.searchButton addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self.searchButton setTintColor:self.scheme.colorScheme.primaryColor];
+        [self.searchButton setBackgroundColor:self.scheme.colorScheme.surfaceColor];
+        [self.view addSubview:self.searchButton];
+        [self.searchButton autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.hintView withOffset:16];
+        [self.searchButton autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:16];
+    }
     
     UIStackView *buttonStack = [[UIStackView alloc] initForAutoLayout];
     buttonStack.axis = UILayoutConstraintAxisHorizontal;
