@@ -13,8 +13,11 @@ struct ObservationFormViewSwiftUI: View {
     @State
     var expanded: Bool = true
     
+    @EnvironmentObject
+    var router: MageRouter
+    
     var viewModel: ObservationFormViewModel
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
+//    var selectedAttachment: (_ attachmentUri: URL) -> Void
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     var body: some View {
@@ -79,7 +82,7 @@ struct ObservationFormViewSwiftUI: View {
                                         fieldName: field.name,
                                         fieldTitle: field.title
                                     ),
-                                    selectedAttachment: selectedAttachment,
+//                                    selectedAttachment: selectedAttachment,
                                     selectedUnsentAttachment: selectedUnsentAttachment
                                 )
                                 .padding(.bottom, 8)

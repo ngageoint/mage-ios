@@ -33,7 +33,7 @@ import MaterialViews
     }();
     
     private lazy var locationsTab: UINavigationController = {
-        let locationTableViewController = LocationListWrapperViewController(scheme: scheme)
+        let locationTableViewController = LocationListWrapperViewController(scheme: scheme, router: MageRouter())
         
         let nc = UINavigationController()
         nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2);
@@ -52,7 +52,8 @@ import MaterialViews
     }
     
     private lazy var observationsTab: UINavigationController = {
-        let observationTableViewController = ObservationListWrapperViewController(scheme: scheme)
+//        let observationTableViewController = ObservationListWrapperViewController(scheme: scheme)
+        let observationTableViewController = ObservationListNavStack(scheme: scheme)
         let nc = UINavigationController(rootViewController: observationTableViewController);
         nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);
         return nc;
@@ -70,7 +71,7 @@ import MaterialViews
             return nil
         }
 //        return nil
-        let uvc = UserViewWrapperViewController(userUri: user.objectID.uriRepresentation(), scheme: scheme)
+        let uvc = UserViewWrapperViewController(userUri: user.objectID.uriRepresentation(), scheme: scheme, router: MageRouter())
         let nc = UINavigationController(rootViewController: uvc);
         nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3);
         return nc;

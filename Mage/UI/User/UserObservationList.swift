@@ -12,9 +12,9 @@ struct UserObservationList: View {
     @ObservedObject
     var viewModel: UserViewViewModel
     
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
-    var selectedObservation: (_ observationUri: URL) -> Void
-    
+    @EnvironmentObject
+    var router: MageRouter
+
     var body: some View {
         switch(viewModel.state) {
         case .loaded(let rows):
@@ -22,8 +22,7 @@ struct UserObservationList: View {
                 switch uriItem {
                 case .listItem(let uri):
                     ObservationSummaryViewSwiftUI(
-                        viewModel: ObservationListViewModel(uri: uri),
-                        selectedAttachment: selectedAttachment
+                        viewModel: ObservationListViewModel(uri: uri)
                     )
                     .onAppear {
                         if rows.last == uriItem {
@@ -31,7 +30,7 @@ struct UserObservationList: View {
                         }
                     }
                     .onTapGesture {
-                        selectedObservation(uri)
+                        router.path.append(ObservationRoute.detail(uri: uri))
                     }
                     .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                     .listRowSeparator(.hidden)

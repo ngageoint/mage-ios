@@ -17,9 +17,11 @@ class LocationListWrapperViewController: SwiftUIViewController {
     var userRepository: UserRepository
     
     var scheme: MDCContainerScheming?
+    var router: MageRouter
     
-    init(scheme: MDCContainerScheming?) {
+    init(scheme: MDCContainerScheming?, router: MageRouter) {
         self.scheme = scheme
+        self.router = router
         super.init()
         swiftUIView = AnyView( LocationList(
             viewLocationUser: { locationUri in
@@ -28,7 +30,7 @@ class LocationListWrapperViewController: SwiftUIViewController {
             launchFilter: {
                 self.launchFilter()
             }
-        ))
+        ).environmentObject(router))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,7 +66,7 @@ class LocationListWrapperViewController: SwiftUIViewController {
             if let location = await self?.locationRepository.getLocation(locationUri: locationUri),
                let userId = location.userModel?.userId
             {
-                let uvc = UserViewWrapperViewController(userUri: userId, scheme: self?.scheme)
+                let uvc = UserViewWrapperViewController(userUri: userId, scheme: self?.scheme, router: router)
                 self?.navigationController?.pushViewController(uvc, animated: true)
             }
         }

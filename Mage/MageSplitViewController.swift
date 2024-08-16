@@ -29,6 +29,8 @@ import Foundation
     var childCoordinators: [NSObject] = [];
     var attachmentCoordinator: AttachmentViewCoordinator?;
     
+    var router = MageRouter()
+    
     init(frame: CGRect) {
         super.init(nibName: nil, bundle: nil);
     }
@@ -181,22 +183,11 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
             actionsSheet.applyTheme(withContainerScheme: self.scheme);
             self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
             self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-        } editObservation: { observationUri in
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
-                    return;
-                }
-                let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
-                observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
-                observationEditCoordinator.start();
-                self.childCoordinators.append(observationEditCoordinator)
-
-            }
-        } selectedAttachment: { attachmentUri in
-            self.selectedAttachment(attachmentUri)
-        } selectedUnsentAttachment: { localPath, contentType in
+        }
+    selectedUnsentAttachment: { localPath, contentType in
             
         }
+    .environmentObject(router)
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         self.masterViewController?.pushViewController(ovc2, animated: true)
@@ -211,17 +202,17 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func selectedUser(_ user: User!) {
-        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!, router: router);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
     func selectedUser(_ user: User!, region: MKCoordinateRegion) {
-        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!, router: router);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
     func userDetailSelected(_ user: User!) {
-        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!, router: router);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
@@ -234,13 +225,13 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
             // already showing
             return
         }
-        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
+        let userViewController: UserViewController = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!, router: router);
         self.masterViewController?.pushViewController(userViewController, animated: true);
     }
     
     func showFavorites(userIds: [String]) {
         if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
             locationViewController.title = "Favorited By";
             self.masterViewController?.pushViewController(locationViewController, animated: true);
         }

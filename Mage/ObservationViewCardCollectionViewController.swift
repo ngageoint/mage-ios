@@ -20,10 +20,11 @@ struct ObservationFullView: View {
     @StateObject
     var viewModel: ObservationViewViewModel
     
+    @EnvironmentObject
+    var router: MageRouter
+    
     var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
     var moreActions: () -> Void
-    var editObservation: (_ observationUri: URL) -> Void
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     var body: some View {
@@ -41,7 +42,6 @@ struct ObservationFullView: View {
                 ForEach(viewModel.observationForms ?? []) { form in
                     ObservationFormViewSwiftUI(
                         viewModel: ObservationFormViewModel(form: form),
-                        selectedAttachment: selectedAttachment,
                         selectedUnsentAttachment: selectedUnsentAttachment
                     )
                 }
@@ -52,9 +52,7 @@ struct ObservationFullView: View {
         .overlay(alignment: .bottomTrailing) {
             if viewModel.currentUserCanEdit {
                 Button {
-                    if let observationUri = viewModel.observationModel?.observationId {
-                        editObservation(observationUri)
-                    }
+                    router.path.append(ObservationRoute.edit(uri: viewModel.observationModel?.observationId))
                 } label: {
                     Label {
                         Text("")

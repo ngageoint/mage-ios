@@ -39,7 +39,7 @@ import QuickLook
     var hasPushedViewController: Bool = false;
     var ignoreNextDelegateCall: Bool = false;
     
-    @objc public init(rootViewController: UINavigationController, attachment: AttachmentModel, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
+    @objc public init(rootViewController: UINavigationController, attachment: AttachmentModel, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
         self.rootViewController = rootViewController;
         self.attachment = attachment;
         self.delegate = delegate;
@@ -51,11 +51,11 @@ import QuickLook
         } else {
             self.tempFile =  NSTemporaryDirectory() + "tempfile";
         }
-        self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
+        self.navigationControllerObserver = navigationControllerObserver ?? NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
     }
     
-    @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?) {
+    @objc public init(rootViewController: UINavigationController, url: URL, contentType: String, delegate: AttachmentViewDelegate?, scheme: MDCContainerScheming?, navigationControllerObserver: NavigationControllerObserver? = nil) {
         self.rootViewController = rootViewController;
         self.urlToLoad = url;
         self.delegate = delegate;
@@ -63,7 +63,7 @@ import QuickLook
         self.contentType = contentType;
         self.tempFile =  NSTemporaryDirectory() + url.lastPathComponent;
         
-        self.navigationControllerObserver = NavigationControllerObserver(navigationController: self.rootViewController);
+        self.navigationControllerObserver = navigationControllerObserver ?? NavigationControllerObserver(navigationController: self.rootViewController);
         super.init();
     }
     

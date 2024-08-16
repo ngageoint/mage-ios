@@ -47,12 +47,18 @@ class AttachmentFieldViewModel: ObservableObject {
         }
         .store(in: &cancellable)
     }
+    
+    func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
+        repository.appendAttachmentViewRoute(router: router, attachment: attachment)
+    }
 }
 
 struct AttachmentFieldViewSwiftUI: View {
     @StateObject var viewModel: AttachmentFieldViewModel
     
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
+    @EnvironmentObject
+    var router: MageRouter
+    
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     let layout = [
@@ -88,7 +94,7 @@ struct AttachmentFieldViewSwiftUI: View {
                                     .frame(maxWidth: .infinity, maxHeight: 150)
                                     .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
                                     .onTapGesture {
-                                        selectedAttachment(attachment.attachmentUri)
+                                        viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                                     }
                             }
                         }

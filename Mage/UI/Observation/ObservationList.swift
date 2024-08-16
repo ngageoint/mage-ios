@@ -14,10 +14,10 @@ import MaterialViews
 
 struct ObservationList: View {
     @StateObject var viewModel: ObservationsViewModel = ObservationsViewModel()
+    
+    @EnvironmentObject
+    var router: MageRouter
 
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
-    var selectedObservation: (_ observationUri: URL) -> Void
-    var createNew: () -> Void
     var launchFilter: () -> Void
     
     var body: some View {
@@ -52,16 +52,12 @@ struct ObservationList: View {
                         switch uriItem {
                         case .listItem(let uri):
                             ObservationSummaryViewSwiftUI(
-                                viewModel: ObservationListViewModel(uri: uri),
-                                selectedAttachment: selectedAttachment
+                                viewModel: ObservationListViewModel(uri: uri)
                             )
                             .onAppear {
                                 if rows.last == uriItem {
                                     viewModel.loadMore()
                                 }
-                            }
-                            .onTapGesture {
-                                selectedObservation(uri)
                             }
                             .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                             .listRowSeparator(.hidden)
@@ -123,7 +119,7 @@ struct ObservationList: View {
         .overlay(alignment: .bottomTrailing) {
             if viewModel.currentUserCanEdit {
                 Button {
-                    createNew()
+                    router.path.append(ObservationRoute.create)
                 } label: {
                     Label {
                         Text("")

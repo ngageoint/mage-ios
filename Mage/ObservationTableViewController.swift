@@ -19,6 +19,8 @@ class ObservationTableViewController: UITableViewController {
     @Injected(\.userRepository)
     var userRepository: UserRepository
     
+    var router: MageRouter
+    
     weak var attachmentDelegate: AttachmentSelectionDelegate?;
     weak var observationActionsDelegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
@@ -68,7 +70,8 @@ class ObservationTableViewController: UITableViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    public init(attachmentDelegate: AttachmentSelectionDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+    public init(attachmentDelegate: AttachmentSelectionDelegate? = nil, observationActionsDelegate: ObservationActionsDelegate? = nil, scheme: MDCContainerScheming?, router: MageRouter) {
+        self.router = router
         super.init(style: .grouped);
         self.attachmentDelegate = attachmentDelegate;
         self.observationActionsDelegate = observationActionsDelegate;
@@ -347,21 +350,11 @@ extension ObservationTableViewController: ObservationActionsDelegate {
             actionsSheet.applyTheme(withContainerScheme: self.scheme);
             self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
             self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-        } editObservation: { observationUri in
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
-                    return;
-                }
-                let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
-                observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
-                observationEditCoordinator.start();
-                self.childCoordinators.append(observationEditCoordinator)
-            }
-        } selectedAttachment: { attachmentUri in
-            self.selectedAttachment(attachmentUri)
-        } selectedUnsentAttachment: { localPath, contentType in
+        }
+    selectedUnsentAttachment: { localPath, contentType in
             
         }
+    .environmentObject(router)
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         navigationController?.pushViewController(ovc2, animated: true)
@@ -401,13 +394,13 @@ extension ObservationTableViewController: ObservationActionsDelegate {
     
     func viewUser(_ user: User) {
         bottomSheet?.dismiss(animated: true, completion: nil);
-        let uvc = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!, router: router);
         self.navigationController?.pushViewController(uvc, animated: true);
     }
     
     func showFavorites(userIds: [String]) {
         if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
             locationViewController.title = "Favorited By";
             self.navigationController?.pushViewController(locationViewController, animated: true);
         }

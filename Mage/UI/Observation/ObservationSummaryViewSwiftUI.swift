@@ -14,29 +14,35 @@ struct ObservationSummaryViewSwiftUI: View {
     @StateObject
     var viewModel: ObservationListViewModel
     
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
+    @EnvironmentObject
+    var router: MageRouter
     
     var body: some View {
         VStack {
-            if let important = viewModel.observationImportantModel {
-                ObservationImportantViewSwiftUI(important: important)
+            Group {
+                if let important = viewModel.observationImportantModel {
+                    ObservationImportantViewSwiftUI(important: important)
+                }
+                ObservationLocationSummary(
+                    timestamp: viewModel.observationModel?.timestamp,
+                    user: viewModel.user?.name,
+                    primaryFieldText: viewModel.primaryFeedFieldText,
+                    secondaryFieldText: viewModel.secondaryFeedFieldText,
+                    iconPath: viewModel.iconPath,
+                    error: viewModel.observationModel?.error ?? false,
+                    syncing: viewModel.observationModel?.syncing ?? false
+                )
             }
-            ObservationLocationSummary(
-                timestamp: viewModel.observationModel?.timestamp,
-                user: viewModel.user?.name,
-                primaryFieldText: viewModel.primaryFeedFieldText,
-                secondaryFieldText: viewModel.secondaryFeedFieldText,
-                iconPath: viewModel.iconPath,
-                error: viewModel.observationModel?.error ?? false,
-                syncing: viewModel.observationModel?.syncing ?? false
-            )
+            .contentShape(Rectangle())
+            .onTapGesture {
+                router.path.append(ObservationRoute.detail(uri: viewModel.observationModel?.observationId))
+            }
             if !(viewModel.attachments ?? []).isEmpty {
                 TabView {
                     ForEach(viewModel.orderedAttachments ?? []) { attachment in
                         if let url = URL(string: attachment.url ?? "") {
                             KFImage(url)
                                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
-                                .forceRefresh()
                                 .cacheOriginalImage()
                                 .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
                                 .placeholder {
@@ -52,13 +58,13 @@ struct ObservationSummaryViewSwiftUI: View {
                                 .scaledToFill()
                                 .frame(maxWidth: .infinity, maxHeight: 150)
                                 .onTapGesture {
-                                    selectedAttachment(attachment.attachmentUri)
+                                    viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                                 }
                         }
                     }
                 }
-                .tabViewStyle(.page(indexDisplayMode: .always))
-                .indexViewStyle(.page(backgroundDisplayMode: .always))
+                .tabViewStyle(.page(indexDisplayMode: .automatic))
+                .indexViewStyle(.page(backgroundDisplayMode: .automatic))
                 .frame(height: 150)
             }
             ObservationListActionBar(
