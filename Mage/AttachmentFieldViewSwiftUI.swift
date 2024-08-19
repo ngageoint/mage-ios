@@ -51,6 +51,14 @@ class AttachmentFieldViewModel: ObservableObject {
     func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
         repository.appendAttachmentViewRoute(router: router, attachment: attachment)
     }
+    
+    var orderedAttachments: [AttachmentModel]? {
+        return attachments?.sorted(by: { first, second in
+            let firstOrder = first.order.intValue
+            let secondOrder = second.order.intValue
+            return (firstOrder != secondOrder) ? (firstOrder < secondOrder) : (first.lastModified ?? Date()) < (second.lastModified ?? Date())
+        })
+    }
 }
 
 struct AttachmentFieldViewSwiftUI: View {
@@ -72,7 +80,7 @@ struct AttachmentFieldViewSwiftUI: View {
                 Text(viewModel.fieldTitle)
                     .secondaryText()
                 LazyVGrid(columns:layout) {
-                    ForEach(viewModel.attachments ?? []) { attachment in
+                    ForEach(viewModel.orderedAttachments ?? []) { attachment in
                         AttachmentPreviewView(attachment: attachment) {
                             viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                         }

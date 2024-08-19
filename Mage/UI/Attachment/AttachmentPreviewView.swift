@@ -61,6 +61,7 @@ struct AttachmentPreviewView: View {
                 .fade(duration: 0.3)
                 .resizable()
                 .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: 150)
                 .overlay {
                     Image(systemName: "play.circle.fill")
                         .symbolRenderingMode(.monochrome)
@@ -72,7 +73,6 @@ struct AttachmentPreviewView: View {
                 .onTapGesture {
                     onTap()
                 }
-                .frame(maxWidth: .infinity, maxHeight: 150)
             } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
                 Image(systemName: "speaker.wave.2.fill")
                     .symbolRenderingMode(.monochrome)
