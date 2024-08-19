@@ -15,11 +15,12 @@ struct UserViewSwiftUI: View {
     @StateObject
     var viewModel: UserViewViewModel
     
+    @EnvironmentObject
+    var router: MageRouter
+    
     @StateObject var mixins: MapMixins = MapMixins()
     @StateObject var mapState: MapState = MapState()
     
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
-    var selectedObservation: (_ observationUri: URL) -> Void
     var viewImage: (_ imageUrl: URL) -> Void
     
     var map: some View {
@@ -127,9 +128,7 @@ struct UserViewSwiftUI: View {
             .listRowBackground(Color.backgroundColor)
             
             UserObservationList(
-                viewModel: viewModel,
-                selectedAttachment: selectedAttachment,
-                selectedObservation: selectedObservation
+                viewModel: viewModel
             )
             .listRowBackground(Color.backgroundColor)
         }

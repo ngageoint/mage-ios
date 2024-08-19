@@ -63,6 +63,19 @@ struct ObservationFormFieldModel: Identifiable {
     var lastModified: Date?
     var contentType: String?
     @objc var markedForDeletion: Bool = false
+    
+    var urlWithToken: URL? {
+        if let url = url {
+            var url2 = URL(string: url)
+            url2?.append(
+                queryItems: [
+                    URLQueryItem(name: "access_token", value: StoredPassword.retrieveStoredToken())
+                ]
+            )
+            return url2
+        }
+        return nil
+    }
 //}
 //
 //extension AttachmentModel {

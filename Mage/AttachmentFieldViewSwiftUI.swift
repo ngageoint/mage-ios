@@ -47,12 +47,26 @@ class AttachmentFieldViewModel: ObservableObject {
         }
         .store(in: &cancellable)
     }
+    
+    func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
+        repository.appendAttachmentViewRoute(router: router, attachment: attachment)
+    }
+    
+    var orderedAttachments: [AttachmentModel]? {
+        return attachments?.sorted(by: { first, second in
+            let firstOrder = first.order.intValue
+            let secondOrder = second.order.intValue
+            return (firstOrder != secondOrder) ? (firstOrder < secondOrder) : (first.lastModified ?? Date()) < (second.lastModified ?? Date())
+        })
+    }
 }
 
 struct AttachmentFieldViewSwiftUI: View {
     @StateObject var viewModel: AttachmentFieldViewModel
     
-    var selectedAttachment: (_ attachmentUri: URL) -> Void
+    @EnvironmentObject
+    var router: MageRouter
+    
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     let layout = [
@@ -66,32 +80,11 @@ struct AttachmentFieldViewSwiftUI: View {
                 Text(viewModel.fieldTitle)
                     .secondaryText()
                 LazyVGrid(columns:layout) {
-                    ForEach(viewModel.attachments ?? []) { attachment in
-                        VStack{
-                            if let url = URL(string: attachment.url ?? "") {
-                                KFImage(url)
-                                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
-                                    .forceRefresh()
-                                    .cacheOriginalImage()
-                                    .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
-                                    .placeholder {
-                                        Image("observations")
-                                            .symbolRenderingMode(.monochrome)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
-                                    }
-                                
-                                    .fade(duration: 0.3)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(maxWidth: .infinity, maxHeight: 150)
-                                    .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
-                                    .onTapGesture {
-                                        selectedAttachment(attachment.attachmentUri)
-                                    }
-                            }
+                    ForEach(viewModel.orderedAttachments ?? []) { attachment in
+                        AttachmentPreviewView(attachment: attachment) {
+                            viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                         }
+                        .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
                     }
                 }
             }

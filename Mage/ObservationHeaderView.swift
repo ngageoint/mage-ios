@@ -34,7 +34,7 @@ struct ObservationHeaderViewSwiftUI: View {
             .background(Color.surfaceColor)
             .card()
             
-            VStack {
+            VStack(spacing: 0) {
                 if let important = viewModel.observationImportantModel {
                     ObservationImportantViewSwiftUI(important: important)
                 }
@@ -47,6 +47,7 @@ struct ObservationHeaderViewSwiftUI: View {
                     error: viewModel.observationModel?.error ?? false,
                     syncing: viewModel.observationModel?.syncing ?? false
                 )
+                .padding(16)
                 if let observationId = viewModel.observationModel?.observationId {
                     ObservationMapItemView(observationUri: observationId)
                 }

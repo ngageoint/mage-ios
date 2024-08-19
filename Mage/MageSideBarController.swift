@@ -25,6 +25,8 @@ class SidebarUIButton: UIButton {
     var activeButton: SidebarUIButton?;
     var scheme: MDCContainerScheming?;
     
+    var router = MageRouter()
+    
     typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserActionsDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
     weak public var delegate: Delegate?;
     
@@ -183,7 +185,7 @@ class SidebarUIButton: UIButton {
     func createLocationsRailView() -> SidebarUIButton {
         let locationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.locations, title: "People", systemImageName: "person.2.fill");
         locationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
-        let locationViewController : LocationsTableViewController = LocationsTableViewController(scheme: self.scheme);
+        let locationViewController : LocationsTableViewController = LocationsTableViewController(scheme: self.scheme, router: router);
 //        locationViewController.actionsDelegate = delegate;
         locationButton.viewController = locationViewController;
         return locationButton;
@@ -193,7 +195,7 @@ class SidebarUIButton: UIButton {
         let observationButton: SidebarUIButton = createRailItem(sidebarType: SidebarUIButton.SidebarType.observations, title: "Observations", imageName: "observations");
         observationButton.addTarget(self, action: #selector(activateButton(button:)), for: .touchUpInside);
 //        let observationViewController : ObservationTableViewController = ObservationTableViewController(attachmentDelegate: delegate, observationActionsDelegate: delegate, scheme: self.scheme);
-        let observationViewController : ObservationTableViewController = ObservationTableViewController(scheme: self.scheme);
+        let observationViewController : ObservationTableViewController = ObservationTableViewController(scheme: self.scheme, router: router);
         observationButton.viewController = observationViewController;
         return observationButton;
     }

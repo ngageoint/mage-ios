@@ -9,6 +9,27 @@
 import Foundation
 import SwiftUI
 
+class ObservationListNavStack: MageNavStack {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let svc = SwiftUIViewController(
+            swiftUIView: ObservationList(
+            launchFilter: { [weak self] in
+                self?.launchFilter()
+            }
+            )
+            .environmentObject(router)
+        )
+        self.view.addSubview(svc.view)
+        setNavBarTitle()
+    }
+    
+    func setNavBarTitle() {
+        let timeFilterString = MageFilter.getString();
+        self.navigationItem.setTitle("Observations", subtitle: (timeFilterString == "All" ? nil : timeFilterString), scheme: self.scheme);
+    }
+}
+
 class ObservationListWrapperViewController: SwiftUIViewController {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
@@ -19,28 +40,22 @@ class ObservationListWrapperViewController: SwiftUIViewController {
     @Injected(\.currentLocationRepository)
     var currentLocationRepository: CurrentLocationRepository
     
+    var router: MageRouter
+    
     var scheme: MDCContainerScheming?
     var attachmentViewCoordinator: AttachmentViewCoordinator?
     var bottomSheet: MDCBottomSheetController?
     var childCoordinators: [NSObject] = []
     
-    init(scheme: MDCContainerScheming?) {
+    init(scheme: MDCContainerScheming?, router: MageRouter) {
         self.scheme = scheme
+        self.router = router
         super.init()
         swiftUIView = AnyView( ObservationList(
-            selectedAttachment: { [weak self] attachmentUri in
-                self?.selectedAttachment(attachmentUri)
-           },
-            selectedObservation: { [weak self] observationUri in
-                self?.viewObservation(uri: observationUri)
-            },
-            createNew: { [weak self] in
-                self?.startCreateNewObservation(location: self?.currentLocationRepository.getLastLocation(), provider: "gps")
-            },
             launchFilter: { [weak self] in
                 self?.launchFilter()
             }
-        ))
+        ).environmentObject(router))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,7 +91,9 @@ class ObservationListWrapperViewController: SwiftUIViewController {
     }
     
     func viewObservation(uri: URL) {
-        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: uri)) { favoritesModel in
+        let observationView = ObservationFullView(
+            viewModel: ObservationViewViewModel(uri: uri)
+        ) { favoritesModel in
             guard let favoritesModel = favoritesModel,
                   let favoriteUsers = favoritesModel.favoriteUsers
             else {
@@ -93,18 +110,11 @@ class ObservationListWrapperViewController: SwiftUIViewController {
                 self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
                 self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
             }
-        } editObservation: { observationUri in
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
-                    return;
-                }
-                self.editObservation(observation)
-            }
-        } selectedAttachment: { attachmentUri in
-            self.selectedAttachment(attachmentUri)
-        } selectedUnsentAttachment: { localPath, contentType in
+        }
+    selectedUnsentAttachment: { localPath, contentType in
             
         }
+    .environmentObject(router)
         
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         navigationController?.pushViewController(ovc2, animated: true)
@@ -112,7 +122,7 @@ class ObservationListWrapperViewController: SwiftUIViewController {
     
     func showFavorites(userIds: [String]) {
         if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
             locationViewController.title = "Favorited By";
             self.navigationController?.pushViewController(locationViewController, animated: true);
         }
@@ -171,7 +181,7 @@ extension ObservationListWrapperViewController: ObservationActionsDelegate {
     
     func viewUser(_ user: User) {
         self.bottomSheet?.dismiss(animated: true, completion: nil);
-        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme)
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme, router: router)
         navigationController?.pushViewController(uvc, animated: true)
     }
     

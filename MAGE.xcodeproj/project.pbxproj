@@ -151,6 +151,15 @@
 		F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */; };
 		F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
 		F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */; };
+		F70C342F2C73CF3F007616FA /* AttachmentPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C342E2C73CF3F007616FA /* AttachmentPreviewView.swift */; };
+		F70C34312C73D6DB007616FA /* AttachmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C34302C73D6DB007616FA /* AttachmentViewModel.swift */; };
+		F70C34332C73D712007616FA /* DownloadingImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C34322C73D712007616FA /* DownloadingImageViewModel.swift */; };
+		F70C34352C73D735007616FA /* DownloadingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C34342C73D735007616FA /* DownloadingImageView.swift */; };
+		F70C34372C73D753007616FA /* DownloadingFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C34362C73D753007616FA /* DownloadingFileViewModel.swift */; };
+		F70C34392C73D7A0007616FA /* DownloadingFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C34382C73D7A0007616FA /* DownloadingFileView.swift */; };
+		F70C343B2C73D7BD007616FA /* AskToCacheImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C343A2C73D7BD007616FA /* AskToCacheImageView.swift */; };
+		F70C343D2C73D7E6007616FA /* AskToDownloadFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C343C2C73D7E6007616FA /* AskToDownloadFileView.swift */; };
+		F70C343F2C73D801007616FA /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70C343E2C73D801007616FA /* VideoView.swift */; };
 		F70D19E12742C5F3006E12F8 /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70D19E02742C5F3006E12F8 /* FormTests.swift */; };
 		F70D19E32742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip in Resources */ = {isa = PBXBuildFile; fileRef = F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */; };
 		F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70D1BF427299BC800B8015C /* ArrayExtensions.swift */; };
@@ -466,6 +475,9 @@
 		F786492E273BFF16002D3DC2 /* LayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F786492D273BFF16002D3DC2 /* LayerTests.swift */; };
 		F7864930273C5E71002D3DC2 /* staticFeatures.geojson in Resources */ = {isa = PBXBuildFile; fileRef = F786492F273C5E71002D3DC2 /* staticFeatures.geojson */; };
 		F788005E191166B4007E909B /* LocationServicesSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */; };
+		F788768F2C6AA44300E30300 /* MageNavStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F788768E2C6AA44300E30300 /* MageNavStack.swift */; };
+		F78876932C6AA54800E30300 /* MageRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78876922C6AA54800E30300 /* MageRouter.swift */; };
+		F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78876972C6C04A800E30300 /* DocumentPreview.swift */; };
 		F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */; };
 		F789EB5E2BF63BFB00CF3DF9 /* ObservationTileRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F789EB5D2BF63BFB00CF3DF9 /* ObservationTileRepositoryTests.swift */; };
 		F789EB602BF6418900CF3DF9 /* ObservationLocationStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F789EB5F2BF6418900CF3DF9 /* ObservationLocationStaticLocalDataSource.swift */; };
@@ -969,6 +981,15 @@
 		F70B47B124B5F27A00D0BFE5 /* FeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTests.swift; sourceTree = "<group>"; };
 		F70B47B324B5F7AF00D0BFE5 /* feeds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feeds.json; sourceTree = "<group>"; };
 		F70B47B524B79D4100D0BFE5 /* FeedItemRetrieverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemRetrieverTests.swift; sourceTree = "<group>"; };
+		F70C342E2C73CF3F007616FA /* AttachmentPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPreviewView.swift; sourceTree = "<group>"; };
+		F70C34302C73D6DB007616FA /* AttachmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewModel.swift; sourceTree = "<group>"; };
+		F70C34322C73D712007616FA /* DownloadingImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingImageViewModel.swift; sourceTree = "<group>"; };
+		F70C34342C73D735007616FA /* DownloadingImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingImageView.swift; sourceTree = "<group>"; };
+		F70C34362C73D753007616FA /* DownloadingFileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingFileViewModel.swift; sourceTree = "<group>"; };
+		F70C34382C73D7A0007616FA /* DownloadingFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingFileView.swift; sourceTree = "<group>"; };
+		F70C343A2C73D7BD007616FA /* AskToCacheImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToCacheImageView.swift; sourceTree = "<group>"; };
+		F70C343C2C73D7E6007616FA /* AskToDownloadFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskToDownloadFileView.swift; sourceTree = "<group>"; };
+		F70C343E2C73D801007616FA /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		F70D19E02742C5F3006E12F8 /* FormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
 		F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = plantsAnimalsBuildingsIcons.zip; sourceTree = "<group>"; };
 		F70D1BF427299BC800B8015C /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
@@ -1333,6 +1354,9 @@
 		F786492F273C5E71002D3DC2 /* staticFeatures.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = staticFeatures.geojson; sourceTree = "<group>"; };
 		F788005C191166B4007E909B /* LocationServicesSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationServicesSettingsTableViewController.h; sourceTree = "<group>"; };
 		F788005D191166B4007E909B /* LocationServicesSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationServicesSettingsTableViewController.m; sourceTree = "<group>"; };
+		F788768E2C6AA44300E30300 /* MageNavStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageNavStack.swift; sourceTree = "<group>"; };
+		F78876922C6AA54800E30300 /* MageRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageRouter.swift; sourceTree = "<group>"; };
+		F78876972C6C04A800E30300 /* DocumentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPreview.swift; sourceTree = "<group>"; };
 		F788AE352432816000C6BC3F /* AttachmentUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentUIImageView.swift; sourceTree = "<group>"; };
 		F789EB5D2BF63BFB00CF3DF9 /* ObservationTileRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTileRepositoryTests.swift; sourceTree = "<group>"; };
 		F789EB5F2BF6418900CF3DF9 /* ObservationLocationStaticLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocationStaticLocalDataSource.swift; sourceTree = "<group>"; };
@@ -1792,6 +1816,7 @@
 				F7BFB8CF2C4AAE5500901479 /* FavoriteButton.swift */,
 				F7BFB8D12C4AB07300901479 /* NavigateToButton.swift */,
 				F7BFB8D32C4AE84D00901479 /* PageController.swift */,
+				F78876972C6C04A800E30300 /* DocumentPreview.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -2484,6 +2509,7 @@
 		F734C1E62BC8474B00B2E8C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				F78876942C6BE2A000E30300 /* Attachment */,
 				F73564F72C655C0000466813 /* Location */,
 				F73564DC2C62BB6F00466813 /* Observation */,
 				F7BFB8F12C516BFE00901479 /* FeedItem */,
@@ -2934,6 +2960,31 @@
 			path = Layer;
 			sourceTree = "<group>";
 		};
+		F788768D2C6AA43600E30300 /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				F788768E2C6AA44300E30300 /* MageNavStack.swift */,
+				F78876922C6AA54800E30300 /* MageRouter.swift */,
+			);
+			path = Routing;
+			sourceTree = "<group>";
+		};
+		F78876942C6BE2A000E30300 /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				F70C342E2C73CF3F007616FA /* AttachmentPreviewView.swift */,
+				F70C34302C73D6DB007616FA /* AttachmentViewModel.swift */,
+				F70C34322C73D712007616FA /* DownloadingImageViewModel.swift */,
+				F70C34342C73D735007616FA /* DownloadingImageView.swift */,
+				F70C34362C73D753007616FA /* DownloadingFileViewModel.swift */,
+				F70C34382C73D7A0007616FA /* DownloadingFileView.swift */,
+				F70C343A2C73D7BD007616FA /* AskToCacheImageView.swift */,
+				F70C343C2C73D7E6007616FA /* AskToDownloadFileView.swift */,
+				F70C343E2C73D801007616FA /* VideoView.swift */,
+			);
+			path = Attachment;
+			sourceTree = "<group>";
+		};
 		F7929C6E23C4E64E00396D11 /* Maps */ = {
 			isa = PBXGroup;
 			children = (
@@ -3116,6 +3167,7 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F788768D2C6AA43600E30300 /* Routing */,
 				F7DE98722C123D58005372F8 /* DependencyInjection */,
 				F776AC912BCD9CB5000FAFB4 /* Network */,
 				F734C1E62BC8474B00B2E8C8 /* UI */,
@@ -4019,6 +4071,7 @@
 				F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.swift in Sources */,
 				2F3B20CE25FA69950063A940 /* UIColor+Hex.m in Sources */,
 				F72D42DB2694B60300F9AC3B /* Authentication.m in Sources */,
+				F70C342F2C73CF3F007616FA /* AttachmentPreviewView.swift in Sources */,
 				F73564DE2C62BB7E00466813 /* ObservationList.swift in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
 				F754C6592C484CA700E408E9 /* Triangle.swift in Sources */,
@@ -4034,6 +4087,7 @@
 				F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */,
 				F72D432D2694B60300F9AC3B /* Canary+CoreDataProperties.swift in Sources */,
 				F7F8B4B526C5A03000DACCC7 /* FeatureSummaryView.swift in Sources */,
+				F70C343D2C73D7E6007616FA /* AskToDownloadFileView.swift in Sources */,
 				F72D42FD2694B60300F9AC3B /* Model9To15.xcmappingmodel in Sources */,
 				F7D43BE0269E0FEB00561A8F /* FeatureActionsView.swift in Sources */,
 				F7BFB8EE2C51572600901479 /* GeoPackageMediaView.swift in Sources */,
@@ -4139,6 +4193,7 @@
 				F796E45024193E73005CA09C /* AskToDownloadViewController.swift in Sources */,
 				2F0323AB2463666700D2866B /* ObservationAccuracy.m in Sources */,
 				F72D43202694B60300F9AC3B /* NotificationRequester.m in Sources */,
+				F70C343F2C73D801007616FA /* VideoView.swift in Sources */,
 				F776AC9F2BCDB442000FAFB4 /* ObservationDataFetchOperation.swift in Sources */,
 				F727516E19C888DB006C63CB /* Locations.m in Sources */,
 				04ED96421EB7B15900B6AD8D /* MapAnnotationObservation.m in Sources */,
@@ -4174,6 +4229,7 @@
 				2F6D80D52B1FAB9900545221 /* Geocoder.swift in Sources */,
 				F7B1C476267404BC0005FCE4 /* ViewLoaderAppDelegate.m in Sources */,
 				2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */,
+				F70C343B2C73D7BD007616FA /* AskToCacheImageView.swift in Sources */,
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
@@ -4215,6 +4271,7 @@
 				F776AC992BCDB1F3000FAFB4 /* ObservationRemoteDataSource.swift in Sources */,
 				F7225F5A2C5A784700B7D935 /* AttachmentLocalDataSource.swift in Sources */,
 				F776ACA12BCDB892000FAFB4 /* MageSession.swift in Sources */,
+				F788768F2C6AA44300E30300 /* MageNavStack.swift in Sources */,
 				F7BFB8F52C518A2D00901479 /* MageBottomSheetViewModel.swift in Sources */,
 				F76EB1E2247D83EC0089F3AC /* NumberFieldView.swift in Sources */,
 				F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */,
@@ -4248,6 +4305,7 @@
 				F73564D22C61430900466813 /* ObservationImportantService.swift in Sources */,
 				F72D432F2694B60300F9AC3B /* Model3To15.xcmappingmodel in Sources */,
 				F72D432A2694B60300F9AC3B /* Observation.swift in Sources */,
+				F70C34372C73D753007616FA /* DownloadingFileViewModel.swift in Sources */,
 				2F4E10A7220DDC46001C9F12 /* FormDefaults.m in Sources */,
 				F72D42EF2694B60300F9AC3B /* NSDate+display.m in Sources */,
 				F72D42F52694B60300F9AC3B /* TaskSessionManager.m in Sources */,
@@ -4269,6 +4327,7 @@
 				F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */,
 				F70688A62BA4DA8600D8E2EA /* ObservationToObservationPolicy.swift in Sources */,
 				F73564FF2C656B0000466813 /* LocationSummaryViewModel.swift in Sources */,
+				F70C34312C73D6DB007616FA /* AttachmentViewModel.swift in Sources */,
 				F776AC892BC98939000FAFB4 /* MageHostingController.swift in Sources */,
 				F73564F42C65579A00466813 /* LocationRepository.swift in Sources */,
 				F7F4754525BA357E006634F7 /* ObservationListCardCell.swift in Sources */,
@@ -4286,6 +4345,7 @@
 				F7225F3F2C542C1400B7D935 /* FormLocalDataSource.swift in Sources */,
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
+				F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				F7BFB8DC2C50103100901479 /* UserSummary.swift in Sources */,
 				F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */,
@@ -4339,11 +4399,13 @@
 				F734C1DA2BC03EB400B2E8C8 /* MapFeatureRepository.swift in Sources */,
 				F7489B4127A48B0E00A9E314 /* StringExtensions.swift in Sources */,
 				2F9B48DE1ED3BCC1001D07AB /* MageOfflineObservationManager.m in Sources */,
+				F78876932C6AA54800E30300 /* MageRouter.swift in Sources */,
 				F7D9B82A255EF6A800A76E2C /* AttachmentCreationCoordinator.swift in Sources */,
 				F78D579C27BE9A4F003594D3 /* SFGeometryMap.swift in Sources */,
 				F7D4F58727597C25004EA263 /* Form+CoreDataProperties.swift in Sources */,
 				F73565012C66616D00466813 /* UserViewSwiftUI.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
+				F70C34332C73D712007616FA /* DownloadingImageViewModel.swift in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
@@ -4356,6 +4418,7 @@
 				F7225F5E2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift in Sources */,
 				F7154AC7260CE165002C8617 /* NavigationOverlay.swift in Sources */,
 				2F3C9EE02B179E8F00FF5570 /* HasMapSearchMixin.swift in Sources */,
+				F70C34392C73D7A0007616FA /* DownloadingFileView.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
 				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.swift in Sources */,
@@ -4467,6 +4530,7 @@
 				F714D5F51A5C8CAA00B096A7 /* Recording.m in Sources */,
 				F7B5772C245CABE600879C9C /* ExpandableCard.swift in Sources */,
 				04E2C8A028D387C2001F0812 /* GridSystems.swift in Sources */,
+				F70C34352C73D735007616FA /* DownloadingImageView.swift in Sources */,
 				F752B5F0275FF80C00BFA6EC /* FormJson.swift in Sources */,
 				F72D43222694B60300F9AC3B /* Model11To15.xcmappingmodel in Sources */,
 				F7A82D5D2051C2560080A4E3 /* ObservationTableHeaderView.m in Sources */,

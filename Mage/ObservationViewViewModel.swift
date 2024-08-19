@@ -26,6 +26,9 @@ class ObservationViewViewModel: ObservableObject {
     @Injected(\.formRepository)
     var formRepository: FormRepository
     
+    @Injected(\.attachmentRepository)
+    var attachmentRepository: AttachmentRepository
+    
     @Published
     var event: Event?
     
@@ -235,9 +238,6 @@ class ObservationViewViewModel: ObservableObject {
 }
 
 class ObservationListViewModel: ObservationViewViewModel {
-    @Injected(\.attachmentRepository)
-    var attachmentRepository: AttachmentRepository
-    
     var attachments: [AttachmentModel]?
     
     var orderedAttachments: [AttachmentModel]? {
@@ -301,5 +301,9 @@ class ObservationListViewModel: ObservationViewViewModel {
             }
         }
         .store(in: &cancellables)
+    }
+    
+    func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
+        attachmentRepository.appendAttachmentViewRoute(router: router, attachment: attachment)
     }
 }

@@ -24,22 +24,20 @@ class UserViewWrapperViewController: SwiftUIViewController {
     var scheme: MDCContainerScheming?
     var viewModel: UserViewViewModel
     
+    var router: MageRouter
+    
     var cancellables: Set<AnyCancellable> = Set()
     
-    init(userUri: URL, scheme: MDCContainerScheming?) {
+    init(userUri: URL, scheme: MDCContainerScheming?, router: MageRouter) {
+        self.router = router
         self.scheme = scheme
         self.viewModel = UserViewViewModel(uri: userUri)
         super.init()
         swiftUIView = AnyView( UserViewSwiftUI(
             viewModel: self.viewModel,
-            selectedAttachment: { [weak self] attachmentUri in
-                self?.selectedAttachment(attachmentUri)
-           },
-            selectedObservation: { [weak self] observationUri in
-                self?.viewObservation(uri: observationUri)
-            },
             viewImage: { [weak self] imageUrl in
                 if self?.viewModel.currentUserIsMe ?? false {
+                    // TODO: hook this up to the router
                     print("ITS MEEE")
                 } else {
                     if let saveNavigationController = self?.navigationController {
@@ -89,7 +87,9 @@ class UserViewWrapperViewController: SwiftUIViewController {
              
              UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
              */
-        ))
+        )
+            .environmentObject(router)
+        )
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -138,18 +138,11 @@ class UserViewWrapperViewController: SwiftUIViewController {
                 self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
                 self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
             }
-        } editObservation: { observationUri in
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
-                    return;
-                }
-                self.editObservation(observation)
-            }
-        } selectedAttachment: { attachmentUri in
-            self.selectedAttachment(attachmentUri)
-        } selectedUnsentAttachment: { localPath, contentType in
+        }
+    selectedUnsentAttachment: { localPath, contentType in
             
         }
+    .environmentObject(router)
         
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         navigationController?.pushViewController(ovc2, animated: true)
@@ -157,7 +150,7 @@ class UserViewWrapperViewController: SwiftUIViewController {
     
     func showFavorites(userIds: [String]) {
         if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
             locationViewController.title = "Favorited By";
             self.navigationController?.pushViewController(locationViewController, animated: true);
         }
@@ -216,6 +209,8 @@ class UserViewController : UITableViewController {
     @Injected(\.userRepository)
     var userRepository: UserRepository
     
+    var router: MageRouter
+    
     let user : User?
     let cellReuseIdentifier = "cell";
     var childCoordinators: Array<NSObject> = [];
@@ -237,7 +232,7 @@ class UserViewController : UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(userModel:UserModel, scheme: MDCContainerScheming?) {
+    init(userModel:UserModel, scheme: MDCContainerScheming?, router: MageRouter) {
         let context = NSManagedObjectContext.mr_default()
         self.user = context.performAndWait {
             if let userUri = userModel.userId,
@@ -247,8 +242,8 @@ class UserViewController : UITableViewController {
             }
             return nil
         }
-//        self.user = user
         self.scheme = scheme;
+        self.router = router
         super.init(style: .grouped)
         self.title = user?.name;
         self.tableView.register(cellClass: ObservationListCardCell.self);
@@ -302,22 +297,11 @@ extension UserViewController : ObservationActionsDelegate {
             actionsSheet.applyTheme(withContainerScheme: self.scheme);
             self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
             self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-        } editObservation: { observationUri in
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
-                    return;
-                }
-                let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
-                observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
-                observationEditCoordinator.start();
-                self.childCoordinators.append(observationEditCoordinator)
-
-            }
-        } selectedAttachment: { attachmentUri in
-            self.selectedAttachment(attachmentUri)
-        } selectedUnsentAttachment: { localPath, contentType in
+        }
+    selectedUnsentAttachment: { localPath, contentType in
             
         }
+    .environmentObject(router)
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         navigationController?.pushViewController(ovc2, animated: true)
@@ -345,7 +329,7 @@ extension UserViewController : ObservationActionsDelegate {
     
     func showFavorites(userIds: [String]) {
         if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
             locationViewController.title = "Favorited By";
             self.navigationController?.pushViewController(locationViewController, animated: true);
         }
@@ -354,7 +338,7 @@ extension UserViewController : ObservationActionsDelegate {
     func viewUser(_ user: User) {
         bottomSheet?.dismiss(animated: true, completion: nil);
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme)
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme, router: router)
         navigationController?.pushViewController(uvc, animated: true)
     }
 }

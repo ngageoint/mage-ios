@@ -38,6 +38,8 @@ class MainMageMapView:
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
+    var router: MageRouter = MageRouter()
+    
     // this initializes the location manager, this should go somewhere else in the future
     @Injected(\.currentLocationRepository)
     var currentLocationRepository: CurrentLocationRepository
@@ -206,7 +208,7 @@ class MainMageMapView:
     func viewUser(_ user: User) {
         bottomSheet?.dismiss(animated: true, completion: nil);
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme)
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme, router: router)
         navigationController?.pushViewController(uvc, animated: true)
     }
     
@@ -229,7 +231,7 @@ class MainMageMapView:
     func viewUserUri(_ userUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
         if let user = await userRepository.getUser(userUri: userUri) {
-            let uvc = UserViewController(userModel: user, scheme: scheme)
+            let uvc = UserViewController(userModel: user, scheme: scheme, router: router)
             navigationController?.pushViewController(uvc, animated: true)
         }
     }
@@ -253,22 +255,11 @@ class MainMageMapView:
                     self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
                 }
             }
-        } editObservation: { observationUri in
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: observationUri) else {
-                    return;
-                }
-                let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
-                observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
-                observationEditCoordinator.start();
-                self.childCoordinators.append(observationEditCoordinator)
-
-            }
-        } selectedAttachment: { attachmentUri in
-            self.selectedAttachment(attachmentUri)
-        } selectedUnsentAttachment: { localPath, contentType in
+        }
+    selectedUnsentAttachment: { localPath, contentType in
             
         }
+    .environmentObject(router)
 
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         navigationController?.pushViewController(ovc2, animated: true)
@@ -348,7 +339,7 @@ extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
     
     func showFavorites(userIds: [String]) {
         if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme);
+            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
             locationViewController.title = "Favorited By";
             self.navigationController?.pushViewController(locationViewController, animated: true);
         }

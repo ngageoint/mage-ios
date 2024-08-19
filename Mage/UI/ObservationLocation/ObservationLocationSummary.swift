@@ -57,11 +57,11 @@ struct ObservationLocationSummary: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(user?.uppercased() ?? "") \u{2022} \(timeText)")
                         .overlineText()
-                    if let primaryFieldText = primaryFieldText {
+                    if let primaryFieldText = primaryFieldText, !primaryFieldText.isEmpty {
                         Text(primaryFieldText)
                             .primaryText()
                     }
-                    if let secondaryFieldText = secondaryFieldText {
+                    if let secondaryFieldText = secondaryFieldText, !secondaryFieldText.isEmpty {
                         Text(secondaryFieldText)
                             .secondaryText()
                     }
@@ -73,7 +73,6 @@ struct ObservationLocationSummary: View {
                         .frame(maxWidth: 48, maxHeight: 48)
                 }
             }
-            .padding()
         }
     }
 }

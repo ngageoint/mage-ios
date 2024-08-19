@@ -52,18 +52,21 @@ struct ObservationSyncStatusSwiftUI: View {
     func error(errorMessage: String?) -> some View {
         HStack {
             Image(systemName: "exclamationmark.circle")
-            VStack {
+            VStack(alignment: .leading) {
                 Text("Error Pushing Changes")
                 if let errorMessage = errorMessage, !errorMessage.isEmpty {
                     Text(errorMessage)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             .font(Font.overline)
+            .frame(maxWidth: .infinity)
         }
         
         .foregroundColor(Color.errorColor)
         .opacity(0.6)
-        .padding([.top, .bottom], 8)
+        .padding(8)
     }
     
     // If the observation is syncing

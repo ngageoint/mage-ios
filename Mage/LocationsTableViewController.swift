@@ -17,6 +17,7 @@ class LocationsTableViewController: UITableViewController {
     var updateTimer: Timer?;
     var listenersSetUp = false;
     var userIds: [String]?;
+    var router: MageRouter
     
     private lazy var allReturned : UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 30));
@@ -54,7 +55,8 @@ class LocationsTableViewController: UITableViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    public init(userIds: [String]? = nil, actionsDelegate: UserActionsDelegate? = nil, scheme: MDCContainerScheming?) {
+    public init(userIds: [String]? = nil, actionsDelegate: UserActionsDelegate? = nil, scheme: MDCContainerScheming?, router: MageRouter) {
+        self.router = router
         super.init(style: .grouped);
         self.actionsDelegate = actionsDelegate;
         self.scheme = scheme;
@@ -207,7 +209,7 @@ class LocationsTableViewController: UITableViewController {
 extension LocationsTableViewController: UserActionsDelegate {
     
     func viewUser(_ user: User) {
-        let uvc = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!);
+        let uvc = UserViewController(userModel: UserModel(user: user), scheme: self.scheme!, router: router);
         self.navigationController?.pushViewController(uvc, animated: true);
     }
     
