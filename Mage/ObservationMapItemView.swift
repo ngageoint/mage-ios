@@ -68,7 +68,7 @@ struct ObservationMapItemView: View {
                     },
                     label: {
                         Label(
-                            title: {},
+                            title: {EmptyView()},
                             icon: {
                                 Image(systemName: "chevron.left")
                                     .renderingMode(.template)
@@ -79,18 +79,16 @@ struct ObservationMapItemView: View {
                     }
                 )
                 .contentShape(Rectangle())
-                .buttonStyle(MaterialButtonStyle())
+                .buttonStyle(MaterialButtonStyle(type: .text))
                 .accessibilityElement()
                 .accessibilityLabel("previous")
                 if let item = viewModel.currentItem, let coordinate = item.coordinate {
-                    Spacer()
                     CoordinateButton(action: CoordinateActions.copyCoordinate(coordinate: coordinate))
                         .buttonStyle(MaterialButtonStyle())
                         .padding(.trailing, 8)
                     Text(item.accuracyDisplay ?? "")
                         .font(Font.caption)
                         .foregroundColor(Color.onSurfaceColor.opacity(0.6))
-                    Spacer()
                 }
                 Button(
                     action: {
@@ -115,5 +113,6 @@ struct ObservationMapItemView: View {
                 .accessibilityLabel("next")
             }
         }
+        .frame(maxWidth: .infinity)
     }
 }

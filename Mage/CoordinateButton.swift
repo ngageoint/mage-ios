@@ -19,6 +19,7 @@ struct CoordinateButton: View {
             } label: {
                 Label {
                     Text(coordinate.toDisplay(short: true))
+                        .lineLimit(1)
                 } icon: {
                     Image(uiImage: UIImage(named: "location_tracking_on")!.resized(to: CGSize(width: 14, height: 14)).withRenderingMode(.alwaysTemplate))
                 }
