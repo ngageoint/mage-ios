@@ -84,7 +84,6 @@ struct AttachmentFieldViewSwiftUI: View {
                         AttachmentPreviewView(attachment: attachment) {
                             viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                         }
-                        .frame(maxWidth: .infinity, maxHeight: 150)
                         .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
                     }
                 }
