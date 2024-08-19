@@ -73,31 +73,11 @@ struct AttachmentFieldViewSwiftUI: View {
                     .secondaryText()
                 LazyVGrid(columns:layout) {
                     ForEach(viewModel.attachments ?? []) { attachment in
-                        VStack{
-                            if let url = URL(string: attachment.url ?? "") {
-                                KFImage(url)
-                                    .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
-                                    .forceRefresh()
-                                    .cacheOriginalImage()
-                                    .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
-                                    .placeholder {
-                                        Image("observations")
-                                            .symbolRenderingMode(.monochrome)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
-                                    }
-                                
-                                    .fade(duration: 0.3)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(maxWidth: .infinity, maxHeight: 150)
-                                    .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
-                                    .onTapGesture {
-                                        viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
-                                    }
-                            }
+                        AttachmentPreviewView(attachment: attachment) {
+                            viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                         }
+                        .frame(maxWidth: .infinity, maxHeight: 150)
+                        .clipShape(RoundedRectangle(cornerSize: CGSizeMake(5, 5)))
                     }
                 }
             }
