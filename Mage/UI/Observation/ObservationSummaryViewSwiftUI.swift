@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Kingfisher
+import CoreMedia
 
 struct ObservationSummaryViewSwiftUI: View {
     @StateObject
@@ -32,6 +33,8 @@ struct ObservationSummaryViewSwiftUI: View {
                     error: viewModel.observationModel?.error ?? false,
                     syncing: viewModel.observationModel?.syncing ?? false
                 )
+                .padding([.leading, .trailing], 16)
+                .padding(.top, 16)
             }
             .contentShape(Rectangle())
             .onTapGesture {
@@ -41,12 +44,42 @@ struct ObservationSummaryViewSwiftUI: View {
                 TabView {
                     ForEach(viewModel.orderedAttachments ?? []) { attachment in
                         if let url = URL(string: attachment.url ?? "") {
-                            KFImage(url)
+                            if (attachment.contentType?.hasPrefix("image") ?? false) {
+                                KFImage(
+                                    url
+                                )
                                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
                                 .cacheOriginalImage()
                                 .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
                                 .placeholder {
                                     Image("observations")
+                                        .symbolRenderingMode(.monochrome)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                                }
+                                .fade(duration: 0.3)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: .infinity, maxHeight: 150)
+                                .onTapGesture {
+                                    viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
+                                }
+                            } else if (attachment.contentType?.hasPrefix("video") ?? false),
+                                      let url = attachment.urlWithToken
+                            {
+                                KFImage(
+                                    source: Source.provider(
+                                        AVAssetImageDataProvider(
+                                            assetURL: url,
+                                            time: CMTime(seconds: 0.0, preferredTimescale: 1)
+                                        )
+                                    )
+                                )
+                                .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
+                                .cacheOriginalImage()
+                                .placeholder {
+                                    Image(systemName: "play.circle.fill")
                                         .symbolRenderingMode(.monochrome)
                                         .resizable()
                                         .scaledToFit()
@@ -60,6 +93,39 @@ struct ObservationSummaryViewSwiftUI: View {
                                 .onTapGesture {
                                     viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
                                 }
+                                .overlay {
+                                    Image(systemName: "play.circle.fill")
+                                        .symbolRenderingMode(.monochrome)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                                        .padding(16)
+                                }
+                            } else if (attachment.contentType?.hasPrefix("audio") ?? false) {
+                                Image(systemName: "speaker.wave.2.fill")
+                                    .symbolRenderingMode(.monochrome)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                                    .onTapGesture {
+                                        viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
+                                    }
+                                    .padding(16)
+                                    .frame(maxWidth: .infinity, maxHeight: 150)
+                                    .border(.gray)
+                            } else {
+                                Image(systemName: "paperclip")
+                                    .symbolRenderingMode(.monochrome)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
+                                    .onTapGesture {
+                                        viewModel.appendAttachmentViewRoute(router: router, attachment: attachment)
+                                    }
+                                    .padding(16)
+                                    .frame(maxWidth: .infinity, maxHeight: 150)
+                                    .border(.gray)
+                            }
                         }
                     }
                 }

@@ -24,6 +24,16 @@ enum FileRoute: Hashable {
     case showFileImage(filePath: String)
     case cacheImage(url: URL)
     case askToCache(url: URL)
+    
+    case showLocalVideo(filePath: String)
+    case showRemoteVideo(url: URL)
+    
+    case showLocalAudio(filePath: String)
+    case showRemoteAudio(url: URL)
+    
+    case askToDownload(url: URL)
+    case downloadFile(url: URL)
+    case showDownloadedFile(fileUrl: URL, url: URL)
 }
 
 enum AttachmentRoute: Hashable {

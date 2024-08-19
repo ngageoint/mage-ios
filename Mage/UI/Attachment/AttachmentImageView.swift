@@ -51,7 +51,7 @@ struct AttachmentImageView: View {
         KFImage(viewModel.attachmentServerUrl)
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
             .cacheOriginalImage()
-            .draggableAndZoomable()
+//            .draggableAndZoomable()
     }
 }
 
@@ -135,6 +135,83 @@ struct DownloadingImageView: View {
     }
 }
 
+import Alamofire
+
+class DownloadingFileViewModel: ObservableObject {
+    @Published
+    var error: String?
+    
+    @Published
+    var fileUrl: URL?
+    
+    @Published
+    var fileDate: Date = Date()
+    
+    @Published
+    var receivedSize: Int64 = 0
+    
+    @Published
+    var totalSize: Int64 = 0
+    
+    var url: URL
+    var router: MageRouter
+    
+    init(url: URL, router: MageRouter) {
+        self.url = url
+        self.router = router
+        
+        let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory, options: [.createIntermediateDirectories, .removePreviousFile])
+
+        MageSession.shared.session.download(
+            url,
+            method: .get,
+            to: destination
+        ).downloadProgress(closure: { (progress) in
+                self.receivedSize = progress.completedUnitCount
+                self.totalSize = progress.totalUnitCount
+            }).response(completionHandler: { (response) in
+                // TODO: if this was an attachment, set the local path on the entity
+                // but this does not seem like the right place to do that
+                if let fileUrl = response.fileURL {
+                    self.router.path.append(FileRoute.showDownloadedFile(fileUrl: fileUrl, url: url))
+                }
+            })
+    }
+}
+
+struct DownloadingFileView: View {
+    @ObservedObject
+    var viewModel: DownloadingFileViewModel
+    
+    var bcf: ByteCountFormatter {
+        let bcf = ByteCountFormatter()
+        bcf.allowedUnits = [.useAll]
+        bcf.countStyle = .file
+        return bcf
+    }
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            if let error = viewModel.error {
+                Text("Error Downloading: \(error)")
+                    .foregroundColor(Color.errorColor)
+                    .primaryText()
+            } else {
+                Text("Downloading")
+                    .primaryText()
+            }
+            ProgressView(value: (Float(viewModel.receivedSize) / Float(viewModel.totalSize)))
+                .tint(Color.primaryColor)
+            Text("Downloaded \(bcf.string(fromByteCount: viewModel.receivedSize)) of \(bcf.string(fromByteCount: viewModel.totalSize))")
+                .secondaryText()
+            Spacer()
+        }
+        .padding()
+        .background(Color.backgroundColor)
+    }
+}
+
 struct AskToCacheImageView: View {
     
     @EnvironmentObject
@@ -159,5 +236,53 @@ struct AskToCacheImageView: View {
         }
         .padding()
         .background(Color.backgroundColor)
+    }
+}
+
+struct AskToDownloadFileView: View {
+    
+    @EnvironmentObject
+    var router: MageRouter
+    
+    var url: URL
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            Text("Your attachment fetch settings do not allow auto downloading.  Would you like to download and view the file?")
+                .font(.body1)
+                .foregroundStyle(Color.onSurfaceColor)
+            Button {
+                router.path.append(FileRoute.downloadFile(url: url))
+            } label: {
+                Text("View")
+            }
+            .buttonStyle(MaterialButtonStyle(type: .contained))
+
+            Spacer()
+        }
+        .padding()
+        .background(Color.backgroundColor)
+    }
+}
+
+import AVKit
+
+struct VideoView: View {
+    var videoUrl: URL
+    
+    @State var player = AVPlayer()
+    
+    var body: some View {
+        VideoPlayer(player: player)
+            .onAppear{
+                  if player.currentItem == nil {
+                        let item = AVPlayerItem(url: videoUrl)
+                        player.replaceCurrentItem(with: item)
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                        player.play()
+                    })
+                }
     }
 }

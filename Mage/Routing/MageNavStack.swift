@@ -117,6 +117,101 @@ class MageNavStack: UIViewController {
             if let url = URL(string: filePath) {
                 DocumentController.shared.presentQL(url: url, viewControllerToPresentFrom: self)
             }
+        case .showLocalVideo(filePath: let filePath):
+            if let url = URL(string: filePath) {
+                let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
+                self.pushViewController(vc: vc)
+            }
+        case .showRemoteVideo(url: let url):
+            var url2 = url
+            url2.append(queryItems: [URLQueryItem(name: "access_token", value: StoredPassword.retrieveStoredToken())])
+            let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url2))
+            self.pushViewController(vc: vc)
+            
+        case .showLocalAudio(filePath: let filePath):
+            if let url = URL(string: filePath) {
+                let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url))
+                self.pushViewController(vc: vc)
+            }
+        case .showRemoteAudio(url: let url):
+            var url2 = url
+            url2.append(queryItems: [URLQueryItem(name: "access_token", value: StoredPassword.retrieveStoredToken())])
+            let vc = SwiftUIViewController(swiftUIView: VideoView(videoUrl: url2))
+            self.pushViewController(vc: vc)
+            
+        case .askToDownload(url: let url):
+            let vc = SwiftUIViewController(swiftUIView: AskToDownloadFileView(url: url).environmentObject(router))
+            self.pushViewController(vc: vc)
+        
+        case .downloadFile(url: let url):
+            let lastIndexOfCache = router.path.lastIndex(where: { element in
+                switch element {
+                case let value as FileRoute:
+                    switch(value) {
+                    case .askToDownload(url: let url):
+                        if url == url {
+                            return true
+                        }
+                    default:
+                        break
+                    }
+                default:
+                    break
+                }
+                return false
+            })
+            
+            var vcs: [UIViewController]?
+            if let lastIndexOfCache = lastIndexOfCache {
+                // we were told to cache this, pop it off the path and replace the view controller without animation
+                vcs = navigationController?.viewControllers
+                let _ = vcs?.popLast()
+                router.path.remove(at: lastIndexOfCache)
+                currentPathElementCount = currentPathElementCount - 1
+            }
+            
+            let ovc2 = SwiftUIViewController(swiftUIView: DownloadingFileView(viewModel: DownloadingFileViewModel(url: url, router: router)))
+            if vcs != nil {
+                self.navigationControllerObserver?.observePopTransition(of: ovc2, delegate: self)
+                vcs?.append(ovc2)
+                self.navigationController?.viewControllers = vcs!
+            } else {
+                self.pushViewController(vc: ovc2)
+            }
+        case .showDownloadedFile(fileUrl: let fileUrl, url: let url):
+            let lastIndexOfDownload = router.path.lastIndex(where: { element in
+                switch element {
+                case let value as FileRoute:
+                    switch(value) {
+                    case .downloadFile(url: let downloadedUrl):
+                        if downloadedUrl == url {
+                            return true
+                        }
+                    default:
+                        break
+                    }
+                default:
+                    break
+                }
+                return false
+            })
+            
+            var vcs: [UIViewController]?
+            if let lastIndexOfDownload = lastIndexOfDownload {
+                // we were told to download this, pop it off the path and replace the view controller without animation
+                vcs = navigationController?.viewControllers
+                let _ = vcs?.popLast()
+                router.path.remove(at: lastIndexOfDownload)
+                currentPathElementCount = currentPathElementCount - 1
+            }
+            if vcs != nil {
+                let ql = DocumentController.shared.getQuickLookViewController(url: fileUrl)
+                self.navigationControllerObserver?.observePopTransition(of: ql, delegate: self)
+                vcs?.append(ql)
+                self.navigationController?.viewControllers = vcs!
+            } else {
+                DocumentController.shared.presentQL(url: fileUrl, viewControllerToPresentFrom: self)
+            }
         case .cacheImage(url: let url):
             let lastIndexOfCache = router.path.lastIndex(where: { element in
                 switch element {

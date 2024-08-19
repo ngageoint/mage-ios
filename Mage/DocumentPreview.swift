@@ -70,7 +70,6 @@ class DocumentController: NSObject, ObservableObject, UIDocumentInteractionContr
     }
     
     func presentDocument(url: URL, viewControllerToPresentFrom: UIViewController? = nil) {
-        print("xxx show the url \(url)")
         self.viewControllerToPresentFrom = viewControllerToPresentFrom
         controller = UIDocumentInteractionController()
         controller?.delegate = self
