@@ -27,6 +27,78 @@ class ObservationRepository: ObservableObject {
     @Injected(\.observationRemoteDataSource)
     var remoteDataSource: ObservationRemoteDataSource
     
+    var refreshPublisher: AnyPublisher<Date, Never>? {
+        refreshSubject?.eraseToAnyPublisher()
+    }
+    
+    var cancellable = Set<AnyCancellable>()
+
+    var refreshSubject: PassthroughSubject<Date, Never>? = PassthroughSubject<Date, Never>()
+    
+    init() {
+        UserDefaults.standard.publisher(for: \.observationTimeFilterKey)
+            .removeDuplicates()
+            .sink { [weak self] order in
+                NSLog("Order update \(DataSources.observation.key): \(order)")
+                Task { [weak self] in
+                    self?.refreshSubject?.send(Date())
+                }
+            }
+            .store(in: &cancellable)
+        UserDefaults.standard.publisher(for: \.observationTimeFilterUnitKey)
+            .removeDuplicates()
+            .sink { [weak self] order in
+                NSLog("Order update \(DataSources.observation.key): \(order)")
+                Task { [weak self] in
+                    self?.refreshSubject?.send(Date())
+                }
+            }
+            .store(in: &cancellable)
+        UserDefaults.standard.publisher(for: \.observationTimeFilterNumberKey)
+            .removeDuplicates()
+            .sink { [weak self] order in
+                NSLog("Order update \(DataSources.observation.key): \(order)")
+                Task { [weak self] in
+                    self?.refreshSubject?.send(Date())
+                }
+            }
+            .store(in: &cancellable)
+        UserDefaults.standard.publisher(for: \.importantFilterKey)
+            .removeDuplicates()
+            .sink { [weak self] order in
+                NSLog("Order update \(DataSources.observation.key): \(order)")
+                Task { [weak self] in
+                    self?.refreshSubject?.send(Date())
+                }
+            }
+            .store(in: &cancellable)
+        UserDefaults.standard.publisher(for: \.favoritesFilterKey)
+            .removeDuplicates()
+            .sink { [weak self] order in
+                Task { [weak self] in
+                    self?.refreshSubject?.send(Date())
+                }
+            }
+            .store(in: &cancellable)
+
+        NotificationCenter.default.publisher(for: .MAGEFormFetched)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                if let event: Event = notification.object as? Event {
+                    if let eventId = event.remoteId, eventId == Server.currentEventId() {
+                        Task { [weak self] in
+                            self?.refreshSubject?.send(Date())
+                        }
+                    }
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    func observeFilteredCount() -> AnyPublisher<Int, Never>? {
+        localDataSource.observeFilteredCount()
+    }
+    
     func observations(
         paginatedBy paginator: Trigger.Signal? = nil
     ) -> AnyPublisher<[ObservationItem], Error> {

@@ -31,8 +31,7 @@ protocol ObservationLocalDataSource {
     @discardableResult
     func getObservation(remoteId: String?) async -> Observation?
     func getObservation(observationUri: URL?) async -> Observation?
-    func getCount(
-    ) -> Int
+    func observeFilteredCount() -> AnyPublisher<Int, Never>?
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
@@ -144,12 +143,12 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
             request.predicate = predicate
 
             request.includesSubentities = false
-            request.includesPropertyValues = false
+            request.propertiesToFetch = ["timestamp"]
             request.fetchLimit = 100
             request.fetchOffset = (page ?? 0) * request.fetchLimit
             request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
 
-            if let fetched = context.fetch(request: request) {
+            if let fetched = try? context.fetch(request) {
 
                 observations = fetched.flatMap { observation in
                     return [ObservationItem.listItem(observation.objectID.uriRepresentation())]
@@ -158,7 +157,8 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         }
 
         let observationPage: ObservationModelPage = ObservationModelPage(
-            observationList: observations, next: (page ?? 0) + 1,
+            observationList: observations, 
+            next: (page ?? 0) + 1,
             currentHeader: previousHeader
         )
 
@@ -265,10 +265,24 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
             return nil
         }
     }
-
-    func getCount(
-    ) -> Int {
-        return 0
+    func observeFilteredCount() -> AnyPublisher<Int, Never>? {
+        var itemChanges: AnyPublisher<Int, Never> {
+            
+            let request = Observation.fetchRequest()
+            let predicates: [NSPredicate] = Observations.getPredicatesForObservations() as? [NSPredicate] ?? []
+            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            request.predicate = predicate
+            request.includesSubentities = false
+            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+            
+            return context.listPublisher(for: request, transformer: { $0 })
+            .catch { _ in Empty() }
+            .map({ output in
+                output.count
+            })
+            .eraseToAnyPublisher()
+        }
+        return itemChanges
     }
 
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int {

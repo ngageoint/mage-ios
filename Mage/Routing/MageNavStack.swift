@@ -47,6 +47,8 @@ class MageNavStack: UIViewController {
                         self.handleAttachmentRoute(route: value)
                     case let value as FileRoute:
                         self.handleFileRoute(route: value)
+                    case let value as MageRoute:
+                        self.handleMageRoute(route: value)
                     default:
                         print("something else")
                     }
@@ -59,6 +61,18 @@ class MageNavStack: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("This class does not support NSCoding")
+    }
+    
+    func handleMageRoute(route: MageRoute) {
+        switch (route) {
+        case .observationFilter:
+            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil);
+            let fvc: ObservationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "observationFilter");
+            fvc.applyTheme(withContainerScheme: self.scheme);
+            self.pushViewController(vc: fvc)
+        case .locationFilter:
+            print("location filter")
+        }
     }
     
     func handleFileRoute(route: FileRoute) {
@@ -293,10 +307,6 @@ class MageNavStack: UIViewController {
     }
     
     @objc func launchFilter() {
-        let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil);
-        let fvc: ObservationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "observationFilter");
-        fvc.applyTheme(withContainerScheme: self.scheme);
-        self.pushViewController(vc: fvc)
     }
     
     func pushViewController(vc: UIViewController) {

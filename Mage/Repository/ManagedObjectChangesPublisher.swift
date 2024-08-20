@@ -200,8 +200,8 @@ struct ManagedObjectChangesPublisher<Object: NSManagedObject, TransformedObject:
 extension NSManagedObjectContext {
     func listPublisher<Object: NSManagedObject, TransformedObject: Equatable>(
         for fetchRequest: NSFetchRequest<Object>,
-        transformer: @escaping (Object) -> TransformedObject?
-    ) -> ManagedObjectListPublisher<Object, TransformedObject?> {
+        transformer: @escaping (Object) -> TransformedObject
+    ) -> ManagedObjectListPublisher<Object, TransformedObject> {
         ManagedObjectListPublisher(fetchRequest: fetchRequest, context: self, transformer: transformer)
     }
 }
