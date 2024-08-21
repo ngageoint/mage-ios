@@ -33,6 +33,9 @@ class ObservationsViewModel: ObservableObject {
     
     @Published private(set) var state: State = .loading
     @Published var loaded: Bool = false
+    @Published var firstVisible: Bool = false
+    var shouldReload: Bool = false
+    
     private var disposables = Set<AnyCancellable>()
     
     var currentUserCanEdit: Bool {
@@ -64,12 +67,39 @@ class ObservationsViewModel: ObservableObject {
         case loadMore
     }
     
+    init() {
+        repository.refreshPublisher?.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] _ in
+            self?.reload()
+        })
+        .store(in: &disposables)
+        
+        repository.observeFilteredCount()?
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] count in
+                guard let self = self else { return }
+                if self.firstVisible {
+                    self.reload()
+                } else {
+                    self.shouldReload = true
+                }
+            })
+            .store(in: &disposables)
+    }
+    
     func reload() {
         trigger.activate(for: TriggerId.reload)
     }
     
     func loadMore() {
         trigger.activate(for: TriggerId.loadMore)
+    }
+    
+    func setFirstRowVisible(visible: Bool) {
+        firstVisible = visible
+        if firstVisible, shouldReload {
+            shouldReload = false
+            reload()
+        }
     }
     
     func fetchObservations(limit: Int = 100) {

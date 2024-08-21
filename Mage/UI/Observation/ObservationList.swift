@@ -48,6 +48,7 @@ struct ObservationList: View {
                 .background(Color.backgroundColor)
                 .transition(AnyTransition.opacity)
             case let .loaded(rows: rows):
+                ScrollViewReader { proxy in
                     List(rows) { uriItem in
                         switch uriItem {
                         case .listItem(let uri):
@@ -55,8 +56,16 @@ struct ObservationList: View {
                                 viewModel: ObservationListViewModel(uri: uri)
                             )
                             .onAppear {
+                                if rows.first == uriItem {
+                                    viewModel.setFirstRowVisible(visible: true)
+                                }
                                 if rows.last == uriItem {
                                     viewModel.loadMore()
+                                }
+                            }
+                            .onDisappear {
+                                if rows.first == uriItem {
+                                    viewModel.setFirstRowVisible(visible: false)
                                 }
                             }
                             .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
@@ -101,15 +110,16 @@ struct ObservationList: View {
                                     
                                 }
                                 .padding([.leading, .trailing], 16)
-
+                                
                             }
                             .buttonStyle(MaterialButtonStyle(type: .contained))
-
+                            
                         }
                         .padding(64)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color.surfaceColor)
                     }
+                }
                     .transition(AnyTransition.opacity)
                 
             case let .failure(error: error):

@@ -39,6 +39,23 @@ class LocationsViewModel: ObservableObject {
         case loadMore
     }
     
+    init() {
+        repository.refreshPublisher?
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] _ in
+                self?.reload()
+            })
+            .store(in: &disposables)
+        
+        repository.observeLatest()?
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] count in
+                guard let self = self else { return }
+                self.reload()
+            })
+            .store(in: &disposables)
+    }
+    
     func reload() {
         trigger.activate(for: TriggerId.reload)
     }

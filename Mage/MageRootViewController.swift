@@ -52,7 +52,6 @@ import MaterialViews
     }
     
     private lazy var observationsTab: UINavigationController = {
-//        let observationTableViewController = ObservationListWrapperViewController(scheme: scheme)
         let observationTableViewController = ObservationListNavStack(scheme: scheme)
         let nc = UINavigationController(rootViewController: observationTableViewController);
         nc.tabBarItem = UITabBarItem(title: "Observations", image: UIImage(named: "observations"), tag: 1);

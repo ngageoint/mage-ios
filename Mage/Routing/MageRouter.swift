@@ -13,6 +13,11 @@ class MageRouter: ObservableObject {
     var path: [Any] = []
 }
 
+enum MageRoute: Hashable {
+    case observationFilter
+    case locationFilter
+}
+
 enum ObservationRoute: Hashable {
     case detail(uri: URL?)
     case create
