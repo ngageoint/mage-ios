@@ -49,8 +49,6 @@ class MageNavStack: UIViewController {
                     switch (last) {
                     case let value as ObservationRoute:
                         self.handleObservationRoute(route: value)
-                    case let value as AttachmentRoute:
-                        self.handleAttachmentRoute(route: value)
                     case let value as FileRoute:
                         self.handleFileRoute(route: value)
                     case let value as MageRoute:
@@ -303,20 +301,6 @@ class MageNavStack: UIViewController {
         case .askToCache(url: let url):
             let vc = SwiftUIViewController(swiftUIView: AskToCacheImageView(imageUrl: url).environmentObject(router))
             self.pushViewController(vc: vc)
-        }
-    }
-    
-    func handleAttachmentRoute(route: AttachmentRoute) {
-        switch(route) {
-        
-        case .askToDownload(attachmentUri: let attachmentUri):
-            print("askToDownload")
-        case .showVideo(attachmentUri: let attachmentUri):
-            print("showVideo")
-        case .showAudio(attachmentUri: let attachmentUri):
-            print("showAudio")
-        case .showFilePreview(attachmentUri: let attachmentUri):
-            print("showFilePreview")
         }
     }
     

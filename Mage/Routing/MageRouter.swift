@@ -45,10 +45,3 @@ enum FileRoute: Hashable {
     case downloadFile(url: URL)
     case showDownloadedFile(fileUrl: URL, url: URL)
 }
-
-enum AttachmentRoute: Hashable {
-    case askToDownload(attachmentUri: URL?)
-    case showVideo(attachmentUri: URL?)
-    case showAudio(attachmentUri: URL?)
-    case showFilePreview(attachmentUri: URL?)
-}
