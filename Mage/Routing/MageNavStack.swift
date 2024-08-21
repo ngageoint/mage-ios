@@ -20,6 +20,12 @@ class MageNavStack: UIViewController {
     @Injected(\.observationRepository)
     var observationRepository: ObservationRepository
     
+    @Injected(\.locationRepository)
+    var locationRepository: LocationRepository
+    
+    @Injected(\.userRepository)
+    var userRepository: UserRepository
+    
     var router: MageRouter = MageRouter()
     
     var scheme: MDCContainerScheming?
@@ -49,6 +55,8 @@ class MageNavStack: UIViewController {
                         self.handleFileRoute(route: value)
                     case let value as MageRoute:
                         self.handleMageRoute(route: value)
+                    case let value as UserRoute:
+                        self.handleUserRoute(route: value)
                     default:
                         print("something else")
                     }
@@ -63,6 +71,34 @@ class MageNavStack: UIViewController {
         fatalError("This class does not support NSCoding")
     }
     
+    func handleUserRoute(route: UserRoute) {
+        switch(route) {
+        case .detail(uri: let uri):
+            print("User uri")
+            guard let uri = uri else { return }
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                if let user = await self.userRepository.getUser(userUri: uri),
+                   let userId = user.userId
+                {
+                    let uvc = UserViewWrapperViewController(userUri: userId, scheme: self.scheme, router: self.router)
+                    self.pushViewController(vc: uvc)
+                }
+            }
+        case .userFromLocation(locationUri: let locationUri):
+            guard let locationUri = locationUri else { return }
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                if let location = await self.locationRepository.getLocation(locationUri: locationUri),
+                   let userId = location.userModel?.userId
+                {
+                    let uvc = UserViewWrapperViewController(userUri: userId, scheme: self.scheme, router: self.router)
+                    self.pushViewController(vc: uvc)
+                }
+            }
+        }
+    }
+    
     func handleMageRoute(route: MageRoute) {
         switch (route) {
         case .observationFilter:
@@ -71,7 +107,10 @@ class MageNavStack: UIViewController {
             fvc.applyTheme(withContainerScheme: self.scheme);
             self.pushViewController(vc: fvc)
         case .locationFilter:
-            print("location filter")
+            let filterStoryboard = UIStoryboard(name: "Filter", bundle: nil);
+            let fvc: LocationFilterTableViewController = filterStoryboard.instantiateViewController(identifier: "locationFilter");
+            fvc.applyTheme(withContainerScheme: self.scheme);
+            self.pushViewController(vc: fvc)
         }
     }
     

@@ -17,8 +17,6 @@ struct ObservationList: View {
     
     @EnvironmentObject
     var router: MageRouter
-
-    var launchFilter: () -> Void
     
     var body: some View {
         Group {
@@ -102,7 +100,7 @@ struct ObservationList: View {
                                 .multilineTextAlignment(.center)
                                 .padding(.bottom, 8)
                             Button {
-                                launchFilter()
+                                router.path.append(MageRoute.observationFilter)
                             } label: {
                                 Label {
                                     Text("Adjust Filter")

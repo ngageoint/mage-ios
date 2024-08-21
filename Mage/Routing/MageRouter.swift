@@ -24,6 +24,11 @@ enum ObservationRoute: Hashable {
     case edit(uri: URL?)
 }
 
+enum UserRoute: Hashable {
+    case detail(uri: URL?)
+    case userFromLocation(locationUri: URL?)
+}
+
 enum FileRoute: Hashable {
     case showCachedImage(cacheKey: String?)
     case showFileImage(filePath: String)

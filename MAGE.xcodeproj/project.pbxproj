@@ -336,10 +336,10 @@
 		F73564E22C63B67600466813 /* ObservationSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564E12C63B67600466813 /* ObservationSummaryViewModel.swift */; };
 		F73564E52C650B5300466813 /* CurrentLocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564E42C650B5300466813 /* CurrentLocationRepository.swift */; };
 		F73564E72C650BAC00466813 /* CurrentLocationLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564E62C650BAC00466813 /* CurrentLocationLocalDataSource.swift */; };
-		F73564E92C651D3300466813 /* ObservationListWrapperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564E82C651D3300466813 /* ObservationListWrapperViewController.swift */; };
+		F73564E92C651D3300466813 /* ObservationListNavStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564E82C651D3300466813 /* ObservationListNavStack.swift */; };
 		F73564EB2C652EE800466813 /* ObservationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564EA2C652EE800466813 /* ObservationsViewModel.swift */; };
 		F73564ED2C65354B00466813 /* LocationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564EC2C65354B00466813 /* LocationList.swift */; };
-		F73564EF2C65356500466813 /* LocationListWrapperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564EE2C65356500466813 /* LocationListWrapperViewController.swift */; };
+		F73564EF2C65356500466813 /* LocationListNavStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564EE2C65356500466813 /* LocationListNavStack.swift */; };
 		F73564F12C6548A900466813 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564F02C6548A900466813 /* LocationsViewModel.swift */; };
 		F73564F42C65579A00466813 /* LocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564F32C65579A00466813 /* LocationRepository.swift */; };
 		F73564F62C65584E00466813 /* LocationLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73564F52C65584E00466813 /* LocationLocalDataSource.swift */; };
@@ -1202,10 +1202,10 @@
 		F73564E12C63B67600466813 /* ObservationSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSummaryViewModel.swift; sourceTree = "<group>"; };
 		F73564E42C650B5300466813 /* CurrentLocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationRepository.swift; sourceTree = "<group>"; };
 		F73564E62C650BAC00466813 /* CurrentLocationLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationLocalDataSource.swift; sourceTree = "<group>"; };
-		F73564E82C651D3300466813 /* ObservationListWrapperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListWrapperViewController.swift; sourceTree = "<group>"; };
+		F73564E82C651D3300466813 /* ObservationListNavStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListNavStack.swift; sourceTree = "<group>"; };
 		F73564EA2C652EE800466813 /* ObservationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationsViewModel.swift; sourceTree = "<group>"; };
 		F73564EC2C65354B00466813 /* LocationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationList.swift; sourceTree = "<group>"; };
-		F73564EE2C65356500466813 /* LocationListWrapperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListWrapperViewController.swift; sourceTree = "<group>"; };
+		F73564EE2C65356500466813 /* LocationListNavStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListNavStack.swift; sourceTree = "<group>"; };
 		F73564F02C6548A900466813 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
 		F73564F32C65579A00466813 /* LocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRepository.swift; sourceTree = "<group>"; };
 		F73564F52C65584E00466813 /* LocationLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationLocalDataSource.swift; sourceTree = "<group>"; };
@@ -2559,7 +2559,7 @@
 				F73564DD2C62BB7E00466813 /* ObservationList.swift */,
 				F73564DF2C62CF8400466813 /* ObservationSummaryViewSwiftUI.swift */,
 				F73564E12C63B67600466813 /* ObservationSummaryViewModel.swift */,
-				F73564E82C651D3300466813 /* ObservationListWrapperViewController.swift */,
+				F73564E82C651D3300466813 /* ObservationListNavStack.swift */,
 				F73564EA2C652EE800466813 /* ObservationsViewModel.swift */,
 			);
 			path = Observation;
@@ -2589,7 +2589,7 @@
 			children = (
 				F73564EC2C65354B00466813 /* LocationList.swift */,
 				F73564F02C6548A900466813 /* LocationsViewModel.swift */,
-				F73564EE2C65356500466813 /* LocationListWrapperViewController.swift */,
+				F73564EE2C65356500466813 /* LocationListNavStack.swift */,
 				F73564F82C65642D00466813 /* LocationSummaryView.swift */,
 				F73564FA2C65650F00466813 /* UserLocationViewModel.swift */,
 				F73564FE2C656B0000466813 /* LocationSummaryViewModel.swift */,
@@ -4284,7 +4284,7 @@
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
 				F7AC803626E7E366004B944D /* MageSplitViewController.swift in Sources */,
 				F73564F12C6548A900466813 /* LocationsViewModel.swift in Sources */,
-				F73564EF2C65356500466813 /* LocationListWrapperViewController.swift in Sources */,
+				F73564EF2C65356500466813 /* LocationListNavStack.swift in Sources */,
 				F7EBAEBF2762400800650F4F /* MapNotifications.swift in Sources */,
 				F7F8B4B926D4319300DACCC7 /* UIViewExtensions.swift in Sources */,
 				2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */,
@@ -4384,7 +4384,7 @@
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				F776ACA32BCDC362000FAFB4 /* CoreDataDataSource.swift in Sources */,
 				F72D43072694B60300F9AC3B /* ObservationImportant.swift in Sources */,
-				F73564E92C651D3300466813 /* ObservationListWrapperViewController.swift in Sources */,
+				F73564E92C651D3300466813 /* ObservationListNavStack.swift in Sources */,
 				F70688B42BB3574100D8E2EA /* ObservationsMap.swift in Sources */,
 				F7225F3D2C542BC300B7D935 /* FormRepository.swift in Sources */,
 				F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */,

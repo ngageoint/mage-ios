@@ -33,7 +33,7 @@ import MaterialViews
     }();
     
     private lazy var locationsTab: UINavigationController = {
-        let locationTableViewController = LocationListWrapperViewController(scheme: scheme, router: MageRouter())
+        let locationTableViewController = LocationListNavStack(scheme: scheme)
         
         let nc = UINavigationController()
         nc.tabBarItem = UITabBarItem(title: "People", image: UIImage(systemName: "person.2.fill"), tag: 2);

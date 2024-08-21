@@ -1,5 +1,5 @@
 //
-//  ObservationListWrapperViewController.swift
+//  ObservationListNavStack.swift
 //  MAGE
 //
 //  Created by Dan Barela on 8/8/24.
@@ -13,12 +13,8 @@ class ObservationListNavStack: MageNavStack {
     override func viewDidLoad() {
         super.viewDidLoad()
         let svc = SwiftUIViewController(
-            swiftUIView: ObservationList(
-            launchFilter: { [weak self] in
-                self?.launchFilter()
-            }
-            )
-            .environmentObject(router)
+            swiftUIView: ObservationList()
+                .environmentObject(router)
         )
         self.view.addSubview(svc.view)
         setNavBarTitle()
