@@ -73,15 +73,17 @@ class ObservationsViewModel: ObservableObject {
         })
         .store(in: &disposables)
         
-        repository.observeFilteredCount()?.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] count in
-            guard let self = self else { return }
-            if self.firstVisible {
-                self.reload()
-            } else {
-                self.shouldReload = true
-            }
-        })
-        .store(in: &disposables)
+        repository.observeFilteredCount()?
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] count in
+                guard let self = self else { return }
+                if self.firstVisible {
+                    self.reload()
+                } else {
+                    self.shouldReload = true
+                }
+            })
+            .store(in: &disposables)
     }
     
     func reload() {

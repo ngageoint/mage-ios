@@ -265,6 +265,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
             return nil
         }
     }
+    
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {
         var itemChanges: AnyPublisher<Int, Never> {
             

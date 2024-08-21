@@ -40,6 +40,7 @@ protocol LocationLocalDataSource {
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<[URIItem], Error>
     func observeLocation(locationUri: URL) -> AnyPublisher<LocationModel, Never>?
+    func observeLatest() -> AnyPublisher<Date, Never>?
 }
 
 struct URIModelPage {
@@ -63,6 +64,27 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
             }
             return nil
         }
+    }
+    
+    func observeLatest() -> AnyPublisher<Date, Never>? {
+        var itemChanges: AnyPublisher<Date, Never> {
+            
+            let request = Location.fetchRequest()
+            let predicates: [NSPredicate] = Locations.getPredicatesForLocations() as? [NSPredicate] ?? []
+            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            request.predicate = predicate
+            request.includesSubentities = false
+            request.propertiesToFetch = ["timestamp"]
+            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+            
+            return context.listPublisher(for: request, transformer: { $0 })
+            .catch { _ in Empty() }
+            .map({ output in
+                output[0].timestamp ?? Date()
+            })
+            .eraseToAnyPublisher()
+        }
+        return itemChanges
     }
     
     func observeLocation(locationUri: URL) -> AnyPublisher<LocationModel, Never>? {
@@ -135,9 +157,9 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
         request.predicate = predicate
 
         request.includesSubentities = false
-        request.includesPropertyValues = false
         request.fetchLimit = 100
         request.fetchOffset = (page ?? 0) * request.fetchLimit
+        request.propertiesToFetch = ["timestamp"]
         request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
         let previousHeader: String? = currentHeader
         var uris: [URIItem] = []
