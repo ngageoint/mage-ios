@@ -9,7 +9,7 @@ import PureLayout
 
 @objc class MapViewController_iPad : MageMapViewController {
     
-    typealias Delegate = ObservationActionsDelegate & UserActionsDelegate & FeedItemSelectionDelegate
+    typealias Delegate = ObservationActionsDelegate & FeedItemSelectionDelegate
     weak var delegate: Delegate?;
     var settingsCoordinator: MapSettingsCoordinator?
     
