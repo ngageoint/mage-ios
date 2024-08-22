@@ -57,8 +57,8 @@ struct MageBottomSheet: View {
             ScrollView(.vertical) {
                 if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? ObservationMapItem {
                     ObservationLocationBottomSheet(viewModel: ObservationLocationBottomSheetViewModel(observationLocationUri: bottomSheetItem.observationLocationId))
-                } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? User {
-                    UserBottomSheet(viewModel: UserBottomSheetViewModel(userUri: bottomSheetItem.objectID.uriRepresentation()))
+                } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? UserModel {
+                    UserBottomSheet(viewModel: UserBottomSheetViewModel(userUri: bottomSheetItem.userId))
                 } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? FeatureItem {
                     FeatureBottomSheet(viewModel: StaticLayerBottomSheetViewModel(featureItem: bottomSheetItem))
                 } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? GeoPackageFeatureItem {
