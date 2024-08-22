@@ -110,6 +110,7 @@ struct ObservationLocationBottomSheet: View {
                         error: observationMapItem.error,
                         syncing: observationMapItem.syncing
                     )
+                    .padding(16)
                     
                     ObservationLocationBottomSheetActionBar(
                         coordinate: observationMapItem.coordinate,
