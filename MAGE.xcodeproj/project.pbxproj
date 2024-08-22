@@ -590,7 +590,6 @@
 		F7C640FB257E9B7000C02335 /* MockObservationFormListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */; };
 		F7C640FF257EB29100C02335 /* geometryField.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C640FE257EB29100C02335 /* geometryField.json */; };
 		F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C6410925817BC000C02335 /* MockLocationService.swift */; };
-		F7C812DB25C08D3C00D4332B /* ObservationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */; };
 		F7C812E925C1B37200D4332B /* ObservationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C812E825C1B37200D4332B /* ObservationDataStore.swift */; };
 		F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */; };
 		F7CDD70F2600ED4000F3294C /* ObservationTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */; };
@@ -1508,7 +1507,6 @@
 		F7C640FA257E9B7000C02335 /* MockObservationFormListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObservationFormListener.swift; sourceTree = "<group>"; };
 		F7C640FE257EB29100C02335 /* geometryField.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryField.json; sourceTree = "<group>"; };
 		F7C6410925817BC000C02335 /* MockLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationService.swift; sourceTree = "<group>"; };
-		F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewController.swift; sourceTree = "<group>"; };
 		F7C812E825C1B37200D4332B /* ObservationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationDataStore.swift; sourceTree = "<group>"; };
 		F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionHandler.swift; sourceTree = "<group>"; };
 		F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewControllerTests.swift; sourceTree = "<group>"; };
@@ -2279,7 +2277,6 @@
 				F7F4754825BA3C7D006634F7 /* ObservationSummaryView.swift */,
 				F7A82D5B2051C2560080A4E3 /* ObservationTableHeaderView.h */,
 				F7A82D5C2051C2560080A4E3 /* ObservationTableHeaderView.m */,
-				F7C812DA25C08D3C00D4332B /* ObservationTableViewController.swift */,
 				F75DD30D1A97AABD0007FA3F /* View */,
 			);
 			name = Observation;
@@ -4391,7 +4388,6 @@
 				F763FF092C765D9200403A00 /* UserAvatarChooserDelegate.swift in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.swift in Sources */,
-				F7C812DB25C08D3C00D4332B /* ObservationTableViewController.swift in Sources */,
 				F744ACFD2BFE73A900A6E4CA /* DataSourceMapViewModel.swift in Sources */,
 				F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */,
 				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
