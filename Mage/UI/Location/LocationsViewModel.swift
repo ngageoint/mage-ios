@@ -29,7 +29,7 @@ class LocationsViewModel: ObservableObject {
     }
     
     @Published private(set) var state: State = .loading
-    @Published var userIds: [URL] = []
+    @Published var userIds: [String]?
     @Published var loaded: Bool = false
     private var disposables = Set<AnyCancellable>()
         
@@ -39,7 +39,8 @@ class LocationsViewModel: ObservableObject {
         case loadMore
     }
     
-    init() {
+    init(userIds: [String]? = nil) {
+        self.userIds = userIds
         repository.refreshPublisher?
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] _ in
@@ -69,6 +70,7 @@ class LocationsViewModel: ObservableObject {
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, repository] in
             repository.locations(
+                userIds: self.userIds,
                 paginatedBy: trigger.signal(activatedBy: TriggerId.loadMore)
             )
             .scan([]) { $0 + $1 }

@@ -37,6 +37,7 @@ enum URIItem: Hashable, Identifiable {
 protocol LocationLocalDataSource {
     func getLocation(uri: URL) async -> LocationModel?
     func locations(
+        userIds: [String]?,
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<[URIItem], Error>
     func observeLocation(locationUri: URL) -> AnyPublisher<LocationModel, Never>?
@@ -105,9 +106,11 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
     }
     
     func locations(
+        userIds: [String]? = nil,
         paginatedBy paginator: Trigger.Signal? = nil
     ) -> AnyPublisher<[URIItem], Error> {
         return locations(
+            userIds: userIds,
             at: nil,
             currentHeader: nil,
             paginatedBy: paginator
@@ -117,17 +120,20 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
     }
     
     func locations(
+        userIds: [String]? = nil,
         at page: Page?,
         currentHeader: String?,
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<URIModelPage, Error> {
         return locations(
+            userIds: userIds,
             at: page,
             currentHeader: currentHeader
         )
         .map { result -> AnyPublisher<URIModelPage, Error> in
             if let paginator = paginator, let next = result.next {
                 return self.locations(
+                    userIds: userIds,
                     at: next,
                     currentHeader: result.currentHeader,
                     paginatedBy: paginator
@@ -147,12 +153,21 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
     }
     
     func locations(
+        userIds: [String]? = nil,
         at page: Page?,
         currentHeader: String?
     ) -> AnyPublisher<URIModelPage, Error> {
 
         let request = Location.fetchRequest()
-        let predicates: [NSPredicate] = Locations.getPredicatesForLocations() as? [NSPredicate] ?? []
+        let predicates: [NSPredicate] = {
+            if let userids = userIds {
+                return [
+                    NSPredicate(format: "user.remoteId IN %@", userIds!)
+                ]
+            } else {
+                return Locations.getPredicatesForLocations() as? [NSPredicate] ?? []
+            }
+        }()
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.predicate = predicate
 

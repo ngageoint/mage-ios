@@ -181,18 +181,14 @@ class MainMageMapView:
         viewObservationNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
             self?.bottomSheetMixin?.dismissBottomSheet()
             if let observation = notification.object as? URL {
-                Task {
-                    await self?.viewObservation(observation)
-                }
+                self?.router.appendRoute(ObservationRoute.detail(uri: observation))
             }
         }
 
         viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
             self?.bottomSheetMixin?.dismissBottomSheet()
             if let user = notification.object as? URL {
-                Task {
-                    await self?.viewUserUri(user)
-                }
+                self?.router.appendRoute(UserRoute.detail(uri: user))
             }
         }
 
@@ -204,13 +200,6 @@ class MainMageMapView:
                 }
             }
         }
-    }
-    
-    func viewUser(_ user: User) {
-        bottomSheet?.dismiss(animated: true, completion: nil);
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme, router: router)
-        navigationController?.pushViewController(uvc, animated: true)
     }
     
     func viewFeedItem(_ feedItem: FeedItem) {
@@ -226,27 +215,6 @@ class MainMageMapView:
             let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
             navigationController?.pushViewController(fivc, animated: true)
         }
-    }
-    
-    @MainActor
-    func viewUserUri(_ userUri: URL) async {
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        if let user = await userRepository.getUser(userUri: userUri) {
-            let uvc = UserViewController(userModel: user, scheme: scheme, router: router)
-            navigationController?.pushViewController(uvc, animated: true)
-        }
-    }
-    
-    @MainActor
-    func viewObservation(_ observationUri: URL) async {
-        NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observationUri)) { localPath, contentType in
-            
-        }
-    .environmentObject(router)
-
-        let ovc2 = SwiftUIViewController(swiftUIView: observationView)
-        navigationController?.pushViewController(ovc2, animated: true)
     }
     
     func onSearchResultSelected(result: GeocoderResult) {
@@ -276,12 +244,6 @@ extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
             return coordinator == child;
         }) {
             self.childCoordinators.remove(at: index);
-        }
-    }
-    
-    func viewObservation(_ observation: Observation) {
-        Task {
-            await viewObservation(observation.objectID.uriRepresentation())
         }
     }
     
@@ -321,13 +283,6 @@ extension MainMageMapView: ObservationEditDelegate, ObservationActionsDelegate {
         bottomSheet?.dismiss(animated: true, completion: nil);
     }
     
-    func showFavorites(userIds: [String]) {
-        if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
-            locationViewController.title = "Favorited By";
-            self.navigationController?.pushViewController(locationViewController, animated: true);
-        }
-    }
 }
 
 extension MainMageMapView: AttachmentSelectionDelegate {

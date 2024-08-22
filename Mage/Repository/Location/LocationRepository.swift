@@ -67,9 +67,10 @@ class LocationRepository: ObservableObject {
     }
     
     func locations(
+        userIds: [String]? = nil,
         paginatedBy paginator: Trigger.Signal? = nil
     ) -> AnyPublisher<[URIItem], Error> {
-        localDataSource.locations(paginatedBy: paginator)
+        localDataSource.locations(userIds: userIds, paginatedBy: paginator)
     }
     
     func getLocation(locationUri: URL) async -> LocationModel? {
