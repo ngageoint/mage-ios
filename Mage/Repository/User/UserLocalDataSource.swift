@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import Kingfisher
 
 private struct UserLocalDataSourceProviderKey: InjectionKey {
     static var currentValue: UserLocalDataSource = UserCoreDataDataSource()
@@ -35,6 +36,9 @@ protocol UserLocalDataSource {
         event: Event,
         userUri: URL
     ) async -> Bool
+    
+    func avatarChosen(user: UserModel, imageData: Data)
+    func handleAvatarResponse(response: [AnyHashable: Any], user: UserModel, imageData: Data, image: UIImage)
 }
 
 struct UserModelPage {
@@ -49,7 +53,7 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
     }()
     
     private func getUserNSManagedObject(userUri: URL) async -> User? {
-        let context = NSManagedObjectContext.mr_default()
+        let context = context
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri) {
                 return try? context.existingObject(with: id) as? User
@@ -62,7 +66,7 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         guard let userUri = userUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        let context = context
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri) {
                 return (try? context.existingObject(with: id) as? User).map { user in
@@ -80,7 +84,6 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
     }
     
     func getUser(remoteId: String) -> UserModel? {
-        let context = NSManagedObjectContext.mr_default()
         return context.performAndWait {
             return context.fetchFirst(User.self, key: "remoteId", value: remoteId).map { user in
                 UserModel(user: user)
@@ -92,7 +95,6 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         guard let userUri = userUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
         return context.performAndWait {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri) {
                 if let user = try? context.existingObject(with: id) as? User {
@@ -211,5 +213,40 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         }
 
         return false
+    }
+    
+    func avatarChosen(user: UserModel, imageData: Data) {
+        let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
+            let userAvatarPath = "\(documentsDirectories[0])/userAvatars/\(user.remoteId ?? "temp")";
+            do {
+                try imageData.write(to: URL(fileURLWithPath: userAvatarPath))
+            } catch {
+                print("Could not write image file to destination")
+            }
+        }
+    }
+    
+    func handleAvatarResponse(response: [AnyHashable : Any], user: UserModel, imageData: Data, image: UIImage) {
+        // store the image data for the updated avatar in the cache here
+        guard let userUri = user.userId else {
+            return
+        }
+        let context = context
+        return context.performAndWait {
+            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri) {
+                if let user = try? context.existingObject(with: id) as? User {
+                    user.update(json: response, context: context)
+                    if let cacheAvatarUrl = user.cacheAvatarUrl,
+                        let url = URL(string: cacheAvatarUrl)
+                    {
+                        print("XXX caching for url \(url.absoluteString)")
+                        KingfisherManager.shared.cache.store(image, original:imageData, forKey: url.absoluteString) {_ in
+                            try? context.save()
+                        }
+                    }
+                }
+            }
+        }
     }
 }

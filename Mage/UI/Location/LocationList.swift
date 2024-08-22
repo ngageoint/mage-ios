@@ -12,9 +12,9 @@ import MaterialViews
 struct LocationList: View {
     @StateObject var viewModel: LocationsViewModel = LocationsViewModel()
     
-    var viewLocationUser: (_ locationUri: URL) -> Void
-    var launchFilter: () -> Void
-    
+    @EnvironmentObject
+    var router: MageRouter
+        
     var body: some View {
         Group {
             switch viewModel.state {
@@ -56,7 +56,7 @@ struct LocationList: View {
                                 }
                             }
                         .onTapGesture {
-                            viewLocationUser(uri)
+                            router.appendRoute(UserRoute.userFromLocation(locationUri: uri))
                         }
                         .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                         .listRowSeparator(.hidden)
@@ -92,7 +92,7 @@ struct LocationList: View {
                             .multilineTextAlignment(.center)
                             .padding(.bottom, 8)
                         Button {
-                            launchFilter()
+                            router.appendRoute(MageRoute.locationFilter)
                         } label: {
                             Label {
                                 Text("Adjust Filter")

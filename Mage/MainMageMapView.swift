@@ -239,24 +239,7 @@ class MainMageMapView:
     @MainActor
     func viewObservation(_ observationUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observationUri)) { favoritesModel in
-            guard let favoritesModel = favoritesModel,
-                  let favoriteUsers = favoritesModel.favoriteUsers
-            else {
-                return
-            }
-            self.showFavorites(userIds: favoriteUsers)
-        } moreActions: {
-            Task {
-                if let observation = await self.observationRepository.getObservation(observationUri: observationUri) {
-                    let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-                    actionsSheet.applyTheme(withContainerScheme: self.scheme);
-                    self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-                    self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-                }
-            }
-        }
-    selectedUnsentAttachment: { localPath, contentType in
+        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observationUri)) { localPath, contentType in
             
         }
     .environmentObject(router)

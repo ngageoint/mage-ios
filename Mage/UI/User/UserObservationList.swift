@@ -30,7 +30,7 @@ struct UserObservationList: View {
                         }
                     }
                     .onTapGesture {
-                        router.path.append(ObservationRoute.detail(uri: uri))
+                        router.appendRoute(ObservationRoute.detail(uri: uri))
                     }
                     .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                     .listRowSeparator(.hidden)

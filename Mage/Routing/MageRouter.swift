@@ -11,6 +11,17 @@ import Foundation
 class MageRouter: ObservableObject {
     @Published
     var path: [Any] = []
+    
+    @Published
+    var bottomSheetRoute: BottomSheetRoute?
+    
+    func appendRoute(_ route: Any) {
+        if let bottomSheetRoute = route as? BottomSheetRoute {
+            self.bottomSheetRoute = bottomSheetRoute
+        } else {
+            path.append(route)
+        }
+    }
 }
 
 enum MageRoute: Hashable {
@@ -18,10 +29,21 @@ enum MageRoute: Hashable {
     case locationFilter
 }
 
+enum BottomSheetRoute: Hashable {
+    case observationMoreActions(observationUri: URL?)
+    case userAvatarActions(userUri: URL?)
+}
+
 enum ObservationRoute: Hashable {
     case detail(uri: URL?)
     case create
     case edit(uri: URL?)
+}
+
+enum UserRoute: Hashable {
+    case detail(uri: URL?)
+    case userFromLocation(locationUri: URL?)
+    case showFavoritedUsers(remoteIds: [String])
 }
 
 enum FileRoute: Hashable {
@@ -39,11 +61,4 @@ enum FileRoute: Hashable {
     case askToDownload(url: URL)
     case downloadFile(url: URL)
     case showDownloadedFile(fileUrl: URL, url: URL)
-}
-
-enum AttachmentRoute: Hashable {
-    case askToDownload(attachmentUri: URL?)
-    case showVideo(attachmentUri: URL?)
-    case showAudio(attachmentUri: URL?)
-    case showFilePreview(attachmentUri: URL?)
 }

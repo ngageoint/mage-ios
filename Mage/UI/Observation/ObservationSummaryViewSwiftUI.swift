@@ -38,7 +38,7 @@ struct ObservationSummaryViewSwiftUI: View {
             }
             .contentShape(Rectangle())
             .onTapGesture {
-                router.path.append(ObservationRoute.detail(uri: viewModel.observationModel?.observationId))
+                router.appendRoute(ObservationRoute.detail(uri: viewModel.observationModel?.observationId))
             }
             if !(viewModel.attachments ?? []).isEmpty {
                 TabView {

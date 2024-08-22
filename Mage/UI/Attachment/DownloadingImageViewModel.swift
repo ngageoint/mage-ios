@@ -48,7 +48,7 @@ class DownloadingImageViewModel: ObservableObject {
         ) { result in
             switch result {
             case .success(_):
-                router.path.append(FileRoute.showCachedImage(cacheKey: imageUrl.absoluteString))
+                router.appendRoute(FileRoute.showCachedImage(cacheKey: imageUrl.absoluteString))
             case .failure(let error):
                 self.error = error.localizedDescription
             }

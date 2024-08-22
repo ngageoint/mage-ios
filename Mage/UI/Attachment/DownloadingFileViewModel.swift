@@ -45,7 +45,7 @@ class DownloadingFileViewModel: ObservableObject {
                 // TODO: if this was an attachment, set the local path on the entity
                 // but this does not seem like the right place to do that
                 if let fileUrl = response.fileURL {
-                    self.router.path.append(FileRoute.showDownloadedFile(fileUrl: fileUrl, url: url))
+                    self.router.appendRoute(FileRoute.showDownloadedFile(fileUrl: fileUrl, url: url))
                 }
             })
     }

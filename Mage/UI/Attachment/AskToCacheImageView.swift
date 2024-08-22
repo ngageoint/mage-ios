@@ -24,7 +24,7 @@ struct AskToCacheImageView: View {
                 .font(.body1)
                 .foregroundStyle(Color.onSurfaceColor)
             Button {
-                router.path.append(FileRoute.cacheImage(url: imageUrl))
+                router.appendRoute(FileRoute.cacheImage(url: imageUrl))
             } label: {
                 Text("View")
             }

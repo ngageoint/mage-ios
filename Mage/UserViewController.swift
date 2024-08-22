@@ -34,59 +34,7 @@ class UserViewWrapperViewController: SwiftUIViewController {
         self.viewModel = UserViewViewModel(uri: userUri)
         super.init()
         swiftUIView = AnyView( UserViewSwiftUI(
-            viewModel: self.viewModel,
-            viewImage: { [weak self] imageUrl in
-                if self?.viewModel.currentUserIsMe ?? false {
-                    // TODO: hook this up to the router
-                    print("ITS MEEE")
-                } else {
-                    if let saveNavigationController = self?.navigationController {
-                        let coordinator: AttachmentViewCoordinator = AttachmentViewCoordinator(
-                            rootViewController: saveNavigationController,
-                            url: imageUrl,
-                            contentType: "image",
-                            delegate: nil,
-                            scheme: scheme
-                        )
-                        self?.childCoordinators.append(coordinator)
-                        coordinator.start()
-                    }
-                }
-            }
-            /**
-             let alert = UIAlertController(title: "Avatar", message: "Change or view your avatar", preferredStyle: .actionSheet);
-             alert.addAction(UIAlertAction(title: "View Avatar", style: .default, handler: { (action) in
-                 self.presentAvatar();
-             }));
-             alert.addAction(UIAlertAction(title: "New Avatar Photo", style: .default, handler: { (action) in
-                 ExternalDevice.checkCameraPermissions(for: self.navigationController) { (granted) in
-                     let picker = UIImagePickerController();
-                     picker.delegate = self;
-                     picker.allowsEditing = true;
-                     picker.sourceType = .camera;
-                     picker.cameraDevice = .front;
-                     self.navigationController?.present(picker, animated: true, completion: nil);
-                 }
-             }));
-             alert.addAction(UIAlertAction(title: "New Avatar From Gallery", style: .default, handler: { (action) in
-                 ExternalDevice.checkGalleryPermissions(for: self.navigationController) { (granted) in
-                     let picker = UIImagePickerController();
-                     picker.delegate = self;
-                     picker.allowsEditing = true;
-                     picker.sourceType = .photoLibrary;
-                     self.navigationController?.present(picker, animated: true, completion: nil);
-                 }
-             }));
-             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
-
-             if let popoverController = alert.popoverPresentationController {
-                 popoverController.sourceView = self
-                 popoverController.sourceRect = CGRect(x: self.bounds.midX, y: self.bounds.midY, width: 0, height: 0)
-                 popoverController.permittedArrowDirections = []
-             }
-             
-             UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
-             */
+            viewModel: self.viewModel
         )
             .environmentObject(router)
         )
@@ -121,25 +69,7 @@ class UserViewWrapperViewController: SwiftUIViewController {
     }
     
     func viewObservation(uri: URL) {
-        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: uri)) { favoritesModel in
-            guard let favoritesModel = favoritesModel,
-                  let favoriteUsers = favoritesModel.favoriteUsers
-            else {
-                return
-            }
-            self.showFavorites(userIds: favoriteUsers)
-        } moreActions: {
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
-                    return
-                }
-                let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-                actionsSheet.applyTheme(withContainerScheme: self.scheme);
-                self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-                self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-            }
-        }
-    selectedUnsentAttachment: { localPath, contentType in
+        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: uri)) { localPath, contentType in
             
         }
     .environmentObject(router)
@@ -285,20 +215,7 @@ class UserViewController : UITableViewController {
 
 extension UserViewController : ObservationActionsDelegate {
     func viewObservation(_ observation: Observation) {
-        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation())) { favoritesModel in
-            guard let favoritesModel = favoritesModel,
-                  let favoriteUsers = favoritesModel.favoriteUsers
-            else {
-                return
-            }
-            self.showFavorites(userIds: favoriteUsers)
-        } moreActions: {
-            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-            actionsSheet.applyTheme(withContainerScheme: self.scheme);
-            self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-            self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-        }
-    selectedUnsentAttachment: { localPath, contentType in
+        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation()))  { localPath, contentType in
             
         }
     .environmentObject(router)

@@ -20,9 +20,7 @@ struct UserViewSwiftUI: View {
     
     @StateObject var mixins: MapMixins = MapMixins()
     @StateObject var mapState: MapState = MapState()
-    
-    var viewImage: (_ imageUrl: URL) -> Void
-    
+        
     var map: some View {
         MapRepresentable(name: "MAGE Map", mixins: mixins, mapState: mapState)
             .ignoresSafeArea()
@@ -37,9 +35,8 @@ struct UserViewSwiftUI: View {
                         if let url = URL(string: viewModel.user?.avatarUrl ?? "") {
                             KFImage(url)
                                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
-                                .forceRefresh()
                                 .cacheOriginalImage()
-                                .onlyFromCache(DataConnectionUtilities.shouldFetchAttachments())
+                                .onlyFromCache(!DataConnectionUtilities.shouldFetchAttachments())
                                 .placeholder {
                                     Image(systemName: "person.crop.square")
                                         .symbolRenderingMode(.monochrome)
@@ -48,7 +45,6 @@ struct UserViewSwiftUI: View {
                                         .foregroundStyle(Color.onSurfaceColor.opacity(0.45))
                                         .background(Color.backgroundColor)
                                 }
-                                .roundCorner(radius: Radius.point(5))
                                 .fade(duration: 0.3)
                                 .resizable()
                                 .scaledToFill()
@@ -60,7 +56,14 @@ struct UserViewSwiftUI: View {
                                 )
                                 .padding(.top, -35)
                                 .onTapGesture {
-                                    viewImage(url)
+                                    // if me do something different
+                                    if viewModel.currentUserIsMe {
+                                        router.appendRoute(BottomSheetRoute.userAvatarActions(userUri: viewModel.uri))
+                                    }
+                                    // else show the image
+                                    else {
+                                        router.appendRoute(FileRoute.showCachedImage(cacheKey: url.absoluteString))
+                                    }
                                 }
                         }
                         

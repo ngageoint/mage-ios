@@ -42,7 +42,7 @@ struct UserModel: Equatable, Hashable {
         email = user.email
         phone = user.phone
         lastUpdated = user.lastUpdated
-        avatarUrl = user.avatarUrl
+        avatarUrl = user.cacheAvatarUrl
         username = user.username
         timestamp = user.location?.timestamp
         userId = user.objectID.uriRepresentation()
@@ -57,6 +57,9 @@ class UserRepository: ObservableObject {
     
     @Injected(\.userLocalDataSource)
     var localDataSource: UserLocalDataSource
+    
+    @Injected(\.userRemoteDataSource)
+    var remoteDataSource: UserRemoteDataSource
 
     func getUser(userUri: URL?) async -> UserModel? {
         await localDataSource.getUser(userUri: userUri)
@@ -88,5 +91,13 @@ class UserRepository: ObservableObject {
             return await localDataSource.canUserUpdateImportant(event: event, userUri: userUri)
         }
         return false
+    }
+    
+    func avatarChosen(user: UserModel, image: UIImage) async {
+        if let imageData = image.jpegData(compressionQuality: 1.0) {
+            localDataSource.avatarChosen(user: user, imageData: imageData)
+            let response = await remoteDataSource.uploadAvatar(user: user, imageData: imageData)
+            localDataSource.handleAvatarResponse(response: response, user: user, imageData: imageData, image: image)
+        }
     }
 }

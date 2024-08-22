@@ -107,7 +107,7 @@ class AttachmentRepository: ObservableObject {
             }
         }
         if let route = route {
-            router.path.append(route)
+            router.appendRoute(route)
         }
     }
 }
