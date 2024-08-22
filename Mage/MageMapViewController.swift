@@ -8,22 +8,12 @@
 
 import Foundation
 
-class MageMapViewController: UIViewController {
+class MageMapViewController: MageNavStack {
     var mapView: MainMageMapView?
-    var scheme: MDCContainerScheming?;
-    
-    public init(scheme: MDCContainerScheming?) {
-        super.init(nibName: nil, bundle: nil)
-        self.scheme = scheme
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView = MainMageMapView(viewController: self, navigationController: self.navigationController, scheme: scheme)
+        mapView = MainMageMapView(viewController: self, navigationController: self.navigationController, scheme: scheme, router: router)
         view.addSubview(mapView!)
         mapView?.autoPinEdgesToSuperviewEdges()
         NotificationCenter.default.addObserver(forName: .ObservationFiltersChanged, object:nil, queue: .main) { [weak self] notification in

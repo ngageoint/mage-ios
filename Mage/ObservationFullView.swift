@@ -1,5 +1,5 @@
 //
-//  ObservationViewCardCollectionViewController.swift
+//  ObservationFullView.swift
 //  MAGE
 //
 //  Created by Daniel Barela on 12/16/20.
@@ -31,7 +31,6 @@ struct ObservationFullView: View {
                 ObservationHeaderViewSwiftUI(
                     viewModel: viewModel
                 )
-                
                 Text("Forms")
                     .overlineText()
                     .padding()

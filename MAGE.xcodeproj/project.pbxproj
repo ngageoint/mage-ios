@@ -360,7 +360,7 @@
 		F7384FDE274D74EA00EA1A96 /* ObservationFetchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */; };
 		F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886C625894CEA00EDA036 /* KeyboardHelper.swift */; };
 		F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */; };
-		F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */; };
+		F7388708258A8D0900EDA036 /* ObservationFullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388707258A8D0900EDA036 /* ObservationFullView.swift */; };
 		F738870F258A999100EDA036 /* ObservationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738870E258A999100EDA036 /* ObservationHeaderView.swift */; };
 		F7388715258AABE800EDA036 /* ObservationImportantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7388714258AABE800EDA036 /* ObservationImportantView.swift */; };
 		F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738871C258BA22500EDA036 /* UIButtonInsets.swift */; };
@@ -1230,7 +1230,7 @@
 		F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFetchServiceTests.swift; sourceTree = "<group>"; };
 		F73886C625894CEA00EDA036 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		F73886CB258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
-		F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewCardCollectionViewController.swift; sourceTree = "<group>"; };
+		F7388707258A8D0900EDA036 /* ObservationFullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFullView.swift; sourceTree = "<group>"; };
 		F738870E258A999100EDA036 /* ObservationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationHeaderView.swift; sourceTree = "<group>"; };
 		F7388714258AABE800EDA036 /* ObservationImportantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantView.swift; sourceTree = "<group>"; };
 		F738871C258BA22500EDA036 /* UIButtonInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonInsets.swift; sourceTree = "<group>"; };
@@ -2764,7 +2764,7 @@
 			children = (
 				F738870D258A997500EDA036 /* Components */,
 				F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */,
-				F7388707258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift */,
+				F7388707258A8D0900EDA036 /* ObservationFullView.swift */,
 				F7225F402C543B7800B7D935 /* ObservationViewViewModel.swift */,
 			);
 			name = View;
@@ -4471,7 +4471,7 @@
 				F730B94B2683D273004AD64A /* CardHeader.swift in Sources */,
 				F714D5F11A5C832F00B096A7 /* MediaViewController.m in Sources */,
 				F7225F462C54492C00B7D935 /* EventLocalDataSource.swift in Sources */,
-				F7388708258A8D0900EDA036 /* ObservationViewCardCollectionViewController.swift in Sources */,
+				F7388708258A8D0900EDA036 /* ObservationFullView.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F734C1DE2BC72FA600B2E8C8 /* ObservationMapItemView.swift in Sources */,

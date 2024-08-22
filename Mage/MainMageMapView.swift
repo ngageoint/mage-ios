@@ -38,7 +38,7 @@ class MainMageMapView:
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
-    var router: MageRouter = MageRouter()
+    var router: MageRouter
     
     // this initializes the location manager, this should go somewhere else in the future
     @Injected(\.currentLocationRepository)
@@ -83,9 +83,10 @@ class MainMageMapView:
         return buttonStack
     }()
     
-    public init(viewController: UIViewController?, navigationController: UINavigationController?, scheme: MDCContainerScheming?) {
+    public init(viewController: UIViewController?, navigationController: UINavigationController?, scheme: MDCContainerScheming?, router: MageRouter) {
         self.viewController = viewController
         self.navigationController = navigationController
+        self.router = router
         super.init(scheme: scheme)
         // this initializes the location manager, this should go somewhere else in the future
         _ = currentLocationRepository.getLastLocation()
