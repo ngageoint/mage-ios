@@ -153,12 +153,13 @@ class SidebarUIButton: UIButton {
         
         var allRailItems: [SidebarUIButton] = [observationButton, locationButton];
 
-        for feed in Feed.mr_findAll()! as! [Feed] {
-            let feedButton: SidebarUIButton = createFeedRailView(feed: feed);
-            feedButton.feed = feed;
-            allRailItems.append(feedButton);
+        if let currentEventId = Server.currentEventId() {
+            for feed in Feed.getEventFeeds(eventId: currentEventId) {
+                let feedButton: SidebarUIButton = createFeedRailView(feed: feed);
+                feedButton.feed = feed;
+                allRailItems.append(feedButton);
+            }
         }
-
         for view in allRailItems {
             navigationRail.addArrangedSubview(view);
         }
