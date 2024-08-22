@@ -108,7 +108,11 @@ class MageNavStack: UIViewController {
                 }
             }
         case .showFavoritedUsers(remoteIds: let remoteIds):
-            showFavorites(userIds: remoteIds)
+            if (remoteIds.count != 0) {
+                let locationViewController = LocationListWrapperViewController(userRemoteIds: remoteIds, scheme: scheme, router: router)
+                locationViewController.title = "Favorited By";
+                self.pushViewController(vc: locationViewController)
+            }
         }
     }
     
@@ -444,14 +448,6 @@ class MageNavStack: UIViewController {
         
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         self.pushViewController(vc: ovc2)
-    }
-    
-    func showFavorites(userIds: [String]) {
-        if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
-            locationViewController.title = "Favorited By";
-            self.pushViewController(vc: locationViewController)
-        }
     }
 }
 

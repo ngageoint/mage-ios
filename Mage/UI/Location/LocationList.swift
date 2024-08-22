@@ -9,6 +9,28 @@
 import SwiftUI
 import MaterialViews
 
+class LocationListWrapperViewController: SwiftUIViewController {
+    let router: MageRouter
+    var scheme: MDCContainerScheming?
+    var viewModel: LocationsViewModel
+    
+    init(userRemoteIds: [String]? = nil, scheme: MDCContainerScheming?, router: MageRouter) {
+        self.router = router
+        self.scheme = scheme
+        self.viewModel = LocationsViewModel(userIds: userRemoteIds)
+        super.init()
+        swiftUIView = AnyView( LocationList(
+            viewModel: self.viewModel
+        )
+            .environmentObject(router)
+        )
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
+    }
+}
+
 struct LocationList: View {
     @StateObject var viewModel: LocationsViewModel = LocationsViewModel()
     

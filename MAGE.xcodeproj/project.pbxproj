@@ -507,7 +507,7 @@
 		F7929C8123C8F48C00396D11 /* countries_dark.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C8023C8F48C00396D11 /* countries_dark.gpkg */; };
 		F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		F795ED0524B8DFB80028FBFC /* LocationUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */; };
-		F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0624B8F15D0028FBFC /* UserViewController.swift */; };
+		F795ED0724B8F15D0028FBFC /* UserWrapperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0624B8F15D0028FBFC /* UserWrapperViewController.swift */; };
 		F795ED0924B8F34D0028FBFC /* UserTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */; };
 		F795ED0C24B8FCC00028FBFC /* UserTableHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0B24B8FCC00028FBFC /* UserTableHeaderViewTests.swift */; };
 		F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ED0F24BCB71C0028FBFC /* UserViewControllerTests.swift */; };
@@ -615,7 +615,6 @@
 		F7D43BE4269F357200561A8F /* FeedItemActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE3269F357200561A8F /* FeedItemActionsView.swift */; };
 		F7D43BE6269F3C1800561A8F /* FeedItemActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */; };
 		F7D43BEA269F505A00561A8F /* CommonSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */; };
-		F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */; };
 		F7D43BEE269F8F4D00561A8F /* LocationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */; };
 		F7D43BF0269F922C00561A8F /* PersonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */; };
 		F7D43BF226A5FCC800561A8F /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BF126A5FCC800561A8F /* UserDataStore.swift */; };
@@ -1391,7 +1390,7 @@
 		F7929C8023C8F48C00396D11 /* countries_dark.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = countries_dark.gpkg; sourceTree = "<group>"; };
 		F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMageServer.swift; sourceTree = "<group>"; };
 		F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUtilities.swift; sourceTree = "<group>"; };
-		F795ED0624B8F15D0028FBFC /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		F795ED0624B8F15D0028FBFC /* UserWrapperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWrapperViewController.swift; sourceTree = "<group>"; };
 		F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableHeaderView.swift; sourceTree = "<group>"; };
 		F795ED0B24B8FCC00028FBFC /* UserTableHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableHeaderViewTests.swift; sourceTree = "<group>"; };
 		F795ED0F24BCB71C0028FBFC /* UserViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewControllerTests.swift; sourceTree = "<group>"; };
@@ -1535,7 +1534,6 @@
 		F7D43BE3269F357200561A8F /* FeedItemActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemActionsView.swift; sourceTree = "<group>"; };
 		F7D43BE5269F3C1800561A8F /* FeedItemActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemActionsDelegate.swift; sourceTree = "<group>"; };
 		F7D43BE9269F505A00561A8F /* CommonSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonSummaryView.swift; sourceTree = "<group>"; };
-		F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
 		F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataStore.swift; sourceTree = "<group>"; };
 		F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTableViewCell.swift; sourceTree = "<group>"; };
 		F7D43BF126A5FCC800561A8F /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
@@ -2004,7 +2002,6 @@
 			isa = PBXGroup;
 			children = (
 				F7D43BED269F8F4D00561A8F /* LocationDataStore.swift */,
-				F7D43BEB269F8DAD00561A8F /* LocationsTableViewController.swift */,
 				F7D43BEF269F922C00561A8F /* PersonTableViewCell.swift */,
 				F7E40A6D2693B52200E50E26 /* UserActionsDelegate.swift */,
 				F7E40A6B2693B1A700E50E26 /* UserActionsView.swift */,
@@ -2012,7 +2009,7 @@
 				F7D43BF126A5FCC800561A8F /* UserDataStore.swift */,
 				F7E40A6726939B4100E50E26 /* UserSummaryView.swift */,
 				F795ED0824B8F34D0028FBFC /* UserTableHeaderView.swift */,
-				F795ED0624B8F15D0028FBFC /* UserViewController.swift */,
+				F795ED0624B8F15D0028FBFC /* UserWrapperViewController.swift */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -4081,7 +4078,7 @@
 				F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */,
 				F7B1C4722674033D0005FCE4 /* main.m in Sources */,
 				F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */,
-				F795ED0724B8F15D0028FBFC /* UserViewController.swift in Sources */,
+				F795ED0724B8F15D0028FBFC /* UserWrapperViewController.swift in Sources */,
 				F7225F582C5A783B00B7D935 /* AttachmentRepository.swift in Sources */,
 				F776ACA72BCDC5FC000FAFB4 /* ObservationDataLoadOperation.swift in Sources */,
 				F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */,
@@ -4430,7 +4427,6 @@
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
 				F72D43102694B60300F9AC3B /* GPSLocation+CoreDataProperties.swift in Sources */,
 				F7098F28249401E500313703 /* FeedItemTableViewCell.swift in Sources */,
-				F7D43BEC269F8DAD00561A8F /* LocationsTableViewController.swift in Sources */,
 				F72D42F12694B60300F9AC3B /* DataConnectionUtilities.swift in Sources */,
 				2F142891199AB9A400C64A98 /* UINextField.m in Sources */,
 				F7225F5E2C5C1B9000B7D935 /* ObservationLocationFieldViewModel.swift in Sources */,
