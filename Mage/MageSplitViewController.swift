@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc class MageSplitViewController : UISplitViewController {
+class MageSplitViewController : UISplitViewController {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
@@ -64,7 +64,7 @@ import Foundation
         
         self.delegate = self;
         
-        self.sideBarController = MageSideBarController(containerScheme: self.scheme!);
+        self.sideBarController = MageSideBarController(scheme: self.scheme);
         self.sideBarController!.delegate = self;
         self.masterViewController = UINavigationController(rootViewController: self.sideBarController!);
 
