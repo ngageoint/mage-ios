@@ -100,7 +100,7 @@ struct ObservationList: View {
                                 .multilineTextAlignment(.center)
                                 .padding(.bottom, 8)
                             Button {
-                                router.path.append(MageRoute.observationFilter)
+                                router.appendRoute(MageRoute.observationFilter)
                             } label: {
                                 Label {
                                     Text("Adjust Filter")
@@ -127,7 +127,7 @@ struct ObservationList: View {
         .overlay(alignment: .bottomTrailing) {
             if viewModel.currentUserCanEdit {
                 Button {
-                    router.path.append(ObservationRoute.create)
+                    router.appendRoute(ObservationRoute.create)
                 } label: {
                     Label {
                         Text("")

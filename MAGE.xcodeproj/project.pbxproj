@@ -410,6 +410,10 @@
 		F760910523FDC8FD000233A6 /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
 		F760910623FDC8FD000233A6 /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
 		F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */ = {isa = PBXBuildFile; fileRef = F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */; };
+		F763FF072C76299E00403A00 /* MeNavStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF062C76299E00403A00 /* MeNavStack.swift */; };
+		F763FF092C765D9200403A00 /* UserAvatarChooserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF082C765D9200403A00 /* UserAvatarChooserDelegate.swift */; };
+		F763FF0B2C7661DB00403A00 /* UserRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF0A2C7661DB00403A00 /* UserRemoteDataSource.swift */; };
+		F763FF0E2C7663A600403A00 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF0D2C7663A600403A00 /* UserService.swift */; };
 		F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7641CE3276D423A006225BA /* CanCreateObservation.swift */; };
 		F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
 		F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
@@ -1285,6 +1289,10 @@
 		F760910723FDCAAE000233A6 /* NetworkSyncOptionTetsts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkSyncOptionTetsts.m; sourceTree = "<group>"; };
 		F7613D5027EE03B300570145 /* ReleaseTestPlan.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReleaseTestPlan.md; sourceTree = "<group>"; };
 		F7614DA92006902000676366 /* apiSuccess.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = apiSuccess.json; path = responses/apiSuccess.json; sourceTree = SOURCE_ROOT; };
+		F763FF062C76299E00403A00 /* MeNavStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeNavStack.swift; sourceTree = "<group>"; };
+		F763FF082C765D9200403A00 /* UserAvatarChooserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarChooserDelegate.swift; sourceTree = "<group>"; };
+		F763FF0A2C7661DB00403A00 /* UserRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRemoteDataSource.swift; sourceTree = "<group>"; };
+		F763FF0D2C7663A600403A00 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
 		F76949151AA6436000CB680B /* EventChooserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventChooserController.swift; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
@@ -2824,6 +2832,14 @@
 			path = responses;
 			sourceTree = SOURCE_ROOT;
 		};
+		F763FF0C2C76634400403A00 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				F763FF0D2C7663A600403A00 /* UserService.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		F76949131AA6434A00CB680B /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -2891,6 +2907,7 @@
 		F776AC912BCD9CB5000FAFB4 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				F763FF0C2C76634400403A00 /* User */,
 				F776AC922BCD9CBC000FAFB4 /* Observation */,
 				F776ACA02BCDB892000FAFB4 /* MageSession.swift */,
 			);
@@ -3396,6 +3413,7 @@
 				F73565002C66616D00466813 /* UserViewSwiftUI.swift */,
 				F73565022C66619200466813 /* UserViewViewModel.swift */,
 				F73565042C668DB200466813 /* UserObservationList.swift */,
+				F763FF062C76299E00403A00 /* MeNavStack.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -3516,6 +3534,8 @@
 				F7DE98872C1A43F3005372F8 /* UserRepository.swift */,
 				F7DE98892C1A4431005372F8 /* UserDefinition.swift */,
 				F7DE988B2C1A4478005372F8 /* UserLocalDataSource.swift */,
+				F763FF082C765D9200403A00 /* UserAvatarChooserDelegate.swift */,
+				F763FF0A2C7661DB00403A00 /* UserRemoteDataSource.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -4074,6 +4094,7 @@
 				F70C342F2C73CF3F007616FA /* AttachmentPreviewView.swift in Sources */,
 				F73564DE2C62BB7E00466813 /* ObservationList.swift in Sources */,
 				04ED964E1EB8D09C00B6AD8D /* MapObservationManager.m in Sources */,
+				F763FF0B2C7661DB00403A00 /* UserRemoteDataSource.swift in Sources */,
 				F754C6592C484CA700E408E9 /* Triangle.swift in Sources */,
 				F7BFB8F72C52DD7F00901479 /* FeedItemAnnotation.swift in Sources */,
 				F79D2940282AC907008FD45E /* EventContentView.swift in Sources */,
@@ -4367,6 +4388,7 @@
 				F70688BE2BB5D3BC00D8E2EA /* ObservationRepository.swift in Sources */,
 				F734C1E52BC845BE00B2E8C8 /* CoordinateDisplayType.swift in Sources */,
 				2F38DF1722B942C800485DA4 /* LdapLoginView.m in Sources */,
+				F763FF092C765D9200403A00 /* UserAvatarChooserDelegate.swift in Sources */,
 				F733DC4F241BFD380056B591 /* ImageAttachmentViewController.swift in Sources */,
 				F725A9CC195CB819002A699C /* ObservationAnnotation.swift in Sources */,
 				F7C812DB25C08D3C00D4332B /* ObservationTableViewController.swift in Sources */,
@@ -4429,6 +4451,7 @@
 				F7FE8C8E258829BE00314285 /* EditAttachmentCardView.swift in Sources */,
 				F7225F4C2C594B4200B7D935 /* ShowFavoritesButton.swift in Sources */,
 				F7FD4DF91A80126300DAABA6 /* StyledPolyline.swift in Sources */,
+				F763FF072C76299E00403A00 /* MeNavStack.swift in Sources */,
 				F72D42EB2694B60300F9AC3B /* Event+CoreDataProperties.swift in Sources */,
 				F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */,
 				F7E40A6A2693A22E00E50E26 /* UserAvatarUIImageView.swift in Sources */,
@@ -4502,6 +4525,7 @@
 				F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
 				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
+				F763FF0E2C7663A600403A00 /* UserService.swift in Sources */,
 				F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F73564D52C6180C500466813 /* ObservationFavoriteRepository.swift in Sources */,

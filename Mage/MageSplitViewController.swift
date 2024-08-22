@@ -171,20 +171,8 @@ extension MageSplitViewController: ObservationActionsDelegate & UserActionsDeleg
     }
     
     func selectedObservation(_ observation: Observation!) {
-        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation())) { favoritesModel in
-            guard let favoritesModel = favoritesModel,
-                  let favoriteUsers = favoritesModel.favoriteUsers
-            else {
-                return
-            }
-            self.showFavorites(userIds: favoriteUsers)
-        } moreActions: {
-            let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-            actionsSheet.applyTheme(withContainerScheme: self.scheme);
-            self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-            self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-        }
-    selectedUnsentAttachment: { localPath, contentType in
+        let observationView = ObservationFullView(viewModel: ObservationViewViewModel(uri: observation.objectID.uriRepresentation())) {
+    localPath, contentType in
             
         }
     .environmentObject(router)

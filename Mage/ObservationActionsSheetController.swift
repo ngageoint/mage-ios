@@ -19,9 +19,10 @@ class ObservationActionsSheetController: UITableViewController {
     weak var delegate: ObservationActionsDelegate?;
     var scheme: MDCContainerScheming?;
     var userHasEditPermissions: Bool = false;
+    var router: MageRouter
     
     @objc func cancelButtonTapped(_ sender: UIButton) {
-        delegate?.cancelAction?();
+        router.bottomSheetRoute = nil
     }
     
     private lazy var cancelButton: MDCButton = {
@@ -37,10 +38,12 @@ class ObservationActionsSheetController: UITableViewController {
         fatalError("This class does not support NSCoding")
     }
     
-    @objc public init(observation: Observation, delegate: ObservationActionsDelegate) {
+    public init(observation: Observation, delegate: ObservationActionsDelegate, router: MageRouter) {
+        self.router = router
         super.init(style: .plain);
         self.observation = observation;
         self.delegate = delegate;
+        self.router = router
         let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default());
         self.userHasEditPermissions = user?.hasEditPermission ?? false;
     }
@@ -158,7 +161,7 @@ class ObservationActionsSheetController: UITableViewController {
             delegate?.deleteObservation?(observation);
         }
         if (tag == ObservationActionsSheetController.EDIT_CELL_TAG) {
-            delegate?.editObservation?(observation);
+            router.appendRoute(ObservationRoute.edit(uri: observation.objectID.uriRepresentation()))
         }
         
         if (tag == ObservationActionsSheetController.REORDER_CELL_TAG) {
@@ -168,7 +171,7 @@ class ObservationActionsSheetController: UITableViewController {
         if (tag == ObservationActionsSheetController.USER_CELL_TAG) {
             // show the user page
             if let user = observation.user {
-                delegate?.viewUser?(user)
+                router.appendRoute(UserRoute.detail(uri: user.objectID.uriRepresentation()))
             }
         }
         

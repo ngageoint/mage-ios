@@ -37,6 +37,8 @@ class MageNavStack: UIViewController {
     
     var currentPathElementCount = 0
     
+    var avatarChooserDelegate: UserAvatarChooserDelegate?
+    
     init(scheme: MDCContainerScheming?) {
         self.scheme = scheme
         super.init(nibName: nil, bundle: nil)
@@ -61,6 +63,17 @@ class MageNavStack: UIViewController {
                 }
                 
                 print("new value in router path \(value)")
+            }
+            .store(in: &cancellables)
+        
+        router.$bottomSheetRoute
+            .receive(on: DispatchQueue.main)
+            .sink { route in
+                if let route = route {
+                    self.handleBottomSheetRoute(route: route)
+                } else {
+                    self.bottomSheet?.dismiss(animated: true, completion: nil)
+                }
             }
             .store(in: &cancellables)
     }
@@ -93,6 +106,66 @@ class MageNavStack: UIViewController {
                     let uvc = UserViewWrapperViewController(userUri: userId, scheme: self.scheme, router: self.router)
                     self.pushViewController(vc: uvc)
                 }
+            }
+        case .showFavoritedUsers(remoteIds: let remoteIds):
+            showFavorites(userIds: remoteIds)
+        }
+    }
+    
+    func handleBottomSheetRoute(route: BottomSheetRoute) {
+        switch (route) {
+        case .observationMoreActions(observationUri: let uri):
+            Task {
+                guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
+                    return
+                }
+                let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self, router: router);
+                actionsSheet.applyTheme(withContainerScheme: self.scheme);
+                self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
+                self.bottomSheet?.delegate = self
+                self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
+            }
+        case .userAvatarActions(userUri: let uri):
+            Task {
+                guard let user = await userRepository.getUser(userUri: uri) else {
+                    return
+                }
+                let alert = UIAlertController(title: "Avatar", message: "Change or view your avatar", preferredStyle: .actionSheet);
+                if let avatarUrl = user.avatarUrl {
+                    alert.addAction(UIAlertAction(title: "View Avatar", style: .default, handler: { (action) in
+                        self.router.appendRoute(FileRoute.showCachedImage(cacheKey: avatarUrl))
+                    }));
+                }
+                alert.addAction(UIAlertAction(title: "New Avatar Photo", style: .default, handler: { (action) in
+                    ExternalDevice.checkCameraPermissions(for: self.navigationController) { (granted) in
+                        let picker = UIImagePickerController();
+                        self.avatarChooserDelegate = UserAvatarChooserDelegate(user: user)
+                        picker.delegate = self.avatarChooserDelegate
+                        picker.allowsEditing = true;
+                        picker.sourceType = .camera;
+                        picker.cameraDevice = .front;
+                        self.navigationController?.present(picker, animated: true, completion: nil);
+                    }
+                }));
+                alert.addAction(UIAlertAction(title: "New Avatar From Gallery", style: .default, handler: { (action) in
+                    ExternalDevice.checkGalleryPermissions(for: self.navigationController) { (granted) in
+                        let picker = UIImagePickerController();
+                        self.avatarChooserDelegate = UserAvatarChooserDelegate(user: user)
+                        picker.delegate = self.avatarChooserDelegate
+                        picker.allowsEditing = true;
+                        picker.sourceType = .photoLibrary;
+                        self.navigationController?.present(picker, animated: true, completion: nil);
+                    }
+                }));
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil));
+                
+                if let popoverController = alert.popoverPresentationController {
+//                    popoverController.sourceView = self.navigationController?.view
+//                    popoverController.sourceRect = CGRect(x: self.bounds.midX, y: self.bounds.midY, width: 0, height: 0)
+//                    popoverController.permittedArrowDirections = []
+                }
+                
+                UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -333,6 +406,7 @@ class MageNavStack: UIViewController {
     }
     
     func pushViewController(vc: UIViewController) {
+        self.bottomSheet?.dismiss(animated: true, completion: nil)
         self.navigationController?.pushViewController(vc, animated: true)
         self.navigationControllerObserver?.observePopTransition(of: vc, delegate: self)
         
@@ -362,26 +436,8 @@ class MageNavStack: UIViewController {
     func viewObservation(uri: URL) {
         let observationView = ObservationFullView(
             viewModel: ObservationViewViewModel(uri: uri)
-//            router: router
-        ) { favoritesModel in
-            guard let favoritesModel = favoritesModel,
-                  let favoriteUsers = favoritesModel.favoriteUsers
-            else {
-                return
-            }
-            self.showFavorites(userIds: favoriteUsers)
-        } moreActions: {
-            Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
-                    return
-                }
-                let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self);
-                actionsSheet.applyTheme(withContainerScheme: self.scheme);
-                self.bottomSheet = MDCBottomSheetController(contentViewController: actionsSheet);
-                self.navigationController?.present(self.bottomSheet!, animated: true, completion: nil);
-            }
-        }
-    selectedUnsentAttachment: { localPath, contentType in
+        )
+        { localPath, contentType in
             
         }
     .environmentObject(router)
@@ -415,24 +471,19 @@ extension MageNavStack: ObservationActionsDelegate {
     }
     
     func editObservation(uri: URL) async {
+        self.bottomSheet?.dismiss(animated: true, completion: nil)
         guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
             return;
         }
-        self.editObservation(observation)
-    }
-    
-    func editObservation(_ observation: Observation) {
-        self.bottomSheet?.dismiss(animated: true, completion: nil);
         let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);
         observationEditCoordinator.applyTheme(withContainerScheme: self.scheme);
         observationEditCoordinator.start();
         self.childCoordinators.append(observationEditCoordinator)
     }
     
-    func viewUser(_ user: User) {
+    func editObservation(_ observation: Observation) {
         self.bottomSheet?.dismiss(animated: true, completion: nil);
-        let uvc = UserViewController(userModel: UserModel(user: user), scheme: scheme, router: router)
-        self.pushViewController(vc: uvc)
+        router.appendRoute(ObservationRoute.edit(uri: observation.objectID.uriRepresentation()))
     }
     
     func cancelAction() {
@@ -470,5 +521,12 @@ extension MageNavStack: NavigationControllerObserverDelegate {
     ) {
         router.path.removeLast()
         self.currentPathElementCount = router.path.count
+    }
+}
+
+extension MageNavStack: MDCBottomSheetControllerDelegate {
+    
+    func bottomSheetControllerDidDismissBottomSheet(_ controller: MDCBottomSheetController) {
+        router.bottomSheetRoute = nil
     }
 }

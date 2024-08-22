@@ -15,12 +15,12 @@ import SwiftUI
 import MaterialViews
 
 struct ObservationHeaderViewSwiftUI: View {
+    @EnvironmentObject
+    var router: MageRouter
+    
     @ObservedObject
     var viewModel: ObservationViewViewModel
-    
-    var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
-    var moreActions: () -> Void
-    
+        
     var body: some View {
         VStack {
             ObservationSyncStatusSwiftUI(
@@ -97,16 +97,17 @@ struct ObservationHeaderViewSwiftUI: View {
                             userRemoteId: viewModel.currentUser?.remoteId
                         ),
                     showFavoritesAction: {
-                        showFavorites(viewModel.observationFavoritesModel)
+                        router.appendRoute(UserRoute.showFavoritedUsers(remoteIds: viewModel.observationFavoritesModel?.favoriteUsers ?? []))
                     },
                     navigateToAction:
                         CoordinateActions.navigateTo(
                             coordinate: viewModel.observationModel?.coordinate,
                             itemKey: viewModel.observationModel?.observationId?.absoluteString,
                             dataSource: DataSources.observation
-                        ),
+                        )
+                    ,
                     moreActions: {
-                        moreActions()
+                        router.appendRoute(BottomSheetRoute.observationMoreActions(observationUri: viewModel.observationModel?.observationId))
                     }
                 )
             }

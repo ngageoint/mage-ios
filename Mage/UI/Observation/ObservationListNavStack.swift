@@ -27,6 +27,6 @@ class ObservationListNavStack: MageNavStack {
     }
     
     @objc func launchObservationFilter() {
-        router.path.append(MageRoute.observationFilter)
+        router.appendRoute(MageRoute.observationFilter)
     }
 }

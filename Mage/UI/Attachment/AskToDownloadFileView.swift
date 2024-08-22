@@ -24,7 +24,7 @@ struct AskToDownloadFileView: View {
                 .font(.body1)
                 .foregroundStyle(Color.onSurfaceColor)
             Button {
-                router.path.append(FileRoute.downloadFile(url: url))
+                router.appendRoute(FileRoute.downloadFile(url: url))
             } label: {
                 Text("View")
             }

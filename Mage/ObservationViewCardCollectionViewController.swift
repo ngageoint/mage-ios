@@ -23,17 +23,13 @@ struct ObservationFullView: View {
     @EnvironmentObject
     var router: MageRouter
     
-    var showFavorites: (_ favoritesModel: ObservationFavoritesModel?) -> Void
-    var moreActions: () -> Void
     var selectedUnsentAttachment: (_ localPath: String, _ contentType: String) -> Void
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 ObservationHeaderViewSwiftUI(
-                    viewModel: viewModel,
-                    showFavorites: showFavorites,
-                    moreActions: moreActions
+                    viewModel: viewModel
                 )
                 
                 Text("Forms")
@@ -52,7 +48,7 @@ struct ObservationFullView: View {
         .overlay(alignment: .bottomTrailing) {
             if viewModel.currentUserCanEdit {
                 Button {
-                    router.path.append(ObservationRoute.edit(uri: viewModel.observationModel?.observationId))
+                    router.appendRoute(ObservationRoute.edit(uri: viewModel.observationModel?.observationId))
                 } label: {
                     Label {
                         Text("")

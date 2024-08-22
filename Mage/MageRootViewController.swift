@@ -66,12 +66,8 @@ import MaterialViews
     }()
     
     private lazy var meTab: UINavigationController? = {
-        guard let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()) else {
-            return nil
-        }
-//        return nil
-        let uvc = UserViewWrapperViewController(userUri: user.objectID.uriRepresentation(), scheme: scheme, router: MageRouter())
-        let nc = UINavigationController(rootViewController: uvc);
+        let meNavStack = MeNavStack(scheme: scheme)
+        let nc = UINavigationController(rootViewController: meNavStack);
         nc.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3);
         return nc;
     }()

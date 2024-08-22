@@ -27,6 +27,6 @@ class LocationListNavStack: MageNavStack {
     }
     
     @objc func launchLocationFilter() {
-        router.path.append(MageRoute.locationFilter)
+        router.appendRoute(MageRoute.locationFilter)
     }
 }

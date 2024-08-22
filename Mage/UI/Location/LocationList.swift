@@ -56,7 +56,7 @@ struct LocationList: View {
                                 }
                             }
                         .onTapGesture {
-                            router.path.append(UserRoute.userFromLocation(locationUri: uri))
+                            router.appendRoute(UserRoute.userFromLocation(locationUri: uri))
                         }
                         .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                         .listRowSeparator(.hidden)
@@ -92,7 +92,7 @@ struct LocationList: View {
                             .multilineTextAlignment(.center)
                             .padding(.bottom, 8)
                         Button {
-                            router.path.append(MageRoute.locationFilter)
+                            router.appendRoute(MageRoute.locationFilter)
                         } label: {
                             Label {
                                 Text("Adjust Filter")
