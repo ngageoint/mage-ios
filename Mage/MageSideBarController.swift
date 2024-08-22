@@ -23,7 +23,7 @@ class SidebarUIButton: UIButton {
 @objc class MageSideBarController : MageNavStack {
     
     var activeButton: SidebarUIButton?;
-    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserActionsDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
+    typealias Delegate = AttachmentSelectionDelegate & ObservationSelectionDelegate & UserSelectionDelegate & FeedItemSelectionDelegate & ObservationActionsDelegate
     weak public var delegate: Delegate?;
     
     private lazy var railScroll : UIScrollView = {
