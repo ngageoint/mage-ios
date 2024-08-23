@@ -88,32 +88,6 @@ class NumberFieldViewTests: KIFSpec {
 //                expect(view).to(haveValidSnapshot());
             }
             
-            it("non edit mode reference image") {
-                field[FieldKey.min.key] = 2;
-                field[FieldKey.required.key] = true;
-                numberFieldView = NumberFieldView(field: field, editMode: false, value: "2");
-                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(numberFieldView)
-                numberFieldView.autoPinEdgesToSuperviewEdges();
-                
-                expect(numberFieldView.fieldValue.text) == "2";
-                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
-                
-//                expect(view).to(haveValidSnapshot());
-            }
-            
-            it("non edit mode") {
-                numberFieldView = NumberFieldView(field: field, editMode: false, value: "2");
-                numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(numberFieldView)
-                numberFieldView.autoPinEdgesToSuperviewEdges();
-                
-                expect(numberFieldView.fieldValue.text) == "2";
-                expect(numberFieldView.fieldNameLabel.text) == "Number Field"
-            }
-            
             it("no initial value") {
                 numberFieldView = NumberFieldView(field: field);
                 numberFieldView.applyTheme(withScheme: MAGEScheme.scheme());

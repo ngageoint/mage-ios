@@ -12,6 +12,22 @@ import Combine
 @testable import MAGE
 
 class ObservationLocationStaticLocalDataSource: ObservationLocationLocalDataSource {
+    func locationsPublisher() -> AnyPublisher<CollectionDifference<MAGE.ObservationMapItem>, Never> {
+        AnyPublisher(Just(list.difference(from: [])).setFailureType(to: Never.self))
+    }
+    
+    func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<MAGE.ObservationMapItem, Never>? {
+        AnyPublisher(Just(list[0]))
+    }
+    
+    func getObservationMapItems(observationUri: URL, formId: String, fieldName: String) async -> [MAGE.ObservationMapItem]? {
+        list
+    }
+    
+    func getObservationMapItems(userUri: URL) async -> [MAGE.ObservationMapItem]? {
+        list
+    }
+    
     func getObservationLocation(observationLocationUri: URL?) async -> MAGE.ObservationLocation? {
         return nil
     }

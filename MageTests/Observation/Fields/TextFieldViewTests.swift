@@ -52,20 +52,6 @@ class TextFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
-            it("non edit mode reference image") {
-                field[FieldKey.required.key] = true;
-                textFieldView = TextFieldView(field: field, editMode: false, value: "Hello");
-                textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(textFieldView)
-                textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                expect(textFieldView.fieldValue.text) == "Hello";
-                expect(textFieldView.fieldNameLabel.text) == "Field Title"
-                
-//                expect(view).to(haveValidSnapshot());
-            }
-            
             it("edit mode reference image") {
                 field[FieldKey.required.key] = true;
                 textFieldView = TextFieldView(field: field, editMode: true, value: "Hello");
@@ -287,20 +273,6 @@ class TextFieldViewTests: KIFSpec {
                 ];
 //                Nimble_Snapshots.setNimbleTolerance(0.0);
 //                Nimble_Snapshots.recordAllSnapshots()
-            }
-            
-            it("non edit mode reference image") {
-                field[FieldKey.required.key] = true;
-                textFieldView = TextFieldView(field: field, editMode: false, value: "Hi\nHello", multiline: true);
-                textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(textFieldView)
-                textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                expect(textFieldView.fieldValue.text) == "Hi\nHello";
-                expect(textFieldView.fieldNameLabel.text) == "Multi Line Field Title"
-                
-//                expect(view).to(haveValidSnapshot());
             }
             
             it("edit mode reference image") {

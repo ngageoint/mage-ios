@@ -24,12 +24,12 @@ protocol AttachmentCreationCoordinatorDelegate: AnyObject {
 }
 
 class AttachmentCreationCoordinator: NSObject {
-    var scheme: MDCContainerScheming?;
+    weak var scheme: MDCContainerScheming?;
     var photoLocations: [TimeInterval : CLLocation] = [:]
     var photoHeadings: [TimeInterval : CLHeading] = [:]
     var locationManager: CLLocationManager?;
     weak var rootViewController: UIViewController?;
-    var observation: Observation;
+    weak var observation: Observation?
     var fieldName: String?;
     var observationFormId: String?;
     weak var delegate: AttachmentCreationCoordinatorDelegate?;
@@ -76,7 +76,7 @@ class AttachmentCreationCoordinator: NSObject {
             } else {
                 // this is only applicable in the server5 case, can be removed after that
                 attachmentJson["dirty"] = 1;
-                if let attachment = Attachment.attachment(json: attachmentJson, context: (observation.managedObjectContext)!) {
+                if let observation = observation, let attachment = Attachment.attachment(json: attachmentJson, context: (observation.managedObjectContext)!) {
                     attachment.observation = observation;
                     delegate?.attachmentCreated(attachment: AttachmentModel(attachment: attachment));
                 }

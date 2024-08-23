@@ -12,6 +12,10 @@ import OHHTTPStubs
 @testable import MAGE
 
 class ObservationIconStaticLocalDataSource: ObservationIconLocalDataSource {
+    func resetEventIconSize(eventId: Int) {
+        
+    }
+    
     func getIconPath(observationUri: URL) async -> String? {
         return OHPathForFile("110.png", type(of: self))
     }

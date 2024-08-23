@@ -134,7 +134,7 @@ public struct MapRepresentable: UIViewRepresentable, MapProtocol {
         }
         context.coordinator.mixins = mixins.mixins
     }
-
+    
     public func makeCoordinator() -> MapCoordinator {
         return MapCoordinator(self, focusNotification: focusNotification)
     }

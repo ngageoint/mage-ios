@@ -60,17 +60,16 @@ final class ObservationTileRepositoryTests: XCTestCase {
         Server.setCurrentEventId(1)
         
         let localDataSource = ObservationLocationStaticLocalDataSource()
+        InjectedValues[\.observationLocationLocalDataSource] = localDataSource
         let localIconDataSource = ObservationIconStaticLocalDataSource()
-        let iconRepository = ObservationIconRepository(localDataSource: localIconDataSource)
-        let tileRepository = ObservationsTileRepository(
-            localDataSource: localDataSource,
-            observationIconRepository: iconRepository
-        )
+        InjectedValues[\.observationIconLocalDataSource] = localIconDataSource
+        let iconRepository = ObservationIconRepository()
+        let tileRepository = ObservationsTileRepository()
         
         localDataSource.list.append(ObservationMapItem(
             observationId: URL(string: "https://test/observationId"),
             geometry: SFPoint(xValue: -104.90241, andYValue: 39.62691),
-            iconPath: OHPathForFile("110.png", type(of: self)),
+//            iconPath: OHPathForFile("110.png", type(of: self)),
             maxLatitude:  39.62691,
             maxLongitude: -104.90241,
             minLatitude: 39.62691,
@@ -85,7 +84,8 @@ final class ObservationTileRepositoryTests: XCTestCase {
             latitudePerPixel: 0.000058806721412885429,
             longitudePerPixel: 0.000085830109961996306,
             zoom: 14,
-            precise: true
+            precise: true,
+            distanceTolerance: 10.0
         )
         // this should hit one
         
@@ -100,7 +100,8 @@ final class ObservationTileRepositoryTests: XCTestCase {
             latitudePerPixel: 0.000058806721412885429,
             longitudePerPixel: 0.000085830109961996306,
             zoom: 14,
-            precise: true
+            precise: true,
+            distanceTolerance: 10.0
         )
         
         XCTAssertEqual(noItemKeys.count, 0)

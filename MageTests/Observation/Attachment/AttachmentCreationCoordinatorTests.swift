@@ -18,6 +18,10 @@ import PhotosUI
 @testable import MAGE
 
 class MockAttachmentCreationCoordinatorDelegate: AttachmentCreationCoordinatorDelegate {
+    func attachmentCreated(attachment: MAGE.AttachmentModel) {
+        
+    }
+    
 
     let attachmentCreatedCalled = XCTestExpectation(description: "attachmentCreated called")
     let attachmentCreationCancelledCalled = XCTestExpectation(description: "attachmentCreationCancelled called")

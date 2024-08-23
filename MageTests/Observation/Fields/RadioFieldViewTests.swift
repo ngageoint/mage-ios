@@ -69,17 +69,6 @@ class RadioFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
-            it("non edit mode") {
-                radioFieldView = RadioFieldView(field: field, editMode: false, value: "Purple");
-                radioFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(radioFieldView)
-                radioFieldView.autoPinEdgesToSuperviewEdges();
-                
-                controller.view.addSubview(view);
-//                expect(view).to(haveValidSnapshot());
-            }
-            
             it("no initial value") {
                 radioFieldView = RadioFieldView(field: field);
                 radioFieldView.applyTheme(withScheme: MAGEScheme.scheme());

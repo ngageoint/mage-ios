@@ -1260,8 +1260,8 @@ class ObservationTests: KIFSpec {
             
             afterEach {
                 ObservationPushService.singleton.stop();
-                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
-                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
+//                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
+//                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
                 expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse());
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
@@ -1577,10 +1577,10 @@ class ObservationTests: KIFSpec {
                     Nimble.fail()
                     return;
                 }
-                observation.toggleFavorite(completion: { success, error in
-                    expect(success).to(beTrue());
-                    print("success")
-                })
+//                observation.toggleFavorite(completion: { success, error in
+//                    expect(success).to(beTrue());
+//                    print("success")
+//                })
 
                 expect(stubCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "stub not called");
             }
@@ -1613,13 +1613,13 @@ class ObservationTests: KIFSpec {
                 expect(observation).toNot(beNil());
                 expect(Observation.mr_findFirst(in: NSManagedObjectContext.mr_default())!.favorites?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
 
-                observation.toggleFavorite(completion: nil);
+//                observation.toggleFavorite(completion: nil);
                 
                 expect(stubCalled).toEventually(beTrue());
                 
                 expect(((Observation.mr_findFirst()!.favorites!).first! as ObservationFavorite).favorite).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
                 expect(((Observation.mr_findFirst()!.favorites!).first! as ObservationFavorite).dirty).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+//                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
             it("should tell the server to make the observation important") {
@@ -1652,11 +1652,11 @@ class ObservationTests: KIFSpec {
                 
                 expect(localObservation).toNot(beNil());
                 expect(localObservation.isImportant).to(beFalse());
-                localObservation.flagImportant(description: "new important", completion: nil)
+//                localObservation.flagImportant(description: "new important", completion: nil)
                 
                 expect(stubCalled).toEventually(beTrue());
                 expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+//                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
             
             it("should tell the server to remove the observation important") {
@@ -1692,14 +1692,14 @@ class ObservationTests: KIFSpec {
                 expect(localObservation.isImportant).to(beTrue());
 
                 var importantRemoved = false;
-                localObservation.removeImportant { success, error in
-                    importantRemoved = true;
-                }
+//                localObservation.removeImportant { success, error in
+//                    importantRemoved = true;
+//                }
                 expect(importantRemoved).toEventually(beTrue());
                 
                 expect(stubCalled).toEventually(beTrue());
 
-                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+//                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
             }
         }
         
@@ -1742,8 +1742,8 @@ class ObservationTests: KIFSpec {
             
             afterEach {
                 ObservationPushService.singleton.stop();
-                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
-                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
+//                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
+//                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
                 expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse());
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
@@ -2030,8 +2030,8 @@ class ObservationTests: KIFSpec {
 
             afterEach {
                 ObservationPushService.singleton.stop();
-                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
-                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
+//                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
+//                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
                 expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse());
                 NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();

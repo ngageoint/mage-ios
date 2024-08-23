@@ -65,12 +65,12 @@ class DataSourceMapViewModel {
             }
             .store(in: &cancellable)
         
-        mapStateRepository.$zoom.sink { zoom in
-            self.requerySubject.send(())
+        mapStateRepository.$zoom.sink { [weak self] zoom in
+            self?.requerySubject.send(())
         }.store(in: &cancellable)
         
-        mapStateRepository.$region.sink { region in
-            self.requerySubject.send(())
+        mapStateRepository.$region.sink { [weak self] region in
+            self?.requerySubject.send(())
         }.store(in: &cancellable)
         
         repository?.refreshPublisher?
@@ -155,7 +155,6 @@ class DataSourceMapViewModel {
         let queryLocationMinLatitude = location.latitude
         let queryLocationMaxLatitude = location.latitude
 
-        print("XXX ITEM KEYS \(repository)")
         return [
             dataSource.key: await repository?.getItemKeys(
                 minLatitude: queryLocationMinLatitude,
