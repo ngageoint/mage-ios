@@ -45,7 +45,7 @@ struct FeedItemBottomSheet: View {
                         timestamp: feedItem.timestamp,
                         primaryValue: feedItem.primaryValue,
                         secondaryValue: feedItem.secondaryValue,
-                        iconUrl: feedItem.iconUrl
+                        iconUrl: feedItem.iconURL
                     )
                     
                     StaticLayerFeatureBottomSheetActionBar(

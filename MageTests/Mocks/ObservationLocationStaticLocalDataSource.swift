@@ -28,8 +28,10 @@ class ObservationLocationStaticLocalDataSource: ObservationLocationLocalDataSour
         list
     }
     
-    func getObservationLocation(observationLocationUri: URL?) async -> MAGE.ObservationLocation? {
-        return nil
+    func getObservationLocation(observationLocationUri: URL?) async -> MAGE.ObservationMapItem? {
+        list.first { item in
+            item.observationLocationId == observationLocationUri
+        }
     }
     
     var list: [ObservationMapItem] = []

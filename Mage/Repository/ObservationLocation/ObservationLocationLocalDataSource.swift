@@ -21,7 +21,7 @@ extension InjectedValues {
 }
 
 protocol ObservationLocationLocalDataSource {
-    func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation?
+    func getObservationLocation(observationLocationUri: URL?) async -> ObservationMapItem?
     func getMapItems(
         observationLocationUri: URL?,
         minLatitude: Double?,
@@ -78,14 +78,16 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource, ObservationLoca
         }
     }
     
-    func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation? {
+    func getObservationLocation(observationLocationUri: URL?) async -> ObservationMapItem? {
         guard let observationLocationUri = observationLocationUri else {
             return nil
         }
         let context = NSManagedObjectContext.mr_default()
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationLocationUri) {
-                return try? context.existingObject(with: id) as? ObservationLocation
+                if let location = try? context.existingObject(with: id) as? ObservationLocation {
+                    return ObservationMapItem(observation: location)
+                }
             }
             return nil
         }

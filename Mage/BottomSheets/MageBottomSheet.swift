@@ -63,8 +63,8 @@ struct MageBottomSheet: View {
                     FeatureBottomSheet(viewModel: StaticLayerBottomSheetViewModel(featureItem: bottomSheetItem))
                 } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? GeoPackageFeatureItem {
                     GeoPackageFeatureBottomSheet(viewModel: GeoPackageFeatureBottomSheetViewModel(featureItem: bottomSheetItem))
-                } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? FeedItem {
-                    FeedItemBottomSheet(viewModel: FeedItemBottomSheeViewModel(feedItemUri: bottomSheetItem.objectID.uriRepresentation()))
+                } else if let bottomSheetItem = viewModel.currentBottomSheetItem?.item as? FeedItemModel {
+                    FeedItemBottomSheet(viewModel: FeedItemBottomSheeViewModel(feedItemUri: bottomSheetItem.feedItemId))
                 }
             }
             .frame(maxWidth: .infinity)

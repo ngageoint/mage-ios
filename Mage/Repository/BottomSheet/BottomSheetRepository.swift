@@ -65,7 +65,7 @@ class BottomSheetRepository: ObservableObject {
                     if let observationLocation = await observationLocationRepository.getObservationLocation(
                         observationLocationUri: URL(string: observationLocationUriString)
                     ) {
-                        bottomSheetItems.append(BottomSheetItem(item: ObservationMapItem(observation: observationLocation)))
+                        bottomSheetItems.append(BottomSheetItem(item: observationLocation))
                     }
                 }
             case DataSources.user.key:
@@ -76,7 +76,7 @@ class BottomSheetRepository: ObservableObject {
                 }
             case DataSources.feedItem.key:
                 for feedUriString in itemKeys {
-                    if let feedItem = await feedItemRepository.getFeedItem(feedItemrUri: URL(string: feedUriString)) {
+                    if let feedItem = await feedItemRepository.getFeedItemModel(feedItemUri: URL(string: feedUriString)) {
                         bottomSheetItems.append(BottomSheetItem(item: feedItem, actionDelegate: nil, annotationView: nil))
                     }
                 }
