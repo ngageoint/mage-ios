@@ -13,17 +13,17 @@ import Combine
 
 final class BottomSheetRepositoryTests: XCTestCase {
     
-    var userLocalDataSource = UserStaticLocalDataSource()
-    var feedItemLocalDataSource = FeedItemStaticLocalDataSource()
-    var observationLocationLocalDataSource = ObservationLocationStaticLocalDataSource()
+    var userRepository = UserRepositoryMock()
+    var feedItemRepository = FeedItemRepositoryMock()
+    var observationLocationRepository = ObservationLocationRepositoryMock()
     var geoPackageRepositoryMock = GeoPackageRepositoryMock()
     
     var cancellables: Set<AnyCancellable> = Set()
     
     override func setUp() {
-        InjectedValues[\.observationLocationLocalDataSource] = observationLocationLocalDataSource
-        InjectedValues[\.userLocalDataSource] = userLocalDataSource
-        InjectedValues[\.feedItemLocalDataSource] = feedItemLocalDataSource
+        InjectedValues[\.observationLocationRepository] = observationLocationRepository
+        InjectedValues[\.userRepository] = userRepository
+        InjectedValues[\.feedItemRepository] = feedItemRepository
         InjectedValues[\.geoPackageRepository] = geoPackageRepositoryMock
     }
     
@@ -32,7 +32,7 @@ final class BottomSheetRepositoryTests: XCTestCase {
     }
 
     func testSettingItemKey() {
-        observationLocationLocalDataSource.list = [
+        observationLocationRepository.list = [
             ObservationMapItem(
                 observationId: URL(string: "magetest://observation/1"),
                 observationLocationId: URL(string: "magetest://observationLocation/1")
@@ -60,7 +60,7 @@ final class BottomSheetRepositoryTests: XCTestCase {
     }
     
     func testSettingItemKeys() {
-        observationLocationLocalDataSource.list = [
+        observationLocationRepository.list = [
             ObservationMapItem(
                 observationId: URL(string: "magetest://observation/1"),
                 observationLocationId: URL(string: "magetest://observationLocation/1")
@@ -71,11 +71,11 @@ final class BottomSheetRepositoryTests: XCTestCase {
             )
         ]
         
-        userLocalDataSource.users = [
+        userRepository.users = [
             UserModel(userId: URL(string: "magetest://user/1"))
         ]
         
-        feedItemLocalDataSource.items = [
+        feedItemRepository.items = [
             FeedItemModel(feedItemId: URL(string: "magetest://feedItem/1")!, coordinate: CLLocationCoordinate2D(latitude: 0, longitude: 0))
         ]
         
