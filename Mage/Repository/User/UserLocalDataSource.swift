@@ -33,7 +33,7 @@ protocol UserLocalDataSource {
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<[URIItem], Error>
     func canUserUpdateImportant(
-        event: Event,
+        event: EventModel,
         userUri: URL
     ) async -> Bool
     
@@ -191,7 +191,7 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
     }
     
     func canUserUpdateImportant(
-        event: Event,
+        event: EventModel,
         userUri: URL
     ) async -> Bool {
         let user = await getUserNSManagedObject(userUri: userUri)

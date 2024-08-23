@@ -30,7 +30,7 @@ class ObservationViewViewModel: ObservableObject {
     var attachmentRepository: AttachmentRepository
     
     @Published
-    var event: Event?
+    var event: EventModel?
     
     @Published
     var observationModel: ObservationModel?

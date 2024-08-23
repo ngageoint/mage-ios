@@ -14,7 +14,7 @@ import Combine
 class UserStaticLocalDataSource: UserLocalDataSource {
     var currentUserUri: URL?
     var users: [UserModel] = []
-    var canUpdateImportantReturnValue: Bool = true
+    var canUpdateImportantReturnValues: [NSNumber: [UserModel]] = [:]
     
     func getUser(userUri: URL?) async -> MAGE.UserModel? {
         users.first { model in
@@ -31,13 +31,28 @@ class UserStaticLocalDataSource: UserLocalDataSource {
         return nil
     }
     
+    var subjectMap: [URL : CurrentValueSubject<UserModel, Never>] = [:]
+    
     func observeUser(userUri: URL?) -> AnyPublisher<MAGE.UserModel, Never>? {
+        guard let userUri = userUri else { return nil }
         if let user = users.first(where: { model in
             model.userId == userUri
         }) {
-            AnyPublisher(Just(user))
+            let subject = CurrentValueSubject<UserModel, Never>(user)
+            subjectMap[userUri] = subject
+            return AnyPublisher(subject)
         } else {
-            nil
+            return nil
+        }
+    }
+    
+    func updateUser(userUri: URL, model: UserModel) {
+        users.removeAll { model in
+            model.userId == userUri
+        }
+        users.append(model)
+        if let subject = subjectMap[userUri] {
+            subject.send(model)
         }
     }
     
@@ -55,16 +70,30 @@ class UserStaticLocalDataSource: UserLocalDataSource {
         }).setFailureType(to: Error.self))
     }
     
-    func canUserUpdateImportant(event: MAGE.Event, userUri: URL) async -> Bool {
-        canUpdateImportantReturnValue
+    func canUserUpdateImportant(event: EventModel, userUri: URL) async -> Bool {
+        guard let eventId = event.remoteId else { return false }
+        return canUpdateImportantReturnValues[eventId]?.first(where: { model in
+            model.userId == userUri
+        }) != nil
     }
+    
+    var avatarChosenUser: UserModel?
+    var avatarChosenImageData: Data?
     
     func avatarChosen(user: MAGE.UserModel, imageData: Data) {
-        
+        avatarChosenUser = user
+        self.avatarChosenImageData = imageData
     }
     
+    var avatarResponse: [AnyHashable : Any]?
+    var avatarResponseUser: UserModel?
+    var avatarResponseImageData: Data?
+    var avatarResponseImage: UIImage?
     func handleAvatarResponse(response: [AnyHashable : Any], user: MAGE.UserModel, imageData: Data, image: UIImage) {
-        
+        avatarResponse = response
+        avatarResponseUser = user
+        avatarResponseImageData = imageData
+        avatarResponseImage = image
     }
     
     

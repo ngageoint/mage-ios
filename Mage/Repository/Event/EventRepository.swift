@@ -23,7 +23,7 @@ class EventRepository: ObservableObject {
     @Injected(\.eventLocalDataSource)
     var localDataSource: EventLocalDataSource
     
-    func getEvent(eventId: NSNumber) -> Event? {
+    func getEvent(eventId: NSNumber) -> EventModel? {
         localDataSource.getEvent(eventId: eventId)
     }
 }
