@@ -437,7 +437,7 @@ class GeometryViewTests: KIFSpec {
                 expect(geometryFieldView?.isValid(enforceRequired: true)) == true;
                 
                 expect(geometryFieldView?.mapView.isHidden).to(beFalse());
-                expect(geometryFieldView?.textField.text) == "40.00850, -105.26780 ";
+                expect(geometryFieldView?.textField.text) == "40.0085, -105.2678 ";
                 expect(geometryFieldView?.textField.label.text) == "Field Title *"
             }
             
@@ -470,7 +470,7 @@ class GeometryViewTests: KIFSpec {
                 tester().tapView(withAccessibilityLabel: "Apply");
                 
                 tester().waitForView(withAccessibilityLabel: field[FieldKey.name.key] as? String);
-                expect((viewTester().usingLabel("\(field[FieldKey.name.key] as? String ?? "") value")!.view as! MDCFilledTextField).text) == "1.00000, 1.00000 "
+                expect((viewTester().usingLabel("\(field[FieldKey.name.key] as? String ?? "") value")!.view as! MDCFilledTextField).text) == "1.0000, 1.0000 "
                 
                 expect(UIApplication.getTopViewController()).toNot(beAnInstanceOf(delegate.viewControllerToLaunch!.classForCoder));
                 

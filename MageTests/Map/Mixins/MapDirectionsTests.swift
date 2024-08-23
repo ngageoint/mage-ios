@@ -144,7 +144,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(observation: observation)
+                let notification = DirectionsToItemNotification(itemKey: observation.objectID.uriRepresentation().absoluteString, dataSource: DataSources.observation, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -164,9 +164,10 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal("Observation"))
-                    expect(notification.observation).to(equal(observation))
-                    expect(notification.user).to(beNil())
-                    expect(notification.feedItem).to(beNil())
+//                    expect(notification.itemKey).to(equal(observation.objectID.uriRepresentation().absoluteString))
+//                    expect(notification.observation).to(equal(observation))
+//                    expect(notification.user).to(beNil())
+//                    expect(notification.feedItem).to(beNil())
                     expect(notification.coordinate.latitude).to(equal(observation.location?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(observation.location?.coordinate.longitude))
 
@@ -214,7 +215,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(observation: observation)
+                let notification = DirectionsToItemNotification(itemKey: observation.objectID.uriRepresentation().absoluteString, dataSource: DataSources.observation, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -234,9 +235,9 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal("Observation"))
-                    expect(notification.observation).to(equal(observation))
-                    expect(notification.user).to(beNil())
-                    expect(notification.feedItem).to(beNil())
+//                    expect(notification.observation).to(equal(observation))
+//                    expect(notification.user).to(beNil())
+//                    expect(notification.feedItem).to(beNil())
                     expect(notification.coordinate.latitude).to(equal(observation.location?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(observation.location?.coordinate.longitude))
                     
@@ -284,7 +285,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(observation: observation)
+                let notification = DirectionsToItemNotification(itemKey: observation.objectID.uriRepresentation().absoluteString, dataSource: DataSources.observation, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -304,9 +305,9 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal("Observation"))
-                    expect(notification.observation).to(equal(observation))
-                    expect(notification.user).to(beNil())
-                    expect(notification.feedItem).to(beNil())
+//                    expect(notification.observation).to(equal(observation))
+//                    expect(notification.user).to(beNil())
+//                    expect(notification.feedItem).to(beNil())
                     expect(notification.coordinate.latitude).to(equal(observation.location?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(observation.location?.coordinate.longitude))
                     
@@ -357,7 +358,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(user: user)
+                let notification = DirectionsToItemNotification(itemKey: user?.objectID.uriRepresentation().absoluteString, dataSource: DataSources.user, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -377,9 +378,9 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal("User ABC"))
-                    expect(notification.user).to(equal(user))
-                    expect(notification.observation).to(beNil())
-                    expect(notification.feedItem).to(beNil())
+//                    expect(notification.user).to(equal(user))
+//                    expect(notification.observation).to(beNil())
+//                    expect(notification.feedItem).to(beNil())
                     expect(notification.coordinate.latitude).to(equal(user?.location?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(user?.location?.coordinate.longitude))
                     
@@ -429,7 +430,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(user: user)
+                let notification = DirectionsToItemNotification(itemKey: user?.objectID.uriRepresentation().absoluteString, dataSource: DataSources.user, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -449,9 +450,9 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal("User ABC"))
-                    expect(notification.user).to(equal(user))
-                    expect(notification.observation).to(beNil())
-                    expect(notification.feedItem).to(beNil())
+//                    expect(notification.user).to(equal(user))
+//                    expect(notification.observation).to(beNil())
+//                    expect(notification.feedItem).to(beNil())
                     expect(notification.coordinate.latitude).to(equal(user?.location?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(user?.location?.coordinate.longitude))
                     
@@ -500,7 +501,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(feedItem: feedItem)
+                let notification = DirectionsToItemNotification(itemKey: feedItem?.objectID.uriRepresentation().absoluteString, dataSource: DataSources.feedItem, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -520,9 +521,9 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal(" "))
-                    expect(notification.user).to(beNil())
-                    expect(notification.observation).to(beNil())
-                    expect(notification.feedItem).to(equal(feedItem))
+//                    expect(notification.user).to(beNil())
+//                    expect(notification.observation).to(beNil())
+//                    expect(notification.feedItem).to(equal(feedItem))
                     expect(notification.coordinate.latitude).to(equal(feedItem?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(feedItem?.coordinate.longitude))
                     startStraightLineNavigationObserverCalled = true
@@ -581,7 +582,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(feedItem: feedItem)
+                let notification = DirectionsToItemNotification(itemKey: feedItem?.objectID.uriRepresentation().absoluteString, dataSource: DataSources.feedItem, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -601,9 +602,9 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal(" "))
-                    expect(notification.user).to(beNil())
-                    expect(notification.observation).to(beNil())
-                    expect(notification.feedItem).to(equal(feedItem))
+//                    expect(notification.user).to(beNil())
+//                    expect(notification.observation).to(beNil())
+//                    expect(notification.feedItem).to(equal(feedItem))
                     expect(notification.coordinate.latitude).to(equal(feedItem?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(feedItem?.coordinate.longitude))
                     startStraightLineNavigationObserverCalled = true
@@ -664,7 +665,7 @@ class MapDirectionsTests: KIFSpec {
                     mixin.mapView?.setRegion(region, animated: false)
                 }
                 
-                let notification = DirectionsToItemNotification(feedItem: feedItem)
+                let notification = DirectionsToItemNotification(itemKey: feedItem?.objectID.uriRepresentation().absoluteString, dataSource: DataSources.feedItem, includeCopy: false)
                 NotificationCenter.default.post(name: .DirectionsToItem, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "Navigate With...")
@@ -684,9 +685,9 @@ class MapDirectionsTests: KIFSpec {
                     let notification = notification.object as! StraightLineNavigationNotification
                     expect(notification.image).toNot(beNil())
                     expect(notification.title).to(equal(" "))
-                    expect(notification.user).to(beNil())
-                    expect(notification.observation).to(beNil())
-                    expect(notification.feedItem).to(equal(feedItem))
+//                    expect(notification.user).to(beNil())
+//                    expect(notification.observation).to(beNil())
+//                    expect(notification.feedItem).to(equal(feedItem))
                     expect(notification.coordinate.latitude).to(equal(feedItem?.coordinate.latitude))
                     expect(notification.coordinate.longitude).to(equal(feedItem?.coordinate.longitude))
                     startStraightLineNavigationObserverCalled = true

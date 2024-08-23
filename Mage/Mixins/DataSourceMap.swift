@@ -20,11 +20,11 @@ class DataSourceMap: MapMixin {
     var uuid: UUID = UUID()
     var cancellable = Set<AnyCancellable>()
     
-    var viewModel: DataSourceMapViewModel?
+    weak var viewModel: DataSourceMapViewModel?
 
     var scheme: MDCContainerScheming?
-    var mapState: MapState?
-    var mapView: MKMapView?
+    weak var mapState: MapState?
+    weak var mapView: MKMapView?
 
     var dataSource: any DataSourceDefinition
     
@@ -49,22 +49,22 @@ class DataSourceMap: MapMixin {
         self.mapView = mapView
         self.mapState = mapState
 
-        viewModel?.$annotations.sink { annotations in
-            Task {
-                await self.handleFeatureChanges(annotations: annotations)
+        viewModel?.$annotations.sink { [weak self] annotations in
+            Task { [weak self] in
+                await self?.handleFeatureChanges(annotations: annotations)
             }
         }
         .store(in: &cancellable)
         
-        viewModel?.$featureOverlays.sink { featureOverlays in
-            Task {
-                await self.handleFeatureOverlayChanges(featureOverlays: featureOverlays)
+        viewModel?.$featureOverlays.sink { [weak self] featureOverlays in
+            Task { [weak self] in
+                await self?.handleFeatureOverlayChanges(featureOverlays: featureOverlays)
             }
         }
         .store(in: &cancellable)
         
-        viewModel?.$tileOverlays.sink { tileOverlays in
-            self.updateTileOverlays(tileOverlays: tileOverlays)
+        viewModel?.$tileOverlays.sink { [weak self] tileOverlays in
+            self?.updateTileOverlays(tileOverlays: tileOverlays)
         }
         .store(in: &cancellable)
     }
@@ -264,12 +264,21 @@ class DataSourceMap: MapMixin {
         NSLog("Annotation count: \(mapView.overlays.count)")
         return !inserts.isEmpty || !removals.isEmpty
     }
+    
+//    deinit {
+//        for cancellable in cancellable {
+//            cancellable.cancel()
+//        }
+//    }
 
 
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         mapView.removeOverlays(viewModel?.featureOverlays ?? [])
         mapView.removeAnnotations(viewModel?.annotations ?? [])
         mapView.removeOverlays(viewModel?.tileOverlays ?? [])
+        for cancellable in cancellable {
+            cancellable.cancel()
+        }
     }
 
     func items(

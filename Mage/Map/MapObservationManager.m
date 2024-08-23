@@ -15,7 +15,7 @@
 
 @interface MapObservationManager ()
 
-@property (nonatomic, strong) MKMapView *mapView;
+@property (nonatomic, weak) MKMapView *mapView;
 
 @end
 

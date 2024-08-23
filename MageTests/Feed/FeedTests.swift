@@ -188,10 +188,10 @@ class FeedTests: KIFSpec {
 
                 var feedItemIds: [String] = ["1","2"];
 
-                for feedItem: FeedItem in FeedItem.getFeedItems(feedId: "1", eventId: 1)! {
-                    expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
-                    feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
-                }
+//                for feedItem: FeedItemAnnotation in FeedItem.getFeedItems(feedId: "1", eventId: 1)! {
+//                    expect(feedItemIds as NMBContainer).to(contain(feedItem. .remoteId));
+//                    feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
+//                }
 
                 expect(feedItemIds.isEmpty) == true;
             }

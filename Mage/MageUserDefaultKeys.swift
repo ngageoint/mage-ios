@@ -136,15 +136,6 @@ extension UserDefaults {
         }
     }
     
-    var mapType: Int {
-        get {
-            return integer(forKey: #function)
-        }
-        set {
-            set(newValue, forKey: #function)
-        }
-    }
-    
     var gridType: Int {
         get {
             return integer(forKey: #function)
@@ -181,7 +172,7 @@ extension UserDefaults {
         }
     }
     
-    var selectedOnlineLayers: [String: [NSNumber]]? {
+    @objc var selectedOnlineLayers: [String: [NSNumber]]? {
         get {
             return dictionary(forKey: #function) as? [String: [NSNumber]];
         }

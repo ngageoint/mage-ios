@@ -55,16 +55,6 @@ class DropdownFieldViewTests: KIFSpec {
                 }
             }
             
-            it("non edit mode") {
-                dropdownFieldView = DropdownFieldView(field: field, editMode: false, value: "The Value");
-                dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(dropdownFieldView)
-                dropdownFieldView.autoPinEdgesToSuperviewEdges();
-                
-//                expect(view).to(haveValidSnapshot());
-            }
-            
             it("no initial value") {
                 dropdownFieldView = DropdownFieldView(field: field);
                 dropdownFieldView.applyTheme(withScheme: MAGEScheme.scheme());

@@ -11,8 +11,8 @@ import MapKit
 import MapFramework
 
 class OnlineLayerMapMixin: NSObject, MapMixin {
-    var mapView: MKMapView?
-    var mapState: MapState?
+    weak var mapView: MKMapView?
+    weak var mapState: MapState?
     var onlineLayers: [NSNumber:MKTileOverlay] = [:]
     
     func cleanupMixin() {
