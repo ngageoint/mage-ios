@@ -24,7 +24,7 @@ class ObservationLocationRepository: ObservableObject {
     @Injected(\.observationLocationLocalDataSource)
     var localDataSource: ObservationLocationLocalDataSource
     
-    func getObservationLocation(observationLocationUri: URL?) async -> ObservationLocation? {
+    func getObservationLocation(observationLocationUri: URL?) async -> ObservationMapItem? {
         await localDataSource.getObservationLocation(observationLocationUri: observationLocationUri)
     }
     

@@ -415,6 +415,10 @@
 		F763FF0B2C7661DB00403A00 /* UserRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF0A2C7661DB00403A00 /* UserRemoteDataSource.swift */; };
 		F763FF0E2C7663A600403A00 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF0D2C7663A600403A00 /* UserService.swift */; };
 		F763FF102C77CAF300403A00 /* ObservationSyncStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF0F2C77CAF300403A00 /* ObservationSyncStatus.swift */; };
+		F763FF142C78DF1400403A00 /* BottomSheetRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF132C78DF1400403A00 /* BottomSheetRepositoryTests.swift */; };
+		F763FF162C78EBFA00403A00 /* UserStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF152C78EBFA00403A00 /* UserStaticLocalDataSource.swift */; };
+		F763FF182C78EF9300403A00 /* FeedItemStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF172C78EF9300403A00 /* FeedItemStaticLocalDataSource.swift */; };
+		F763FF1A2C78F34700403A00 /* GeoPackageRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF192C78F34700403A00 /* GeoPackageRepositoryMock.swift */; };
 		F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7641CE3276D423A006225BA /* CanCreateObservation.swift */; };
 		F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
 		F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
@@ -1279,6 +1283,10 @@
 		F763FF0A2C7661DB00403A00 /* UserRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRemoteDataSource.swift; sourceTree = "<group>"; };
 		F763FF0D2C7663A600403A00 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		F763FF0F2C77CAF300403A00 /* ObservationSyncStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationSyncStatus.swift; sourceTree = "<group>"; };
+		F763FF132C78DF1400403A00 /* BottomSheetRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetRepositoryTests.swift; sourceTree = "<group>"; };
+		F763FF152C78EBFA00403A00 /* UserStaticLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStaticLocalDataSource.swift; sourceTree = "<group>"; };
+		F763FF172C78EF9300403A00 /* FeedItemStaticLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemStaticLocalDataSource.swift; sourceTree = "<group>"; };
+		F763FF192C78F34700403A00 /* GeoPackageRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageRepositoryMock.swift; sourceTree = "<group>"; };
 		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
 		F76949151AA6436000CB680B /* EventChooserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventChooserController.swift; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
@@ -2111,6 +2119,7 @@
 		F70688AB2BB1FAF600D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F763FF122C78DEF400403A00 /* BottomSheet */,
 				F70688AC2BB1FAFC00D8E2EA /* Observation */,
 			);
 			path = Repository;
@@ -2128,6 +2137,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F763FF112C78DE2A00403A00 /* BottomSheet */,
 				F73564F22C65578000466813 /* Location */,
 				F73564E32C650B3F00466813 /* CurrentLocation */,
 				F7225F562C5A782200B7D935 /* Attachment */,
@@ -2199,6 +2209,9 @@
 				F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */,
 				F789EB5F2BF6418900CF3DF9 /* ObservationLocationStaticLocalDataSource.swift */,
 				F789EB612BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift */,
+				F763FF152C78EBFA00403A00 /* UserStaticLocalDataSource.swift */,
+				F763FF172C78EF9300403A00 /* FeedItemStaticLocalDataSource.swift */,
+				F763FF192C78F34700403A00 /* GeoPackageRepositoryMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -2572,7 +2585,6 @@
 				F73607DB26F90C79008CF824 /* MageBottomSheet.swift */,
 				F76FFBE5261D0D6900532330 /* ObservationBottomSheetView.swift */,
 				F7E40A6526939A4200E50E26 /* UserBottomSheetView.swift */,
-				F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */,
 				F7BFB8EF2C5161AE00901479 /* GeoPackageFeatureBottomSheetViewModel.swift */,
 				F7BFB8F42C518A2D00901479 /* MageBottomSheetViewModel.swift */,
 			);
@@ -2794,6 +2806,22 @@
 				F763FF0D2C7663A600403A00 /* UserService.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		F763FF112C78DE2A00403A00 /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */,
+			);
+			path = BottomSheet;
+			sourceTree = "<group>";
+		};
+		F763FF122C78DEF400403A00 /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				F763FF132C78DF1400403A00 /* BottomSheetRepositoryTests.swift */,
+			);
+			path = BottomSheet;
 			sourceTree = "<group>";
 		};
 		F76949131AA6434A00CB680B /* Event */ = {
@@ -4570,6 +4598,7 @@
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
 				F7489B37279A13CE00A9E314 /* CoordinateFieldTests.swift in Sources */,
 				F71B7251246B545F00E4CF33 /* GeometryViewTests.swift in Sources */,
+				F763FF142C78DF1400403A00 /* BottomSheetRepositoryTests.swift in Sources */,
 				F71B724E246B1DCC00E4CF33 /* DateViewTests.swift in Sources */,
 				F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */,
 				F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */,
@@ -4613,6 +4642,7 @@
 				F79CC3EB252F832E005692DC /* ChangePasswordViewTests.swift in Sources */,
 				F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */,
 				F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */,
+				F763FF162C78EBFA00403A00 /* UserStaticLocalDataSource.swift in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
 				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
 				F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */,
@@ -4633,11 +4663,13 @@
 				F7BEF68427D7C561000E8CDE /* FilteredObservationsMapTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 				F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */,
+				F763FF182C78EF9300403A00 /* FeedItemStaticLocalDataSource.swift in Sources */,
 				F79B5DE32821D94C001A5844 /* EventChooserCoordinatorTests.swift in Sources */,
 				F7148D3924003C6B00F9F879 /* ImageCacheTests.m in Sources */,
 				F7F08E9E27EA2E5600640D89 /* SFGeometryMapTests.swift in Sources */,
 				F723232C251CE92800AD168A /* MapSettingsTests.swift in Sources */,
 				F74020B724917FFE00B5A8BA /* KIF+Extensions.swift in Sources */,
+				F763FF1A2C78F34700403A00 /* GeoPackageRepositoryMock.swift in Sources */,
 				F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */,
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,

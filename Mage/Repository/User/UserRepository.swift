@@ -34,7 +34,9 @@ struct UserModel: Equatable, Hashable {
     var timestamp: Date?
     var hasEditPermissions: Bool = false
     var cllocation: CLLocation?
-    
+}
+
+extension UserModel {
     init(user: User) {
         remoteId = user.remoteId
         name = user.name

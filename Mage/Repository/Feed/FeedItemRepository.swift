@@ -21,15 +21,19 @@ extension InjectedValues {
 }
 
 struct FeedItemModel {
-    let feedItemId: URL
-    let properties: Any?
-    let remoteId: String?
-    let temporalSortValue: Int?
-    let coordinate: CLLocationCoordinate2D
-    let iconUrl: URL?
-    let primaryValue: String?
-    let secondaryValue: String?
-    let timestamp: Date?
+    var feedItemId: URL
+    var properties: Any?
+    var remoteId: String?
+    var temporalSortValue: Int?
+    var coordinate: CLLocationCoordinate2D
+    var primaryValue: String?
+    var secondaryValue: String?
+    var timestamp: Date?
+    var title: String?
+    var iconURL: URL?
+}
+
+extension FeedItemModel {
     
     init(feedItem: FeedItem) {
         self.feedItemId = feedItem.objectID.uriRepresentation()
@@ -41,16 +45,21 @@ struct FeedItemModel {
             self.temporalSortValue = nil
         }
         self.coordinate = feedItem.coordinate
-        self.iconUrl = feedItem.iconURL
         self.primaryValue = feedItem.primaryValue
         self.secondaryValue = feedItem.secondaryValue
         self.timestamp = feedItem.timestamp
+        self.title = feedItem.title
+        self.iconURL = feedItem.iconURL
     }
 }
 
 class FeedItemRepository: ObservableObject {
     @Injected(\.feedItemLocalDataSource)
     var localDataSource: FeedItemLocalDataSource
+    
+    func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel? {
+        await localDataSource.getFeedItemModel(feedItemUri: feedItemUri)
+    }
 
     func getFeedItem(feedItemrUri: URL?) async -> FeedItem? {
         await localDataSource.getFeedItem(feedItemrUri: feedItemrUri)
