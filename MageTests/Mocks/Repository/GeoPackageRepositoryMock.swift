@@ -18,4 +18,16 @@ class GeoPackageRepositoryMock: GeoPackageRepository {
             item.featureId == key.featureId
         }
     }
+    
+    override func getBaseMap() -> BaseMapOverlay? {
+        return nil
+    }
+    
+    override func getDarkBaseMap() -> BaseMapOverlay? {
+        return nil
+    }
+    
+    override func cleanupBackgroundGeoPackages() {
+        
+    }
 }

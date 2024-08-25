@@ -24,6 +24,7 @@ final class UserRepositoryTests: XCTestCase {
         InjectedValues[\.eventRepository] = eventRepository
         InjectedValues[\.userLocalDataSource] = userLocalDataSource
         InjectedValues[\.userRemoteDataSource] = userRemoteDataSource
+        InjectedValues[\.geoPackageRepository] = GeoPackageRepositoryMock()
     }
     
     override func tearDown() {
