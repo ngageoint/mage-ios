@@ -9,6 +9,20 @@
 import Foundation
 
 @objc class MageInitializer: NSObject {
+    @Injected(\.geoPackageRepository)
+    static var geoPackageRepository: GeoPackageRepository
+    
+    @objc static func cleanupGeoPackages() {
+        geoPackageRepository.cleanupBackgroundGeoPackages()
+    }
+    
+    @objc static func getBaseMap() -> BaseMapOverlay? {
+        geoPackageRepository.getBaseMap()
+    }
+    
+    @objc static func getDarkBaseMap() -> BaseMapOverlay? {
+        geoPackageRepository.getDarkBaseMap()
+    }
     
     @objc public static func initializePreferences() {
         
