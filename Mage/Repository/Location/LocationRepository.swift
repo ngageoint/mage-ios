@@ -36,7 +36,7 @@ class LocationRepository: ObservableObject {
         UserDefaults.standard.publisher(for: \.locationTimeFilter)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(DataSources.observation.key): \(order)")
+                NSLog("locationTimeFilter update: \(order)")
                 Task { [weak self] in
                     self?.refreshSubject?.send(Date())
                 }
@@ -45,7 +45,7 @@ class LocationRepository: ObservableObject {
         UserDefaults.standard.publisher(for: \.locationTimeFilterUnit)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(DataSources.observation.key): \(order)")
+                NSLog("locationTimeFilterUnit update: \(order)")
                 Task { [weak self] in
                     self?.refreshSubject?.send(Date())
                 }
@@ -54,7 +54,7 @@ class LocationRepository: ObservableObject {
         UserDefaults.standard.publisher(for: \.locationTimeFilterNumber)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(DataSources.observation.key): \(order)")
+                NSLog("locationTimeFilterNumber update: \(order)")
                 Task { [weak self] in
                     self?.refreshSubject?.send(Date())
                 }
