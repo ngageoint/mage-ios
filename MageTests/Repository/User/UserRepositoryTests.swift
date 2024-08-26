@@ -187,7 +187,6 @@ final class UserRepositoryTests: XCTestCase {
             )
             .scan([]) { $0 + $1 }
             .map { 
-                print("XXX rows \($0)")
                 return State.loaded(rows: $0)
             }
             .catch { error in

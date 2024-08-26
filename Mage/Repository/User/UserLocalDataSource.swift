@@ -21,6 +21,17 @@ extension InjectedValues {
     }
 }
 
+private struct ManagedObjectContextProviderKey: InjectionKey {
+    static var currentValue: NSManagedObjectContext? = nil //NSManagedObjectContext.mr_default()
+}
+
+extension InjectedValues {
+    var nsManagedObjectContext: NSManagedObjectContext? {
+        get { Self[ManagedObjectContextProviderKey.self] }
+        set { Self[ManagedObjectContextProviderKey.self] = newValue }
+    }
+}
+
 protocol UserLocalDataSource {
     func getUser(userUri: URL?) async -> UserModel?
     func getCurrentUser() -> UserModel?
@@ -38,7 +49,7 @@ protocol UserLocalDataSource {
     ) async -> Bool
     
     func avatarChosen(user: UserModel, imageData: Data)
-    func handleAvatarResponse(response: [AnyHashable: Any], user: UserModel, imageData: Data, image: UIImage)
+    func handleAvatarResponse(response: [AnyHashable: Any], user: UserModel, imageData: Data, image: UIImage) async -> Bool
 }
 
 struct UserModelPage {
@@ -48,12 +59,13 @@ struct UserModelPage {
 }
 
 class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, ObservableObject {
-    private lazy var context: NSManagedObjectContext = {
-        NSManagedObjectContext.mr_default()
-    }()
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
+    var fetchLimit: Int = 100
     
     private func getUserNSManagedObject(userUri: URL) async -> User? {
-        let context = context
+        guard let context = context else { return nil }
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri) {
                 return try? context.existingObject(with: id) as? User
@@ -66,7 +78,7 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         guard let userUri = userUri else {
             return nil
         }
-        let context = context
+        guard let context = context else { return nil }
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri) {
                 return (try? context.existingObject(with: id) as? User).map { user in
@@ -78,12 +90,14 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
     }
     
     func getCurrentUser() -> UserModel? {
-        User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()).map { user in
+        guard let context = context else { return nil }
+        return User.fetchCurrentUser(context: context).map { user in
             UserModel(user: user)
         }
     }
     
     func getUser(remoteId: String) -> UserModel? {
+        guard let context = context else { return nil }
         return context.performAndWait {
             return context.fetchFirst(User.self, key: "remoteId", value: remoteId).map { user in
                 UserModel(user: user)
@@ -92,6 +106,7 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
     }
     
     func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>? {
+        guard let context = context else { return nil }
         guard let userUri = userUri else {
             return nil
         }
@@ -133,13 +148,14 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         )
         .map { result -> AnyPublisher<URIModelPage, Error> in
             if let paginator = paginator, let next = result.next {
-                return self.users(
-                    at: next,
-                    currentHeader: result.currentHeader,
-                    paginatedBy: paginator
-                )
-                .wait(untilOutputFrom: paginator)
-                .retry(.max)
+                return Publishers.Publish(onOutputFrom: paginator) {
+                    return self.users(
+                        at: next,
+                        currentHeader: result.currentHeader,
+                        paginatedBy: paginator
+                    )
+                    .eraseToAnyPublisher()
+                }
                 .prepend(result)
                 .eraseToAnyPublisher()
             } else {
@@ -156,7 +172,6 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         at page: Page?,
         currentHeader: String?
     ) -> AnyPublisher<URIModelPage, Error> {
-
         let request = User.fetchRequest()
         let predicates: [NSPredicate] = [NSPredicate(value: true)]
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
@@ -164,13 +179,13 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
 
         request.includesSubentities = false
         request.includesPropertyValues = false
-        request.fetchLimit = 100
+        request.fetchLimit = fetchLimit
         request.fetchOffset = (page ?? 0) * request.fetchLimit
         request.sortDescriptors = [NSSortDescriptor(key: "location.timestamp", ascending: false)]
         let previousHeader: String? = currentHeader
         var users: [URIItem] = []
-        context.performAndWait {
-            if let fetched = context.fetch(request: request) {
+        context?.performAndWait {
+            if let fetched = context?.fetch(request: request) {
 
                 users = fetched.flatMap { user in
                     return [URIItem.listItem(user.objectID.uriRepresentation())]
@@ -216,35 +231,57 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
     }
     
     func avatarChosen(user: UserModel, imageData: Data) {
-        let documentsDirectories: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        if (documentsDirectories.count != 0 && FileManager.default.fileExists(atPath: documentsDirectories[0])) {
-            let userAvatarPath = "\(documentsDirectories[0])/userAvatars/\(user.remoteId ?? "temp")";
-            do {
-                try imageData.write(to: URL(fileURLWithPath: userAvatarPath))
-            } catch {
-                print("Could not write image file to destination")
-            }
+        guard let remoteId = user.remoteId, let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+        let avatarsDirectory = documentsDirectory.appendingPathComponent("userAvatars")
+        do {
+            try FileManager.default.createDirectory(at: avatarsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
+        }
+        catch {
+            print("error creating directory \(avatarsDirectory) to save user avatars", error)
+            return
+        }
+        let userAvatarPath = avatarsDirectory.appendingPathComponent(remoteId)
+        do {
+            try imageData.write(to: userAvatarPath)
+        } catch {
+            print("Could not write image file to destination \(error)")
         }
     }
     
-    func handleAvatarResponse(response: [AnyHashable : Any], user: UserModel, imageData: Data, image: UIImage) {
+    func handleAvatarResponse(response: [AnyHashable : Any], user: UserModel, imageData: Data, image: UIImage) async -> Bool {
         // store the image data for the updated avatar in the cache here
         guard let userUri = user.userId else {
-            return
+            return false
         }
-        let context = context
-        return context.performAndWait {
-            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri) {
-                if let user = try? context.existingObject(with: id) as? User {
+        guard let context = context else { return false }
+        return await withCheckedContinuation { continuation in
+            context.perform {
+                if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri),
+                   let user = try? context.existingObject(with: id) as? User
+                {
                     user.update(json: response, context: context)
                     if let cacheAvatarUrl = user.cacheAvatarUrl,
-                        let url = URL(string: cacheAvatarUrl)
+                       let url = URL(string: cacheAvatarUrl)
                     {
-                        print("XXX caching for url \(url.absoluteString)")
-                        KingfisherManager.shared.cache.store(image, original:imageData, forKey: url.absoluteString) {_ in
-                            try? context.save()
+                        KingfisherManager.shared.cache.store(image, original:imageData, forKey: url.absoluteString) { result in
+                            context.perform {
+                                do {
+                                    try context.save()
+                                    continuation.resume(returning: true)
+                                    return
+                                } catch {
+                                    print("error saving user after avatar save \(error)")
+                                }
+                                continuation.resume(returning: false)
+                            }
                         }
+                    } else {
+                        continuation.resume(returning: false)
                     }
+                } else {
+                    continuation.resume(returning: false)
                 }
             }
         }

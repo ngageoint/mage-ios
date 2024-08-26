@@ -64,7 +64,7 @@ class UserRepositoryMock: UserRepository {
         canUpdateImportantReturnValue
     }
     
-    override func avatarChosen(user: UserModel, image: UIImage) async {
-        
+    override func avatarChosen(user: UserModel, image: UIImage) async -> Bool {
+        return true
     }
 }

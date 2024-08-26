@@ -89,11 +89,12 @@ class UserStaticLocalDataSource: UserLocalDataSource {
     var avatarResponseUser: UserModel?
     var avatarResponseImageData: Data?
     var avatarResponseImage: UIImage?
-    func handleAvatarResponse(response: [AnyHashable : Any], user: MAGE.UserModel, imageData: Data, image: UIImage) {
+    func handleAvatarResponse(response: [AnyHashable : Any], user: MAGE.UserModel, imageData: Data, image: UIImage) async -> Bool {
         avatarResponse = response
         avatarResponseUser = user
         avatarResponseImageData = imageData
         avatarResponseImage = image
+        return true
     }
     
     

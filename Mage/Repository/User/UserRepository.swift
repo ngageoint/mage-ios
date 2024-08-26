@@ -63,11 +63,12 @@ class UserRepository: ObservableObject {
         return false
     }
     
-    func avatarChosen(user: UserModel, image: UIImage) async {
+    func avatarChosen(user: UserModel, image: UIImage) async -> Bool {
         if let imageData = image.jpegData(compressionQuality: 1.0) {
             localDataSource.avatarChosen(user: user, imageData: imageData)
             let response = await remoteDataSource.uploadAvatar(user: user, imageData: imageData)
-            localDataSource.handleAvatarResponse(response: response, user: user, imageData: imageData, image: image)
+            return await localDataSource.handleAvatarResponse(response: response, user: user, imageData: imageData, image: image)
         }
+        return false
     }
 }
