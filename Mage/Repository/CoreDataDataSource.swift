@@ -11,12 +11,21 @@ import BackgroundTasks
 import CoreData
 import Combine
 
-class CoreDataDataSource: NSObject {
+class CoreDataDataSource<T: NSManagedObject>: NSObject {
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     typealias Page = Int
 
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     var cleanup: (() -> Void)?
     var operation: CountingDataLoadOperation?
+    
+    var fetchLimit: Int = 100
+    
+    func getFetchRequest(parameters: [String: Any]? = nil) -> NSFetchRequest<T> {
+        preconditionFailure("This method must be overridden")
+    }
 
     func registerBackgroundTask(name: String) {
         NSLog("Register the background task \(name)")
@@ -39,8 +48,9 @@ class CoreDataDataSource: NSObject {
         }
     }
 
-    func publisher<T: NSManagedObject>(for managedObject: T,
-                                       in context: NSManagedObjectContext
+    func publisher(
+        for managedObject: T,
+        in context: NSManagedObjectContext
     ) -> AnyPublisher<T, Never> {
         let notification = NSManagedObjectContext.didSaveObjectsNotification
         return NotificationCenter.default.publisher(for: notification) //, object: context)
@@ -54,6 +64,72 @@ class CoreDataDataSource: NSObject {
                     return nil
                 }
             })
+            .eraseToAnyPublisher()
+    }
+    
+    func uris(
+        parameters: [String: Any]? = nil,
+        at page: Page?,
+        currentHeader: String?,
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<URIModelPage, Error> {
+        return uris(
+            parameters: parameters,
+            at: page,
+            currentHeader: currentHeader
+        )
+        .map { result -> AnyPublisher<URIModelPage, Error> in
+            if let paginator = paginator, let next = result.next {
+                return Publishers.Publish(onOutputFrom: paginator) {
+                    return self.uris(
+                        parameters: parameters,
+                        at: next,
+                        currentHeader: result.currentHeader,
+                        paginatedBy: paginator
+                    )
+                    .eraseToAnyPublisher()
+                }
+                .prepend(result)
+                .eraseToAnyPublisher()
+            } else {
+                return Just(result)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+        }
+        .switchToLatest()
+        .eraseToAnyPublisher()
+    }
+    
+    func uris(
+        parameters: [String: Any]? = nil,
+        at page: Page?,
+        currentHeader: String?
+    ) -> AnyPublisher<URIModelPage, Error> {
+        let request = getFetchRequest(parameters: parameters)
+        request.fetchLimit = fetchLimit
+        request.fetchOffset = (page ?? 0) * request.fetchLimit
+        
+        let previousHeader: String? = currentHeader
+        var users: [URIItem] = []
+        context?.performAndWait {
+            if let fetched = context?.fetch(request: request) {
+
+                users = fetched.flatMap { user in
+                    return [URIItem.listItem(user.objectID.uriRepresentation())]
+                }
+            }
+        }
+
+        let page: URIModelPage = URIModelPage(
+            list: users,
+            next: (page ?? 0) + 1,
+            currentHeader: previousHeader
+        )
+
+        return Just(page)
+            .setFailureType(to: Error.self)
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 

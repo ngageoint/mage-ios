@@ -592,6 +592,7 @@
 		F7BFB8F72C52DD7F00901479 /* FeedItemAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8F62C52DD7F00901479 /* FeedItemAnnotation.swift */; };
 		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
 		F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */; };
+		F7C0974A2C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097492C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift */; };
 		F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */; };
 		F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB9C207FE93100154281 /* local-authView.xib */; };
 		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
@@ -1507,6 +1508,7 @@
 		F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetTests.swift; sourceTree = "<group>"; };
 		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
 		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
+		F7C097492C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCoreDataDataSourceTests.swift; sourceTree = "<group>"; };
 		F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBuilder.swift; sourceTree = "<group>"; };
 		F7C3DB9C207FE93100154281 /* local-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "local-authView.xib"; sourceTree = "<group>"; };
 		F7C3DB9E207FECEB00154281 /* LocalLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalLoginView.h; sourceTree = "<group>"; };
@@ -2892,6 +2894,7 @@
 			isa = PBXGroup;
 			children = (
 				F763FF342C7BAB7B00403A00 /* LocationRepositoryTests.swift */,
+				F7C097492C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -4710,6 +4713,7 @@
 				F7059AB72044720F00A6B7CC /* DisconnectedLogin.m in Sources */,
 				F79CC3E7252F6875005692DC /* ServerURLControllerTests.swift in Sources */,
 				F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */,
+				F7C0974A2C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift in Sources */,
 				F7F15B1B2745BEA7008FF6C2 /* MockObservationPushDelegate.swift in Sources */,
 				F7F08EA027EA40DC00640D89 /* SingleObservationMapTests.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,

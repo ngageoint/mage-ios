@@ -30,7 +30,7 @@ protocol FormLocalDataSource {
     
 }
 
-class FormCoreDataDataSource: CoreDataDataSource, FormLocalDataSource, ObservableObject {
+class FormCoreDataDataSource: CoreDataDataSource<Form>, FormLocalDataSource, ObservableObject {
     
     func getForm(formId: NSNumber) -> Form? {
         let context = NSManagedObjectContext.mr_default()

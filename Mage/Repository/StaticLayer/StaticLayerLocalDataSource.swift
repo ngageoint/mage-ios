@@ -23,7 +23,7 @@ protocol StaticLayerLocalDataSource {
     func getStaticLayer(remoteId: NSNumber?) -> StaticLayer?
 }
 
-class StaticLayerCoreDataDataSource: CoreDataDataSource, StaticLayerLocalDataSource, ObservableObject {
+class StaticLayerCoreDataDataSource: CoreDataDataSource<StaticLayer>, StaticLayerLocalDataSource, ObservableObject {
     
     func getStaticLayer(remoteId: NSNumber?, eventId: NSNumber?) -> StaticLayer? {
         guard let remoteId = remoteId, let eventId = eventId else {

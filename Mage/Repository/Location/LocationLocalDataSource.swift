@@ -41,7 +41,7 @@ protocol LocationLocalDataSource {
         paginatedBy paginator: Trigger.Signal?
     ) -> AnyPublisher<[URIItem], Error>
     func observeLocation(locationUri: URL) -> AnyPublisher<LocationModel, Never>?
-    func observeLatest() -> AnyPublisher<Date, Never>?
+    func observeLatestFiltered() -> AnyPublisher<Date, Never>?
 }
 
 struct URIModelPage {
@@ -50,13 +50,11 @@ struct URIModelPage {
     var currentHeader: String?
 }
 
-class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, ObservableObject {
-    private lazy var context: NSManagedObjectContext = {
-        NSManagedObjectContext.mr_default()
-    }()
+class LocationCoreDataDataSource: CoreDataDataSource<Location>, LocationLocalDataSource, ObservableObject {
+    static let USER_IDS_FILTER = "userIds"
     
     func getLocation(uri: URL) async -> LocationModel? {
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: uri) {
                 if let location = try? context.existingObject(with: id) as? Location {
@@ -67,7 +65,8 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
         }
     }
     
-    func observeLatest() -> AnyPublisher<Date, Never>? {
+    func observeLatestFiltered() -> AnyPublisher<Date, Never>? {
+        guard let context = context else { return nil }
         var itemChanges: AnyPublisher<Date, Never> {
             
             let request = Location.fetchRequest()
@@ -80,8 +79,11 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
             
             return context.listPublisher(for: request, transformer: { $0 })
             .catch { _ in Empty() }
+            .compactMap({ output in
+                output.first
+            })
             .map({ output in
-                output[0].timestamp ?? Date()
+                output.timestamp ?? Date(timeIntervalSince1970: 0)
             })
             .eraseToAnyPublisher()
         }
@@ -89,7 +91,7 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
     }
     
     func observeLocation(locationUri: URL) -> AnyPublisher<LocationModel, Never>? {
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: locationUri) {
                 if let location = try? context.existingObject(with: id) as? Location {
@@ -105,64 +107,12 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
         }
     }
     
-    func locations(
-        userIds: [String]? = nil,
-        paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[URIItem], Error> {
-        return locations(
-            userIds: userIds,
-            at: nil,
-            currentHeader: nil,
-            paginatedBy: paginator
-        )
-        .map(\.list)
-        .eraseToAnyPublisher()
-    }
-    
-    func locations(
-        userIds: [String]? = nil,
-        at page: Page?,
-        currentHeader: String?,
-        paginatedBy paginator: Trigger.Signal?
-    ) -> AnyPublisher<URIModelPage, Error> {
-        return locations(
-            userIds: userIds,
-            at: page,
-            currentHeader: currentHeader
-        )
-        .map { result -> AnyPublisher<URIModelPage, Error> in
-            if let paginator = paginator, let next = result.next {
-                return self.locations(
-                    userIds: userIds,
-                    at: next,
-                    currentHeader: result.currentHeader,
-                    paginatedBy: paginator
-                )
-                .wait(untilOutputFrom: paginator)
-                .retry(.max)
-                .prepend(result)
-                .eraseToAnyPublisher()
-            } else {
-                return Just(result)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }
-        }
-        .switchToLatest()
-        .eraseToAnyPublisher()
-    }
-    
-    func locations(
-        userIds: [String]? = nil,
-        at page: Page?,
-        currentHeader: String?
-    ) -> AnyPublisher<URIModelPage, Error> {
-
+    override func getFetchRequest(parameters: [String: Any]? = nil) -> NSFetchRequest<Location> {
         let request = Location.fetchRequest()
         let predicates: [NSPredicate] = {
-            if let userids = userIds {
+            if let userIds = parameters?[LocationCoreDataDataSource.USER_IDS_FILTER] as? [String] {
                 return [
-                    NSPredicate(format: "user.remoteId IN %@", userIds!)
+                    NSPredicate(format: "user.remoteId IN %@", userIds)
                 ]
             } else {
                 return Locations.getPredicatesForLocations() as? [NSPredicate] ?? []
@@ -172,30 +122,33 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
         request.predicate = predicate
 
         request.includesSubentities = false
-        request.fetchLimit = 100
-        request.fetchOffset = (page ?? 0) * request.fetchLimit
         request.propertiesToFetch = ["timestamp"]
         request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-        let previousHeader: String? = currentHeader
-        var uris: [URIItem] = []
-        context.performAndWait {
-            if let fetched = context.fetch(request: request) {
-
-                uris = fetched.flatMap { user in
-                    return [URIItem.listItem(user.objectID.uriRepresentation())]
-                }
-            }
-        }
-
-        let page: URIModelPage = URIModelPage(
-            list: uris,
-            next: (page ?? 0) + 1,
-            currentHeader: previousHeader
-        )
-
-        return Just(page)
-            .setFailureType(to: Error.self)
-            .receive(on: DispatchQueue.main)
+        print("XXX fetch request predicate \(predicate)")
+        return request
+    }
+    
+    func locations(
+        userIds: [String]? = nil,
+        paginatedBy paginator: Trigger.Signal? = nil
+    ) -> AnyPublisher<[URIItem], Error> {
+        if let userIds = userIds {
+            return uris(
+                parameters: [LocationCoreDataDataSource.USER_IDS_FILTER: userIds],
+                at: nil,
+                currentHeader: nil,
+                paginatedBy: paginator
+            )
+            .map(\.list)
             .eraseToAnyPublisher()
+        } else {
+            return uris(
+                at: nil,
+                currentHeader: nil,
+                paginatedBy: paginator
+            )
+            .map(\.list)
+            .eraseToAnyPublisher()
+        }
     }
 }

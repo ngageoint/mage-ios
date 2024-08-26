@@ -58,11 +58,7 @@ struct UserModelPage {
     var currentHeader: String?
 }
 
-class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, ObservableObject {
-    @Injected(\.nsManagedObjectContext)
-    var context: NSManagedObjectContext?
-    
-    var fetchLimit: Int = 100
+class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, ObservableObject {
     
     private func getUserNSManagedObject(userUri: URL) async -> User? {
         guard let context = context else { return nil }
@@ -125,53 +121,7 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
         }
     }
     
-    func users(
-        paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[URIItem], Error> {
-        return users(
-            at: nil,
-            currentHeader: nil,
-            paginatedBy: paginator
-        )
-        .map(\.list)
-        .eraseToAnyPublisher()
-    }
-    
-    func users(
-        at page: Page?,
-        currentHeader: String?,
-        paginatedBy paginator: Trigger.Signal?
-    ) -> AnyPublisher<URIModelPage, Error> {
-        return users(
-            at: page,
-            currentHeader: currentHeader
-        )
-        .map { result -> AnyPublisher<URIModelPage, Error> in
-            if let paginator = paginator, let next = result.next {
-                return Publishers.Publish(onOutputFrom: paginator) {
-                    return self.users(
-                        at: next,
-                        currentHeader: result.currentHeader,
-                        paginatedBy: paginator
-                    )
-                    .eraseToAnyPublisher()
-                }
-                .prepend(result)
-                .eraseToAnyPublisher()
-            } else {
-                return Just(result)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }
-        }
-        .switchToLatest()
-        .eraseToAnyPublisher()
-    }
-    
-    func users(
-        at page: Page?,
-        currentHeader: String?
-    ) -> AnyPublisher<URIModelPage, Error> {
+    override func getFetchRequest(parameters: [String: Any]? = nil) -> NSFetchRequest<User> {
         let request = User.fetchRequest()
         let predicates: [NSPredicate] = [NSPredicate(value: true)]
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
@@ -179,32 +129,22 @@ class UserCoreDataDataSource: CoreDataDataSource, UserLocalDataSource, Observabl
 
         request.includesSubentities = false
         request.includesPropertyValues = false
-        request.fetchLimit = fetchLimit
-        request.fetchOffset = (page ?? 0) * request.fetchLimit
         request.sortDescriptors = [NSSortDescriptor(key: "location.timestamp", ascending: false)]
-        let previousHeader: String? = currentHeader
-        var users: [URIItem] = []
-        context?.performAndWait {
-            if let fetched = context?.fetch(request: request) {
-
-                users = fetched.flatMap { user in
-                    return [URIItem.listItem(user.objectID.uriRepresentation())]
-                }
-            }
-        }
-
-        let page: URIModelPage = URIModelPage(
-            list: users, 
-            next: (page ?? 0) + 1,
-            currentHeader: previousHeader
-        )
-
-        return Just(page)
-            .setFailureType(to: Error.self)
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        return request
     }
-    
+
+    func users(
+        paginatedBy paginator: Trigger.Signal? = nil
+    ) -> AnyPublisher<[URIItem], Error> {
+        return uris(
+            at: nil,
+            currentHeader: nil,
+            paginatedBy: paginator
+        )
+        .map(\.list)
+        .eraseToAnyPublisher()
+    }
+ 
     func canUserUpdateImportant(
         event: EventModel,
         userUri: URL

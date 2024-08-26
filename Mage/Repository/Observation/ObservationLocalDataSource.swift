@@ -51,10 +51,10 @@ struct ObservationModelPage {
     var currentHeader: String?
 }
 
-class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSource, ObservableObject {
-    private lazy var context: NSManagedObjectContext = {
-        NSManagedObjectContext.mr_default()
-    }()
+class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, ObservationLocalDataSource, ObservableObject {
+//    private lazy var context: NSManagedObjectContext = {
+//        NSManagedObjectContext.mr_default()
+//    }()
     
     func userObservations(
         userUri: URL,
@@ -123,12 +123,12 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         let previousHeader: String? = currentHeader
         var observations: [ObservationItem] = []
         
-        context.performAndWait {
+        context?.performAndWait {
             let request = Observation.fetchRequest()
             let predicates: [NSPredicate] = {
                 if let userUri = userUri {
-                    if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri),
-                       let user = try? context.existingObject(with: id) as? User
+                    if let id = context?.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri),
+                       let user = try? context?.existingObject(with: id) as? User
                     {
                         return [
                             NSPredicate(format: "user == %@ AND eventId == %@", argumentArray: [user, Server.currentEventId() ?? -1])
@@ -148,7 +148,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
             request.fetchOffset = (page ?? 0) * request.fetchLimit
             request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
 
-            if let fetched = try? context.fetch(request) {
+            if let fetched = try? context?.fetch(request) {
 
                 observations = fetched.flatMap { observation in
                     return [ObservationItem.listItem(observation.objectID.uriRepresentation())]
@@ -267,6 +267,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
     }
     
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {
+        guard let context = context else { return nil }
         var itemChanges: AnyPublisher<Int, Never> {
             
             let request = Observation.fetchRequest()

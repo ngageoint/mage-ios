@@ -29,7 +29,7 @@ protocol ObservationImportantLocalDataSource {
     func getImportantsToPush() -> [ObservationImportantModel]
 }
 
-class ObservationImportantCoreDataDataSource: CoreDataDataSource, ObservationImportantLocalDataSource, ObservableObject {
+class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImportant>, ObservationImportantLocalDataSource, ObservableObject {
     
     var pushSubject: PassthroughSubject<ObservationImportantModel, Never>? = PassthroughSubject<ObservationImportantModel, Never>()
     var importantFetchedResultsController: NSFetchedResultsController<ObservationImportant>?

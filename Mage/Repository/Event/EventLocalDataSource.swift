@@ -24,7 +24,7 @@ protocol EventLocalDataSource {
     
 }
 
-class EventCoreDataDataSource: CoreDataDataSource, EventLocalDataSource, ObservableObject {
+class EventCoreDataDataSource: CoreDataDataSource<Event>, EventLocalDataSource, ObservableObject {
     
     func getEvent(eventId: NSNumber) -> EventModel? {
         let context = NSManagedObjectContext.mr_default()

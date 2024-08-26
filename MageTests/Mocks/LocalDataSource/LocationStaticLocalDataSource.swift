@@ -53,7 +53,7 @@ class LocationStaticLocalDataSource: LocationLocalDataSource {
     
     var latestSubject: CurrentValueSubject<Date, Never> = CurrentValueSubject(Date(timeIntervalSince1970: 0))
     
-    func observeLatest() -> AnyPublisher<Date, Never>? {
+    func observeLatestFiltered() -> AnyPublisher<Date, Never>? {
         return AnyPublisher(latestSubject)
     }
     
