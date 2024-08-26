@@ -30,7 +30,7 @@ protocol FeedItemLocalDataSource {
     ) -> AnyPublisher<FeedItemModel, Never>?
 }
 
-class FeedItemCoreDataDataSource: CoreDataDataSource, FeedItemLocalDataSource, ObservableObject {
+class FeedItemCoreDataDataSource: CoreDataDataSource<FeedItem>, FeedItemLocalDataSource, ObservableObject {
     func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel? {
         if let feedItem = await getFeedItem(feedItemrUri: feedItemUri) {
             return FeedItemModel(feedItem: feedItem)

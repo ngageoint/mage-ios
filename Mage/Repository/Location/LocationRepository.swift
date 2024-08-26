@@ -62,8 +62,8 @@ class LocationRepository: ObservableObject {
             .store(in: &cancellable)
     }
     
-    func observeLatest() -> AnyPublisher<Date, Never>? {
-        localDataSource.observeLatest()
+    func observeLatestFiltered() -> AnyPublisher<Date, Never>? {
+        localDataSource.observeLatestFiltered()
     }
     
     func locations(

@@ -27,7 +27,7 @@ protocol ObservationFavoriteLocalDataSource {
     func toggleFavorite(observationUri: URL?, userRemoteId: String)
 }
 
-class ObservationFavoriteCoreDataDataSource: CoreDataDataSource, ObservationFavoriteLocalDataSource, ObservableObject {
+class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavorite>, ObservationFavoriteLocalDataSource, ObservableObject {
     
     var pushSubject: PassthroughSubject<ObservationFavoriteModel, Never>? = PassthroughSubject<ObservationFavoriteModel, Never>()
     var favoritesFetchedResultsController: NSFetchedResultsController<ObservationFavorite>?

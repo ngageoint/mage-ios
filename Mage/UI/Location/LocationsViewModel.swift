@@ -48,7 +48,7 @@ class LocationsViewModel: ObservableObject {
             })
             .store(in: &disposables)
         
-        repository.observeLatest()?
+        repository.observeLatestFiltered()?
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] count in
                 guard let self = self else { return }

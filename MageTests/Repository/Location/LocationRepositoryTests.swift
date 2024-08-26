@@ -80,7 +80,7 @@ final class LocationRepositoryTests: XCTestCase {
         var first: Bool = false
         
         let locationRepository = LocationRepository()
-        locationRepository.observeLatest()?
+        locationRepository.observeLatestFiltered()?
             .sink(receiveValue: { model in
                 if model == Date(timeIntervalSince1970: 100000) {
                     first = true

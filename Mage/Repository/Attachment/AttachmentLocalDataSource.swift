@@ -29,7 +29,7 @@ protocol AttachmentLocalDataSource {
     func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>?
 }
 
-class AttachmentCoreDataDataSource: CoreDataDataSource, AttachmentLocalDataSource, ObservableObject {
+class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLocalDataSource, ObservableObject {
     
     func getAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) async -> [AttachmentModel]? {
         

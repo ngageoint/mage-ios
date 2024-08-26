@@ -56,7 +56,7 @@ protocol ObservationLocationLocalDataSource {
     ) async -> [ObservationMapItem]?
 }
 
-class ObservationLocationCoreDataDataSource: CoreDataDataSource, ObservationLocationLocalDataSource {
+class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocation>, ObservationLocationLocalDataSource {
     
     func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<ObservationMapItem, Never>? {
         guard let observationLocationUri = observationLocationUri else {
