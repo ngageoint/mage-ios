@@ -41,17 +41,22 @@ import Foundation
     
     @objc public static func setupCoreData() {
         MagicalRecord.setupMageCoreDataStack();
+        InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
         MagicalRecord.setLoggingLevel(.verbose);
     }
 
     @objc public static func clearAndSetupCoreData() {
         MagicalRecord.deleteAndSetupMageCoreDataStack();
+        InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
         MagicalRecord.setLoggingLevel(.verbose);
     }
     
     @discardableResult
     @objc public static func clearServerSpecificData() -> [String: Bool] {
-        let localContext: NSManagedObjectContext = NSManagedObjectContext.mr_default();
+        @Injected(\.nsManagedObjectContext)
+        var localContext: NSManagedObjectContext?
+        
+        guard let localContext = localContext else { return [:] }
         
         // clear server specific selected layers
         if let events = Event.mr_findAll(in:localContext) as? [Event] {

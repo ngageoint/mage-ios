@@ -429,6 +429,7 @@
 		F763FF322C79180F00403A00 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF302C79180900403A00 /* EventModel.swift */; };
 		F763FF352C7BAB7B00403A00 /* LocationRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF342C7BAB7B00403A00 /* LocationRepositoryTests.swift */; };
 		F763FF372C7BAC3900403A00 /* LocationStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF362C7BAC3900403A00 /* LocationStaticLocalDataSource.swift */; };
+		F763FF392C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F763FF382C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift */; };
 		F7641CE4276D423A006225BA /* CanCreateObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7641CE3276D423A006225BA /* CanCreateObservation.swift */; };
 		F767AC7827D957F4005684E5 /* Feed+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C62694B60300F9AC3B /* Feed+CoreDataProperties.swift */; };
 		F767AC7927D95802005684E5 /* Role+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42952694B60300F9AC3B /* Role+CoreDataProperties.swift */; };
@@ -1307,6 +1308,7 @@
 		F763FF302C79180900403A00 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
 		F763FF342C7BAB7B00403A00 /* LocationRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRepositoryTests.swift; sourceTree = "<group>"; };
 		F763FF362C7BAC3900403A00 /* LocationStaticLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStaticLocalDataSource.swift; sourceTree = "<group>"; };
+		F763FF382C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCoreDataDataSourceTests.swift; sourceTree = "<group>"; };
 		F7641CE3276D423A006225BA /* CanCreateObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanCreateObservation.swift; sourceTree = "<group>"; };
 		F76949151AA6436000CB680B /* EventChooserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventChooserController.swift; sourceTree = "<group>"; };
 		F76A15BD1A93C35400F2BDF1 /* KeyboardConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardConstraint.h; sourceTree = "<group>"; };
@@ -2849,6 +2851,7 @@
 			isa = PBXGroup;
 			children = (
 				F763FF1E2C79044800403A00 /* UserRepositoryTests.swift */,
+				F763FF382C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -4760,6 +4763,7 @@
 				F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
+				F763FF392C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift in Sources */,
 				F74020B92491904200B5A8BA /* TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
