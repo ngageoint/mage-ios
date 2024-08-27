@@ -26,8 +26,8 @@
 + (Observations *) observationsForUser:(User *) user context: (NSManagedObjectContext *) context;
 + (Observations *) observationsForObservation:(Observation *) observation context: (NSManagedObjectContext *) context;
 
-+ (NSMutableArray *) getPredicatesForObservations;
-+ (NSMutableArray *) getPredicatesForObservationsForMap;
++ (NSMutableArray *) getPredicatesForObservations: (NSManagedObjectContext *) context;
++ (NSMutableArray *) getPredicatesForObservationsForMap: (NSManagedObjectContext *) context;
 
 - (id) initWithFetchedResultsController:(NSFetchedResultsController *) fetchedResultsController;
 

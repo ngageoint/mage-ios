@@ -32,10 +32,10 @@ class UserViewViewModel: ObservableObject {
     
     enum State {
         case loading
-        case loaded(rows: [ObservationItem])
+        case loaded(rows: [URIItem])
         case failure(error: Error)
         
-        fileprivate var rows: [ObservationItem] {
+        fileprivate var rows: [URIItem] {
             if case let .loaded(rows: rows) = self {
                 return rows
             } else {

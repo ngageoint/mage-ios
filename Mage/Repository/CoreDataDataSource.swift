@@ -23,7 +23,7 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     
     var fetchLimit: Int = 100
     
-    func getFetchRequest(parameters: [String: Any]? = nil) -> NSFetchRequest<T> {
+    func getFetchRequest(parameters: [AnyHashable: Any]? = nil) -> NSFetchRequest<T> {
         preconditionFailure("This method must be overridden")
     }
 
@@ -68,7 +68,7 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     }
     
     func uris(
-        parameters: [String: Any]? = nil,
+        parameters: [AnyHashable: Any]? = nil,
         at page: Page?,
         currentHeader: String?,
         paginatedBy paginator: Trigger.Signal?
@@ -102,7 +102,7 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     }
     
     func uris(
-        parameters: [String: Any]? = nil,
+        parameters: [AnyHashable: Any]? = nil,
         at page: Page?,
         currentHeader: String?
     ) -> AnyPublisher<URIModelPage, Error> {
