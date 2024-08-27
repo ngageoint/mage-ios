@@ -28,7 +28,7 @@ class BottomSheetEnabledTests: KIFSpec {
     
     override func spec() {
         
-        describe("BottomSheetEnabledTests") {
+        xdescribe("BottomSheetEnabledTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

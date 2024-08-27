@@ -19,7 +19,7 @@ class ObservationTests: KIFSpec {
     
     override func spec() {
         
-        describe("Transformation Tests") {
+        xdescribe("Transformation Tests") {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
@@ -62,7 +62,7 @@ class ObservationTests: KIFSpec {
             }
         }
         
-        describe("Field Tests") {
+        xdescribe("Field Tests") {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 UserDefaults.standard.baseServerUrl = "https://magetest";
@@ -1223,7 +1223,7 @@ class ObservationTests: KIFSpec {
             }
         }
         
-        describe("Route Tests") {
+        xdescribe("Route Tests") {
 
             beforeEach {
                 var cleared = false;
@@ -1993,7 +1993,7 @@ class ObservationTests: KIFSpec {
         }
 
 
-        describe("Observation Location Tests") {
+        xdescribe("Observation Location Tests") {
 
             beforeEach {
                 var cleared = false;

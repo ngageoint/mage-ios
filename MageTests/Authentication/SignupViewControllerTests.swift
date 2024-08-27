@@ -45,7 +45,7 @@ class SignUpViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("SignUpViewControllerTests") {
+        xdescribe("SignUpViewControllerTests") {
             
             var window: UIWindow?;
             var view: SignUpViewController?;

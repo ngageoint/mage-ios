@@ -109,7 +109,13 @@ func actionButtonTapped()
         return collectionView
     }()
     
-    let allEventsController = Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format: "TRUEPREDICATE"), groupBy: nil, context: NSManagedObjectContext.mr_default())
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+
+    lazy var allEventsController: NSFetchedResultsController<Event>? = {
+        guard let context = context else { return nil }
+        return Event.caseInsensitiveSortFetchAll(sortTerm: "name", ascending: true, predicate: NSPredicate(format: "TRUEPREDICATE"), groupBy: nil, context: context)
+    }()
 
     
     init(frame: CGRect) {
@@ -328,7 +334,11 @@ func actionButtonTapped()
         if eventDataSource?.otherFetchedResultsController?.fetchedObjects?.count == 0 && eventDataSource?.recentFetchedResultsController?.fetchedObjects?.count == 0 {
             let error = "You must be a member of at least one event to use MAGE.  Ask your administrator to add you to an event."
             let info = ContactInfo(title: nil, andMessage: error)
-            if let currentUser = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()), let username = currentUser.username {
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else { return }
+            if let currentUser = User.fetchCurrentUser(context: context), let username = currentUser.username {
                 info.username = username
             }
             
@@ -374,7 +384,12 @@ func actionButtonTapped()
 extension EventChooserController : EventSelectionDelegate {
     func didSelectEvent(event: Event) {
         // verify the user is still in this event
-        if let remoteId = event.remoteId, let fetchedEvent = Event.getEvent(eventId: remoteId, context: NSManagedObjectContext.mr_default()) {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        
+        if let remoteId = event.remoteId, let fetchedEvent = Event.getEvent(eventId: remoteId, context: context) {
             // dismiss the search view if showing
             searchController.isActive = false
             // show the loading indicator

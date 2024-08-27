@@ -23,6 +23,9 @@ extension FilteredUsersMap {
 }
 
 class FilteredUsersMapMixin: NSObject, MapMixin {
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     var mapAnnotationFocusedObserver: AnyObject?
     var filteredUsersMap: FilteredUsersMap?
     var mapView: MKMapView?
@@ -94,13 +97,13 @@ class FilteredUsersMapMixin: NSObject, MapMixin {
         }
         
         if let user = user {
-            locations = Locations(for: user)
+            locations = Locations(for: user, context: context)
             locations?.delegate = self
         } else if let locations = locations,
            let locationPredicates = Locations.getPredicatesForLocationsForMap() as? [NSPredicate] {
             locations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: locationPredicates)
         } else {
-            locations = Locations.forMap()
+            locations = Locations.init(forMap: context)
             locations?.delegate = self
         }
         

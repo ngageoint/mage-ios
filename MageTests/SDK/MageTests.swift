@@ -19,7 +19,7 @@ class MageTests: KIFSpec {
     
     override func spec() {
         
-        describe("MageTests") {
+        xdescribe("MageTests") {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();

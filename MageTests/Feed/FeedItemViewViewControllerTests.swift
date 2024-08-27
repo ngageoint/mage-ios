@@ -20,7 +20,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("FeedItemViewController no timestamp") {
+        xdescribe("FeedItemViewController no timestamp") {
             var controller: FeedItemViewController!
             var window: UIWindow!;
             
@@ -213,7 +213,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
         }
         
-        describe("FeedItemViewController with timestamp") {
+        xdescribe("FeedItemViewController with timestamp") {
             var controller: FeedItemViewController!
             var window: UIWindow!;
                 

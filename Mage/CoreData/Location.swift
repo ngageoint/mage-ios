@@ -15,10 +15,15 @@ import MagicalRecord
 @objc public class Location: NSManagedObject, Navigable {
     
     static func mostRecentLocationFetchedResultsController(_ user: User, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Location>? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         let fetchRequest = Location.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "user = %@", user)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-        let locationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        let locationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         locationFetchedResultsController.delegate = delegate
         do {
             try locationFetchedResultsController.performFetch()

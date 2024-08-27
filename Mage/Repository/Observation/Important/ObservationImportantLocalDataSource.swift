@@ -36,7 +36,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
     
     override init() {
         super.init()
-        let context = NSManagedObjectContext.mr_default();
+        guard let context = context else { return }
         context.perform { [weak self] in
             self?.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(
                 by: "observation.\(ObservationKey.timestamp.key)",
@@ -59,7 +59,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
             if let observation = try? context.existingObject(with: id) as? Observation {
                 
@@ -83,7 +83,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
         guard let observationUri = observationUri else {
             return
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return }
         
         return context.performAndWait {
             
@@ -120,7 +120,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
         guard let observationUri = observationUri else {
             return
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return }
         
         return context.performAndWait {
             
@@ -181,7 +181,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
     
     func handleServerPushResponse(important: ObservationImportantModel, response: [AnyHashable: Any]) {
         // verify that the current state in our data is the same as returned from the server
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return }
         
         context.performAndWait {
             if let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: important.importantUri),

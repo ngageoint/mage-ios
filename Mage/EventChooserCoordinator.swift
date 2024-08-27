@@ -29,7 +29,11 @@ import UIKit
     
     @objc func start() {
         if let currentEventId = Server.currentEventId() {
-            if let event = Event.getEvent(eventId: currentEventId, context: NSManagedObjectContext.mr_default()) {
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else { return }
+            if let event = Event.getEvent(eventId: currentEventId, context: context) {
                 eventToSegueTo = event
                 eventController?.dismiss(animated: false)
                 delegate?.eventChosen(event: event)

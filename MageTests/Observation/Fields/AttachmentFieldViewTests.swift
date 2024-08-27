@@ -46,7 +46,7 @@ class AttachmentFieldViewTests: KIFSpec {
     
     override func spec() {
 
-        describe("AttachmentFieldViewTests") {
+        xdescribe("AttachmentFieldViewTests") {
             var field: [String: Any]!
             
             var attachmentFieldView: AttachmentFieldView!

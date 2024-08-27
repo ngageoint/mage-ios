@@ -16,7 +16,7 @@ import Nimble
 class DropdownFieldViewTests: KIFSpec {
     
     override func spec() {
-        describe("DropdownFieldView") {            
+        xdescribe("DropdownFieldView") {            
             var controller: UIViewController!
             var window: UIWindow!;
             

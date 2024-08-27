@@ -23,7 +23,11 @@ class MageCoreDataFixtures {
     
     @discardableResult
     public static func clearAllData() -> [String: Bool] {
-        let localContext: NSManagedObjectContext = NSManagedObjectContext.mr_default();
+        @Injected(\.nsManagedObjectContext)
+        var localContext: NSManagedObjectContext?
+        
+        guard let localContext = localContext else { return [:] }
+//        let localContext: NSManagedObjectContext = NSManagedObjectContext.mr_default();
 
         let cleared = [
             String(describing: Attachment.self): Attachment.mr_truncateAll(in: localContext),

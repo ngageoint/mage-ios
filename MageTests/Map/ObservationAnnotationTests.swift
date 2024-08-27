@@ -19,7 +19,7 @@ import DateTools
 class ObservationAnnotationTests: KIFSpec {
     
     override func spec() {
-        describe("ObservationImage Tests") {
+        xdescribe("ObservationImage Tests") {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();

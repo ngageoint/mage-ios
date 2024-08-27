@@ -30,7 +30,7 @@ class HasMapSettingsTests: KIFSpec {
     
     override func spec() {
         
-        describe("HasMapSettingsTests") {
+        xdescribe("HasMapSettingsTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

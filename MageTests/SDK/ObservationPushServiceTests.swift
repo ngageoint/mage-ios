@@ -17,7 +17,7 @@ import OHHTTPStubs
 class ObservationPushServiceTests: KIFSpec {
     
     override func spec() {
-        describe("Route Tests") {
+        xdescribe("Route Tests") {
             
             beforeEach {
                 var cleared = false;

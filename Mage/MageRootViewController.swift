@@ -11,6 +11,9 @@ import MaterialViews
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     var profileTabBarItem: UITabBarItem?;
     var moreTabBarItem: UITabBarItem?;
     var moreTableViewDelegate: UITableViewDelegate?;
@@ -21,12 +24,12 @@ import MaterialViews
     var attachmentViewCoordinator: AttachmentViewCoordinator?
     
     private lazy var offlineObservationManager: MageOfflineObservationManager = {
-        let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self);
+        let manager: MageOfflineObservationManager = MageOfflineObservationManager(delegate: self, context: context);
         return manager;
     }();
     
     private lazy var settingsTabItem: UINavigationController = {
-        let svc = SettingsTableViewController(scheme: scheme)!;
+        let svc = SettingsTableViewController(scheme: scheme, context: context)!;
         let nc = UINavigationController(rootViewController: svc);
         nc.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape.fill"), tag: 4);
         return nc;

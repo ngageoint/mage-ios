@@ -280,7 +280,10 @@ final class LocationCoreDataDataSourceTests: XCTestCase {
             try? context.obtainPermanentIDs(for: [location, user])
             try? context.save()
         }
-
+        
+        UserDefaults.standard.currentEventId = 1
+        UserDefaults.standard.locationTimeFilter = .all
+        
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, localDataSource] in
@@ -396,7 +399,10 @@ final class LocationCoreDataDataSourceTests: XCTestCase {
             try? context.obtainPermanentIDs(for: [location, user])
             try? context.save()
         }
-
+        
+        UserDefaults.standard.currentEventId = 1
+        UserDefaults.standard.locationTimeFilter = .all
+        
         Publishers.PublishAndRepeat(
             onOutputFrom: trigger.signal(activatedBy: TriggerId.reload)
         ) { [trigger, localDataSource] in
@@ -484,7 +490,10 @@ final class LocationCoreDataDataSourceTests: XCTestCase {
 
         let trigger = Trigger()
         let localDataSource = LocationCoreDataDataSource()
-
+        
+        UserDefaults.standard.currentEventId = 1
+        UserDefaults.standard.locationTimeFilter = .all
+        
         context.performAndWait {
             let user = User(context: context)
             user.name = "Fred"
@@ -631,7 +640,10 @@ final class LocationCoreDataDataSourceTests: XCTestCase {
         let trigger = Trigger()
         let localDataSource = LocationCoreDataDataSource()
         localDataSource.fetchLimit = 1
-
+        
+        UserDefaults.standard.currentEventId = 1
+        UserDefaults.standard.locationTimeFilter = .all
+        
         context.performAndWait {
             let user = User(context: context)
             user.name = "Fred"

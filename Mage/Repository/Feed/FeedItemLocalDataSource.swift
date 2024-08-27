@@ -42,7 +42,10 @@ class FeedItemCoreDataDataSource: CoreDataDataSource<FeedItem>, FeedItemLocalDat
         guard let feedItemrUri = feedItemrUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: feedItemrUri) {
                 if let feedItem = try? context.existingObject(with: id) as? FeedItem {
@@ -57,7 +60,10 @@ class FeedItemCoreDataDataSource: CoreDataDataSource<FeedItem>, FeedItemLocalDat
         guard let feedItemUri = feedItemUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: feedItemUri) {
                 if let feedItem = try? context.existingObject(with: id) as? FeedItem {

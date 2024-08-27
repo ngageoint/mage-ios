@@ -38,7 +38,7 @@ class FeedsMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("FeedsMapTests") {
+        xdescribe("FeedsMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

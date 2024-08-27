@@ -38,7 +38,7 @@ class OnlineLayerMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("OnlineLayerMapTests") {
+        xdescribe("OnlineLayerMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

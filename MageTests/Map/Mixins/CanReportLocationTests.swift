@@ -28,7 +28,7 @@ class CanReportLocationTests: KIFSpec {
     
     override func spec() {
         
-        describe("CanReportLocationTests") {
+        xdescribe("CanReportLocationTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

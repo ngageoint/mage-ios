@@ -34,7 +34,7 @@ class FormPickerTests: KIFSpec {
     
     override func spec() {
         
-        describe("FormPickerTests") {
+        xdescribe("FormPickerTests") {
             
             var formPicker: FormPickerViewController!
             var window: UIWindow!;

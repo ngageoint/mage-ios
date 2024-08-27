@@ -10,6 +10,6 @@
 
 @interface OfflineMapTableViewController : UITableViewController<CacheOverlayListener>
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
 
 @end

@@ -81,7 +81,10 @@ class CanReportLocationMixin: NSObject, MapMixin {
     @objc func reportLocationButtonPressed(_ sender: UIButton) {
         let authorized = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
         
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
         let inEvent = Event.getCurrentEvent(context: context)?.isUserInEvent(user: User.fetchCurrentUser(context: context)) ?? false
         
         if UserDefaults.standard.locationServiceDisabled {
@@ -113,7 +116,10 @@ class CanReportLocationMixin: NSObject, MapMixin {
         let authorized = locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse
         
         let trackingOn = UserDefaults.standard.reportLocation
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
         let inEvent = Event.getCurrentEvent(context: context)?.isUserInEvent(user: User.fetchCurrentUser(context: context)) ?? false
         
         if UserDefaults.standard.locationServiceDisabled {

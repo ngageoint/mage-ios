@@ -26,16 +26,24 @@ protocol StaticLayerLocalDataSource {
 class StaticLayerCoreDataDataSource: CoreDataDataSource<StaticLayer>, StaticLayerLocalDataSource, ObservableObject {
     
     func getStaticLayer(remoteId: NSNumber?, eventId: NSNumber?) -> StaticLayer? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         guard let remoteId = remoteId, let eventId = eventId else {
             return nil
         }
-        return StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", remoteId, eventId), in: NSManagedObjectContext.mr_default())
+        return StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", remoteId, eventId), in: context)
     }
     
     func getStaticLayer(remoteId: NSNumber?) -> StaticLayer? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         guard let remoteId = remoteId else {
             return nil
         }
-        return StaticLayer.mr_findFirst(byAttribute: "remoteId", withValue: remoteId, in: NSManagedObjectContext.mr_default())
+        return StaticLayer.mr_findFirst(byAttribute: "remoteId", withValue: remoteId, in: context)
     }
 }

@@ -59,7 +59,10 @@ extension UIImage {
     
     public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return [] }
         
         return context.performAndWait {
             if let feeds: [Feed] = Feed.mr_findAll(in: context) as? [Feed] {
@@ -74,7 +77,10 @@ extension UIImage {
     }
     
     public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag, in: context) {
                 return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
@@ -84,7 +90,10 @@ extension UIImage {
     }
     
     public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let feed: Feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId), in: context) {
                 if (feed.itemsHaveSpatialDimension) {
@@ -97,7 +106,10 @@ extension UIImage {
     
     public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return [] }
         
         return context.performAndWait {
             if let feeds: [Feed] = Feed.mr_findAll(in: context) as? [Feed] {
@@ -116,7 +128,7 @@ extension UIImage {
     @objc public let feed: Feed;
     let delegate: FeedItemDelegate;
     
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {
+    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem>? = {
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
@@ -125,7 +137,12 @@ extension UIImage {
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
         
         // Create Fetched Results Controller
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         
         // Configure Fetched Results Controller
         fetchedResultsController.delegate = self
@@ -140,13 +157,13 @@ extension UIImage {
     
     @objc public func startRetriever() -> [FeedItemAnnotation]? {
         do {
-            try fetchedResultsController.performFetch()
+            try fetchedResultsController?.performFetch()
         } catch {
             let fetchError = error as NSError
             print("Unable to Perform Fetch Request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
-        return fetchedResultsController.fetchedObjects?.compactMap({ feedItem in
+        return fetchedResultsController?.fetchedObjects?.compactMap({ feedItem in
             if feedItem.isMappable {
                 return FeedItemAnnotation(feedItem: feedItem)
             }

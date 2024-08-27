@@ -52,10 +52,6 @@ struct ObservationModelPage {
 }
 
 class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, ObservationLocalDataSource, ObservableObject {
-//    private lazy var context: NSManagedObjectContext = {
-//        NSManagedObjectContext.mr_default()
-//    }()
-    
     func userObservations(
         userUri: URL,
         paginatedBy paginator: Trigger.Signal? = nil
@@ -172,7 +168,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
             if let observation = try? context.existingObject(with: id) as? Observation {
                 
@@ -203,7 +199,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
     }
 
     func getLastObservation(eventId: Int) -> Observation? {
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return context.performAndWait {
             let user = User.fetchCurrentUser(context: context)
             if let userRemoteId = user?.remoteId {
@@ -227,7 +223,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         guard let remoteId = remoteId else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return await context.perform {
             context.fetchFirst(Observation.self, key: "remoteId", value: remoteId)
         }
@@ -237,7 +233,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 return try? context.existingObject(with: id) as? Observation
@@ -250,7 +246,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 if let observation = try? context.existingObject(with: id) as? Observation {

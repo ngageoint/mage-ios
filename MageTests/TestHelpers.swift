@@ -161,12 +161,19 @@ class TestHelpers {
         
     }
     
+    static var coreDataStack: TestCoreDataStack?
+    static var context: NSManagedObjectContext?
+    
     @discardableResult
     public static func clearAndSetUpStack() -> [String: Bool] {
         TestHelpers.clearDocuments();
         TestHelpers.clearImageCache();
         TestHelpers.resetUserDefaults();
-        return MageCoreDataFixtures.clearAllData();
+        coreDataStack = TestCoreDataStack()
+        context = coreDataStack!.persistentContainer.newBackgroundContext()
+        InjectedValues[\.nsManagedObjectContext] = context
+        return [:]
+//        return MageCoreDataFixtures.clearAllData();
 //        MagicalRecord.cleanUp();
         
 //        MagicalRecord.deleteAndSetupMageCoreDataStack();
@@ -186,6 +193,8 @@ class TestHelpers {
         }
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
         MageInitializer.initializePreferences();
+        InjectedValues[\.nsManagedObjectContext] = nil
+        coreDataStack!.reset()
         
 //        if (NSManagedObjectContext.mr_default() != nil) {
 //            NSManagedObjectContext.mr_default().reset();

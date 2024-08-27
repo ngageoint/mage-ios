@@ -20,7 +20,7 @@ class DataSourceMap: MapMixin {
     var uuid: UUID = UUID()
     var cancellable = Set<AnyCancellable>()
     
-    weak var viewModel: DataSourceMapViewModel?
+    var viewModel: DataSourceMapViewModel?
 
     var scheme: MDCContainerScheming?
     weak var mapState: MapState?

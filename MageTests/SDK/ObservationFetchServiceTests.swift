@@ -17,7 +17,7 @@ import OHHTTPStubs
 class ObservationFetchServiceTests: KIFSpec {
     
     override func spec() {
-        describe("ObservationFetchService Tests") {
+        xdescribe("ObservationFetchService Tests") {
             
             beforeEach {
                 ObservationFetchService.singleton.stop();

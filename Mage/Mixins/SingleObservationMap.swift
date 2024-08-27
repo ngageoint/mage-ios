@@ -40,8 +40,8 @@ class SingleObservationMapMixin: FilteredObservationsMapMixin {
             }
         }
         
-        if let observation = observation {
-            observations = Observations(for: observation)
+        if let observation = observation, let context = context {
+            observations = Observations(for: observation, context: context)
             observations?.delegate = self
         }
         

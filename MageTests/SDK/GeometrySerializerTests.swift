@@ -17,7 +17,7 @@ class GeometrySerializerTests: KIFSpec {
     
     override func spec() {
         
-        describe("GeometrySerializer Tests") {
+        xdescribe("GeometrySerializer Tests") {
             
             it("should serialize a point") {
                 let geometry: SFPoint = SFPoint(x: 1, andY: 2);

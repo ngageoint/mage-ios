@@ -33,7 +33,10 @@ protocol FormLocalDataSource {
 class FormCoreDataDataSource: CoreDataDataSource<Form>, FormLocalDataSource, ObservableObject {
     
     func getForm(formId: NSNumber) -> Form? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
             return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context)
         }

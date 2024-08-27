@@ -62,7 +62,8 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         guard let observationLocationUri = observationLocationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
+        
         return context.performAndWait {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationLocationUri) {
                 if let observationLocation = try? context.existingObject(with: id) as? ObservationLocation {
@@ -82,7 +83,9 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         guard let observationLocationUri = observationLocationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        
+        guard let context = context else { return nil }
+
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationLocationUri) {
                 if let location = try? context.existingObject(with: id) as? ObservationLocation {
@@ -94,7 +97,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
     }
     
     func getObservationMapItems(observationUri: URL, formId: String, fieldName: String) async -> [ObservationMapItem]? {
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return await context.perform {
             if let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri)
             {
@@ -115,7 +118,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
     }
     
     func getObservationMapItems(userUri: URL) async -> [ObservationMapItem]? {
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return await context.perform {
             if let userObjectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri)
             {
@@ -140,8 +143,12 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         if Observations.getImportantFilter() {
             predicates.append(NSPredicate(format: "observation.observationImportant.important = %@", NSNumber(value: true)))
         }
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+                
         if Observations.getFavoritesFilter(),
-           let currentUser = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()),
+           let context = context,
+           let currentUser = User.fetchCurrentUser(context: context),
            let remoteId = currentUser.remoteId
         {
             predicates.append(NSPredicate(format: "observation.favorites.favorite CONTAINS %@ AND observation.favorites.userId CONTAINS %@", NSNumber(value: true), remoteId))
@@ -159,7 +166,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         guard let observationLocationUri = observationLocationUri else {
             return []
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return [] }
         return await context.perform {
             var predicates: [NSPredicate] = []
             if let minLatitude = minLatitude,
@@ -205,7 +212,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         guard let observationUri = observationUri else {
             return []
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return [] }
         return await context.perform {
 
             var predicates: [NSPredicate] = []
@@ -246,8 +253,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
         minLongitude: Double?,
         maxLongitude: Double?
     ) async -> [ObservationMapItem] {
-        let context = NSManagedObjectContext.mr_default()
-
+        guard let context = context else { return [] }
         return await context.perform {
             var predicates: [NSPredicate] = self.getObservationPredicates()
             if let minLatitude = minLatitude,
@@ -275,8 +281,7 @@ class ObservationLocationCoreDataDataSource: CoreDataDataSource<ObservationLocat
     }
 
     func locationsPublisher() -> AnyPublisher<CollectionDifference<ObservationMapItem>, Never> {
-        let context = NSManagedObjectContext.mr_default()
-
+        guard let context = context else { return AnyPublisher(Just([].difference(from: [])).setFailureType(to: Never.self)) }
         var itemChanges: AnyPublisher<CollectionDifference<ObservationMapItem>, Never> {
             let fetchRequest: NSFetchRequest<ObservationLocation> = ObservationLocation.fetchRequest()
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "eventId", ascending: false)]

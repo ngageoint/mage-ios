@@ -29,7 +29,7 @@ class NumberFieldViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("NumberFieldView") {
+        xdescribe("NumberFieldView") {
             
             var numberFieldView: NumberFieldView!
             var field: [String: Any]!

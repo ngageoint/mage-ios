@@ -16,13 +16,18 @@ import MapKit
     var view: MKAnnotationView?
     
     static func fetchedResultsController(_ feedItem: FeedItem, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<FeedItem>? {
-        guard let remoteId = feedItem.remoteId else {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context,
+                let remoteId = feedItem.remoteId
+        else {
             return nil
         }
         let fetchRequest = FeedItem.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "remoteId = %@", remoteId)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "temporalSortValue", ascending: true)]
-        let feedItemFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        let feedItemFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         feedItemFetchedResultsController.delegate = delegate
         do {
             try feedItemFetchedResultsController.performFetch()
@@ -101,8 +106,10 @@ import MapKit
     }
 
     @objc public static func getFeedItems(feedId: String, eventId: Int) -> [FeedItemAnnotation]? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
         
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)", feedId, eventId), in: context) {
                 return (FeedItem.mr_findAll(with: NSPredicate(format: "(feed == %@)", feed), in: context) as? [FeedItem])?.map({ feedItem in

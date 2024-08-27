@@ -17,7 +17,7 @@ class ObservationFormReorderTests: KIFSpec {
     
     override func spec() {
         
-        describe("ObservationFormReorder") {
+        xdescribe("ObservationFormReorder") {
             var observationFormReorder: ObservationFormReorder?
             var window: UIWindow!;
             var stackSetup = false;

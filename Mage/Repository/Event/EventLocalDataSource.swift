@@ -27,7 +27,10 @@ protocol EventLocalDataSource {
 class EventCoreDataDataSource: CoreDataDataSource<Event>, EventLocalDataSource, ObservableObject {
     
     func getEvent(eventId: NSNumber) -> EventModel? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let event = Event.mr_findFirst(byAttribute: EventKey.remoteId.key, withValue: eventId, in: context) {
                 return EventModel(event: event)

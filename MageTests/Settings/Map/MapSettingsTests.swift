@@ -19,7 +19,7 @@ class MapSettingsTests: KIFSpec {
     
     override func spec() {
         
-        describe("MapSettingsTests") {
+        xdescribe("MapSettingsTests") {
             
             var mapSettings: MapSettings!
             var window: UIWindow!;

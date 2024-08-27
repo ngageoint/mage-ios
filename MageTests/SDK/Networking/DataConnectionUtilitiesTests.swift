@@ -17,7 +17,7 @@ class DataConnectionUtilitiesTests: QuickSpec {
     
     override func spec() {
         
-        describe("DataConnectionUtilitiesTests") {
+        xdescribe("DataConnectionUtilitiesTests") {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();

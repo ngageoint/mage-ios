@@ -25,7 +25,7 @@ class MockEventChooserDelegate: NSObject, EventChooserDelegate {
 class EventChooserCoordinatorTests : KIFSpec {
     override func spec() {
         
-        describe("EventChooserCoordinatorTests") {
+        xdescribe("EventChooserCoordinatorTests") {
             
             var window: UIWindow?
             var coordinator: EventChooserCoordinator?

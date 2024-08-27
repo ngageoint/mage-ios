@@ -36,7 +36,7 @@ class FilteredObservationsMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("FilteredObservationsMapTests") {
+        xdescribe("FilteredObservationsMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

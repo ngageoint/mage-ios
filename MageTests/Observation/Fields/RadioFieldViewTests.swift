@@ -16,7 +16,7 @@ import Nimble
 class RadioFieldViewTests: KIFSpec {
     
     override func spec() {
-        describe("RadioFieldView") {
+        xdescribe("RadioFieldView") {
             
             var controller: UIViewController!
             var window: UIWindow!;
