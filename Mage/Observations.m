@@ -33,8 +33,8 @@
     [defaults synchronize];
 }
 
-+ (NSMutableArray *) getPredicatesForObservationsForMap {
-    NSMutableArray *predicates = [Observations getPredicatesForObservations];
++ (NSMutableArray *) getPredicatesForObservationsForMap: (NSManagedObjectContext *) context {
+    NSMutableArray *predicates = [Observations getPredicatesForObservations: context];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [predicates addObject:[NSPredicate predicateWithValue:!defaults.hideObservations]];
     return predicates;
@@ -65,7 +65,7 @@
 }
 
 + (Observations *) observations: (NSManagedObjectContext *) context {
-    NSMutableArray *predicates = [Observations getPredicatesForObservations];
+    NSMutableArray *predicates = [Observations getPredicatesForObservations: context];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:NO withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:context
@@ -76,7 +76,7 @@
 }
 
 + (Observations *) observationsForMap: (NSManagedObjectContext *) context {
-    NSMutableArray *predicates = [Observations getPredicatesForObservationsForMap];
+    NSMutableArray *predicates = [Observations getPredicatesForObservationsForMap: context];
     NSFetchRequest *fetchRequest = [Observation MR_requestAllSortedBy:@"timestamp" ascending:YES withPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:predicates]];
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:context

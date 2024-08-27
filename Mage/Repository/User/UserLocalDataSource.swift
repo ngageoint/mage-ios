@@ -32,6 +32,17 @@ extension InjectedValues {
     }
 }
 
+//private struct ManagedObjectViewContextProviderKey: InjectionKey {
+//    static var currentValue: NSManagedObjectContext? = nil
+//}
+//
+//extension InjectedValues {
+//    var viewContext: NSManagedObjectContext? {
+//        get { Self[ManagedObjectViewContextProviderKey.self] }
+//        set { Self[ManagedObjectViewContextProviderKey.self] = newValue }
+//    }
+//}
+
 protocol UserLocalDataSource {
     func getUser(userUri: URL?) async -> UserModel?
     func getCurrentUser() -> UserModel?
@@ -121,7 +132,7 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
         }
     }
     
-    override func getFetchRequest(parameters: [String: Any]? = nil) -> NSFetchRequest<User> {
+    override func getFetchRequest(parameters: [AnyHashable: Any]? = nil) -> NSFetchRequest<User> {
         let request = User.fetchRequest()
         let predicates: [NSPredicate] = [NSPredicate(value: true)]
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)

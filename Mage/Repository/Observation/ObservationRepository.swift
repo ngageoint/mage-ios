@@ -101,14 +101,14 @@ class ObservationRepository: ObservableObject {
     
     func observations(
         paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[ObservationItem], Error> {
+    ) -> AnyPublisher<[URIItem], Error> {
         localDataSource.observations(paginatedBy: paginator)
     }
     
     func userObservations(
         userUri: URL,
         paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[ObservationItem], Error> {
+    ) -> AnyPublisher<[URIItem], Error> {
         localDataSource.userObservations(
             userUri: userUri,
             paginatedBy: paginator

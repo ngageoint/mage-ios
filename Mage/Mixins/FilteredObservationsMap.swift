@@ -129,7 +129,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             observations = Observations(for: user, context: context)
             observations?.delegate = self
         } else if let observations = observations,
-           let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
+                  let observationPredicates = Observations.getPredicatesForObservations(forMap: context) as? [NSPredicate] {
             observations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: observationPredicates)
             
         } else {

@@ -593,6 +593,7 @@
 		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
 		F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */; };
 		F7C0974A2C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097492C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift */; };
+		F7C0974C2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0974B2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift */; };
 		F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */; };
 		F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB9C207FE93100154281 /* local-authView.xib */; };
 		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
@@ -1509,6 +1510,7 @@
 		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
 		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
 		F7C097492C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCoreDataDataSourceTests.swift; sourceTree = "<group>"; };
+		F7C0974B2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationCoreDataDataSourceTests.swift; sourceTree = "<group>"; };
 		F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBuilder.swift; sourceTree = "<group>"; };
 		F7C3DB9C207FE93100154281 /* local-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "local-authView.xib"; sourceTree = "<group>"; };
 		F7C3DB9E207FECEB00154281 /* LocalLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalLoginView.h; sourceTree = "<group>"; };
@@ -2156,6 +2158,7 @@
 			children = (
 				F70688AD2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift */,
 				F789EB5D2BF63BFB00CF3DF9 /* ObservationTileRepositoryTests.swift */,
+				F7C0974B2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -4746,6 +4749,7 @@
 				F763FF1F2C79044800403A00 /* UserRepositoryTests.swift in Sources */,
 				F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */,
 				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,
+				F7C0974C2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift in Sources */,
 				F7BEF68427D7C561000E8CDE /* FilteredObservationsMapTests.swift in Sources */,
 				F7ED5D2F20052248007BD768 /* AuthenticationTests.m in Sources */,
 				F791E22D2485486E00CCC6BA /* MockFieldDelegate.swift in Sources */,

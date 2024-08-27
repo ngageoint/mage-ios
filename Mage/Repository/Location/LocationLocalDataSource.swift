@@ -51,7 +51,9 @@ struct URIModelPage {
 }
 
 class LocationCoreDataDataSource: CoreDataDataSource<Location>, LocationLocalDataSource, ObservableObject {
-    static let USER_IDS_FILTER = "userIds"
+    private enum FilterKeys: String {
+        case userIds
+    }
     
     func getLocation(uri: URL) async -> LocationModel? {
         guard let context = context else { return nil }
@@ -107,12 +109,12 @@ class LocationCoreDataDataSource: CoreDataDataSource<Location>, LocationLocalDat
         }
     }
     
-    override func getFetchRequest(parameters: [String: Any]? = nil) -> NSFetchRequest<Location> {
+    override func getFetchRequest(parameters: [AnyHashable: Any]? = nil) -> NSFetchRequest<Location> {
         let request = Location.fetchRequest()
         let predicates: [NSPredicate] = {
-            if let userIds = parameters?[LocationCoreDataDataSource.USER_IDS_FILTER] as? [String] {
+            if let userIds = parameters?[FilterKeys.userIds] as? [String] {
                 return [
-                    NSPredicate(format: "user.remoteId IN %@", userIds)
+                    NSPredicate(format: "%K IN %@", #keyPath(Location.user.remoteId), userIds)
                 ]
             } else {
                 return Locations.getPredicatesForLocations() as? [NSPredicate] ?? []
@@ -124,7 +126,6 @@ class LocationCoreDataDataSource: CoreDataDataSource<Location>, LocationLocalDat
         request.includesSubentities = false
         request.propertiesToFetch = ["timestamp"]
         request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-        print("XXX fetch request predicate \(predicate)")
         return request
     }
     
@@ -134,7 +135,7 @@ class LocationCoreDataDataSource: CoreDataDataSource<Location>, LocationLocalDat
     ) -> AnyPublisher<[URIItem], Error> {
         if let userIds = userIds {
             return uris(
-                parameters: [LocationCoreDataDataSource.USER_IDS_FILTER: userIds],
+                parameters: [FilterKeys.userIds: userIds],
                 at: nil,
                 currentHeader: nil,
                 paginatedBy: paginator
