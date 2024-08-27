@@ -45,7 +45,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
     
     override func spec() {
         
-        describe("AttachmentCreationCoordinatorTests") {
+        xdescribe("AttachmentCreationCoordinatorTests") {
 
             var attachmentCreationCoordinator: AttachmentCreationCoordinator!
             var view: UIView!

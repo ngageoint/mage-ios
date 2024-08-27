@@ -18,6 +18,9 @@ protocol FilteredObservationsMap {
 }
 
 class FilteredObservationsMapMixin: NSObject, MapMixin {
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     var filteredObservationsMap: FilteredObservationsMap
     var mapAnnotationFocusedObserver: AnyObject?
     var user: User?
@@ -122,15 +125,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
         
-        if let user = user {
-            observations = Observations(for: user)
+        if let user = user, let context = context {
+            observations = Observations(for: user, context: context)
             observations?.delegate = self
         } else if let observations = observations,
            let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
             observations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: observationPredicates)
             
         } else {
-            observations = Observations.forMap()
+            observations = Observations.init(forMap: context)
             observations?.delegate = self
         }
         

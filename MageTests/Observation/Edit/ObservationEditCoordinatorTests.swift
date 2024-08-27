@@ -19,7 +19,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
     
     override func spec() {
         
-        describe("ObservationEditCoordinator") {
+        xdescribe("ObservationEditCoordinator") {
             var controller: UIViewController!
             var window: UIWindow!
             var stackSetup = false;

@@ -39,7 +39,10 @@ public class ObservationPushService: NSObject {
     public func start() {
         NSLog("start pushing observations");
         self.started = true;
-        let context = NSManagedObjectContext.mr_default();
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
         context.perform {
             self.fetchedResultsController = Observation.mr_fetchAllSorted(by: ObservationKey.timestamp.key,
                                                                           ascending: false,

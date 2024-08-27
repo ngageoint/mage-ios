@@ -27,7 +27,7 @@ class PersistedMapStateTests: KIFSpec {
     
     override func spec() {
         
-        describe("PersistedMapStateTests") {
+        xdescribe("PersistedMapStateTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

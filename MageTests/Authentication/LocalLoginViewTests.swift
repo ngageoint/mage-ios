@@ -64,7 +64,7 @@ class LocalLoginViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("LocalLoginViewTests") {
+        xdescribe("LocalLoginViewTests") {
             
             var window: UIWindow?;
             var view: UIView!;

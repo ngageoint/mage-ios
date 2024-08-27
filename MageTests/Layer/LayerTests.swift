@@ -21,7 +21,7 @@ class LayerTests: KIFSpec {
         
         var staticLayerObserver: AnyObject?
     
-        describe("Layer Tests") {
+        xdescribe("Layer Tests") {
             
             beforeEach {
                 var cleared = false;

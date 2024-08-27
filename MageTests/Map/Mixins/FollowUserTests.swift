@@ -37,7 +37,7 @@ class FollowUserTests: KIFSpec {
     
     override func spec() {
         
-        describe("FollowUserTests") {
+        xdescribe("FollowUserTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

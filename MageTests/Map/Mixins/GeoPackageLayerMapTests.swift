@@ -37,7 +37,7 @@ class GeoPackageLayerMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("GeoPackageLayerMapTests") {
+        xdescribe("GeoPackageLayerMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

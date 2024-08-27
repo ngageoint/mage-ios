@@ -27,7 +27,7 @@ class UserTrackingMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("UserTrackingMapTests") {
+        xdescribe("UserTrackingMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

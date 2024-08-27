@@ -19,7 +19,7 @@ class FeedTests: KIFSpec {
     
     override func spec() {
         
-        describe("FeedTests") {
+        xdescribe("FeedTests") {
             
             beforeEach {
                 

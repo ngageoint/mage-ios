@@ -31,6 +31,7 @@
 @property (strong, nonatomic) UIImageView *settingsDetailImageView;
 @property (strong, nonatomic) UILabel *settingsDetailLabel;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSManagedObjectContext* context;
 
 @end
 
@@ -44,8 +45,9 @@
     return self;
 }
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     if (self = [super init]) {
+        self.context = context;
         self.scheme = containerScheme;
         [self initialize];
     }
@@ -66,7 +68,7 @@
 - (void) initialize {
     self.childCoordinators = [NSMutableArray array];
     
-    self.settingsTableViewController = [[SettingsTableViewController alloc] initWithScheme:self.scheme delegate:self];
+    self.settingsTableViewController = [[SettingsTableViewController alloc] initWithScheme:self.scheme delegate:self context: self.context];
     self.masterViewController = [[UINavigationController alloc] initWithRootViewController:self.settingsTableViewController];
     
     self.settingsDetailView = [[UIView alloc] initForAutoLayout];
@@ -225,7 +227,7 @@
             break;
         }
         case kChangePassword: {
-            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme];
+            ChangePasswordViewController *viewController = [[ChangePasswordViewController alloc] initWithLoggedIn:YES scheme:self.scheme context: self.context];
             [self presentViewController:viewController animated:YES completion:nil];
             break;
         }
@@ -264,7 +266,7 @@
     
     [self presentViewController:navigationController animated:YES completion:nil];
     
-    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme];
+    AuthenticationCoordinator *coord = [[AuthenticationCoordinator alloc] initWithNavigationController:navigationController andDelegate:self andScheme:self.scheme context: self.context];
     [self.childCoordinators addObject:coord];
     [coord startLoginOnly];
     navigationController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLogin:)];

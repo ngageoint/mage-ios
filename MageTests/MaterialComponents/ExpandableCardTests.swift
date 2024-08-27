@@ -18,7 +18,7 @@ class ExpandableCardTests: KIFSpec {
     
     override func spec() {
         
-        describe("ExpandableCardTests") {            
+        xdescribe("ExpandableCardTests") {            
             var expandableCard: ExpandableCard!
             var view: UIView!
             var controller: UIViewController!

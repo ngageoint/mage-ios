@@ -18,6 +18,6 @@
 
 @interface ChangePasswordViewController : UIViewController
 
-- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<MDCContainerScheming>)containerScheme;
+- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<MDCContainerScheming>)containerScheme context: (NSManagedObjectContext *) context;
 
 @end

@@ -29,6 +29,7 @@
 @property (nonatomic, strong) UIApplication *application;
 @property (nonatomic) BOOL applicationStarted;
 @property (nonatomic, strong) GeoPackageImporter *gpImporter;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 //@property (nonatomic, strong) BaseMapOverlay *backgroundOverlay;
 //@property (nonatomic, strong) BaseMapOverlay *darkBackgroundOverlay;
 //@property (nonatomic, strong) GPKGGeoPackage *backgroundGeoPackage;
@@ -80,7 +81,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geoPackageDownloaded:) name:Layer.GeoPackageDownloaded object:nil];
     
     [MageInitializer initializePreferences];
-    [MageInitializer setupCoreData];
+    self.context = [MageInitializer setupCoreData];
 }
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
@@ -147,7 +148,7 @@
         NSLog(@"startMageApp canary save success? %d with error %@", contextDidSave, error);
         // error should be null and contextDidSave should be true
         if (contextDidSave && error == NULL) {
-            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme]];
+            self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme] context: self.context];
             [self.appCoordinator start];
             [self.gpImporter processOfflineMapArchives];
         } else {

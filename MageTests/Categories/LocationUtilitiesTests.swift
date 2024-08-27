@@ -22,7 +22,7 @@ class LocationUtilitiesTests: QuickSpec {
             it("should display the coordinate") {
                 UserDefaults.standard.locationDisplay = .latlng
                 
-                expect(CLLocationCoordinate2D(latitude: 15.48, longitude: 20.47).toDisplay()).to(equal("15.48000, 20.47000"))
+                expect(CLLocationCoordinate2D(latitude: 15.48, longitude: 20.47).toDisplay()).to(equal("15.4800, 20.4700"))
 
                 UserDefaults.standard.locationDisplay = .mgrs
                 expect(CLLocationCoordinate2D(latitude: 15.48, longitude: 20.47).toDisplay()).to(equal("34PDC4314911487"))

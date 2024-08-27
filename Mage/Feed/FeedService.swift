@@ -45,7 +45,12 @@ import Foundation
         let fetchRequest: NSFetchRequest<Feed> = Feed.fetchRequest();
         fetchRequest.predicate = NSPredicate(format: "eventId = %@", currentEventId);
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
-        feedFetchedResultsController = NSFetchedResultsController<Feed>(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        
+        feedFetchedResultsController = NSFetchedResultsController<Feed>(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         feedFetchedResultsController?.delegate = self
         do {
             try feedFetchedResultsController?.performFetch()

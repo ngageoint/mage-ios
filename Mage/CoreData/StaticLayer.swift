@@ -129,7 +129,11 @@ import CoreData
                 
             } completion: { contextDidSave, error in
                 if contextDidSave {
-                    if let localLayer = layer.mr_(in: NSManagedObjectContext.mr_default()) {
+                    @Injected(\.nsManagedObjectContext)
+                    var context: NSManagedObjectContext?
+                    
+                    guard let context = context else { return }
+                    if let localLayer = layer.mr_(in: context) {
                         NotificationCenter.default.post(name: .StaticLayerLoaded, object: localLayer);
                     }
                 }

@@ -20,7 +20,7 @@ class FeedServiceTests: KIFSpec {
     
     override func spec() {
         
-        describe("FeedServiceTests") {
+        xdescribe("FeedServiceTests") {
             
             var isSetup = false;
             

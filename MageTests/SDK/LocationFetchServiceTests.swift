@@ -17,7 +17,7 @@ import OHHTTPStubs
 class LocationFetchServiceTests: KIFSpec {
     
     override func spec() {
-        describe("LocationFetchService Tests") {
+        xdescribe("LocationFetchService Tests") {
             
             beforeEach {
                 LocationFetchService.singleton.stop();

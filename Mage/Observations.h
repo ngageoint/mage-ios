@@ -20,12 +20,11 @@
 + (void) setFavoritesFilter:(BOOL) filter;
 
 
-+ (Observations *) observations;
-+ (Observations *) list;
-+ (Observations *) observationsForMap;
-+ (Observations *) hideObservations;
-+ (Observations *) observationsForUser:(User *) user;
-+ (Observations *) observationsForObservation:(Observation *) observation;
++ (Observations *) observations: (NSManagedObjectContext *) context;
++ (Observations *) list: (NSManagedObjectContext *) context;
++ (Observations *) observationsForMap: (NSManagedObjectContext *) context;
++ (Observations *) observationsForUser:(User *) user context: (NSManagedObjectContext *) context;
++ (Observations *) observationsForObservation:(Observation *) observation context: (NSManagedObjectContext *) context;
 
 + (NSMutableArray *) getPredicatesForObservations;
 + (NSMutableArray *) getPredicatesForObservationsForMap;

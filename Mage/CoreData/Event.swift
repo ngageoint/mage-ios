@@ -77,7 +77,13 @@ import CoreData
     }
     
     @objc public static func sendRecentEvent() {
-        guard let u = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default()), let baseURL = MageServer.baseURL() else {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context,
+              let u = User.fetchCurrentUser(context: context), 
+                let baseURL = MageServer.baseURL()
+        else {
             return;
         }
         let manager = MageSessionManager.shared();

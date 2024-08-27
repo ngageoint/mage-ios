@@ -7,6 +7,8 @@
 import Foundation
 
 @objc public class Mage: NSObject {
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
     
     @objc public static let singleton = Mage();
     
@@ -16,7 +18,9 @@ import Foundation
     @objc public func startServices(initial: Bool) {
         var tasks: [URLSessionDataTask] = []
         
-        LocationService.singleton().start();
+        if let context = context {
+            LocationService.singleton().start(context);
+        }
         if let rolesPullTask = Role.operationToFetchRoles(success: nil, failure: nil) {
             tasks.append(rolesPullTask);
         }
@@ -40,7 +44,9 @@ import Foundation
         fetchSettings()
         
         ObservationPushService.singleton.start();
-        AttachmentPushService.singleton().start();
+        if let context = context {
+            AttachmentPushService.singleton().start(context)
+        }
         
         let sessionTask = SessionTask(tasks: tasks, andMaxConcurrentTasks: 1);
         MageSessionManager.shared().add(sessionTask);

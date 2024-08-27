@@ -17,7 +17,7 @@ protocol FeedItemSelectionDelegate {
 @objc class FeedItemsViewController : UITableViewController {
     
     var scheme: MDCContainerScheming?;
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {
+    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem>? = {
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
@@ -25,8 +25,13 @@ protocol FeedItemSelectionDelegate {
         // Configure Fetch Request
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "temporalSortValue", ascending: false), NSSortDescriptor(key: "remoteId", ascending: true)]
         
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         // Create Fetched Results Controller
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         
         // Configure Fetched Results Controller
         fetchedResultsController.delegate = self
@@ -72,7 +77,7 @@ protocol FeedItemSelectionDelegate {
         self.dataSource = UITableViewDiffableDataSource<Int, NSManagedObjectID>(
             tableView: tableView,
             cellProvider: { (tableView, indexPath, feedItemId) in
-                guard let feedItem = try? self.fetchedResultsController.managedObjectContext.existingObject(with: feedItemId) as? FeedItem else {
+                guard let feedItem = try? self.fetchedResultsController?.managedObjectContext.existingObject(with: feedItemId) as? FeedItem else {
                     fatalError("feed item \(feedItemId) not found in managed object context")
                 }
                 let feedCell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseIdentifier, for: indexPath) as! FeedItemTableViewCell
@@ -92,7 +97,7 @@ protocol FeedItemSelectionDelegate {
         emptySnapshot.appendItems([])
         dataSource?.apply(emptySnapshot)
         do {
-            try self.fetchedResultsController.performFetch()
+            try self.fetchedResultsController?.performFetch()
         } catch {
             let fetchError = error as NSError
             print("Unable to perform fetch request")
@@ -125,12 +130,13 @@ protocol FeedItemSelectionDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let feedItem = fetchedResultsController.object(at: indexPath)
-        if (selectionDelegate != nil) {
-            self.selectionDelegate?.feedItemSelected(feedItem);
-        } else {
-            let feedItemViewController: FeedItemViewController = FeedItemViewController(feedItem: feedItem, scheme: self.scheme);
-            self.navigationController?.pushViewController(feedItemViewController, animated: true);
+        if let feedItem = fetchedResultsController?.object(at: indexPath) {
+            if (selectionDelegate != nil) {
+                self.selectionDelegate?.feedItemSelected(feedItem);
+            } else {
+                let feedItemViewController: FeedItemViewController = FeedItemViewController(feedItem: feedItem, scheme: self.scheme);
+                self.navigationController?.pushViewController(feedItemViewController, animated: true);
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, SettingType) {
 @property (weak, nonatomic) id<SettingsDelegate> delegate;
 @property (assign, nonatomic) BOOL showDisclosureIndicator;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
 - (void) reloadData;
 
 @end

@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
 @property (nonatomic, strong) NSFetchedResultsController *mapsFetchedResultsController;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation OfflineMapTableViewController
@@ -37,9 +38,10 @@ static NSString *MY_MAPS_SECTION_NAME = @"My Layers";
 static NSString *AVAILABLE_SECTION_NAME = @"Available Layers";
 static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.scheme = containerScheme;
+    self.context = context;
     return self;
 }
 
@@ -257,7 +259,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         case AVAILABLE_SECTION:
             return AVAILABLE_SECTION_NAME;
         case DOWNLOADED_SECTION:
-            return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]].name];
+            return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventWithContext:self.context].name];
         case PROCESSING_SECTION:
             return PROCESSING_SECTION_NAME;
         case MY_MAPS_SECTION:

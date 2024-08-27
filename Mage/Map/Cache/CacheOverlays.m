@@ -117,7 +117,7 @@ static CacheOverlays * instance;
     }
 }
 
--(NSArray<CacheOverlay *> *) getOverlays{
+-(NSArray<CacheOverlay *> *) getOverlays: (NSManagedObjectContext *) context {
     NSMutableArray<CacheOverlay *> *overlaysInCurrentEvent = [[NSMutableArray alloc] init];
     
     
@@ -130,7 +130,7 @@ static CacheOverlays * instance;
             if ([[pathComponents objectAtIndex:[pathComponents count] - 3] isEqualToString:@"geopackages"]) {
                 NSString *layerId = [pathComponents objectAtIndex:[pathComponents count] - 2];
                 // check if this layer is in the event
-                NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND remoteId == %ld", [Server currentEventId], layerId.integerValue] inContext:[NSManagedObjectContext MR_defaultContext]];
+                NSUInteger count = [Layer MR_countOfEntitiesWithPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND remoteId == %ld", [Server currentEventId], layerId.integerValue] inContext:context];
                 if (count != 0) {
                     [overlaysInCurrentEvent addObject:cacheOverlay];
                 }

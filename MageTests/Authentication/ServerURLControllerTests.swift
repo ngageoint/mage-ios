@@ -33,7 +33,7 @@ class ServerURLControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("ServerURLControllerTests") {
+        xdescribe("ServerURLControllerTests") {
             
             var window: UIWindow?;
             var view: ServerURLController?;

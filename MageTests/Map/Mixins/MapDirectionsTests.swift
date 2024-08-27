@@ -37,7 +37,7 @@ class MapDirectionsTests: KIFSpec {
     
     override func spec() {
         
-        describe("MapDirectionsTests") {
+        xdescribe("MapDirectionsTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

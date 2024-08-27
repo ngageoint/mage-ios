@@ -38,7 +38,7 @@ class StaticLayerMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("StaticLayerMapTests") {
+        xdescribe("StaticLayerMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

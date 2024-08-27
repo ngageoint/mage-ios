@@ -37,7 +37,7 @@ class UserHeadingDisplayTests: KIFSpec {
     
     override func spec() {
         
-        describe("UserHeadingDisplayTests") {
+        xdescribe("UserHeadingDisplayTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

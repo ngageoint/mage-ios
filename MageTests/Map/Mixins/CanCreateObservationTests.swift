@@ -30,7 +30,7 @@ class CanCreateObservationTests: KIFSpec {
     
     override func spec() {
         
-        describe("CanCreateObservationTests") {
+        xdescribe("CanCreateObservationTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

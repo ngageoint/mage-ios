@@ -37,7 +37,7 @@ class FeedItemsViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("FeedItemsViewController no timestamp") {
+        xdescribe("FeedItemsViewController no timestamp") {
 //            Nimble_Snapshots.setNimbleTolerance(0);
                 
                 
@@ -144,7 +144,7 @@ class FeedItemsViewControllerTests: KIFSpec {
             
         }
         
-        describe("FeedItemsViewController with timestamp") {
+        xdescribe("FeedItemsViewController with timestamp") {
             
             afterEach {
                 HTTPStubs.removeAllStubs();

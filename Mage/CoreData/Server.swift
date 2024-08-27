@@ -13,7 +13,11 @@ import MagicalRecord
 @objc public class Server: NSManagedObject {
     
     @objc public static func serverUrl() -> String? {
-        return Server.getPropertyForKey(key: "serverUrl", context: NSManagedObjectContext.mr_default()) as? String
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        return Server.getPropertyForKey(key: "serverUrl", context: context) as? String
     }
     
     @objc public static func setServerUrl(serverUrl: String, completion: MRSaveCompletionHandler? = nil) {

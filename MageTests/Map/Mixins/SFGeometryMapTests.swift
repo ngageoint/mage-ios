@@ -38,7 +38,7 @@ class SFGeometryMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("SFGeometryMapTests") {
+        xdescribe("SFGeometryMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;

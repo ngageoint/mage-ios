@@ -24,6 +24,7 @@
 @property (strong, nonatomic) NSArray<Event *>* recentEvents;
 @property (strong, nonatomic) NSMutableArray* sections;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation SettingsDataSource
@@ -38,25 +39,26 @@ static const NSInteger SETTINGS_SECTION = 6;
 static const NSInteger ABOUT_SECTION = 7;
 static const NSInteger LEGAL_SECTION = 8;
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super init];
     
     if (self) {
         self.scheme = containerScheme;
-        self.event = [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]];
+        self.context = context;
+        self.event = [Event getCurrentEventWithContext:context];
         
-        User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
+        User *user = [User fetchCurrentUserWithContext:context];
         NSArray *recentEventIds = [user.recentEventIds filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", self.event.remoteId]];
 
         if (recentEventIds != nil) {
-            NSFetchRequest *recentRequest = [Event MR_requestAllInContext:[NSManagedObjectContext MR_defaultContext]];
+            NSFetchRequest *recentRequest = [Event MR_requestAllInContext:context];
             [recentRequest setPredicate:[NSPredicate predicateWithFormat:@"(remoteId IN %@)", recentEventIds]];
             [recentRequest setIncludesSubentities:NO];
             NSSortDescriptor* sortBy = [NSSortDescriptor sortDescriptorWithKey:@"recentSortOrder" ascending:YES];
             [recentRequest setSortDescriptors:[NSArray arrayWithObject:sortBy]];
             
             NSError *error = nil;
-            self.recentEvents = [[NSManagedObjectContext MR_defaultContext] executeFetchRequest:recentRequest error:&error];
+            self.recentEvents = [context executeFetchRequest:recentRequest error:&error];
             if (error != nil) {
                 self.recentEvents = [[NSArray alloc] init];
             }
@@ -452,7 +454,7 @@ static const NSInteger LEGAL_SECTION = 8;
 }
 
 - (NSDictionary *) aboutSection {
-    User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
+    User *user = [User fetchCurrentUserWithContext:self.context];
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     

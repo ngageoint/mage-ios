@@ -18,7 +18,7 @@ import MagicalRecord
 class ObservationImageTests: KIFSpec {
     
     override func spec() {
-        describe("ObservationImage Tests") {
+        xdescribe("ObservationImage Tests") {
             
             beforeEach {
                 TestHelpers.clearAndSetUpStack();

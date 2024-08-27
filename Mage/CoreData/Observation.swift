@@ -112,6 +112,11 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     static func fetchedResultsController(_ observation: Observation, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Observation>? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         let fetchRequest = Observation.fetchRequest()
 
         if let remoteId = observation.remoteId {
@@ -122,7 +127,7 @@ enum ObservationState: Int, CustomStringConvertible {
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
         }
         
-        let observationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        let observationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         observationFetchedResultsController.delegate = delegate
         do {
             try observationFetchedResultsController.performFetch()
@@ -143,6 +148,11 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     static func operationToPullObservations(initial: Bool, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         guard let currentEventId = Server.currentEventId(), let baseURL = MageServer.baseURL() else {
             return nil;
         }
@@ -154,7 +164,7 @@ enum ObservationState: Int, CustomStringConvertible {
             "sort" : "lastModified+DESC"
         ]
         
-        if let lastObservationDate = Observation.fetchLastObservationDate(context: NSManagedObjectContext.mr_default()) {
+        if let lastObservationDate = Observation.fetchLastObservationDate(context: context) {
             parameters["startDate"] = ISO8601DateFormatter.string(from: lastObservationDate, timeZone: TimeZone(secondsFromGMT: 0)!, formatOptions: [.withDashSeparatorInDate, .withFullDate, .withFractionalSeconds, .withTime, .withColonSeparatorInTime, .withTimeZone])
         }
         
@@ -1061,7 +1071,10 @@ enum ObservationState: Int, CustomStringConvertible {
         get {
             
             if let primaryObservationForm = primaryObservationForm, let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber {
-                let context = managedObjectContext ?? NSManagedObjectContext.mr_default()
+                @Injected(\.nsManagedObjectContext)
+                var context: NSManagedObjectContext?
+                
+                guard let context = managedObjectContext ?? context else { return nil }
                 return (context).performAndWait {
                     return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context)
                 }

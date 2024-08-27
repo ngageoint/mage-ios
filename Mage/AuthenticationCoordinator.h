@@ -21,7 +21,7 @@
 
 @interface AuthenticationCoordinator : NSObject
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme;
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
 - (void) start:(MageServer *) mageServer;
 - (void) startLoginOnly;
 @end

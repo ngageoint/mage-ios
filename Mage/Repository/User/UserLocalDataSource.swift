@@ -22,7 +22,7 @@ extension InjectedValues {
 }
 
 private struct ManagedObjectContextProviderKey: InjectionKey {
-    static var currentValue: NSManagedObjectContext? = nil //NSManagedObjectContext.mr_default()
+    static var currentValue: NSManagedObjectContext? = nil
 }
 
 extension InjectedValues {

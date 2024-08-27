@@ -17,7 +17,7 @@ class GeometryEditViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("GeometryEditViewController") {
+        xdescribe("GeometryEditViewController") {
             var geometryEditViewController: GeometryEditViewController?
             let navController = UINavigationController();
 

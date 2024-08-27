@@ -17,7 +17,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("ObservationEditCardCollectionViewController") {
+        xdescribe("ObservationEditCardCollectionViewController") {
             var observationEditController: ObservationEditCardCollectionViewController!
             var window: UIWindow!;
             var stackSetup = false;

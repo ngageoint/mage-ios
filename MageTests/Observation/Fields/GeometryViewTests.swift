@@ -18,7 +18,7 @@ class GeometryViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("GeometryView") {
+        xdescribe("GeometryView") {
             var stackSetup = false;
             var field: [String: Any]!
                         

@@ -34,7 +34,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
     
     override init() {
         super.init()
-        let context = NSManagedObjectContext.mr_default();
+        guard let context = context else { return }
         context.perform { [weak self] in
             self?.favoritesFetchedResultsController = ObservationFavorite.mr_fetchAllSorted(
                 by: "observation.\(ObservationKey.timestamp.key)",
@@ -57,7 +57,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
             if let observation = try? context.existingObject(with: id) as? Observation {
                 
@@ -79,7 +79,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
     
     func toggleFavorite(observationUri: URL?, userRemoteId: String) {
         guard let observationUri = observationUri else { return }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return }
         context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 if let observation = try? context.existingObject(with: id) as? Observation {
@@ -110,7 +110,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
 
     func handleServerPushResponse(favorite: ObservationFavoriteModel, response: [AnyHashable: Any]) {
         NSLog("Successfuly submitted favorite")
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return }
         
         context.performAndWait {
             if let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: favorite.observationFavoriteUri),

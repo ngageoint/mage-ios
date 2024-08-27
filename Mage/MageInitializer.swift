@@ -39,16 +39,18 @@ import Foundation
         UserDefaults.standard.register(defaults: allPreferences)
     }
     
-    @objc public static func setupCoreData() {
+    @objc public static func setupCoreData() -> NSManagedObjectContext {
         MagicalRecord.setupMageCoreDataStack();
         InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
         MagicalRecord.setLoggingLevel(.verbose);
+        return NSManagedObjectContext.mr_default()
     }
 
-    @objc public static func clearAndSetupCoreData() {
+    @objc public static func clearAndSetupCoreData() -> NSManagedObjectContext {
         MagicalRecord.deleteAndSetupMageCoreDataStack();
         InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
         MagicalRecord.setLoggingLevel(.verbose);
+        return NSManagedObjectContext.mr_default()
     }
     
     @discardableResult

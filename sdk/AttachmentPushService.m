@@ -20,6 +20,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSMutableArray *pushTasks;
 @property (nonatomic, strong) NSMutableDictionary *pushData;
+@property (nonatomic, strong) NSManagedObjectContext* context;
 @end
 
 @implementation AttachmentPushService
@@ -53,7 +54,8 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
     return self;
 }
 
-- (void) start {
+- (void) start: (NSManagedObjectContext *) context {
+    self.context = context;
     [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [StoredPassword retrieveStoredToken]] forHTTPHeaderField:@"Authorization"];
     
     self.fetchedResultsController = [Attachment MR_fetchAllSortedBy:@"lastModified"
@@ -61,7 +63,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
                                                       withPredicate:[NSPredicate predicateWithFormat:@"observationRemoteId != nil && dirty == YES"]
                                                             groupBy:nil
                                                            delegate:self
-                                                          inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                          inContext:context];
     __weak typeof(self) weakSelf = self;
     [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -184,7 +186,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
         NSNumber *taskIdentifier = [NSNumber numberWithLong:uploadTask.taskIdentifier];
         [self.pushTasks addObject:taskIdentifier];
         attachment.taskIdentifier = taskIdentifier;
-        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        [self.context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
             NSLog(@"ATTACHMENT - Context did save %d with error %@", contextDidSave, error);
             [uploadTask resume];
         }];
@@ -243,9 +245,8 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
         return;
     }
     
-    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     Attachment *attachment = [Attachment MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"taskIdentifier == %@", [NSNumber numberWithLong:task.taskIdentifier]]
-                                                         inContext:context];
+                                                         inContext:self.context];
     
     if (!attachment) {
         NSLog(@"ATTACHMENT - error completing attachment upload, could not retrieve attachment for task id %lu", (unsigned long)task.taskIdentifier);
@@ -275,7 +276,7 @@ NSString * const kAttachmentBackgroundSessionIdentifier = @"mil.nga.mage.backgro
     if (attachment.url) {
         __weak __typeof__(self) weakSelf = self;
 
-        [context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
+        [self.context MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError * _Nullable error) {
             [weakSelf.pushTasks removeObject:[NSNumber numberWithLong:task.taskIdentifier]];
             // push local file to the image cache
             if ([NSFileManager.defaultManager fileExistsAtPath:attachment.localPath]) {

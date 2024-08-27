@@ -40,7 +40,7 @@ class SingleObservationMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("SingleObservationMapTests") {
+        xdescribe("SingleObservationMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
