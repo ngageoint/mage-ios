@@ -15,10 +15,11 @@ import Nimble
 final class LocationRepositoryTests: XCTestCase {
     
     var cancellables: Set<AnyCancellable> = Set()
-    let localDataSource = LocationStaticLocalDataSource()
+    var localDataSource: LocationStaticLocalDataSource!
 
     override func setUp() {
-        InjectedValues[\.locationLocalDataSource] = localDataSource
+        localDataSource = LocationStaticLocalDataSource()
+        InjectedValues[\.locationLocalDataSource] = localDataSource!
     }
     
     override func tearDown() {
@@ -164,7 +165,7 @@ final class LocationRepositoryTests: XCTestCase {
     }
     
     func testRefreshPublisher() {
-        var repository = LocationRepository()
+        let repository = LocationRepository()
         
         var published = false
         

@@ -19,6 +19,7 @@ struct ObservationModel: Equatable, Hashable {
     }
     
     var observationId: URL?
+    var remoteId: String?
     var geometry: SFGeometry?
     var formId: Int?
     var eventId: Int?
@@ -61,6 +62,7 @@ struct ObservationModel: Equatable, Hashable {
 extension ObservationModel {
     init(observation: Observation) {
         self.observationId = observation.objectID.uriRepresentation()
+        self.remoteId = observation.remoteId
         self.geometry = observation.geometry
         if let eventId = observation.eventId {
             self.eventId = Int(truncating: eventId)

@@ -78,7 +78,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
         NotificationCenter.default.addObserver(forName: .MAGEFormFetched, object: nil, queue: .main) { [weak self] notification in
-            if let event: Event = notification.object as? Event {
+            if let event: EventModel = notification.object as? EventModel {
                 if event.remoteId == Server.currentEventId() {
                     self?.addFilteredObservations()
                 }

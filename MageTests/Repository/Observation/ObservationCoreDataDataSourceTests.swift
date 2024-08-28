@@ -236,7 +236,7 @@ final class ObservationCoreDataDataSourceTests: XCTestCase {
         XCTAssertNotNil(observation)
         XCTAssertEqual(observation?.remoteId, "1")
         
-        let observationByUri = await localDataSource.getObservation(observationUri: observation?.objectID.uriRepresentation())
+        let observationByUri = await localDataSource.getObservation(observationUri: observation?.observationId)
         
         XCTAssertNotNil(observationByUri)
         XCTAssertEqual(observationByUri?.remoteId, "1")
