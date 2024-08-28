@@ -120,7 +120,7 @@ class MageNavStack: UIViewController {
         switch (route) {
         case .observationMoreActions(observationUri: let uri):
             Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
+                guard let observation = await self.observationRepository.getObservationNSManagedObject(observationUri: uri) else {
                     return
                 }
                 let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self, router: router);
@@ -468,7 +468,7 @@ extension MageNavStack: ObservationActionsDelegate {
     
     func editObservation(uri: URL) async {
         self.bottomSheet?.dismiss(animated: true, completion: nil)
-        guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
+        guard let observation = await self.observationRepository.getObservationNSManagedObject(observationUri: uri) else {
             return;
         }
         let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);

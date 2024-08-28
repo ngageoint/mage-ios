@@ -84,7 +84,7 @@ class ObservationRepository: ObservableObject {
         NotificationCenter.default.publisher(for: .MAGEFormFetched)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] notification in
-                if let event: Event = notification.object as? Event {
+                if let event: EventModel = notification.object as? EventModel {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
                         Task { [weak self] in
                             self?.refreshSubject?.send(Date())
@@ -118,15 +118,21 @@ class ObservationRepository: ObservableObject {
     func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>? {
         localDataSource.observeObservation(observationUri: observationUri)
     }
+    
+    @available(*, deprecated, message: "Use getObservation to get a model")
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation? {
+        await localDataSource.getObservationNSManagedObject(observationUri: observationUri)
+    }
 
-    func getObservation(remoteId: String?) async -> Observation? {
+    func getObservation(remoteId: String?) async -> ObservationModel? {
         await localDataSource.getObservation(remoteId: remoteId)
     }
 
-    func getObservation(observationUri: URL?) async -> Observation? {
+    func getObservation(observationUri: URL?) async -> ObservationModel? {
         await localDataSource.getObservation(observationUri: observationUri)
     }
     
+    // TODO: implement this
     func syncObservation(uri: URL?) {
         print("XXX SYNC IT")
     }

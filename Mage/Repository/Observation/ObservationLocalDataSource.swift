@@ -27,10 +27,11 @@ extension InjectedValues {
 
 protocol ObservationLocalDataSource {
     func getLastObservationDate(eventId: Int) -> Date?
-    func getLastObservation(eventId: Int) -> Observation?
+    func getLastObservation(eventId: Int) -> ObservationModel?
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation?
     @discardableResult
-    func getObservation(remoteId: String?) async -> Observation?
-    func getObservation(observationUri: URL?) async -> Observation?
+    func getObservation(remoteId: String?) async -> ObservationModel?
+    func getObservation(observationUri: URL?) async -> ObservationModel?
     func observeFilteredCount() -> AnyPublisher<Int, Never>?
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
@@ -148,7 +149,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         getLastObservation(eventId: eventId)?.lastModified
     }
 
-    func getLastObservation(eventId: Int) -> Observation? {
+    func getLastObservation(eventId: Int) -> ObservationModel? {
         guard let context = context else { return nil }
         return context.performAndWait {
             let user = User.fetchCurrentUser(context: context)
@@ -163,23 +164,34 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                         #keyPath(Observation.user.remoteId),
                         userRemoteId
                     )
-                )
+                ).map({ observation in
+                    ObservationModel(observation: observation)
+                })
             }
             return nil
         }
     }
 
-    func getObservation(remoteId: String?) async -> Observation? {
+    func getObservation(remoteId: String?) async -> ObservationModel? {
         guard let remoteId = remoteId else {
             return nil
         }
         guard let context = context else { return nil }
         return await context.perform {
             context.fetchFirst(Observation.self, key: "remoteId", value: remoteId)
+                .map { observation in
+                    ObservationModel(observation: observation)
+                }
         }
     }
 
-    func getObservation(observationUri: URL?) async -> Observation? {
+    func getObservation(observationUri: URL?) async -> ObservationModel? {
+        await getObservationNSManagedObject(observationUri: observationUri).map { observation in
+            ObservationModel(observation: observation)
+        }
+    }
+    
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation? {
         guard let observationUri = observationUri else {
             return nil
         }

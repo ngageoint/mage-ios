@@ -92,7 +92,7 @@ class ObservationsMap: DataSourceMap {
         NotificationCenter.default.publisher(for: .MAGEFormFetched)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] notification in
-                if let event: Event = notification.object as? Event {
+                if let event: EventModel = notification.object as? EventModel {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
                         Task { [self] in
                             self?.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))

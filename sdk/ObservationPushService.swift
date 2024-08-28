@@ -106,7 +106,7 @@ public class ObservationPushService: NSObject {
     }
     
     public func pushObservation(observationUri: URL) async {
-        if let observation = await observationRepository.getObservation(observationUri: observationUri) {
+        if let observation = await observationRepository.getObservationNSManagedObject(observationUri: observationUri) {
             pushObservations(observations: [observation])
         }
     }
