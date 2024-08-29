@@ -10,6 +10,9 @@ import Foundation
     @Injected(\.nsManagedObjectContext)
     var context: NSManagedObjectContext?
     
+    @Injected(\.observationImageRepository)
+    var imageRepository: ObservationImageRepository
+    
     @objc public static let singleton = Mage();
     
     private override init() {
@@ -115,7 +118,7 @@ import Foundation
             }
             let formTask = Form.operationToPullFormIcons(eventId: remoteId) {
                 NSLog("Pulled form for event")
-                ObservationImage.imageCache.removeAllObjects()
+                self.imageRepository.clearCache()
                 NotificationCenter.default.post(name: .MAGEFormFetched, object: EventModel(event: e))
             } failure: { error in
                 NSLog("Failed to pull form for event")

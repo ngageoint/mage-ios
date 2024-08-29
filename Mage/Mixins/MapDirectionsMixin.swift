@@ -30,6 +30,9 @@ class MapDirectionsMixin: NSObject, MapMixin {
     @Injected(\.feedItemRepository)
     var feedItemRepository: FeedItemRepository
     
+    @Injected(\.observationImageRepository)
+    var imageRepository: ObservationImageRepository
+    
     var directionsToItemObserver: Any?
     var startStraightLineNavigationObserver: Any?
     var mapView: MKMapView?
@@ -137,7 +140,7 @@ class MapDirectionsMixin: NSObject, MapMixin {
             if let observationLocation = await observationLocationRepository.getObservationLocation(observationLocationUri: uri)
             {
                 title = observationLocation.primaryFieldText ?? "Observation"
-                if let imageName = ObservationImage.imageName(
+                if let imageName = imageRepository.imageName(
                     eventId: observationLocation.eventId,
                     formId: observationLocation.formId,
                     primaryFieldText: observationLocation.primaryFieldText,

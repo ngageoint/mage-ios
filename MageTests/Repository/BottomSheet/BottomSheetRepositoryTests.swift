@@ -29,6 +29,10 @@ final class BottomSheetRepositoryTests: XCTestCase {
     
     override func tearDown() {
         cancellables.removeAll()
+        TestHelpers.defaultObservationLocationInjection()
+        TestHelpers.defaultUserInjection()
+        TestHelpers.defaultFeedItemInjection()
+        TestHelpers.defaultGeoPackageInjection()
     }
 
     func testSettingItemKey() {

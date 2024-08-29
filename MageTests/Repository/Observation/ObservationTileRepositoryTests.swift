@@ -13,6 +13,10 @@ import OHHTTPStubs
 
 final class ObservationTileRepositoryTests: XCTestCase {
     
+    override class func tearDown() {
+        TestHelpers.defaultObservationLocationInjection()
+    }
+    
     func testStuff() async {
         let location = CLLocationCoordinate2D(latitude: 39.62601343172716,longitude: -104.90165054798126)
         let zoom = 13.7806

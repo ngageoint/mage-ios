@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct ObservationImportantRepositoryProviderKey: InjectionKey {
-    static var currentValue: ObservationImportantRepository = ObservationImportantRepository()
+    static var currentValue: ObservationImportantRepository = ObservationImportantRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,8 +20,16 @@ extension InjectedValues {
     }
 }
 
+protocol ObservationImportantRepository {
+    func sync()
+    func observeObservationImportant(observationUri: URL?) -> AnyPublisher<[ObservationImportantModel?], Never>?
+    func flagImportant(observationUri: URL?, reason: String)
+    func removeImportant(observationUri: URL?)
+    func pushImportant(importants: [ObservationImportantModel]?) async
+}
 
-class ObservationImportantRepository: ObservableObject {
+
+class ObservationImportantRepositoryImpl: ObservableObject, ObservationImportantRepository {
     @Injected(\.observationImportantLocalDataSource)
     var localDataSource: ObservationImportantLocalDataSource
     

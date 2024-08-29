@@ -11,7 +11,7 @@ import Combine
 import CLLocationCoordinate2DExtensions
 
 private struct UserRepositoryProviderKey: InjectionKey {
-    static var currentValue: UserRepository = UserRepository()
+    static var currentValue: UserRepository = UserRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -21,7 +21,23 @@ extension InjectedValues {
     }
 }
 
-class UserRepository: ObservableObject {
+protocol UserRepository {
+    func getUser(userUri: URL?) async -> UserModel?
+    func getCurrentUser() -> UserModel?
+    func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>?
+    func getUser(remoteId: String) -> UserModel?
+    func users(
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func canUserUpdateImportant(
+        eventId: NSNumber,
+        userUri: URL
+    ) async -> Bool
+    func avatarChosen(user: UserModel, image: UIImage) async -> Bool
+    
+}
+
+class UserRepositoryImpl: ObservableObject, UserRepository {
     @Injected(\.eventRepository)
     var eventRepository: EventRepository
     

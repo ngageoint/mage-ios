@@ -13,7 +13,7 @@ struct ObservationMapItem: Equatable, Hashable {
     var observationId: URL?
     var observationLocationId: URL?
     var geometry: SFGeometry?
-    var formId: Int64?
+    var formId: Int?
     var fieldName: String?
     var eventId: Int64?
     var accuracy: Double?
@@ -78,7 +78,10 @@ struct ObservationMapItem: Equatable, Hashable {
     }
     
     var iconPath: String? {
-        ObservationImage.imageName(
+        @Injected(\.observationImageRepository)
+        var imageRepository: ObservationImageRepository
+        
+        return imageRepository.imageName(
             eventId: eventId,
             formId: formId,
             primaryFieldText: primaryFieldText,
@@ -91,7 +94,7 @@ extension ObservationMapItem {
     init(observation: ObservationLocation) {
         self.observationId = observation.observation?.objectID.uriRepresentation()
         self.observationLocationId = observation.objectID.uriRepresentation()
-        self.formId = observation.formId
+        self.formId = Int(observation.formId)
         self.fieldName = observation.fieldName
         self.eventId = observation.eventId
         self.geometry = observation.geometry
@@ -121,45 +124,5 @@ extension ObservationMapItem {
                 self.important = ObservationImportantModel(observationImportant: observationImportant)
             }
         }
-    }
-}
-
-class ObservationImportantModel: Equatable, Hashable, ObservableObject {
-    static func == (lhs: ObservationImportantModel, rhs: ObservationImportantModel) -> Bool {
-        lhs.userId == rhs.userId && lhs.timestamp == rhs.timestamp
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(userId)
-        hasher.combine(timestamp)
-    }
-    
-    @Injected(\.userRepository)
-    var userRepository: UserRepository
-    
-    var important: Bool
-    var userId: String?
-    var reason: String?
-    var timestamp: Date?
-    var observationRemoteId: String?
-    var importantUri: URL
-    var eventId: NSNumber?
-    
-    var userName: String? {
-        if let userId = userId {
-            let user = userRepository.getUser(remoteId: userId)
-            return user?.name
-        }
-        return nil
-    }
-
-    init(observationImportant: ObservationImportant) {
-        self.importantUri = observationImportant.objectID.uriRepresentation()
-        self.observationRemoteId = observationImportant.observation?.remoteId
-        self.important = observationImportant.important
-        self.userId = observationImportant.userId
-        self.reason = observationImportant.reason
-        self.timestamp = observationImportant.timestamp
-        self.eventId = observationImportant.observation?.eventId
     }
 }

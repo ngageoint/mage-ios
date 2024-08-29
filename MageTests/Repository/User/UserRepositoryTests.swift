@@ -29,6 +29,9 @@ final class UserRepositoryTests: XCTestCase {
     
     override func tearDown() {
         cancellables.removeAll()
+        TestHelpers.defaultEventInjection()
+        TestHelpers.defaultUserInjection()
+        TestHelpers.defaultGeoPackageInjection()
     }
 
     func testGetCurrentUser() {
@@ -40,7 +43,7 @@ final class UserRepositoryTests: XCTestCase {
         
         userLocalDataSource.currentUserUri = URL(string: "magetest://user/1")
         
-        let userRepostory = UserRepository()
+        let userRepostory = UserRepositoryImpl()
         
         let currentUser = userRepostory.getCurrentUser()
         XCTAssertNotNil(currentUser)
@@ -54,7 +57,7 @@ final class UserRepositoryTests: XCTestCase {
             )
         ]
                 
-        let userRepostory = UserRepository()
+        let userRepostory = UserRepositoryImpl()
         
         let user = await userRepostory.getUser(userUri: URL(string: "magetest://user/1"))
         XCTAssertNotNil(user)
@@ -69,7 +72,7 @@ final class UserRepositoryTests: XCTestCase {
             )
         ]
                 
-        let userRepostory = UserRepository()
+        let userRepostory = UserRepositoryImpl()
         
         let user = userRepostory.getUser(remoteId: "1")
         XCTAssertNotNil(user)
@@ -96,7 +99,7 @@ final class UserRepositoryTests: XCTestCase {
             EventModel(remoteId: 1)
         ]
                 
-        let userRepostory = UserRepository()
+        let userRepostory = UserRepositoryImpl()
         
         let canUpdate = await userRepostory.canUserUpdateImportant(eventId: 1, userUri: URL(string: "magetest://user/1")!)
         XCTAssertTrue(canUpdate)
@@ -125,7 +128,7 @@ final class UserRepositoryTests: XCTestCase {
             EventModel(remoteId: 1)
         ]
                 
-        let userRepostory = UserRepository()
+        let userRepostory = UserRepositoryImpl()
         
         userRepostory.observeUser(userUri: URL(string: "magetest://user/1"))?
             .sink(receiveValue: { model in
@@ -170,7 +173,7 @@ final class UserRepositoryTests: XCTestCase {
         var state: State = .loading
 
         let trigger = Trigger()
-        let userRepostory = UserRepository()
+        let userRepostory = UserRepositoryImpl()
         
         let userModel = UserModel(
             userId: URL(string: "magetest://user/1"),
@@ -228,7 +231,7 @@ final class UserRepositoryTests: XCTestCase {
             name: "first"
         )
         
-        var repository = UserRepository()
+        var repository = UserRepositoryImpl()
         
         await repository.avatarChosen(user: userModel, image: UIImage(systemName: "face.smiling")!)
         

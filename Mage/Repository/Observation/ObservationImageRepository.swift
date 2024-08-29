@@ -1,37 +1,67 @@
 //
-//  ObservationImage.m
-//  Mage
+//  ObservationImageRepository.swift
+//  MAGE
 //
+//  Created by Dan Barela on 8/29/24.
+//  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import Foundation
 
-@objc public class ObservationImage: NSObject {
+private struct ObservationImageRepositoryProviderKey: InjectionKey {
+    static var currentValue: ObservationImageRepository = ObservationImageRepositoryImpl()
+}
+
+extension InjectedValues {
+    var observationImageRepository: ObservationImageRepository {
+        get { Self[ObservationImageRepositoryProviderKey.self] }
+        set { Self[ObservationImageRepositoryProviderKey.self] = newValue }
+    }
+}
+
+protocol ObservationImageRepository {
+    func clearCache()
+    func imageName(
+        eventId: Int64?,
+        formId: Int?,
+        primaryFieldText: String?,
+        secondaryFieldText: String?
+    ) -> String?
+    func imageName(observation: Observation?) -> String?
+    func imageAtPath(imagePath: String?) -> UIImage
+    func image(observation: Observation) -> UIImage
+}
+
+class ObservationImageRepositoryImpl: ObservationImageRepository, ObservableObject {
     
-    static let annotationScaleWidth = 35.0
+    let annotationScaleWidth = 35.0
     
-    public static var imageCache: NSCache<NSString, UIImage> = {
+    private var imageCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
         cache.countLimit = 100
         return cache
     }()
     
-    static func getDocumentsDirectory() -> String {
+    private lazy var documentsDirectory: String = {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         return documentsDirectory as String
+    }()
+    
+    func clearCache() {
+        imageCache.removeAllObjects()
     }
-
-    public static func imageName(
+    
+    func imageName(
         eventId: Int64?,
-        formId: Int64?,
+        formId: Int?,
         primaryFieldText: String?,
         secondaryFieldText: String?
     ) -> String? {
         guard let eventId = eventId else {
             return nil
         }
-        let rootIconFolder = "\(getDocumentsDirectory())/events/icons-\(eventId)/icons"
+        let rootIconFolder = "\(documentsDirectory)/events/icons-\(eventId)/icons"
         var foundIcon = false
         let fileManager = FileManager.default
 
@@ -84,14 +114,14 @@ import Foundation
         }
         return nil
     }
-
-    @objc public static func imageName(observation: Observation?) -> String? {
+    
+    func imageName(observation: Observation?) -> String? {
         guard let observation = observation, let eventId = observation.eventId else {
             return nil
         }
-        var formId: Int64?
+        var formId: Int?
         if let primaryObservationForm = observation.primaryObservationForm, let formIdNumber = primaryObservationForm[FormKey.formId.key] as? NSNumber {
-            formId = formIdNumber.int64Value
+            formId = formIdNumber.intValue
         }
 
         var primaryText: String?
@@ -104,7 +134,7 @@ import Foundation
             secondaryText = secondaryFieldText
         }
 
-        return ObservationImage.imageName(
+        return imageName(
             eventId: eventId.int64Value,
             formId: formId,
             primaryFieldText: primaryText,
@@ -112,15 +142,15 @@ import Foundation
         )
     }
     
-    @objc public static func image(observation: Observation) -> UIImage {
-        return ObservationImage.imageAtPath(imagePath: ObservationImage.imageName(observation: observation))
+    func image(observation: Observation) -> UIImage {
+        return imageAtPath(imagePath: imageName(observation: observation))
     }
-
-    public static func imageAtPath(imagePath: String?) -> UIImage {
+    
+    func imageAtPath(imagePath: String?) -> UIImage {
         guard let imagePath = imagePath as? NSString else {
             return UIImage(named: "defaultMarker")!
         }
-        if let image = ObservationImage.imageCache.object(forKey: imagePath) {
+        if let image = imageCache.object(forKey: imagePath) {
             // image is cached
             image.accessibilityIdentifier = imagePath as String
             return image
@@ -130,7 +160,7 @@ import Foundation
             let scale = image.size.width / annotationScaleWidth
 
             let scaledImage = UIImage(cgImage: cgImage, scale: scale, orientation: image.imageOrientation)
-            ObservationImage.imageCache.setObject(scaledImage, forKey: imagePath)
+            imageCache.setObject(scaledImage, forKey: imagePath)
             scaledImage.accessibilityIdentifier = imagePath as String
             return scaledImage
         }

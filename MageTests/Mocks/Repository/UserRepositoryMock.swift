@@ -16,22 +16,28 @@ class UserRepositoryMock: UserRepository {
     var users: [UserModel] = []
     var canUpdateImportantReturnValue: Bool = true
     
-    override func getUser(userUri: URL?) async -> UserModel? {
+    func getUser(userUri: URL?) async -> UserModel? {
         users.first { model in
             model.userId == userUri
         }
     }
     
-    override func getCurrentUser() -> UserModel? {
+    func getCurrentUser() -> UserModel? {
         if let currentUserUri = currentUserUri {
             return users.first { model in
                 model.userId == currentUserUri
             }
         }
+        
+        if let currentUserRemoteId = UserDefaults.standard.currentUserId {
+            return users.first { model in
+                model.remoteId == currentUserRemoteId
+            }
+        }
         return nil
     }
     
-    override func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>? {
+    func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>? {
         if let user = users.first(where: { model in
             model.userId == userUri
         }) {
@@ -41,13 +47,13 @@ class UserRepositoryMock: UserRepository {
         }
     }
     
-    override func getUser(remoteId: String) -> UserModel? {
+    func getUser(remoteId: String) -> UserModel? {
         users.first { model in
             model.remoteId == remoteId
         }
     }
     
-    override func users(
+    func users(
         paginatedBy paginator: Trigger.Signal? = nil
     ) -> AnyPublisher<[URIItem], Error> {
         AnyPublisher(Just(users.compactMap{ model in
@@ -57,14 +63,14 @@ class UserRepositoryMock: UserRepository {
         }).setFailureType(to: Error.self))
     }
     
-    override func canUserUpdateImportant(
+    func canUserUpdateImportant(
         eventId: NSNumber,
         userUri: URL
     ) async -> Bool {
         canUpdateImportantReturnValue
     }
     
-    override func avatarChosen(user: UserModel, image: UIImage) async -> Bool {
+    func avatarChosen(user: UserModel, image: UIImage) async -> Bool {
         return true
     }
 }

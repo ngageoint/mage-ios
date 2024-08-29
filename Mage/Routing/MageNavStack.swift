@@ -444,7 +444,7 @@ class MageNavStack: UIViewController {
         { localPath, contentType in
             
         }
-    .environmentObject(router)
+        .environmentObject(router)
         
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         self.pushViewController(vc: ovc2)

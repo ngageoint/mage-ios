@@ -33,7 +33,7 @@ class ObservationSummaryViewModel: ObservableObject {
     var observationModel: ObservationModel?
     
     var primaryObservationForm: [AnyHashable : Any]?
-    var primaryEventForm: Form?
+    var primaryEventForm: FormModel?
     
     private func setPrimaryEventForm() {
         if let primaryObservationForm = primaryObservationForm, let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber {

@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct ObservationRepositoryProviderKey: InjectionKey {
-    static var currentValue: ObservationRepository = ObservationRepository()
+    static var currentValue: ObservationRepository = ObservationRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,8 +20,28 @@ extension InjectedValues {
     }
 }
 
-class ObservationRepository: ObservableObject {
-    @Injected(\.observationLocalDataSource) 
+protocol ObservationRepository {
+    var refreshPublisher: AnyPublisher<Date, Never>? { get }
+    func observeFilteredCount() -> AnyPublisher<Int, Never>?
+    func observations(
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func userObservations(
+        userUri: URL,
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>?
+    @available(*, deprecated, message: "Use getObservation to get a model")
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation?
+    func getObservation(remoteId: String?) async -> ObservationModel?
+    func getObservation(observationUri: URL?) async -> ObservationModel?
+    func syncObservation(uri: URL?)
+    func fetchObservations() async -> Int
+    func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
+}
+
+class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
+    @Injected(\.observationLocalDataSource)
     var localDataSource: ObservationLocalDataSource
     
     @Injected(\.observationRemoteDataSource)

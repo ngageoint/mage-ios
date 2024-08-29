@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct FeedItemRepositoryProviderKey: InjectionKey {
-    static var currentValue: FeedItemRepository = FeedItemRepository()
+    static var currentValue: FeedItemRepository = FeedItemRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -18,6 +18,12 @@ extension InjectedValues {
         get { Self[FeedItemRepositoryProviderKey.self] }
         set { Self[FeedItemRepositoryProviderKey.self] = newValue }
     }
+}
+
+protocol FeedItemRepository {
+    func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel?
+    func getFeedItem(feedItemrUri: URL?) async -> FeedItem?
+    func observeFeedItem(feedItemUri: URL?) -> AnyPublisher<FeedItemModel, Never>?
 }
 
 struct FeedItemModel {
@@ -53,7 +59,7 @@ extension FeedItemModel {
     }
 }
 
-class FeedItemRepository: ObservableObject {
+class FeedItemRepositoryImpl: ObservableObject, FeedItemRepository {
     @Injected(\.feedItemLocalDataSource)
     var localDataSource: FeedItemLocalDataSource
     

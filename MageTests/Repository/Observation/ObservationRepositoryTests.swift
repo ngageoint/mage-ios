@@ -27,10 +27,11 @@ final class ObservationRepositoryTests: XCTestCase {
     
     override func tearDown() {
         cancellables.removeAll()
+        TestHelpers.defaultObservationInjection()
     }
     
     func testRefreshPublisher() {
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         
         var published = false
         
@@ -66,7 +67,7 @@ final class ObservationRepositoryTests: XCTestCase {
         
         var count: Int = 0
         
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         repository.observeFilteredCount()?
             .sink(receiveValue: { publishedCount in
                 count = publishedCount
@@ -104,7 +105,7 @@ final class ObservationRepositoryTests: XCTestCase {
         var state: State = .loading
 
         let trigger = Trigger()
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         
         let model = ObservationModel(
             observationId: URL(string: "magetest://observation/1")!,
@@ -172,7 +173,7 @@ final class ObservationRepositoryTests: XCTestCase {
         var state: State = .loading
 
         let trigger = Trigger()
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         
         let model = ObservationModel(
             observationId: URL(string: "magetest://observation/1")!,
@@ -239,7 +240,7 @@ final class ObservationRepositoryTests: XCTestCase {
         
         var lastModified: Date = Date(timeIntervalSince1970: 0)
         
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         repository.observeObservation(observationUri: URL(string: "magetest://observation/1")!)?
             .sink(receiveValue: { model in
                 lastModified = model.lastModified!
@@ -279,7 +280,7 @@ final class ObservationRepositoryTests: XCTestCase {
             )
         ]
         
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         let observation = await repository.getObservation(remoteId: "1")
         XCTAssertNotNil(observation)
         XCTAssertEqual(observation?.remoteId, "1")
@@ -300,7 +301,7 @@ final class ObservationRepositoryTests: XCTestCase {
             )
         ]
         
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         
         remoteDataSource.fetchResponseToSend = [["remoteId": "1"]]
         UserDefaults.standard.currentEventId = 1
@@ -324,7 +325,7 @@ final class ObservationRepositoryTests: XCTestCase {
         var first = false
         var second = false
         
-        let repository = ObservationRepository()
+        let repository = ObservationRepositoryImpl()
         
         repository.observeObservationFavorites(observationUri: URL(string: "magetest://observation/1"))?
             .sink(receiveValue: { model in

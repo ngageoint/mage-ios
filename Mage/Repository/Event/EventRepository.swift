@@ -9,7 +9,7 @@
 import Foundation
 
 private struct EventRepositoryProviderKey: InjectionKey {
-    static var currentValue: EventRepository = EventRepository()
+    static var currentValue: EventRepository = EventRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -19,7 +19,11 @@ extension InjectedValues {
     }
 }
 
-class EventRepository: ObservableObject {
+protocol EventRepository {
+    func getEvent(eventId: NSNumber) -> EventModel?
+}
+
+class EventRepositoryImpl: ObservableObject, EventRepository {
     @Injected(\.eventLocalDataSource)
     var localDataSource: EventLocalDataSource
     

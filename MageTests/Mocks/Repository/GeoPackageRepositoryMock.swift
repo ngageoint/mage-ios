@@ -13,21 +13,21 @@ import Foundation
 class GeoPackageRepositoryMock: GeoPackageRepository {
     var items: [GeoPackageFeatureItem] = []
     
-    override func getGeoPackageFeatureItem(key: GeoPackageFeatureKey) -> GeoPackageFeatureItem? {
+    func getGeoPackageFeatureItem(key: GeoPackageFeatureKey) -> GeoPackageFeatureItem? {
         items.first { item in
             item.featureId == key.featureId
         }
     }
     
-    override func getBaseMap() -> BaseMapOverlay? {
+    func getBaseMap() -> BaseMapOverlay? {
         return nil
     }
     
-    override func getDarkBaseMap() -> BaseMapOverlay? {
+    func getDarkBaseMap() -> BaseMapOverlay? {
         return nil
     }
     
-    override func cleanupBackgroundGeoPackages() {
+    func cleanupBackgroundGeoPackages() {
         
     }
 }

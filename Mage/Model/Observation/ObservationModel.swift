@@ -34,6 +34,8 @@ struct ObservationModel: Equatable, Hashable {
     var lastModified: Date?
     var important: ObservationImportantModel?
     var properties: [AnyHashable: AnyObject]?
+    var primaryObservationForm: [String : AnyHashable]?
+    var observationForms: [ObservationFormModel]?
 
     var coordinate: CLLocationCoordinate2D? {
         guard let geometry = geometry, let point = geometry.centroid() else {
@@ -67,7 +69,6 @@ extension ObservationModel {
         if let eventId = observation.eventId {
             self.eventId = Int(truncating: eventId)
         }
-        self.geometry = observation.geometry
         self.accuracy = observation.getAccuracy()
         self.provider = observation.getProvider()
         
@@ -85,5 +86,12 @@ extension ObservationModel {
             self.important = ObservationImportantModel(observationImportant: observationImportant)
         }
         self.userId = observation.user?.objectID.uriRepresentation()
+        
+        if let forms = properties?[ObservationKey.forms.key] as? [[String:AnyHashable]] {
+            primaryObservationForm = forms.first
+            observationForms = forms.map({ form in
+                ObservationFormModel(observationId: self.observationId, form: form)
+            })
+        }
     }
 }

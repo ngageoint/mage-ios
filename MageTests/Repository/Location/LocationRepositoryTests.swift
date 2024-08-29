@@ -24,6 +24,7 @@ final class LocationRepositoryTests: XCTestCase {
     
     override func tearDown() {
         cancellables.removeAll()
+        TestHelpers.defaultLocationInjection()
     }
     
     func testGetLocation() async {
@@ -36,7 +37,7 @@ final class LocationRepositoryTests: XCTestCase {
             )
         ]
                 
-        let locationRepostory = LocationRepository()
+        let locationRepostory = LocationRepositoryImpl()
         
         let location = await locationRepostory.getLocation(locationUri: URL(string: "magetest://location/1")!)
         XCTAssertNotNil(location)
@@ -55,7 +56,7 @@ final class LocationRepositoryTests: XCTestCase {
         var first: Bool = false
         var second: Bool = false
         
-        let locationRepository = LocationRepository()
+        let locationRepository = LocationRepositoryImpl()
         locationRepository.observeLocation(locationUri: URL(string: "magetest://location/1")!)?
             .sink(receiveValue: { model in
                 if model.timestamp == Date(timeIntervalSince1970: 100000) {
@@ -80,7 +81,7 @@ final class LocationRepositoryTests: XCTestCase {
     func testObserveLatest() {
         var first: Bool = false
         
-        let locationRepository = LocationRepository()
+        let locationRepository = LocationRepositoryImpl()
         locationRepository.observeLatestFiltered()?
             .sink(receiveValue: { model in
                 if model == Date(timeIntervalSince1970: 100000) {
@@ -115,7 +116,7 @@ final class LocationRepositoryTests: XCTestCase {
         var state: State = .loading
 
         let trigger = Trigger()
-        let locationRepository = LocationRepository()
+        let locationRepository = LocationRepositoryImpl()
         
         let model = LocationModel(
             locationUri: URL(string: "magetest://location/1")!,
@@ -165,7 +166,7 @@ final class LocationRepositoryTests: XCTestCase {
     }
     
     func testRefreshPublisher() {
-        let repository = LocationRepository()
+        let repository = LocationRepositoryImpl()
         
         var published = false
         

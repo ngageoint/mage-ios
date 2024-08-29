@@ -15,17 +15,17 @@ class ObservationLocationRepositoryMock: ObservationLocationRepository {
     
     var list: [ObservationMapItem] = []
     
-    override func getObservationLocation(observationLocationUri: URL?) async -> ObservationMapItem? {
+    func getObservationLocation(observationLocationUri: URL?) async -> ObservationMapItem? {
         list.first { item in
             item.observationLocationId == observationLocationUri
         }
     }
     
-    override func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<ObservationMapItem, Never>? {
+    func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<ObservationMapItem, Never>? {
         AnyPublisher(Just(list[0]))
     }
     
-    override func getObservationMapItems(observationUri: URL, formId: String, fieldName: String) async -> [ObservationMapItem]? {
+    func getObservationMapItems(observationUri: URL, formId: String, fieldName: String) async -> [ObservationMapItem]? {
         list
     }
 }

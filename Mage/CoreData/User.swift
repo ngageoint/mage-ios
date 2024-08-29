@@ -284,15 +284,26 @@ import Kingfisher
         self.prefetchIconAndAvatar();
         
         if let userRole = json[UserKey.role.key] as? [AnyHashable : Any] {
-            if let roleId = userRole[RoleKey.id.key] as? String, let role = Role.mr_findFirst(byAttribute: RoleKey.remoteId.key, withValue: roleId, in: context) {
-                self.role = role;
-                role.addToUsers(self);
-            } else {
-                let role = Role.insert(json: userRole, context: context);
-                self.role = role;
-                role?.addToUsers(self);
-            }
+            @Injected(\.roleLocalDataSource)
+            var roleLocalDataSource: RoleLocalDataSource
+            
+            roleLocalDataSource.addUserToRole(
+                roleJson: userRole,
+                user: self,
+                context: context
+            )
         }
+//        
+//        if let userRole = json[UserKey.role.key] as? [AnyHashable : Any] {
+//            if let roleId = userRole[RoleKey.id.key] as? String, let role = Role.mr_findFirst(byAttribute: RoleKey.remoteId.key, withValue: roleId, in: context) {
+//                self.role = role;
+//                role.addToUsers(self);
+//            } else {
+//                let role = Role.insert(json: userRole, context: context);
+//                self.role = role;
+//                role?.addToUsers(self);
+//            }
+//        }
     }
     
     @objc public var hasEditPermission: Bool {

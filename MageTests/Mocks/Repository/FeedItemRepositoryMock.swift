@@ -14,17 +14,17 @@ import Combine
 class FeedItemRepositoryMock: FeedItemRepository {
     var items: [FeedItemModel] = []
     
-    override func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel? {
+    func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel? {
         items.first { item in
             item.feedItemId == feedItemUri
         }
     }
 
-    override func getFeedItem(feedItemrUri: URL?) async -> FeedItem? {
+    func getFeedItem(feedItemrUri: URL?) async -> FeedItem? {
          return nil
     }
     
-    override func observeFeedItem(feedItemUri: URL?) -> AnyPublisher<FeedItemModel, Never>? {
+    func observeFeedItem(feedItemUri: URL?) -> AnyPublisher<FeedItemModel, Never>? {
         if let item = items.first(where: { model in
             model.feedItemId == feedItemUri
         }) {
