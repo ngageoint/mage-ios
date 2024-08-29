@@ -11,7 +11,7 @@ import geopackage_ios
 import ExceptionCatcher
 
 private struct GeoPackageRepositoryProviderKey: InjectionKey {
-    static var currentValue: GeoPackageRepository = GeoPackageRepository()
+    static var currentValue: GeoPackageRepository = GeoPackageRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -21,7 +21,14 @@ extension InjectedValues {
     }
 }
 
-class GeoPackageRepository: ObservableObject {
+protocol GeoPackageRepository {
+    func cleanupBackgroundGeoPackages()
+    func getBaseMap() -> BaseMapOverlay?
+    func getDarkBaseMap() -> BaseMapOverlay?
+    func getGeoPackageFeatureItem(key: GeoPackageFeatureKey) -> GeoPackageFeatureItem?
+}
+
+class GeoPackageRepositoryImpl: ObservableObject, GeoPackageRepository {
     
     var darkBackgroundOverlay: BaseMapOverlay?
     var backgroundOverlay: BaseMapOverlay?

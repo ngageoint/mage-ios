@@ -234,7 +234,6 @@
 		F72D42E42694B60300F9AC3B /* ServerAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42502694B60300F9AC3B /* ServerAuthentication.m */; };
 		F72D42E52694B60300F9AC3B /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */; };
 		F72D42E62694B60300F9AC3B /* Model1To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */; };
-		F72D42E72694B60300F9AC3B /* ObservationImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42532694B60300F9AC3B /* ObservationImage.swift */; };
 		F72D42E82694B60300F9AC3B /* Model15To16.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */; };
 		F72D42E92694B60300F9AC3B /* Observation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.swift */; };
 		F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42582694B60300F9AC3B /* Model10To15.xcmappingmodel */; };
@@ -597,6 +596,26 @@
 		F7C0974E2C7E7395003FA115 /* ObservationRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0974D2C7E7395003FA115 /* ObservationRepositoryTests.swift */; };
 		F7C097502C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0974F2C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift */; };
 		F7C097522C7E8208003FA115 /* ObservationRemoteDataSourceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097512C7E8208003FA115 /* ObservationRemoteDataSourceMock.swift */; };
+		F7C097562C7F6301003FA115 /* ObservationViewViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097552C7F6301003FA115 /* ObservationViewViewModelTests.swift */; };
+		F7C097582C7F6404003FA115 /* ObservationRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097572C7F6404003FA115 /* ObservationRepositoryMock.swift */; };
+		F7C0975A2C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097592C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift */; };
+		F7C0975C2C7F70D4003FA115 /* AttachmentRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0975B2C7F70D4003FA115 /* AttachmentRepositoryMock.swift */; };
+		F7C0975E2C7F73B0003FA115 /* FormRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0975D2C7F73B0003FA115 /* FormRepositoryMock.swift */; };
+		F7C097622C7FA822003FA115 /* RoleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097602C7FA81F003FA115 /* RoleRepository.swift */; };
+		F7C097652C7FA9B9003FA115 /* RoleLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097632C7FA9B7003FA115 /* RoleLocalDataSource.swift */; };
+		F7C097672C7FBC73003FA115 /* RoleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097662C7FBC73003FA115 /* RoleModel.swift */; };
+		F7C0976B2C7FBE67003FA115 /* RoleRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0976A2C7FBE67003FA115 /* RoleRepositoryMock.swift */; };
+		F7C0976D2C7FC70E003FA115 /* RoleStaticLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0976C2C7FC70E003FA115 /* RoleStaticLocalDataSource.swift */; };
+		F7C097732C80C52C003FA115 /* AttachmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097722C80C52C003FA115 /* AttachmentModel.swift */; };
+		F7C097752C80C73C003FA115 /* ObservationFormModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097742C80C73C003FA115 /* ObservationFormModel.swift */; };
+		F7C097772C80C759003FA115 /* ObservationFormFieldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097762C80C759003FA115 /* ObservationFormFieldModel.swift */; };
+		F7C0977A2C80C7C5003FA115 /* ObservationModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097792C80C7C5003FA115 /* ObservationModelTests.swift */; };
+		F7C0977D2C80E0A5003FA115 /* FormModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0977C2C80E0A5003FA115 /* FormModel.swift */; };
+		F7C0977F2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0977E2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift */; };
+		F7C097822C80FA5E003FA115 /* ObservationImportantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097802C80FA52003FA115 /* ObservationImportantModel.swift */; };
+		F7C097842C80FD87003FA115 /* ObservationImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097832C80FD87003FA115 /* ObservationImageRepository.swift */; };
+		F7C097862C8102F1003FA115 /* ObservationImageRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097852C8102F1003FA115 /* ObservationImageRepositoryMock.swift */; };
+		F7C0978A2C81114E003FA115 /* ObservationListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097892C81114E003FA115 /* ObservationListViewModel.swift */; };
 		F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */; };
 		F7C3DB9D207FE93100154281 /* local-authView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C3DB9C207FE93100154281 /* local-authView.xib */; };
 		F7C3DBA0207FECEB00154281 /* LocalLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C3DB9F207FECEB00154281 /* LocalLoginView.m */; };
@@ -1086,7 +1105,6 @@
 		F72D42502694B60300F9AC3B /* ServerAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerAuthentication.m; sourceTree = "<group>"; };
 		F72D42512694B60300F9AC3B /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42522694B60300F9AC3B /* Model1To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model1To15.xcmappingmodel; sourceTree = "<group>"; };
-		F72D42532694B60300F9AC3B /* ObservationImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservationImage.swift; sourceTree = "<group>"; };
 		F72D42542694B60300F9AC3B /* Model15To16.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model15To16.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42552694B60300F9AC3B /* Observation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F72D42562694B60300F9AC3B /* LdapAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LdapAuthentication.h; sourceTree = "<group>"; };
@@ -1517,6 +1535,26 @@
 		F7C0974D2C7E7395003FA115 /* ObservationRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRepositoryTests.swift; sourceTree = "<group>"; };
 		F7C0974F2C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationStaticLocalDataSource.swift; sourceTree = "<group>"; };
 		F7C097512C7E8208003FA115 /* ObservationRemoteDataSourceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRemoteDataSourceMock.swift; sourceTree = "<group>"; };
+		F7C097552C7F6301003FA115 /* ObservationViewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewViewModelTests.swift; sourceTree = "<group>"; };
+		F7C097572C7F6404003FA115 /* ObservationRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationRepositoryMock.swift; sourceTree = "<group>"; };
+		F7C097592C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantRepositoryMock.swift; sourceTree = "<group>"; };
+		F7C0975B2C7F70D4003FA115 /* AttachmentRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentRepositoryMock.swift; sourceTree = "<group>"; };
+		F7C0975D2C7F73B0003FA115 /* FormRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormRepositoryMock.swift; sourceTree = "<group>"; };
+		F7C097602C7FA81F003FA115 /* RoleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleRepository.swift; sourceTree = "<group>"; };
+		F7C097632C7FA9B7003FA115 /* RoleLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleLocalDataSource.swift; sourceTree = "<group>"; };
+		F7C097662C7FBC73003FA115 /* RoleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleModel.swift; sourceTree = "<group>"; };
+		F7C0976A2C7FBE67003FA115 /* RoleRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleRepositoryMock.swift; sourceTree = "<group>"; };
+		F7C0976C2C7FC70E003FA115 /* RoleStaticLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleStaticLocalDataSource.swift; sourceTree = "<group>"; };
+		F7C097722C80C52C003FA115 /* AttachmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentModel.swift; sourceTree = "<group>"; };
+		F7C097742C80C73C003FA115 /* ObservationFormModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormModel.swift; sourceTree = "<group>"; };
+		F7C097762C80C759003FA115 /* ObservationFormFieldModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormFieldModel.swift; sourceTree = "<group>"; };
+		F7C097792C80C7C5003FA115 /* ObservationModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationModelTests.swift; sourceTree = "<group>"; };
+		F7C0977C2C80E0A5003FA115 /* FormModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormModel.swift; sourceTree = "<group>"; };
+		F7C0977E2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFavoriteRepositoryMock.swift; sourceTree = "<group>"; };
+		F7C097802C80FA52003FA115 /* ObservationImportantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantModel.swift; sourceTree = "<group>"; };
+		F7C097832C80FD87003FA115 /* ObservationImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImageRepository.swift; sourceTree = "<group>"; };
+		F7C097852C8102F1003FA115 /* ObservationImageRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImageRepositoryMock.swift; sourceTree = "<group>"; };
+		F7C097892C81114E003FA115 /* ObservationListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListViewModel.swift; sourceTree = "<group>"; };
 		F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBuilder.swift; sourceTree = "<group>"; };
 		F7C3DB9C207FE93100154281 /* local-authView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "local-authView.xib"; sourceTree = "<group>"; };
 		F7C3DB9E207FECEB00154281 /* LocalLoginView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalLoginView.h; sourceTree = "<group>"; };
@@ -2141,9 +2179,6 @@
 		F706889D2BA4A2D200D8E2EA /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F706889E2BA4A2E300D8E2EA /* ObservationMapItem.swift */,
-				F754C65C2C49A87100E408E9 /* ObservationFavoritesModel.swift */,
-				F7225F472C57D48C00B7D935 /* ObservationModel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -2151,6 +2186,7 @@
 		F70688AB2BB1FAF600D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F7C097682C7FBE43003FA115 /* Role */,
 				F763FF332C7BAB6500403A00 /* Location */,
 				F763FF1D2C79042E00403A00 /* User */,
 				F763FF122C78DEF400403A00 /* BottomSheet */,
@@ -2173,6 +2209,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F7C0975F2C7FA813003FA115 /* Role */,
 				F763FF112C78DE2A00403A00 /* BottomSheet */,
 				F73564F22C65578000466813 /* Location */,
 				F73564E32C650B3F00466813 /* CurrentLocation */,
@@ -2213,6 +2250,7 @@
 				F7DE98792C133A5F005372F8 /* ObservationMapItemTileRepository.swift */,
 				F7DE987D2C133B21005372F8 /* ObservationsTileRepository.swift */,
 				F7DE987F2C133B49005372F8 /* ObservationMapImage.swift */,
+				F7C097832C80FD87003FA115 /* ObservationImageRepository.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -2357,7 +2395,6 @@
 			isa = PBXGroup;
 			children = (
 				F7225F4E2C59555100B7D935 /* ObservationFormViewSwiftUI.swift */,
-				F7225F502C59557300B7D935 /* ObservationFormViewModel.swift */,
 				F7225F542C5A775400B7D935 /* AttachmentFieldViewSwiftUI.swift */,
 			);
 			name = Forms;
@@ -2475,7 +2512,6 @@
 				F72D42492694B60300F9AC3B /* NSString+Contains.h */,
 				F72D42982694B60300F9AC3B /* NSString+Contains.m */,
 				F72D42822694B60300F9AC3B /* ObservationFetchService.swift */,
-				F72D42532694B60300F9AC3B /* ObservationImage.swift */,
 				F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */,
 				F72D427C2694B60300F9AC3B /* ObservationPushService.swift */,
 				F72D42342694B60300F9AC3B /* ObservationRoutes.h */,
@@ -2568,11 +2604,10 @@
 		F73564DC2C62BB6F00466813 /* Observation */ = {
 			isa = PBXGroup;
 			children = (
+				F7388707258A8D0900EDA036 /* ObservationFullView.swift */,
 				F73564DD2C62BB7E00466813 /* ObservationList.swift */,
 				F73564DF2C62CF8400466813 /* ObservationSummaryViewSwiftUI.swift */,
-				F73564E12C63B67600466813 /* ObservationSummaryViewModel.swift */,
 				F73564E82C651D3300466813 /* ObservationListNavStack.swift */,
-				F73564EA2C652EE800466813 /* ObservationsViewModel.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -2766,8 +2801,6 @@
 			children = (
 				F738870D258A997500EDA036 /* Components */,
 				F78391BE25A4D9A800ED9C2D /* ObservationActionsSheetController.swift */,
-				F7388707258A8D0900EDA036 /* ObservationFullView.swift */,
-				F7225F402C543B7800B7D935 /* ObservationViewViewModel.swift */,
 				F763FF0F2C77CAF300403A00 /* ObservationSyncStatus.swift */,
 			);
 			name = View;
@@ -2876,6 +2909,13 @@
 				F763FF232C79086500403A00 /* FeedItemRepositoryMock.swift */,
 				F763FF252C790C7C00403A00 /* ObservationLocationRepositoryMock.swift */,
 				F763FF272C790F4600403A00 /* EventRepositoryMock.swift */,
+				F7C097572C7F6404003FA115 /* ObservationRepositoryMock.swift */,
+				F7C097592C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift */,
+				F7C0975B2C7F70D4003FA115 /* AttachmentRepositoryMock.swift */,
+				F7C0975D2C7F73B0003FA115 /* FormRepositoryMock.swift */,
+				F7C0976A2C7FBE67003FA115 /* RoleRepositoryMock.swift */,
+				F7C0977E2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift */,
+				F7C097852C8102F1003FA115 /* ObservationImageRepositoryMock.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2889,6 +2929,7 @@
 				F789EB5F2BF6418900CF3DF9 /* ObservationLocationStaticLocalDataSource.swift */,
 				F763FF362C7BAC3900403A00 /* LocationStaticLocalDataSource.swift */,
 				F7C0974F2C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift */,
+				F7C0976C2C7FC70E003FA115 /* RoleStaticLocalDataSource.swift */,
 			);
 			path = LocalDataSource;
 			sourceTree = "<group>";
@@ -3254,6 +3295,8 @@
 		F7A94D7118AD9CB000CB9EE0 /* Mage */ = {
 			isa = PBXGroup;
 			children = (
+				F7C097872C811133003FA115 /* ViewModel */,
+				F7C0976F2C80C438003FA115 /* Model */,
 				F788768D2C6AA43600E30300 /* Routing */,
 				F7DE98722C123D58005372F8 /* DependencyInjection */,
 				F776AC912BCD9CB5000FAFB4 /* Network */,
@@ -3330,6 +3373,8 @@
 		F7A94D8E18AD9CB000CB9EE0 /* MageTests */ = {
 			isa = PBXGroup;
 			children = (
+				F7C097782C80C79F003FA115 /* Model */,
+				F7C097532C7F62E3003FA115 /* UI */,
 				F70688AB2BB1FAF600D8E2EA /* Repository */,
 				F7F264372806FDDE00758C5B /* Event */,
 				F70E7B1927888531000BBC58 /* Categories */,
@@ -3513,6 +3558,106 @@
 				F7BFB8F22C516C0C00901479 /* FeedItemSummaryView.swift */,
 			);
 			path = FeedItem;
+			sourceTree = "<group>";
+		};
+		F7C097532C7F62E3003FA115 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F7C097542C7F62EA003FA115 /* Observation */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		F7C097542C7F62EA003FA115 /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F7C097552C7F6301003FA115 /* ObservationViewViewModelTests.swift */,
+			);
+			path = Observation;
+			sourceTree = "<group>";
+		};
+		F7C0975F2C7FA813003FA115 /* Role */ = {
+			isa = PBXGroup;
+			children = (
+				F7C097602C7FA81F003FA115 /* RoleRepository.swift */,
+				F7C097632C7FA9B7003FA115 /* RoleLocalDataSource.swift */,
+				F7C097662C7FBC73003FA115 /* RoleModel.swift */,
+			);
+			path = Role;
+			sourceTree = "<group>";
+		};
+		F7C097682C7FBE43003FA115 /* Role */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Role;
+			sourceTree = "<group>";
+		};
+		F7C0976F2C80C438003FA115 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F7C0977B2C80E099003FA115 /* Form */,
+				F7C097712C80C51D003FA115 /* Attachment */,
+				F7C097702C80C50D003FA115 /* Observation */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F7C097702C80C50D003FA115 /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F7225F502C59557300B7D935 /* ObservationFormViewModel.swift */,
+				F7225F472C57D48C00B7D935 /* ObservationModel.swift */,
+				F706889E2BA4A2E300D8E2EA /* ObservationMapItem.swift */,
+				F754C65C2C49A87100E408E9 /* ObservationFavoritesModel.swift */,
+				F7C097742C80C73C003FA115 /* ObservationFormModel.swift */,
+				F7C097762C80C759003FA115 /* ObservationFormFieldModel.swift */,
+				F7C097802C80FA52003FA115 /* ObservationImportantModel.swift */,
+			);
+			path = Observation;
+			sourceTree = "<group>";
+		};
+		F7C097712C80C51D003FA115 /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				F7C097722C80C52C003FA115 /* AttachmentModel.swift */,
+			);
+			path = Attachment;
+			sourceTree = "<group>";
+		};
+		F7C097782C80C79F003FA115 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F7C097792C80C7C5003FA115 /* ObservationModelTests.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F7C0977B2C80E099003FA115 /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				F7C0977C2C80E0A5003FA115 /* FormModel.swift */,
+			);
+			path = Form;
+			sourceTree = "<group>";
+		};
+		F7C097872C811133003FA115 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F7C097882C81113F003FA115 /* Observation */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F7C097882C81113F003FA115 /* Observation */ = {
+			isa = PBXGroup;
+			children = (
+				F7225F402C543B7800B7D935 /* ObservationViewViewModel.swift */,
+				F7C097892C81114E003FA115 /* ObservationListViewModel.swift */,
+				F73564E12C63B67600466813 /* ObservationSummaryViewModel.swift */,
+				F73564EA2C652EE800466813 /* ObservationsViewModel.swift */,
+			);
+			path = Observation;
 			sourceTree = "<group>";
 		};
 		F7C641022581503B00C02335 /* Map */ = {
@@ -4216,6 +4361,7 @@
 				2F9F43AB1CE5050400D99AAF /* UINavigationItem+Subtitle.m in Sources */,
 				F7DBBAF523D8B7050052D86C /* ObservationServicesSettingsTableViewController.m in Sources */,
 				F721B3661913E61B00F1CAB4 /* ValuePickerTableViewController.m in Sources */,
+				F7C097732C80C52C003FA115 /* AttachmentModel.swift in Sources */,
 				F781609E273EE1A50055B5D2 /* ObjC.m in Sources */,
 				F78391C325A4F4A000ED9C2D /* ObservationActionsDelegate.swift in Sources */,
 				F7BFB8E72C504EF900901479 /* StaticLayerFeatureBottomSheetActionBar.swift in Sources */,
@@ -4227,6 +4373,7 @@
 				2FA70A9F1A03F2CA00243F4A /* MapSettings.m in Sources */,
 				F72D42F02694B60300F9AC3B /* Server+CoreDataProperties.swift in Sources */,
 				F7331D0D2653137C00D645AC /* NavigationSettingsViewController.swift in Sources */,
+				F7C097752C80C73C003FA115 /* ObservationFormModel.swift in Sources */,
 				2F0323B1246366CF00D2866B /* LocationAccuracyRenderer.m in Sources */,
 				F776AC9D2BCDB271000FAFB4 /* DataFetchOperation.swift in Sources */,
 				F774970322F9FC7A00E69734 /* OnlineMapTableViewController.m in Sources */,
@@ -4239,6 +4386,7 @@
 				F7F4754D25BB2CF0006634F7 /* ObservationListActionsView.swift in Sources */,
 				2FCDC35622C2866A004189AD /* AuthenticationButton.m in Sources */,
 				F73564FB2C65650F00466813 /* UserLocationViewModel.swift in Sources */,
+				F7C097622C7FA822003FA115 /* RoleRepository.swift in Sources */,
 				F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */,
 				F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */,
 				F7ECDC9E27A83C8600D0AF92 /* GeoPackage.m in Sources */,
@@ -4292,6 +4440,7 @@
 				F78D578D27B5841D003594D3 /* MageMapViewController.swift in Sources */,
 				F7402C86276B80B600531613 /* FilteredUsersMap.swift in Sources */,
 				F73607DC26F90C79008CF824 /* MageBottomSheet.swift in Sources */,
+				F7C0978A2C81114E003FA115 /* ObservationListViewModel.swift in Sources */,
 				F753813A243BBB7900F23BF8 /* NavigationControllerObserver.swift in Sources */,
 				F7FD5AA42809F3800032384B /* EmptyState.swift in Sources */,
 				2FAE23FF2B5599A100629721 /* NativeService.swift in Sources */,
@@ -4336,7 +4485,6 @@
 				F7BFB8D22C4AB07300901479 /* NavigateToButton.swift in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
-				F72D42E72694B60300F9AC3B /* ObservationImage.swift in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7489B3F27A2FE8100A9E314 /* StaticLayerMap.swift in Sources */,
@@ -4381,6 +4529,7 @@
 				F72D42FF2694B60300F9AC3B /* ObservationFetchService.swift in Sources */,
 				F7DBD2B41FBB938800D4DDE9 /* ObservationShapeStyleParser.swift in Sources */,
 				F7DE98852C13461B005372F8 /* ObservationIconLocalDataSource.swift in Sources */,
+				F7C097652C7FA9B9003FA115 /* RoleLocalDataSource.swift in Sources */,
 				F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */,
 				F7BFB8F32C516C0C00901479 /* FeedItemSummaryView.swift in Sources */,
 				F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */,
@@ -4432,6 +4581,7 @@
 				2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */,
 				F70688A42BA4DA4100D8E2EA /* Model22To23.xcmappingmodel in Sources */,
 				F78876982C6C04A800E30300 /* DocumentPreview.swift in Sources */,
+				F7C097842C80FD87003FA115 /* ObservationImageRepository.swift in Sources */,
 				F738871D258BA22500EDA036 /* UIButtonInsets.swift in Sources */,
 				F7BFB8DC2C50103100901479 /* UserSummary.swift in Sources */,
 				F7DE98962C20D4A9005372F8 /* FeedItemDefinition.swift in Sources */,
@@ -4491,6 +4641,7 @@
 				F7D4F58727597C25004EA263 /* Form+CoreDataProperties.swift in Sources */,
 				F73565012C66616D00466813 /* UserViewSwiftUI.swift in Sources */,
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
+				F7C097772C80C759003FA115 /* ObservationFormFieldModel.swift in Sources */,
 				F70C34332C73D712007616FA /* DownloadingImageViewModel.swift in Sources */,
 				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
 				F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */,
@@ -4505,6 +4656,7 @@
 				2F3C9EE02B179E8F00FF5570 /* HasMapSearchMixin.swift in Sources */,
 				F70C34392C73D7A0007616FA /* DownloadingFileView.swift in Sources */,
 				F783AD3518B812AC00BCED14 /* SettingsTableViewController.m in Sources */,
+				F7C097672C7FBC73003FA115 /* RoleModel.swift in Sources */,
 				2F99EC211E2982E700E0CBB6 /* MageFilter.m in Sources */,
 				F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.swift in Sources */,
 				2F5D68F41C4EC11B00E95DF6 /* ObservationAnnotationView.swift in Sources */,
@@ -4548,6 +4700,7 @@
 				2F9F43A41CE4F68400D99AAF /* TimeFilter.m in Sources */,
 				F72D43142694B60300F9AC3B /* Event.swift in Sources */,
 				F7DE988C2C1A4478005372F8 /* UserLocalDataSource.swift in Sources */,
+				F7C097822C80FA5E003FA115 /* ObservationImportantModel.swift in Sources */,
 				F7708527258C1A02008903BA /* ObservationAttachmentCard.swift in Sources */,
 				F72D42F72694B60300F9AC3B /* LocationFetchService.swift in Sources */,
 				F72D43022694B60300F9AC3B /* MAGERoutes.m in Sources */,
@@ -4639,6 +4792,7 @@
 				F7BFB8E02C5019BA00901479 /* EmailButton.swift in Sources */,
 				2F8A2C122200FD2F007FE473 /* EventInformationController.m in Sources */,
 				F70688B12BB3569B00D8E2EA /* ObservationTileRepository.swift in Sources */,
+				F7C0977D2C80E0A5003FA115 /* FormModel.swift in Sources */,
 				F7D43BEA269F505A00561A8F /* CommonSummaryView.swift in Sources */,
 				2F81C4241C692C30006897E7 /* AttributionsViewController.m in Sources */,
 				F7D9B826255DC65C00A76E2C /* MageImage.swift in Sources */,
@@ -4667,6 +4821,7 @@
 				F7F08EA227EA4B0300640D89 /* MapDirectionsTests.swift in Sources */,
 				F7384FDE274D74EA00EA1A96 /* ObservationFetchServiceTests.swift in Sources */,
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
+				F7C097862C8102F1003FA115 /* ObservationImageRepositoryMock.swift in Sources */,
 				F7BEF68227D69DC7000E8CDE /* GeoPackageBaseMapTests.swift in Sources */,
 				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
 				F7F62FA4273F186E00AF0A74 /* UserUtilityTests.swift in Sources */,
@@ -4679,6 +4834,7 @@
 				F763FF2C2C79128200403A00 /* UserRemoteDataSourceMock.swift in Sources */,
 				F77B7D7B24797AF900C51953 /* FormBuilder.swift in Sources */,
 				F71EFE4C2757F824001E6134 /* DataConnectionUtilitiesTests.swift in Sources */,
+				F7C0976B2C7FBE67003FA115 /* RoleRepositoryMock.swift in Sources */,
 				F7EEF488273EEB2C009B28F0 /* GeometrySerializerTests.swift in Sources */,
 				F75D24C0274C2B11003C0A83 /* ObservationAnnotationTests.swift in Sources */,
 				F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */,
@@ -4686,6 +4842,7 @@
 				F789EB602BF6418900CF3DF9 /* ObservationLocationStaticLocalDataSource.swift in Sources */,
 				F7521DE82672317700C52318 /* GeometryEditViewControllerTests.swift in Sources */,
 				F7E5749027DA8D21009A6E0D /* CanCreateObservationTests.swift in Sources */,
+				F7C097562C7F6301003FA115 /* ObservationViewViewModelTests.swift in Sources */,
 				F763FF352C7BAB7B00403A00 /* LocationRepositoryTests.swift in Sources */,
 				F786492E273BFF16002D3DC2 /* LayerTests.swift in Sources */,
 				F7C2A250247960EB0051DAD8 /* ObservationBuilder.swift in Sources */,
@@ -4710,6 +4867,7 @@
 				F7CE230E2544714900D710DE /* AttachmentFieldViewTests.swift in Sources */,
 				F70688AE2BB1FB0F00D8E2EA /* ObservationCoreDataSourceTests.swift in Sources */,
 				F71446EF249A9CAC005A5EC1 /* FeedServiceTests.swift in Sources */,
+				F7C0976D2C7FC70E003FA115 /* RoleStaticLocalDataSource.swift in Sources */,
 				F7E5748C27DA7BEA009A6E0D /* PersistedMapStateTests.swift in Sources */,
 				F7F15B13274565A8008FF6C2 /* MageTests.swift in Sources */,
 				F73886CC258A6C0D00EDA036 /* ObservationViewCardCollectionViewControllerTests.swift in Sources */,
@@ -4739,9 +4897,11 @@
 				F763FF282C790F4600403A00 /* EventRepositoryMock.swift in Sources */,
 				F763FF372C7BAC3900403A00 /* LocationStaticLocalDataSource.swift in Sources */,
 				F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */,
+				F7C0977A2C80C7C5003FA115 /* ObservationModelTests.swift in Sources */,
 				F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */,
 				F763FF162C78EBFA00403A00 /* UserStaticLocalDataSource.swift in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
+				F7C0975E2C7F73B0003FA115 /* FormRepositoryMock.swift in Sources */,
 				F795ED0024B8BCAC0028FBFC /* MockMageServer.swift in Sources */,
 				F770854C2593FDD8008903BA /* MockObservationActionsDelegate.swift in Sources */,
 				F795ED1024BCB71C0028FBFC /* UserViewControllerTests.swift in Sources */,
@@ -4752,10 +4912,12 @@
 				F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F789EB622BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift in Sources */,
+				F7C0975A2C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift in Sources */,
 				F78FDC90265E8D130011C536 /* RadioFieldViewTests.swift in Sources */,
 				F7F08EA427EB984200640D89 /* BottomSheetEnabledTests.swift in Sources */,
 				F79A09472694D1A200EB2ABA /* AttachmentPushServiceTests.swift in Sources */,
 				F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */,
+				F7C0977F2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift in Sources */,
 				F763FF1F2C79044800403A00 /* UserRepositoryTests.swift in Sources */,
 				F770854425929C9A008903BA /* ObservationSyncStatusTests.swift in Sources */,
 				F70B47B624B79D4100D0BFE5 /* FeedItemRetrieverTests.swift in Sources */,
@@ -4774,6 +4936,7 @@
 				F7C0974E2C7E7395003FA115 /* ObservationRepositoryTests.swift in Sources */,
 				F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */,
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
+				F7C0975C2C7F70D4003FA115 /* AttachmentRepositoryMock.swift in Sources */,
 				F7C097522C7E8208003FA115 /* ObservationRemoteDataSourceMock.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F7F08E9627E8B35F00640D89 /* FeedsMapTests.swift in Sources */,
@@ -4781,6 +4944,7 @@
 				F7E5749227DB91D3009A6E0D /* CanReportLocationTests.swift in Sources */,
 				F7E5748E27DA818A009A6E0D /* HasMapSettingsTests.swift in Sources */,
 				F781609B273EB9C80055B5D2 /* GeometryDeserializerTests.swift in Sources */,
+				F7C097582C7F6404003FA115 /* ObservationRepositoryMock.swift in Sources */,
 				F72C175B2523B52300682052 /* AuthenticationCoordinatorTests.swift in Sources */,
 				F7BCAC21263093F8006BE2A9 /* MageServerTests.swift in Sources */,
 				F763FF392C7BB3F600403A00 /* UserCoreDataDataSourceTests.swift in Sources */,

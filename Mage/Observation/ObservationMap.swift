@@ -12,6 +12,9 @@ import DataSourceTileOverlay
 import MapFramework
 
 class ObservationMap: DataSourceMap {
+    @Injected(\.observationImageRepository)
+    var imageRepository: ObservationImageRepository
+    
     override var REFRESH_KEY: String {
         "ObservationMapDateUpdated"
     }
@@ -53,7 +56,7 @@ class ObservationMap: DataSourceMap {
         }
 
         if let iconPath = annotation.mapItem.iconPath, let annotationView = annotationView {
-            let image = ObservationImage.imageAtPath(imagePath: iconPath)
+            let image = imageRepository.imageAtPath(imagePath: iconPath)
             annotationView.image = image
             annotationView.centerOffset = CGPoint(x: 0, y: -(image.size.height/2.0))
             annotationView.accessibilityLabel = "Observation"

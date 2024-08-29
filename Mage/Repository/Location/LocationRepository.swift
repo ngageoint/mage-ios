@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct LocationRepositorySourceProviderKey: InjectionKey {
-    static var currentValue: LocationRepository = LocationRepository()
+    static var currentValue: LocationRepository = LocationRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,7 +20,18 @@ extension InjectedValues {
     }
 }
 
-class LocationRepository: ObservableObject {
+protocol LocationRepository {
+    var refreshPublisher: AnyPublisher<Date, Never>? { get }
+    func observeLatestFiltered() -> AnyPublisher<Date, Never>?
+    func locations(
+        userIds: [String]?,
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func getLocation(locationUri: URL) async -> LocationModel?
+    func observeLocation(locationUri: URL) -> AnyPublisher<LocationModel, Never>?
+}
+
+class LocationRepositoryImpl: ObservableObject, LocationRepository {
     @Injected(\.locationLocalDataSource)
     var localDataSource: LocationLocalDataSource
     

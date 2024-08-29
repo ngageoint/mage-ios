@@ -86,8 +86,9 @@ class ObservationImageTests: KIFSpec {
                         "testfield": "Hi"
                     ]
                 ]
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
                 
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(equal(iconPath))
             }
             
@@ -115,8 +116,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(equal(iconPath))
             }
             
@@ -142,8 +144,9 @@ class ObservationImageTests: KIFSpec {
                         "formId": 26
                     ]
                 ]
-                
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(equal(iconPath))
             }
             
@@ -171,8 +174,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(equal(iconPath))
             }
             
@@ -217,8 +221,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(equal(iconPath))
             }
             
@@ -246,8 +251,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(equal(iconPath))
             }
             
@@ -267,8 +273,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(beNil())
             }
             
@@ -294,8 +301,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let imageName = ObservationImage.imageName(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let imageName = imageRepository.imageName(observation: observation);
                 expect(imageName).to(beNil())
             }
             
@@ -321,8 +329,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let image = ObservationImage.image(observation: observation)
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let image = imageRepository.image(observation: observation)
                 expect(image).to(equal(UIImage(named:"defaultMarker")))
             }
             
@@ -350,8 +359,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let image = ObservationImage.image(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let image = imageRepository.image(observation: observation);
                 expect(image).toNot(beNil());
                 expect(image).toNot(equal(UIImage(named:"defaultMarker")));
             }
@@ -380,8 +390,9 @@ class ObservationImageTests: KIFSpec {
                         "secondary": "turtle"
                     ]
                 ]
-                
-                let image = ObservationImage.image(observation: observation);
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
+                let image = imageRepository.image(observation: observation);
                 expect(image).toNot(beNil());
                 expect(image).toNot(equal(UIImage(named:"defaultMarker")));
                 
@@ -392,8 +403,8 @@ class ObservationImageTests: KIFSpec {
                     let image: UIImage = UIImage(systemName: "location.north.fill")!
                     FileManager.default.createFile(atPath: iconPath, contents: image.pngData()!, attributes: nil)
                 }
-                
-                let image2 = ObservationImage.image(observation: observation);
+
+                let image2 = imageRepository.image(observation: observation);
                 expect(image2).toNot(beNil());
                 expect(image2).to(equal(image))
             }

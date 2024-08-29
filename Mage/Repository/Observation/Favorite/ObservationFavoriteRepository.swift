@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct ObservationFavoriteRepositoryProviderKey: InjectionKey {
-    static var currentValue: ObservationFavoriteRepository = ObservationFavoriteRepository()
+    static var currentValue: ObservationFavoriteRepository = ObservationFavoriteRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,7 +20,13 @@ extension InjectedValues {
     }
 }
 
-class ObservationFavoriteRepository: ObservableObject {
+protocol ObservationFavoriteRepository {
+    func sync()
+    func toggleFavorite(observationUri: URL?, userRemoteId: String)
+    func pushFavorites(favorites: [ObservationFavoriteModel]?) async
+}
+
+class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, ObservableObject {
     @Injected(\.observationFavoriteLocalDataSource)
     var localDataSource: ObservationFavoriteLocalDataSource
     

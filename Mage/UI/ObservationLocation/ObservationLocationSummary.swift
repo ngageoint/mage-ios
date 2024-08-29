@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct ObservationLocationSummary: View {
+    @Injected(\.observationImageRepository)
+    var imageRepository: ObservationImageRepository
+    
     var timestamp: Date?
     var user: String?
     var primaryFieldText: String?
@@ -69,7 +72,7 @@ struct ObservationLocationSummary: View {
                 }
                 Spacer()
                 if let iconPath = iconPath {
-                    Image(uiImage: ObservationImage.imageAtPath(imagePath: iconPath))
+                    Image(uiImage: imageRepository.imageAtPath(imagePath: iconPath))
                         .frame(maxWidth: 48, maxHeight: 48)
                 }
             }

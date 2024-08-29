@@ -99,13 +99,14 @@ class ObservationAnnotationTests: KIFSpec {
                 expect(annotation.accessibilityValue).to(equal("Observation Annotation"))
                 
                 let mapView = MKMapView(forAutoLayout: ());
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
                 
                 let annotationView = annotation.viewForAnnotation(on: mapView, scheme: MAGEScheme.scheme());
                 expect(annotationView).toNot(beNil());
                 expect(annotationView.accessibilityLabel).to(equal("Observation"))
                 expect(annotationView.accessibilityValue).to(equal("Observation"))
                 expect(annotationView.displayPriority).to(equal(MKFeatureDisplayPriority.required))
-                expect(annotationView.image).to(equal(ObservationImage.image(observation: observation)))
+                expect(annotationView.image).to(equal(imageRepository.image(observation: observation)))
                 expect(annotationView.isEnabled).to(beTrue());
                 expect(annotationView.centerOffset.x).to(equal(0))
                 expect(annotationView.centerOffset.y).to(beCloseTo(-23.86363))
@@ -142,13 +143,14 @@ class ObservationAnnotationTests: KIFSpec {
                 expect(annotation.accessibilityValue).to(equal("Observation Annotation"))
                 
                 let mapView = MKMapView(forAutoLayout: ());
-                
+                let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+
                 let annotationView = annotation.viewForAnnotation(on: mapView, scheme: MAGEScheme.scheme());
                 expect(annotationView).toNot(beNil());
                 expect(annotationView.accessibilityLabel).to(equal("Observation"))
                 expect(annotationView.accessibilityValue).to(equal("Observation"))
                 expect(annotationView.displayPriority).to(equal(MKFeatureDisplayPriority.required))
-                expect(annotationView.image).to(equal(ObservationImage.image(observation: observation)))
+                expect(annotationView.image).to(equal(imageRepository.image(observation: observation)))
                 expect(annotationView.isEnabled).to(beTrue());
                 expect(annotationView.centerOffset.x).to(equal(0))
                 expect(annotationView.centerOffset.y).to(beCloseTo(-23.86363))

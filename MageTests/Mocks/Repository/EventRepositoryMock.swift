@@ -14,7 +14,7 @@ import Combine
 class EventRepositoryMock: EventRepository {
     var events: [EventModel] = []
     
-    override func getEvent(eventId: NSNumber) -> EventModel? {
+    func getEvent(eventId: NSNumber) -> EventModel? {
         events.first { event in
             event.remoteId == eventId
         }

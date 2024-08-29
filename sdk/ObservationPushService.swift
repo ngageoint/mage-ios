@@ -18,6 +18,7 @@ public class ObservationPushService: NSObject {
     var observationFavoriteRepository: ObservationFavoriteRepository
     
     public static let ObservationErrorStatusCode = "errorStatusCode"
+    // TODO: why do both of these exist?
     public static let ObservationErrorDescription = "errorDescription"
     public static let ObservationErrorMessage = "errorMessage"
     

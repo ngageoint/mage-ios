@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct ObservationLocationRepositoryProviderKey: InjectionKey {
-    static var currentValue: ObservationLocationRepository = ObservationLocationRepository()
+    static var currentValue: ObservationLocationRepository = ObservationLocationRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,7 +20,13 @@ extension InjectedValues {
     }
 }
 
-class ObservationLocationRepository: ObservableObject {
+protocol ObservationLocationRepository {
+    func getObservationLocation(observationLocationUri: URL?) async -> ObservationMapItem?
+    func observeObservationLocation(observationLocationUri: URL?) -> AnyPublisher<ObservationMapItem, Never>?
+    func getObservationMapItems(observationUri: URL, formId: String, fieldName: String) async -> [ObservationMapItem]?
+}
+
+class ObservationLocationRepositoryImpl: ObservableObject, ObservationLocationRepository {
     @Injected(\.observationLocationLocalDataSource)
     var localDataSource: ObservationLocationLocalDataSource
     

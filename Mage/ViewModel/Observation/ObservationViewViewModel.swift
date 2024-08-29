@@ -29,6 +29,9 @@ class ObservationViewViewModel: ObservableObject {
     @Injected(\.attachmentRepository)
     var attachmentRepository: AttachmentRepository
     
+    @Injected(\.observationImageRepository)
+    var imageRepository: ObservationImageRepository
+    
     @Published
     var event: EventModel?
     
@@ -39,7 +42,7 @@ class ObservationViewViewModel: ObservableObject {
     var user: UserModel?
     
     var primaryObservationForm: [AnyHashable : Any]?
-    var primaryEventForm: Form?
+    var primaryEventForm: FormModel?
     
     @Published
     var observationForms: [ObservationFormModel]?
@@ -61,7 +64,7 @@ class ObservationViewViewModel: ObservableObject {
     
     var iconPath: String? {
         if let eventRemoteId = event?.remoteId, let formid = primaryEventForm?.formId {
-            return ObservationImage.imageName(eventId: Int64(truncating: eventRemoteId), formId: Int64(truncating: formid), primaryFieldText: primaryFieldText, secondaryFieldText: secondaryFieldText)
+            return imageRepository.imageName(eventId: Int64(truncating: eventRemoteId), formId: formid, primaryFieldText: primaryFieldText, secondaryFieldText: secondaryFieldText)
         }
         return nil
     }
@@ -98,36 +101,42 @@ class ObservationViewViewModel: ObservableObject {
     
     init(uri: URL) {
         $observationModel.sink { [weak self] observationModel in
-            guard let observationModel = observationModel else {
-                return
+            Task { [weak self] in
+                await self?.setupModels()
             }
-            Task { @MainActor [weak self] in
-                if let eventId = observationModel.eventId {
-                    self?.event = self?.eventRepository.getEvent(eventId: eventId as NSNumber)
-                }
-                if let userId = observationModel.userId {
-                    self?.user = await self?.userRepository.getUser(userUri: userId)
-                }
-                self?.currentUserCanEdit = self?.currentUser?.hasEditPermissions ?? false
-                if let eventId = observationModel.eventId,
-                   let currentUserUri = self?.currentUser?.userId
-                {
-                    self?.currentUserCanUpdateImportant = await self?.userRepository.canUserUpdateImportant(
-                        eventId: eventId as NSNumber,
-                        userUri: currentUserUri
-                    ) ?? false
-                }
-            }
-            
-            self?.setupFavorites(observationModel: observationModel)
-            self?.setupImportant(observationModel: observationModel)
-            self?.setupForms(observationModel: observationModel)
         }.store(in: &cancellables)
         
         repository.observeObservation(observationUri: uri)?
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .assign(to: &$observationModel)
+    }
+    
+    @MainActor
+    func setupModels() async {
+        guard let observationModel = observationModel else {
+            return
+        }
+        
+        if let eventId = observationModel.eventId {
+            self.event = self.eventRepository.getEvent(eventId: eventId as NSNumber)
+        }
+        if let userId = observationModel.userId {
+            self.user = await self.userRepository.getUser(userUri: userId)
+        }
+        self.currentUserCanEdit = self.currentUser?.hasEditPermissions ?? false
+        if let eventId = observationModel.eventId,
+           let currentUserUri = self.currentUser?.userId
+        {
+            self.currentUserCanUpdateImportant = await self.userRepository.canUserUpdateImportant(
+                eventId: eventId as NSNumber,
+                userUri: currentUserUri
+            )
+        }
+        
+        self.setupFavorites(observationModel: observationModel)
+        self.setupImportant(observationModel: observationModel)
+        self.setupForms(observationModel: observationModel)
     }
     
     func makeImportant() {
@@ -234,76 +243,5 @@ class ObservationViewViewModel: ObservableObject {
             }
             return nil;
         }
-    }
-}
-
-class ObservationListViewModel: ObservationViewViewModel {
-    var attachments: [AttachmentModel]?
-    
-    var orderedAttachments: [AttachmentModel]? {
-        var observationForms: [[String: Any]] = []
-        if let properties = observationModel?.properties as? [String: Any] {
-            if (properties.keys.contains("forms")) {
-                observationForms = properties["forms"] as! [[String: Any]];
-            }
-        }
-        
-        return attachments?.sorted(by: { first, second in
-            // return true if first comes before second, false otherwise
-            
-            if first.formId == second.formId {
-                // if they are in the same form, sort on field
-                if first.fieldName == second.fieldName {
-                    // if they are the same field return the order comparison unless they are both zero, then return the lat modified comparison
-                    let firstOrder = first.order.intValue
-                    let secondOrder = second.order.intValue
-                    return (firstOrder != secondOrder) ? (firstOrder < secondOrder) : (first.lastModified ?? Date()) < (second.lastModified ?? Date())
-                } else {
-                    // return the first field
-                    let form = observationForms.first { form in
-                        return form[FormKey.id.key] as? String == first.formId
-                    }
-                    
-                    let firstFieldIndex = (form?[FormKey.fields.key] as? [[String: Any]])?.firstIndex { form in
-                        return form[FieldKey.name.key] as? String == first.fieldName
-                    } ?? 0
-                    let secondFieldIndex = (form?[FormKey.fields.key] as? [[String: Any]])?.firstIndex { form in
-                        return form[FieldKey.name.key] as? String == second.fieldName
-                    } ?? 0
-                    return firstFieldIndex < secondFieldIndex
-                }
-            } else {
-                // different forms, sort on form order
-                let firstFormIndex = observationForms.firstIndex { form in
-                    return form[FormKey.id.key] as? String == first.formId
-                } ?? 0
-                let secondFormIndex = observationForms.firstIndex { form in
-                    return form[FormKey.id.key] as? String == second.formId
-                } ?? 0
-                return firstFormIndex < secondFormIndex
-            }
-        })
-    }
-    
-    override init(uri: URL) {
-        super.init(uri: uri)
-        
-        $observationModel.sink { [weak self] observationModel in
-            guard let observationModel = observationModel else {
-                return
-            }
-            Task { @MainActor [weak self] in
-                self?.attachments = await self?.attachmentRepository.getAttachments(
-                    observationUri:observationModel.observationId,
-                    observationFormId: nil,
-                    fieldName: nil
-                )
-            }
-        }
-        .store(in: &cancellables)
-    }
-    
-    func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel) {
-        attachmentRepository.appendAttachmentViewRoute(router: router, attachment: attachment)
     }
 }

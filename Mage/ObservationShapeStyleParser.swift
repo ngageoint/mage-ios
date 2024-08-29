@@ -36,7 +36,7 @@
     ) -> ObservationShapeStyle {
         let style = ObservationShapeStyle()
         
-        var form: Form?
+        var form: FormModel?
         if let primaryObservationForm = observation.primaryObservationForm, 
             let formId = primaryObservationForm[EventKey.formId.key] as? NSNumber
         {

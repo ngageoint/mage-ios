@@ -128,6 +128,4 @@ final class ObservationStaticLocalDataSource: ObservationLocalDataSource {
             URIItem.listItem(userId)
         }).setFailureType(to: Error.self))
     }
-    
-    
 }

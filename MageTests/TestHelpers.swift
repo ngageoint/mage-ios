@@ -66,6 +66,83 @@ extension XCTestCase {
 
 class TestHelpers {
     
+    public static func defaultObservationInjection() {
+        InjectedValues[\.observationRepository] = ObservationRepositoryImpl()
+        InjectedValues[\.observationLocalDataSource] = ObservationCoreDataDataSource()
+        InjectedValues[\.observationRemoteDataSource] = ObservationRemoteDataSource()
+    }
+    
+    public static func defaultImportantInjection() {
+        InjectedValues[\.observationImportantRepository] = ObservationImportantRepositoryImpl()
+        InjectedValues[\.observationImportantLocalDataSource] = ObservationImportantCoreDataDataSource()
+        InjectedValues[\.observationImportantRemoteDataSource] = ObservationImportantRemoteDataSource()
+    }
+    
+    public static func defaultObservationFavoriteInjection() {
+        InjectedValues[\.observationFavoriteRepository] = ObservationFavoriteRepositoryImpl()
+        InjectedValues[\.observationFavoriteLocalDataSource] = ObservationFavoriteCoreDataDataSource()
+        InjectedValues[\.observationFavoriteRemoteDataSource] = ObservationFavoriteRemoteDataSource()
+    }
+    
+    public static func defaultEventInjection() {
+        InjectedValues[\.eventRepository] = EventRepositoryImpl()
+        InjectedValues[\.eventLocalDataSource] = EventCoreDataDataSource()
+    }
+    
+    public static func defaultUserInjection() {
+        InjectedValues[\.userRepository] = UserRepositoryImpl()
+        InjectedValues[\.userLocalDataSource] = UserCoreDataDataSource()
+        InjectedValues[\.userRemoteDataSource] = UserRemoteDataSource()
+    }
+    
+    public static func defaultFormInjection() {
+        InjectedValues[\.formRepository] = FormRepositoryImpl()
+        InjectedValues[\.formLocalDataSource] = FormCoreDataDataSource()
+    }
+    
+    public static func defaultAttachmentInjection() {
+        InjectedValues[\.attachmentRepository] = AttachmentRepositoryImpl()
+        InjectedValues[\.attachmentLocalDataSource] = AttachmentCoreDataDataSource()
+    }
+    
+    public static func defaultRoleInjection() {
+        InjectedValues[\.roleRepository] = RoleRepositoryImpl()
+        InjectedValues[\.roleLocalDataSource] = RoleCoreDataDataSource()
+    }
+    
+    public static func defaultLocationInjection() {
+        InjectedValues[\.locationRepository] = LocationRepositoryImpl()
+        InjectedValues[\.locationLocalDataSource] = LocationCoreDataDataSource()
+    }
+    
+    public static func defaultObservationImageInjection() {
+        InjectedValues[\.observationImageRepository] = ObservationImageRepositoryImpl()
+    }
+    
+    public static func defaultStaticLayerInjection() {
+        InjectedValues[\.staticLayerRepository] = StaticLayerRepository()
+        InjectedValues[\.staticLayerLocalDataSource] = StaticLayerCoreDataDataSource()
+    }
+    
+    public static func defaultGeoPackageInjection() {
+        InjectedValues[\.geoPackageRepository] = GeoPackageRepositoryImpl()
+    }
+    
+    public static func defaultFeedItemInjection() {
+        InjectedValues[\.feedItemRepository] = FeedItemRepositoryImpl()
+        InjectedValues[\.feedItemLocalDataSource] = FeedItemStaticLocalDataSource()
+    }
+    
+    public static func defaultObservationLocationInjection() {
+        InjectedValues[\.observationLocationRepository] = ObservationLocationRepositoryImpl()
+        InjectedValues[\.observationLocationLocalDataSource] = ObservationLocationCoreDataDataSource()
+    }
+    
+    public static func defaultObservationIconInjection() {
+        InjectedValues[\.observationIconRepository] = ObservationIconRepository()
+        InjectedValues[\.observationIconLocalDataSource] = ObservationIconCoreDataDataSource()
+    }
+    
     public static func getKeyWindowVisible() -> UIWindow {
         var window: UIWindow;
         if (UIApplication.shared.windows.count == 0) {
