@@ -11,28 +11,6 @@ import SwiftUI
 import Combine
 import MaterialViews
 
-class FeedItemBottomSheeViewModel: ObservableObject {
-    @Injected(\.feedItemRepository)
-    var repository: FeedItemRepository
-    
-    var disposables = Set<AnyCancellable>()
-    
-    @Published
-    var feedItem: FeedItemModel?
-    
-    var feedItemUri: URL?
-    
-    init(feedItemUri: URL?) {
-        self.feedItemUri = feedItemUri
-        repository.observeFeedItem(feedItemUri: feedItemUri)?
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] updatedObject in
-                self?.feedItem = updatedObject
-            })
-            .store(in: &disposables)
-    }
-}
-
 struct FeedItemBottomSheet: View {
     @ObservedObject
     var viewModel: FeedItemBottomSheeViewModel

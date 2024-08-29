@@ -2,31 +2,12 @@
 //  GeoPackageFeatureBottomSheetViewModel.swift
 //  MAGE
 //
-//  Created by Dan Barela on 7/24/24.
+//  Created by Dan Barela on 8/29/24.
 //  Copyright © 2024 National Geospatial Intelligence Agency. All rights reserved.
 //
 
 import Foundation
 import SwiftUI
-
-struct GeoPackageMediaRow: Identifiable, Hashable {
-    let id: String = UUID().uuidString
-    
-    let title: String
-    let image: UIImage
-}
-
-struct GeoPackageRelation: Identifiable, Hashable {
-    let id: String = UUID().uuidString
-    let properties: [GeoPackageProperty]
-    let medias: [GeoPackageMediaRow]
-}
-
-struct GeoPackageProperty: Identifiable, Hashable {
-    let id: String = UUID().uuidString
-    let name: String
-    let value: String?
-}
 
 class GeoPackageFeatureBottomSheetViewModel: ObservableObject {
     @Published var itemKey: String
