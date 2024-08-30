@@ -23,8 +23,13 @@ class FeedServiceTests: KIFSpec {
         xdescribe("FeedServiceTests") {
             
             var isSetup = false;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (!isSetup) {
                     ImageCache.default.clearMemoryCache();
                     ImageCache.default.clearDiskCache();
@@ -40,10 +45,12 @@ class FeedServiceTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 FeedService.shared.stop();
                 expect(FeedService.shared.isStopped()).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "Feed Service Stopped");
                 HTTPStubs.removeAllStubs();

@@ -31,11 +31,16 @@ class EventChooserControllerTests : KIFSpec {
         
         xdescribe("EventChooserControllerTests") {
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             var window: UIWindow?;
             var view: EventChooserController?;
             var navigationController: UINavigationController?;
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
                 
                 navigationController = UINavigationController();
@@ -45,6 +50,8 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 navigationController?.viewControllers = [];
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
                 window?.rootViewController = nil;
@@ -77,9 +84,9 @@ class EventChooserControllerTests : KIFSpec {
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
@@ -98,7 +105,7 @@ class EventChooserControllerTests : KIFSpec {
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 
                 view?.eventsFetchedFromServer()
@@ -116,7 +123,7 @@ class EventChooserControllerTests : KIFSpec {
                 navigationController?.pushViewController(view!, animated: false)
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 
                 view?.eventsFetchedFromServer()
@@ -128,9 +135,9 @@ class EventChooserControllerTests : KIFSpec {
             it("Should load the event chooser with events then get an extra one") {
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 UserDefaults.standard.currentUserId = "userabc"
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
                 
                 let delegate = MockEventSelectionDelegate()
@@ -140,7 +147,7 @@ class EventChooserControllerTests : KIFSpec {
                 view?.eventsFetchedFromServer()
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
                 
-                MageCoreDataFixtures.addEvent(remoteId: 3, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 
                 view?.eventsFetchedFromServer()
@@ -151,7 +158,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one event not recent") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
@@ -169,7 +176,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one event recent") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
@@ -187,7 +194,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one event not recent but not pick it because showEventChooserOnce was set") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
@@ -205,7 +212,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one event recent but not pick it because showEventChooserOnce was set") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
@@ -225,8 +232,8 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one recent and one other event") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
@@ -248,8 +255,8 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one recent and one other event refreshing taking too long") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
@@ -276,8 +283,8 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should load the event chooser with one recent and one other event") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", description: "Lorem ipsum dolor sit amet, no eos nonumes temporibus vituperatoribus, usu oporteat inimicus ex. Sint inimicus cum eu, libris melius oblique ad mel, et libris accusamus vix. Vel ut dolor aperiam debitis. Ius at diam ferri option, eum solet blandit deseruisse ea, eu ridens periculis sed. Nonumy utamur mel ut, eos eu nulla populo, sea habeo veniam tempor in. Ius et eius ancillae assueverit, sed cu probo putent labores, no atqui tacimates invenire duo. No usu probo repudiandae, quando cetero nominati quo et.", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", description: "Lorem ipsum dolor sit amet, no eos nonumes temporibus vituperatoribus, usu oporteat inimicus ex. Sint inimicus cum eu, libris melius oblique ad mel, et libris accusamus vix. Vel ut dolor aperiam debitis. Ius at diam ferri option, eum solet blandit deseruisse ea, eu ridens periculis sed. Nonumy utamur mel ut, eos eu nulla populo, sea habeo veniam tempor in. Ius et eius ancillae assueverit, sed cu probo putent labores, no atqui tacimates invenire duo. No usu probo repudiandae, quando cetero nominati quo et.", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
@@ -328,9 +335,9 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should not allow tapping an event the user is not in because it was removed after the view loaded") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
@@ -356,9 +363,9 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("should display all events the user is in and allow searching") {
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addEvent(remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")

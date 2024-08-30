@@ -37,7 +37,7 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
     var cancellables: Set<AnyCancellable> = Set()
     
     init() {
-        localDataSource.pushSubject?.sink(receiveValue: { favorite in
+        localDataSource.pushSubject?.sink(receiveValue: { [weak self] favorite in
             Task { [weak self] in
                 await self?.pushFavorites(favorites: [favorite])
             }

@@ -40,7 +40,8 @@ class FeedItemsViewControllerTests: KIFSpec {
         xdescribe("FeedItemsViewController no timestamp") {
 //            Nimble_Snapshots.setNimbleTolerance(0);
                 
-                
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
                 var controller: FeedItemsViewController!
                 var window: UIWindow!;
             
@@ -50,9 +51,14 @@ class FeedItemsViewControllerTests: KIFSpec {
                     controller = nil;
                     HTTPStubs.removeAllStubs();
                     TestHelpers.clearAndSetUpStack();
+                    InjectedValues[\.nsManagedObjectContext] = nil
+                    coreDataStack!.reset()
                 }
             
                 beforeEach {
+                    coreDataStack = TestCoreDataStack()
+                    context = coreDataStack!.persistentContainer.newBackgroundContext()
+                    InjectedValues[\.nsManagedObjectContext] = context
                     ImageCache.default.clearMemoryCache();
                     ImageCache.default.clearDiskCache();
                     
@@ -71,7 +77,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                     UserDefaults.standard.locationDisplay = .latlng;
                     Server.setCurrentEventId(1);
                     
-                    MageCoreDataFixtures.addEvent();
+                    MageCoreDataFixtures.addEvent(context: context);
                     MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary");
                 }
                 
@@ -146,15 +152,21 @@ class FeedItemsViewControllerTests: KIFSpec {
         
         xdescribe("FeedItemsViewController with timestamp") {
             
+            var controller: FeedItemsViewController!
+            var window: UIWindow!;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             afterEach {
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
             }
-            
-            var controller: FeedItemsViewController!
-            var window: UIWindow!;
-            
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
@@ -173,7 +185,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 UserDefaults.standard.locationDisplay = .latlng;
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp")
             }
             

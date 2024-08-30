@@ -19,7 +19,13 @@ class LocationFetchServiceTests: KIFSpec {
     override func spec() {
         xdescribe("LocationFetchService Tests") {
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 LocationFetchService.singleton.stop();
 
                 var cleared = false;
@@ -45,7 +51,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
@@ -59,6 +65,8 @@ class LocationFetchServiceTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 LocationFetchService.singleton.stop();
                 expect(LocationFetchService.singleton.started).toEventually(beFalse());
                 NSManagedObject.mr_setDefaultBatchSize(20);
@@ -115,7 +123,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 1
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -143,7 +151,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.userFetchFrequency = 1
                 // 2 is none
                 UserDefaults.standard.set(2, forKey: "locationFetchNetworkOption")
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -170,7 +178,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 1
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -197,7 +205,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 1
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -226,7 +234,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 2
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 expect(LocationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();

@@ -20,8 +20,13 @@ class AttachmentPushServiceTests: QuickSpec {
         xdescribe("AttachmentPushServiceTests") {
             
             var stackSetup = false;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (!stackSetup) {
                     TestHelpers.clearAndSetUpStack();
                     stackSetup = true;
@@ -35,13 +40,15 @@ class AttachmentPushServiceTests: QuickSpec {
                 ObservationPushService.singleton.stop();
                 HTTPStubs.removeAllStubs();
                 MageCoreDataFixtures.clearAllData();
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
             }
 
             xit("should save an observation with an attachment") {
                 var idStubCalled = false;
                 var createStubCalled = false;
 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "attachmentForm")
                 
                 stub(condition: isMethodPOST() &&
                         isHost("magetest") &&

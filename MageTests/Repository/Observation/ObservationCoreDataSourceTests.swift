@@ -12,13 +12,14 @@ import CoreData
 @testable import MAGE
 
 final class ObservationCoreDataSourceTests: XCTestCase {
+    
+    var coreDataStack: TestCoreDataStack?
+    var context: NSManagedObjectContext?
 
     override func setUp() {
-        var cleared = false;
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return }
+        coreDataStack = TestCoreDataStack()
+        context = coreDataStack!.persistentContainer.newBackgroundContext()
+        InjectedValues[\.nsManagedObjectContext] = context
         
 //        while (!cleared) {
 //            let clearMap = TestHelpers.clearAndSetUpStack()
@@ -58,12 +59,14 @@ final class ObservationCoreDataSourceTests: XCTestCase {
     }
 
     override func tearDown() {
+        InjectedValues[\.nsManagedObjectContext] = nil
+        coreDataStack!.reset()
     }
 
     func xtestGetObservationMapItemsWithBounds() async {
         Server.setCurrentEventId(1)
         TimeFilter.setObservation(.all)
-        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
+        MageCoreDataFixtures.addEvent(context: context!, remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
 
         let url = Bundle(for: ObservationTests.self).url(forResource: "test_marker", withExtension: "png")!
 

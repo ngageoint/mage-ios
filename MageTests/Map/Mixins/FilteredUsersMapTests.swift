@@ -35,6 +35,8 @@ extension FilteredUsersMapTestImpl : MKMapViewDelegate {
 class FilteredUsersMapTests: KIFSpec {
     
     override func spec() {
+        var coreDataStack: TestCoreDataStack?
+        var context: NSManagedObjectContext!
         
         xdescribe("FilteredUsersMapTests") {
             var navController: UINavigationController!
@@ -47,7 +49,9 @@ class FilteredUsersMapTests: KIFSpec {
             describe("show user") {
                 
                 beforeEach {
-                    
+                    coreDataStack = TestCoreDataStack()
+                    context = coreDataStack!.persistentContainer.newBackgroundContext()
+                    InjectedValues[\.nsManagedObjectContext] = context
                     if (navController != nil) {
                         waitUntil { done in
                             navController.dismiss(animated: false, completion: {
@@ -71,7 +75,7 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(User.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "User still exist in root");
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     let user = MageCoreDataFixtures.addUser(userId: "userabc")
                     MageCoreDataFixtures.addUser(userId: "userdef")
                     MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -104,6 +108,8 @@ class FilteredUsersMapTests: KIFSpec {
                 }
                 
                 afterEach {
+                    InjectedValues[\.nsManagedObjectContext] = nil
+                    coreDataStack!.reset()
                     mixin = nil
                     testimpl = nil
                     
@@ -146,7 +152,9 @@ class FilteredUsersMapTests: KIFSpec {
             describe("show all users") {
                 
                 beforeEach {
-                    
+                    coreDataStack = TestCoreDataStack()
+                    context = coreDataStack!.persistentContainer.newBackgroundContext()
+                    InjectedValues[\.nsManagedObjectContext] = context
                     if (navController != nil) {
                         waitUntil { done in
                             navController.dismiss(animated: false, completion: {
@@ -170,7 +178,7 @@ class FilteredUsersMapTests: KIFSpec {
                     expect(User.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "User still exist in root");
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     MageCoreDataFixtures.addUser(userId: "userabc")
                     MageCoreDataFixtures.addUser(userId: "userdef")
                     MageCoreDataFixtures.addUser(userId: "userxyz")
@@ -202,6 +210,8 @@ class FilteredUsersMapTests: KIFSpec {
                 }
                 
                 afterEach {
+                    InjectedValues[\.nsManagedObjectContext] = nil
+                    coreDataStack!.reset()
                     mixin = nil
                     testimpl = nil
                     

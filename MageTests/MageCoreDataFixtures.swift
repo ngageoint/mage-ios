@@ -361,50 +361,51 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addEvent(remoteId: NSNumber = 1, name: String = "Test Event", description: String = "Test event description", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
+    public static func addEvent(context: NSManagedObjectContext, remoteId: NSNumber = 1, name: String = "Test Event", description: String = "Test event description", formsJsonFile: String = "oneForm", maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
         let jsonDictionary = parseJsonFile(jsonFile: formsJsonFile, forceArray: true)
         
-        MageCoreDataFixtures.addEventFromJson(remoteId: remoteId, name: name, description: description, formsJson: jsonDictionary as! [[AnyHashable : Any]], maxObservationForms: maxObservationForms, minObservationForms: minObservationForms, completion: completion);
+        MageCoreDataFixtures.addEventFromJson(context: context, remoteId: remoteId, name: name, description: description, formsJson: jsonDictionary as! [[AnyHashable : Any]], maxObservationForms: maxObservationForms, minObservationForms: minObservationForms, completion: completion);
     }
     
-    public static func addEventFromJson(remoteId: NSNumber = 1, name: String = "Test Event", description: String = "Test event description", formsJson: [[AnyHashable: Any]], maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
+    public static func addEventFromJson(context: NSManagedObjectContext, remoteId: NSNumber = 1, name: String = "Test Event", description: String = "Test event description", formsJson: [[AnyHashable: Any]], maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
 
         if (completion == nil) {
-            MagicalRecord.save(blockAndWait:{ (localContext: NSManagedObjectContext) in
-                if let e: Event = Event.mr_createEntity(in: localContext) {
-                    e.name = name;
-                    e.remoteId = remoteId;
-                    e.eventDescription = description;
-                    e.maxObservationForms = maxObservationForms;
-                    e.minObservationForms = minObservationForms;
-                    let teamJson: [String: Any] = [
-                        "id": "teamid",
-                        "name": "Team Name",
-                        "description": "Team Description"
-                    ]
-                    let team = Team.insert(json: teamJson, context: localContext)!;
-                    e.addToTeams(team);
-                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
-                }
-            })
+            context.performAndWait {
+                let e: Event = Event(context: context)
+                e.name = name;
+                e.remoteId = remoteId;
+                e.eventDescription = description;
+                e.maxObservationForms = maxObservationForms;
+                e.minObservationForms = minObservationForms;
+                let teamJson: [String: Any] = [
+                    "id": "teamid",
+                    "name": "Team Name",
+                    "description": "Team Description"
+                ]
+                let team = Team.insert(json: teamJson, context: context)!;
+                e.addToTeams(team);
+                Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: context)
+                try? context.save()
+            }
         } else {
-            MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                if let e: Event = Event.mr_createEntity(in: localContext) {
-                    e.name = name;
-                    e.remoteId = remoteId;
-                    e.eventDescription = description;
-                    e.maxObservationForms = maxObservationForms;
-                    e.minObservationForms = minObservationForms;
-                    let teamJson: [String: Any] = [
-                        "id": "teamid",
-                        "name": "Team Name",
-                        "description": "Team Description"
-                    ]
-                    let team = Team.insert(json: teamJson, context: localContext)!;
-                    e.addToTeams(team);
-                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
-                }
-            }, completion: completion)
+            fatalError()
+//            MagicalRecord.save({ (localContext: NSManagedObjectContext) in
+//                if let e: Event = Event.mr_createEntity(in: localContext) {
+//                    e.name = name;
+//                    e.remoteId = remoteId;
+//                    e.eventDescription = description;
+//                    e.maxObservationForms = maxObservationForms;
+//                    e.minObservationForms = minObservationForms;
+//                    let teamJson: [String: Any] = [
+//                        "id": "teamid",
+//                        "name": "Team Name",
+//                        "description": "Team Description"
+//                    ]
+//                    let team = Team.insert(json: teamJson, context: localContext)!;
+//                    e.addToTeams(team);
+//                    Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: localContext)
+//                }
+//            }, completion: completion)
         }
     }
     

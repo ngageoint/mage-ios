@@ -21,8 +21,13 @@ class FeedTests: KIFSpec {
         
         xdescribe("FeedTests") {
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
                 let emptyFeeds: [String]? = nil
@@ -31,11 +36,13 @@ class FeedTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                     
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
             }
             
             afterEach {
                 TestHelpers.clearAndSetUpStack();
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
             }
             
             func loadFeedsJson() -> NSArray {

@@ -48,14 +48,20 @@ class AuthenticationCoordinatorTests: KIFSpec {
             var delegate: MockAuthenticationCoordinatorDelegate?;
             var navigationController: UINavigationController?;
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
+//                TestHelpers.clearAndSetUpStack();
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.locationDisplay = .latlng;
                 
-                MageCoreDataFixtures.addEvent()
+                MageCoreDataFixtures.addEvent(context: context)
                 
                 Server.setCurrentEventId(1);
                 
@@ -77,7 +83,9 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 coordinator = nil;
                 delegate = nil;
                 HTTPStubs.removeAllStubs();
-                TestHelpers.clearAndSetUpStack();
+//                TestHelpers.clearAndSetUpStack();
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 
             }
             

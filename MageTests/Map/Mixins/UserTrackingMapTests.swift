@@ -35,12 +35,16 @@ class UserTrackingMapTests: KIFSpec {
             var testimpl: UserTrackingMapTestImpl!
             var mixin: UserTrackingMapMixin!
             var mockCLLocationManager: MockCLLocationManager!
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             var buttonStack: UIStackView!
         
                 
             beforeEach {
-                
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -60,7 +64,7 @@ class UserTrackingMapTests: KIFSpec {
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc";
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -100,6 +104,8 @@ class UserTrackingMapTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 mixin = nil
                 testimpl = nil
                 

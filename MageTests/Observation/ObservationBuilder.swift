@@ -15,9 +15,9 @@ class ObservationBuilder {
     static func createBlankObservation(_ eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
         var observation: Observation!;
         if let safeContext = context {
-            observation = Observation.mr_createEntity(in: safeContext);
+            observation = Observation(context: safeContext)
         } else {
-            observation = Observation.mr_createEntity()!;
+            fatalError()
         }
         observation.eventId = eventId;
         let observationProperties: [String:Any] = [:]
@@ -46,7 +46,7 @@ class ObservationBuilder {
             fatalError("Unable to convert jsonFileName to JSON dictionary")
         }
         
-        let observation = createBlankObservation(eventId);
+        let observation = createBlankObservation(eventId, context: context);
         observation.populate(json: jsonDictionaryObservation);
         return observation;
     }

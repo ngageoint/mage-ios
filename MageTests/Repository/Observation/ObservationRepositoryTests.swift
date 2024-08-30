@@ -12,22 +12,17 @@ import Nimble
 
 @testable import MAGE
 
-final class ObservationRepositoryTests: XCTestCase {
+final class ObservationRepositoryTests: MageInjectionTestCase {
 
-    var cancellables: Set<AnyCancellable> = Set()
     var localDataSource: ObservationStaticLocalDataSource!
     var remoteDataSource: ObservationRemoteDataSourceMock!
 
     override func setUp() {
+        super.setUp()
         localDataSource = ObservationStaticLocalDataSource()
         InjectedValues[\.observationLocalDataSource] = localDataSource
         remoteDataSource = ObservationRemoteDataSourceMock()
         InjectedValues[\.observationRemoteDataSource] = remoteDataSource
-    }
-    
-    override func tearDown() {
-        cancellables.removeAll()
-        TestHelpers.defaultObservationInjection()
     }
     
     func testRefreshPublisher() {

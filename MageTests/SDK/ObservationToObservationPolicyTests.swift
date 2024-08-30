@@ -8,12 +8,146 @@
 
 import Foundation
 import CoreData
+import Combine
 
 @testable import MAGE
 
-final class ObservationToObservationPolicyTests: XCTestCase {
+class MageInjectionTestCase: XCTestCase {
+    var cancellables: Set<AnyCancellable> = Set()
+    
+    override func setUp() {
+        defaultObservationInjection()
+        defaultImportantInjection()
+        defaultObservationFavoriteInjection()
+        defaultEventInjection()
+        defaultUserInjection()
+        defaultFormInjection()
+        defaultAttachmentInjection()
+        defaultRoleInjection()
+        defaultLocationInjection()
+        defaultObservationImageInjection()
+        defaultStaticLayerInjection()
+        defaultGeoPackageInjection()
+        defaultFeedItemInjection()
+        defaultObservationLocationInjection()
+        defaultObservationIconInjection()
+        
+        clearAndSetUpStack()
+    }
+    
+    override func tearDown() {
+        clearAndSetUpStack()
+        cancellables.removeAll()
+    }
+    
+    func clearAndSetUpStack() {
+        TestHelpers.clearDocuments();
+        TestHelpers.clearImageCache();
+        TestHelpers.resetUserDefaults();
+    }
+    
+    func defaultObservationInjection() {
+        InjectedValues[\.observationRepository] = ObservationRepositoryImpl()
+        InjectedValues[\.observationLocalDataSource] = ObservationCoreDataDataSource()
+        InjectedValues[\.observationRemoteDataSource] = ObservationRemoteDataSource()
+    }
+    
+    func defaultImportantInjection() {
+        InjectedValues[\.observationImportantRepository] = ObservationImportantRepositoryImpl()
+        InjectedValues[\.observationImportantLocalDataSource] = ObservationImportantCoreDataDataSource()
+        InjectedValues[\.observationImportantRemoteDataSource] = ObservationImportantRemoteDataSource()
+    }
+    
+    func defaultObservationFavoriteInjection() {
+        InjectedValues[\.observationFavoriteRepository] = ObservationFavoriteRepositoryImpl()
+        InjectedValues[\.observationFavoriteLocalDataSource] = ObservationFavoriteCoreDataDataSource()
+        InjectedValues[\.observationFavoriteRemoteDataSource] = ObservationFavoriteRemoteDataSource()
+    }
+    
+    func defaultEventInjection() {
+        InjectedValues[\.eventRepository] = EventRepositoryImpl()
+        InjectedValues[\.eventLocalDataSource] = EventCoreDataDataSource()
+    }
+    
+    func defaultUserInjection() {
+        InjectedValues[\.userRepository] = UserRepositoryImpl()
+        InjectedValues[\.userLocalDataSource] = UserCoreDataDataSource()
+        InjectedValues[\.userRemoteDataSource] = UserRemoteDataSource()
+    }
+    
+    func defaultFormInjection() {
+        InjectedValues[\.formRepository] = FormRepositoryImpl()
+        InjectedValues[\.formLocalDataSource] = FormCoreDataDataSource()
+    }
+    
+    func defaultAttachmentInjection() {
+        InjectedValues[\.attachmentRepository] = AttachmentRepositoryImpl()
+        InjectedValues[\.attachmentLocalDataSource] = AttachmentCoreDataDataSource()
+    }
+    
+    func defaultRoleInjection() {
+        InjectedValues[\.roleRepository] = RoleRepositoryImpl()
+        InjectedValues[\.roleLocalDataSource] = RoleCoreDataDataSource()
+    }
+    
+    func defaultLocationInjection() {
+        InjectedValues[\.locationRepository] = LocationRepositoryImpl()
+        InjectedValues[\.locationLocalDataSource] = LocationCoreDataDataSource()
+    }
+    
+    func defaultObservationImageInjection() {
+        InjectedValues[\.observationImageRepository] = ObservationImageRepositoryImpl()
+    }
+    
+    func defaultStaticLayerInjection() {
+        InjectedValues[\.staticLayerRepository] = StaticLayerRepository()
+        InjectedValues[\.staticLayerLocalDataSource] = StaticLayerCoreDataDataSource()
+    }
+    
+    func defaultGeoPackageInjection() {
+        if !(InjectedValues[\.geoPackageRepository] is GeoPackageRepositoryImpl) {
+            InjectedValues[\.geoPackageRepository] = GeoPackageRepositoryImpl()
+        }
+    }
+    
+    func defaultFeedItemInjection() {
+        InjectedValues[\.feedItemRepository] = FeedItemRepositoryImpl()
+        InjectedValues[\.feedItemLocalDataSource] = FeedItemStaticLocalDataSource()
+    }
+    
+    func defaultObservationLocationInjection() {
+        InjectedValues[\.observationLocationRepository] = ObservationLocationRepositoryImpl()
+        InjectedValues[\.observationLocationLocalDataSource] = ObservationLocationCoreDataDataSource()
+    }
+    
+    func defaultObservationIconInjection() {
+        InjectedValues[\.observationIconRepository] = ObservationIconRepository()
+        InjectedValues[\.observationIconLocalDataSource] = ObservationIconCoreDataDataSource()
+    }
+}
+
+class MageCoreDataTestCase: MageInjectionTestCase {
+    var coreDataStack: TestCoreDataStack?
+    var context: NSManagedObjectContext!
+    
+    override func setUp() {
+        super.setUp()
+        coreDataStack = TestCoreDataStack()
+        context = coreDataStack!.persistentContainer.newBackgroundContext()
+        InjectedValues[\.nsManagedObjectContext] = context
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        InjectedValues[\.nsManagedObjectContext] = nil
+        coreDataStack!.reset()
+    }
+}
+
+final class ObservationToObservationPolicyTests: MageCoreDataTestCase {
 
     override func setUp() {
+        super.setUp()
         var cleared = false;
 //        while (!cleared) {
 //            let clearMap = TestHelpers.clearAndSetUpStack()
@@ -53,6 +187,7 @@ final class ObservationToObservationPolicyTests: XCTestCase {
     }
 
     override func tearDown() {
+        super.tearDown()
     }
 
     private let storeType = NSSQLiteStoreType
@@ -280,7 +415,7 @@ final class ObservationToObservationPolicyTests: XCTestCase {
 //        NSManagedObjectContext.mr_initializeDefaultContext(with: store)
 
         // insert observations
-        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
+        MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
 
         let url = Bundle(for: ObservationTests.self).url(forResource: "test_marker", withExtension: "png")!
 

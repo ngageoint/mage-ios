@@ -39,9 +39,16 @@ class CanReportLocationTests: KIFSpec {
             
             var buttonStack: UIStackView!
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             describe("User not in the event") {
                 
                 beforeEach {
+                    
+                    coreDataStack = TestCoreDataStack()
+                    context = coreDataStack!.persistentContainer.newBackgroundContext()
+                    InjectedValues[\.nsManagedObjectContext] = context
                     
                     if (navController != nil) {
                         waitUntil { done in
@@ -50,7 +57,7 @@ class CanReportLocationTests: KIFSpec {
                             });
                         }
                     }
-                    TestHelpers.clearAndSetUpStack();
+//                    TestHelpers.clearAndSetUpStack();
                     if (view != nil) {
                         for subview in view.subviews {
                             subview.removeFromSuperview();
@@ -62,7 +69,7 @@ class CanReportLocationTests: KIFSpec {
                     
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     MageCoreDataFixtures.addUser(userId: "userabc")
                     UserDefaults.standard.currentUserId = "userabc";
                     
@@ -123,7 +130,9 @@ class CanReportLocationTests: KIFSpec {
                     navController = nil;
                     view = nil;
                     window = nil;
-                    TestHelpers.clearAndSetUpStack();
+//                    TestHelpers.clearAndSetUpStack();
+                    InjectedValues[\.nsManagedObjectContext] = nil
+                    coreDataStack!.reset()
                     HTTPStubs.removeAllStubs()
                 }
                 it("initialize the CanCreateObservation and press the report location button location authorized") {
@@ -180,7 +189,10 @@ class CanReportLocationTests: KIFSpec {
                             });
                         }
                     }
-                    TestHelpers.clearAndSetUpStack();
+                    coreDataStack = TestCoreDataStack()
+                    context = coreDataStack!.persistentContainer.newBackgroundContext()
+                    InjectedValues[\.nsManagedObjectContext] = context
+//                    TestHelpers.clearAndSetUpStack();
                     if (view != nil) {
                         for subview in view.subviews {
                             subview.removeFromSuperview();
@@ -192,7 +204,7 @@ class CanReportLocationTests: KIFSpec {
                     
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     MageCoreDataFixtures.addUser(userId: "userabc")
                     UserDefaults.standard.currentUserId = "userabc";
                     MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -253,7 +265,9 @@ class CanReportLocationTests: KIFSpec {
                     navController = nil;
                     view = nil;
                     window = nil;
-                    TestHelpers.clearAndSetUpStack();
+//                    TestHelpers.clearAndSetUpStack();
+                    InjectedValues[\.nsManagedObjectContext] = nil
+                    coreDataStack!.reset()
                     HTTPStubs.removeAllStubs()
                 }
                 

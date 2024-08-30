@@ -10,23 +10,8 @@ import XCTest
 
 @testable import MAGE
 
-final class ObservationModelTests: XCTestCase {
+final class ObservationModelTests: MageCoreDataTestCase {
     
-    var coreDataStack: TestCoreDataStack?
-    var context: NSManagedObjectContext?
-
-    override func setUp() {
-        coreDataStack = TestCoreDataStack()
-        context = coreDataStack!.persistentContainer.newBackgroundContext()
-        InjectedValues[\.nsManagedObjectContext] = context
-        TestHelpers.defaultObservationInjection()
-    }
-    
-    override func tearDown() {
-        InjectedValues[\.nsManagedObjectContext] = nil
-        coreDataStack!.reset()
-    }
-
     func testCreateWithErrorMessage() {
         guard let context = context else {
             XCTFail("No Managed Object Context")

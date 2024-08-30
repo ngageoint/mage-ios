@@ -11,28 +11,19 @@ import Combine
 
 @testable import MAGE
 
-final class BottomSheetRepositoryTests: XCTestCase {
+final class BottomSheetRepositoryTests: MageInjectionTestCase {
     
     var userRepository = UserRepositoryMock()
     var feedItemRepository = FeedItemRepositoryMock()
     var observationLocationRepository = ObservationLocationRepositoryMock()
     var geoPackageRepositoryMock = GeoPackageRepositoryMock()
-    
-    var cancellables: Set<AnyCancellable> = Set()
-    
+        
     override func setUp() {
+        super.setUp()
         InjectedValues[\.observationLocationRepository] = observationLocationRepository
         InjectedValues[\.userRepository] = userRepository
         InjectedValues[\.feedItemRepository] = feedItemRepository
         InjectedValues[\.geoPackageRepository] = geoPackageRepositoryMock
-    }
-    
-    override func tearDown() {
-        cancellables.removeAll()
-        TestHelpers.defaultObservationLocationInjection()
-        TestHelpers.defaultUserInjection()
-        TestHelpers.defaultFeedItemInjection()
-        TestHelpers.defaultGeoPackageInjection()
     }
 
     func testSettingItemKey() {

@@ -24,8 +24,13 @@ class MapSettingsTests: KIFSpec {
             var mapSettings: MapSettings!
             var window: UIWindow!;
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
                 MageCoreDataFixtures.quietLogging();
                 
@@ -37,10 +42,12 @@ class MapSettingsTests: KIFSpec {
                 
                 window = TestHelpers.getKeyWindowVisible();
                     
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 FeedService.shared.stop();
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();

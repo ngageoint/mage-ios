@@ -21,8 +21,14 @@ class MageTests: KIFSpec {
         
         xdescribe("MageTests") {
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+//                TestHelpers.clearAndSetUpStack();
                 LocationService.singleton().stop();
                 LocationFetchService.singleton.stop();
                 ObservationFetchService.singleton.stop();
@@ -31,8 +37,10 @@ class MageTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 HTTPStubs.removeAllStubs();
-                TestHelpers.clearAndSetUpStack();
+//                TestHelpers.clearAndSetUpStack();
                 LocationService.singleton().stop();
                 LocationFetchService.singleton.stop();
                 ObservationFetchService.singleton.stop();
@@ -43,7 +51,7 @@ class MageTests: KIFSpec {
             it("should start services as initial") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context!);
                 expect(ObservationPushService.singleton.started).to(beFalse());
                 expect(LocationService.singleton().started).to(beFalse());
                 expect(LocationFetchService.singleton.started).to(beFalse());
@@ -199,7 +207,7 @@ class MageTests: KIFSpec {
             it("should start services and then stop") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 expect(ObservationPushService.singleton.started).to(beFalse());
                 expect(LocationService.singleton().started).to(beFalse());
                 expect(LocationFetchService.singleton.started).to(beFalse());

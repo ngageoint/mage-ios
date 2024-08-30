@@ -51,13 +51,18 @@ class SignUpViewControllerTests: KIFSpec {
             var view: SignUpViewController?;
             var delegate: MockSignUpDelegate?;
             var navigationController: UINavigationController?;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 
                 Server.setCurrentEventId(1);
                 
@@ -68,6 +73,8 @@ class SignUpViewControllerTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 navigationController?.viewControllers = [];
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
                 window?.rootViewController = nil;

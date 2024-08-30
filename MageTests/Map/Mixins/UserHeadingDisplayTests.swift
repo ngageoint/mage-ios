@@ -47,10 +47,14 @@ class UserHeadingDisplayTests: KIFSpec {
             var mockCLLocationManager: MockCLLocationManager!
             
             var mapStack: UIStackView!
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             
             beforeEach {
-                
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -70,7 +74,7 @@ class UserHeadingDisplayTests: KIFSpec {
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc";
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -111,6 +115,8 @@ class UserHeadingDisplayTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 mixin = nil
                 testimpl = nil
                 
