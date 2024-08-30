@@ -275,6 +275,12 @@ class TextFieldViewTests: KIFSpec {
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
+            afterEach {
+                for view in view.subviews {
+                    view.removeFromSuperview()
+                }
+            }
+            
             it("edit mode reference image") {
                 field[FieldKey.required.key] = true;
                 textFieldView = TextFieldView(field: field, editMode: true, value: "Hi\nHello", multiline: true);
