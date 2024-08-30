@@ -673,7 +673,7 @@
 		F7DBD2B51FBB938800D4DDE9 /* ObservationShapeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DBD2B11FBB938700D4DDE9 /* ObservationShapeStyle.swift */; };
 		F7DCCC251F46366F00E4C616 /* ExternalDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = F7DCCC241F46366F00E4C616 /* ExternalDevice.m */; };
 		F7DDF46D2746CABF00689550 /* ObservationPushDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */; };
-		F7DDF46F2748023A00689550 /* ObservationImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46E2748023A00689550 /* ObservationImageTests.swift */; };
+		F7DDF46F2748023A00689550 /* ObservationImageRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DDF46E2748023A00689550 /* ObservationImageRepositoryTests.swift */; };
 		F7DE98712C122D64005372F8 /* BottomSheetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */; };
 		F7DE98742C123D8D005372F8 /* DependencyInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98732C123D8D005372F8 /* DependencyInjection.swift */; };
 		F7DE98762C12493B005372F8 /* ObservationLocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DE98752C12493B005372F8 /* ObservationLocationRepository.swift */; };
@@ -1629,7 +1629,7 @@
 		F7DCCC231F46366F00E4C616 /* ExternalDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDevice.h; sourceTree = "<group>"; };
 		F7DCCC241F46366F00E4C616 /* ExternalDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExternalDevice.m; sourceTree = "<group>"; };
 		F7DDF46C2746CABF00689550 /* ObservationPushDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationPushDelegate.swift; sourceTree = "<group>"; };
-		F7DDF46E2748023A00689550 /* ObservationImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImageTests.swift; sourceTree = "<group>"; };
+		F7DDF46E2748023A00689550 /* ObservationImageRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImageRepositoryTests.swift; sourceTree = "<group>"; };
 		F7DE98702C122D64005372F8 /* BottomSheetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetRepository.swift; sourceTree = "<group>"; };
 		F7DE98732C123D8D005372F8 /* DependencyInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyInjection.swift; sourceTree = "<group>"; };
 		F7DE98752C12493B005372F8 /* ObservationLocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationLocationRepository.swift; sourceTree = "<group>"; };
@@ -2218,6 +2218,7 @@
 				F789EB5D2BF63BFB00CF3DF9 /* ObservationTileRepositoryTests.swift */,
 				F7C0974B2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift */,
 				F7C0974D2C7E7395003FA115 /* ObservationRepositoryTests.swift */,
+				F7DDF46E2748023A00689550 /* ObservationImageRepositoryTests.swift */,
 			);
 			path = Observation;
 			sourceTree = "<group>";
@@ -3456,7 +3457,6 @@
 				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
 				F71EFE4A2757F810001E6134 /* Networking */,
 				F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */,
-				F7DDF46E2748023A00689550 /* ObservationImageTests.swift */,
 				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
 				F7F62FA3273F186E00AF0A74 /* UserUtilityTests.swift */,
 				F70688A72BADC96A00D8E2EA /* ObservationToObservationPolicyTests.swift */,
@@ -4943,7 +4943,7 @@
 				F7BE036F24660A9D00D2F7C3 /* TextFieldViewTests.swift in Sources */,
 				F7521DEA2672336800C52318 /* MockGeometryEditCoordinator.swift in Sources */,
 				F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */,
-				F7DDF46F2748023A00689550 /* ObservationImageTests.swift in Sources */,
+				F7DDF46F2748023A00689550 /* ObservationImageRepositoryTests.swift in Sources */,
 				F7C097502C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift in Sources */,
 				F7E5749427DBDC28009A6E0D /* UserTrackingMapTests.swift in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,

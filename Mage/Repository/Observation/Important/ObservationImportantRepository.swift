@@ -40,7 +40,7 @@ class ObservationImportantRepositoryImpl: ObservableObject, ObservationImportant
     var cancellables: Set<AnyCancellable> = Set()
     
     init() {
-        localDataSource.pushSubject?.sink(receiveValue: { important in
+        localDataSource.pushSubject?.sink(receiveValue: { [weak self] important in
             Task { [weak self] in
                 await self?.pushImportant(importants: [important])
             }

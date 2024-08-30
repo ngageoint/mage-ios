@@ -38,10 +38,15 @@ class FormPickerTests: KIFSpec {
             
             var formPicker: FormPickerViewController!
             var window: UIWindow!;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
 
             beforeEach {
                 window = TestHelpers.getKeyWindowVisible()
-                TestHelpers.clearAndSetUpStack()
+//                TestHelpers.clearAndSetUpStack()
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
             }
             
             afterEach {
@@ -49,7 +54,9 @@ class FormPickerTests: KIFSpec {
                 window.rootViewController = nil
                 formPicker = nil
                 Server.removeCurrentEventId()
-                TestHelpers.clearAndSetUpStack()
+//                TestHelpers.clearAndSetUpStack()
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
             }
             
             it("initialized") {
@@ -278,7 +285,7 @@ class FormPickerTests: KIFSpec {
                 ]]
                 
                 let delegate = MockFormPickerDelegate();
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
                 
                 Server.setCurrentEventId(1)
@@ -350,7 +357,7 @@ class FormPickerTests: KIFSpec {
                 ]]
                 
                 let delegate = MockFormPickerDelegate();
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
                 
                 Server.setCurrentEventId(1)

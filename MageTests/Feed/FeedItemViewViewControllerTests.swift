@@ -23,8 +23,13 @@ class FeedItemViewViewControllerTests: KIFSpec {
         xdescribe("FeedItemViewController no timestamp") {
             var controller: FeedItemViewController!
             var window: UIWindow!;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
@@ -45,11 +50,13 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
@@ -216,8 +223,13 @@ class FeedItemViewViewControllerTests: KIFSpec {
         xdescribe("FeedItemViewController with timestamp") {
             var controller: FeedItemViewController!
             var window: UIWindow!;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
                 
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
@@ -240,11 +252,13 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent();
+                MageCoreDataFixtures.addEvent(context: context);
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp")
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
             }

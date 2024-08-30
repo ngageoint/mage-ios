@@ -11,11 +11,7 @@ import OHHTTPStubs
 
 @testable import MAGE
 
-final class ObservationTileRepositoryTests: XCTestCase {
-    
-    override class func tearDown() {
-        TestHelpers.defaultObservationLocationInjection()
-    }
+final class ObservationTileRepositoryTests: MageCoreDataTestCase {
     
     func testStuff() async {
         let location = CLLocationCoordinate2D(latitude: 39.62601343172716,longitude: -104.90165054798126)

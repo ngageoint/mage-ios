@@ -18,8 +18,14 @@ class ObservationPushServiceTests: KIFSpec {
     
     override func spec() {
         xdescribe("Route Tests") {
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+                
                 var cleared = false;
                 while (!cleared) {
                     let clearMap = TestHelpers.clearAndSetUpStack()
@@ -43,7 +49,7 @@ class ObservationPushServiceTests: KIFSpec {
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
@@ -57,6 +63,8 @@ class ObservationPushServiceTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 ObservationPushService.singleton.stop();
 //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
 //                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());

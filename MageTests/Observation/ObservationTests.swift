@@ -21,25 +21,34 @@ class ObservationTests: KIFSpec {
         
         xdescribe("Transformation Tests") {
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
+                TestHelpers.clearAndSetUpStack();
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+//                
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
-                NSManagedObject.mr_setDefaultBatchSize(0);
+//                NSManagedObject.mr_setDefaultBatchSize(0);
                 ObservationPushService.singleton.start();
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 ObservationPushService.singleton.stop();
-                NSManagedObject.mr_setDefaultBatchSize(20);
+//                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
@@ -63,16 +72,24 @@ class ObservationTests: KIFSpec {
         }
         
         xdescribe("Field Tests") {
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 Server.setCurrentEventId(1);
-                NSManagedObject.mr_setDefaultBatchSize(0);
+//                NSManagedObject.mr_setDefaultBatchSize(0);
             }
             
             afterEach {
-                NSManagedObject.mr_setDefaultBatchSize(20);
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
+//                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
             }
             
@@ -81,7 +98,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field4";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 observation.properties!["forms"] = [
@@ -99,7 +116,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field4";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 observation.properties!["forms"] = [
@@ -117,7 +134,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field7";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -136,7 +153,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field21";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -155,7 +172,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "type";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -174,7 +191,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field6";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -193,7 +210,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field11";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -212,7 +229,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field12";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -231,7 +248,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field13";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -250,7 +267,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field14";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -269,7 +286,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field15";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -288,7 +305,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field19";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -307,7 +324,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -326,7 +343,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -345,7 +362,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field7";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -364,7 +381,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field21";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -383,7 +400,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "type";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -402,7 +419,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field6";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -421,7 +438,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field11";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -440,7 +457,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field12";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -459,7 +476,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field13";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -478,7 +495,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field14";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -497,7 +514,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field15";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -516,7 +533,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field19";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -535,7 +552,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -554,7 +571,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["variantField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -573,7 +590,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field7";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -592,7 +609,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field21";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -611,7 +628,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "type";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -630,7 +647,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field6";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -649,7 +666,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field11";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -668,7 +685,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field12";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -687,7 +704,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field13";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -706,7 +723,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field14";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -725,7 +742,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field15";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -744,7 +761,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field19";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -763,7 +780,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -782,7 +799,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -801,7 +818,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field7";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -819,7 +836,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field21";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -837,7 +854,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "type";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -855,7 +872,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field6";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -873,7 +890,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field11";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -891,7 +908,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field12";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -909,7 +926,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field13";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -927,7 +944,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field14";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -945,7 +962,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field15";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -963,7 +980,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field19";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -981,7 +998,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -999,7 +1016,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["primaryFeedField"] = "field7";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1018,7 +1035,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field21";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1037,7 +1054,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "type";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1056,7 +1073,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field6";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1075,7 +1092,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field11";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1094,7 +1111,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field12";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1113,7 +1130,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field13";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1132,7 +1149,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field14";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1151,7 +1168,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field15";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1170,7 +1187,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field19";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1189,7 +1206,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1208,7 +1225,7 @@ class ObservationTests: KIFSpec {
                 
                 formsJson[0]["secondaryFeedField"] = "field22";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createBlankObservation(1, context: NSManagedObjectContext.mr_default());
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -1225,31 +1242,37 @@ class ObservationTests: KIFSpec {
         
         xdescribe("Route Tests") {
 
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                var cleared = false;
-                while (!cleared) {
-                    let clearMap = TestHelpers.clearAndSetUpStack()
-                    cleared = (clearMap[String(describing: Observation.self)] ?? false) && (clearMap[String(describing: ObservationImportant.self)] ?? false) && (clearMap[String(describing: User.self)] ?? false)
-                        
-                    if (!cleared) {
-                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && ObservationImportant.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && User.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
-                    }
-                    
-                    if (!cleared) {
-                        Thread.sleep(forTimeInterval: 0.5);
-                    }
-                    
-                }
-                
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
-                
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+//                var cleared = false;
+//                while (!cleared) {
+//                    let clearMap = TestHelpers.clearAndSetUpStack()
+//                    cleared = (clearMap[String(describing: Observation.self)] ?? false) && (clearMap[String(describing: ObservationImportant.self)] ?? false) && (clearMap[String(describing: User.self)] ?? false)
+//                        
+//                    if (!cleared) {
+//                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && ObservationImportant.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && User.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
+//                    }
+//                    
+//                    if (!cleared) {
+//                        Thread.sleep(forTimeInterval: 0.5);
+//                    }
+//                    
+//                }
+//                
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+//                
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
@@ -1259,6 +1282,8 @@ class ObservationTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 ObservationPushService.singleton.stop();
 //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
 //                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
@@ -1705,29 +1730,35 @@ class ObservationTests: KIFSpec {
         
         xdescribe("Attachment Tests") {
 
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                var cleared = false;
-                while (!cleared) {
-                    cleared = TestHelpers.clearAndSetUpStack()[String(describing: Observation.self)] ?? false
-                    if (!cleared) {
-                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
-                    }
-                    
-                    if (!cleared) {
-                        Thread.sleep(forTimeInterval: 0.5);
-                    }
-                    
-                }
-                
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
-                
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+//                var cleared = false;
+//                while (!cleared) {
+//                    cleared = TestHelpers.clearAndSetUpStack()[String(describing: Observation.self)] ?? false
+//                    if (!cleared) {
+//                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
+//                    }
+//                    
+//                    if (!cleared) {
+//                        Thread.sleep(forTimeInterval: 0.5);
+//                    }
+//                    
+//                }
+//                
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+//                
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "attachmentForm")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
@@ -1736,16 +1767,18 @@ class ObservationTests: KIFSpec {
                     LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
                     LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
                 ]
-                NSManagedObject.mr_setDefaultBatchSize(0);
+//                NSManagedObject.mr_setDefaultBatchSize(0);
                 ObservationPushService.singleton.start();
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 ObservationPushService.singleton.stop();
 //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
 //                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());
                 expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse());
-                NSManagedObject.mr_setDefaultBatchSize(20);
+//                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
@@ -1995,31 +2028,37 @@ class ObservationTests: KIFSpec {
 
         xdescribe("Observation Location Tests") {
 
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                var cleared = false;
-                while (!cleared) {
-                    let clearMap = TestHelpers.clearAndSetUpStack()
-                    cleared = (clearMap[String(describing: Observation.self)] ?? false) && (clearMap[String(describing: ObservationImportant.self)] ?? false) && (clearMap[String(describing: User.self)] ?? false)
-
-                    if (!cleared) {
-                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && ObservationImportant.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && User.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
-                    }
-
-                    if (!cleared) {
-                        Thread.sleep(forTimeInterval: 0.5);
-                    }
-
-                }
-
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
-
-                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+//                var cleared = false;
+//                while (!cleared) {
+//                    let clearMap = TestHelpers.clearAndSetUpStack()
+//                    cleared = (clearMap[String(describing: Observation.self)] ?? false) && (clearMap[String(describing: ObservationImportant.self)] ?? false) && (clearMap[String(describing: User.self)] ?? false)
+//
+//                    if (!cleared) {
+//                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && ObservationImportant.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && User.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
+//                    }
+//
+//                    if (!cleared) {
+//                        Thread.sleep(forTimeInterval: 0.5);
+//                    }
+//
+//                }
+//
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
+//
+//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
                 MageCoreDataFixtures.addUser(userId: "userabc")
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
@@ -2029,6 +2068,8 @@ class ObservationTests: KIFSpec {
             }
 
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 ObservationPushService.singleton.stop();
 //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse());
 //                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse());

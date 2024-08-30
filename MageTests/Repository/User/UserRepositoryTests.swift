@@ -12,26 +12,18 @@ import Nimble
 
 @testable import MAGE
 
-final class UserRepositoryTests: XCTestCase {
+final class UserRepositoryTests: MageInjectionTestCase {
     
     var eventRepository = EventRepositoryMock()
     var userLocalDataSource = UserStaticLocalDataSource()
     var userRemoteDataSource = UserRemoteDataSourceMock()
-    
-    var cancellables: Set<AnyCancellable> = Set()
-    
+        
     override func setUp() {
+        super.setUp()
         InjectedValues[\.eventRepository] = eventRepository
         InjectedValues[\.userLocalDataSource] = userLocalDataSource
         InjectedValues[\.userRemoteDataSource] = userRemoteDataSource
         InjectedValues[\.geoPackageRepository] = GeoPackageRepositoryMock()
-    }
-    
-    override func tearDown() {
-        cancellables.removeAll()
-        TestHelpers.defaultEventInjection()
-        TestHelpers.defaultUserInjection()
-        TestHelpers.defaultGeoPackageInjection()
     }
 
     func testGetCurrentUser() {

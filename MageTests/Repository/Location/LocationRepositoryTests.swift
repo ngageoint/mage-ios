@@ -12,19 +12,13 @@ import Nimble
 
 @testable import MAGE
 
-final class LocationRepositoryTests: XCTestCase {
+final class LocationRepositoryTests: MageInjectionTestCase {
     
-    var cancellables: Set<AnyCancellable> = Set()
     var localDataSource: LocationStaticLocalDataSource!
 
     override func setUp() {
         localDataSource = LocationStaticLocalDataSource()
         InjectedValues[\.locationLocalDataSource] = localDataSource!
-    }
-    
-    override func tearDown() {
-        cancellables.removeAll()
-        TestHelpers.defaultLocationInjection()
     }
     
     func testGetLocation() async {

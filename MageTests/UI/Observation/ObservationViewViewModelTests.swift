@@ -12,10 +12,8 @@ import Nimble
 
 @testable import MAGE
 
-final class ObservationViewViewModelTests: XCTestCase {
-    
-    var cancellables: Set<AnyCancellable> = Set()
-    
+final class ObservationViewViewModelTests: MageInjectionTestCase {
+        
     var observationRepository: ObservationRepositoryMock!
     var importantRepository: ObservationImportantRepositoryMock!
     var eventRepository: EventRepositoryMock!
@@ -42,19 +40,6 @@ final class ObservationViewViewModelTests: XCTestCase {
         InjectedValues[\.roleRepository] = roleRepository
         observationImageRepository = ObservationImageRepositoryMock()
         InjectedValues[\.observationImageRepository] = observationImageRepository
-    }
-    
-    override func tearDown() {
-        TestHelpers.defaultObservationInjection()
-        TestHelpers.defaultImportantInjection()
-        TestHelpers.defaultEventInjection()
-        TestHelpers.defaultUserInjection()
-        TestHelpers.defaultFormInjection()
-        TestHelpers.defaultAttachmentInjection()
-        TestHelpers.defaultRoleInjection()
-        TestHelpers.defaultLocationInjection()
-        TestHelpers.defaultObservationImageInjection()
-        cancellables.removeAll()
     }
 
     func testInit() {

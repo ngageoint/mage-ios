@@ -20,10 +20,15 @@ class LayerTests: KIFSpec {
     override func spec() {
         
         var staticLayerObserver: AnyObject?
+        var coreDataStack: TestCoreDataStack?
+        var context: NSManagedObjectContext!
     
         xdescribe("Layer Tests") {
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 var cleared = false;
                 while (!cleared) {
                     let clearMap = TestHelpers.clearAndSetUpStack()
@@ -51,13 +56,15 @@ class LayerTests: KIFSpec {
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                NSManagedObject.mr_setDefaultBatchSize(0);
+//                NSManagedObject.mr_setDefaultBatchSize(0);
             }
             
             afterEach {
-                NSManagedObject.mr_setDefaultBatchSize(20);
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
+//                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }

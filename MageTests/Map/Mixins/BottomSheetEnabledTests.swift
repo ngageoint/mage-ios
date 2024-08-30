@@ -37,9 +37,13 @@ class BottomSheetEnabledTests: KIFSpec {
             var mixin: BottomSheetMixin!
             
             var mapStack: UIStackView!
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
-                
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -61,7 +65,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 UserDefaults.standard.selectedOnlineLayers = nil
                 UserDefaults.standard.observationTimeFilterKey = .all
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 Server.setCurrentEventId(1);
                 
@@ -98,6 +102,8 @@ class BottomSheetEnabledTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 mixin = nil
                 testimpl = nil
                 

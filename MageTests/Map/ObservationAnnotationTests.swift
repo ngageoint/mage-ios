@@ -21,16 +21,24 @@ class ObservationAnnotationTests: KIFSpec {
     override func spec() {
         xdescribe("ObservationImage Tests") {
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 Server.setCurrentEventId(1);
-                NSManagedObject.mr_setDefaultBatchSize(0);
+//                NSManagedObject.mr_setDefaultBatchSize(0);
             }
             
             afterEach {
-                NSManagedObject.mr_setDefaultBatchSize(20);
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
+//                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
             }
             
@@ -79,7 +87,7 @@ class ObservationAnnotationTests: KIFSpec {
                 formsJson[0]["primaryField"] = "testfield";
                 formsJson[0]["primaryFeedField"] = "testfield";
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createPointObservation(eventId:1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date())
@@ -123,7 +131,7 @@ class ObservationAnnotationTests: KIFSpec {
                 
                 let formsJson = getFormsJsonWithExtraFields()
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createPointObservation(eventId:1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date())
@@ -167,7 +175,7 @@ class ObservationAnnotationTests: KIFSpec {
                 
                 let formsJson = getFormsJsonWithExtraFields()
                 
-                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createLineObservation()
                 ObservationBuilder.setObservationDate(observation: observation, date: Date())
@@ -212,7 +220,7 @@ class ObservationAnnotationTests: KIFSpec {
               formsJson[0]["primaryField"] = "testfield";
               formsJson[0]["primaryFeedField"] = "testfield";
               
-              MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+               MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
               
               let observation = ObservationBuilder.createPointObservation(eventId:1);
               observation.remoteId = "1"
@@ -239,7 +247,7 @@ class ObservationAnnotationTests: KIFSpec {
               formsJson[0]["primaryField"] = "testfield";
               formsJson[0]["primaryFeedField"] = "testfield";
               
-              MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
+               MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
               
               let observation = ObservationBuilder.createPointObservation(eventId:1);
               observation.remoteId = "1"

@@ -44,9 +44,13 @@ class GeoPackageLayerMapTests: KIFSpec {
             var controller: UIViewController!
             var testimpl: GeoPackageLayerMapTestImpl!
             var mixin: GeoPackageLayerMapMixin!
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
-                
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -67,7 +71,7 @@ class GeoPackageLayerMapTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.selectedStaticLayers = nil
                 
-                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 Server.setCurrentEventId(1);
                 
@@ -92,6 +96,8 @@ class GeoPackageLayerMapTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 mixin = nil
                 testimpl = nil
                 

@@ -44,6 +44,9 @@ class FilteredObservationsMapTests: KIFSpec {
             var testimpl: FilteredObservationsMapTestImpl!
             var fomixin: FilteredObservationsMapMixin!
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             describe("show observations for user") {
                 
                 beforeEach {
@@ -56,6 +59,9 @@ class FilteredObservationsMapTests: KIFSpec {
                         }
                     }
                     TestHelpers.clearAndSetUpStack();
+                    coreDataStack = TestCoreDataStack()
+                    context = coreDataStack!.persistentContainer.newBackgroundContext()
+                    InjectedValues[\.nsManagedObjectContext] = context
                     if (view != nil) {
                         for subview in view.subviews {
                             subview.removeFromSuperview();
@@ -71,7 +77,7 @@ class FilteredObservationsMapTests: KIFSpec {
                     expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     let user = MageCoreDataFixtures.addUser(userId: "userabc")
                     MageCoreDataFixtures.addUser(userId: "userdef")
                     MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
@@ -121,6 +127,8 @@ class FilteredObservationsMapTests: KIFSpec {
                     navController = nil;
                     view = nil;
                     window = nil;
+                    InjectedValues[\.nsManagedObjectContext] = nil
+                    coreDataStack!.reset()
                     TestHelpers.clearAndSetUpStack();
                     HTTPStubs.removeAllStubs();
                     
@@ -172,7 +180,7 @@ class FilteredObservationsMapTests: KIFSpec {
                     expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     MageCoreDataFixtures.addUser(userId: "userabc")
                     MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                     Server.setCurrentEventId(1);
