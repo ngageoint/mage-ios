@@ -139,8 +139,9 @@ class MageCoreDataTestCase: MageInjectionTestCase {
     
     override func tearDown() {
         super.tearDown()
-        InjectedValues[\.nsManagedObjectContext] = nil
         coreDataStack!.reset()
+        InjectedValues[\.nsManagedObjectContext] = nil
+        context = nil
     }
 }
 

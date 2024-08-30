@@ -72,20 +72,21 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         var formsJson = getFormsJsonWithExtraFields()
         
         formsJson[0]["primaryField"] = "testfield";
-        
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi"
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-        
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(equal(iconPath))
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(equal(iconPath))
+        }
     }
     
     func tesstShouldGetTheImageWithPrimaryAndSecondaryField() throws {
@@ -101,21 +102,22 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
 
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["variantField"] = "secondary"
-        
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(equal(iconPath))
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(equal(iconPath))
+        }
     }
     
     func testShouldGetTheImageNameWithNoPrimaryOrSecondaryField() throws {
@@ -131,19 +133,20 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
 
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
-        
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(equal(iconPath))
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(equal(iconPath))
+        }
     }
     
     func testShouldGetTheImageNameWithPrimaryAndSecondaryButNoIcons() throws {
@@ -159,21 +162,22 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
 
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
-        
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(equal(iconPath))
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(equal(iconPath))
+        }
     }
     
     func testShouldGetTheImageNameWithPrimaryAndSecondaryButOnlyPrimaryIcon() throws {
@@ -206,21 +210,22 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         ])
         
         formsJson[0]["fields"] = fields;
-        
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(equal(iconPath))
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(equal(iconPath))
+        }
     }
     
     func testShouldGetTheImageNameWithPrimaryAndSecondaryButOnlyEventIcon() throws {
@@ -237,20 +242,22 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
         
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(equal(iconPath))
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(equal(iconPath))
+        }
     }
     
     func testShouldGetTheNilForTheImageNameWithPrimaryAndSecondaryButNoIcons() {
@@ -259,20 +266,22 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
         
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(beNil())
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(beNil())
+        }
     }
     
     func testShouldGetNilForTheImageNameWithPrimaryAndSecondaryDirectoryExistsButNoIcon() throws {
@@ -286,21 +295,23 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
 
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
-        
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let imageName = imageRepository.imageName(observation: observation);
-        expect(imageName).to(beNil())
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let imageName = imageRepository.imageName(observation: observation);
+            expect(imageName).to(beNil())
+        }
     }
     
     func testShouldGetTheDefaultMarkerImageWithPrimaryAndSecondaryDirectoryExistsButNoIcon() throws {
@@ -315,20 +326,22 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
         
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let image = imageRepository.image(observation: observation)
-        expect(image).to(equal(UIImage(named:"defaultMarker")))
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let image = imageRepository.image(observation: observation)
+            expect(image).to(equal(UIImage(named:"defaultMarker")))
+        }
     }
     
     func testShouldGetTheImageWithPrimaryAndSecondaryField() throws {
@@ -344,22 +357,24 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
 
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["variantField"] = "secondary"
-        
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        context.performAndWait {
+            
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let image = imageRepository.image(observation: observation);
-        expect(image).toNot(beNil());
-        expect(image).toNot(equal(UIImage(named:"defaultMarker")));
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let image = imageRepository.image(observation: observation);
+            expect(image).toNot(beNil());
+            expect(image).toNot(equal(UIImage(named:"defaultMarker")));
+        }
     }
     
     func testShouldGetTheImageWithPrimaryAndSecondaryFieldFromTheCache() throws {
@@ -376,32 +391,34 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["variantField"] = "secondary"
         
-        MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
-        
-        let observation = ObservationBuilder.createBlankObservation(1, context: context);
-        observation.properties!["forms"] = [
-            [
-                "formId": 26,
-                "testfield": "Hi",
-                "secondary": "turtle"
+        try context.performAndWait {
+            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            
+            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            observation.properties!["forms"] = [
+                [
+                    "formId": 26,
+                    "testfield": "Hi",
+                    "secondary": "turtle"
+                ]
             ]
-        ]
-        let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
-
-        let image = imageRepository.image(observation: observation);
-        expect(image).toNot(beNil());
-        expect(image).toNot(equal(UIImage(named:"defaultMarker")));
-        
-        // this is to verify it is from the cache and not this other icon
-        // if there is no file at the location, the default marker will be returned so a file must exist
-        do {
-            try FileManager.default.removeItem(atPath: iconPath);
-            let image: UIImage = UIImage(systemName: "location.north.fill")!
-            FileManager.default.createFile(atPath: iconPath, contents: image.pngData()!, attributes: nil)
+            let imageRepository: ObservationImageRepository = ObservationImageRepositoryImpl()
+            
+            let image = imageRepository.image(observation: observation);
+            expect(image).toNot(beNil());
+            expect(image).toNot(equal(UIImage(named:"defaultMarker")));
+            
+            // this is to verify it is from the cache and not this other icon
+            // if there is no file at the location, the default marker will be returned so a file must exist
+            do {
+                try FileManager.default.removeItem(atPath: iconPath);
+                let image: UIImage = UIImage(systemName: "location.north.fill")!
+                FileManager.default.createFile(atPath: iconPath, contents: image.pngData()!, attributes: nil)
+            }
+            
+            let image2 = imageRepository.image(observation: observation);
+            expect(image2).toNot(beNil());
+            expect(image2).to(equal(image))
         }
-
-        let image2 = imageRepository.image(observation: observation);
-        expect(image2).toNot(beNil());
-        expect(image2).to(equal(image))
     }
 }
