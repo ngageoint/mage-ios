@@ -89,7 +89,9 @@ class UserRepositoryImpl: ObservableObject, UserRepository {
     }
     
     func fetchMyself() async -> UserModel? {
-        let response = await remoteDataSource.fetchMyself()
-        return await localDataSource.handleUserResponse(response: response)
+        if let response = await remoteDataSource.fetchMyself() {
+            return await localDataSource.handleUserResponse(response: response)
+        }
+        return nil
     }
 }

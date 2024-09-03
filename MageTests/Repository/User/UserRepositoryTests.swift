@@ -246,5 +246,18 @@ final class UserRepositoryTests: MageInjectionTestCase {
         XCTAssertEqual(imageData, userLocalDataSource.avatarResponseImageData)
         XCTAssertEqual(imageData, userRemoteDataSource.uploadAvatarImageData)
     }
+    
+    func testFetchMyself() async {
+        let repository = UserRepositoryImpl()
+        
+        userRemoteDataSource.fetchMyselfResponse = TestHelpers.loadJsonFile("myself")
+        
+        // this returns nil b/c it is a mock
+        let userModel = await repository.fetchMyself()
+        
+        XCTAssertNotNil(userLocalDataSource.handleUserResponseResponse)
+        XCTAssertNotNil(userRemoteDataSource)
+        XCTAssertTrue(userRemoteDataSource.fetchMyselfCalled)
+    }
 
 }

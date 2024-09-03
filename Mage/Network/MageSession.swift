@@ -33,7 +33,9 @@ extension MageError: Identifiable {
 class MageBearerRequestAdapter: RequestInterceptor {
     func adapt(_ urlRequest: URLRequest, for session: Alamofire.Session, completion: @escaping (Result<URLRequest, any Error>) -> Void) {
         var urlRequest = urlRequest
-        urlRequest.headers.add(.authorization(bearerToken: MageSessionManager.shared().getToken()))
+        if let token = MageSessionManager.shared().getToken() {
+            urlRequest.headers.add(.authorization(bearerToken: token))
+        }
         completion(.success(urlRequest))
     }
 }
