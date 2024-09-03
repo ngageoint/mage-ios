@@ -12,6 +12,11 @@ import Combine
 @testable import MAGE
 
 class UserRepositoryMock: UserRepository {
+    var myselfUser: UserModel?
+    func fetchMyself() async -> MAGE.UserModel? {
+        return myselfUser
+    }
+    
     var currentUserUri: URL?
     var users: [UserModel] = []
     var canUpdateImportantReturnValue: Bool = true

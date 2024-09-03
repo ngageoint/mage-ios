@@ -50,4 +50,32 @@ class UserRemoteDataSource {
                 }
         }
     }
+    
+    func fetchMyself() async -> [AnyHashable: Any] {
+        let request = UserService.fetchMyself
+        
+        return await withCheckedContinuation { continuation in
+            MageSession.shared.session.request(request)
+                .validate(MageSession.shared.validateMageResponse)
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data)
+                            if let json = json as? [AnyHashable: Any] {
+                                continuation.resume(returning: json)
+                            }
+                        } catch {
+                            print("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
+                            // TODO: what should this throw?
+                            continuation.resume(returning: [:])
+                        }
+                    case .failure(let error):
+                        print("Error \(error)")
+                        // TODO: what should this throw?
+                        continuation.resume(returning: [:])
+                    }
+                }
+        }
+    }
 }

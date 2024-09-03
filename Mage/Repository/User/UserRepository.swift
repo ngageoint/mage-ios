@@ -34,7 +34,7 @@ protocol UserRepository {
         userUri: URL
     ) async -> Bool
     func avatarChosen(user: UserModel, image: UIImage) async -> Bool
-    
+    func fetchMyself() async -> UserModel?
 }
 
 class UserRepositoryImpl: ObservableObject, UserRepository {
@@ -86,5 +86,10 @@ class UserRepositoryImpl: ObservableObject, UserRepository {
             return await localDataSource.handleAvatarResponse(response: response, user: user, imageData: imageData, image: image)
         }
         return false
+    }
+    
+    func fetchMyself() async -> UserModel? {
+        let response = await remoteDataSource.fetchMyself()
+        return await localDataSource.handleUserResponse(response: response)
     }
 }

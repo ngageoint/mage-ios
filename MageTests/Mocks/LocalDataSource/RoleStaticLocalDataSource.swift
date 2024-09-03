@@ -18,7 +18,10 @@ class RoleStaticLocalDataSource: RoleLocalDataSource {
         }
     }
     
+    var addUserToRoleRoleJson: [AnyHashable: Any]?
+    var addUserToRoleUser: User?
     func addUserToRole(roleJson: [AnyHashable : Any], user: MAGE.User, context: NSManagedObjectContext) {
-        
+        addUserToRoleRoleJson = roleJson
+        addUserToRoleUser = user
     }
 }
