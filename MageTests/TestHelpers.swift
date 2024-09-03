@@ -192,6 +192,24 @@ class TestHelpers {
         MagicalRecord.cleanUp();
     }
     
+    static func setupValidToken() {
+        MageSessionManager.shared().setToken("NewToken")
+        UserDefaults.standard.loginParameters = [
+            LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
+            LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
+        ]
+        UserUtility.singleton.resetExpiration()
+    }
+    
+    static func setupExpiredToken() {
+        MageSessionManager.shared().setToken("NewToken")
+        UserDefaults.standard.loginParameters = [
+            LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
+            LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(-1000000)
+        ]
+        UserUtility.singleton.resetExpiration()
+    }
+    
     static func loadJsonFile(_ filename: String) -> [AnyHashable: Any]? {
         if let path = Bundle(for: TestHelpers.self).path(forResource: filename, ofType: "json") {
             let data = try! Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)

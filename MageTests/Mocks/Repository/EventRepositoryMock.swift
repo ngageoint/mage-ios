@@ -12,6 +12,11 @@ import Combine
 @testable import MAGE
 
 class EventRepositoryMock: EventRepository {
+    var fetchEventsCalled = false
+    func fetchEvents() async {
+        fetchEventsCalled = true
+    }
+    
     var events: [EventModel] = []
     
     func getEvent(eventId: NSNumber) -> EventModel? {
