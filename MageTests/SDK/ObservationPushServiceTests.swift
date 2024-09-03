@@ -93,7 +93,7 @@ class ObservationPushServiceTests: KIFSpec {
                 
                 var createStubCalled = false;
                 
-                let url = Bundle(for: ObservationTests.self).url(forResource: "test_marker", withExtension: "png")!
+                let url = Bundle(for: ObservationPushServiceTests.self).url(forResource: "test_marker", withExtension: "png")!
                 
                 var baseObservationJson: [AnyHashable : Any] = [:]
                 baseObservationJson["important"] = nil;

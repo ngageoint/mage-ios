@@ -68,7 +68,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
         TimeFilter.setObservation(.all)
         MageCoreDataFixtures.addEvent(context: context!, remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
 
-        let url = Bundle(for: ObservationTests.self).url(forResource: "test_marker", withExtension: "png")!
+        let url = Bundle(for: ObservationCoreDataSourceTests.self).url(forResource: "test_marker", withExtension: "png")!
 
         var baseObservationJson: [AnyHashable : Any] = [:]
         baseObservationJson["important"] = nil;

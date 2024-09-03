@@ -161,7 +161,7 @@ class GeoPackageLayerMapTests: KIFSpec {
                      isPath("/api/events/1/layers/1")
                 ) { (request) -> HTTPStubsResponse in
                     geopackageStubCalled = true;
-                    let stubPath = OHPathForFile("gpkgWithMedia.gpkg", ObservationTests.self);
+                    let stubPath = OHPathForFile("gpkgWithMedia.gpkg", GeoPackageLayerMapTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/octet-stream"]);
                 }
                 

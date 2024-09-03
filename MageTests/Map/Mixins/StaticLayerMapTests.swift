@@ -154,7 +154,7 @@ class StaticLayerMapTests: KIFSpec {
                      isPath("/api/events/1/layers/1/features")
                 ) { (request) -> HTTPStubsResponse in
                     featuresStubCalled = true;
-                    let stubPath = OHPathForFile("staticFeatures.geojson", ObservationTests.self);
+                    let stubPath = OHPathForFile("staticFeatures.geojson", StaticLayerMapTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
@@ -253,7 +253,7 @@ class StaticLayerMapTests: KIFSpec {
                      isPath("/api/events/1/layers/1/features")
                 ) { (request) -> HTTPStubsResponse in
                     featuresStubCalled = true;
-                    let stubPath = OHPathForFile("staticFeatures.geojson", ObservationTests.self);
+                    let stubPath = OHPathForFile("staticFeatures.geojson", StaticLayerMapTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
@@ -370,7 +370,7 @@ class StaticLayerMapTests: KIFSpec {
                      isPath("/api/events/1/layers/1/features")
                 ) { (request) -> HTTPStubsResponse in
                     featuresStubCalled = true;
-                    let stubPath = OHPathForFile("staticFeatures.geojson", ObservationTests.self);
+                    let stubPath = OHPathForFile("staticFeatures.geojson", StaticLayerMapTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
@@ -484,7 +484,7 @@ class StaticLayerMapTests: KIFSpec {
                      isPath("/api/events/1/layers/1/features")
                 ) { (request) -> HTTPStubsResponse in
                     featuresStubCalled = true;
-                    let stubPath = OHPathForFile("staticFeatures.geojson", ObservationTests.self);
+                    let stubPath = OHPathForFile("staticFeatures.geojson", StaticLayerMapTests.self);
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
