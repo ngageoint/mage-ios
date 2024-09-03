@@ -13,25 +13,18 @@ import Kingfisher
 
 @testable import MAGE
 
-final class UserCoreDataDataSourceTests: XCTestCase {
+final class UserCoreDataDataSourceTests: MageCoreDataTestCase {
     
-    var cancellables: Set<AnyCancellable> = Set()
-    var coreDataStack: TestCoreDataStack?
-    var context: NSManagedObjectContext?
     var roleLocalDataSource: RoleStaticLocalDataSource!
 
     override func setUp() {
-        coreDataStack = TestCoreDataStack()
-        context = coreDataStack!.persistentContainer.newBackgroundContext()
-        InjectedValues[\.nsManagedObjectContext] = context
+        super.setUp()
         roleLocalDataSource = RoleStaticLocalDataSource()
         InjectedValues[\.roleLocalDataSource] = roleLocalDataSource
     }
     
     override func tearDown() {
-        cancellables.removeAll()
-        InjectedValues[\.nsManagedObjectContext] = nil
-        coreDataStack!.reset()
+        super.tearDown()
     }
 
     func testGetCurrentUser() async {

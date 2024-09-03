@@ -9,7 +9,7 @@
 import Foundation
 
 private struct UserRemoteDataSourceProviderKey: InjectionKey {
-    static var currentValue: UserRemoteDataSource = UserRemoteDataSource()
+    static var currentValue: UserRemoteDataSource = UserRemoteDataSourceImpl()
 }
 
 extension InjectedValues {
@@ -19,7 +19,12 @@ extension InjectedValues {
     }
 }
 
-class UserRemoteDataSource {
+protocol UserRemoteDataSource {
+    func uploadAvatar(user: UserModel, imageData: Data) async -> [AnyHashable: Any]
+    func fetchMyself() async -> [AnyHashable: Any]?
+}
+
+class UserRemoteDataSourceImpl: UserRemoteDataSource {
     func uploadAvatar(user: UserModel, imageData: Data) async -> [AnyHashable: Any]  {
         let request = UserService.uploadAvatar(imageData: imageData)
         
@@ -51,7 +56,7 @@ class UserRemoteDataSource {
         }
     }
     
-    func fetchMyself() async -> [AnyHashable: Any] {
+    func fetchMyself() async -> [AnyHashable: Any]? {
         let request = UserService.fetchMyself
         
         return await withCheckedContinuation { continuation in
@@ -68,12 +73,12 @@ class UserRemoteDataSource {
                         } catch {
                             print("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
                             // TODO: what should this throw?
-                            continuation.resume(returning: [:])
+                            continuation.resume(returning: nil)
                         }
                     case .failure(let error):
                         print("Error \(error)")
                         // TODO: what should this throw?
-                        continuation.resume(returning: [:])
+                        continuation.resume(returning: nil)
                     }
                 }
         }
