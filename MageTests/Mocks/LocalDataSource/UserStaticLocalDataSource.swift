@@ -12,6 +12,12 @@ import Combine
 @testable import MAGE
 
 class UserStaticLocalDataSource: UserLocalDataSource {
+    var handleUserResponseResponse: [AnyHashable: Any]?
+    func handleUserResponse(response: [AnyHashable : Any]) async -> MAGE.UserModel? {
+        handleUserResponseResponse = response
+        return nil
+    }
+    
     var currentUserUri: URL?
     var users: [UserModel] = []
     var canUpdateImportantReturnValues: [NSNumber: [UserModel]] = [:]

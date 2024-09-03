@@ -191,4 +191,13 @@ class TestHelpers {
 //        }
         MagicalRecord.cleanUp();
     }
+    
+    static func loadJsonFile(_ filename: String) -> [AnyHashable: Any]? {
+        if let path = Bundle(for: TestHelpers.self).path(forResource: filename, ofType: "json") {
+            let data = try! Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            let jsonResult = try! JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
+            return jsonResult as? [AnyHashable: Any]
+        }
+        return nil
+    }
 }

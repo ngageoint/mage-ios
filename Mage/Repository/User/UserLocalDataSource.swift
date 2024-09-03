@@ -61,6 +61,7 @@ protocol UserLocalDataSource {
     
     func avatarChosen(user: UserModel, imageData: Data)
     func handleAvatarResponse(response: [AnyHashable: Any], user: UserModel, imageData: Data, image: UIImage) async -> Bool
+    func handleUserResponse(response: [AnyHashable: Any]) async -> UserModel?
 }
 
 struct UserModelPage {
@@ -70,6 +71,15 @@ struct UserModelPage {
 }
 
 class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, ObservableObject {
+    @Injected(\.roleLocalDataSource)
+    var roleLocalDataSource: RoleLocalDataSource
+    
+    private func getUserNSManagedObject(remoteId: String, context: NSManagedObjectContext) async -> User? {
+//        guard let context = context else { return nil }
+        return await context.perform {
+            return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: remoteId)
+        }
+    }
     
     private func getUserNSManagedObject(userUri: URL) async -> User? {
         guard let context = context else { return nil }
@@ -235,6 +245,84 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
                     continuation.resume(returning: false)
                 }
             }
+        }
+    }
+    
+    func handleUserResponse(response: [AnyHashable: Any]) async -> UserModel? {
+        guard let context = context,
+              let userId = response["id"] as? String
+        else {
+            return nil
+        }
+        
+        return await withCheckedContinuation { [weak self] continuation in
+            context.perform {
+                let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: userId) ?? User(context: context)
+                user.remoteId = response[UserKey.id.key] as? String
+                user.username = response[UserKey.username.key] as? String
+                user.email = response[UserKey.email.key] as? String
+                user.name = response[UserKey.displayName.key] as? String
+                if let phones = response[UserKey.phones.key] as? [[AnyHashable : Any]], phones.count > 0 {
+                    user.phone = phones[0][UserPhoneKey.number.key] as? String
+                }
+                user.iconUrl = response[UserKey.iconUrl.key] as? String
+                if let icon = response[UserKey.icon.key] as? [AnyHashable : Any] {
+                    user.iconText = icon[UserIconKey.text.key] as? String
+                    user.iconColor = icon[UserIconKey.color.key] as? String
+                }
+                user.avatarUrl = response[UserKey.avatarUrl.key] as? String
+                user.recentEventIds = response[UserKey.recentEventIds.key] as? [NSNumber]
+                
+                let dateFormat = DateFormatter();
+                dateFormat.timeZone = TimeZone(secondsFromGMT: 0);
+                dateFormat.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+                let posix = Locale(identifier: "en_US_POSIX");
+                dateFormat.locale = posix;
+                
+                if let createdAtString = response[UserKey.createdAt.key] as? String {
+                    user.createdAt = dateFormat.date(from: createdAtString)
+                }
+                
+                if let lastUpdatedString = response[UserKey.lastUpdated.key] as? String {
+                    user.lastUpdated = dateFormat.date(from: lastUpdatedString)
+                }
+                // go pull their icon and avatar if they got one using the image cache which will decide if we need to pull
+                self?.prefetchIconAndAvatar(iconUrl: user.cacheIconUrl, avatarUrl: user.cacheAvatarUrl)
+                
+                if let userRole = response[UserKey.role.key] as? [AnyHashable : Any] {
+                    // TODO: is this the correct place for this?
+                    self?.roleLocalDataSource.addUserToRole(
+                        roleJson: userRole,
+                        user: user,
+                        context: context
+                    )
+                }
+                try? context.obtainPermanentIDs(for: [user])
+                try? context.save()
+                
+                continuation.resume(returning: UserModel(user: user))
+            }
+        }
+    }
+    
+    func prefetchIconAndAvatar(iconUrl: String?, avatarUrl: String?) {
+        if let cacheIconUrl = iconUrl, let url = URL(string: cacheIconUrl) {
+            let prefetcher = ImagePrefetcher(urls: [url], options: [
+                .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
+                .diskCacheExpiration(.never)
+            ]) {
+                skippedResources, failedResources, completedResources in
+            }
+            prefetcher.start()
+        }
+        if let cacheAvatarUrl = avatarUrl, let url = URL(string: cacheAvatarUrl) {
+            print("caching avatar \(url)")
+            let prefetcher = ImagePrefetcher(urls: [url], options: [
+                .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
+            ]) {
+                skippedResources, failedResources, completedResources in
+            }
+            prefetcher.start()
         }
     }
 }

@@ -18,11 +18,14 @@ final class UserCoreDataDataSourceTests: XCTestCase {
     var cancellables: Set<AnyCancellable> = Set()
     var coreDataStack: TestCoreDataStack?
     var context: NSManagedObjectContext?
+    var roleLocalDataSource: RoleStaticLocalDataSource!
 
     override func setUp() {
         coreDataStack = TestCoreDataStack()
         context = coreDataStack!.persistentContainer.newBackgroundContext()
         InjectedValues[\.nsManagedObjectContext] = context
+        roleLocalDataSource = RoleStaticLocalDataSource()
+        InjectedValues[\.roleLocalDataSource] = roleLocalDataSource
     }
     
     override func tearDown() {
@@ -472,6 +475,61 @@ final class UserCoreDataDataSourceTests: XCTestCase {
         
         // cleanup
         KingfisherManager.shared.cache.removeImage(forKey: avatarUrl!)
+    }
+    
+    func testHandleUserResponseUpdate() async {
+        guard let context = context else {
+            XCTFail("No Managed Object Context")
+            return
+        }
+        
+        let localDataSource = UserCoreDataDataSource()
+        guard let userJson = TestHelpers.loadJsonFile("myself") else {
+            XCTFail()
+            return
+        }
+        
+        context.performAndWait {
+            let user = User(context: context)
+            user.username = "Fred"
+            user.name = "Fred"
+            user.remoteId = "userabc"
+            
+            try? context.obtainPermanentIDs(for: [user])
+            try? context.save()
+        }
+        
+        let firstFoundUser = localDataSource.getUser(remoteId: "userabc")
+        XCTAssertNotNil(firstFoundUser)
+        XCTAssertEqual(firstFoundUser?.username, "Fred")
+        
+        let user = await localDataSource.handleUserResponse(response: userJson)
+        
+        XCTAssertNotNil(user)
+        XCTAssertNotNil(roleLocalDataSource.addUserToRoleRoleJson)
+        XCTAssertNotNil(roleLocalDataSource.addUserToRoleUser)
+        
+        let foundUser = localDataSource.getUser(remoteId: "userabc")
+        XCTAssertNotNil(foundUser)
+        XCTAssertEqual(foundUser?.username, "userabc")
+    }
+    
+    func testHandleUserResponseInsert() async {
+        let localDataSource = UserCoreDataDataSource()
+        guard let userJson = TestHelpers.loadJsonFile("myself") else {
+            XCTFail()
+            return
+        }
+        
+        let user = await localDataSource.handleUserResponse(response: userJson)
+        
+        XCTAssertNotNil(user)
+        XCTAssertNotNil(roleLocalDataSource.addUserToRoleRoleJson)
+        XCTAssertNotNil(roleLocalDataSource.addUserToRoleUser)
+        
+        let foundUser = localDataSource.getUser(remoteId: "userabc")
+        XCTAssertNotNil(foundUser)
+        XCTAssertEqual(foundUser?.username, "userabc")
     }
 
 }

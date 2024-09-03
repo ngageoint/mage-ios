@@ -11,11 +11,14 @@ import Alamofire
 
 enum UserService: URLRequestConvertible {
     case uploadAvatar(imageData: Data)
+    case fetchMyself
     
     var method: HTTPMethod {
         switch self {
         case .uploadAvatar(_):
             return .put
+        case .fetchMyself:
+            return .get
         }
     }
     
@@ -23,12 +26,16 @@ enum UserService: URLRequestConvertible {
         switch self {
         case .uploadAvatar(_):
             return "/api/users/myself"
+        case .fetchMyself:
+            return "/api/users/myself"
         }
     }
     
     var parameters: Parameters? {
         switch self {
         case .uploadAvatar(_):
+            return nil
+        case .fetchMyself:
             return nil
         }
     }
