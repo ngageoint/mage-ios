@@ -70,8 +70,13 @@ class LocalLoginViewTests: KIFSpec {
             var view: UIView!;
             var localLoginView: LocalLoginView!;
             var controller: UIViewController?;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
@@ -87,6 +92,8 @@ class LocalLoginViewTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 window?.rootViewController?.dismiss(animated: false, completion: nil);
                 window?.rootViewController = nil;
                 controller = nil;
@@ -222,7 +229,7 @@ class LocalLoginViewTests: KIFSpec {
             }
             
             it("should fill in username for passed in user") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 let strategy: [AnyHashable : Any?] = [

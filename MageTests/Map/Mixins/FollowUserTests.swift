@@ -77,11 +77,11 @@ class FollowUserTests: KIFSpec {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
                 userabc = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
-                MageCoreDataFixtures.addUser(userId: "userdef")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userdef")
+                MageCoreDataFixtures.addUser(userId: "userdef", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userdef", context: context)
                 
                 controller = UIViewController()
                 let mapView = MKMapView()

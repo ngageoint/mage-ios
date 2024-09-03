@@ -25,8 +25,13 @@ class ChangePasswordViewControllerTests: KIFSpec {
             var window: UIWindow?;
             var view: ChangePasswordViewController?;
             var navigationController: UINavigationController?;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 TestHelpers.clearAndSetUpStack();
 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
@@ -342,7 +347,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
             }
             
             it("should set the currently logged in user") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 UserDefaults.standard.currentUserId = "userabc";
                 
                 let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();

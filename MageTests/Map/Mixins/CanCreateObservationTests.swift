@@ -74,8 +74,8 @@ class CanCreateObservationTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc";
 
                 Server.setCurrentEventId(1);

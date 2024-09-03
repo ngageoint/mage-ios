@@ -61,7 +61,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("Should load the event chooser with no events") {
-                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -76,7 +76,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("Should load the event chooser with no events and then get them from the server") {
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -87,9 +87,9 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc", context: context)
                 
                 view?.eventsFetchedFromServer()
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
@@ -97,7 +97,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("Should load the event chooser with no events and then get one from the server and auto select") {
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -106,7 +106,7 @@ class EventChooserControllerTests : KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 
                 view?.eventsFetchedFromServer()
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
@@ -115,7 +115,7 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("Should load the event chooser with no events and then get one not recent from the server") {
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -124,7 +124,7 @@ class EventChooserControllerTests : KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "Loading Events")
                 
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 
                 view?.eventsFetchedFromServer()
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
@@ -133,12 +133,12 @@ class EventChooserControllerTests : KIFSpec {
             }
             
             it("Should load the event chooser with events then get an extra one") {
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
                 
                 let delegate = MockEventSelectionDelegate()
                 view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
@@ -148,7 +148,7 @@ class EventChooserControllerTests : KIFSpec {
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Refreshing Events")
                 
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc", context: context)
                 
                 view?.eventsFetchedFromServer()
                 tester().waitForView(withAccessibilityLabel: "Refresh Events")
@@ -159,8 +159,8 @@ class EventChooserControllerTests : KIFSpec {
             
             it("should load the event chooser with one event not recent") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -177,8 +177,8 @@ class EventChooserControllerTests : KIFSpec {
             
             it("should load the event chooser with one event recent") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -195,8 +195,8 @@ class EventChooserControllerTests : KIFSpec {
             
             it("should load the event chooser with one event not recent but not pick it because showEventChooserOnce was set") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 UserDefaults.standard.showEventChooserOnce = true
                 
@@ -213,8 +213,8 @@ class EventChooserControllerTests : KIFSpec {
             
             it("should load the event chooser with one event recent but not pick it because showEventChooserOnce was set") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 UserDefaults.standard.showEventChooserOnce = true
                 
@@ -234,9 +234,9 @@ class EventChooserControllerTests : KIFSpec {
             it("should load the event chooser with one recent and one other event") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
 
                 let delegate = MockEventSelectionDelegate()
@@ -257,9 +257,9 @@ class EventChooserControllerTests : KIFSpec {
             it("should load the event chooser with one recent and one other event refreshing taking too long") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -285,9 +285,9 @@ class EventChooserControllerTests : KIFSpec {
             it("should load the event chooser with one recent and one other event") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", description: "Lorem ipsum dolor sit amet, no eos nonumes temporibus vituperatoribus, usu oporteat inimicus ex. Sint inimicus cum eu, libris melius oblique ad mel, et libris accusamus vix. Vel ut dolor aperiam debitis. Ius at diam ferri option, eum solet blandit deseruisse ea, eu ridens periculis sed. Nonumy utamur mel ut, eos eu nulla populo, sea habeo veniam tempor in. Ius et eius ancillae assueverit, sed cu probo putent labores, no atqui tacimates invenire duo. No usu probo repudiandae, quando cetero nominati quo et.", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 Server.setCurrentEventId(1);
                 
@@ -338,10 +338,10 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()
@@ -366,10 +366,10 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Nope", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventSelectionDelegate()

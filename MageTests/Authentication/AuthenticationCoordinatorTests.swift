@@ -235,7 +235,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should login as a different user") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 UserDefaults.standard.deviceRegistered = true;
@@ -289,7 +289,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should stop logging in as a different user") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 UserDefaults.standard.deviceRegistered = true;
@@ -338,7 +338,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in with an inactive user") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -382,7 +382,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should fail to get a token") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -432,7 +432,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should not be able to log in offline with no stored password") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -479,7 +479,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in offline with stored password") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -536,7 +536,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in offline again with stored password") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 UserDefaults.standard.loginType = "offline";
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -579,7 +579,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should initialize the login view with a user") {
-                MageCoreDataFixtures.addUser();
+                MageCoreDataFixtures.addUser(context: context);
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";

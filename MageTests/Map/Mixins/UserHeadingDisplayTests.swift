@@ -75,9 +75,9 @@ class UserHeadingDisplayTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
                 UserDefaults.standard.currentUserId = "userabc";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 
                 Server.setCurrentEventId(1);
                 

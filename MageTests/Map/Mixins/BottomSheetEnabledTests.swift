@@ -149,7 +149,7 @@ class BottomSheetEnabledTests: KIFSpec {
             }
             
             it("user bottom sheet") {
-                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addUser(context: context)
                 let location = MageCoreDataFixtures.addLocation()
                 let ua = LocationAnnotation(location: location)
                 
@@ -285,7 +285,7 @@ class BottomSheetEnabledTests: KIFSpec {
                 MageCoreDataFixtures.addFeedToEvent()
                 let feedItem = MageCoreDataFixtures.addFeedItemToFeed(simpleFeature: SFPoint(x: -105, andY: 40.01))
                 
-                MageCoreDataFixtures.addUser()
+                MageCoreDataFixtures.addUser(context: context)
                 let location = MageCoreDataFixtures.addLocation()
                 let ua = LocationAnnotation(location: location)
                 

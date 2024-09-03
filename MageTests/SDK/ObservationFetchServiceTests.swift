@@ -51,8 +51,8 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.serverMinorVersion = 0;
                 
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
-                MageCoreDataFixtures.addUser(userId: "userabc")
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
+                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
                 NSManagedObject.mr_setDefaultBatchSize(0);

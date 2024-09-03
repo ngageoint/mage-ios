@@ -76,10 +76,10 @@ class FilteredUsersMapTests: KIFSpec {
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
                     MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                    let user = MageCoreDataFixtures.addUser(userId: "userabc")
-                    MageCoreDataFixtures.addUser(userId: "userdef")
-                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userdef")
+                    let user = MageCoreDataFixtures.addUser(userId: "userabc", context: context)
+                    MageCoreDataFixtures.addUser(userId: "userdef", context: context)
+                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userdef", context: context)
                     
                     MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
                     MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
@@ -179,12 +179,12 @@ class FilteredUsersMapTests: KIFSpec {
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
                     MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                    MageCoreDataFixtures.addUser(userId: "userabc")
-                    MageCoreDataFixtures.addUser(userId: "userdef")
-                    MageCoreDataFixtures.addUser(userId: "userxyz")
-                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userxyz")
-                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userdef")
+                    MageCoreDataFixtures.addUser(userId: "userabc", context: context)
+                    MageCoreDataFixtures.addUser(userId: "userdef", context: context)
+                    MageCoreDataFixtures.addUser(userId: "userxyz", context: context)
+                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userxyz", context: context)
+                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userdef", context: context)
                     
                     Server.setCurrentEventId(1);
                     UserDefaults.standard.currentUserId = "userabc";

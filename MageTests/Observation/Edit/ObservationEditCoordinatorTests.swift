@@ -99,7 +99,7 @@ class ObservationEditCoordinatorTests: KIFSpec {
             it("should not allow a user not in the event to edit an observation") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
                 
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
@@ -123,9 +123,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             it("should allow a user in the event to edit an observation") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     let observation = ObservationBuilder.createPointObservation(eventId: 1, context: localContext);
@@ -148,9 +148,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             it("should show form chooser with new observation") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
@@ -169,9 +169,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             it("should show form chooser with new observation and pick a form") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
@@ -193,9 +193,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             xit("should show form chooser with new observation and pick a form and select a combo field") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
@@ -229,9 +229,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             xit("should show form chooser with new observation and pick a form and select the observation geometry field") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "geometryField")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
@@ -276,9 +276,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             xit("should show form chooser with new observation and pick a form and select a geometry field") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "geometryField")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let delegate: MockObservationEditDelegate = MockObservationEditDelegate();
@@ -322,9 +322,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             xit("should show form chooser with new observation and pick a form and set the observations date") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "geometryField")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 let formatter = DateFormatter();
                 formatter.dateFormat = "yyyy-MM-dd'T'HH:mmZ";
@@ -366,9 +366,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             it("should show form chooser with new observation and cancel it") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
                 let delegate: ObservationEditDelegate = MockObservationEditDelegate();
@@ -386,9 +386,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
             it("should cancel editing") {
                 MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
                     let observation = ObservationBuilder.createPointObservation(eventId: 1, context: localContext);
@@ -446,9 +446,9 @@ class ObservationEditCoordinatorTests: KIFSpec {
                 
                 MageCoreDataFixtures.addEventFromJson(context: context, formsJson: formsJson, maxObservationForms: 1, minObservationForms: 1)
                 Server.setCurrentEventId(1);
-                MageCoreDataFixtures.addUser(userId: "user")
+                MageCoreDataFixtures.addUser(userId: "user", context: context)
                 UserDefaults.standard.currentUserId = "user";
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "user", context: context)
                 
                 let formatter = DateFormatter();
                 formatter.dateFormat = "yyyy-MM-dd'T'HH:mmZ";

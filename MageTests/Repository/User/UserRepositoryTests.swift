@@ -253,7 +253,7 @@ final class UserRepositoryTests: MageInjectionTestCase {
         userRemoteDataSource.fetchMyselfResponse = TestHelpers.loadJsonFile("myself")
         
         // this returns nil b/c it is a mock
-        let userModel = await repository.fetchMyself()
+        _ = await repository.fetchMyself()
         
         XCTAssertNotNil(userLocalDataSource.handleUserResponseResponse)
         XCTAssertNotNil(userRemoteDataSource)
