@@ -119,7 +119,7 @@ class MageCoreDataFixtures {
     }
     
     @discardableResult
-    public static func addUser(userId: String = "userabc", recentEventIds: [Int]? = nil, completion: MRSaveCompletionHandler? = nil) -> User? {
+    public static func addUser(userId: String = "userabc", recentEventIds: [Int]? = nil, context: NSManagedObjectContext) -> User? {
         var jsonDictionary: [AnyHashable : Any] = parseJsonFile(jsonFile: "userabc") as! [AnyHashable : Any];
         if let recentEventIds = recentEventIds {
             jsonDictionary["recentEventIds"] = recentEventIds
@@ -145,49 +145,23 @@ class MageCoreDataFixtures {
         
         jsonDictionary["avatarUrl"] = "icon27.png";
         jsonDictionary["iconUrl"] = "test_marker.png";
-        if (completion == nil) {
-            var u: User?
-            MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
-                var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
-                if (existingRole == nil) {
-                    existingRole = Role.insert(json: roleJson, context: localContext);
-                    print("inserting a role");
-                } else {
-                    print("role already existed")
-                }
-                print("inserting a user")
-                u = User.insert(json: jsonDictionary, context: localContext)!
-                u?.remoteId = userId;
-                u?.role = existingRole;
-                
-            })
-            return u
-        } else {
-            MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
-                var existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
-                if (existingRole == nil) {
-                    existingRole = Role.insert(json: roleJson, context: localContext);
-                    print("inserting a role");
-                } else {
-                    print("role already existed")
-                }
-                
-            }) { (success, error) in
-                print("role was inserted")
-                MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                    print("inserting a user")
-                    let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
-
-                    let existingRole: Role? = Role.mr_findFirst(byAttribute: "remoteId", withValue: roleJson["id"] as! String, in: localContext);
-                    let u: User = User.insert(json: jsonDictionary, context: localContext)!
-                    u.remoteId = userId;
-                    u.role = existingRole;
-                }, completion: completion);
+        var u: User?
+        context.performAndWait {
+            let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
+            var existingRole: Role? = context.fetchFirst(Role.self, key: "remoteId", value: roleJson["id"] as! String)
+            if (existingRole == nil) {
+                existingRole = Role.insert(json: roleJson, context: context);
+                print("inserting a role");
+            } else {
+                print("role already existed")
             }
+            print("inserting a user")
+            u = User.insert(json: jsonDictionary, context: context)!
+            u?.remoteId = userId;
+            u?.role = existingRole;
+            try? context.save()
         }
-        return nil
+        return u
     }
     
     public static func addImageryLayer(eventId: NSNumber = 1, layerId: NSNumber = 1, format: String = "XYZ", url: String = "https://magetest/xyzlayer/{z}/{x}/{y}.png", base: Bool = true, options: [String:Any]? = nil, completion: MRSaveCompletionHandler? = nil) {
@@ -226,23 +200,14 @@ class MageCoreDataFixtures {
         }
     }
     
-    public static func addUserToEvent(eventId: NSNumber = 1, userId: String = "userabc", completion: MRSaveCompletionHandler? = nil) {
-        if (completion == nil) {
-            MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
-                let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                if let teams = event?.teams, let team = teams.first {
-                    team.addToUsers(user!);
-                }
-            });
-        } else {
-            MagicalRecord.save({ (localContext: NSManagedObjectContext) in
-                let user = User.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [userId]), in: localContext);
-                let event = Event.mr_findFirst(with: NSPredicate(format: "remoteId = %@", argumentArray: [eventId]), in: localContext);
-                if let teams = event?.teams, let team = teams.first {
-                    team.addToUsers(user!);
-                }
-            }, completion: completion);
+    public static func addUserToEvent(eventId: NSNumber = 1, userId: String = "userabc", context: NSManagedObjectContext) {
+        context.performAndWait {
+            let user = context.fetchFirst(User.self, key: "remoteId", value: userId)
+            let event = context.fetchFirst(Event.self, key: "remoteId", value: eventId)
+            if let teams = event?.teams, let team = teams.first {
+                team.addToUsers(user!);
+            }
+            try? context.save()
         }
     }
     
@@ -368,6 +333,9 @@ class MageCoreDataFixtures {
     }
     
     public static func addEventFromJson(context: NSManagedObjectContext, remoteId: NSNumber = 1, name: String = "Test Event", description: String = "Test event description", formsJson: [[AnyHashable: Any]], maxObservationForms: NSNumber? = nil, minObservationForms: NSNumber? = nil, completion: MRSaveCompletionHandler? = nil) {
+        
+        @Injected(\.teamLocalDataSource)
+        var teamDataSource: TeamLocalDataSource
 
         if (completion == nil) {
             context.performAndWait {
@@ -382,8 +350,9 @@ class MageCoreDataFixtures {
                     "name": "Team Name",
                     "description": "Team Description"
                 ]
-                let team = Team.insert(json: teamJson, context: context)!;
-                e.addToTeams(team);
+                if let team = teamDataSource.updateOrInsert(json: teamJson) {
+                    e.addToTeams(team);
+                }
                 Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: context)
                 try? context.save()
             }

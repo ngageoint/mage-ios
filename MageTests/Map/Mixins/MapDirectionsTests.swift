@@ -355,7 +355,7 @@ class MapDirectionsTests: KIFSpec {
             }
             
             it("get directions to a user") {
-                var user = MageCoreDataFixtures.addUser(userId: "userabc")
+                var user = MageCoreDataFixtures.addUser(userId: "userabc", context: context)
                 MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01), completion: nil)
                 user = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
 
@@ -427,7 +427,7 @@ class MapDirectionsTests: KIFSpec {
             }
             
             it("get directions to a user change my location") {
-                var user = MageCoreDataFixtures.addUser(userId: "userabc")
+                var user = MageCoreDataFixtures.addUser(userId: "userabc", context: context)
                 MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01), completion: nil)
                 user = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
                 
