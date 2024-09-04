@@ -25,7 +25,7 @@ class MockEventChooserDelegate: NSObject, EventChooserDelegate {
 class EventChooserCoordinatorTests : KIFSpec {
     override func spec() {
         
-        xdescribe("EventChooserCoordinatorTests") {
+        describe("EventChooserCoordinatorTests") {
             
             var window: UIWindow?
             var coordinator: EventChooserCoordinator?
@@ -36,25 +36,30 @@ class EventChooserCoordinatorTests : KIFSpec {
             beforeEach {
                 TestHelpers.clearAndSetUpStack();
                 
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                context = MageInitializer.setupCoreData()
+                MageCoreDataFixtures.clearAllData()
+//                coreDataStack = TestCoreDataStack()
+//                context = coreDataStack!.persistentContainer.newBackgroundContext()
                 InjectedValues[\.nsManagedObjectContext] = context
                 
                 navigationController = UINavigationController()
                 UserDefaults.standard.baseServerUrl = "https://magetest"
                 window = TestHelpers.getKeyWindowVisible()
                 window!.rootViewController = navigationController
+                
+                TestHelpers.setupValidToken()
             }
             
             afterEach {
+                MageCoreDataFixtures.clearAllData()
                 navigationController?.viewControllers = []
                 window?.rootViewController?.dismiss(animated: false, completion: nil)
                 window?.rootViewController = nil
                 navigationController = nil
                 coordinator = nil
-                TestHelpers.clearAndSetUpStack()
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
+//                TestHelpers.clearAndSetUpStack()
+//                InjectedValues[\.nsManagedObjectContext] = nil
+//                coreDataStack!.reset()
             }
             
             it("Should load the event chooser with no events") {

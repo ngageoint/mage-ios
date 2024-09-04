@@ -22,11 +22,21 @@ extension InjectedValues {
 protocol EventLocalDataSource {
     func getEvent(eventId: NSNumber) -> EventModel?
     func handleEventsResponse(response: [[AnyHashable: Any]]) async
+    func getEvents() -> [EventModel]
 }
 
 class EventCoreDataDataSource: CoreDataDataSource<Event>, EventLocalDataSource, ObservableObject {
     @Injected(\.teamLocalDataSource)
     var teamLocalDataSource: TeamLocalDataSource
+    
+    func getEvents() -> [EventModel] {
+        guard let context = context else { return [] }
+        return context.performAndWait {
+            return context.fetchAll(Event.self)?.map({ event in
+                EventModel(event: event)
+            }) ?? []
+        }
+    }
     
     func getEvent(eventId: NSNumber) -> EventModel? {
         guard let context = context else { return nil }
@@ -68,7 +78,7 @@ class EventCoreDataDataSource: CoreDataDataSource<Event>, EventLocalDataSource, 
                 Layer.populateLayers(json: layers, eventId: remoteId, context: context);
             }
             if let remoteId = event.remoteId {
-                Feed.refreshFeeds(eventId: remoteId)
+                Feed.refreshFeeds(eventId: remoteId, context: context)
             }
             try? context.save()
             return event
@@ -102,9 +112,6 @@ class EventCoreDataDataSource: CoreDataDataSource<Event>, EventLocalDataSource, 
             }
             
             try? context.save()
-            
-            // TODO: this shouldn't matter as we should be observing the repository at some point
-            NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
         }
     }
 }

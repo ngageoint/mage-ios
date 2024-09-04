@@ -47,8 +47,16 @@ import CoreData
             }
             let saveStart = Date()
             NSLog("TIMING Saving Roles @ \(saveStart)")
-            MagicalRecord.save { localContext in
-
+            
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else { 
+                success?(task, nil)
+                return
+            }
+//            MagicalRecord.save { localContext in
+            context.performAndWait {
                 // Get the role ids to query
                 var roleIds: [String] = [];
                 for roleJson in roles {
@@ -57,7 +65,7 @@ import CoreData
                     }
                 }
 
-                let rolesMatchingIDs: [Role] = Role.mr_findAll(with: NSPredicate(format: "(\(RoleKey.remoteId.key) IN %@)", roleIds), in: localContext) as? [Role] ?? [];
+                let rolesMatchingIDs: [Role] = (try? context.fetchObjects(Role.self, predicate: NSPredicate(format: "(\(RoleKey.remoteId.key) IN %@)", roleIds))) ?? [];
                 var roleIdMap: [String : Role] = [:];
                 for role in rolesMatchingIDs {
                     if let remoteId = role.remoteId {
@@ -73,25 +81,33 @@ import CoreData
                     if let role = roleIdMap[roleId] {
                         // already exists in core data, lets update the object we have
                         print("Updating role in the database \(role.remoteId ?? "")");
-                        role.update(json: roleJson, context: localContext);
+                        role.update(json: roleJson, context: context);
 
                     } else {
                         // not in core data yet need to create a new managed object
                         print("Inserting new role into database");
-                        Role.insert(json: roleJson, context: localContext)
+                        Role.insert(json: roleJson, context: context)
                     }
                 }
-            } completion: { contextDidSave, error in
-                NSLog("TIMING inserted roles. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-
-                if let error = error {
-                    if let failure = failure {
-                        failure(task, error);
-                    }
-                } else if let success = success {
-                    success(task, nil);
+                
+                do {
+                    try context.save()
+                    success?(task, nil)
+                } catch {
+                    failure?(task, error)
                 }
-            }
+            } 
+//        completion: { contextDidSave, error in
+//                NSLog("TIMING inserted roles. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+//
+//                if let error = error {
+//                    if let failure = failure {
+//                        failure(task, error);
+//                    }
+//                } else if let success = success {
+//                    success(task, nil);
+//                }
+//            }
         }, failure: { task, error in
             if let failure = failure {
                 failure(task, error);

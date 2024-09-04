@@ -1,0 +1,6 @@
+
+{
+    "webSearchType": "NOMINATIM",
+    "webNominatimUrl": "https://nominatim.openstreetmap.org",
+    "mobileSearchType": "NATIVE"
+}

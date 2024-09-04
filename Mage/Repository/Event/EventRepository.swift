@@ -22,6 +22,7 @@ extension InjectedValues {
 protocol EventRepository {
     func getEvent(eventId: NSNumber) -> EventModel?
     func fetchEvents() async
+    func getEvents() -> [EventModel]
 }
 
 class EventRepositoryImpl: ObservableObject, EventRepository {
@@ -39,5 +40,11 @@ class EventRepositoryImpl: ObservableObject, EventRepository {
         if let response = await remoteDataSource.fetchEvents() {
             await localDataSource.handleEventsResponse(response: response)
         }
+        // TODO: this shouldn't matter as we should be observing the repository at some point
+        NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
+    }
+    
+    func getEvents() -> [EventModel] {
+        localDataSource.getEvents()
     }
 }

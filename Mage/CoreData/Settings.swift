@@ -46,18 +46,25 @@ enum MapSearchType: Int32 {
                 return;
             }
 
-            MagicalRecord.save { context in
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else {
+                success?(task, nil)
+                return
+            }
+            context.performAndWait {
                 var settings = Settings.mr_findFirst(in: context)
                 if (settings == nil) {
                     settings = Settings.mr_createEntity(in: context)
                 }
 
                 settings?.populate(response)
-            } completion: { contextDidSave, error in
-                if let error = error {
-                    failure?(task, error);
-                } else {
-                    success?(task, response);
+                do {
+                    try context.save()
+                    success?(task, response)
+                } catch {
+                    failure?(task, error)
                 }
             }
         } failure: { task, error in

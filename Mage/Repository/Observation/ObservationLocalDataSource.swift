@@ -259,24 +259,27 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         let initial = true
         let saveStart = Date()
         NSLog("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
-        let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
-        let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
-        return await localContext.perform {
+        
+        let backgroundContext = persistence.getNewBackgroundContext(name: #function)
+        
+//        let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
+//        let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
+        return await backgroundContext.perform {
             NSLog("TIMING There are \(propertyList.count) features to save, chunking into groups of 250")
-            localContext.mr_setWorkingName(#function)
+//            localContext.mr_setWorkingName(#function)
 
             var chunks = propertyList.chunked(into: 250);
             var newObservationCount = 0;
             var observationToNotifyAbout: Observation?;
             var eventFormDictionary: [NSNumber: [[String: AnyHashable]]] = [:]
-            if let event = Event.getEvent(eventId: eventId as NSNumber, context: localContext), let eventForms = event.forms {
+            if let event = Event.getEvent(eventId: eventId as NSNumber, context: backgroundContext), let eventForms = event.forms {
                 for eventForm in eventForms {
                     if let formId = eventForm.formId, let json = eventForm.json?.json {
                         eventFormDictionary[formId] = json[FormKey.fields.key] as? [[String: AnyHashable]]
                     }
                 }
             }
-            localContext.reset();
+            backgroundContext.reset();
             NSLog("TIMING we have \(chunks.count) groups to save")
             while (chunks.count > 0) {
                 autoreleasepool {
@@ -288,7 +291,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                     NSLog("TIMING creating \(features.count) observations for chunk \(chunks.count)")
 
                     for observation in features {
-                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: localContext) {
+                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: backgroundContext) {
                             newObservationCount = newObservationCount + 1;
                             if (!initial) {
                                 observationToNotifyAbout = newObservation;
@@ -302,18 +305,19 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                 let localSaveDate = Date()
                 do {
                     NSLog("TIMING saving \(propertyList.count) observations on local context")
-                    try localContext.save()
+                    try backgroundContext.save()
                 } catch {
                     print("Error saving observations: \(error)")
                 }
                 NSLog("TIMING saved \(propertyList.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
 
-                rootSavingContext.perform {
+                let rootContext = self.persistence.getRootContext()
+                rootContext.perform {
                     let rootSaveDate = Date()
 
                     do {
                         NSLog("TIMING saving \(propertyList.count) observations on root context")
-                        try rootSavingContext.save()
+                        try rootContext.save()
                     } catch {
                         print("Error saving observations: \(error)")
                     }
@@ -321,14 +325,14 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
 
                 }
 
-                localContext.reset();
+                backgroundContext.reset();
                 NSLog("TIMING reset the local context for chunk \(chunks.count)")
                 NSLog("Saved chunk \(chunks.count)")
             }
 
             NSLog("Received \(newObservationCount) new observations and send bulk is \(initial)")
             if ((initial && newObservationCount > 0) || newObservationCount > 1) {
-                NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: localContext));
+                NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: backgroundContext));
             } else if let observationToNotifyAbout = observationToNotifyAbout {
                 NotificationRequester.observationPulled(observationToNotifyAbout);
             }
