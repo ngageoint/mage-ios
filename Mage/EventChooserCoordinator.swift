@@ -60,7 +60,8 @@ import UIKit
         if let eventController = eventController {
             viewController?.pushViewController(eventController, animated: false)
         }
-        Mage.singleton.fetchEvents()
+        
+        MageUseCases.fetchEvents()
     }
 
     func eventsFetched() {

@@ -9,10 +9,7 @@ import Foundation
 @objc public class Mage: NSObject {
     @Injected(\.nsManagedObjectContext)
     var context: NSManagedObjectContext?
-    
-    @Injected(\.observationImageRepository)
-    var imageRepository: ObservationImageRepository
-    
+
     @objc public static let singleton = Mage();
     
     private override init() {
@@ -76,84 +73,5 @@ import Foundation
         if let task = task {
             manager?.addTask(task)
         }
-    }
-    
-    @objc public func fetchEvents() {
-        let manager = MageSessionManager.shared();
-        
-        let myselfTask = User.operationToFetchMyself { task, response in
-            let eventTask = Event.operationToFetchEvents { task, response in
-                if let events = Event.mr_findAll() as? [Event] {
-                    self.fetchFormAndStaticLayers(events: events);
-                }
-            } failure: { task, error in
-                NSLog("Failure to pull events");
-                NotificationCenter.default.post(name: .MAGEEventsFetched, object: nil);
-                if let events = Event.mr_findAll() as? [Event] {
-                    self.fetchFormAndStaticLayers(events: events);
-                }
-            }
-            manager?.addTask(eventTask);
-        } failure: { task, error in
-            NotificationCenter.default.post(name: .MAGEEventsFetched, object: nil);
-            if let events = Event.mr_findAll() as? [Event] {
-                self.fetchFormAndStaticLayers(events: events);
-            }
-        }
-        
-        if let myselfTask = myselfTask {
-            manager?.addTask(myselfTask)
-        }
-    }
-    
-    @objc public func fetchFormAndStaticLayers(events: [Event]) {
-        let manager = MageSessionManager.shared();
-        let task = SessionTask(maxConcurrentTasks: Int32(MAGE_MaxConcurrentEvents));
-        
-        let currentEventId = Server.currentEventId();
-        var eventTasks: [NSNumber: [NSNumber]] = [:];
-        for e in events {
-            guard let remoteId = e.remoteId else {
-                continue;
-            }
-            let formTask = Form.operationToPullFormIcons(eventId: remoteId) {
-                NSLog("Pulled form for event")
-                self.imageRepository.clearCache()
-                NotificationCenter.default.post(name: .MAGEFormFetched, object: EventModel(event: e))
-            } failure: { error in
-                NSLog("Failed to pull form for event")
-                NotificationCenter.default.post(name: .MAGEFormFetched, object: EventModel(event: e))
-            }
-            
-            guard let formTask = formTask else {
-                continue
-            }
-            if let currentEventId = currentEventId, currentEventId == remoteId {
-                formTask.priority = URLSessionTask.highPriority
-                manager?.addTask(formTask);
-            } else {
-                task?.add(formTask);
-                self.add(task: formTask, eventTasks: &eventTasks, event: e);
-            }
-        }
-        
-        MageSessionManager.setEventTasks(eventTasks);
-        task?.priority = URLSessionTask.lowPriority;
-        manager?.add(task);
-    }
-    
-    func add(task: URLSessionTask, eventTasks: inout [NSNumber: [NSNumber]], event: Event) {
-        guard let remoteId = event.remoteId else {
-            return;
-        }
-        let taskIdentifier = task.taskIdentifier;
-        var tasks = eventTasks[remoteId]
-        
-        if tasks == nil {
-            tasks = [];
-            eventTasks[remoteId] = tasks;
-        }
-        
-        tasks?.append(NSNumber(value:taskIdentifier))
     }
 }

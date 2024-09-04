@@ -21,73 +21,84 @@ import CoreData
     }
     
     @objc public static func populateFeeds(feeds: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [String] {
-        var feedRemoteIds: [String] = []
-        var selectedFeedsForEvent: [String] = UserDefaults.standard.array(forKey: "selectedFeeds-\(eventId)") as? [String] ?? [];
-        var count = Feed.mr_countOfEntities();
-        for feed in feeds {
-            if let remoteFeedId = Feed.feedIdFromJson(json: feed) {
-                feedRemoteIds.append(remoteFeedId);
-                if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
-                    f.populate(json: feed, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
-                } else {
-                    let f = Feed.mr_createEntity(in: context);
-                    selectedFeedsForEvent.append(remoteFeedId);
-                    f?.populate(json: feed, eventId: eventId, tag: NSNumber(value: count));
-                    f?.selected = true
-                    count = count + 1;
+        return context.performAndWait {
+            var feedRemoteIds: [String] = []
+            var selectedFeedsForEvent: [String] = UserDefaults.standard.array(forKey: "selectedFeeds-\(eventId)") as? [String] ?? [];
+            var count = try? context.countOfObjects(Feed.self)
+            for feed in feeds {
+                if let remoteFeedId = Feed.feedIdFromJson(json: feed) {
+                    feedRemoteIds.append(remoteFeedId);
+                    if let f = try? context.fetchFirst(Feed.self, predicate: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId)) {
+                        f.populate(json: feed, eventId: eventId, tag: f.tag ?? NSNumber(value: count ?? 0));
+                    } else {
+                        let f = Feed(context: context);
+                        selectedFeedsForEvent.append(remoteFeedId);
+                        f.populate(json: feed, eventId: eventId, tag: NSNumber(value: count ?? 0));
+                        f.selected = true
+                        count = (count ?? 0) + 1;
+                    }
                 }
             }
+            selectedFeedsForEvent = selectedFeedsForEvent.filter { feedRemoteId in
+                return feedRemoteIds.contains(feedRemoteId)
+            }
+            UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
+            
+            try? context.save()
+            return feedRemoteIds;
         }
-        selectedFeedsForEvent = selectedFeedsForEvent.filter { feedRemoteId in
-            return feedRemoteIds.contains(feedRemoteId)
-        }
-        UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
-        
-        return feedRemoteIds;
     }
     
     @objc public static func addFeed(json: [AnyHashable : Any], eventId: NSNumber, context: NSManagedObjectContext) -> String? {
-        var selectedFeedsForEvent: [String] = UserDefaults.standard.array(forKey: "selectedFeeds-\(eventId)") as? [String] ?? [];
-        let count = Feed.mr_countOfEntities();
-        
         guard let remoteFeedId = Feed.feedIdFromJson(json: json) else {
             return nil;
         }
         
-        if let f = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId), in: context) {
-            f.populate(json: json, eventId: eventId, tag: f.tag ?? NSNumber(value: count));
-        } else {
-            let f = Feed.mr_createEntity(in: context);
-            selectedFeedsForEvent.append(remoteFeedId);
-            f?.populate(json: json, eventId: eventId, tag: NSNumber(value: count));
-            f?.selected = true
+        return context.performAndWait {
+            var selectedFeedsForEvent: [String] = UserDefaults.standard.array(forKey: "selectedFeeds-\(eventId)") as? [String] ?? [];
+            var count = try? context.countOfObjects(Feed.self)
+            
+            if let f = try? context.fetchFirst(Feed.self, predicate: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId)) {
+                f.populate(json: json, eventId: eventId, tag: f.tag ?? NSNumber(value: count ?? 0));
+            } else {
+                let f = Feed(context: context)
+                selectedFeedsForEvent.append(remoteFeedId);
+                f.populate(json: json, eventId: eventId, tag: NSNumber(value: count ?? 0));
+                f.selected = true
+            }
+            UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
+            try? context.save()
+            return remoteFeedId;
         }
-        UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
-        return remoteFeedId;
     }
     
     @discardableResult @objc public static func populateFeedItems(feedItems: [[AnyHashable : Any]], feedId: String, eventId: NSNumber, context: NSManagedObjectContext) -> [String] {
-        var feedItemRemoteIds: [String] = [];
-        guard let feed = Feed.mr_findFirst(with: NSPredicate(format: "\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@", feedId, eventId), in: context) else {
+        return context.performAndWait {
+            var feedItemRemoteIds: [String] = [];
+            guard let feed = try? context.fetchFirst(Feed.self, predicate: NSPredicate(format: "\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@", feedId, eventId)) else {
+                return feedItemRemoteIds;
+            }
+            for feedItem in feedItems {
+                if let remoteFeedItemId = FeedItem.feedItemIdFromJson(json: feedItem) {
+                    feedItemRemoteIds.append(remoteFeedItemId)
+                    let fi = (try? context.fetchFirst(FeedItem.self, predicate: NSPredicate(format: "(\(FeedItemKey.remoteId.key) == %@ AND feed == %@)", remoteFeedItemId, feed))) ?? FeedItem(context: context);
+                    fi.populate(json: feedItem, feed: feed);
+                }
+            }
+            let items = try? context.fetchObjects(FeedItem.self, predicate: NSPredicate(format: "(NOT (\(FeedItemKey.remoteId.key) IN %@)) AND feed == %@", feedItemRemoteIds, feed));
+            for item in items ?? [] {
+                context.delete(item)
+            }
+            try? context.save()
             return feedItemRemoteIds;
         }
-        for feedItem in feedItems {
-            if let remoteFeedItemId = FeedItem.feedItemIdFromJson(json: feedItem) {
-                feedItemRemoteIds.append(remoteFeedItemId)
-                let fi = FeedItem.mr_findFirst(with: NSPredicate(format: "(\(FeedItemKey.remoteId.key) == %@ AND feed == %@)", remoteFeedItemId, feed), in: context) ?? FeedItem.mr_createEntity(in: context);
-                fi?.populate(json: feedItem, feed: feed);
-            }
-        }
-        
-        FeedItem.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedItemKey.remoteId.key) IN %@)) AND feed == %@", feedItemRemoteIds, feed), in: context);
-        return feedItemRemoteIds;
     }
     
     @objc public static func feedIdFromJson(json: [AnyHashable: Any]) -> String? {
         return json[FeedKey.id.key] as? String;
     }
     
-    @objc public static func operationToPullFeeds(eventId: NSNumber, success: ((URLSessionDataTask?, Any?) -> Void)?, failure: ((Error) -> Void)?) -> URLSessionDataTask? {
+    @objc public static func operationToPullFeeds(eventId: NSNumber, context: NSManagedObjectContext) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {
             return nil
         }
@@ -102,34 +113,27 @@ import CoreData
 
             let saveStart = Date()
             NSLog("TIMING Saving Feeds @ \(saveStart)")
-                MagicalRecord.save({ localContext in
-                    if let feedsJson = responseObject as? [[AnyHashable : Any]] {
-                        feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: localContext);
-                        for feedRemoteId in feedRemoteIds {
-                            Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, success: nil, failure: nil);
-                        }
-                        Feed.mr_deleteAll(matching: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId), in: localContext)
+            
+            context.performAndWait {
+                if let feedsJson = responseObject as? [[AnyHashable : Any]] {
+                    feedRemoteIds = Feed.populateFeeds(feeds: feedsJson, eventId: eventId, context: context);
+                    for feedRemoteId in feedRemoteIds {
+                        Feed.pullFeedItems(feedId: feedRemoteId, eventId: eventId, context: context);
                     }
-                }, completion: { contextDidSave, error in
-                    NSLog("TIMING Saved Feeds. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-
-                    if let error = error {
-                        if let failure = failure {
-                            failure(error);
-                        }
-                    } else if let success = success {
-                        success(task, nil);
+                    
+                    let feeds = try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(NOT (\(FeedKey.remoteId.key) IN %@)) AND \(FeedKey.eventId.key) == %@", feedRemoteIds, eventId))
+                    for feed in feeds ?? [] {
+                        context.delete(feed)
                     }
-                })
-            }, failure: { task, error in
-                if let failure = failure {
-                    failure(error);
                 }
+                try? context.save()
+            }
+            }, failure: { task, error in
             });
         return task;
     }
     
-    @objc public static func operationToPullFeedItemsForFeed(feedId: String, eventId: NSNumber, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
+    @objc public static func operationToPullFeedItemsForFeed(feedId: String, eventId: NSNumber, context: NSManagedObjectContext) -> URLSessionDataTask? {
         guard let baseURL = MageServer.baseURL() else {
             return nil
         }
@@ -142,38 +146,26 @@ import CoreData
 
             let saveStart = Date()
             NSLog("TIMING Saving Feed Items /api/events/\(eventId)/feeds/\(feedId)/content @ \(saveStart)")
-            MagicalRecord.save { localContext in
+            context.performAndWait {
                 if let json = responseObject as? [AnyHashable : Any], let items = json[FeedKey.items.key] as? [AnyHashable : Any], let features = items[FeedKey.features.key] as? [[AnyHashable : Any]] {
-                    Feed.populateFeedItems(feedItems: features, feedId: feedId, eventId: eventId, context: localContext);
+                    Feed.populateFeedItems(feedItems: features, feedId: feedId, eventId: eventId, context: context);
                 }
-            } completion: { contextDidSave, error in
-                NSLog("TIMING Saved Feed Items. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-                if let error = error {
-                    if let failure = failure {
-                        failure(task, error);
-                    }
-                } else if let success = success {
-                    success(task, nil);
-                }
+                try? context.save()
             }
-
         }, failure: { task, error in
-            if let failure = failure {
-                failure(task, error);
-            }
         });
         return task;
     }
     
-    @objc public static func refreshFeeds(eventId: NSNumber) {
+    @objc public static func refreshFeeds(eventId: NSNumber, context: NSManagedObjectContext) {
         let manager = MageSessionManager.shared();
-        let task = Feed.operationToPullFeeds(eventId: eventId, success: nil, failure: nil);
+        let task = Feed.operationToPullFeeds(eventId: eventId, context: context);
         manager?.addTask(task);
     }
     
-    @objc public static func pullFeedItems(feedId: String, eventId: NSNumber, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) {
+    @objc public static func pullFeedItems(feedId: String, eventId: NSNumber, context: NSManagedObjectContext) {
         let manager = MageSessionManager.shared();
-        let task = Feed.operationToPullFeedItemsForFeed(feedId: feedId, eventId: eventId, success: success, failure: failure);
+        let task = Feed.operationToPullFeedItemsForFeed(feedId: feedId, eventId: eventId, context: context);
         manager?.addTask(task);
     }
     

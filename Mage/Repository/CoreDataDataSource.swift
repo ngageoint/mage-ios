@@ -12,6 +12,9 @@ import CoreData
 import Combine
 
 class CoreDataDataSource<T: NSManagedObject>: NSObject {
+    @Injected(\.persistence)
+    var persistence: Persistence
+    
     @Injected(\.nsManagedObjectContext)
     var context: NSManagedObjectContext?
     

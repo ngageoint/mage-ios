@@ -12,6 +12,9 @@ import Foundation
     @Injected(\.geoPackageRepository)
     static var geoPackageRepository: GeoPackageRepository
     
+    @Injected(\.persistence)
+    static var persistence: Persistence
+    
     @objc static func cleanupGeoPackages() {
         geoPackageRepository.cleanupBackgroundGeoPackages()
     }
@@ -40,17 +43,13 @@ import Foundation
     }
     
     @objc public static func setupCoreData() -> NSManagedObjectContext {
-        MagicalRecord.setupMageCoreDataStack();
-        InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
-        MagicalRecord.setLoggingLevel(.verbose);
-        return NSManagedObjectContext.mr_default()
+        persistence.setupStack()
+        return persistence.getContext()
     }
 
     @objc public static func clearAndSetupCoreData() -> NSManagedObjectContext {
-        MagicalRecord.deleteAndSetupMageCoreDataStack();
-        InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
-        MagicalRecord.setLoggingLevel(.verbose);
-        return NSManagedObjectContext.mr_default()
+        persistence.clearAndSetupStack()
+        return persistence.getContext()
     }
     
     @discardableResult

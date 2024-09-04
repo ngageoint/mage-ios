@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import Combine
+import OHHTTPStubs
 
 @testable import MAGE
 
@@ -38,6 +39,7 @@ class MageInjectionTestCase: XCTestCase {
     override func tearDown() {
         clearAndSetUpStack()
         cancellables.removeAll()
+        HTTPStubs.removeAllStubs();
     }
     
     func clearAndSetUpStack() {
@@ -127,19 +129,20 @@ class MageInjectionTestCase: XCTestCase {
 }
 
 class MageCoreDataTestCase: MageInjectionTestCase {
-    var coreDataStack: TestCoreDataStack?
+    var coreDataStack: TestPersistence!
     var context: NSManagedObjectContext!
     
     override func setUp() {
         super.setUp()
-        coreDataStack = TestCoreDataStack()
-        context = coreDataStack!.persistentContainer.newBackgroundContext()
+        coreDataStack = TestPersistence()
+        InjectedValues[\.persistence] = coreDataStack
+        context = coreDataStack!.getContext()
         InjectedValues[\.nsManagedObjectContext] = context
     }
     
     override func tearDown() {
         super.tearDown()
-        coreDataStack!.reset()
+        coreDataStack!.clearAndSetupStack()
         InjectedValues[\.nsManagedObjectContext] = nil
         context = nil
     }

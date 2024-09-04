@@ -237,8 +237,15 @@ import MagicalRecord
     }
     
     static func fetchLastLocationDate() -> Date? {
-        if let currentEventId = Server.currentEventId() {
-            let location = Location.mr_findFirst(with: NSPredicate(format: "\(LocationKey.eventId.key) == %@", currentEventId), sortedBy: LocationKey.timestamp.key, ascending: false);
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        if let currentEventId = Server.currentEventId(), let context = context {
+            let location = try? context.fetchFirst(
+                Location.self,
+                sortBy: [NSSortDescriptor(key: LocationKey.timestamp.key, ascending: false)], 
+                predicate: NSPredicate(
+                    format: "\(LocationKey.eventId.key) == %@", currentEventId));
             
             return location?.timestamp
         }

@@ -190,10 +190,16 @@ import Kingfisher
                 return;
             }
             
-            MagicalRecord.save { localContext in
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else {
+                return
+            }
+            context.performAndWait {
                 // Get roles
                 var roleIdMap: [String : Role] = [:];
-                if let roles = Role.mr_findAll(in: localContext) as? [Role] {
+                if let roles = context.fetchAll(Role.self) {
                     for role in roles {
                         if let remoteId = role.remoteId {
                             roleIdMap[remoteId] = role
@@ -208,7 +214,7 @@ import Kingfisher
                     }
                 }
                                 
-                let usersMatchingIDs: [User] = User.mr_findAll(with: NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds), in: localContext) as? [User] ?? [];
+                let usersMatchingIDs: [User] = (try? context.fetchObjects(User.self, predicate: NSPredicate(format: "(\(UserKey.remoteId.key) IN %@)", userIds))) ?? [];
                 var userIdMap: [String : User] = [:];
                 for user in usersMatchingIDs {
                     if let remoteId = user.remoteId {
@@ -224,23 +230,19 @@ import Kingfisher
                     if let user = userIdMap[userId] {
                         // already exists in core data, lets update the object we have
                         print("Updating user in the database \(user.name ?? "")");
-                        user.update(json: userJson, context: localContext);
+                        user.update(json: userJson, context: context);
                         
                     } else {
                         // not in core data yet need to create a new managed object
                         print("Inserting new user into database");
-                        User.insert(json: userJson, context: localContext)
+                        User.insert(json: userJson, context: context)
                     }
                 }
-            } completion: { contextDidSave, error in
-                NSLog("TIMING Saved Users. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-
-                if let error = error {
-                    if let failure = failure {
-                        failure(task, error);
-                    }
-                } else if let success = success {
-                    success(task, nil);
+                do {
+                    try context.save()
+                    success?(task, nil)
+                } catch {
+                    failure?(task, error)
                 }
             }
         }, failure: { task, error in

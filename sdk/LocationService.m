@@ -125,10 +125,13 @@ NSInteger const kLocationPushLimit = 100;
     if (!self.isPushingLocations && [DataConnectionUtilities shouldPushLocations]) {
         
         //TODO, submit in pages
-        NSFetchRequest *fetchRequest = [GPSLocation MR_requestAllWhere:@"eventId" isEqualTo:[Server currentEventId] inContext:self.context];
+        NSFetchRequest *fetchRequest = [GPSLocation fetchRequest];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K = %@", @"eventId", [Server currentEventId]];
         [fetchRequest setFetchLimit:kLocationPushLimit];
         [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-        NSArray *locations = [GPSLocation MR_executeFetchRequest:fetchRequest inContext:self.context];
+        NSError *error = nil;
+        NSArray *locations = [_context executeFetchRequest:fetchRequest error:&error];
+        //[GPSLocation MR_executeFetchRequest:fetchRequest inContext:self.context];
         
         if (![locations count]) return;
         
@@ -140,17 +143,24 @@ NSInteger const kLocationPushLimit = 100;
         
         
         NSURLSessionDataTask *locationTask = [GPSLocation operationToPushWithLocations:locations success:^(NSURLSessionDataTask * _Nullable task, id _Nullable response) {
-            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+            [self->_context performBlockAndWait:^{
                 for (GPSLocation *location in locations) {
-                    [location MR_deleteEntityInContext:localContext];
+                    [weakSelf.context deleteObject:location];
                 }
-            } completion:^(BOOL contextDidSave, NSError *error) {
+                NSError *error = nil;
+                [weakSelf.context save:&error];
+            }];
+//            [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+//                for (GPSLocation *location in locations) {
+//                    [location MR_deleteEntityInContext:localContext];
+//                }
+//            } completion:^(BOOL contextDidSave, NSError *error) {
                 self.isPushingLocations = NO;
                 
                 if ([locations count] == kLocationPushLimit) {
                     [weakSelf pushLocations];
                 }
-            }];
+//            }];
         } failure:^(NSError * _Nonnull error) {
             NSLog(@"Failure to push GPS locations to the server");
             self.isPushingLocations = NO;
