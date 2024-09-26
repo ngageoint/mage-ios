@@ -75,7 +75,7 @@ class OnlineLayerMapTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.selectedOnlineLayers = nil
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 Server.setCurrentEventId(1);
                 
@@ -224,7 +224,7 @@ class OnlineLayerMapTests: KIFSpec {
                     WMSLayerOptionsKey.format.key: "format",
                     WMSLayerOptionsKey.transparent.key: 1
                 ]
-                MageCoreDataFixtures.addImageryLayer(eventId: 1, layerId: 1, format: "WMS", url: "https://magetest/wmslayer", base: true, options: options, completion: nil)
+                MageCoreDataFixtures.addImageryLayer(eventId: 1, layerId: 1, format: "WMS", url: "https://magetest/wmslayer", base: true, options: options)
                 
                 var tileStubCalledCount = 0
                 stub(condition: isMethodGET() &&

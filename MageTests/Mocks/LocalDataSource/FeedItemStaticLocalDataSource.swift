@@ -20,7 +20,7 @@ class FeedItemStaticLocalDataSource: FeedItemLocalDataSource {
         }
     }
     
-    func getFeedItem(feedItemrUri: URL?) async -> MAGE.FeedItem? {
+    func getFeedItem(feedItemUri: URL?) async -> MAGE.FeedItem? {
         return nil
 //        items.first { item in
 //            item.

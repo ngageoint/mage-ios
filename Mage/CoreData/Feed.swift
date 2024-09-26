@@ -13,11 +13,23 @@ import CoreData
 @objc public class Feed: NSManagedObject {
     
     @objc public static func getMappableFeeds(eventId: NSNumber) -> [Feed] {
-        return Feed.mr_findAll(with: NSPredicate(format: "(\(FeedKey.itemsHaveSpatialDimension.key) == 1 AND \(FeedKey.eventId.key) == %@)", eventId)) as? [Feed] ?? [];
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return [] }
+        return context.performAndWait {
+            (try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(\(FeedKey.itemsHaveSpatialDimension.key) == 1 AND \(FeedKey.eventId.key) == %@)", eventId))) ?? []
+        }
     }
     
     @objc public static func getEventFeeds(eventId: NSNumber) -> [Feed] {
-        return Feed.mr_findAll(with: NSPredicate(format: "(\(FeedKey.eventId.key) == %@)", eventId)) as? [Feed] ?? [];
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return [] }
+        return context.performAndWait {
+            (try? context.fetchObjects(Feed.self, predicate: NSPredicate(format: "(\(FeedKey.eventId.key) == %@)", eventId))) ?? []
+        }
     }
     
     @objc public static func populateFeeds(feeds: [[AnyHashable: Any]], eventId: NSNumber, context: NSManagedObjectContext) -> [String] {
@@ -36,6 +48,7 @@ import CoreData
                         f.populate(json: feed, eventId: eventId, tag: NSNumber(value: count ?? 0));
                         f.selected = true
                         count = (count ?? 0) + 1;
+                        try? context.obtainPermanentIDs(for: [f])
                     }
                 }
             }
@@ -56,7 +69,7 @@ import CoreData
         
         return context.performAndWait {
             var selectedFeedsForEvent: [String] = UserDefaults.standard.array(forKey: "selectedFeeds-\(eventId)") as? [String] ?? [];
-            var count = try? context.countOfObjects(Feed.self)
+            let count = try? context.countOfObjects(Feed.self)
             
             if let f = try? context.fetchFirst(Feed.self, predicate: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %@)", remoteFeedId, eventId)) {
                 f.populate(json: json, eventId: eventId, tag: f.tag ?? NSNumber(value: count ?? 0));
@@ -65,6 +78,7 @@ import CoreData
                 selectedFeedsForEvent.append(remoteFeedId);
                 f.populate(json: json, eventId: eventId, tag: NSNumber(value: count ?? 0));
                 f.selected = true
+                try? context.obtainPermanentIDs(for: [f])
             }
             UserDefaults.standard.setValue(selectedFeedsForEvent, forKey: "selectedFeeds-\(eventId)")
             try? context.save()

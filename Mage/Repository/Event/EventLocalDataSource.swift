@@ -55,7 +55,15 @@ class EventCoreDataDataSource: CoreDataDataSource<Event>, EventLocalDataSource, 
             return nil
         }
         return context.performAndWait {
-            let event = context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: remoteId) ?? Event(context: context)
+            var event: Event {
+                if let event = context.fetchFirst(Event.self, key: EventKey.remoteId.key, value: remoteId) {
+                    return event
+                } else {
+                    let event = Event(context: context)
+                    try? context.obtainPermanentIDs(for: [event])
+                    return event
+                }
+            }
             event.remoteId = json[EventKey.id.key] as? NSNumber
             event.name = json[EventKey.name.key] as? String
             event.maxObservationForms = json[EventKey.maxObservationForms.key] as? NSNumber

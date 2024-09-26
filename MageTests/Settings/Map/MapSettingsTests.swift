@@ -42,7 +42,7 @@ class MapSettingsTests: KIFSpec {
                 
                 window = TestHelpers.getKeyWindowVisible();
                     
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
             }
             
             afterEach {
@@ -55,11 +55,7 @@ class MapSettingsTests: KIFSpec {
             }
             
             it("should unselect a feed") {
-                waitUntil { done in
-                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary") { (success: Bool, error: Error?) in
-                        done();
-                    }
-                }
+                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
                 
                 UserDefaults.standard.set(["1"], forKey: "selectedFeeds-1");
                 mapSettings = MapSettings();

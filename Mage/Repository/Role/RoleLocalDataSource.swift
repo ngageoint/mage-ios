@@ -33,13 +33,14 @@ class RoleCoreDataDataSource: CoreDataDataSource<Role>, RoleLocalDataSource, Obs
     }
     
     func addUserToRole(roleJson: [AnyHashable : Any], user: User, context: NSManagedObjectContext) {
-        if let roleId = roleJson[RoleKey.id.key] as? String, let role = Role.mr_findFirst(byAttribute: RoleKey.remoteId.key, withValue: roleId, in: context) {
+        if let roleId = roleJson[RoleKey.id.key] as? String, let role = context.fetchFirst(Role.self, key: RoleKey.remoteId.key, value: roleId) {
             user.role = role
             role.addToUsers(user)
         } else {
             let role = Role.insert(json: roleJson, context: context)
             user.role = role
-            role?.addToUsers(user)
+            role.addToUsers(user)
+            try? context.obtainPermanentIDs(for: [role])
         }
     }
 }

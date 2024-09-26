@@ -6,8 +6,15 @@
 
 import Foundation
 import CoreData
+import Combine
 
 public class ObservationPushService: NSObject {
+    @Injected(\.persistence)
+    var persistence: Persistence
+    
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     @Injected(\.observationRepository)
     var observationRepository: ObservationRepository
     
@@ -32,7 +39,7 @@ public class ObservationPushService: NSObject {
     var favoritesFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
     var importantFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?;
     var pushingObservations: [NSManagedObjectID : Observation] = [:]
-    
+    var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     
     private override init() {
     }
@@ -40,18 +47,35 @@ public class ObservationPushService: NSObject {
     public func start() {
         NSLog("start pushing observations");
         self.started = true;
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
+        persistence.contextChange
+            .compactMap {
+                return $0
+            }
+            .sink { [weak self] context in
+            context.perform { [weak self] in
+                NSLog("create fetched results controller after context change \(self)")
+                guard let self = self else { return }
+                self.fetchedResultsController = Observation.mr_fetchAllSorted(by: ObservationKey.timestamp.key,
+                                                                              ascending: false,
+                                                                              with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
+                                                                              groupBy: nil,
+                                                                              delegate: self,
+                                                                              in: context);
+            }
+        }
+        .store(in: &cancellables)
         
         guard let context = context else { return }
-        context.perform {
+        NSLog("create fetched results controller")
+    
+//        context.perform {
             self.fetchedResultsController = Observation.mr_fetchAllSorted(by: ObservationKey.timestamp.key,
                                                                           ascending: false,
                                                                           with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
                                                                           groupBy: nil,
                                                                           delegate: self,
                                                                           in: context);
-        }
+//        }
         onTimerFire();
         scheduleTimer();
     }
@@ -64,7 +88,9 @@ public class ObservationPushService: NSObject {
                 self?.observationPushTimer = nil;
             }
         }
-        
+        for cancellable in cancellables {
+            cancellable.cancel()
+        }
         self.fetchedResultsController = nil;
         self.importantFetchedResultsController = nil;
         self.favoritesFetchedResultsController = nil;
@@ -270,7 +296,7 @@ public class ObservationPushService: NSObject {
 
 extension ObservationPushService : NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
+        print("object changed \(anObject)")
         if let observation = anObject as? Observation {
             switch type {
             case .insert:

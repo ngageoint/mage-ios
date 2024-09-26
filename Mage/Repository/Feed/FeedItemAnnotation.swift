@@ -15,6 +15,8 @@ public class FeedItemAnnotation: DataSourceAnnotation {
     var view: MKAnnotationView?
     
     public var iconURL: URL?
+    public var remoteId: String?
+    public var simpleFeature: SFGeometry?
     
     public override var dataSource: any DataSourceDefinition {
         get {
@@ -26,6 +28,8 @@ public class FeedItemAnnotation: DataSourceAnnotation {
     init(feedItem: FeedItem) {
         super.init(coordinate: feedItem.coordinate, itemKey: feedItem.objectID.uriRepresentation().absoluteString)
         self.iconURL = feedItem.iconURL
+        self.remoteId = feedItem.remoteId
+        self.simpleFeature = feedItem.simpleFeature
         self.id = feedItem.objectID.uriRepresentation().absoluteString
     }
 }

@@ -20,7 +20,7 @@ class FeedItemRepositoryMock: FeedItemRepository {
         }
     }
 
-    func getFeedItem(feedItemrUri: URL?) async -> FeedItem? {
+    func getFeedItem(feedItemUri: URL?) async -> FeedItem? {
          return nil
     }
     

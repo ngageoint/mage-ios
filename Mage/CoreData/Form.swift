@@ -78,7 +78,8 @@ import CoreData
                         }
                     }
                 }
-                
+                try? context.obtainPermanentIDs(for: [form])
+                try? context.save()
                 return form
             }
             return nil
@@ -87,14 +88,18 @@ import CoreData
     
     @discardableResult
     @objc public static func deleteAndRecreateForms(eventId: NSNumber, formsJson:[[AnyHashable: Any]], context: NSManagedObjectContext) -> [Form] {
-        Form.deleteAllFormsForEvent(eventId: eventId, context: context)
-        var forms: [Form] = []
-        for (index, formJson) in formsJson.enumerated() {
-            if let form = Form.createForm(eventId: eventId, order: NSNumber(value: index), formJson: formJson, context: context) {
-                forms.append(form)
+        
+        return context.performAndWait {
+            Form.deleteAllFormsForEvent(eventId: eventId, context: context)
+            var forms: [Form] = []
+            for (index, formJson) in formsJson.enumerated() {
+                if let form = Form.createForm(eventId: eventId, order: NSNumber(value: index), formJson: formJson, context: context) {
+                    forms.append(form)
+                }
             }
+            try? context.save()
+            return forms
         }
-        return forms
     }
     
     @objc public var name: String? {

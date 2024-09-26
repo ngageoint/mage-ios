@@ -229,7 +229,7 @@ class LocalLoginViewTests: KIFSpec {
             }
             
             it("should fill in username for passed in user") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 let strategy: [AnyHashable : Any?] = [

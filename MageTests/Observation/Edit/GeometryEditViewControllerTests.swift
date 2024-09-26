@@ -13,11 +13,19 @@ import Nimble
 
 @testable import MAGE
 
-class GeometryEditViewControllerTests: KIFSpec {
+class GeometryEditViewControllerTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
-        xdescribe("GeometryEditViewController") {
+        describe("GeometryEditViewController") {
             var geometryEditViewController: GeometryEditViewController?
             let navController = UINavigationController();
 
@@ -25,9 +33,6 @@ class GeometryEditViewControllerTests: KIFSpec {
             var field: [String: Any]!
 
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
-
-                MageCoreDataFixtures.clearAllData();
                 TestHelpers.resetUserDefaults();
                 window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = navController;

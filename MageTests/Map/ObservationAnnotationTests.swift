@@ -87,7 +87,7 @@ class ObservationAnnotationTests: KIFSpec {
                 formsJson[0]["primaryField"] = "testfield";
                 formsJson[0]["primaryFeedField"] = "testfield";
                 
-                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createPointObservation(eventId:1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date())
@@ -131,7 +131,7 @@ class ObservationAnnotationTests: KIFSpec {
                 
                 let formsJson = getFormsJsonWithExtraFields()
                 
-                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createPointObservation(eventId:1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date())
@@ -175,7 +175,7 @@ class ObservationAnnotationTests: KIFSpec {
                 
                 let formsJson = getFormsJsonWithExtraFields()
                 
-                MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
+                MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
                 
                 let observation = ObservationBuilder.createLineObservation()
                 ObservationBuilder.setObservationDate(observation: observation, date: Date())
@@ -220,7 +220,7 @@ class ObservationAnnotationTests: KIFSpec {
               formsJson[0]["primaryField"] = "testfield";
               formsJson[0]["primaryFeedField"] = "testfield";
               
-               MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
+               MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
               
               let observation = ObservationBuilder.createPointObservation(eventId:1);
               observation.remoteId = "1"
@@ -247,7 +247,7 @@ class ObservationAnnotationTests: KIFSpec {
               formsJson[0]["primaryField"] = "testfield";
               formsJson[0]["primaryFeedField"] = "testfield";
               
-               MageCoreDataFixtures.addEventFromJson(context: context, remoteId: 1, name: "Event", formsJson: formsJson)
+               MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
               
               let observation = ObservationBuilder.createPointObservation(eventId:1);
               observation.remoteId = "1"

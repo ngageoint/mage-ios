@@ -20,6 +20,7 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     
     typealias Page = Int
 
+    var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     var cleanup: (() -> Void)?
     var operation: CountingDataLoadOperation?
@@ -109,10 +110,11 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         at page: Page?,
         currentHeader: String?
     ) -> AnyPublisher<URIModelPage, Error> {
+        print("XXX getting page number \(page)")
         let request = getFetchRequest(parameters: parameters)
         request.fetchLimit = fetchLimit
         request.fetchOffset = (page ?? 0) * request.fetchLimit
-        
+        print("XXX request \(request)")
         let previousHeader: String? = currentHeader
         var users: [URIItem] = []
         context?.performAndWait {

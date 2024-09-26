@@ -80,6 +80,8 @@ class ObservationImportantRepositoryImpl: ObservableObject, ObservationImportant
                 NSLog("adding important to push \(observationRemoteId)")
                 pushingImportant[observationRemoteId] = important
                 importantsToPush[observationRemoteId] = important
+            } else {
+                
             }
         }
         

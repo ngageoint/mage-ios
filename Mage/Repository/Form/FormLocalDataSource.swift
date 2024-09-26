@@ -38,15 +38,9 @@ class FormCoreDataDataSource: CoreDataDataSource<Form>, FormLocalDataSource, Obs
         
         guard let context = context else { return nil }
         return context.performAndWait {
-            return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context).map { form in
-                FormModel(form: form)
-            }
-            // TODO: change to this once tested
-            /**
              return context.fetchFirst(Form.self, key: "formId", value: formId).map { form in
                  FormModel(form: form)
              }
-             */
         }
     }
 }

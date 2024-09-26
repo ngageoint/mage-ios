@@ -41,7 +41,7 @@ final class EventRepositoryTests: MageCoreDataTestCase {
             return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
         }
         
-        MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+        MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
         UserDefaults.standard.currentUserId = "userabc"
         
         let repository = EventRepositoryImpl()

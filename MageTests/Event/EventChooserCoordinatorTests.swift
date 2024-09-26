@@ -22,7 +22,16 @@ class MockEventChooserDelegate: NSObject, EventChooserDelegate {
     }
 }
 
-class EventChooserCoordinatorTests : KIFSpec {
+class EventChooserCoordinatorTests : KIFMageCoreDataTestCase {
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
+    
+    
     override func spec() {
         
         describe("EventChooserCoordinatorTests") {
@@ -30,18 +39,8 @@ class EventChooserCoordinatorTests : KIFSpec {
             var window: UIWindow?
             var coordinator: EventChooserCoordinator?
             var navigationController: UINavigationController?
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
             
-            beforeEach {
-                TestHelpers.clearAndSetUpStack();
-                
-                context = MageInitializer.setupCoreData()
-                MageCoreDataFixtures.clearAllData()
-//                coreDataStack = TestCoreDataStack()
-//                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
-                
+            beforeEach {                
                 navigationController = UINavigationController()
                 UserDefaults.standard.baseServerUrl = "https://magetest"
                 window = TestHelpers.getKeyWindowVisible()
@@ -51,15 +50,11 @@ class EventChooserCoordinatorTests : KIFSpec {
             }
             
             afterEach {
-                MageCoreDataFixtures.clearAllData()
                 navigationController?.viewControllers = []
                 window?.rootViewController?.dismiss(animated: false, completion: nil)
                 window?.rootViewController = nil
                 navigationController = nil
                 coordinator = nil
-//                TestHelpers.clearAndSetUpStack()
-//                InjectedValues[\.nsManagedObjectContext] = nil
-//                coreDataStack!.reset()
             }
             
             it("Should load the event chooser with no events") {
@@ -73,7 +68,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc")
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
@@ -109,7 +104,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
@@ -142,7 +137,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
@@ -158,12 +153,12 @@ class EventChooserCoordinatorTests : KIFSpec {
             }
             
             it("Should load the current event") {
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [2], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [2])
                 UserDefaults.standard.currentUserId = "userabc"
                 Server.setCurrentEventId(2)
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
+                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
                 
                 let delegate = MockEventChooserDelegate()
                 coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
@@ -175,14 +170,14 @@ class EventChooserCoordinatorTests : KIFSpec {
             }
             
             it("Should show the event picker if the current event is no longer around") {
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 UserDefaults.standard.currentUserId = "userabc"
                 Server.setCurrentEventId(1)
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Event 3", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc", context: context)
+                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                MageCoreDataFixtures.addEvent(remoteId: 3, name: "Event 3", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 
                 let delegate = MockEventChooserDelegate()
                 coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
@@ -214,7 +209,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [2], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [2])
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
@@ -250,7 +245,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 }
                 
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
@@ -285,12 +280,12 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 UserDefaults.standard.currentUserId = "userabc"
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc", context: context)
+                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                MageCoreDataFixtures.addEvent(remoteId: 3, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 
                 let delegate = MockEventChooserDelegate()
                 coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
@@ -332,12 +327,12 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 UserDefaults.standard.currentUserId = "userabc"
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc", context: context)
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 3, name: "Event", formsJsonFile: "oneForm")
-                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc", context: context)
+                MageCoreDataFixtures.addEvent( remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
+                MageCoreDataFixtures.addEvent(remoteId: 3, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")
                 
                 let delegate = MockEventChooserDelegate()
                 coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
@@ -380,7 +375,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()
@@ -416,7 +411,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
                 }
                 
-                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1], context: context)
+                MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
                 UserDefaults.standard.currentUserId = "userabc"
                 
                 let delegate = MockEventChooserDelegate()

@@ -14,7 +14,7 @@ import CoreData
 final class ObservationCoreDataSourceTests: XCTestCase {
     
     var coreDataStack: TestCoreDataStack?
-    var context: NSManagedObjectContext?
+    var context: NSManagedObjectContext!
 
     override func setUp() {
         coreDataStack = TestCoreDataStack()
@@ -66,7 +66,7 @@ final class ObservationCoreDataSourceTests: XCTestCase {
     func xtestGetObservationMapItemsWithBounds() async {
         Server.setCurrentEventId(1)
         TimeFilter.setObservation(.all)
-        MageCoreDataFixtures.addEvent(context: context!, remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
+        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "multipleGeometryFields")
 
         let url = Bundle(for: ObservationCoreDataSourceTests.self).url(forResource: "test_marker", withExtension: "png")!
 

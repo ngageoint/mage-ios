@@ -139,6 +139,7 @@ import CoreData
     
     static func insertEvent(json: [AnyHashable : Any], context: NSManagedObjectContext) -> Event? {
         let event = Event(context: context)
+        try? context.obtainPermanentIDs(for: [event])
         event.updateEvent(json: json, context: context);
         return event;
     }
@@ -187,8 +188,8 @@ import CoreData
         }
         for team in teams {
             if let users = team.users {
-                if users.contains(user) {
-                    return true;
+                if users.contains(where: { $0.remoteId == user.remoteId }) {
+                    return true
                 }
             }
         }

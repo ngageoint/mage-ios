@@ -75,6 +75,21 @@ public extension View {
     }
 }
 
+public struct NoContentTitleText: ViewModifier {
+    public func body(content: Content) -> some View {
+        content
+            .font(Font.headline4)
+            .foregroundColor(Color.onSurfaceColor)
+            .opacity(0.6)
+    }
+}
+
+public extension View {
+    func noContentText() -> some View {
+        modifier(NoContentTitleText())
+    }
+}
+
 public struct PropertyValueText: ViewModifier {
     public func body(content: Content) -> some View {
         content

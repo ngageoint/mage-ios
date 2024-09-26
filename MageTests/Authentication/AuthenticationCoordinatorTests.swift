@@ -37,31 +37,40 @@ class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
     }
 }
 
-class AuthenticationCoordinatorTests: KIFSpec {
+class AuthenticationCoordinatorTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
-        xdescribe("AuthenticationCoordinatorTests") {
+        describe("AuthenticationCoordinatorTests") {
             
             var window: UIWindow?;
             var coordinator: AuthenticationCoordinator?;
             var delegate: MockAuthenticationCoordinatorDelegate?;
             var navigationController: UINavigationController?;
             
-            var coreDataStack: TestCoreDataStack?
+//            @Injected(\.persistence)
+//            var coreDataStack: Persistence
+            @Injected(\.nsManagedObjectContext)
             var context: NSManagedObjectContext!
             
             beforeEach {
-//                TestHelpers.clearAndSetUpStack();
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
                 InjectedValues[\.nsManagedObjectContext] = context
+//                NSManagedObject.mr_setDefaultBatchSize(0);
+                TestHelpers.clearAndSetUpStack()
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.locationDisplay = .latlng;
                 
-                MageCoreDataFixtures.addEvent(context: context)
+                MageCoreDataFixtures.addEvent()
                 
                 Server.setCurrentEventId(1);
                 
@@ -70,8 +79,6 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 navigationController?.isNavigationBarHidden = true;
                 window = TestHelpers.getKeyWindowVisible();
                 window!.rootViewController = navigationController;
-                @Injected(\.nsManagedObjectContext)
-                var context: NSManagedObjectContext?
                 coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme(), context: context);
             }
             
@@ -83,9 +90,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 coordinator = nil;
                 delegate = nil;
                 HTTPStubs.removeAllStubs();
-//                TestHelpers.clearAndSetUpStack();
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
+                TestHelpers.clearAndSetUpStack();
                 
             }
             
@@ -235,7 +240,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should login as a different user") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 UserDefaults.standard.deviceRegistered = true;
@@ -289,7 +294,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should stop logging in as a different user") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 MageCoreDataFixtures.addUnsyncedObservationToEvent();
                 
                 UserDefaults.standard.deviceRegistered = true;
@@ -338,7 +343,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in with an inactive user") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -382,7 +387,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should fail to get a token") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -432,7 +437,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should not be able to log in offline with no stored password") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -479,7 +484,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in offline with stored password") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -536,7 +541,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should log in offline again with stored password") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 UserDefaults.standard.loginType = "offline";
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";
@@ -579,7 +584,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
             }
             
             it("should initialize the login view with a user") {
-                MageCoreDataFixtures.addUser(context: context);
+                MageCoreDataFixtures.addUser();
                 
                 UserDefaults.standard.deviceRegistered = true;
                 UserDefaults.standard.currentUserId = "userabc";

@@ -54,12 +54,17 @@ enum MapSearchType: Int32 {
                 return
             }
             context.performAndWait {
-                var settings = Settings.mr_findFirst(in: context)
-                if (settings == nil) {
-                    settings = Settings.mr_createEntity(in: context)
+                var settings: Settings {
+                    if let settings = try? context.fetchFirst(Settings.self) {
+                        return settings
+                    } else {
+                        let settings = Settings(context: context)
+                        try? context.obtainPermanentIDs(for: [settings])
+                        return settings
+                    }
                 }
 
-                settings?.populate(response)
+                settings.populate(response)
                 do {
                     try context.save()
                     success?(task, response)

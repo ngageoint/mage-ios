@@ -24,7 +24,7 @@ class LayerTests: MageCoreDataTestCase {
         UserDefaults.standard.serverMajorVersion = 6;
         UserDefaults.standard.serverMinorVersion = 0;
         
-        MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+        MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
         Server.setCurrentEventId(1);
     }
     

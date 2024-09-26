@@ -17,46 +17,29 @@ import OHHTTPStubs
 class LocationFetchServiceTests: KIFSpec {
     
     override func spec() {
-        xdescribe("LocationFetchService Tests") {
-            
-            var coreDataStack: TestCoreDataStack?
+        describe("LocationFetchService Tests") {
+            @Injected(\.persistence)
+            var coreDataStack: Persistence
+            @Injected(\.nsManagedObjectContext)
             var context: NSManagedObjectContext!
             
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                coreDataStack.clearAndSetupStack()
+                context = coreDataStack.getContext()
                 InjectedValues[\.nsManagedObjectContext] = context
+//                NSManagedObject.mr_setDefaultBatchSize(0);
+                
                 LocationFetchService.singleton.stop();
-
-                var cleared = false;
-                while (!cleared) {
-                    let clearMap = TestHelpers.clearAndSetUpStack()
-                    cleared = (clearMap[String(describing: Location.self)] ?? false) && (clearMap[String(describing: User.self)] ?? false)
-                    
-                    if (!cleared) {
-                        cleared = Location.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && User.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
-                    }
-                    
-                    if (!cleared) {
-                        Thread.sleep(forTimeInterval: 0.5);
-                    }
-                    
-                }
-                
-                expect(Location.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations still exist in default");
-                
-                expect(Location.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations still exist in root");
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
-                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
-                NSManagedObject.mr_setDefaultBatchSize(0);
                 UserDefaults.standard.loginParameters = [
                     LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
                     LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
@@ -66,10 +49,9 @@ class LocationFetchServiceTests: KIFSpec {
             
             afterEach {
                 InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
+                coreDataStack.clearAndSetupStack()
                 LocationFetchService.singleton.stop();
                 expect(LocationFetchService.singleton.started).toEventually(beFalse());
-                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
@@ -123,7 +105,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -151,7 +133,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.userFetchFrequency = 1
                 // 2 is none
                 UserDefaults.standard.set(2, forKey: "locationFetchNetworkOption")
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -178,7 +160,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -205,7 +187,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(LocationFetchService.singleton.started).to(beFalse());
 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -234,7 +216,7 @@ class LocationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.userFetchFrequency = 2
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(LocationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();

@@ -78,7 +78,9 @@ protocol FeedItemSelectionDelegate {
             tableView: tableView,
             cellProvider: { (tableView, indexPath, feedItemId) in
                 guard let feedItem = try? self.fetchedResultsController?.managedObjectContext.existingObject(with: feedItemId) as? FeedItem else {
-                    fatalError("feed item \(feedItemId) not found in managed object context")
+                    print("feed item \(feedItemId) not found in managed object context")
+                    return nil
+//                    fatalError("feed item \(feedItemId) not found in managed object context")
                 }
                 let feedCell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseIdentifier, for: indexPath) as! FeedItemTableViewCell
                 feedCell.configure(feedItem: feedItem, actionsDelegate: self, scheme: self.scheme);

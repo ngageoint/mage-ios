@@ -75,7 +75,7 @@ class MapDirectionsTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.selectedOnlineLayers = nil
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 Server.setCurrentEventId(1);
                 
@@ -355,8 +355,8 @@ class MapDirectionsTests: KIFSpec {
             }
             
             it("get directions to a user") {
-                var user = MageCoreDataFixtures.addUser(userId: "userabc", context: context)
-                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01), completion: nil)
+                var user = MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01))
                 user = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
 
                 let mapState = MapState()
@@ -408,7 +408,7 @@ class MapDirectionsTests: KIFSpec {
                     }
                 }
                 
-                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105.1, andY: 40.1), completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105.1, andY: 40.1))
 
                 tester().wait(forTimeInterval: 1)
                 for overlay in mixin.mapView!.overlays {
@@ -427,8 +427,8 @@ class MapDirectionsTests: KIFSpec {
             }
             
             it("get directions to a user change my location") {
-                var user = MageCoreDataFixtures.addUser(userId: "userabc", context: context)
-                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01), completion: nil)
+                var user = MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(x: -105, andY: 40.01))
                 user = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
                 
                 let mapState = MapState()

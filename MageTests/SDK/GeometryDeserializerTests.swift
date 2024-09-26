@@ -17,7 +17,7 @@ class GeometryDeserializerTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("GeometryDeserializer Tests") {
+        describe("GeometryDeserializer Tests") {
             
             it("should deserialize a point") {
                 let point: [String:Any] = [

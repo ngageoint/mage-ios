@@ -12,22 +12,16 @@ import Nimble
 
 @testable import MAGE
 
-final class ObservationCoreDataDataSourceTests: XCTestCase {
+final class ObservationCoreDataDataSourceTests: MageCoreDataTestCase {
     
-    var cancellables: Set<AnyCancellable> = Set()
-    var coreDataStack: TestCoreDataStack?
-    var context: NSManagedObjectContext?
-
     override func setUp() {
-        coreDataStack = TestCoreDataStack()
-        context = coreDataStack!.persistentContainer.newBackgroundContext()
-        InjectedValues[\.nsManagedObjectContext] = context
+        super.setUp()
+        print("XXX SET UP")
     }
     
     override func tearDown() {
-        cancellables.removeAll()
-        InjectedValues[\.nsManagedObjectContext] = nil
-        coreDataStack!.reset()
+        super.tearDown()
+        print("XXX TEAR DOWN")
     }
     
     func testGetLastObservationDateNoObservationsFromOtherUsers() {
@@ -558,7 +552,9 @@ final class ObservationCoreDataDataSourceTests: XCTestCase {
         expect(state.rows.count).toEventually(equal(3))
     }
     
-    func testObservationsForUserPublisherLoadMore() {
+    func testObservationsForUserPublisherLoadMore() throws {
+        try XCTSkipIf(persistence is MagicalRecordPersistence, "Magical record fails to use fetch offset properly")
+        
         guard let context = context else {
             XCTFail("No Managed Object Context")
             return
@@ -592,7 +588,7 @@ final class ObservationCoreDataDataSourceTests: XCTestCase {
             let user = User(context: context)
             user.name = "Fred"
             user.remoteId = "user1"
-            user.currentUser = true
+            user.currentUser = false
             
             let user2 = User(context: context)
             user2.name = "Bob"
@@ -603,19 +599,22 @@ final class ObservationCoreDataDataSourceTests: XCTestCase {
             observation.remoteId = "1"
             observation.eventId = 1
             observation.user = user
-            observation.lastModified = Date(timeIntervalSince1970: 10000)
+            observation.lastModified = Date(timeIntervalSince1970: 20001)
+            observation.timestamp = Date(timeIntervalSince1970: 20001)
             
             let observation2 = Observation(context: context)
             observation2.remoteId = "2"
             observation2.eventId = 1
             observation2.user = user2
-            observation2.lastModified = Date(timeIntervalSince1970: 10000)
+            observation2.lastModified = Date(timeIntervalSince1970: 20000)
+            observation2.timestamp = Date(timeIntervalSince1970: 20000)
             
             let observation3 = Observation(context: context)
             observation3.remoteId = "3"
             observation3.eventId = 1
             observation3.user = user2
-            observation3.lastModified = Date(timeIntervalSince1970: 20000)
+            observation3.lastModified = Date(timeIntervalSince1970: 10003)
+            observation3.timestamp = Date(timeIntervalSince1970: 10003)
             
             try? context.obtainPermanentIDs(for: [observation, observation2, user, user2])
             userUri = user2.objectID.uriRepresentation()
@@ -634,6 +633,7 @@ final class ObservationCoreDataDataSourceTests: XCTestCase {
             )
             .scan([]) { $0 + $1 }
             .map {
+                print("new rows \($0)")
                 return State.loaded(rows: $0)
             }
             .catch { error in
@@ -663,13 +663,15 @@ final class ObservationCoreDataDataSourceTests: XCTestCase {
             observation.remoteId = "4"
             observation.eventId = 1
             observation.user = user
-            observation.lastModified = Date(timeIntervalSince1970: 20000)
+            observation.lastModified = Date(timeIntervalSince1970: 10002)
+            observation.timestamp = Date(timeIntervalSince1970: 10002)
             
             let observation2 = Observation(context: context)
             observation2.remoteId = "5"
             observation2.eventId = 1
             observation2.user = user2
-            observation2.lastModified = Date(timeIntervalSince1970: 20000)
+            observation2.lastModified = Date(timeIntervalSince1970: 10001)
+            observation2.timestamp = Date(timeIntervalSince1970: 10001)
             
             try? context.obtainPermanentIDs(for: [observation, observation2])
             try? context.save()

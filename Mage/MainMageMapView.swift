@@ -211,7 +211,7 @@ class MainMageMapView:
     @MainActor
     func viewFeedItemUri(_ feedItemUri: URL) async {
         NotificationCenter.default.post(name: .MapAnnotationFocused, object: nil)
-        if let feedItem = await feedItemRepository.getFeedItem(feedItemrUri: feedItemUri) {
+        if let feedItem = await feedItemRepository.getFeedItem(feedItemUri: feedItemUri) {
             let fivc = FeedItemViewController(feedItem: feedItem, scheme: scheme)
             navigationController?.pushViewController(fivc, animated: true)
         }

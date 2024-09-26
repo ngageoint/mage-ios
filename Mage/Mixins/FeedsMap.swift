@@ -84,11 +84,11 @@ class FeedsMapMixin: NSObject, MapMixin {
         
         let feedIdsInEvent = UserDefaults.standard.currentEventSelectedFeeds
         // remove any feeds that are no longer selected
-        currentFeeds.removeAll { feedId in
-            return feedIdsInEvent.contains(feedId)
+        let removeFeeds = currentFeeds.filter { feedId in
+            return !feedIdsInEvent.contains(feedId)
         }
         // current feeds is now any that used to be selected but not any more
-        for feedId in currentFeeds {
+        for feedId in removeFeeds {
             feedItemRetrievers.removeValue(forKey: feedId)
             if let items = FeedItem.getFeedItems(feedId: feedId, eventId: currentEventId.intValue) {
                 for item in items {
@@ -105,10 +105,14 @@ class FeedsMapMixin: NSObject, MapMixin {
             }
         }
         
-        // clear the current feeds
-        currentFeeds.removeAll()
-        
         for feedId in feedIdsInEvent {
+            // This feed already is on the map
+            let alreadyAdded = currentFeeds.contains { currentFeedId in
+                return currentFeedId == feedId
+            }
+            if alreadyAdded {
+                continue
+            }
             guard let retriever = feedItemRetrievers[feedId] ?? {
                 return FeedItemRetriever.getMappableFeedRetriever(feedId: feedId, eventId: currentEventId, delegate: self)
             }() else {
@@ -121,7 +125,7 @@ class FeedsMapMixin: NSObject, MapMixin {
                 }
             }
         }
-        
+        currentFeeds.removeAll()
         currentFeeds.append(contentsOf: feedIdsInEvent)
     }
     
