@@ -62,7 +62,7 @@ class SignUpViewControllerTests: KIFSpec {
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 
                 Server.setCurrentEventId(1);
                 

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 private struct PersistenceProviderKey: InjectionKey {
     static var currentValue: Persistence = MagicalRecordPersistence()
@@ -20,6 +21,7 @@ extension InjectedValues {
 }
 
 protocol Persistence {
+    var contextChange: AnyPublisher<NSManagedObjectContext?, Never> { get }
     func getContext() -> NSManagedObjectContext
     func getNewBackgroundContext(name: String?) -> NSManagedObjectContext
     func setupStack()
@@ -28,10 +30,23 @@ protocol Persistence {
 }
 
 class MagicalRecordPersistence: Persistence {
+    var refreshSubject: PassthroughSubject<NSManagedObjectContext?, Never> = PassthroughSubject<NSManagedObjectContext?, Never>()
+    
+    var contextChange: AnyPublisher<NSManagedObjectContext?, Never> {
+        refreshSubject.eraseToAnyPublisher()
+    }
+    
+    init() {
+        print("XXX CREATE THE STACK")
+        setupStack()
+    }
     
     func setupStack() {
         MagicalRecord.setupMageCoreDataStack();
-        InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
+        let context = NSManagedObjectContext.mr_default()
+        InjectedValues[\.nsManagedObjectContext] = context
+        print("XXX send context change \(self)")
+        refreshSubject.send(context)
         MagicalRecord.setLoggingLevel(.verbose);
     }
     
@@ -54,7 +69,11 @@ class MagicalRecordPersistence: Persistence {
     
     func clearAndSetupStack() {
         MagicalRecord.deleteAndSetupMageCoreDataStack()
-        InjectedValues[\.nsManagedObjectContext] = NSManagedObjectContext.mr_default()
+        let context = NSManagedObjectContext.mr_default()
+        InjectedValues[\.nsManagedObjectContext] = context
+        print("XXX send context change \(self)")
+        refreshSubject.send(context)
         MagicalRecord.setLoggingLevel(.verbose)
+//        NSManagedObject.mr_setDefaultBatchSize(20);
     }
 }

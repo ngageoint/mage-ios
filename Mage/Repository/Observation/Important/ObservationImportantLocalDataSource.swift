@@ -36,8 +36,31 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
     
     override init() {
         super.init()
+        persistence.contextChange
+            .compactMap {
+                return $0
+            }
+            .sink { [weak self] context in
+                context.performAndWait { [weak self] in
+                    self?.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(
+                        by: "observation.\(ObservationKey.timestamp.key)",
+                        ascending: false,
+                        with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
+                        groupBy: nil,
+                        delegate: self,
+                        in: context
+                    ) as? NSFetchedResultsController<ObservationImportant>
+                }
+                for observationImportant in self?.importantFetchedResultsController?.fetchedObjects ?? [] {
+                    if observationImportant.observation?.remoteId != nil {
+                        self?.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
+                    }
+                }
+        }
+        .store(in: &cancellables)
+        
         guard let context = context else { return }
-        context.perform { [weak self] in
+        context.performAndWait { [weak self] in
             self?.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(
                 by: "observation.\(ObservationKey.timestamp.key)",
                 ascending: false,
@@ -46,6 +69,11 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                 delegate: self,
                 in: context
             ) as? NSFetchedResultsController<ObservationImportant>
+        }
+        for observationImportant in self.importantFetchedResultsController?.fetchedObjects ?? [] {
+            if observationImportant.observation?.remoteId != nil {
+                self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
+            }
         }
     }
     
@@ -100,18 +128,27 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     important.reason = reason
                     // this will get overridden by the server, but let's set an initial value so the UI has something to display
                     important.timestamp = Date();
+                    print("Important existed, updating it")
                 } else {
-                    if let important = ObservationImportant.mr_createEntity(in: context) {
-                        important.observation = observation
-                        observation.observationImportant = important;
-                        important.dirty = true;
-                        important.important = true;
-                        important.userId = userRemoteId;
-                        important.reason = reason
-                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                        important.timestamp = Date();
-                    }
+                    let important = ObservationImportant(context: context)
+                    important.observation = observation
+                    observation.observationImportant = important;
+                    important.dirty = true;
+                    important.important = true;
+                    important.userId = userRemoteId;
+                    important.reason = reason
+                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
+                    important.timestamp = Date();
+                    try? context.obtainPermanentIDs(for: [important])
+                    print("Important created")
                 }
+            }
+            print("Saving the flagged important")
+            do {
+                try context.save()
+                print("Saved")
+            } catch {
+                print("Error saving important \(error)")
             }
         }
     }
@@ -138,18 +175,19 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     // this will get overridden by the server, but let's set an initial value so the UI has something to display
                     important.timestamp = Date();
                 } else {
-                    if let important = ObservationImportant.mr_createEntity(in: context) {
-                        important.observation = observation
-                        observation.observationImportant = important;
-                        important.dirty = true;
-                        important.important = false;
-                        important.userId = userRemoteId;
-                        important.reason = nil
-                        // this will get overridden by the server, but let's set an initial value so the UI has something to display
-                        important.timestamp = Date();
-                    }
+                    let important = ObservationImportant(context: context)
+                    important.observation = observation
+                    observation.observationImportant = important;
+                    important.dirty = true;
+                    important.important = false;
+                    important.userId = userRemoteId;
+                    important.reason = nil
+                    // this will get overridden by the server, but let's set an initial value so the UI has something to display
+                    important.timestamp = Date();
+                    try? context.obtainPermanentIDs(for: [important])
                 }
             }
+            try? context.save()
         }
     }
     
@@ -198,12 +236,14 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     localImportant.managedObjectContext?.refresh(observation, mergeChanges: false);
                 }
             }
+            try? context.save()
         }
     }
 }
 
 extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("fetch controller found a thing \(anObject)")
         if let observationImportant = anObject as? ObservationImportant {
             switch type {
             case .insert:

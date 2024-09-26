@@ -13,42 +13,6 @@ import Kingfisher
 
 @testable import MAGE
 
-class TestCoreDataStack: NSObject {
-    // this is static to only load one model because even when the data store is reset
-    // it keeps the model around :shrug: but resetting does clear all data
-    static let momd = NSManagedObjectModel.mergedModel(from: [.main])
-    var managedObjectModel: NSManagedObjectModel?
-    
-    lazy var persistentContainer: NSPersistentContainer = {
-        let description = NSPersistentStoreDescription()
-        description.url = URL(fileURLWithPath: "/dev/null")
-        description.shouldAddStoreAsynchronously = false
-        let bundle: Bundle = .main
-        let container = NSPersistentContainer(name: "mage-ios-sdk", managedObjectModel: TestCoreDataStack.momd!)
-        container.persistentStoreDescriptions = [description]
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
-    
-    func reset() {
-        do {
-            for currentStore in persistentContainer.persistentStoreCoordinator.persistentStores {
-                try persistentContainer.persistentStoreCoordinator.remove(currentStore)
-                if let currentStoreURL = currentStore.url {
-                    try persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: currentStoreURL, type: .sqlite)
-                    
-                }
-            }
-        } catch {
-            print("Exception destroying \(error)")
-        }
-    }
-}
-
 extension XCTestCase {
     /// Creates an expectation for monitoring the given condition.
     /// - Parameters:

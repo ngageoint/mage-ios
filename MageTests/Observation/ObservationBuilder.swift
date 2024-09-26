@@ -12,20 +12,28 @@ import MagicalRecord
 @testable import MAGE
 
 class ObservationBuilder {
-    static func createBlankObservation(_ eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
-        var observation: Observation!;
-        if let safeContext = context {
-            observation = Observation(context: safeContext)
-        } else {
+    @Injected(\.nsManagedObjectContext)
+    static var context: NSManagedObjectContext?
+    
+    static func createBlankObservation(_ eventId: NSNumber = 0) -> Observation {
+        guard let context = context else {
             fatalError()
         }
-        observation.eventId = eventId;
-        let observationProperties: [String:Any] = [:]
-        observation.properties = observationProperties;
-        return observation
+        return context.performAndWait {
+            var observation = Observation(context: context)
+            observation.eventId = eventId;
+            let observationProperties: [String:Any] = [:]
+            observation.properties = observationProperties;
+            try? context.obtainPermanentIDs(for: [observation])
+            try? context.save()
+            return observation
+        }
     }
     
-    static func createObservation(jsonFileName: String, eventId: NSNumber = 0, context: NSManagedObjectContext? = nil) -> Observation {
+    static func createObservation(jsonFileName: String, eventId: NSNumber = 0) -> Observation {
+        guard let context = context else {
+            fatalError()
+        }
         guard let pathString = Bundle(for: ObservationBuilder.self).path(forResource: jsonFileName, ofType: "json") else {
             fatalError("jsonFileName not found")
         }
@@ -46,38 +54,51 @@ class ObservationBuilder {
             fatalError("Unable to convert jsonFileName to JSON dictionary")
         }
         
-        let observation = createBlankObservation(eventId, context: context);
+        let observation = createBlankObservation(eventId);
         observation.populate(json: jsonDictionaryObservation);
         return observation;
     }
     
-    static func createGeometryObservation(eventId: NSNumber = 0, jsonFileName: String?, geometry: SFGeometry, context: NSManagedObjectContext? = nil) -> Observation {
+    static func createGeometryObservation(eventId: NSNumber = 0, jsonFileName: String?, geometry: SFGeometry) -> Observation {
+        guard let context = context else {
+            fatalError()
+        }
         var observation: Observation;
-        observation = createBlankObservation(eventId, context: context);
+        observation = createBlankObservation(eventId);
         if (jsonFileName != nil) {
-            observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId, context: context);
+            observation = createObservation(jsonFileName: jsonFileName!, eventId: eventId);
         }
         observation.geometry = geometry;
+        observation.createObservationLocations(context: context)
         return observation;
     }
     
-    static func createPointObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
+    static func createPointObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
+        guard let context = context else {
+            fatalError()
+        }
         let point: SFPoint = SFPoint(x: -105.2678, andY: 40.0085);
-        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: point, context: context);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: point);
     }
     
-    static func createLineObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
+    static func createLineObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
+        guard let context = context else {
+            fatalError()
+        }
         let points: NSMutableArray = [SFPoint(x: -105.2678, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0085) as Any]
         
         let line: SFLineString = SFLineString(points: points);
-        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: line, context: context);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: line);
     }
     
-    static func createPolygonObservation(eventId: NSNumber = 0, jsonFileName: String? = nil, context: NSManagedObjectContext? = nil) -> Observation {
+    static func createPolygonObservation(eventId: NSNumber = 0, jsonFileName: String? = nil) -> Observation {
+        guard let context = context else {
+            fatalError()
+        }
         let points: NSMutableArray = [SFPoint(x: -105.2678, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0085) as Any, SFPoint(x: -105.2653, andY: 40.0102) as Any, SFPoint(x: -105.2678, andY: 40.0102) as Any]
         let line: SFLineString = SFLineString(points: points);
         let poly: SFPolygon = SFPolygon(ring: line);
-        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: poly, context: context);
+        return createGeometryObservation(eventId: eventId, jsonFileName: jsonFileName, geometry: poly);
     }
     
     static func addObservationProperty(observation: Observation, key: String, value: Any) {

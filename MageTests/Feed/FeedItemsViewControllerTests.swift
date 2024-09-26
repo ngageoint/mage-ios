@@ -17,31 +17,21 @@ import Kingfisher
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedItemsViewControllerTests: KIFSpec {
+class FeedItemsViewControllerTests: KIFMageCoreDataTestCase {
     let recordSnapshots = false;
-
-//    func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-//        print("Record snapshot?", recordSnapshots);
-//        if (recordSnapshots || recordThisSnapshot) {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Thread.sleep(forTimeInterval: 1.0);
-//                DispatchQueue.main.async {
-//                    expect(view) == recordSnapshot();
-//                    doneClosure?();
-//                }
-//            }
-//        } else {
-//            doneClosure?();
-//        }
-//    }
     
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
+
     override func spec() {
         
-        xdescribe("FeedItemsViewController no timestamp") {
-//            Nimble_Snapshots.setNimbleTolerance(0);
-                
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
+        describe("FeedItemsViewController no timestamp") {
+
                 var controller: FeedItemsViewController!
                 var window: UIWindow!;
             
@@ -49,16 +39,9 @@ class FeedItemsViewControllerTests: KIFSpec {
                     controller.dismiss(animated: false, completion: nil);
                     window.rootViewController = nil;
                     controller = nil;
-                    HTTPStubs.removeAllStubs();
-                    TestHelpers.clearAndSetUpStack();
-                    InjectedValues[\.nsManagedObjectContext] = nil
-                    coreDataStack!.reset()
                 }
             
                 beforeEach {
-                    coreDataStack = TestCoreDataStack()
-                    context = coreDataStack!.persistentContainer.newBackgroundContext()
-                    InjectedValues[\.nsManagedObjectContext] = context
                     ImageCache.default.clearMemoryCache();
                     ImageCache.default.clearDiskCache();
                     
@@ -70,14 +53,12 @@ class FeedItemsViewControllerTests: KIFSpec {
                     };
                     
                     window = TestHelpers.getKeyWindowVisible();
-                    
-                    TestHelpers.clearAndSetUpStack();
-                    
+                                        
                     UserDefaults.standard.mapType = 0;
                     UserDefaults.standard.locationDisplay = .latlng;
                     Server.setCurrentEventId(1);
                     
-                    MageCoreDataFixtures.addEvent(context: context);
+                    MageCoreDataFixtures.addEvent();
                     MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary");
                 }
                 
@@ -150,23 +131,18 @@ class FeedItemsViewControllerTests: KIFSpec {
             
         }
         
-        xdescribe("FeedItemsViewController with timestamp") {
+        describe("FeedItemsViewController with timestamp") {
             
             var controller: FeedItemsViewController!
             var window: UIWindow!;
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
             
             afterEach {
-                HTTPStubs.removeAllStubs();
-                TestHelpers.clearAndSetUpStack();
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
             }
+            
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
@@ -178,14 +154,12 @@ class FeedItemsViewControllerTests: KIFSpec {
                 };
                 
                 window = TestHelpers.getKeyWindowVisible();
-                
-                TestHelpers.clearAndSetUpStack();
-                
+                                
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.locationDisplay = .latlng;
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp")
             }
             

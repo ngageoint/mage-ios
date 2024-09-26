@@ -111,8 +111,18 @@ import MapKit
         
         guard let context = context else { return nil }
         return context.performAndWait {
-            if let feed = Feed.mr_findFirst(with: NSPredicate(format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)", feedId, eventId), in: context) {
-                return (FeedItem.mr_findAll(with: NSPredicate(format: "(feed == %@)", feed), in: context) as? [FeedItem])?.map({ feedItem in
+            if let feed = try? context.fetchFirst(
+                Feed.self,
+                predicate: NSPredicate(
+                    format: "(\(FeedKey.remoteId.key) == %@ AND \(FeedKey.eventId.key) == %d)",
+                    feedId,
+                    eventId
+                )
+            ) {
+                return try? context.fetchObjects(
+                    FeedItem.self,
+                    predicate: NSPredicate(format: "(feed == %@)", feed)
+                )?.map({ feedItem in
                     FeedItemAnnotation(feedItem: feedItem)
                 })
             }

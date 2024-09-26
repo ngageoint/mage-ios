@@ -17,7 +17,7 @@ class FormTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("Form Tests") {
+        describe("Form Tests") {
             
             beforeEach {
                 TestHelpers.resetUserDefaults();

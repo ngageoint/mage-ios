@@ -10,9 +10,15 @@
 
 @implementation MagicalRecord (MAGE)
 
+// this is static to only load one model because even when the data store is reset
+// it keeps the model around :shrug: but resetting does clear all data
+static NSManagedObjectModel* momd = nil;
+
 +(void) setupMageCoreDataStack {
-    NSManagedObjectModel *model = [NSManagedObjectModel MR_defaultManagedObjectModel];
-    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+    if (momd == nil) {
+        momd = [NSManagedObjectModel MR_defaultManagedObjectModel];
+    }
+    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:momd];
     
     // Adding the journalling mode recommended by apple
     NSMutableDictionary *sqliteOptions = [NSMutableDictionary dictionary];

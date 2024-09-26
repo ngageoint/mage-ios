@@ -163,7 +163,7 @@ class MageServiceTests: MageCoreDataTestCase {
     func testShouldStartServicesAsInitial() {
         UserDefaults.standard.baseServerUrl = "https://magetest";
         UserDefaults.standard.currentEventId = 1
-        MageCoreDataFixtures.addEvent(context: context!);
+        MageCoreDataFixtures.addEvent();
         expect(ObservationPushService.singleton.started).to(beFalse());
         expect(LocationService.singleton().started).to(beFalse());
         expect(LocationFetchService.singleton.started).to(beFalse());
@@ -243,7 +243,7 @@ class MageServiceTests: MageCoreDataTestCase {
     func testShouldStartServicesAndThenStop() {
         UserDefaults.standard.baseServerUrl = "https://magetest";
         UserDefaults.standard.currentEventId = 1
-        MageCoreDataFixtures.addEvent(context: context);
+        MageCoreDataFixtures.addEvent();
         expect(ObservationPushService.singleton.started).to(beFalse());
         expect(LocationService.singleton().started).to(beFalse());
         expect(LocationFetchService.singleton.started).to(beFalse());

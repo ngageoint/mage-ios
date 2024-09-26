@@ -22,7 +22,7 @@ extension InjectedValues {
 
 protocol FeedItemRepository {
     func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel?
-    func getFeedItem(feedItemrUri: URL?) async -> FeedItem?
+    func getFeedItem(feedItemUri: URL?) async -> FeedItem?
     func observeFeedItem(feedItemUri: URL?) -> AnyPublisher<FeedItemModel, Never>?
 }
 
@@ -64,11 +64,11 @@ class FeedItemRepositoryImpl: ObservableObject, FeedItemRepository {
     var localDataSource: FeedItemLocalDataSource
     
     func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel? {
-        await localDataSource.getFeedItemModel(feedItemUri: feedItemUri)
+        return await localDataSource.getFeedItemModel(feedItemUri: feedItemUri)
     }
 
-    func getFeedItem(feedItemrUri: URL?) async -> FeedItem? {
-        await localDataSource.getFeedItem(feedItemrUri: feedItemrUri)
+    func getFeedItem(feedItemUri: URL?) async -> FeedItem? {
+        await localDataSource.getFeedItem(feedItemUri: feedItemUri)
     }
     
     func observeFeedItem(feedItemUri: URL?) -> AnyPublisher<FeedItemModel, Never>? {

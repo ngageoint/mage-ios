@@ -23,7 +23,7 @@ extension InjectedValues {
 protocol FeedItemLocalDataSource {
     // TODO: this should go away
     @available(*, deprecated, renamed: "getFeedItemModel", message: "use the getFeedItemModel method")
-    func getFeedItem(feedItemrUri: URL?) async -> FeedItem?
+    func getFeedItem(feedItemUri: URL?) async -> FeedItem?
     func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel?
     func observeFeedItem(
         feedItemUri: URL?
@@ -32,14 +32,14 @@ protocol FeedItemLocalDataSource {
 
 class FeedItemCoreDataDataSource: CoreDataDataSource<FeedItem>, FeedItemLocalDataSource, ObservableObject {
     func getFeedItemModel(feedItemUri: URL?) async -> FeedItemModel? {
-        if let feedItem = await getFeedItem(feedItemrUri: feedItemUri) {
+        if let feedItem = await getFeedItem(feedItemUri: feedItemUri) {
             return FeedItemModel(feedItem: feedItem)
         }
         return nil
     }
     
-    func getFeedItem(feedItemrUri: URL?) async -> FeedItem? {
-        guard let feedItemrUri = feedItemrUri else {
+    func getFeedItem(feedItemUri: URL?) async -> FeedItem? {
+        guard let feedItemUri = feedItemUri else {
             return nil
         }
         @Injected(\.nsManagedObjectContext)
@@ -47,7 +47,7 @@ class FeedItemCoreDataDataSource: CoreDataDataSource<FeedItem>, FeedItemLocalDat
         
         guard let context = context else { return nil }
         return await context.perform {
-            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: feedItemrUri) {
+            if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: feedItemUri) {
                 if let feedItem = try? context.existingObject(with: id) as? FeedItem {
                     return feedItem
                 }

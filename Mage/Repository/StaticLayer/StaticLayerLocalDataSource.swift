@@ -33,7 +33,9 @@ class StaticLayerCoreDataDataSource: CoreDataDataSource<StaticLayer>, StaticLaye
         guard let remoteId = remoteId, let eventId = eventId else {
             return nil
         }
-        return StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", remoteId, eventId), in: context)
+        return context.performAndWait {
+            return try? context.fetchFirst(StaticLayer.self, predicate: NSPredicate(format: "remoteId == %@ AND eventId == %@", remoteId, eventId))
+        }
     }
     
     func getStaticLayer(remoteId: NSNumber?) -> StaticLayer? {
@@ -44,6 +46,8 @@ class StaticLayerCoreDataDataSource: CoreDataDataSource<StaticLayer>, StaticLaye
         guard let remoteId = remoteId else {
             return nil
         }
-        return StaticLayer.mr_findFirst(byAttribute: "remoteId", withValue: remoteId, in: context)
+        return context.performAndWait {
+            return context.fetchFirst(StaticLayer.self, key: "remoteId", value: remoteId)
+        }
     }
 }

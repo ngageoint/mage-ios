@@ -16,7 +16,7 @@ class CoordinateFieldTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("CoordinateFieldTests") {
+        describe("CoordinateFieldTests") {
             var view: UIView!
             var controller: UIViewController!
             var window: UIWindow!;

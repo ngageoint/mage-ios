@@ -38,7 +38,7 @@ class ObservationFormReorderTests: KIFSpec {
 //                MageCoreDataFixtures.clearAllData();
                 TestHelpers.resetUserDefaults();
                 window = TestHelpers.getKeyWindowVisible();
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "allFieldTypesForm")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "allFieldTypesForm")
                 
                 eventForm = FormBuilder.createFormWithAllFieldTypes();
                 

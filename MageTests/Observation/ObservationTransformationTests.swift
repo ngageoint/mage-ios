@@ -22,9 +22,9 @@ class ObservationTransformationTests: MageCoreDataTestCase {
         UserDefaults.standard.baseServerUrl = "https://magetest";
         
         context.performAndWait {
-            MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-            MageCoreDataFixtures.addUser(userId: "userabc", context: context)
-            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+            MageCoreDataFixtures.addEvent( remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+            MageCoreDataFixtures.addUser(userId: "userabc")
+            MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
         }
         Server.setCurrentEventId(1);
         UserDefaults.standard.currentUserId = "userabc";

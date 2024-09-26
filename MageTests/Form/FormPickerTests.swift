@@ -30,23 +30,25 @@ class MockFormPickerDelegate: FormPickedDelegate {
     }
 }
 
-class FormPickerTests: KIFSpec {
+class FormPickerTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
-        xdescribe("FormPickerTests") {
+        describe("FormPickerTests") {
             
             var formPicker: FormPickerViewController!
             var window: UIWindow!;
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
 
             beforeEach {
                 window = TestHelpers.getKeyWindowVisible()
-//                TestHelpers.clearAndSetUpStack()
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
             }
             
             afterEach {
@@ -54,9 +56,6 @@ class FormPickerTests: KIFSpec {
                 window.rootViewController = nil
                 formPicker = nil
                 Server.removeCurrentEventId()
-//                TestHelpers.clearAndSetUpStack()
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
             }
             
             it("initialized") {
@@ -75,7 +74,7 @@ class FormPickerTests: KIFSpec {
                     "id": 2
                 ]]
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
                 
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -111,7 +110,7 @@ class FormPickerTests: KIFSpec {
                     "id": 4
                 ]]
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
 
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -174,7 +173,7 @@ class FormPickerTests: KIFSpec {
                 ]]
                 let delegate = MockFormPickerDelegate();
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
 
                 formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -191,6 +190,8 @@ class FormPickerTests: KIFSpec {
                 
                 expect(delegate.formPickedCalled).to(beTrue());
                 expect(delegate.pickedForm).to(equal(forms[9]));
+                
+                bottomSheet.dismiss(animated: false)
 
 //                expect(formPicker.view).to(haveValidSnapshot());
             }
@@ -226,14 +227,14 @@ class FormPickerTests: KIFSpec {
                 
                 let delegate = MockFormPickerDelegate();
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
 
                 formPicker = FormPickerViewController(delegate: delegate, forms: forms, scheme: MAGEScheme.scheme());
                 
                 window.rootViewController = formPicker;
                 
-                tester().waitForTappableView(withAccessibilityLabel: "Cancel");
-                tester().tapView(withAccessibilityLabel: "Cancel");
+                tester().waitForTappableView(withAccessibilityLabel: "CANCEL");
+                tester().tapView(withAccessibilityLabel: "CANCEL");
                 
                 expect(delegate.cancelSelectionCalled).to(beTrue());
             }
@@ -246,7 +247,7 @@ class FormPickerTests: KIFSpec {
                     "id": 2
                 ]]
                 
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
 
                 formPicker = FormPickerViewController(forms: forms, scheme: MAGEScheme.scheme());
                 
@@ -285,8 +286,8 @@ class FormPickerTests: KIFSpec {
                 ]]
                 
                 let delegate = MockFormPickerDelegate();
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
                 
                 Server.setCurrentEventId(1)
                 
@@ -357,8 +358,8 @@ class FormPickerTests: KIFSpec {
                 ]]
                 
                 let delegate = MockFormPickerDelegate();
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: NSManagedObjectContext.mr_default())
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                let forms = Form.deleteAndRecreateForms(eventId: 1, formsJson: formsJson, context: self.context)
                 
                 Server.setCurrentEventId(1)
                 
@@ -383,7 +384,7 @@ class FormPickerTests: KIFSpec {
                 ];
                 
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
-                let observations = Observation.mr_findAll();
+                let observations = self.context.fetchAll(Observation.self)
                 expect(observations?.count).to(equal(1));
                 let observation: Observation = observations![0] as! Observation;
                 

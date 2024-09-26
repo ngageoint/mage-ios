@@ -24,11 +24,19 @@ class CanReportLocationTestImpl : NSObject, CanReportLocation {
     var canReportLocationMixin: CanReportLocationMixin?
 }
 
-class CanReportLocationTests: KIFSpec {
+class CanReportLocationTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
-        xdescribe("CanReportLocationTests") {
+        describe("CanReportLocationTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
@@ -39,17 +47,11 @@ class CanReportLocationTests: KIFSpec {
             
             var buttonStack: UIStackView!
             
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
             
             describe("User not in the event") {
                 
                 beforeEach {
-                    
-                    coreDataStack = TestCoreDataStack()
-                    context = coreDataStack!.persistentContainer.newBackgroundContext()
-                    InjectedValues[\.nsManagedObjectContext] = context
-                    
+                    TestHelpers.clearAndSetUpStack()
                     if (navController != nil) {
                         waitUntil { done in
                             navController.dismiss(animated: false, completion: {
@@ -69,8 +71,8 @@ class CanReportLocationTests: KIFSpec {
                     
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                    MageCoreDataFixtures.addUser(userId: "userabc", context: context)
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addUser(userId: "userabc")
                     UserDefaults.standard.currentUserId = "userabc";
                     
                     Server.setCurrentEventId(1);
@@ -130,10 +132,7 @@ class CanReportLocationTests: KIFSpec {
                     navController = nil;
                     view = nil;
                     window = nil;
-//                    TestHelpers.clearAndSetUpStack();
-                    InjectedValues[\.nsManagedObjectContext] = nil
-                    coreDataStack!.reset()
-                    HTTPStubs.removeAllStubs()
+                    TestHelpers.clearAndSetUpStack();
                 }
                 it("initialize the CanCreateObservation and press the report location button location authorized") {
                     UserDefaults.standard.reportLocation = true
@@ -181,7 +180,7 @@ class CanReportLocationTests: KIFSpec {
             describe("User in the event") {
                 
                 beforeEach {
-                    
+                    TestHelpers.clearAndSetUpStack()
                     if (navController != nil) {
                         waitUntil { done in
                             navController.dismiss(animated: false, completion: {
@@ -189,10 +188,6 @@ class CanReportLocationTests: KIFSpec {
                             });
                         }
                     }
-                    coreDataStack = TestCoreDataStack()
-                    context = coreDataStack!.persistentContainer.newBackgroundContext()
-                    InjectedValues[\.nsManagedObjectContext] = context
-//                    TestHelpers.clearAndSetUpStack();
                     if (view != nil) {
                         for subview in view.subviews {
                             subview.removeFromSuperview();
@@ -204,10 +199,10 @@ class CanReportLocationTests: KIFSpec {
                     
                     UserDefaults.standard.baseServerUrl = "https://magetest";
                     
-                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-                    MageCoreDataFixtures.addUser(userId: "userabc", context: context)
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addUser(userId: "userabc")
                     UserDefaults.standard.currentUserId = "userabc";
-                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                    MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                     
                     Server.setCurrentEventId(1);
                     
@@ -265,10 +260,7 @@ class CanReportLocationTests: KIFSpec {
                     navController = nil;
                     view = nil;
                     window = nil;
-//                    TestHelpers.clearAndSetUpStack();
-                    InjectedValues[\.nsManagedObjectContext] = nil
-                    coreDataStack!.reset()
-                    HTTPStubs.removeAllStubs()
+                    TestHelpers.clearAndSetUpStack();
                 }
                 
                 it("initialize the CanCreateObservation with the button at index 0") {

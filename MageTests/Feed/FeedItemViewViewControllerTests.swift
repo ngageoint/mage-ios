@@ -16,20 +16,24 @@ import Kingfisher
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedItemViewViewControllerTests: KIFSpec {
+class FeedItemViewViewControllerTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
-        xdescribe("FeedItemViewController no timestamp") {
+        describe("FeedItemViewController no timestamp") {
             var controller: FeedItemViewController!
             var window: UIWindow!;
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
+
             
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
@@ -39,9 +43,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                     let stubPath = OHPathForFile("icon27.png", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 };
-                
-                TestHelpers.clearAndSetUpStack();
-                
+                                
                 window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
@@ -50,18 +52,14 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary")
             }
             
             afterEach {
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
-                HTTPStubs.removeAllStubs();
-                TestHelpers.clearAndSetUpStack();
             }
             
             it("feed item with no value non mappable") {
@@ -252,7 +250,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp")
             }
             

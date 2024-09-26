@@ -108,10 +108,12 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         }()
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.predicate = predicate
+        print("Predicate \(predicate.debugDescription)")
 
         request.includesSubentities = false
-        request.propertiesToFetch = ["timestamp"]
+        request.propertiesToFetch = ["timestamp", "user"]
         request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+        request.includesPendingChanges = true
         return request
     }
     

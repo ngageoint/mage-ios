@@ -31,8 +31,16 @@ class TeamCoreDataDataSource: CoreDataDataSource<Team>, TeamLocalDataSource {
         else {
             return nil
         }
-        context.performAndWait {
-            let team = context.fetchFirst(Team.self, key: TeamKey.remoteId.key, value: remoteId) ?? Team(context: context)
+        return context.performAndWait {
+            var team: Team {
+                if let team = context.fetchFirst(Team.self, key: TeamKey.remoteId.key, value: remoteId) {
+                    return team
+                } else {
+                    let team = Team(context: context)
+                    try? context.obtainPermanentIDs(for: [team])
+                    return team
+                }
+            }
             team.name = json[TeamKey.name.key] as? String
             team.teamDescription = json[TeamKey.description.key] as? String
             var teamUsers: Set<User> = Set<User>()
@@ -45,6 +53,7 @@ class TeamCoreDataDataSource: CoreDataDataSource<Team>, TeamLocalDataSource {
                         let user = User(context: context)
                         user.remoteId = userId;
                         teamUsers.insert(user)
+                        try? context.obtainPermanentIDs(for: [user])
                     }
                 }
             }
@@ -52,7 +61,7 @@ class TeamCoreDataDataSource: CoreDataDataSource<Team>, TeamLocalDataSource {
             team.users = teamUsers
             
             try? context.save()
+            return team
         }
-        return nil
     }
 }

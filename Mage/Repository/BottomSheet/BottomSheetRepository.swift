@@ -58,7 +58,9 @@ class BottomSheetRepository: ObservableObject {
         guard let itemKeys = itemKeys else { return [] }
         
         var bottomSheetItems: [BottomSheetItem] = []
-        for (dataSourceKey, itemKeys) in itemKeys {
+        let sortedKeys = itemKeys.keys.sorted()
+        for (dataSourceKey) in sortedKeys {
+            let itemKeys = itemKeys[dataSourceKey] ?? []
             switch (dataSourceKey) {
             case DataSources.observation.key:
                 for observationLocationUriString in itemKeys {

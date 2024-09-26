@@ -73,9 +73,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         
         formsJson[0]["primaryField"] = "testfield";
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -103,9 +103,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["variantField"] = "secondary"
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -134,9 +134,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26
@@ -163,9 +163,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["primaryField"] = "testfield";
         formsJson[0]["secondaryField"] = "secondary"
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -211,9 +211,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         
         formsJson[0]["fields"] = fields;
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -243,9 +243,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["secondaryField"] = "secondary"
         
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -267,9 +267,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["secondaryField"] = "secondary"
         
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -297,9 +297,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["secondaryField"] = "secondary"
         context.performAndWait {
             
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -327,9 +327,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["secondaryField"] = "secondary"
         
         context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -359,9 +359,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["variantField"] = "secondary"
         context.performAndWait {
             
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,
@@ -392,9 +392,9 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         formsJson[0]["variantField"] = "secondary"
         
         try context.performAndWait {
-            MageCoreDataFixtures.addEventFromJson(context: context!, remoteId: 1, name: "Event", formsJson: formsJson)
+            MageCoreDataFixtures.addEventFromJson(remoteId: 1, name: "Event", formsJson: formsJson)
             
-            let observation = ObservationBuilder.createBlankObservation(1, context: context);
+            let observation = ObservationBuilder.createBlankObservation(1);
             observation.properties!["forms"] = [
                 [
                     "formId": 26,

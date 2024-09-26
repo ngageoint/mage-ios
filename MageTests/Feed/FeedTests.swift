@@ -15,34 +15,29 @@ import MagicalRecord
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedTests: KIFSpec {
+class FeedTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
+    
     
     override func spec() {
         
-        xdescribe("FeedTests") {
-            
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
+        describe("FeedTests") {
             
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
-                TestHelpers.clearAndSetUpStack();
-                MageCoreDataFixtures.quietLogging();
                 let emptyFeeds: [String]? = nil
                 UserDefaults.standard.set(emptyFeeds, forKey: "selectedFeeds-1");
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
                 Server.setCurrentEventId(1);
                     
-                MageCoreDataFixtures.addEvent(context: context);
-            }
-            
-            afterEach {
-                TestHelpers.clearAndSetUpStack();
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
+                MageCoreDataFixtures.addEvent();
             }
             
             func loadFeedsJson() -> NSArray {
@@ -195,10 +190,10 @@ class FeedTests: KIFSpec {
 
                 var feedItemIds: [String] = ["1","2"];
 
-//                for feedItem: FeedItemAnnotation in FeedItem.getFeedItems(feedId: "1", eventId: 1)! {
-//                    expect(feedItemIds as NMBContainer).to(contain(feedItem. .remoteId));
-//                    feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
-//                }
+                for feedItem: FeedItemAnnotation in FeedItem.getFeedItems(feedId: "1", eventId: 1)! {
+                    expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
+                    feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
+                }
 
                 expect(feedItemIds.isEmpty) == true;
             }

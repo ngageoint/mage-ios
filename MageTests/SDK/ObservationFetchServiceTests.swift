@@ -17,45 +17,26 @@ import OHHTTPStubs
 class ObservationFetchServiceTests: KIFSpec {
     
     override func spec() {
-        xdescribe("ObservationFetchService Tests") {
-            
-            var coreDataStack: TestCoreDataStack?
+        describe("ObservationFetchService Tests") {
+            @Injected(\.persistence)
+            var coreDataStack: Persistence
+            @Injected(\.nsManagedObjectContext)
             var context: NSManagedObjectContext!
             
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
+                coreDataStack.clearAndSetupStack()
+                
+                TestHelpers.clearAndSetUpStack()
                 ObservationFetchService.singleton.stop();
-//                var cleared = false;
-//                while (!cleared) {
-//                    let clearMap = TestHelpers.clearAndSetUpStack()
-//                    cleared = (clearMap[String(describing: Observation.self)] ?? false) && (clearMap[String(describing: ObservationImportant.self)] ?? false) && (clearMap[String(describing: User.self)] ?? false)
-//                    
-//                    if (!cleared) {
-//                        cleared = Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && ObservationImportant.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && User.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
-//                    }
-//                    
-//                    if (!cleared) {
-//                        Thread.sleep(forTimeInterval: 0.5);
-//                    }
-//                    
-//                }
-                
-//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in default");
-//                
-//                expect(Observation.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Observations still exist in root");
-                
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.serverMajorVersion = 6;
                 UserDefaults.standard.serverMinorVersion = 0;
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
-                MageCoreDataFixtures.addUser(userId: "userabc", context: context)
-                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc", context: context)
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
+                MageCoreDataFixtures.addUser(userId: "userabc")
+                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
-                NSManagedObject.mr_setDefaultBatchSize(0);
                 UserDefaults.standard.loginParameters = [
                     LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
                     LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
@@ -65,9 +46,8 @@ class ObservationFetchServiceTests: KIFSpec {
             
             afterEach {
                 InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
+                coreDataStack.clearAndSetupStack()
                 ObservationFetchService.singleton.stop();
-                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }
@@ -75,7 +55,7 @@ class ObservationFetchServiceTests: KIFSpec {
             it("should start the observation fetch service") {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -100,7 +80,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -126,7 +106,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -152,7 +132,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -180,7 +160,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.observationFetchFrequency = 1
                 // 2 is none
                 UserDefaults.standard.set(2, forKey: "observationFetchNetworkOption")
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -209,7 +189,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.observationFetchFrequency = 1
                 // 2 is none
                 UserDefaults.standard.set(2, forKey: "observationFetchNetworkOption")
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -236,7 +216,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -263,7 +243,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 1
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();
@@ -292,7 +272,7 @@ class ObservationFetchServiceTests: KIFSpec {
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.currentEventId = 1
                 UserDefaults.standard.observationFetchFrequency = 2
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
                 expect(ObservationFetchService.singleton.started).to(beFalse());
                 
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications();

@@ -16,18 +16,24 @@ struct FeedItemSummaryView: View {
     var iconUrl: URL?
     
     // we do not want the date to word break so we replace all spaces with a non word breaking spaces
-    var timeText: String {
+    var timeText: String? {
         if let itemDate: NSDate = timestamp as NSDate? {
             return itemDate.formattedDisplay().uppercased().replacingOccurrences(of: " ", with: "\u{00a0}") ;
         }
-        return ""
+        return nil
     }
     
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(timeText)
-                    .overlineText()
+                if primaryValue == nil && secondaryValue == nil && timeText == nil {
+                    Text("No Content")
+                        .noContentText()
+                }
+                if let timeText = timeText {
+                    Text(timeText)
+                        .overlineText()
+                }
                 if let primaryValue = primaryValue {
                     Text(primaryValue)
                         .primaryText()

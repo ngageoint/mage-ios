@@ -16,28 +16,22 @@ import Kingfisher
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedServiceTests: KIFSpec {
+class FeedServiceTests: KIFMageCoreDataTestCase {
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
-        xdescribe("FeedServiceTests") {
-            
-            var isSetup = false;
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
-            
+        describe("FeedServiceTests") {
+                        
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
-                if (!isSetup) {
-                    ImageCache.default.clearMemoryCache();
-                    ImageCache.default.clearDiskCache();
-                    
-                    TestHelpers.clearAndSetUpStack();
-                    MageCoreDataFixtures.quietLogging();
-                    isSetup = true;
-                }
+                ImageCache.default.clearMemoryCache();
+                ImageCache.default.clearDiskCache();
 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
@@ -45,16 +39,12 @@ class FeedServiceTests: KIFSpec {
                 
                 Server.setCurrentEventId(1);
                 
-                MageCoreDataFixtures.addEvent(context: context);
+                MageCoreDataFixtures.addEvent();
             }
             
             afterEach {
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
                 FeedService.shared.stop();
                 expect(FeedService.shared.isStopped()).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "Feed Service Stopped");
-                HTTPStubs.removeAllStubs();
-                MageCoreDataFixtures.clearAllData();
             }
             
             it("should request feed items") {

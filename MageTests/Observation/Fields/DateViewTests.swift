@@ -23,7 +23,7 @@ class DateViewTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("DateFieldView") {
+        describe("DateFieldView") {
             
             var dateFieldView: DateView!
             var field: [String: Any]!

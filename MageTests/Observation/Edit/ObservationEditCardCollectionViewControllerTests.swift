@@ -59,7 +59,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 
                 it("empty observation") {
-                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     
                     let observation = ObservationBuilder.createBlankObservation(1);
                     ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -71,7 +71,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
                 }
                 
                 it("verify legacy behavior") {
-                    MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                    MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                     
                     let observation = ObservationBuilder.createBlankObservation(1);
                     ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -120,7 +120,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("empty observation not new") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -137,7 +137,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("empty new observation zero forms") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -149,7 +149,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("validation error on observation") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -164,7 +164,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("add form button should call delegate") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -181,7 +181,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("show the form button if there are two forms") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -199,7 +199,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("not show the add form button if there are no forms") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "zeroForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -212,7 +212,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("empty new observation two forms should call add form") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -227,7 +227,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("when form is added it should show") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -251,7 +251,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("user defaults") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let formDefaults = FormDefaults(eventId: 1, formId: 1);
                 var defaults = formDefaults.getDefaults() as! [String : AnyHashable];
@@ -282,7 +282,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             
             it("should undo a deleted form") {
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -312,7 +312,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("should delete a form") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createPointObservation(eventId: 1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -347,7 +347,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("should reorder forms") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoForms")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoForms")
                 
                 let observation = ObservationBuilder.createPointObservation(eventId: 1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -397,7 +397,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("cannot add more forms than maxObservationForms or less than minObservationForms") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneForm", maxObservationForms: 1, minObservationForms: 1)
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm", maxObservationForms: 1, minObservationForms: 1)
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -444,7 +444,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("must add the proper number of forms specified by the form") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "oneFormRestricted")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneFormRestricted")
                 
                 let observation = ObservationBuilder.createPointObservation(eventId: 1)
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -487,7 +487,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("observation should show current forms") {
                 let formsJsonFile = "twoForms";
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -522,7 +522,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("observation should expand current forms") {
                 let formsJsonFile = "twoForms";
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -561,7 +561,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("observation should show current forms multiple forms") {
                 let formsJsonFile = "twoForms";
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -600,7 +600,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             it("observation should show all the things form") {
                 let formsJsonFile = "allTheThings";
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: formsJsonFile)
                 
                 guard let pathString = Bundle(for: MageCoreDataFixtures.self).path(forResource: formsJsonFile, ofType: "json") else {
                     fatalError("\(formsJsonFile).json not found")
@@ -634,7 +634,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             
             it("observation should show checkbox form") {
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "checkboxForm")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "checkboxForm")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -656,7 +656,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             
             it("filling out the form should update the form header") {
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -681,7 +681,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("saving the form should send the observation to the delegate") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -734,7 +734,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             it("saving an invalid form should not send the observation to the delegate") {
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));
@@ -778,7 +778,7 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             
             it("clearing a field should update the form header") {
                 
-                MageCoreDataFixtures.addEvent(context: context, remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
+                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "twoFormsAlternate")
                 
                 let observation = ObservationBuilder.createBlankObservation(1);
                 ObservationBuilder.setObservationDate(observation: observation, date: Date(timeIntervalSince1970: 10000000));

@@ -17,7 +17,7 @@ class CheckboxFieldViewTests: KIFSpec {
     
     override func spec() {
         
-        xdescribe("CheckboxFieldView") {
+        describe("CheckboxFieldView") {
             var controller: UIViewController!
             var window: UIWindow!;
             
