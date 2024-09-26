@@ -93,6 +93,8 @@ class FollowUserMapMixin: NSObject, MapMixin {
                 print("Unable to Perform Fetch Request")
                 print("\(fetchError), \(fetchError.localizedDescription)")
             }
+            print("XXX fetched objects \(gpsFetchedResultsController?.fetchedObjects)")
+            print("XXX location \(gpsFetchedResultsController!.fetchedObjects![0].cllocation)")
             if let fetchedObjects = gpsFetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty, let cllocation = fetchedObjects[0].cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
             }

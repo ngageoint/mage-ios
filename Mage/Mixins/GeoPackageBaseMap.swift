@@ -46,6 +46,13 @@ class GeoPackageBaseMapMixin: NSObject, MapMixin {
         }
     }
     
+    func renderer(overlay: MKOverlay) -> MKOverlayRenderer? {
+        if let overlay = overlay as? BaseMapOverlay {
+            return standardRenderer(overlay: overlay)
+        }
+        return nil
+    }
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         Task { [weak self] in
             await self?.addBaseMap()

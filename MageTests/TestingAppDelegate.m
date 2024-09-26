@@ -108,11 +108,13 @@
 }
 
 - (BaseMapOverlay *) getBaseMap {
-    return self.backgroundOverlay;
+    return [MageInitializer getBaseMap];
+//    return self.backgroundOverlay;
 }
 
 - (BaseMapOverlay *) getDarkBaseMap {
-    return self.darkBackgroundOverlay;
+    return [MageInitializer getDarkBaseMap];
+//    return self.darkBackgroundOverlay;
 }
 
 @end
