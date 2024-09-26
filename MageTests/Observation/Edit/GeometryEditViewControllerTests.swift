@@ -15,14 +15,6 @@ import Nimble
 
 class GeometryEditViewControllerTests: KIFMageCoreDataTestCase {
     
-    override open func setUp() {
-        super.setUp()
-    }
-    
-    override open func tearDown() {
-        super.tearDown()
-    }
-    
     override func spec() {
         
         describe("GeometryEditViewController") {
