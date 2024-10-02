@@ -58,9 +58,10 @@
         [alert addAction:[UIAlertAction actionWithTitle:@"Do Not Import" style:UIAlertActionStyleCancel handler:nil]];
         
         [[AppDelegate topMostController] presentViewController:alert animated:YES completion:nil];
+        return false;
     } else {
         // Import the GeoPackage file
-        [self importGeoPackageFile: filePath andOverwrite:NO];
+        return [self importGeoPackageFile: filePath andOverwrite:NO];
     }
     return true;
 }
@@ -134,11 +135,7 @@
     return [self importGeoPackageFile:path withName:[[path lastPathComponent] stringByDeletingPathExtension] andOverwrite:overwrite];
 }
 
--(BOOL) importGeoPackageFile: (NSString *) path {
-    return [self importGeoPackageFile:path andOverwrite:YES];
-}
-
--(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSString *) remoteId {
+-(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSNumber *) remoteId {
     // Import the GeoPackage file
     BOOL imported = false;
     GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
@@ -159,6 +156,7 @@
     
     if(!imported){
         NSLog(@"Error importing GeoPackage file: %@", path);
+        
         [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
             NSArray<Layer *> *layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"remoteId == %@", remoteId] inContext:localContext];
             for (Layer *layer in layers) {
@@ -273,8 +271,8 @@
 }
 
 - (void) removeOutdatedOfflineMapArchives {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        NSArray * layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == -1 AND (type == %@ OR type == %@)", [Server currentEventId], @"GeoPackage", @"Local_XYZ"] inContext:localContext];
+    [MagicalRecord saveWithBlockAndWait:^(NSManagedObjectContext * _Nonnull localContext) {
+        NSArray * layers = [Layer MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"eventId == -1 AND (type == %@ OR type == %@)", @"GeoPackage", @"Local_XYZ"] inContext:localContext];
         for (Layer * layer in layers) {
             CacheOverlay * overlay =  [[CacheOverlays getInstance] getByCacheName:layer.name];
             if (!overlay) {
@@ -309,6 +307,7 @@
                     [cacheOverlays addObject:cacheOverlay];
                 }
             }else{
+                // this will never hit because manager.databases() call only returns files that exist
                 [[CacheOverlays getInstance] removeByCacheName:[[filePath lastPathComponent] stringByDeletingPathExtension]];
                 // Delete if the file was deleted
                 [manager delete:geoPackage];

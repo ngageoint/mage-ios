@@ -117,9 +117,9 @@ static CacheOverlays * instance;
     }
 }
 
--(NSArray<CacheOverlay *> *) getOverlays: (NSManagedObjectContext *) context {
+-(NSArray<CacheOverlay *> *) getOverlays {
+    NSManagedObjectContext* context = [PersistenceProvider.instance getContext];
     NSMutableArray<CacheOverlay *> *overlaysInCurrentEvent = [[NSMutableArray alloc] init];
-    
     
     for(CacheOverlay * cacheOverlay in [self.overlays allValues]) {
         if ([cacheOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
@@ -177,6 +177,12 @@ static CacheOverlays * instance;
 
 -(void) removeCacheOverlay: (CacheOverlay *) overlay{
     [self removeByCacheName:[overlay getCacheName]];
+}
+
+-(void) removeAll {
+    for(CacheOverlay * cacheOverlay in [self.overlays allValues]) {
+        [self removeCacheOverlay:cacheOverlay];
+    }
 }
 
 -(void) removeByCacheName: (NSString *) cacheName{

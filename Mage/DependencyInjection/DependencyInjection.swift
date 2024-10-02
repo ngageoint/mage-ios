@@ -45,8 +45,6 @@ struct InjectedValues {
     static subscript<T>(_ keyPath: WritableKeyPath<InjectedValues, T>) -> T {
         get { current[keyPath: keyPath] }
         set {
-            print("XXX keypath \(keyPath) set \(newValue)")
-//            Thread.callStackSymbols.forEach{print($0)}
             current[keyPath: keyPath] = newValue
         }
     }

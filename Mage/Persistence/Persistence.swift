@@ -29,6 +29,18 @@ protocol Persistence {
     func getRootContext() -> NSManagedObjectContext
 }
 
+// TODO: This is temporary while obj-c classes are removed
+@objc class PersistenceProvider: NSObject {
+    @objc static var instance: PersistenceProvider = PersistenceProvider()
+
+    @objc func getContext() -> NSManagedObjectContext? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        return context
+    }
+}
+
 class MagicalRecordPersistence: Persistence {
     var refreshSubject: PassthroughSubject<NSManagedObjectContext?, Never> = PassthroughSubject<NSManagedObjectContext?, Never>()
     

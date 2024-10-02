@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) handleGeoPackageImport: (NSString *) filePath;
 - (void) processOfflineMapArchives;
--(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSString *) remoteId;
+-(BOOL) importGeoPackageFileAsLink: (NSString *) path andMove: (BOOL) moveFile withLayerId: (NSNumber *) remoteId;
 
 @end
 
