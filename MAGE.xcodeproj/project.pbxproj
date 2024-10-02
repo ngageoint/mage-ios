@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -190,6 +190,10 @@
 		F718CCF22CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */; };
 		F718CCF42CA468580015DF87 /* MageCoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */; };
 		F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */; };
+		F718CCFB2CA719620015DF87 /* MockCacheOverlayListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */; };
+		F718CCFD2CA733970015DF87 /* slateTiles4326.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F718CCFC2CA733970015DF87 /* slateTiles4326.gpkg */; };
+		F718CD062CAC695E0015DF87 /* 000Tile.zip in Resources */ = {isa = PBXBuildFile; fileRef = F718CD052CAC695E0015DF87 /* 000Tile.zip */; };
+		F718CD072CADCE920015DF87 /* countries.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7929C6F23C4E69600396D11 /* countries.gpkg */; };
 		F718CF32271A1A8500A669D5 /* PersonAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */; };
 		F71B34B61F424DC7001D120A /* AudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */; };
 		F71B34B71F424DC7001D120A /* AudioRecorderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F71B34B51F424DC7001D120A /* AudioRecorderViewController.xib */; };
@@ -1073,6 +1077,9 @@
 		F718CCF12CA4683C0015DF87 /* KIFMageCoreDataTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KIFMageCoreDataTestCase.swift; sourceTree = "<group>"; };
 		F718CCF32CA468580015DF87 /* MageCoreDataTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageCoreDataTestCase.swift; sourceTree = "<group>"; };
 		F718CCF52CA468790015DF87 /* MageInjectionTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageInjectionTestCase.swift; sourceTree = "<group>"; };
+		F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCacheOverlayListener.swift; sourceTree = "<group>"; };
+		F718CCFC2CA733970015DF87 /* slateTiles4326.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = slateTiles4326.gpkg; sourceTree = "<group>"; };
+		F718CD052CAC695E0015DF87 /* 000Tile.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = 000Tile.zip; sourceTree = "<group>"; };
 		F718CF31271A1A8500A669D5 /* PersonAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonAnnotationView.swift; sourceTree = "<group>"; };
 		F71B34B31F424DC7001D120A /* AudioRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRecorderViewController.h; sourceTree = "<group>"; };
 		F71B34B41F424DC7001D120A /* AudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRecorderViewController.m; sourceTree = "<group>"; };
@@ -1777,6 +1784,10 @@
 		F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccessNoAuthStrategies.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F718CCF72CA6F8820015DF87 /* GeoPackage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GeoPackage; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		F7A94D6318AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -2332,6 +2343,7 @@
 				F7F15B1A2745BEA7008FF6C2 /* MockObservationPushDelegate.swift */,
 				F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */,
 				F7C097C32C88F4A7003FA115 /* TestPersistence.swift */,
+				F718CCFA2CA719620015DF87 /* MockCacheOverlayListener.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -2867,6 +2879,7 @@
 				F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */,
 				F7CE2303254369BD00D710DE /* checkboxForm.json */,
 				F7F15B16274596B1008FF6C2 /* events.json */,
+				F718CD052CAC695E0015DF87 /* 000Tile.zip */,
 				F709F02C28297AD2002EA135 /* threeEvents.json */,
 				F709F02E2829870B002EA135 /* twoEvents.json */,
 				F71446F424A3FAF5005A5EC1 /* feedContent.json */,
@@ -2874,6 +2887,7 @@
 				F7C640FE257EB29100C02335 /* geometryField.json */,
 				F711241D25F69BF5008849B1 /* geometryObservations.json */,
 				F7F08E8E27E0BE3100640D89 /* gpkgWithMedia.gpkg */,
+				F718CCFC2CA733970015DF87 /* slateTiles4326.gpkg */,
 				F71446F0249BB5BC005A5EC1 /* icon27.png */,
 				F795ED1724BF36DD0028FBFC /* locationsabc.json */,
 				F7003947200D3FFA00E6E660 /* loginSuccess.json */,
@@ -3825,6 +3839,7 @@
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				F718CCF72CA6F8820015DF87 /* GeoPackage */,
 				F7BEF68027D69DA1000E8CDE /* Mixins */,
 				F7D049A226262A8900BCFCC2 /* StraightLineNav */,
 				F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */,
@@ -4081,6 +4096,9 @@
 			dependencies = (
 				F763326C2059CD4F00C5529C /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				F718CCF72CA6F8820015DF87 /* GeoPackage */,
+			);
 			name = MAGETests;
 			productName = MAGETests;
 			productReference = F7ED5D2420052161007BD768 /* MAGETests.xctest */;
@@ -4220,6 +4238,7 @@
 				F70B47B424B5F7AF00D0BFE5 /* feeds.json in Resources */,
 				F73B764627442D0B00799BBF /* attachmentFormPlusOne.json in Resources */,
 				F7003949200D425400E6E660 /* loginSuccess.json in Resources */,
+				F718CCFD2CA733970015DF87 /* slateTiles4326.gpkg in Resources */,
 				F777AFF62527D05200B88BD4 /* tokenSuccess.json in Resources */,
 				F70039462006CCA400E6E660 /* apiFail.json in Resources */,
 				F7F08E8F27E0BE3100640D89 /* gpkgWithMedia.gpkg in Resources */,
@@ -4236,12 +4255,14 @@
 				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
 				F7BCAC272630B62E006BE2A9 /* testResponse.html in Resources */,
 				F7CE2300254368B000D710DE /* allTheThings.json in Resources */,
+				F718CD062CAC695E0015DF87 /* 000Tile.zip in Resources */,
 				F7F7532B2565862F00EF51FF /* testmovie.MOV in Resources */,
 				F71446F524A3FAF5005A5EC1 /* feedContent.json in Resources */,
 				F7154A982608D2A0002C8617 /* apiSuccess6NoDisclaimer.json in Resources */,
 				7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */,
 				F70D19E32742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip in Resources */,
 				F795ED1424BD061C0028FBFC /* observations.json in Resources */,
+				F718CD072CADCE920015DF87 /* countries.gpkg in Resources */,
 				F70688AA2BADDF0A00D8E2EA /* multipleGeometryFields.json in Resources */,
 				F7098F262492C36700313703 /* test_marker.png in Resources */,
 				F709F02D28297AD2002EA135 /* threeEvents.json in Resources */,
@@ -5034,6 +5055,7 @@
 				F7E2DF512576CA4700CD2ABA /* MockObservationEditDelegate.swift in Sources */,
 				F7BE036F24660A9D00D2F7C3 /* TextFieldViewTests.swift in Sources */,
 				F718CCF42CA468580015DF87 /* MageCoreDataTestCase.swift in Sources */,
+				F718CCFB2CA719620015DF87 /* MockCacheOverlayListener.swift in Sources */,
 				F7521DEA2672336800C52318 /* MockGeometryEditCoordinator.swift in Sources */,
 				F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */,
 				F7DDF46F2748023A00689550 /* ObservationImageRepositoryTests.swift in Sources */,

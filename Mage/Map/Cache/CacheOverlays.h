@@ -145,4 +145,6 @@
  */
 -(NSArray *) getProcessing;
 
+-(void) removeAll;
+
 @end

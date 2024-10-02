@@ -33,24 +33,19 @@ extension GeoPackageLayerMapTestImpl : MKMapViewDelegate {
     }
 }
 
-class GeoPackageLayerMapTests: KIFSpec {
+class GeoPackageLayerMapTests: KIFMageCoreDataTestCase {
     
     override func spec() {
         
-        xdescribe("GeoPackageLayerMapTests") {
+        describe("GeoPackageLayerMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
             var controller: UIViewController!
             var testimpl: GeoPackageLayerMapTestImpl!
             var mixin: GeoPackageLayerMapMixin!
-            var coreDataStack: TestCoreDataStack?
-            var context: NSManagedObjectContext!
             
             beforeEach {
-                coreDataStack = TestCoreDataStack()
-                context = coreDataStack!.persistentContainer.newBackgroundContext()
-                InjectedValues[\.nsManagedObjectContext] = context
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -58,7 +53,6 @@ class GeoPackageLayerMapTests: KIFSpec {
                         });
                     }
                 }
-                TestHelpers.clearAndSetUpStack();
                 if (view != nil) {
                     for subview in view.subviews {
                         subview.removeFromSuperview();
@@ -96,8 +90,6 @@ class GeoPackageLayerMapTests: KIFSpec {
             }
             
             afterEach {
-                InjectedValues[\.nsManagedObjectContext] = nil
-                coreDataStack!.reset()
                 mixin = nil
                 testimpl = nil
                 
@@ -120,8 +112,6 @@ class GeoPackageLayerMapTests: KIFSpec {
                 navController = nil;
                 view = nil;
                 window = nil;
-                TestHelpers.clearAndSetUpStack();
-                HTTPStubs.removeAllStubs()
             }
             
             it("initialize the StaticLayerMap with a not loaded layer then load it but don't add to the map") {
@@ -201,7 +191,7 @@ class GeoPackageLayerMapTests: KIFSpec {
                 expect(geopackageStubCalled).toEventually(beTrue());
                 expect(successfulDownload).toEventually(beTrue())
                 
-                GeoPackageImporter().importGeoPackageFile(asLink: urlPath.path, andMove: false, withLayerId: "1")
+                GeoPackageImporter().importGeoPackageFile(asLink: urlPath.path, andMove: false, withLayerId: 1)
 
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
@@ -216,6 +206,7 @@ class GeoPackageLayerMapTests: KIFSpec {
                 expect(geopackageImported).toEventually(beTrue())
                 
                 expect(CacheOverlays.getInstance().getOverlays()!.count).toEventually(equal(3))
+                print("Cache overlays \(CacheOverlays.getInstance().getOverlays())")
                 for overlay in CacheOverlays.getInstance().getOverlays() {
                     if overlay.getCacheName() == "gpkgWithMedia_1_from_server" {
                         overlay.enabled = true
