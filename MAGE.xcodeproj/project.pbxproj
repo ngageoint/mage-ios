@@ -1785,6 +1785,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F718CCF72CA6F8820015DF87 /* GeoPackage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GeoPackage; sourceTree = "<group>"; };
+		F7E1D76B2CB05A1A0003441B /* Layer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Layer; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2265,6 +2266,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				F7E1D76B2CB05A1A0003441B /* Layer */,
 				F7C097A72C824B93003FA115 /* Team */,
 				F7C0975F2C7FA813003FA115 /* Role */,
 				F763FF112C78DE2A00403A00 /* BottomSheet */,
@@ -4055,6 +4057,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F7E1D76B2CB05A1A0003441B /* Layer */,
 			);
 			name = MAGE;
 			packageProductDependencies = (

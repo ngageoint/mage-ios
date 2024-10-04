@@ -24,4 +24,12 @@ class KIFMageCoreDataTestCase: KIFMageInjectionTestCase {
         super.tearDown()
         persistence.clearAndSetupStack()
     }
+    
+    func awaitDidSave(block: @escaping () async -> Void) async {
+        let didSave = expectation(forNotification: .NSManagedObjectContextDidSave, object: context) { notification in
+            return notification.userInfo?["inserted"] != nil || notification.userInfo?["deleted"] != nil || notification.userInfo?["updated"] != nil
+        }
+        await block()
+        await fulfillment(of: [didSave], timeout: 3)
+    }
 }

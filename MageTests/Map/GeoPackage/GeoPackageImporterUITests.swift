@@ -90,14 +90,16 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
                 
                 try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
 
-                let importer = GeoPackageImporter()
-                let imported = importer.handleGeoPackageImport(urlPath.path())
-                
-                XCTAssertTrue(imported)
-                
-                let importedAgain = importer.handleGeoPackageImport(urlPath.path())
-                
-                XCTAssertFalse(importedAgain)
+                Task {
+                    let importer = GeoPackageImporter()
+                    let imported = await importer.handleGeoPackageImport(urlPath.path())
+                    
+                    XCTAssertTrue(imported)
+                    
+                    let importedAgain = await importer.handleGeoPackageImport(urlPath.path())
+                    
+                    XCTAssertFalse(importedAgain)
+                }
                 
                 tester().waitForView(withAccessibilityLabel: "Do Not Import")
                 tester().waitForView(withAccessibilityLabel: "Import As New")
@@ -134,18 +136,22 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
 
                 let importer = GeoPackageImporter()
                                 
-                let imported = importer.handleGeoPackageImport(urlPath.path())
-                
-                XCTAssertTrue(imported)
-                XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
-                let layers1 = self.context.fetchAll(Layer.self)
-                XCTAssertEqual(layers1?.count, 1)
-                
-                try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
-                
-                let importedAgain = importer.handleGeoPackageImport(urlPath.path())
-                
-                XCTAssertFalse(importedAgain)
+                Task {
+                    await self.awaitDidSave {
+                        let imported = await importer.handleGeoPackageImport(urlPath.path())
+                        
+                        XCTAssertTrue(imported)
+                    }
+                    XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
+                    let layers1 = self.context.fetchAll(Layer.self)
+                    XCTAssertEqual(layers1?.count, 1)
+                    
+                    try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
+                    
+                    let importedAgain = await importer.handleGeoPackageImport(urlPath.path())
+                    
+                    XCTAssertFalse(importedAgain)
+                }
                 
                 tester().waitForView(withAccessibilityLabel: "Do Not Import")
                 tester().waitForView(withAccessibilityLabel: "Import As New")
@@ -188,18 +194,20 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
 
                 let importer = GeoPackageImporter()
                                 
-                let imported = importer.handleGeoPackageImport(urlPath.path())
-                
-                XCTAssertTrue(imported)
-                XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
-                let layers1 = self.context.fetchAll(Layer.self)
-                XCTAssertEqual(layers1?.count, 1)
-                
-                try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
-                
-                let importedAgain = importer.handleGeoPackageImport(urlPath.path())
-                
-                XCTAssertFalse(importedAgain)
+                Task {
+                    let imported = await importer.handleGeoPackageImport(urlPath.path())
+                    
+                    XCTAssertTrue(imported)
+                    XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
+                    let layers1 = self.context.fetchAll(Layer.self)
+                    XCTAssertEqual(layers1?.count, 1)
+                    
+                    try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
+                    
+                    let importedAgain = await importer.handleGeoPackageImport(urlPath.path())
+                    
+                    XCTAssertFalse(importedAgain)
+                }
                 
                 tester().waitForView(withAccessibilityLabel: "Do Not Import")
                 tester().waitForView(withAccessibilityLabel: "Import As New")

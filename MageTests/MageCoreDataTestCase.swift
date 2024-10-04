@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import OHHTTPStubs
+import CoreData
 
 @testable import MAGE
 
@@ -25,6 +26,14 @@ class MageCoreDataTestCase: MageInjectionTestCase {
     override func tearDown() {
         super.tearDown()
         persistence.clearAndSetupStack()
+    }
+    
+    func awaitDidSave(block: @escaping () async -> Void) async {
+        let didSave = expectation(forNotification: .NSManagedObjectContextDidSave, object: context) { notification in
+            return notification.userInfo?["inserted"] != nil || notification.userInfo?["deleted"] != nil || notification.userInfo?["updated"] != nil
+        }
+        await block()
+        await fulfillment(of: [didSave], timeout: 3)
     }
 }
 
@@ -48,6 +57,7 @@ class KIFMageInjectionTestCase: KIFSpec {
         defaultFeedItemInjection()
         defaultObservationLocationInjection()
         defaultObservationIconInjection()
+        defaultLayerInjection()
         
         clearAndSetUpStack()
     }
@@ -121,6 +131,11 @@ class KIFMageInjectionTestCase: KIFSpec {
     func defaultStaticLayerInjection() {
         InjectedValues[\.staticLayerLocalDataSource] = StaticLayerCoreDataDataSource()
         InjectedValues[\.staticLayerRepository] = StaticLayerRepository()
+    }
+    
+    func defaultLayerInjection() {
+        InjectedValues[\.layerLocalDataSource] = LayerLocalCoreDataDataSource()
+        InjectedValues[\.layerRepository] = LayerRepositoryImpl()
     }
     
     func defaultGeoPackageInjection() {
