@@ -10,8 +10,8 @@
 #import "GPKGFeatureOverlayQuery.h"
 #import "GPKGMapShape.h"
 #import "GeoPackageTileTableCacheOverlay.h"
-#import "MAGE-Swift.h"
-
+@class GeoPackageFeatureItem;
+@class GeoPackageFeatureKey;
 
 extern NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM;
 

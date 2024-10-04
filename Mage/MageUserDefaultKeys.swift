@@ -38,6 +38,14 @@ extension Notification.Name {
     case gars
 }
 
+public enum MageDirectories: String {
+    case cache = "MapCache"
+}
+
+public enum MageZooms: Int {
+    case featureMaxZoom = 21
+}
+
 extension UserDefaults {
     var coordinateDisplay: CoordinateDisplayType {
         get {
@@ -683,7 +691,7 @@ extension UserDefaults {
     }
     
     // MARK: GeoPackage keys
-    var geoPackageFeatureTilesMaxPointsPerTile: Int {
+    @objc public var geoPackageFeatureTilesMaxPointsPerTile: Int {
         get {
             return integer(forKey: "geopackage_feature_tiles_max_points_per_tile");
         }
@@ -692,7 +700,7 @@ extension UserDefaults {
         }
     }
     
-    var geoPackageFeatureTilesMaxFeaturesPerTile: Int {
+    @objc public var geoPackageFeatureTilesMaxFeaturesPerTile: Int {
         get {
             return integer(forKey: "geopackage_feature_tiles_max_features_per_tile");
         }
@@ -701,7 +709,7 @@ extension UserDefaults {
         }
     }
     
-    var geoPackageFeaturesMaxPointsPerTable: Int {
+    @objc public var geoPackageFeaturesMaxPointsPerTable: Int {
         get {
             return integer(forKey: "geopackage_features_max_points_per_table");
         }
@@ -710,7 +718,7 @@ extension UserDefaults {
         }
     }
     
-    var geoPackageFeaturesMaxFeaturesPerTable: Int {
+    @objc public var geoPackageFeaturesMaxFeaturesPerTable: Int {
         get {
             return integer(forKey: "geopackage_features_max_features_per_table");
         }
