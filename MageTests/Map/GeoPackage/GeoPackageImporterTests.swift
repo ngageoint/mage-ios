@@ -66,11 +66,11 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         view = window
     }
     
-    func testImportGeoPackageFileAndIndex() throws {
+    func testImportGeoPackageFileAndIndex() async throws {
         let documentsPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = documentsPaths[0] as String
 
-        var countriesGeoPackagePath = URL(fileURLWithPath: "\(documentsDirectory)/countries2.gpkg")
+        let countriesGeoPackagePath = URL(fileURLWithPath: "\(documentsDirectory)/countries2.gpkg")
 
         if FileManager.default.isDeletableFile(atPath: countriesGeoPackagePath.path) {
             do {
@@ -125,13 +125,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         manager.delete("countries2")
 
         let importer = GeoPackageImporter()
-        importer.processOfflineMapArchives()
-
-        context.performAndWait {
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(1), timeout: DispatchTimeInterval.seconds(5))
-        }
-        expect(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded).toEventually(equal(NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)))
         
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
+        }
+
+        XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 1)
+        XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
+
         // verify that the geopackage was indexed
         let indexGP = manager.open("countries2")!
         for featureTable in indexGP.featureTables() {
@@ -143,15 +144,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         print("XXXX CLEAN UP THE THINGS")
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
 
-        importer.processOfflineMapArchives()
-
-        context.performAndWait {
-            print("XXX find the count geopackage")
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(0))
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
         }
+        
+        XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 0)
     }
 
-    func testImportGeoPackageFile() throws {
+    func testImportGeoPackageFile() async throws {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0] as String
         
@@ -172,12 +172,12 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
         
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
-        importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+        _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
 
-        wait(for: [importExpectation])
+        await fulfillment(of: [importExpectation])
     }
     
-    func testImportGeoPackageFileIntoLayer() throws {
+    func testImportGeoPackageFileIntoLayer() async throws {
         let mockListener = MockCacheOverlayListener()
         CacheOverlays.getInstance().register(mockListener)
         
@@ -220,14 +220,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
                 
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
 
-        importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+        _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        wait(for: [importExpectation])
+        await fulfillment(of: [importExpectation])
         
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 0)
     }
     
-    func testImportGeoPackageFileIntoCurrentEventLayer() throws {
+    func testImportGeoPackageFileIntoCurrentEventLayer() async throws {
         let mockListener = MockCacheOverlayListener()
         CacheOverlays.getInstance().register(mockListener)
         Server.setCurrentEventId(1)
@@ -271,14 +271,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
                 
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
 
-        importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+        _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        wait(for: [importExpectation])
+        await fulfillment(of: [importExpectation])
         
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
     }
     
-    func testFailImportGeoPackageFileIntoCurrentEventLayer() throws {
+    func testFailImportGeoPackageFileIntoCurrentEventLayer() async throws {
         let mockListener = MockCacheOverlayListener()
         CacheOverlays.getInstance().register(mockListener)
         Server.setCurrentEventId(1)
@@ -320,15 +320,17 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
         
-        let imported = importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+        await awaitDidSave {
+            let imported = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+            
+            XCTAssertFalse(imported)
+            XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 0)
+        }
         
-        XCTAssertFalse(imported)
-        XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 0)
-        
-        expect(self.context.fetchFirst(Layer.self, key: "remoteId", value: 1)?.loaded).toEventually(equal(NSNumber(floatLiteral: Layer.OFFLINE_LAYER_NOT_DOWNLOADED)))
+        XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "remoteId", value: 1)?.loaded, NSNumber(floatLiteral: Layer.OFFLINE_LAYER_NOT_DOWNLOADED))
     }
     
-    func testImportGeoPackageTilesFileIntoLayer() throws {
+    func testImportGeoPackageTilesFileIntoLayer() async throws {
         let mockListener = MockCacheOverlayListener()
         CacheOverlays.getInstance().register(mockListener)
         
@@ -374,15 +376,15 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
         
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
-        let imported = importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+        let imported = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         XCTAssertTrue(imported)
 
-        wait(for: [importExpectation])
+        await fulfillment(of: [importExpectation])
         
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
     }
     
-    func testHandleGeoPackageImport() throws {
+    func testHandleGeoPackageImport() async throws {
         let downloadPaths = NSSearchPathForDirectoriesInDomains(.downloadsDirectory, .userDomainMask, true)
         let downloadsDirectory = downloadPaths[0] as String
         
@@ -404,28 +406,29 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
 
         let importer = GeoPackageImporter()
-        let imported = importer.handleGeoPackageImport(urlPath.path())
-        
-        XCTAssertTrue(imported)
+        await awaitDidSave {
+            let imported = await importer.handleGeoPackageImport(urlPath.path())
+            
+            XCTAssertTrue(imported)
+        }
         
         context.performAndWait {
             let layers = self.context.fetchAll(Layer.self)
             XCTAssertEqual(layers?.count, 1)
         }
-        expect(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded).toEventually(equal(NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)))
+        XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
         
         print("XXXX CLEAN UP THE THINGS")
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
-        importer.processOfflineMapArchives()
-        
-        context.performAndWait {
-            print("XXX find the count geopackage")
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(0))
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
         }
+        
+        XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 0)
     }
     
-    func testHandleGeoPackageImportDropIn() throws {
+    func testHandleGeoPackageImportDropIn() async throws {
         let documentsPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = documentsPaths[0] as String
         
@@ -446,26 +449,27 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
 
         let importer = GeoPackageImporter()
-        importer.processOfflineMapArchives()
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
+        }
                 
         context.performAndWait {
             let layers = self.context.fetchAll(Layer.self)
             XCTAssertEqual(layers?.count, 1)
         }
-        expect(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded).toEventually(equal(NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)))
+        XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
         
         print("XXXX CLEAN UP THE THINGS")
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
-        importer.processOfflineMapArchives()
-        
-        context.performAndWait {
-            print("XXX find the count geopackage")
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(0))
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
         }
+        
+        XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 0)
     }
     
-    func testHandleGeoPackageImportDeleteFile() throws {
+    func testHandleGeoPackageImportDeleteFile() async throws {
         let downloadPaths = NSSearchPathForDirectoriesInDomains(.downloadsDirectory, .userDomainMask, true)
         let downloadsDirectory = downloadPaths[0] as String
         
@@ -487,19 +491,20 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
 
         let importer = GeoPackageImporter()
-        let imported = importer.handleGeoPackageImport(urlPath.path())
-        
-        XCTAssertTrue(imported)
+        await awaitDidSave {
+            let imported = await importer.handleGeoPackageImport(urlPath.path())
+            
+            XCTAssertTrue(imported)
+        }
         
         context.performAndWait {
             let layers = self.context.fetchAll(Layer.self)
             XCTAssertEqual(layers?.count, 1)
         }
-        expect(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded).toEventually(equal(NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)))
+        XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
         
         print("XXXX CLEAN UP THE THINGS")
         
-        ///Documents/geopackage/db/slateTiles4326_1_from_server.gpkg
         let documentPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentPath = documentPaths[0] as String
         
@@ -510,15 +515,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             print("XXX error \(error)")
         }
         
-        importer.processOfflineMapArchives()
-        
-        context.performAndWait {
-            print("XXX find the count geopackage")
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(0))
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
         }
+        
+        XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 0)
     }
     
-    func testNotAGeoPackage() throws {
+    func testNotAGeoPackage() async throws {
         let downloadPaths = NSSearchPathForDirectoriesInDomains(.downloadsDirectory, .userDomainMask, true)
         let downloadsDirectory = downloadPaths[0] as String
         
@@ -540,7 +544,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
 
         let importer = GeoPackageImporter()
-        let imported = importer.handleGeoPackageImport(urlPath.path())
+        let imported = await importer.handleGeoPackageImport(urlPath.path())
         
         XCTAssertFalse(imported)
         
@@ -550,7 +554,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         }
     }
     
-    func testProcessOfflineMapArchivesXYZZip() throws {
+    func testProcessOfflineMapArchivesXYZZip() async throws {
         let mockListener = MockCacheOverlayListener()
         CacheOverlays.getInstance().register(mockListener)
         
@@ -582,12 +586,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
 
         let importer = GeoPackageImporter()
-        importer.processOfflineMapArchives()
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
+        }
                 
-        expect(mockListener.updatedOverlaysWithoutBase?.count).toEventually(equal(1))
+        XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
         
         context.performAndWait {
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(1))
+            XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 1)
 
             let layer = self.context.fetchAll(Layer.self)?.first
             expect(layer?.loaded).to(equal(NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)))
@@ -608,14 +614,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         CacheOverlays.getInstance().remove(byCacheName: "0")
         
-        importer.processOfflineMapArchives()
-        
-        context.performAndWait {
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(0))
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
         }
+        
+        XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 0)
     }
     
-    func testProcessOfflineMapArchivesXYZDirectory() throws {
+    func testProcessOfflineMapArchivesXYZDirectory() async throws {
         let mockListener = MockCacheOverlayListener()
         CacheOverlays.getInstance().register(mockListener)
         
@@ -646,12 +652,14 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
 
         let importer = GeoPackageImporter()
-        importer.processOfflineMapArchives()
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
+        }
                 
-        expect(mockListener.updatedOverlaysWithoutBase?.count).toEventually(equal(1))
+        XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
         
         context.performAndWait {
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(1))
+            XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 1)
 
             let layer = self.context.fetchAll(Layer.self)?.first
             expect(layer?.loaded).to(equal(NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)))
@@ -667,10 +675,10 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         CacheOverlays.getInstance().remove(byCacheName: "testxyz")
         
-        importer.processOfflineMapArchives()
-        
-        context.performAndWait {
-            expect(self.context.fetchAll(Layer.self)?.count).toEventually(equal(0))
+        await awaitDidSave {
+            await importer.processOfflineMapArchives()
         }
+        
+        XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 0)
     }
 }

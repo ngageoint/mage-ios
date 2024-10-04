@@ -31,6 +31,7 @@ class MageInjectionTestCase: XCTestCase {
         defaultFeedItemInjection()
         defaultObservationLocationInjection()
         defaultObservationIconInjection()
+        defaultLayerInjection()
         
         clearAndSetUpStack()
     }
@@ -103,6 +104,11 @@ class MageInjectionTestCase: XCTestCase {
     func defaultStaticLayerInjection() {
         InjectedValues[\.staticLayerLocalDataSource] = StaticLayerCoreDataDataSource()
         InjectedValues[\.staticLayerRepository] = StaticLayerRepository()
+    }
+    
+    func defaultLayerInjection() {
+        InjectedValues[\.layerLocalDataSource] = LayerLocalCoreDataDataSource()
+        InjectedValues[\.layerRepository] = LayerRepositoryImpl()
     }
     
     func defaultGeoPackageInjection() {

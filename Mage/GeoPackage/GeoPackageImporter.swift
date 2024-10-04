@@ -12,9 +12,12 @@ import ExceptionCatcher
 import SSZipArchive
 
 @objc class GeoPackageImporter: NSObject {
+    @Injected(\.layerRepository)
+    var layerRepository: LayerRepository
+    
     var addedCacheOverlay: String?
     
-    @objc public func handleGeoPackageImport(_ filePath: String) -> Bool {
+    @objc public func handleGeoPackageImport(_ filePath: String) async -> Bool {
 
         if (!GPKGGeoPackageValidate.hasGeoPackageExtension(filePath)) {
             return false;
@@ -25,36 +28,40 @@ import SSZipArchive
 
         if isGeoPackageAlreadyImported(name: fileWithoutExtension) {
             
-            let alert = UIAlertController(
+            let alert = await UIAlertController(
                 title: "Overwrite Existing GeoPackage?",
                 message: "A GeoPackage with the name \((((filePath as NSString).lastPathComponent) as NSString).deletingPathExtension) already exists.  You can import it as a new GeoPackage, or overwrite the existing GeoPackage.",
                 preferredStyle: .actionSheet
             )
             
-            alert.addAction(UIAlertAction(title: "Import As New", style: .default, handler: { action in
-                // rename it and import
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd_HH:mm:ss"
-                formatter.locale = Locale(identifier: "en_US_POSIX")
-                
-                self.importGeoPackageFile(filePath, name: "\(fileWithoutExtension)_\(formatter.string(from: Date()))", overwrite: false)
+            await alert.addAction(UIAlertAction(title: "Import As New", style: .default, handler: { action in
+                Task {
+                    // rename it and import
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy-MM-dd_HH:mm:ss"
+                    formatter.locale = Locale(identifier: "en_US_POSIX")
+                    
+                    _ = await self.importGeoPackageFile(filePath, name: "\(fileWithoutExtension)_\(formatter.string(from: Date()))", overwrite: false)
+                }
             }))
             
-            alert.addAction(UIAlertAction(title: "Overwrite Existing GeoPackage", style: .destructive, handler: { action in
-                self.importGeoPackageFile(filePath, overwrite: true)
+            await alert.addAction(UIAlertAction(title: "Overwrite Existing GeoPackage", style: .destructive, handler: { action in
+                Task {
+                    await self.importGeoPackageFile(filePath, overwrite: true)
+                }
             }))
 
-            alert.addAction(UIAlertAction(title: "Do Not Import", style: .cancel, handler: nil));
+            await alert.addAction(UIAlertAction(title: "Do Not Import", style: .cancel, handler: nil));
 
-            AppDelegate.topMostController().present(alert, animated: true)
+            await AppDelegate.topMostController().present(alert, animated: true)
             return false;
         } else {
             // Import the GeoPackage file
-            return importGeoPackageFile(filePath, overwrite: false)
+            return await importGeoPackageFile(filePath, overwrite: false)
         }
     }
     
-    @objc public func processOfflineMapArchives() {
+    @objc public func processOfflineMapArchives() async {
         guard let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else { return }
         let directoryContent = try? FileManager.default.contentsOfDirectory(atPath: documentsDirectory)
         
@@ -80,29 +87,7 @@ import SSZipArchive
                     overlays.append(cacheOverlay)
                 }
                 
-                @Injected(\.nsManagedObjectContext)
-                var context: NSManagedObjectContext?
-                
-                if let context = context {
-                    context.performAndWait {
-                        do {
-                            let predicate = NSPredicate(format: "eventId == -1 AND (type == %@ OR type == %@) AND name == %@", argumentArray: ["eventId", "GeoPackage", "Local_XYZ", cache])
-                            
-                            var l = try context.fetchFirst(Layer.self, sortBy: [NSSortDescriptor(key: "eventId", ascending: true)], predicate: predicate)
-                            if l == nil {
-                                let l = Layer(context: context)
-                                l.name = cache
-                                l.loaded = NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)
-                                l.type = "Local_XYZ"
-                                l.eventId = -1
-                                try context.obtainPermanentIDs(for: [l])
-                                try context.save()
-                            }
-                        } catch {
-                            NSLog("Exception fetching and saving \(error)")
-                        }
-                    }
-                }
+                _ = await layerRepository.createLoadedXYZLayer(name: cache)
             }
         }
         
@@ -115,7 +100,7 @@ import SSZipArchive
         for geoPackageFile in geoPackageFiles {
             // Import the GeoPackage file
             let geoPackagePath = (documentsDirectory as NSString).appendingPathComponent(geoPackageFile)
-            self.importGeoPackageFile(geoPackagePath, overwrite: false)
+            _ = await self.importGeoPackageFile(geoPackagePath, overwrite: false)
         }
         
         // Add the GeoPackage cache overlays
@@ -163,10 +148,10 @@ import SSZipArchive
             }
         }
         
-        self.removeOutdatedOfflineMapArchives()
+        await self.removeOutdatedOfflineMapArchives()
     }
     
-    @objc public func importGeoPackageFileAsLink(_ path: String, andMove: Bool, withLayerId: NSNumber) -> Bool {
+    @objc public func importGeoPackageFileAsLink(_ path: String, andMove: Bool, withLayerId: NSNumber) async -> Bool {
         let name = ((path as NSString).lastPathComponent as NSString).deletingPathExtension
         var imported = false
         let manager = GPKGGeoPackageFactory.manager()
@@ -190,43 +175,11 @@ import SSZipArchive
         if !imported {
             NSLog("Error importing GeoPackage file: \(path)")
             
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            if let context = context {
-                context.performAndWait {
-                    do {
-                        let layers: [Layer] = try context.fetchObjects(Layer.self, predicate: NSPredicate(format: "remoteId == %@", argumentArray: [withLayerId])) ?? []
-                        for layer in layers {
-                            layer.loaded = NSNumber(floatLiteral: Layer.OFFLINE_LAYER_NOT_DOWNLOADED)
-                            layer.downloading = false
-                        }
-                        try context.save()
-                    } catch {
-                        NSLog("Exception setting layer \(withLayerId) to not downloaded \(error)")
-                    }
-                }
-            }
+            await layerRepository.markRemoteLayerNotDownloaded(remoteId: withLayerId)
         } else {
             NSLog("GeoPackage file %@ has been imported", path)
-            @Injected(\.nsManagedObjectContext)
-            var context: NSManagedObjectContext?
-            
-            if let context = context {
-                context.performAndWait {
-                    do {
-                        let layers: [Layer] = try context.fetchObjects(Layer.self, predicate: NSPredicate(format: "remoteId == %@", argumentArray: [withLayerId])) ?? []
-                        for layer in layers {
-                            layer.loaded = NSNumber(floatLiteral: Layer.OFFLINE_LAYER_LOADED)
-                            layer.downloading = false
-                        }
-                        try context.save()
-                    } catch {
-                        NSLog("Exception setting layer \(withLayerId) to loaded \(error)")
-                    }
-                }
-            }
-            self.processOfflineMapArchives()
+            await layerRepository.markRemoteLayerLoaded(remoteId: withLayerId)
+            await self.processOfflineMapArchives()
             NotificationCenter.default.post(name: .GeoPackageImported, object: nil)
         }
         return imported
@@ -237,7 +190,7 @@ import SSZipArchive
         return manager?.databasesLike(name).count != 0
     }
     
-    private func importGeoPackageFile(_ path: String, name: String? = nil, overwrite: Bool) -> Bool {
+    private func importGeoPackageFile(_ path: String, name: String? = nil, overwrite: Bool) async -> Bool {
         let name = name ?? ((path as NSString).lastPathComponent as NSString).deletingPathExtension
         
         // Import the GeoPackage file
@@ -261,25 +214,9 @@ import SSZipArchive
                                 }
                             }
                         }
-                        
-                        @Injected(\.nsManagedObjectContext)
-                        var context: NSManagedObjectContext?
-                        
-                        if let context = context {
-                            context.performAndWait {
-                                do {
-                                    let l = Layer(context: context)
-                                    l.name = name
-                                    l.loaded = NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)
-                                    l.type = "GeoPackage"
-                                    l.eventId = -1
-                                    try context.obtainPermanentIDs(for: [l])
-                                    try context.save()
-                                    self.updateSelectedCaches(name: name)
-                                } catch {
-                                    NSLog("Error saving local GeoPackage \(error)")
-                                }
-                            }
+                        Task {
+                            _ = await layerRepository.createGeoPackageLayer(name: name)
+                            self.updateSelectedCaches(name: name)
                         }
                     }
                 }
@@ -294,7 +231,7 @@ import SSZipArchive
         if !imported {
             NSLog("Error importing GeoPackage file: \(path)")
         } else {
-            processOfflineMapArchives()
+            await processOfflineMapArchives()
         }
         return imported
     }
@@ -442,43 +379,20 @@ import SSZipArchive
         return cacheOverlay
     }
 
-    func removeOutdatedOfflineMapArchives() {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        if let context = context {
-            context.performAndWait {
-                do {
-                    let layers: [Layer] = try context.fetchObjects(Layer.self, predicate: NSPredicate(format: "eventId == -1 AND (type == %@ OR type == %@)", argumentArray: ["GeoPackage", "Local_XYZ"])) ?? []
-                    for layer in layers {
-                        let overlay = CacheOverlays.getInstance().getByCacheName(layer.name)
-                        
-                        if (overlay == nil) {
-                            context.delete(layer)
-                        } else if let overlay = overlay as? GeoPackageCacheOverlay {
-                            if !FileManager.default.fileExists(atPath: overlay.filePath) {
-                                context.delete(layer)
-                            }
-                        }
-                    }
-                    try context.save()
-                } catch {
-                    NSLog("Exception removing layer \(error)")
-                }
-            }
-        }
+    func removeOutdatedOfflineMapArchives() async {
+        await layerRepository.removeOutdatedOfflineMapArchives()
     }
 }
 
 extension GeoPackageImporter: SSZipArchiveDelegate {
     
     func zipArchiveDidUnzipArchive(atPath path: String, zipInfo: unz_global_info, unzippedPath: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.finishDidUnzipAtPath(path, zipInfo: zipInfo, unzippedPath: unzippedPath)
+        Task { [weak self] in
+            await self?.finishDidUnzipAtPath(path, zipInfo: zipInfo, unzippedPath: unzippedPath)
         }
     }
 
-    func finishDidUnzipAtPath(_ path: String, zipInfo: unz_global_info, unzippedPath: String) {
+    func finishDidUnzipAtPath(_ path: String, zipInfo: unz_global_info, unzippedPath: String) async {
         if FileManager.default.isDeletableFile(atPath: path) {
             do {
                  try FileManager.default.removeItem(atPath: path)
@@ -501,28 +415,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
                     cacheOverlays?.add([cacheOverlay])
                     NSLog("Imported local XYZ Zip")
                     
-                    
-                    @Injected(\.nsManagedObjectContext)
-                    var context: NSManagedObjectContext?
-                    
-                    if let context = context {
-                        context.performAndWait {
-                            do {
-                                let l = try context.fetchFirst(Layer.self, predicate: NSPredicate(format: "eventId == -1 AND (type == %@ OR type == %@) AND name == %@", argumentArray: ["GeoPackage", "Local_XYZ", cache]))
-                                if l == nil {
-                                    let l = Layer(context: context)
-                                    l.name = cache
-                                    l.loaded = NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED)
-                                    l.type = "Local_XYZ"
-                                    l.eventId = -1
-                                    try context.obtainPermanentIDs(for: [l])
-                                    try context.save()
-                                }
-                            } catch {
-                                NSLog("Exception saving unzipped layer \(error)")
-                            }
-                        }
-                    }
+                    _ = await layerRepository.createLoadedXYZLayer(name: cache)
                 }
             }
         }

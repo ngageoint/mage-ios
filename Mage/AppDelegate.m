@@ -85,7 +85,9 @@
 
 - (void) geoPackageDownloaded: (NSNotification *) notification {
     NSString *filePath = [notification.userInfo valueForKey:@"filePath"];
-    [self.gpImporter importGeoPackageFileAsLink:filePath andMove:NO withLayerId:[notification.userInfo valueForKey:@"layerId"]];
+    [self.gpImporter importGeoPackageFileAsLink:filePath andMove:NO withLayerId:[notification.userInfo valueForKey:@"layerId"] completionHandler:^(BOOL imported) {
+        
+    }];
 }
 
 - (BOOL)application:(UIApplication *)app
@@ -101,7 +103,9 @@
         NSString * filePath = [url path];
         
         // Handle GeoPackage files
-        [self.gpImporter handleGeoPackageImport:filePath];
+        [self.gpImporter handleGeoPackageImport:filePath completionHandler:^(BOOL imported) {
+            
+        }];
     } else if ([[url scheme] isEqualToString:@"mage"] && [[url host] isEqualToString:@"app"]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MageAppLink" object:url];
     }
@@ -149,7 +153,9 @@
         if (contextDidSave && error == NULL) {
             self.appCoordinator = [[MageAppCoordinator alloc] initWithNavigationController:self.rootViewController forApplication:self.application andScheme:[MAGEScheme scheme] context: self.context];
             [self.appCoordinator start];
-            [self.gpImporter processOfflineMapArchives];
+            [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
+                
+            }];
         } else {
             NSLog(@"Could not read or write from the database %@", error);
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
@@ -260,7 +266,9 @@
                     self.splashView = nil;
                 }
                 
-                [self.gpImporter processOfflineMapArchives];
+                [self.gpImporter processOfflineMapArchivesWithCompletionHandler:^{
+                    
+                }];
             } else {
                 NSLog(@"Could not read or write from the database %@", error);
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Device Problem"
