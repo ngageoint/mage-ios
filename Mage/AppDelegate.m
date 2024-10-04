@@ -19,7 +19,6 @@
 #import "TransitionViewController.h"
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
-#import "GeoPackageImporter.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;

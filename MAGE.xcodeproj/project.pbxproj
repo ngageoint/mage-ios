@@ -751,7 +751,7 @@
 		F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */; };
 		F7F08E8F27E0BE3100640D89 /* gpkgWithMedia.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = F7F08E8E27E0BE3100640D89 /* gpkgWithMedia.gpkg */; };
 		F7F08E9127E0C04900640D89 /* GeoPackageLayerMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9027E0C04900640D89 /* GeoPackageLayerMapTests.swift */; };
-		F7F08E9427E0EB7100640D89 /* GeoPackageImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9327E0EB7100640D89 /* GeoPackageImporter.m */; };
+		F7F08E9427E0EB7100640D89 /* GeoPackageImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9327E0EB7100640D89 /* GeoPackageImporter.swift */; };
 		F7F08E9627E8B35F00640D89 /* FeedsMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9527E8B35F00640D89 /* FeedsMapTests.swift */; };
 		F7F08E9827E8F4B700640D89 /* FollowUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9727E8F4B700640D89 /* FollowUserTests.swift */; };
 		F7F08E9A27E9163000640D89 /* OnlineLayerMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9927E9163000640D89 /* OnlineLayerMapTests.swift */; };
@@ -1729,8 +1729,7 @@
 		F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationPushServiceTests.swift; sourceTree = "<group>"; };
 		F7F08E8E27E0BE3100640D89 /* gpkgWithMedia.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = gpkgWithMedia.gpkg; sourceTree = "<group>"; };
 		F7F08E9027E0C04900640D89 /* GeoPackageLayerMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageLayerMapTests.swift; sourceTree = "<group>"; };
-		F7F08E9227E0EB7100640D89 /* GeoPackageImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoPackageImporter.h; sourceTree = "<group>"; };
-		F7F08E9327E0EB7100640D89 /* GeoPackageImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoPackageImporter.m; sourceTree = "<group>"; };
+		F7F08E9327E0EB7100640D89 /* GeoPackageImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageImporter.swift; sourceTree = "<group>"; };
 		F7F08E9527E8B35F00640D89 /* FeedsMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedsMapTests.swift; sourceTree = "<group>"; };
 		F7F08E9727E8F4B700640D89 /* FollowUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUserTests.swift; sourceTree = "<group>"; };
 		F7F08E9927E9163000640D89 /* OnlineLayerMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineLayerMapTests.swift; sourceTree = "<group>"; };
@@ -3985,8 +3984,7 @@
 			children = (
 				F7ECDC9C27A83C8600D0AF92 /* GeoPackage.h */,
 				F7ECDC9D27A83C8600D0AF92 /* GeoPackage.m */,
-				F7F08E9227E0EB7100640D89 /* GeoPackageImporter.h */,
-				F7F08E9327E0EB7100640D89 /* GeoPackageImporter.m */,
+				F7F08E9327E0EB7100640D89 /* GeoPackageImporter.swift */,
 			);
 			path = GeoPackage;
 			sourceTree = "<group>";
@@ -4972,7 +4970,7 @@
 				F72D43052694B60300F9AC3B /* User+CoreDataProperties.swift in Sources */,
 				F776ACAB2BCF223D000FAFB4 /* ManagedObjectChangesPublisher.swift in Sources */,
 				F7D43BE4269F357200561A8F /* FeedItemActionsView.swift in Sources */,
-				F7F08E9427E0EB7100640D89 /* GeoPackageImporter.m in Sources */,
+				F7F08E9427E0EB7100640D89 /* GeoPackageImporter.swift in Sources */,
 				F7E079492C29EC870029C88D /* FeatureItemRepository.swift in Sources */,
 				F7225F512C59557300B7D935 /* ObservationFormViewModel.swift in Sources */,
 				F7F91220247EFA4100C068B6 /* DropdownFieldView.swift in Sources */,

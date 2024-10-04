@@ -116,7 +116,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
                 print("XXX error \(error)")
             }
         }
-        let countriesGeoPackagePath2 = URL(fileURLWithPath: "\(documentsDirectory)/2/countries.gpkg")
+        let countriesGeoPackagePath2 = URL(fileURLWithPath: "\(documentsDirectory)/2/countries2.gpkg")
         try FileManager.default.copyItem(at: countriesGeoPackagePath2, to: countriesGeoPackagePath)
         
         let fileExists = FileManager.default.fileExists(atPath: countriesGeoPackagePath.path())
@@ -171,10 +171,9 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
         
-        importer.importGeoPackageFile(asLink: urlPath.path(), andMove: false, withLayerId: 1)
-        
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
-        
+        importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+
         wait(for: [importExpectation])
     }
     
@@ -219,9 +218,9 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
                 
-        importer.importGeoPackageFile(asLink: urlPath.path(), andMove: false, withLayerId: 1)
-        
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
+
+        importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
         wait(for: [importExpectation])
         
@@ -270,9 +269,9 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
                 
-        importer.importGeoPackageFile(asLink: urlPath.path(), andMove: false, withLayerId: 1)
-        
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
+
+        importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
         wait(for: [importExpectation])
         
@@ -321,7 +320,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
         
-        let imported = importer.importGeoPackageFile(asLink: urlPath.path(), andMove: false, withLayerId: 1)
+        let imported = importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
         XCTAssertFalse(imported)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 0)
@@ -374,10 +373,10 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
         
-        let imported = importer.importGeoPackageFile(asLink: urlPath.path(), andMove: false, withLayerId: 1)
-        XCTAssertTrue(imported)
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
-        
+        let imported = importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
+        XCTAssertTrue(imported)
+
         wait(for: [importExpectation])
         
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)

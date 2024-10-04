@@ -21,6 +21,7 @@
 #import "CacheOverlayUpdate.h"
 #import "PROJProjectionConstants.h"
 #import "XYZDirectoryCacheOverlay.h"
+#import "MAGE-Swift.h"
 
 @interface GeoPackage ()
 @property (nonatomic, strong) MKMapView *mapView;

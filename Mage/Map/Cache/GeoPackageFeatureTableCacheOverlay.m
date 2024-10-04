@@ -13,6 +13,7 @@
 #import "GPKGPropertyConstants.h"
 #import "GPKGDataColumnsDao.h"
 #import "GPKGGeoPackageFactory.h"
+#import "MAGE-Swift.h"
 
 NSInteger const GEO_PACKAGE_FEATURE_TABLE_MAX_ZOOM = 21;
 

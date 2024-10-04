@@ -191,7 +191,7 @@ class GeoPackageLayerMapTests: KIFMageCoreDataTestCase {
                 expect(geopackageStubCalled).toEventually(beTrue());
                 expect(successfulDownload).toEventually(beTrue())
                 
-                GeoPackageImporter().importGeoPackageFile(asLink: urlPath.path, andMove: false, withLayerId: 1)
+                GeoPackageImporter().importGeoPackageFileAsLink(urlPath.path, andMove: false, withLayerId: 1)
 
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
