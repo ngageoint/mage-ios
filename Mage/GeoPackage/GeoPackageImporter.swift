@@ -71,7 +71,7 @@ import SSZipArchive
         })
         
         let cacheOverlays = CacheOverlays.getInstance()
-        cacheOverlays?.addProcessing(from: archives)
+        await cacheOverlays.addProcessing(from: archives)
         
         let baseCacheDirectory = (documentsDirectory  as NSString).appendingPathComponent(MageDirectories.cache.rawValue)
         
@@ -139,7 +139,7 @@ import SSZipArchive
         }
         addedCacheOverlay = nil
         
-        cacheOverlays?.add(overlays)
+        await cacheOverlays.add(overlays)
         
         for archive in archives ?? [] {
             let queue = DispatchQueue.global(qos: .background)
@@ -402,7 +402,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
         }
         
         let cacheOverlays = CacheOverlays.getInstance()
-        cacheOverlays?.removeProcessing((path as NSString).lastPathComponent)
+        await cacheOverlays.removeProcessing((path as NSString).lastPathComponent)
         
         // There is no way to know what was in the zip that was unarchived, so just add all current caches to the list
         let caches = try? FileManager.default.contentsOfDirectory(atPath: unzippedPath)
@@ -412,7 +412,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
             let exists = FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory)
             if exists && isDirectory.boolValue {
                 if let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, andDirectory: cacheDirectory) {
-                    cacheOverlays?.add([cacheOverlay])
+                    await cacheOverlays.add([cacheOverlay])
                     NSLog("Imported local XYZ Zip")
                     
                     _ = await layerRepository.createLoadedXYZLayer(name: cache)

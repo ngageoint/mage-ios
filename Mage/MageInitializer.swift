@@ -16,7 +16,9 @@ import Foundation
     static var persistence: Persistence
     
     @objc static func cleanupGeoPackages() {
-        geoPackageRepository.cleanupBackgroundGeoPackages()
+        Task {
+            await geoPackageRepository.cleanupBackgroundGeoPackages()
+        }
     }
     
     @objc static func getBaseMap() -> BaseMapOverlay? {

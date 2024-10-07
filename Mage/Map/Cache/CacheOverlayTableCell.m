@@ -169,7 +169,11 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableArray * overlays = [[NSMutableArray alloc] init];
     CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
-    for(CacheOverlay * cacheOverlay in [cacheOverlays getOverlays]){
+    NSMutableArray *cacheOverlaysOverlays = [[NSMutableArray alloc] init];
+    [cacheOverlays getOverlaysWithCompletionHandler:^(NSArray<CacheOverlay *> * _Nonnull overlays) {
+        [cacheOverlaysOverlays arrayByAddingObjectsFromArray: overlays];
+    }];
+    for(CacheOverlay * cacheOverlay in cacheOverlaysOverlays){
 
         BOOL childAdded = false;
         for(CacheOverlay * childCache in [cacheOverlay getChildren]){
@@ -186,7 +190,9 @@
     [defaults setObject:overlays forKey:MAGE_SELECTED_CACHES];
     [defaults synchronize];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [cacheOverlays notifyListeners];
+        [cacheOverlays notifyListenersWithCompletionHandler:^{
+            
+        }];
     });
 }
 

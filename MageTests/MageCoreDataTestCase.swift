@@ -28,6 +28,16 @@ class MageCoreDataTestCase: MageInjectionTestCase {
         persistence.clearAndSetupStack()
     }
     
+    override func setUp() async throws {
+        try await super.setUp()
+        persistence.clearAndSetupStack()
+    }
+    
+    override func tearDown() async throws {
+        try await super.tearDown()
+        persistence.clearAndSetupStack()
+    }
+    
     func awaitDidSave(block: @escaping () async -> Void) async {
         let didSave = expectation(forNotification: .NSManagedObjectContextDidSave, object: context) { notification in
             return notification.userInfo?["inserted"] != nil || notification.userInfo?["deleted"] != nil || notification.userInfo?["updated"] != nil
