@@ -68,4 +68,6 @@
 #import "WMSTileOverlay.h"
 #import "TMSTileOverlay.h"
 #import "XYZTileOverlay.h"
-#import "GeoPackageImporter.h"
+#import "XYZDirectoryCacheOverlay.h"
+#import "GeoPackageCacheOverlay.h"
+#import "GeoPackageFeatureTableCacheOverlay.h"

@@ -13,7 +13,7 @@ import Nimble
 
 @testable import MAGE
 
-class GeometryEditViewControllerTests: KIFSpec {
+class GeometryEditViewControllerTests: KIFMageCoreDataTestCase {
     
     override func spec() {
         
@@ -25,9 +25,6 @@ class GeometryEditViewControllerTests: KIFSpec {
             var field: [String: Any]!
 
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
-
-                MageCoreDataFixtures.clearAllData();
                 TestHelpers.resetUserDefaults();
                 window = TestHelpers.getKeyWindowVisible();
                 window.rootViewController = navController;

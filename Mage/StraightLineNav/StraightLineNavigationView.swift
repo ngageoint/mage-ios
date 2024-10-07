@@ -127,6 +127,7 @@ class StraightLineNavigationView: UIView {
         return view;
     }();
     
+    // TODO: This is leaking self, should probably just modify the dimensions and corner radius of the view
     private lazy var rootView: UIView = {
         if UIDevice.current.userInterfaceIdiom == .pad {
             addSubview(ipadView);

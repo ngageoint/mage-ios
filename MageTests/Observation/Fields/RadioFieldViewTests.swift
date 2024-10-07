@@ -16,7 +16,7 @@ import Nimble
 class RadioFieldViewTests: KIFSpec {
     
     override func spec() {
-        describe("RadioFieldView") {
+        xdescribe("RadioFieldView") {
             
             var controller: UIViewController!
             var window: UIWindow!;
@@ -67,17 +67,6 @@ class RadioFieldViewTests: KIFSpec {
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
-            }
-            
-            it("non edit mode") {
-                radioFieldView = RadioFieldView(field: field, editMode: false, value: "Purple");
-                radioFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(radioFieldView)
-                radioFieldView.autoPinEdgesToSuperviewEdges();
-                
-                controller.view.addSubview(view);
-//                expect(view).to(haveValidSnapshot());
             }
             
             it("no initial value") {

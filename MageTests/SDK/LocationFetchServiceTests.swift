@@ -18,28 +18,18 @@ class LocationFetchServiceTests: KIFSpec {
     
     override func spec() {
         describe("LocationFetchService Tests") {
+            @Injected(\.persistence)
+            var coreDataStack: Persistence
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack.clearAndSetupStack()
+                context = coreDataStack.getContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+//                NSManagedObject.mr_setDefaultBatchSize(0);
+                
                 LocationFetchService.singleton.stop();
-
-                var cleared = false;
-                while (!cleared) {
-                    let clearMap = TestHelpers.clearAndSetUpStack()
-                    cleared = (clearMap[String(describing: Location.self)] ?? false) && (clearMap[String(describing: User.self)] ?? false)
-                    
-                    if (!cleared) {
-                        cleared = Location.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0 && User.mr_findAll(in: NSManagedObjectContext.mr_default())?.count == 0
-                    }
-                    
-                    if (!cleared) {
-                        Thread.sleep(forTimeInterval: 0.5);
-                    }
-                    
-                }
-                
-                expect(Location.mr_findAll(in: NSManagedObjectContext.mr_default())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations still exist in default");
-                
-                expect(Location.mr_findAll(in: NSManagedObjectContext.mr_rootSaving())?.count).toEventually(equal(0), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Locations still exist in root");
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.serverMajorVersion = 6;
@@ -50,7 +40,6 @@ class LocationFetchServiceTests: KIFSpec {
                 MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
                 Server.setCurrentEventId(1);
                 UserDefaults.standard.currentUserId = "userabc";
-                NSManagedObject.mr_setDefaultBatchSize(0);
                 UserDefaults.standard.loginParameters = [
                     LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
                     LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
@@ -59,9 +48,10 @@ class LocationFetchServiceTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack.clearAndSetupStack()
                 LocationFetchService.singleton.stop();
                 expect(LocationFetchService.singleton.started).toEventually(beFalse());
-                NSManagedObject.mr_setDefaultBatchSize(20);
                 TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs();
             }

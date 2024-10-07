@@ -46,60 +46,60 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [MageInitializer initializePreferences];
     
-    [MageInitializer setupCoreData];
+//    [MageInitializer setupCoreData];
 //    [MagicalRecord setupCoreDataStackWithInMemoryStore];
 //    [MagicalRecord setLoggingLevel:MagicalRecordLoggingLevelVerbose];
     
-    NSString *countriesDarkGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries_dark" ofType:@"gpkg"];
-    NSLog(@"Countries GeoPackage path %@", countriesDarkGeoPackagePath);
-    
-    // Add the GeoPackage caches
-    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
-    @try {
-        [manager importGeoPackageFromPath:countriesDarkGeoPackagePath];
-    }
-    @catch (NSException *e) {
-        // probably was already imported and that is fine
-    }
-    NSString *countriesGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries" ofType:@"gpkg"];
-    NSLog(@"Countries GeoPackage path %@", countriesGeoPackagePath);
-    @try {
-        [manager importGeoPackageFromPath:countriesGeoPackagePath];
-    }
-    @catch (NSException *e) {
-        // probably was already imported and that is fine
-    }
-    
-    GPKGGeoPackage *countriesGeoPackage = [manager open:@"countries"];
-    if (countriesGeoPackage) {
-        GPKGFeatureDao * featureDao = [countriesGeoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:countriesGeoPackage andFeatureDao:featureDao];
-        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:countriesGeoPackage andFeatureDao:featureDao]];
-        
-        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
-        [self.backgroundOverlay setMinZoom:0];
-        self.backgroundOverlay.darkTheme = NO;
-        
-        self.backgroundOverlay.canReplaceMapContent = true;
-    }
-    
-    GPKGGeoPackage *darkCountriesGeoPackage = [manager open:@"countries_dark"];
-    if (darkCountriesGeoPackage) {
-        GPKGFeatureDao * darkFeatureDao = [darkCountriesGeoPackage featureDaoWithTableName:@"countries"];
-        
-        // If indexed, add as a tile overlay
-        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkCountriesGeoPackage andFeatureDao:darkFeatureDao];
-        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkCountriesGeoPackage andFeatureDao:darkFeatureDao]];
-        
-        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
-        [self.darkBackgroundOverlay setMinZoom:0];
-        self.darkBackgroundOverlay.darkTheme = YES;
-        
-        self.darkBackgroundOverlay.canReplaceMapContent = true;
-    }
-    
+//    NSString *countriesDarkGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries_dark" ofType:@"gpkg"];
+//    NSLog(@"Countries GeoPackage path %@", countriesDarkGeoPackagePath);
+//    
+//    // Add the GeoPackage caches
+//    GPKGGeoPackageManager * manager = [GPKGGeoPackageFactory manager];
+//    @try {
+//        [manager importGeoPackageFromPath:countriesDarkGeoPackagePath];
+//    }
+//    @catch (NSException *e) {
+//        // probably was already imported and that is fine
+//    }
+//    NSString *countriesGeoPackagePath = [[NSBundle mainBundle] pathForResource:@"countries" ofType:@"gpkg"];
+//    NSLog(@"Countries GeoPackage path %@", countriesGeoPackagePath);
+//    @try {
+//        [manager importGeoPackageFromPath:countriesGeoPackagePath];
+//    }
+//    @catch (NSException *e) {
+//        // probably was already imported and that is fine
+//    }
+//    
+//    GPKGGeoPackage *countriesGeoPackage = [manager open:@"countries"];
+//    if (countriesGeoPackage) {
+//        GPKGFeatureDao * featureDao = [countriesGeoPackage featureDaoWithTableName:@"countries"];
+//        
+//        // If indexed, add as a tile overlay
+//        GPKGFeatureTiles * featureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:countriesGeoPackage andFeatureDao:featureDao];
+//        [featureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:countriesGeoPackage andFeatureDao:featureDao]];
+//        
+//        self.backgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:featureTiles];
+//        [self.backgroundOverlay setMinZoom:0];
+//        self.backgroundOverlay.darkTheme = NO;
+//        
+//        self.backgroundOverlay.canReplaceMapContent = true;
+//    }
+//    
+//    GPKGGeoPackage *darkCountriesGeoPackage = [manager open:@"countries_dark"];
+//    if (darkCountriesGeoPackage) {
+//        GPKGFeatureDao * darkFeatureDao = [darkCountriesGeoPackage featureDaoWithTableName:@"countries"];
+//        
+//        // If indexed, add as a tile overlay
+//        GPKGFeatureTiles * darkFeatureTiles = [[GPKGFeatureTiles alloc] initWithGeoPackage:darkCountriesGeoPackage andFeatureDao:darkFeatureDao];
+//        [darkFeatureTiles setIndexManager:[[GPKGFeatureIndexManager alloc] initWithGeoPackage:darkCountriesGeoPackage andFeatureDao:darkFeatureDao]];
+//        
+//        self.darkBackgroundOverlay = [[BaseMapOverlay alloc] initWithFeatureTiles:darkFeatureTiles];
+//        [self.darkBackgroundOverlay setMinZoom:0];
+//        self.darkBackgroundOverlay.darkTheme = YES;
+//        
+//        self.darkBackgroundOverlay.canReplaceMapContent = true;
+//    }
+//    
     return YES;
 }
 
@@ -108,11 +108,13 @@
 }
 
 - (BaseMapOverlay *) getBaseMap {
-    return self.backgroundOverlay;
+    return [MageInitializer getBaseMap];
+//    return self.backgroundOverlay;
 }
 
 - (BaseMapOverlay *) getDarkBaseMap {
-    return self.darkBackgroundOverlay;
+    return [MageInitializer getDarkBaseMap];
+//    return self.darkBackgroundOverlay;
 }
 
 @end

@@ -29,11 +29,14 @@ protocol AttachmentLocalDataSource {
     func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>?
 }
 
-class AttachmentCoreDataDataSource: CoreDataDataSource, AttachmentLocalDataSource, ObservableObject {
+class AttachmentCoreDataDataSource: CoreDataDataSource<Attachment>, AttachmentLocalDataSource, ObservableObject {
     
     func getAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) async -> [AttachmentModel]? {
         
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         
         guard let observationUri = observationUri,
               let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri)
@@ -60,7 +63,10 @@ class AttachmentCoreDataDataSource: CoreDataDataSource, AttachmentLocalDataSourc
     }
     
     func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         
         guard let observationUri = observationUri,
               let observationFormId = observationFormId,
@@ -90,7 +96,10 @@ class AttachmentCoreDataDataSource: CoreDataDataSource, AttachmentLocalDataSourc
     }
     
     func getAttachment(attachmentUri: URL?) async -> AttachmentModel? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         
         guard let attachmentUri = attachmentUri
         else {

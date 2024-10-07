@@ -45,7 +45,11 @@ class MageMapViewController: MageNavStack {
     }
 
     func setNavBarTitle() {
-        guard let event = Event.getCurrentEvent(context: NSManagedObjectContext.mr_default()) else {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        guard let event = Event.getCurrentEvent(context: context) else {
             return
         }
         if !MageFilter.getString().isEmpty || !MageFilter.getLocationFilterString().isEmpty {

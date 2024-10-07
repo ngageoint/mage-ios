@@ -22,7 +22,16 @@ class MockEventChooserDelegate: NSObject, EventChooserDelegate {
     }
 }
 
-class EventChooserCoordinatorTests : KIFSpec {
+class EventChooserCoordinatorTests : KIFMageCoreDataTestCase {
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
+    
+    
     override func spec() {
         
         describe("EventChooserCoordinatorTests") {
@@ -31,13 +40,13 @@ class EventChooserCoordinatorTests : KIFSpec {
             var coordinator: EventChooserCoordinator?
             var navigationController: UINavigationController?
             
-            beforeEach {
-                TestHelpers.clearAndSetUpStack();
-                
+            beforeEach {                
                 navigationController = UINavigationController()
                 UserDefaults.standard.baseServerUrl = "https://magetest"
                 window = TestHelpers.getKeyWindowVisible()
                 window!.rootViewController = navigationController
+                
+                TestHelpers.setupValidToken()
             }
             
             afterEach {
@@ -46,7 +55,6 @@ class EventChooserCoordinatorTests : KIFSpec {
                 window?.rootViewController = nil
                 navigationController = nil
                 coordinator = nil
-                TestHelpers.clearAndSetUpStack()
             }
             
             it("Should load the event chooser with no events") {
@@ -321,7 +329,7 @@ class EventChooserCoordinatorTests : KIFSpec {
                 
                 MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [])
                 UserDefaults.standard.currentUserId = "userabc"
-                MageCoreDataFixtures.addEvent(remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
+                MageCoreDataFixtures.addEvent( remoteId: 2, name: "Event 2", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 2, userId: "userabc")
                 MageCoreDataFixtures.addEvent(remoteId: 3, name: "Event", formsJsonFile: "oneForm")
                 MageCoreDataFixtures.addUserToEvent(eventId: 3, userId: "userabc")

@@ -26,7 +26,7 @@ import CoreData
         
         if let userIds = json[TeamKey.userIds.key] as? [String] {
             for userId in userIds {
-                if let user = User.mr_findFirst(byAttribute: UserKey.remoteId.key, withValue: userId, in: context) {
+                if let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: userId) {
                     teamUsers.insert(user);
                 } else {
                     if let user = User.mr_createEntity(in: context) {

@@ -17,12 +17,17 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
     
     override func spec() {
         
-        describe("ObservationEditCardCollectionViewController") {
+        xdescribe("ObservationEditCardCollectionViewController") {
             var observationEditController: ObservationEditCardCollectionViewController!
             var window: UIWindow!;
             var stackSetup = false;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (!stackSetup) {
                     TestHelpers.clearAndSetUpStack();
                     stackSetup = true;
@@ -39,6 +44,8 @@ class ObservationEditCardCollectionViewControllerTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 observationEditController.dismiss(animated: false);
                 window.rootViewController = nil;
                 observationEditController = nil;

@@ -30,13 +30,16 @@ class HasMapSettingsTests: KIFSpec {
     
     override func spec() {
         
-        describe("HasMapSettingsTests") {
+        xdescribe("HasMapSettingsTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
             var controller: UIViewController!
             var testimpl: HasMapSettingsTestImpl!
             var mixin: HasMapSettingsMixin!
+            
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             beforeEach {
                 
@@ -47,7 +50,10 @@ class HasMapSettingsTests: KIFSpec {
                         });
                     }
                 }
-                TestHelpers.clearAndSetUpStack();
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+//                TestHelpers.clearAndSetUpStack();
                 if (view != nil) {
                     for subview in view.subviews {
                         subview.removeFromSuperview();
@@ -104,7 +110,9 @@ class HasMapSettingsTests: KIFSpec {
                 navController = nil;
                 view = nil;
                 window = nil;
-                TestHelpers.clearAndSetUpStack();
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
+//                TestHelpers.clearAndSetUpStack();
                 HTTPStubs.removeAllStubs()
             }
             

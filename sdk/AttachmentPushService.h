@@ -14,7 +14,7 @@ extern NSString * const kAttachmentBackgroundSessionIdentifier;
 
 + (instancetype) singleton;
 
-- (void) start;
+- (void) start: (NSManagedObjectContext *) context;
 - (void) stop;
 @property (nonatomic) BOOL started;
 

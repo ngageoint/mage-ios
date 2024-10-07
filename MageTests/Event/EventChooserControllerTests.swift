@@ -26,7 +26,16 @@ class MockEventSelectionDelegate: NSObject, EventSelectionDelegate {
     }
 }
 
-class EventChooserControllerTests : KIFSpec {
+class EventChooserControllerTests : KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
+    
     override func spec() {
         
         describe("EventChooserControllerTests") {
@@ -289,23 +298,32 @@ class EventChooserControllerTests : KIFSpec {
                 MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
                 MageCoreDataFixtures.addObservationToEvent(eventId: 2)
                 
-                let observations = Observation.mr_findAll();
-                expect(observations?.count).to(equal(2));
-                let observation: Observation = observations![0] as! Observation;
-                observation.dirty = true;
-                observation.error = [
-                    ObservationPushService.ObservationErrorStatusCode: 503,
-                    ObservationPushService.ObservationErrorMessage: "Something Bad"
-                ]
-                let observation2: Observation = observations![1] as! Observation;
-                observation2.dirty = true;
-                observation2.error = [
-                    ObservationPushService.ObservationErrorStatusCode: 503,
-                    ObservationPushService.ObservationErrorMessage: "Something Really Bad"
-                ]
-                NSManagedObjectContext.mr_default().mr_saveToPersistentStoreAndWait();
+                @Injected(\.nsManagedObjectContext)
+                var context: NSManagedObjectContext?
                 
-                expect(Observation.mr_findAll()?.count).toEventually(equal(2))
+                guard let context = context else {
+                    XCTFail()
+                    return
+                }
+                context.performAndWait {
+                    let observations = context.fetchAll(Observation.self)
+                    expect(observations?.count).to(equal(2));
+                    let observation: Observation = observations![0]
+                    observation.dirty = true;
+                    observation.error = [
+                        ObservationPushService.ObservationErrorStatusCode: 503,
+                        ObservationPushService.ObservationErrorMessage: "Something Bad"
+                    ]
+                    let observation2: Observation = observations![1]
+                    observation2.dirty = true;
+                    observation2.error = [
+                        ObservationPushService.ObservationErrorStatusCode: 503,
+                        ObservationPushService.ObservationErrorMessage: "Something Really Bad"
+                    ]
+                    try? context.save()
+                }
+                
+                expect(context.fetchAll(Observation.self)?.count).toEventually(equal(2))
                 
                 let delegate = MockEventSelectionDelegate()
                 view = EventChooserController(delegate: delegate, scheme: MAGEScheme.scheme())
@@ -316,7 +334,8 @@ class EventChooserControllerTests : KIFSpec {
                 // wait for fade out
                 tester().wait(forTimeInterval: 0.8)
                 tester().waitForView(withAccessibilityLabel: "My Recent Events (1)")
-                tester().waitForView(withAccessibilityLabel: "Badge 1")
+                TestHelpers.printAllAccessibilityLabelsInWindows()
+                tester().waitForView(withAccessibilityLabel: "Badge 2")
                 tester().tapItem(at: IndexPath(row: 0, section: 2), inCollectionViewWithAccessibilityIdentifier: "Event Table")
                 expect(delegate.didSelectCalled).toEventually(beTrue())
                 expect(delegate.eventSelected?.remoteId).to(equal(2))

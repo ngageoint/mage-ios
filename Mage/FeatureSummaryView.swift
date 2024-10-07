@@ -13,10 +13,10 @@ import Kingfisher
 class FeatureItem: NSObject, Codable {
     
     init(annotation: StaticPointAnnotation) {
-        self.featureDetail = StaticLayer.featureDescription(feature: annotation.feature ?? [:])
+        self.featureDetail = annotation.subtitle// StaticLayer.featureDescription(feature: annotation.feature ?? [:])
         self.coordinate = annotation.coordinate
-        self.featureTitle = StaticLayer.featureName(feature: annotation.feature ?? [:])
-        self.featureDate = StaticLayer.featureTimestamp(feature: annotation.feature ?? [:])
+        self.featureTitle = annotation.title // StaticLayer.featureName(feature: annotation.feature ?? [:])
+        self.featureDate = annotation.timestamp // StaticLayer.featureTimestamp(feature: annotation.feature ?? [:])
         self.layerName = annotation.layerName ?? ""
         if let iconUrl = annotation.iconUrl {
             if iconUrl.hasPrefix("http") {

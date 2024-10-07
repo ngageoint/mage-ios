@@ -16,23 +16,22 @@ import Kingfisher
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedServiceTests: KIFSpec {
+class FeedServiceTests: KIFMageCoreDataTestCase {
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
         describe("FeedServiceTests") {
-            
-            var isSetup = false;
-            
+                        
             beforeEach {
-                if (!isSetup) {
-                    ImageCache.default.clearMemoryCache();
-                    ImageCache.default.clearDiskCache();
-                    
-                    TestHelpers.clearAndSetUpStack();
-                    MageCoreDataFixtures.quietLogging();
-                    isSetup = true;
-                }
+                ImageCache.default.clearMemoryCache();
+                ImageCache.default.clearDiskCache();
 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
@@ -46,8 +45,6 @@ class FeedServiceTests: KIFSpec {
             afterEach {
                 FeedService.shared.stop();
                 expect(FeedService.shared.isStopped()).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.milliseconds(500), description: "Feed Service Stopped");
-                HTTPStubs.removeAllStubs();
-                MageCoreDataFixtures.clearAllData();
             }
             
             it("should request feed items") {

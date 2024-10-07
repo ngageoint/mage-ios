@@ -16,18 +16,20 @@ import OHHTTPStubs
 
 @available(iOS 13.0, *)
 
-class ChangePasswordViewControllerTests: KIFSpec {
+class ChangePasswordViewControllerTests: KIFMageCoreDataTestCase {
     
     override func spec() {
         
         describe("ChangePasswordViewControllerTests") {
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
             
             var window: UIWindow?;
             var view: ChangePasswordViewController?;
             var navigationController: UINavigationController?;
             
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
+                TestHelpers.clearAndSetUpStack()
 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 
@@ -45,7 +47,6 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 window?.resignKey();
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                HTTPStubs.removeAllStubs();
             }
             
             it("should load empty the Change Password View") {
@@ -53,7 +54,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ChangePasswordViewController.self));
@@ -78,7 +79,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                     return HTTPStubsResponse(data: "error response".data(using: .utf8)!, statusCode: 404, headers: nil);
                 }
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 expect(navigationController?.topViewController).toEventually(beAnInstanceOf(ChangePasswordViewController.self));
@@ -107,7 +108,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                         return HTTPStubsResponse(jsonObject: ["username": "username"], statusCode: 200, headers: ["Content-Type": "application/json"])
                 }
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Username");
@@ -155,7 +156,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                     return HTTPStubsResponse(data: "error response".data(using: .utf8)!, statusCode: 404, headers: nil)
                 }
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Username");
@@ -188,7 +189,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Change");
@@ -209,7 +210,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Change");
@@ -234,7 +235,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForTappableView(withAccessibilityLabel: "Change");
@@ -258,7 +259,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Show Password");
@@ -281,7 +282,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "Show Current Password");
@@ -300,7 +301,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 
                 tester().waitForView(withAccessibilityLabel: "New Password");
@@ -330,7 +331,7 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 let firstView: UIViewController = UIViewController();
                 navigationController?.pushViewController(firstView, animated: false);
                 firstView.present(view!, animated: false, completion: nil);
@@ -349,7 +350,9 @@ class ChangePasswordViewControllerTests: KIFSpec {
                 
                 MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess.json", delegate: serverDelegate);
                 
-                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme());
+                @Injected(\.nsManagedObjectContext)
+                var context: NSManagedObjectContext?
+                view = ChangePasswordViewController(loggedIn: false, scheme: MAGEScheme.scheme(), context: context);
                 navigationController?.pushViewController(view!, animated: false);
                 tester().waitForView(withAccessibilityLabel: "Change");
                 tester().expect(viewTester().usingLabel("Username")?.view, toContainText: "userabc");

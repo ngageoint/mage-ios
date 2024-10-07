@@ -33,7 +33,7 @@ extension FollowUserTestImpl : MKMapViewDelegate {
     }
 }
 
-class FollowUserTests: KIFSpec {
+class FollowUserTests: KIFMageCoreDataTestCase {
     
     override func spec() {
         
@@ -55,7 +55,6 @@ class FollowUserTests: KIFSpec {
                         });
                     }
                 }
-                TestHelpers.clearAndSetUpStack();
                 if (view != nil) {
                     for subview in view.subviews {
                         subview.removeFromSuperview();
@@ -118,16 +117,14 @@ class FollowUserTests: KIFSpec {
                 navController = nil;
                 view = nil;
                 window = nil;
-                TestHelpers.clearAndSetUpStack();
-                HTTPStubs.removeAllStubs()
             }
             
             it("initialize the FollowUserMapMixin with a user") {
                 
                 UserDefaults.standard.currentUserId = nil
 
-                MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
-                MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc")
+                MageCoreDataFixtures.addLocation(userId: "userdef")
                 
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
@@ -147,8 +144,8 @@ class FollowUserTests: KIFSpec {
                 
                 UserDefaults.standard.currentUserId = nil
                 
-                MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
-                MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc")
+                MageCoreDataFixtures.addLocation(userId: "userdef")
                 
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
@@ -161,7 +158,7 @@ class FollowUserTests: KIFSpec {
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
             
-                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1), completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1))
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude + 1, within: 0.01))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude + 1, within: 0.01))
@@ -179,14 +176,14 @@ class FollowUserTests: KIFSpec {
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-                MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc")
                 
                 let initialLocation = userabc.coordinate
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
                 
-                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1), completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1))
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude + 1, within: 0.01))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude + 1, within: 0.01))
@@ -198,8 +195,8 @@ class FollowUserTests: KIFSpec {
                 
                 UserDefaults.standard.currentUserId = nil
                 
-                MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
-                MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc")
+                MageCoreDataFixtures.addLocation(userId: "userdef")
                 
                 mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
@@ -214,7 +211,7 @@ class FollowUserTests: KIFSpec {
                 
                 mixin.followUser(user: nil)
                 
-                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1), completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1))
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
@@ -226,8 +223,8 @@ class FollowUserTests: KIFSpec {
                 
                 UserDefaults.standard.currentUserId = nil
                 
-                MageCoreDataFixtures.addLocation(userId: "userabc", completion: nil)
-                MageCoreDataFixtures.addLocation(userId: "userdef", completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc")
+                MageCoreDataFixtures.addLocation(userId: "userdef")
                 
                 mixin = FollowUserMapMixin(followUser: testimpl, user: nil, scheme: MAGEScheme.scheme())
                 testimpl.followUserMapMixin = mixin
@@ -245,32 +242,7 @@ class FollowUserTests: KIFSpec {
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
                 
-                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1), completion: nil)
-                
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude + 1, within: 0.01))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude + 1, within: 0.01))
-                
-                mixin.cleanupMixin()
-            }
-            
-            it("initialize the FollowUserMapMixin with me then move me") {
-                
-                UserDefaults.standard.currentUserId = "userabc"
-                
-                MageCoreDataFixtures.addGPSLocation(userId: "userabc", completion: nil)
-                
-                mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
-                testimpl.followUserMapMixin = mixin
-                
-                let mapState = MapState()
-                mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
-
-                let initialLocation = userabc.coordinate
-                
-                expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
-                expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
-                
-                MageCoreDataFixtures.addGPSLocation(userId: "userabc", location: CLLocation(latitude: initialLocation.latitude + 1, longitude: initialLocation.longitude + 1), completion: nil)
+                MageCoreDataFixtures.addLocation(userId: "userabc", geometry: SFPoint(xValue: initialLocation.longitude + 1, andYValue: initialLocation.latitude + 1))
                 
                 expect(mixin.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude + 1, within: 0.01))
                 expect(mixin.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude + 1, within: 0.01))

@@ -9,6 +9,25 @@
 import Foundation
 
 @objc class MageInitializer: NSObject {
+    @Injected(\.geoPackageRepository)
+    static var geoPackageRepository: GeoPackageRepository
+    
+    @Injected(\.persistence)
+    static var persistence: Persistence
+    
+    @objc static func cleanupGeoPackages() {
+        Task {
+            await geoPackageRepository.cleanupBackgroundGeoPackages()
+        }
+    }
+    
+    @objc static func getBaseMap() -> BaseMapOverlay? {
+        geoPackageRepository.getBaseMap()
+    }
+    
+    @objc static func getDarkBaseMap() -> BaseMapOverlay? {
+        geoPackageRepository.getDarkBaseMap()
+    }
     
     @objc public static func initializePreferences() {
         
@@ -25,19 +44,22 @@ import Foundation
         UserDefaults.standard.register(defaults: allPreferences)
     }
     
-    @objc public static func setupCoreData() {
-        MagicalRecord.setupMageCoreDataStack();
-        MagicalRecord.setLoggingLevel(.verbose);
+    @objc public static func setupCoreData() -> NSManagedObjectContext {
+        persistence.setupStack()
+        return persistence.getContext()
     }
 
-    @objc public static func clearAndSetupCoreData() {
-        MagicalRecord.deleteAndSetupMageCoreDataStack();
-        MagicalRecord.setLoggingLevel(.verbose);
+    @objc public static func clearAndSetupCoreData() -> NSManagedObjectContext {
+        persistence.clearAndSetupStack()
+        return persistence.getContext()
     }
     
     @discardableResult
     @objc public static func clearServerSpecificData() -> [String: Bool] {
-        let localContext: NSManagedObjectContext = NSManagedObjectContext.mr_default();
+        @Injected(\.nsManagedObjectContext)
+        var localContext: NSManagedObjectContext?
+        
+        guard let localContext = localContext else { return [:] }
         
         // clear server specific selected layers
         if let events = Event.mr_findAll(in:localContext) as? [Event] {

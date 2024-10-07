@@ -19,25 +19,31 @@ class AttachmentPushServiceTests: QuickSpec {
         
         xdescribe("AttachmentPushServiceTests") {
             
-            var stackSetup = false;
+            @Injected(\.persistence)
+            var coreDataStack: Persistence
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext!
             
             beforeEach {
-                if (!stackSetup) {
-                    TestHelpers.clearAndSetUpStack();
-                    stackSetup = true;
-                }
-                MageCoreDataFixtures.clearAllData();
+                coreDataStack.clearAndSetupStack()
+                context = coreDataStack.getContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+                NSManagedObject.mr_setDefaultBatchSize(0);
+                
+                TestHelpers.clearAndSetUpStack()
+                
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 ObservationPushService.singleton.start();
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack.clearAndSetupStack()
                 ObservationPushService.singleton.stop();
                 HTTPStubs.removeAllStubs();
-                MageCoreDataFixtures.clearAllData();
             }
 
-            xit("should save an observation with an attachment") {
+            it("should save an observation with an attachment") {
                 var idStubCalled = false;
                 var createStubCalled = false;
 
@@ -109,8 +115,6 @@ class AttachmentPushServiceTests: QuickSpec {
                     return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
                 }
                 
-
-                
                 var observationJsonToSaveInDb: [AnyHashable : Any] = observationJsonRaw
                 observationJsonToSaveInDb["url"] = nil;
                 observationJsonToSaveInDb["id"] = nil;
@@ -127,13 +131,12 @@ class AttachmentPushServiceTests: QuickSpec {
                 }
                 
                 expect(observation).toNot(beNil());
-                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-                    guard let localObservation = observation.mr_(in: localContext) else {
-                        Nimble.fail()
-                        return;
-                    }
-                    localObservation.dirty = true;
-                })
+
+                context.performAndWait {
+                    let obs = context.fetchFirst(Observation.self, key: "eventId", value: 1)
+                    obs!.dirty = true
+                    try? context.save()
+                }
                 
                 expect(idStubCalled).toEventually(beTrue());
                 expect(createStubCalled).toEventually(beTrue());

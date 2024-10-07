@@ -11,28 +11,6 @@ import SwiftUI
 import Combine
 import MaterialViews
 
-class UserBottomSheetViewModel: ObservableObject {
-    @Injected(\.userRepository)
-    var repository: UserRepository
-    
-    var disposables = Set<AnyCancellable>()
-    
-    @Published
-    var user: UserModel?
-    
-    var userUri: URL?
-    
-    init(userUri: URL?) {
-        self.userUri = userUri
-        repository.observeUser(userUri: userUri)?
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] updatedObject in
-                self?.user = updatedObject
-            })
-            .store(in: &disposables)
-    }
-}
-
 struct UserBottomSheet: View {
     @ObservedObject
     var viewModel: UserBottomSheetViewModel

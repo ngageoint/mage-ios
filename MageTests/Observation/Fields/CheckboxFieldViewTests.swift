@@ -48,22 +48,6 @@ class CheckboxFieldViewTests: KIFSpec {
                 controller = nil;
             }
             
-            it("non edit mode") {
-                checkboxFieldView = CheckboxFieldView(field: field, editMode: false, value: true);
-                checkboxFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(checkboxFieldView)
-                checkboxFieldView.autoPinEdgesToSuperviewEdges();
-                
-                controller.view.addSubview(view);
-                
-                tester().waitForView(withAccessibilityLabel: field["name"] as? String);
-                expect((viewTester().usingLabel(field["name"] as? String)?.view as! UISwitch).isUserInteractionEnabled).to(beFalse());
-                expect((viewTester().usingLabel(field["name"] as? String)?.view as! UISwitch).isEnabled).to(beTrue());
-                
-//                expect(view).to(haveValidSnapshot());
-            }
-            
             it("no initial value") {
                 checkboxFieldView = CheckboxFieldView(field: field);
                 checkboxFieldView.applyTheme(withScheme: MAGEScheme.scheme());

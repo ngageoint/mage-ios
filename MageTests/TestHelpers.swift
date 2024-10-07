@@ -9,10 +9,24 @@
 import Foundation
 import MagicalRecord
 import Nimble
-//import Nimble_Snapshots
 import Kingfisher
 
 @testable import MAGE
+
+extension XCTestCase {
+    /// Creates an expectation for monitoring the given condition.
+    /// - Parameters:
+    ///   - condition: The condition to evaluate to be `true`.
+    ///   - description: A string to display in the test log for this expectation, to help diagnose failures.
+    /// - Returns: The expectation for matching the condition.
+    func expectation(for condition: @autoclosure @escaping () -> Bool, description: String = "") -> XCTestExpectation {
+        let predicate = NSPredicate { _, _ in
+            return condition()
+        }
+        
+        return XCTNSPredicateExpectation(predicate: predicate, object: nil)
+    }
+}
 
 class TestHelpers {
     
@@ -111,18 +125,15 @@ class TestHelpers {
         
     }
     
+    static var coreDataStack: TestCoreDataStack?
+    static var context: NSManagedObjectContext?
+    
     @discardableResult
     public static func clearAndSetUpStack() -> [String: Bool] {
         TestHelpers.clearDocuments();
         TestHelpers.clearImageCache();
         TestHelpers.resetUserDefaults();
-        return MageCoreDataFixtures.clearAllData();
-//        MagicalRecord.cleanUp();
-        
-//        MagicalRecord.deleteAndSetupMageCoreDataStack();
-//        MagicalRecord.setupCoreDataStack();
-//        MagicalRecord.setupCoreDataStackWithInMemoryStore();
-//        MagicalRecord.setLoggingLevel(.verbose);
+        return [:]
     }
     
     public static func cleanUpStack() {
@@ -136,10 +147,39 @@ class TestHelpers {
         }
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!);
         MageInitializer.initializePreferences();
+        InjectedValues[\.nsManagedObjectContext] = nil
+        coreDataStack!.reset()
         
 //        if (NSManagedObjectContext.mr_default() != nil) {
 //            NSManagedObjectContext.mr_default().reset();
 //        }
         MagicalRecord.cleanUp();
+    }
+    
+    static func setupValidToken() {
+        MageSessionManager.shared().setToken("NewToken")
+        UserDefaults.standard.loginParameters = [
+            LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
+            LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
+        ]
+        UserUtility.singleton.resetExpiration()
+    }
+    
+    static func setupExpiredToken() {
+        MageSessionManager.shared().setToken("NewToken")
+        UserDefaults.standard.loginParameters = [
+            LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
+            LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(-1000000)
+        ]
+        UserUtility.singleton.resetExpiration()
+    }
+    
+    static func loadJsonFile(_ filename: String) -> [AnyHashable: Any]? {
+        if let path = Bundle(for: TestHelpers.self).path(forResource: filename, ofType: "json") {
+            let data = try! Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            let jsonResult = try! JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
+            return jsonResult as? [AnyHashable: Any]
+        }
+        return nil
     }
 }

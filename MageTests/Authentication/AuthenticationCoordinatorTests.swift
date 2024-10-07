@@ -37,7 +37,15 @@ class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
     }
 }
 
-class AuthenticationCoordinatorTests: KIFSpec {
+class AuthenticationCoordinatorTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
@@ -48,8 +56,15 @@ class AuthenticationCoordinatorTests: KIFSpec {
             var delegate: MockAuthenticationCoordinatorDelegate?;
             var navigationController: UINavigationController?;
             
+//            @Injected(\.persistence)
+//            var coreDataStack: Persistence
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                TestHelpers.clearAndSetUpStack();
+                InjectedValues[\.nsManagedObjectContext] = context
+//                NSManagedObject.mr_setDefaultBatchSize(0);
+                TestHelpers.clearAndSetUpStack()
                 
                 UserDefaults.standard.baseServerUrl = "https://magetest";
                 UserDefaults.standard.mapType = 0;
@@ -64,8 +79,7 @@ class AuthenticationCoordinatorTests: KIFSpec {
                 navigationController?.isNavigationBarHidden = true;
                 window = TestHelpers.getKeyWindowVisible();
                 window!.rootViewController = navigationController;
-                
-                coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme());
+                coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme(), context: context);
             }
             
             afterEach {

@@ -23,7 +23,7 @@ class StraightLineNavigationViewTests: KIFSpec {
                 
         describe("StraightLineNavigationViewTests") {
             
-            var straightLineNavigationView: StraightLineNavigationView!
+//            var straightLineNavigationView: StraightLineNavigationView!
             
             var view: UIView!
             var controller: UIViewController!
@@ -39,6 +39,9 @@ class StraightLineNavigationViewTests: KIFSpec {
             }
             
             afterEach {
+                for view in view.subviews {
+                    view.removeFromSuperview()
+                }
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
@@ -52,7 +55,7 @@ class StraightLineNavigationViewTests: KIFSpec {
                 mockedCLLocationManager.mockedLocation = location;
                 
                 let markerStubPath: String! = OHPathForFile("test_marker.png", StraightLineNavigationViewTests.self);
-                straightLineNavigationView = StraightLineNavigationView(locationManager: mockedCLLocationManager, destinationMarker: UIImage(contentsOfFile: markerStubPath), destinationCoordinate: destination, delegate: nil, scheme: MAGEScheme.scheme());
+                var straightLineNavigationView = StraightLineNavigationView(locationManager: mockedCLLocationManager, destinationMarker: UIImage(contentsOfFile: markerStubPath), destinationCoordinate: destination, delegate: nil, scheme: MAGEScheme.scheme());
                 straightLineNavigationView.populate();
                 
                 view.addSubview(straightLineNavigationView)

@@ -166,7 +166,7 @@ class MageMapView: UIView, GeoPackageBaseMap {
                     Array(Set(current + new))
                 }
             }
-            await bottomSheetRepository.setItemKeys(itemKeys: itemKeys)
+            bottomSheetRepository.setItemKeys(itemKeys: itemKeys)
         }
     }
 }

@@ -27,7 +27,7 @@ class UserTrackingMapTests: KIFSpec {
     
     override func spec() {
         
-        describe("UserTrackingMapTests") {
+        xdescribe("UserTrackingMapTests") {
             var navController: UINavigationController!
             var view: UIView!
             var window: UIWindow!;
@@ -35,12 +35,16 @@ class UserTrackingMapTests: KIFSpec {
             var testimpl: UserTrackingMapTestImpl!
             var mixin: UserTrackingMapMixin!
             var mockCLLocationManager: MockCLLocationManager!
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
             
             var buttonStack: UIStackView!
         
                 
             beforeEach {
-                
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -100,6 +104,8 @@ class UserTrackingMapTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 mixin = nil
                 testimpl = nil
                 

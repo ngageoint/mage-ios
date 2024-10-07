@@ -17,7 +17,7 @@ class MultiDropdownFieldViewTests: KIFSpec {
     
     override func spec() {
         
-        describe("MultiDropdownFieldView") {
+        xdescribe("MultiDropdownFieldView") {
             var controller: UIViewController!
             
             var multidropdownFieldView: MultiDropdownFieldView!

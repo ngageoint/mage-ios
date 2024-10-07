@@ -11,7 +11,7 @@ import Combine
 import CLLocationCoordinate2DExtensions
 
 private struct UserRepositoryProviderKey: InjectionKey {
-    static var currentValue: UserRepository = UserRepository()
+    static var currentValue: UserRepository = UserRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -21,37 +21,23 @@ extension InjectedValues {
     }
 }
 
-struct UserModel: Equatable, Hashable {
-    var userId: URL?
-    var remoteId: String?
-    var name: String?
-    var coordinate: CLLocationCoordinate2D?
-    var email: String?
-    var phone: String?
-    var lastUpdated: Date?
-    var avatarUrl: String?
-    var username: String?
-    var timestamp: Date?
-    var hasEditPermissions: Bool = false
-    var cllocation: CLLocation?
-    
-    init(user: User) {
-        remoteId = user.remoteId
-        name = user.name
-        coordinate = user.coordinate
-        email = user.email
-        phone = user.phone
-        lastUpdated = user.lastUpdated
-        avatarUrl = user.cacheAvatarUrl
-        username = user.username
-        timestamp = user.location?.timestamp
-        userId = user.objectID.uriRepresentation()
-        hasEditPermissions = user.hasEditPermission
-        cllocation = user.cllocation
-    }
+protocol UserRepository {
+    func getUser(userUri: URL?) async -> UserModel?
+    func getCurrentUser() -> UserModel?
+    func observeUser(userUri: URL?) -> AnyPublisher<UserModel, Never>?
+    func getUser(remoteId: String) -> UserModel?
+    func users(
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func canUserUpdateImportant(
+        eventId: NSNumber,
+        userUri: URL
+    ) async -> Bool
+    func avatarChosen(user: UserModel, image: UIImage) async -> Bool
+    func fetchMyself() async -> UserModel?
 }
 
-class UserRepository: ObservableObject {
+class UserRepositoryImpl: ObservableObject, UserRepository {
     @Injected(\.eventRepository)
     var eventRepository: EventRepository
     
@@ -93,11 +79,19 @@ class UserRepository: ObservableObject {
         return false
     }
     
-    func avatarChosen(user: UserModel, image: UIImage) async {
+    func avatarChosen(user: UserModel, image: UIImage) async -> Bool {
         if let imageData = image.jpegData(compressionQuality: 1.0) {
             localDataSource.avatarChosen(user: user, imageData: imageData)
             let response = await remoteDataSource.uploadAvatar(user: user, imageData: imageData)
-            localDataSource.handleAvatarResponse(response: response, user: user, imageData: imageData, image: image)
+            return await localDataSource.handleAvatarResponse(response: response, user: user, imageData: imageData, image: image)
         }
+        return false
+    }
+    
+    func fetchMyself() async -> UserModel? {
+        if let response = await remoteDataSource.fetchMyself() {
+            return await localDataSource.handleUserResponse(response: response)
+        }
+        return nil
     }
 }

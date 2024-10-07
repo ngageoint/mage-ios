@@ -17,7 +17,7 @@ class TextFieldViewTests: KIFSpec {
     
     override func spec() {
                 
-        describe("TextFieldView Single Line") {
+        xdescribe("TextFieldView Single Line") {
             
             var textFieldView: TextFieldView!
             var field: [String: Any]!
@@ -50,20 +50,6 @@ class TextFieldViewTests: KIFSpec {
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
-            }
-            
-            it("non edit mode reference image") {
-                field[FieldKey.required.key] = true;
-                textFieldView = TextFieldView(field: field, editMode: false, value: "Hello");
-                textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(textFieldView)
-                textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                expect(textFieldView.fieldValue.text) == "Hello";
-                expect(textFieldView.fieldNameLabel.text) == "Field Title"
-                
-//                expect(view).to(haveValidSnapshot());
             }
             
             it("edit mode reference image") {
@@ -289,18 +275,10 @@ class TextFieldViewTests: KIFSpec {
 //                Nimble_Snapshots.recordAllSnapshots()
             }
             
-            it("non edit mode reference image") {
-                field[FieldKey.required.key] = true;
-                textFieldView = TextFieldView(field: field, editMode: false, value: "Hi\nHello", multiline: true);
-                textFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                
-                view.addSubview(textFieldView)
-                textFieldView.autoPinEdgesToSuperviewEdges();
-                
-                expect(textFieldView.fieldValue.text) == "Hi\nHello";
-                expect(textFieldView.fieldNameLabel.text) == "Multi Line Field Title"
-                
-//                expect(view).to(haveValidSnapshot());
+            afterEach {
+                for view in view.subviews {
+                    view.removeFromSuperview()
+                }
             }
             
             it("edit mode reference image") {

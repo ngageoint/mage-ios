@@ -23,6 +23,9 @@ class ObservationsMap: DataSourceMap {
     
     @Injected(\.observationIconRepository)
     var iconRepository: ObservationIconRepository
+    
+    @Injected(\.observationImageRepository)
+    var imageRepository: ObservationImageRepository
 
     init() {
         super.init(
@@ -92,7 +95,7 @@ class ObservationsMap: DataSourceMap {
         NotificationCenter.default.publisher(for: .MAGEFormFetched)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] notification in
-                if let event: Event = notification.object as? Event {
+                if let event: EventModel = notification.object as? EventModel {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
                         Task { [self] in
                             self?.iconRepository.resetEventIconSize(eventId: Int(truncating: eventId))
@@ -189,7 +192,7 @@ class ObservationsMap: DataSourceMap {
             annotationView?.isEnabled = true
         }
 
-        let image = ObservationImage.imageAtPath(imagePath: mapItemAnnotation.mapItem.iconPath)
+        let image = imageRepository.imageAtPath(imagePath: mapItemAnnotation.mapItem.iconPath)
         if let annotationView = annotationView {
             annotationView.image = image
 

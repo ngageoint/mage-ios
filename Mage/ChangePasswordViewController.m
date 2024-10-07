@@ -45,6 +45,7 @@
 @property (strong, nonatomic) id<ChangePasswordDelegate> delegate;
 @property (strong, nonatomic) DBZxcvbn *zxcvbn;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation ChangePasswordViewController
@@ -80,12 +81,13 @@
 
 #pragma mark -
 
-- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<MDCContainerScheming>)containerScheme {
+- (instancetype) initWithLoggedIn: (BOOL) loggedIn scheme: (id<MDCContainerScheming>)containerScheme context: (NSManagedObjectContext *) context {
     if (self = [super initWithNibName:@"ChangePasswordView" bundle:nil]) {
         self.loggedIn = loggedIn;
         // modify this and the init method when coordinator pattern is implmeented
         self.delegate = self;
         self.scheme = containerScheme;
+        self.context = context;
     }
     return self;
 }
@@ -209,7 +211,7 @@
     [MageServer serverWithUrl: url
     success:^(MageServer *mageServer) {
         weakSelf.usernameField.enabled = !weakSelf.loggedIn;
-        User *user = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
+        User *user = [User fetchCurrentUserWithContext:self.context];
         weakSelf.usernameField.text = user.username;
         weakSelf.changePasswordView.hidden = NO;
         weakSelf.informationView.hidden = YES;

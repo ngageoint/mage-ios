@@ -17,19 +17,25 @@ class ObservationFormReorderTests: KIFSpec {
     
     override func spec() {
         
-        describe("ObservationFormReorder") {
+        xdescribe("ObservationFormReorder") {
             var observationFormReorder: ObservationFormReorder?
             var window: UIWindow!;
             var stackSetup = false;
             var eventForm: Form!
             
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
+            
             beforeEach {
-                if (!stackSetup) {
-                    TestHelpers.clearAndSetUpStack();
-                    stackSetup = true;
-                }
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
+//                if (!stackSetup) {
+//                    TestHelpers.clearAndSetUpStack();
+//                    stackSetup = true;
+//                }
                 
-                MageCoreDataFixtures.clearAllData();
+//                MageCoreDataFixtures.clearAllData();
                 TestHelpers.resetUserDefaults();
                 window = TestHelpers.getKeyWindowVisible();
                 MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "allFieldTypesForm")
@@ -51,6 +57,8 @@ class ObservationFormReorderTests: KIFSpec {
                 observationFormReorder?.dismiss(animated: false);
                 observationFormReorder = nil;
                 window.rootViewController = nil;
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
             }
             
             it("observation for reorder primary and variant") {

@@ -44,7 +44,9 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
         }
         geoPackage = GeoPackage(mapView: mapView)
         
-        CacheOverlays.getInstance().register(self)
+        Task {
+            await CacheOverlays.getInstance().register(self)
+        }
         geopackageImportedObserver = NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) { [weak self] notification in
             self?.updateGeoPackageLayers()
         }
@@ -60,7 +62,9 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
     }
     
     func updateGeoPackageLayers() {
-        geoPackage?.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        Task {
+            await geoPackage?.updateCacheOverlaysSynchronized(CacheOverlays.getInstance().getOverlays())
+        }
         
     }
     
@@ -88,7 +92,7 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
 }
 
 extension GeoPackageLayerMapMixin : CacheOverlayListener {
-    func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay]!) {
+    func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay]) {
         updateGeoPackageLayers()
     }
 }

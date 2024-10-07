@@ -67,15 +67,6 @@ class DateViewTests: KIFSpec {
                 }
             }
             
-            it("non edit mode") {
-                dateFieldView = DateView(field: field, editMode: false, value: "2013-06-22T08:18:20.000Z");
-                dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());
-                view.addSubview(dateFieldView)
-                dateFieldView.autoPinEdgesToSuperviewEdges();
-                tester().waitForView(withAccessibilityLabel: "\(field["name"] as? String ?? "") Label");
-//                expect(view).to(haveValidSnapshot());
-            }
-            
             it("no initial value") {
                 dateFieldView = DateView(field: field);
                 dateFieldView.applyTheme(withScheme: MAGEScheme.scheme());

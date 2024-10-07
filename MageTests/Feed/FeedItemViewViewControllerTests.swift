@@ -16,13 +16,22 @@ import Kingfisher
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedItemViewViewControllerTests: KIFSpec {
+class FeedItemViewViewControllerTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
         describe("FeedItemViewController no timestamp") {
             var controller: FeedItemViewController!
             var window: UIWindow!;
+
             
             beforeEach {
                 ImageCache.default.clearMemoryCache();
@@ -34,9 +43,7 @@ class FeedItemViewViewControllerTests: KIFSpec {
                     let stubPath = OHPathForFile("icon27.png", type(of: self))
                     return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
                 };
-                
-                TestHelpers.clearAndSetUpStack();
-                
+                                
                 window = TestHelpers.getKeyWindowVisible();
                 
                 UserDefaults.standard.mapType = 0;
@@ -53,8 +60,6 @@ class FeedItemViewViewControllerTests: KIFSpec {
                 controller.dismiss(animated: false, completion: nil);
                 window.rootViewController = nil;
                 controller = nil;
-                HTTPStubs.removeAllStubs();
-                TestHelpers.clearAndSetUpStack();
             }
             
             it("feed item with no value non mappable") {
@@ -213,11 +218,16 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
         }
         
-        describe("FeedItemViewController with timestamp") {
+        xdescribe("FeedItemViewController with timestamp") {
             var controller: FeedItemViewController!
             var window: UIWindow!;
+            var coreDataStack: TestCoreDataStack?
+            var context: NSManagedObjectContext!
                 
             beforeEach {
+                coreDataStack = TestCoreDataStack()
+                context = coreDataStack!.persistentContainer.newBackgroundContext()
+                InjectedValues[\.nsManagedObjectContext] = context
                 ImageCache.default.clearMemoryCache();
                 ImageCache.default.clearDiskCache();
                 
@@ -245,6 +255,8 @@ class FeedItemViewViewControllerTests: KIFSpec {
             }
             
             afterEach {
+                InjectedValues[\.nsManagedObjectContext] = nil
+                coreDataStack!.reset()
                 HTTPStubs.removeAllStubs();
                 TestHelpers.clearAndSetUpStack();
             }

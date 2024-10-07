@@ -15,16 +15,22 @@ import MagicalRecord
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedTests: KIFSpec {
+class FeedTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
+    
     
     override func spec() {
         
         describe("FeedTests") {
             
             beforeEach {
-                
-                TestHelpers.clearAndSetUpStack();
-                MageCoreDataFixtures.quietLogging();
                 let emptyFeeds: [String]? = nil
                 UserDefaults.standard.set(emptyFeeds, forKey: "selectedFeeds-1");
                 UserDefaults.standard.baseServerUrl = "https://magetest";
@@ -32,10 +38,6 @@ class FeedTests: KIFSpec {
                 Server.setCurrentEventId(1);
                     
                 MageCoreDataFixtures.addEvent();
-            }
-            
-            afterEach {
-                TestHelpers.clearAndSetUpStack();
             }
             
             func loadFeedsJson() -> NSArray {
@@ -188,7 +190,7 @@ class FeedTests: KIFSpec {
 
                 var feedItemIds: [String] = ["1","2"];
 
-                for feedItem: FeedItem in FeedItem.getFeedItems(feedId: "1", eventId: 1)! {
+                for feedItem: FeedItemAnnotation in FeedItem.getFeedItems(feedId: "1", eventId: 1)! {
                     expect(feedItemIds as NMBContainer).to(contain(feedItem.remoteId));
                     feedItemIds.remove(at: feedItemIds.lastIndex(of: feedItem.remoteId!)!);
                 }

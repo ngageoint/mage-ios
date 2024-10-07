@@ -17,30 +17,21 @@ import Kingfisher
 @testable import MAGE
 
 @available(iOS 13.0, *)
-class FeedItemsViewControllerTests: KIFSpec {
+class FeedItemsViewControllerTests: KIFMageCoreDataTestCase {
     let recordSnapshots = false;
-
-//    func maybeRecordSnapshot(_ view: UIView, recordThisSnapshot: Bool = false, doneClosure: (() -> Void)?) {
-//        print("Record snapshot?", recordSnapshots);
-//        if (recordSnapshots || recordThisSnapshot) {
-//            DispatchQueue.global(qos: .userInitiated).async {
-//                Thread.sleep(forTimeInterval: 1.0);
-//                DispatchQueue.main.async {
-//                    expect(view) == recordSnapshot();
-//                    doneClosure?();
-//                }
-//            }
-//        } else {
-//            doneClosure?();
-//        }
-//    }
     
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
+
     override func spec() {
         
         describe("FeedItemsViewController no timestamp") {
-//            Nimble_Snapshots.setNimbleTolerance(0);
-                
-                
+
                 var controller: FeedItemsViewController!
                 var window: UIWindow!;
             
@@ -48,8 +39,6 @@ class FeedItemsViewControllerTests: KIFSpec {
                     controller.dismiss(animated: false, completion: nil);
                     window.rootViewController = nil;
                     controller = nil;
-                    HTTPStubs.removeAllStubs();
-                    TestHelpers.clearAndSetUpStack();
                 }
             
                 beforeEach {
@@ -64,9 +53,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                     };
                     
                     window = TestHelpers.getKeyWindowVisible();
-                    
-                    TestHelpers.clearAndSetUpStack();
-                    
+                                        
                     UserDefaults.standard.mapType = 0;
                     UserDefaults.standard.locationDisplay = .latlng;
                     Server.setCurrentEventId(1);
@@ -146,13 +133,14 @@ class FeedItemsViewControllerTests: KIFSpec {
         
         describe("FeedItemsViewController with timestamp") {
             
-            afterEach {
-                HTTPStubs.removeAllStubs();
-                TestHelpers.clearAndSetUpStack();
-            }
-            
             var controller: FeedItemsViewController!
             var window: UIWindow!;
+            
+            afterEach {
+                controller.dismiss(animated: false, completion: nil);
+                window.rootViewController = nil;
+                controller = nil;
+            }
             
             beforeEach {
                 ImageCache.default.clearMemoryCache();
@@ -166,9 +154,7 @@ class FeedItemsViewControllerTests: KIFSpec {
                 };
                 
                 window = TestHelpers.getKeyWindowVisible();
-                
-                TestHelpers.clearAndSetUpStack();
-                
+                                
                 UserDefaults.standard.mapType = 0;
                 UserDefaults.standard.locationDisplay = .latlng;
                 Server.setCurrentEventId(1);

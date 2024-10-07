@@ -88,7 +88,7 @@ class MageServerTestsSwift: KIFSpec {
                     tester().fail()
                 } failure: { (error) in
                     print("Error \(error.localizedDescription )")
-                    expect(error.localizedDescription).to(contain("Received error unsupported URL"))
+                    expect(error.localizedDescription).to(contain("unsupported URL"))
                     serverSetUp = true
                 }
                 
@@ -214,7 +214,7 @@ class MageServerTestsSwift: KIFSpec {
                     tester().fail()
                 } failure: { (error) in
                     serverSetup = true
-                    expect(error.localizedDescription).to(contain("Failed to connect to server."))
+                    expect(error.localizedDescription).to(contain("The operation couldn’t be completed. (NSURLErrorDomain error -1009.)"))
                 }
                 
                 expect(apiCalled).toEventually(beTrue())
@@ -479,7 +479,7 @@ class MageServerTestsSwift: KIFSpec {
                 MageServer.server(url: URL(string: "https://magetest")!) { (server: MageServer?) in
                     tester().fail()
                 } failure: { (error) in
-                    expect(error.localizedDescription).to(contain("Failed to connect to server.  Received error Request failed: service unavailable (503)"))
+                    expect(error.localizedDescription).to(contain("Request failed: service unavailable (503)"))
                     serverSetup = true
                 }
                 

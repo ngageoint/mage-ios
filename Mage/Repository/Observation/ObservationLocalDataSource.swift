@@ -27,10 +27,11 @@ extension InjectedValues {
 
 protocol ObservationLocalDataSource {
     func getLastObservationDate(eventId: Int) -> Date?
-    func getLastObservation(eventId: Int) -> Observation?
+    func getLastObservation(eventId: Int) -> ObservationModel?
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation?
     @discardableResult
-    func getObservation(remoteId: String?) async -> Observation?
-    func getObservation(observationUri: URL?) async -> Observation?
+    func getObservation(remoteId: String?) async -> ObservationModel?
+    func getObservation(observationUri: URL?) async -> ObservationModel?
     func observeFilteredCount() -> AnyPublisher<Int, Never>?
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int
@@ -38,11 +39,11 @@ protocol ObservationLocalDataSource {
     func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>?
     func observations(
         paginatedBy paginator: Trigger.Signal?
-    ) -> AnyPublisher<[ObservationItem], Error>
+    ) -> AnyPublisher<[URIItem], Error>
     func userObservations(
         userUri: URL,
         paginatedBy paginator: Trigger.Signal?
-    ) -> AnyPublisher<[ObservationItem], Error>
+    ) -> AnyPublisher<[URIItem], Error>
 }
 
 struct ObservationModelPage {
@@ -51,135 +52,83 @@ struct ObservationModelPage {
     var currentHeader: String?
 }
 
-class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSource, ObservableObject {
-    private lazy var context: NSManagedObjectContext = {
-        NSManagedObjectContext.mr_default()
-    }()
+class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, ObservationLocalDataSource, ObservableObject {
+    private enum FilterKeys: String {
+        case userId
+    }
     
     func userObservations(
         userUri: URL,
         paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[ObservationItem], Error> {
+    ) -> AnyPublisher<[URIItem], Error> {
         uris(
+            parameters: [FilterKeys.userId: userUri],
             at: nil,
             currentHeader: nil,
-            userUri: userUri,
             paginatedBy: paginator
         )
-        .map(\.observationList)
+        .map(\.list)
         .eraseToAnyPublisher()
     }
     
     func observations(
         paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[ObservationItem], Error> {
+    ) -> AnyPublisher<[URIItem], Error> {
         return uris(
             at: nil,
             currentHeader: nil,
             paginatedBy: paginator
         )
-        .map(\.observationList)
+        .map(\.list)
         .eraseToAnyPublisher()
     }
     
-    private func uris(
-        at page: Page?,
-        currentHeader: String?,
-        userUri: URL? = nil,
-        paginatedBy paginator: Trigger.Signal?
-    ) -> AnyPublisher<ObservationModelPage, Error> {
-        return uris(
-            at: page,
-            currentHeader: currentHeader,
-            userUri: userUri
-        )
-        .map { result -> AnyPublisher<ObservationModelPage, Error> in
-            if let paginator = paginator, let next = result.next {
-                return self.uris(
-                    at: next,
-                    currentHeader: result.currentHeader,
-                    userUri: userUri,
-                    paginatedBy: paginator
-                )
-                .wait(untilOutputFrom: paginator)
-                .retry(.max)
-                .prepend(result)
-                .eraseToAnyPublisher()
+    override func getFetchRequest(parameters: [AnyHashable: Any]? = nil) -> NSFetchRequest<Observation> {
+        let request = Observation.fetchRequest()
+        let predicates: [NSPredicate] = {
+            if let userUri = parameters?[FilterKeys.userId] as? URL {
+                if let id = context?.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri),
+                   let user = try? context?.existingObject(with: id) as? User
+                {
+                    return [
+                        NSPredicate(
+                            format: "%K == %@ AND %K == %@",
+                            argumentArray: [
+                                #keyPath(Observation.user),
+                                user,
+                                #keyPath(Observation.eventId),
+                                Server.currentEventId() ?? -1]
+                        )
+                    ]
+                }
             } else {
-                return Just(result)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
+                return Observations.getPredicatesForObservations(context) as? [NSPredicate] ?? []
             }
-        }
-        .switchToLatest()
-        .eraseToAnyPublisher()
-    }
-    
-    private func uris(
-        at page: Page?,
-        currentHeader: String?,
-        userUri: URL? = nil
-    ) -> AnyPublisher<ObservationModelPage, Error> {
-        let previousHeader: String? = currentHeader
-        var observations: [ObservationItem] = []
-        
-        context.performAndWait {
-            let request = Observation.fetchRequest()
-            let predicates: [NSPredicate] = {
-                if let userUri = userUri {
-                    if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: userUri),
-                       let user = try? context.existingObject(with: id) as? User
-                    {
-                        return [
-                            NSPredicate(format: "user == %@ AND eventId == %@", argumentArray: [user, Server.currentEventId() ?? -1])
-                        ]
-                    }
-                } else {
-                    return Observations.getPredicatesForObservations() as? [NSPredicate] ?? []
-                }
-                return []
-            }()
-            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-            request.predicate = predicate
+            return []
+        }()
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        request.predicate = predicate
+        print("Predicate \(predicate.debugDescription)")
 
-            request.includesSubentities = false
-            request.propertiesToFetch = ["timestamp"]
-            request.fetchLimit = 100
-            request.fetchOffset = (page ?? 0) * request.fetchLimit
-            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-
-            if let fetched = try? context.fetch(request) {
-
-                observations = fetched.flatMap { observation in
-                    return [ObservationItem.listItem(observation.objectID.uriRepresentation())]
-                }
-            }
-        }
-
-        let observationPage: ObservationModelPage = ObservationModelPage(
-            observationList: observations, 
-            next: (page ?? 0) + 1,
-            currentHeader: previousHeader
-        )
-
-        return Just(observationPage)
-            .setFailureType(to: Error.self)
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        request.includesSubentities = false
+        request.propertiesToFetch = ["timestamp", "user"]
+        request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+        request.includesPendingChanges = true
+        return request
     }
     
     func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>? {
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
             if let observation = try? context.existingObject(with: id) as? Observation {
                 
                 var itemChanges: AnyPublisher<ObservationFavoritesModel, Never> {
                     let fetchRequest: NSFetchRequest<ObservationFavorite> = ObservationFavorite.fetchRequest()
-                    fetchRequest.predicate = NSPredicate(format: "observation = %@", observation)
-                    fetchRequest.sortDescriptors = [NSSortDescriptor(key: "userId", ascending: false)]
+                    fetchRequest.predicate = NSPredicate(format: "%K = %@", #keyPath(ObservationFavorite.observation), observation)
+                    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ObservationFavorite.userId, ascending: false)]
                     return context.listPublisher(for: fetchRequest, transformer: { favorite in
                         favorite.favorite ? favorite.userId : nil
                     })
@@ -202,42 +151,53 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         getLastObservation(eventId: eventId)?.lastModified
     }
 
-    func getLastObservation(eventId: Int) -> Observation? {
-        let context = NSManagedObjectContext.mr_default()
+    func getLastObservation(eventId: Int) -> ObservationModel? {
+        guard let context = context else { return nil }
         return context.performAndWait {
             let user = User.fetchCurrentUser(context: context)
             if let userRemoteId = user?.remoteId {
-                let observation = Observation.mr_findFirst(
-                    with: NSPredicate(
-                        format: "\(ObservationKey.eventId.key) == %i AND user.\(UserKey.remoteId.key) != %@",
+                return try? context.fetchFirst(
+                    Observation.self,
+                    sortBy: [NSSortDescriptor(keyPath: \Observation.lastModified, ascending: false)],
+                    predicate: NSPredicate(
+                        format: "%K == %i AND %K != %@",
+                        #keyPath(Observation.eventId),
                         eventId,
+                        #keyPath(Observation.user.remoteId),
                         userRemoteId
-                    ),
-                    sortedBy: ObservationKey.lastModified.key,
-                    ascending: false,
-                    in:context
-                )
-                return observation
+                    )
+                ).map({ observation in
+                    ObservationModel(observation: observation)
+                })
             }
             return nil
         }
     }
 
-    func getObservation(remoteId: String?) async -> Observation? {
+    func getObservation(remoteId: String?) async -> ObservationModel? {
         guard let remoteId = remoteId else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return await context.perform {
             context.fetchFirst(Observation.self, key: "remoteId", value: remoteId)
+                .map { observation in
+                    ObservationModel(observation: observation)
+                }
         }
     }
 
-    func getObservation(observationUri: URL?) async -> Observation? {
+    func getObservation(observationUri: URL?) async -> ObservationModel? {
+        await getObservationNSManagedObject(observationUri: observationUri).map { observation in
+            ObservationModel(observation: observation)
+        }
+    }
+    
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation? {
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return await context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 return try? context.existingObject(with: id) as? Observation
@@ -250,7 +210,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         return context.performAndWait {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 if let observation = try? context.existingObject(with: id) as? Observation {
@@ -267,10 +227,11 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
     }
     
     func observeFilteredCount() -> AnyPublisher<Int, Never>? {
+        guard let context = context else { return nil }
         var itemChanges: AnyPublisher<Int, Never> {
             
             let request = Observation.fetchRequest()
-            let predicates: [NSPredicate] = Observations.getPredicatesForObservations() as? [NSPredicate] ?? []
+            let predicates: [NSPredicate] = Observations.getPredicatesForObservations(context) as? [NSPredicate] ?? []
             let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
             request.predicate = predicate
             request.includesSubentities = false
@@ -300,24 +261,27 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
         let initial = true
         let saveStart = Date()
         NSLog("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
-        let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
-        let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
-        return await localContext.perform {
+        
+        let backgroundContext = persistence.getNewBackgroundContext(name: #function)
+        
+//        let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
+//        let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
+        return await backgroundContext.perform {
             NSLog("TIMING There are \(propertyList.count) features to save, chunking into groups of 250")
-            localContext.mr_setWorkingName(#function)
+//            localContext.mr_setWorkingName(#function)
 
             var chunks = propertyList.chunked(into: 250);
             var newObservationCount = 0;
             var observationToNotifyAbout: Observation?;
             var eventFormDictionary: [NSNumber: [[String: AnyHashable]]] = [:]
-            if let event = Event.getEvent(eventId: eventId as NSNumber, context: localContext), let eventForms = event.forms {
+            if let event = Event.getEvent(eventId: eventId as NSNumber, context: backgroundContext), let eventForms = event.forms {
                 for eventForm in eventForms {
                     if let formId = eventForm.formId, let json = eventForm.json?.json {
                         eventFormDictionary[formId] = json[FormKey.fields.key] as? [[String: AnyHashable]]
                     }
                 }
             }
-            localContext.reset();
+            backgroundContext.reset();
             NSLog("TIMING we have \(chunks.count) groups to save")
             while (chunks.count > 0) {
                 autoreleasepool {
@@ -329,7 +293,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
                     NSLog("TIMING creating \(features.count) observations for chunk \(chunks.count)")
 
                     for observation in features {
-                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: localContext) {
+                        if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: backgroundContext) {
                             newObservationCount = newObservationCount + 1;
                             if (!initial) {
                                 observationToNotifyAbout = newObservation;
@@ -343,18 +307,19 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
                 let localSaveDate = Date()
                 do {
                     NSLog("TIMING saving \(propertyList.count) observations on local context")
-                    try localContext.save()
+                    try backgroundContext.save()
                 } catch {
                     print("Error saving observations: \(error)")
                 }
                 NSLog("TIMING saved \(propertyList.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
 
-                rootSavingContext.perform {
+                let rootContext = self.persistence.getRootContext()
+                rootContext.perform {
                     let rootSaveDate = Date()
 
                     do {
                         NSLog("TIMING saving \(propertyList.count) observations on root context")
-                        try rootSavingContext.save()
+                        try rootContext.save()
                     } catch {
                         print("Error saving observations: \(error)")
                     }
@@ -362,14 +327,14 @@ class ObservationCoreDataDataSource: CoreDataDataSource, ObservationLocalDataSou
 
                 }
 
-                localContext.reset();
+                backgroundContext.reset();
                 NSLog("TIMING reset the local context for chunk \(chunks.count)")
                 NSLog("Saved chunk \(chunks.count)")
             }
 
             NSLog("Received \(newObservationCount) new observations and send bulk is \(initial)")
             if ((initial && newObservationCount > 0) || newObservationCount > 1) {
-                NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: localContext));
+                NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: backgroundContext));
             } else if let observationToNotifyAbout = observationToNotifyAbout {
                 NotificationRequester.observationPulled(observationToNotifyAbout);
             }

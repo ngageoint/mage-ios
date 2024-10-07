@@ -34,7 +34,7 @@ extension FeedsMapTestImpl : MKMapViewDelegate {
     }
 }
 
-class FeedsMapTests: KIFSpec {
+class FeedsMapTests: KIFMageCoreDataTestCase {
     
     override func spec() {
         
@@ -55,7 +55,6 @@ class FeedsMapTests: KIFSpec {
                         });
                     }
                 }
-                TestHelpers.clearAndSetUpStack();
                 if (view != nil) {
                     for subview in view.subviews {
                         subview.removeFromSuperview();
@@ -119,8 +118,6 @@ class FeedsMapTests: KIFSpec {
                 navController = nil;
                 view = nil;
                 window = nil;
-                TestHelpers.clearAndSetUpStack();
-                HTTPStubs.removeAllStubs()
             }
             
             it("initialize the FeedsMap") {
@@ -173,9 +170,8 @@ class FeedsMapTests: KIFSpec {
                 
                 // unselect one of the feeds
                 UserDefaults.standard.currentEventSelectedFeeds = ["1"]
-                
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
-                expect(testimpl.mapView?.annotations.count).to(equal(1))
+                expect(testimpl.mapView?.annotations.count).toEventually(equal(1))
                 
                 mixin.cleanupMixin()
             }
@@ -236,8 +232,8 @@ class FeedsMapTests: KIFSpec {
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
-                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(FeedItem.self))
-                let feedItem = testimpl.mapView!.annotations[0] as! FeedItem
+                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(FeedItemAnnotation.self))
+                let feedItem = testimpl.mapView!.annotations[0] as! FeedItemAnnotation
                 let initialLocation: CLLocationCoordinate2D = feedItem.coordinate
                 expect(initialLocation.latitude).to(beCloseTo(40.11))
                 expect(initialLocation.longitude).to(beCloseTo(-105.11))
@@ -249,12 +245,18 @@ class FeedsMapTests: KIFSpec {
                 expect(testimpl.mapView?.centerCoordinate.latitude).toEventually(beCloseTo(initialLocation.latitude, within: 0.01))
                 expect(testimpl.mapView?.centerCoordinate.longitude).toEventually(beCloseTo(initialLocation.longitude, within: 0.01))
                 
-                feedItem.simpleFeature = SFPoint(x: -105.3, andY: 40.3)
+                
+                self.context.performAndWait {
+                    let fi = self.context.fetchFirst(FeedItem.self, key: "remoteId", value: feedItem.remoteId!)
+                    
+                    fi?.simpleFeature = SFPoint(x: -105.3, andY: 40.3)
+                    try? self.context.save()
+                }
                 
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(1))
                 
-                let movedFeedItem = testimpl.mapView!.annotations[0] as! FeedItem
+                let movedFeedItem = testimpl.mapView!.annotations[0] as! FeedItemAnnotation
                 let newLocation = movedFeedItem.coordinate
                 expect(newLocation.latitude).to(beCloseTo(40.3))
                 expect(newLocation.longitude).to(beCloseTo(-105.3))
@@ -279,8 +281,8 @@ class FeedsMapTests: KIFSpec {
                 expect(testimpl.mapView?.overlays.count).to(equal(0))
                 expect(testimpl.mapView?.annotations.count).to(equal(2))
                 
-                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(FeedItem.self))
-                let feedItem = testimpl.mapView!.annotations[0] as! FeedItem
+                expect(testimpl.mapView?.annotations[0]).to(beAKindOf(FeedItemAnnotation.self))
+                let feedItem = testimpl.mapView!.annotations[0] as! FeedItemAnnotation
                 if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: feedItem.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)) {
                     testimpl.mapView?.setRegion(region, animated: false)
                 }
@@ -310,8 +312,8 @@ class FeedsMapTests: KIFSpec {
                 }
 
                 // focus on a different one
-                expect(testimpl.mapView?.annotations[1]).to(beAKindOf(FeedItem.self))
-                let feedItem2 = testimpl.mapView!.annotations[1] as! FeedItem
+                expect(testimpl.mapView?.annotations[1]).to(beAKindOf(FeedItemAnnotation.self))
+                let feedItem2 = testimpl.mapView!.annotations[1] as! FeedItemAnnotation
                 initialLocation = feedItem2.coordinate
                 
                 if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: feedItem2.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)) {

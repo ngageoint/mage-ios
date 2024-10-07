@@ -9,7 +9,7 @@
 import Foundation
 
 private struct FormRepositoryProviderKey: InjectionKey {
-    static var currentValue: FormRepository = FormRepository()
+    static var currentValue: FormRepository = FormRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -19,12 +19,16 @@ extension InjectedValues {
     }
 }
 
-class FormRepository: ObservableObject {
+protocol FormRepository {
+    func getForm(formId: NSNumber) -> FormModel?
+}
+
+class FormRepositoryImpl: ObservableObject, FormRepository {
     @Injected(\.formLocalDataSource)
     var localDataSource: FormLocalDataSource
     
     // TODO: This needs to be a model not a managed object
-    func getForm(formId: NSNumber) -> Form? {
+    func getForm(formId: NSNumber) -> FormModel? {
         localDataSource.getForm(formId: formId)
     }
 }

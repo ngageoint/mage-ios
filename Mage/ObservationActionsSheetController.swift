@@ -44,7 +44,11 @@ class ObservationActionsSheetController: UITableViewController {
         self.observation = observation;
         self.delegate = delegate;
         self.router = router
-        let user = User.fetchCurrentUser(context: NSManagedObjectContext.mr_default());
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        let user = User.fetchCurrentUser(context: context);
         self.userHasEditPermissions = user?.hasEditPermission ?? false;
     }
     

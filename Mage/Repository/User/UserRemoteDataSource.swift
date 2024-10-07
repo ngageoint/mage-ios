@@ -9,7 +9,7 @@
 import Foundation
 
 private struct UserRemoteDataSourceProviderKey: InjectionKey {
-    static var currentValue: UserRemoteDataSource = UserRemoteDataSource()
+    static var currentValue: UserRemoteDataSource = UserRemoteDataSourceImpl()
 }
 
 extension InjectedValues {
@@ -19,7 +19,12 @@ extension InjectedValues {
     }
 }
 
-class UserRemoteDataSource {
+protocol UserRemoteDataSource {
+    func uploadAvatar(user: UserModel, imageData: Data) async -> [AnyHashable: Any]
+    func fetchMyself() async -> [AnyHashable: Any]?
+}
+
+class UserRemoteDataSourceImpl: UserRemoteDataSource {
     func uploadAvatar(user: UserModel, imageData: Data) async -> [AnyHashable: Any]  {
         let request = UserService.uploadAvatar(imageData: imageData)
         
@@ -46,6 +51,34 @@ class UserRemoteDataSource {
                     case .failure(let error):
                         print("Error \(error)")
                         continuation.resume(returning: [:])
+                    }
+                }
+        }
+    }
+    
+    func fetchMyself() async -> [AnyHashable: Any]? {
+        let request = UserService.fetchMyself
+        
+        return await withCheckedContinuation { continuation in
+            MageSession.shared.session.request(request)
+                .validate(MageSession.shared.validateMageResponse)
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data)
+                            if let json = json as? [AnyHashable: Any] {
+                                continuation.resume(returning: json)
+                            }
+                        } catch {
+                            print("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
+                            // TODO: what should this throw?
+                            continuation.resume(returning: nil)
+                        }
+                    case .failure(let error):
+                        print("Error \(error)")
+                        // TODO: what should this throw?
+                        continuation.resume(returning: nil)
                     }
                 }
         }

@@ -27,15 +27,39 @@ protocol ObservationFavoriteLocalDataSource {
     func toggleFavorite(observationUri: URL?, userRemoteId: String)
 }
 
-class ObservationFavoriteCoreDataDataSource: CoreDataDataSource, ObservationFavoriteLocalDataSource, ObservableObject {
+class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavorite>, ObservationFavoriteLocalDataSource, ObservableObject {
     
     var pushSubject: PassthroughSubject<ObservationFavoriteModel, Never>? = PassthroughSubject<ObservationFavoriteModel, Never>()
     var favoritesFetchedResultsController: NSFetchedResultsController<ObservationFavorite>?
     
+    
     override init() {
         super.init()
-        let context = NSManagedObjectContext.mr_default();
-        context.perform { [weak self] in
+        persistence.contextChange
+            .compactMap { 
+                return $0
+            }
+            .sink { [weak self] context in
+                context.performAndWait { [weak self] in
+                    self?.favoritesFetchedResultsController = ObservationFavorite.mr_fetchAllSorted(
+                        by: "observation.\(ObservationKey.timestamp.key)",
+                        ascending: false,
+                        with: NSPredicate(format: "\(ObservationKey.dirty.key) == true"),
+                        groupBy: nil,
+                        delegate: self,
+                        in: context
+                    ) as? NSFetchedResultsController<ObservationFavorite>
+                }
+                for favorite in self?.favoritesFetchedResultsController?.fetchedObjects ?? [] {
+                    if favorite.observation?.remoteId != nil {
+                        self?.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
+                    }
+                }
+        }
+        .store(in: &cancellables)
+        
+        guard let context = context else { return }
+        context.performAndWait { [weak self] in
             self?.favoritesFetchedResultsController = ObservationFavorite.mr_fetchAllSorted(
                 by: "observation.\(ObservationKey.timestamp.key)",
                 ascending: false,
@@ -44,6 +68,11 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource, ObservationFavo
                 delegate: self,
                 in: context
             ) as? NSFetchedResultsController<ObservationFavorite>
+        }
+        for favorite in self.favoritesFetchedResultsController?.fetchedObjects ?? [] {
+            if favorite.observation?.remoteId != nil {
+                self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
+            }
         }
     }
     
@@ -57,7 +86,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource, ObservationFavo
         guard let observationUri = observationUri else {
             return nil
         }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return nil }
         if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
             if let observation = try? context.existingObject(with: id) as? Observation {
                 
@@ -79,7 +108,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource, ObservationFavo
     
     func toggleFavorite(observationUri: URL?, userRemoteId: String) {
         guard let observationUri = observationUri else { return }
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return }
         context.perform {
             if let id = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri) {
                 if let observation = try? context.existingObject(with: id) as? Observation {
@@ -94,23 +123,24 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource, ObservationFavo
                             favorite.favorite = true
                             favorite.userId = userRemoteId
                         } else {
-                            if let favorite = ObservationFavorite.mr_createEntity(in: context) {
-                                observation.addToFavorites(favorite)
-                                favorite.observation = observation
-                                favorite.dirty = true
-                                favorite.favorite = true
-                                favorite.userId = userRemoteId
-                            }
+                            let favorite = ObservationFavorite(context: context)
+                            observation.addToFavorites(favorite)
+                            favorite.observation = observation
+                            favorite.dirty = true
+                            favorite.favorite = true
+                            favorite.userId = userRemoteId
+                            try? context.obtainPermanentIDs(for: [favorite])
                         }
                     }
                 }
             }
+            try? context.save()
         }
     }
 
     func handleServerPushResponse(favorite: ObservationFavoriteModel, response: [AnyHashable: Any]) {
         NSLog("Successfuly submitted favorite")
-        let context = NSManagedObjectContext.mr_default()
+        guard let context = context else { return }
         
         context.performAndWait {
             if let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: favorite.observationFavoriteUri),
@@ -131,8 +161,9 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
         if let favorite = anObject as? ObservationFavorite {
             switch type {
             case .insert:
-                NSLog("important inserted, push em")
+                NSLog("favorite inserted, push em")
                 if favorite.observation?.remoteId != nil {
+                    print("sending favorite to push subject")
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }
             case .delete:
@@ -140,7 +171,7 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
             case .move:
                 break
             case .update:
-                NSLog("important updated, push em")
+                NSLog("favorite updated, push em")
                 if favorite.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }

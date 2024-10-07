@@ -12,21 +12,23 @@
 @interface MageOfflineObservationManager()<NSFetchedResultsControllerDelegate>
 @property (assign, nonatomic) NSInteger offlineObservationCount;
 @property (strong, nonatomic) NSFetchedResultsController *observationFetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation MageOfflineObservationManager
 
--(instancetype) initWithDelegate:(id<OfflineObservationDelegate>) delegate {
+-(instancetype) initWithDelegate:(id<OfflineObservationDelegate>) delegate context: (NSManagedObjectContext *) context {
    	if ((self = [super init])) {
         _offlineObservationCount = -1;
         _delegate = delegate;
+        _context = context;
         
         _observationFetchedResultsController = [Observation MR_fetchAllSortedBy:@"timestamp"
                                                                       ascending:NO
                                                                   withPredicate:[NSPredicate predicateWithFormat:@"eventId == %@ AND error != nil", [Server currentEventId]]
                                                                         groupBy:nil
                                                                        delegate:self
-                                                                      inContext:[NSManagedObjectContext MR_defaultContext]];
+                                                                      inContext:context];
     }
     
     return self;

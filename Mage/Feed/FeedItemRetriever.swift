@@ -59,10 +59,13 @@ extension UIImage {
     
     public static func createFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return [] }
         
         return context.performAndWait {
-            if let feeds: [Feed] = Feed.mr_findAll(in: context) as? [Feed] {
+            if let feeds: [Feed] = context.fetchAll(Feed.self) {
             
                 for feed: Feed in feeds {
                     let retriever = FeedItemRetriever(feed: feed, delegate: delegate);
@@ -74,9 +77,12 @@ extension UIImage {
     }
     
     public static func getMappableFeedRetriever(feedTag: NSNumber, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
-            if let feed: Feed = Feed.mr_findFirst(byAttribute: "tag", withValue: feedTag, in: context) {
+            if let feed: Feed = context.fetchFirst(Feed.self, key: "tag", value: feedTag) {
                 return getMappableFeedRetriever(feedId: feed.remoteId!, eventId: eventId, delegate: delegate);
             }
             return nil
@@ -84,9 +90,12 @@ extension UIImage {
     }
     
     public static func getMappableFeedRetriever(feedId: String, eventId: NSNumber, delegate: FeedItemDelegate) -> FeedItemRetriever? {
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
-            if let feed: Feed = Feed.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId), in: context) {
+            if let feed: Feed = try? context.fetchFirst(Feed.self, predicate: NSPredicate(format: "remoteId == %@ AND eventId == %@", feedId, eventId)) {
                 if (feed.itemsHaveSpatialDimension) {
                     return FeedItemRetriever(feed: feed, delegate: delegate);
                 }
@@ -97,10 +106,13 @@ extension UIImage {
     
     public static func createMappableFeedItemRetrievers(delegate: FeedItemDelegate) -> [FeedItemRetriever] {
         var feedRetrievers: [FeedItemRetriever] = [];
-        let context = NSManagedObjectContext.mr_default()
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return [] }
         
         return context.performAndWait {
-            if let feeds: [Feed] = Feed.mr_findAll(in: context) as? [Feed] {
+            if let feeds: [Feed] = context.fetchAll(Feed.self) {
                 
                 for feed: Feed in feeds {
                     if (feed.itemsHaveSpatialDimension) {
@@ -116,7 +128,9 @@ extension UIImage {
     @objc public let feed: Feed;
     let delegate: FeedItemDelegate;
     
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem> = {
+    var fetchedResultsController: NSFetchedResultsController<FeedItem>?
+    
+    func createFetchedResultsController() {
         // Create Fetch Request
         let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
@@ -125,13 +139,17 @@ extension UIImage {
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "remoteId", ascending: true)]
         
         // Create Fetched Results Controller
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        
+        self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         
         // Configure Fetched Results Controller
-        fetchedResultsController.delegate = self
+        fetchedResultsController?.delegate = self
         
-        return fetchedResultsController
-    }()
+    }
     
     init(feed: Feed, delegate: FeedItemDelegate) {
         self.feed = feed;
@@ -139,14 +157,15 @@ extension UIImage {
     }
     
     @objc public func startRetriever() -> [FeedItemAnnotation]? {
+        createFetchedResultsController()
         do {
-            try fetchedResultsController.performFetch()
+            try fetchedResultsController?.performFetch()
         } catch {
             let fetchError = error as NSError
             print("Unable to Perform Fetch Request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
-        return fetchedResultsController.fetchedObjects?.compactMap({ feedItem in
+        return fetchedResultsController?.fetchedObjects?.compactMap({ feedItem in
             if feedItem.isMappable {
                 return FeedItemAnnotation(feedItem: feedItem)
             }
@@ -158,17 +177,21 @@ extension UIImage {
 
 extension FeedItemRetriever : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let feedItem = anObject as? FeedItem, feedItem.isMappable else {
+        guard let feedItem = anObject as? FeedItem else {
             return
         }
         switch type {
         case .insert:
-            delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
+            if feedItem.isMappable {
+                delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
+            }
         case .delete:
             delegate.removeFeedItem(FeedItemAnnotation(feedItem: feedItem))
         case .update:
             delegate.removeFeedItem(FeedItemAnnotation(feedItem: feedItem))
-            delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
+            if feedItem.isMappable {
+                delegate.addFeedItem(FeedItemAnnotation(feedItem: feedItem))
+            }
         case .move:
             print("...")
         @unknown default:

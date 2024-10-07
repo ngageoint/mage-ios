@@ -26,16 +26,21 @@ extension InjectedValues {
 }
 
 protocol FormLocalDataSource {
-    func getForm(formId: NSNumber) -> Form?
+    func getForm(formId: NSNumber) -> FormModel?
     
 }
 
-class FormCoreDataDataSource: CoreDataDataSource, FormLocalDataSource, ObservableObject {
+class FormCoreDataDataSource: CoreDataDataSource<Form>, FormLocalDataSource, ObservableObject {
     
-    func getForm(formId: NSNumber) -> Form? {
-        let context = NSManagedObjectContext.mr_default()
+    func getForm(formId: NSNumber) -> FormModel? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         return context.performAndWait {
-            return Form.mr_findFirst(byAttribute: "formId", withValue: formId, in: context)
+             return context.fetchFirst(Form.self, key: "formId", value: formId).map { form in
+                 FormModel(form: form)
+             }
         }
     }
 }

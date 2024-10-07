@@ -24,7 +24,7 @@ class BottomSheetEnabledTestImpl : NSObject, BottomSheetEnabled {
     var bottomSheetMixin: BottomSheetMixin?
 }
 
-class BottomSheetEnabledTests: KIFSpec {
+class BottomSheetEnabledTests: KIFMageCoreDataTestCase {
     
     override func spec() {
         
@@ -39,6 +39,7 @@ class BottomSheetEnabledTests: KIFSpec {
             var mapStack: UIStackView!
             
             beforeEach {
+                TestHelpers.clearAndSetUpStack()
                 
                 if (navController != nil) {
                     waitUntil { done in
@@ -47,7 +48,6 @@ class BottomSheetEnabledTests: KIFSpec {
                         });
                     }
                 }
-                TestHelpers.clearAndSetUpStack();
                 if (view != nil) {
                     for subview in view.subviews {
                         subview.removeFromSuperview();
@@ -122,21 +122,30 @@ class BottomSheetEnabledTests: KIFSpec {
                 view = nil;
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                HTTPStubs.removeAllStubs()
             }
             
-            it("observation bottom sheet") {
+           it("observation bottom sheet") {
                 let observation = MageCoreDataFixtures.addObservationToEvent()!
                 let oa = ObservationAnnotation(observation: observation, geometry: observation.geometry)
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-                let notification = MapItemsTappedNotification(annotations: [oa], items: nil, mapView: testimpl.mapView)
-                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+//                let notification = MapItemsTappedNotification(annotations: [oa], items: nil, mapView: testimpl.mapView)
+//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+                
+                @Injected(\.bottomSheetRepository)
+                var bottomSheetRepository: BottomSheetRepository
+                
+                if let location = observation.locations?.first {
+                    
+                    bottomSheetRepository.setItemKeys(itemKeys: [DataSources.observation.key: [location.objectID.uriRepresentation().absoluteString]])
+                }
                 
                 tester().waitForView(withAccessibilityLabel: "At Venue")
                 
-                NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
+                bottomSheetRepository.setItemKeys(itemKeys: nil)
+                
+//                NotificationCenter.default.post(name: .DismissBottomSheet, object: nil)
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "At Venue")
                 
                 mixin.cleanupMixin()
@@ -149,9 +158,13 @@ class BottomSheetEnabledTests: KIFSpec {
                 
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+                
+                @Injected(\.bottomSheetRepository)
+                var bottomSheetRepository: BottomSheetRepository
+                bottomSheetRepository.setItemKeys(itemKeys: [DataSources.user.key: [ua!.user.objectID.uriRepresentation().absoluteString]])
 
-                let notification = MapItemsTappedNotification(annotations: [ua], items: nil, mapView: testimpl.mapView)
-                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+//                let notification = MapItemsTappedNotification(annotations: [ua], items: nil, mapView: testimpl.mapView)
+//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
                 tester().waitForView(withAccessibilityLabel: "User ABC")
                 tester().tapScreen(at: CGPoint.zero)
@@ -207,11 +220,17 @@ class BottomSheetEnabledTests: KIFSpec {
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-                let notification = MapItemsTappedNotification(annotations: [sa], items: nil, mapView: testimpl.mapView)
-                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+//                let notification = MapItemsTappedNotification(annotations: [sa], items: nil, mapView: testimpl.mapView)
+//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+                
+                @Injected(\.bottomSheetRepository)
+                var bottomSheetRepository: BottomSheetRepository
+                bottomSheetRepository.setItemKeys(itemKeys: [DataSources.featureItem.key: [sa.itemKey]])
                 
                 tester().waitForView(withAccessibilityLabel: "Point")
                 expect(iconStubCalled).toEventually(beTrue())
+                
+                bottomSheetRepository.setItemKeys(itemKeys: nil)
                 
                 tester().waitForAbsenceOfView(withAccessibilityLabel: "Point")
                 
@@ -225,8 +244,14 @@ class BottomSheetEnabledTests: KIFSpec {
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-                let notification = MapItemsTappedNotification(annotations: [feedItem], items: nil, mapView: testimpl.mapView)
-                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+//                let notification = MapItemsTappedNotification(annotations: [feedItem], items: nil, mapView: testimpl.mapView)
+//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+                
+                @Injected(\.bottomSheetRepository)
+                var bottomSheetRepository: BottomSheetRepository
+                bottomSheetRepository.setItemKeys(itemKeys: [DataSources.feedItem.key: [feedItem!.objectID.uriRepresentation().absoluteString]])
+                
+                print("object id \(feedItem!.objectID.uriRepresentation().absoluteString)")
                 
                 tester().waitForView(withAccessibilityLabel: "No Content")
                 
@@ -234,6 +259,7 @@ class BottomSheetEnabledTests: KIFSpec {
             }
             
             it("multiple items bottom sheet") {
+                print("XXX this is failing in ios18")
                 let feature: [AnyHashable: Any] = [
                     "type": "Feature",
                     "geometry": [
@@ -305,30 +331,47 @@ class BottomSheetEnabledTests: KIFSpec {
                 let mapState = MapState()
                 mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
-                let notification = MapItemsTappedNotification(annotations: [oa, ua, sa, feedItem], items: [lineObs,polygonObs], mapView: testimpl.mapView)
-                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
+//                let notification = MapItemsTappedNotification(annotations: [oa, ua, sa, feedItem], items: [lineObs,polygonObs], mapView: testimpl.mapView)
+//                NotificationCenter.default.post(name: .MapItemsTapped, object: notification)
                 
-                tester().waitForView(withAccessibilityLabel: "At Venue")
-                tester().tapView(withAccessibilityLabel: "next_feature")
-                tester().waitForView(withAccessibilityLabel: "User ABC")
-                tester().tapView(withAccessibilityLabel: "next_feature")
+                @Injected(\.bottomSheetRepository)
+                var bottomSheetRepository: BottomSheetRepository
+                
+                bottomSheetRepository.setItemKeys(itemKeys: [
+                    DataSources.observation.key:[
+                        observation.locations!.first!.objectID.uriRepresentation().absoluteString,
+                        lineObs.locations!.first!.objectID.uriRepresentation().absoluteString,
+                        polygonObs.locations!.first!.objectID.uriRepresentation().absoluteString
+                    ],
+                    DataSources.user.key:
+                        [location!.objectID.uriRepresentation().absoluteString],
+                    DataSources.featureItem.key:
+                        [sa.itemKey],
+                    DataSources.feedItem.key:
+                        [feedItem!.objectID.uriRepresentation().absoluteString]
+                ])
+
                 tester().waitForView(withAccessibilityLabel: "Point")
-                tester().tapView(withAccessibilityLabel: "next_feature")
+                tester().tapView(withAccessibilityLabel: "next")
                 tester().waitForView(withAccessibilityLabel: "No Content")
-                tester().tapView(withAccessibilityLabel: "next_feature")
+                tester().tapView(withAccessibilityLabel: "next")
                 tester().waitForView(withAccessibilityLabel: "Something Cool")
-                tester().tapView(withAccessibilityLabel: "next_feature")
+                tester().tapView(withAccessibilityLabel: "next")
                 tester().waitForView(withAccessibilityLabel: "Super Cool")
-                tester().tapView(withAccessibilityLabel: "previous_feature")
-                tester().waitForView(withAccessibilityLabel: "Something Cool")
-                tester().tapView(withAccessibilityLabel: "previous_feature")
-                tester().waitForView(withAccessibilityLabel: "No Content")
-                tester().tapView(withAccessibilityLabel: "previous_feature")
-                tester().waitForView(withAccessibilityLabel: "Point")
-                tester().tapView(withAccessibilityLabel: "previous_feature")
-                tester().waitForView(withAccessibilityLabel: "User ABC")
-                tester().tapView(withAccessibilityLabel: "previous_feature")
+                tester().tapView(withAccessibilityLabel: "next")
                 tester().waitForView(withAccessibilityLabel: "At Venue")
+                tester().tapView(withAccessibilityLabel: "next")
+                tester().waitForView(withAccessibilityLabel: "User ABC")
+                tester().tapView(withAccessibilityLabel: "previous")
+                tester().waitForView(withAccessibilityLabel: "At Venue")
+                tester().tapView(withAccessibilityLabel: "previous")
+                tester().waitForView(withAccessibilityLabel: "Super Cool")
+                tester().tapView(withAccessibilityLabel: "previous")
+                tester().waitForView(withAccessibilityLabel: "Something Cool")
+                tester().tapView(withAccessibilityLabel: "previous")
+                tester().waitForView(withAccessibilityLabel: "No Content")
+                tester().tapView(withAccessibilityLabel: "previous")
+                tester().waitForView(withAccessibilityLabel: "Point")
                 expect(iconStubCalled).toEventually(beTrue())
 
                 mixin.cleanupMixin()

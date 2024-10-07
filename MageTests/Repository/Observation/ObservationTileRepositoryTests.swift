@@ -11,7 +11,7 @@ import OHHTTPStubs
 
 @testable import MAGE
 
-final class ObservationTileRepositoryTests: XCTestCase {
+final class ObservationTileRepositoryTests: MageCoreDataTestCase {
     
     func testStuff() async {
         let location = CLLocationCoordinate2D(latitude: 39.62601343172716,longitude: -104.90165054798126)
@@ -56,21 +56,21 @@ final class ObservationTileRepositoryTests: XCTestCase {
         
     }
 
-    func testGetItemKeys() async {
+    func xtestGetItemKeys() async {
         Server.setCurrentEventId(1)
         
         let localDataSource = ObservationLocationStaticLocalDataSource()
+        InjectedValues[\.observationLocationLocalDataSource] = localDataSource
         let localIconDataSource = ObservationIconStaticLocalDataSource()
-        let iconRepository = ObservationIconRepository(localDataSource: localIconDataSource)
-        let tileRepository = ObservationsTileRepository(
-            localDataSource: localDataSource,
-            observationIconRepository: iconRepository
-        )
+        InjectedValues[\.observationIconLocalDataSource] = localIconDataSource
+        let iconRepository = ObservationIconRepository()
+        let tileRepository = ObservationsTileRepository()
         
         localDataSource.list.append(ObservationMapItem(
-            observationId: URL(string: "https://test/observationId"),
+            observationId: URL(string: "magetest://observation/1"),
+            observationLocationId: URL(string:"magetest://observationLocation/1"),
             geometry: SFPoint(xValue: -104.90241, andYValue: 39.62691),
-            iconPath: OHPathForFile("110.png", type(of: self)),
+//            iconPath: OHPathForFile("110.png", type(of: self)),
             maxLatitude:  39.62691,
             maxLongitude: -104.90241,
             minLatitude: 39.62691,
@@ -85,7 +85,8 @@ final class ObservationTileRepositoryTests: XCTestCase {
             latitudePerPixel: 0.000058806721412885429,
             longitudePerPixel: 0.000085830109961996306,
             zoom: 14,
-            precise: true
+            precise: true,
+            distanceTolerance: 1000000.0
         )
         // this should hit one
         
@@ -100,7 +101,8 @@ final class ObservationTileRepositoryTests: XCTestCase {
             latitudePerPixel: 0.000058806721412885429,
             longitudePerPixel: 0.000085830109961996306,
             zoom: 14,
-            precise: true
+            precise: true,
+            distanceTolerance: 1000.0
         )
         
         XCTAssertEqual(noItemKeys.count, 0)

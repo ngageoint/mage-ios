@@ -26,7 +26,15 @@ class CanCreateObservationTestImpl : NSObject, CanCreateObservation {
     var canCreateObservationMixin: CanCreateObservationMixin?
 }
 
-class CanCreateObservationTests: KIFSpec {
+class CanCreateObservationTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
@@ -49,7 +57,6 @@ class CanCreateObservationTests: KIFSpec {
             }()
             
             beforeEach {
-                
                 if (navController != nil) {
                     waitUntil { done in
                         navController.dismiss(animated: false, completion: {
@@ -124,7 +131,6 @@ class CanCreateObservationTests: KIFSpec {
                 view = nil;
                 window = nil;
                 TestHelpers.clearAndSetUpStack();
-                HTTPStubs.removeAllStubs()
             }
             
             it("initialize the CanCreateObservation and push the new button") {
@@ -134,10 +140,10 @@ class CanCreateObservationTests: KIFSpec {
                 tester().waitForView(withAccessibilityLabel: "New")
                 tester().tapView(withAccessibilityLabel: "New")
                 tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection")
-                tester().tapView(withAccessibilityLabel: "Cancel")
+                tester().tapView(withAccessibilityLabel: "CANCEL")
                 
                 let geometryView = viewTester().usingLabel("geometry value").view as! MDCFilledTextField
-                expect(geometryView.text).to(equal("40.00850, -105.26780 GPS ± 6.00m"))
+                expect(geometryView.text).to(equal("40.0085, -105.2678 GPS ± 6.00m"))
                 
                 expect(mixin.editCoordinator).toNot(beNil())
                 tester().tapView(withAccessibilityLabel: "Save")
@@ -158,10 +164,10 @@ class CanCreateObservationTests: KIFSpec {
                 viewTester().usingLabel("map").longPress()
                 
                 tester().waitForView(withAccessibilityLabel: "ObservationEditCardCollection")
-                tester().tapView(withAccessibilityLabel: "Cancel")
+                tester().tapView(withAccessibilityLabel: "CANCEL")
                 
                 let geometryView = viewTester().usingLabel("geometry value").view as! MDCFilledTextField
-                expect(geometryView.text).to(equal("15.00000, 25.00000 "))
+                expect(geometryView.text).to(equal("15.0586, 25.0000 "))
                 
                 expect(mixin.editCoordinator).toNot(beNil())
                 tester().tapView(withAccessibilityLabel: "Cancel")

@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSMutableSet *selectedStaticLayers;
 @property (nonatomic, strong) NSFetchedResultsController *mapsFetchedResultsController;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 @end
 
 @implementation OfflineMapTableViewController
@@ -37,9 +38,10 @@ static NSString *MY_MAPS_SECTION_NAME = @"My Layers";
 static NSString *AVAILABLE_SECTION_NAME = @"Available Layers";
 static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super initWithStyle:UITableViewStyleGrouped];
     self.scheme = containerScheme;
+    self.context = context;
     return self;
 }
 
@@ -69,7 +71,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     self.selectedStaticLayers = [NSMutableSet setWithArray:[defaults valueForKeyPath:[NSString stringWithFormat: @"selectedStaticLayers.%@", [Server currentEventId]]]];
     
     self.cacheOverlays = [CacheOverlays getInstance];
-    [self.cacheOverlays registerListener:self];
+    [self.cacheOverlays register:self completionHandler:^{
+        
+    }];
     
     [self applyThemeWithContainerScheme:self.scheme];
 }
@@ -88,7 +92,12 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
 }
 
 - (CacheOverlay *) findOverlayByRemoteId: (NSNumber *) remoteId {
-    for(CacheOverlay * cacheOverlay in [self.cacheOverlays getOverlays]) {
+    NSMutableArray *cacheOverlaysOverlays = [[NSMutableArray alloc] init];
+    CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
+    [cacheOverlays getOverlaysWithCompletionHandler:^(NSArray<CacheOverlay *> * _Nonnull overlays) {
+        [cacheOverlaysOverlays arrayByAddingObjectsFromArray: overlays];
+    }];
+    for(CacheOverlay * cacheOverlay in cacheOverlaysOverlays) {
         if ([cacheOverlay isKindOfClass:[GeoPackageCacheOverlay class]]) {
             GeoPackageCacheOverlay *gpCacheOverlay = (GeoPackageCacheOverlay *)cacheOverlay;
             NSString *filePath = gpCacheOverlay.filePath;
@@ -257,7 +266,7 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         case AVAILABLE_SECTION:
             return AVAILABLE_SECTION_NAME;
         case DOWNLOADED_SECTION:
-            return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventWithContext:[NSManagedObjectContext MR_defaultContext]].name];
+            return [NSString stringWithFormat:DOWNLOADED_SECTION_NAME, [Event getCurrentEventWithContext:self.context].name];
         case PROCESSING_SECTION:
             return PROCESSING_SECTION_NAME;
         case MY_MAPS_SECTION:
@@ -535,13 +544,20 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     [defaults setObject:[self getSelectedOverlays] forKey:MAGE_SELECTED_CACHES];
     [defaults synchronize];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.cacheOverlays notifyListenersExceptCaller:self];
+        [self.cacheOverlays notifyListenersExceptCallerWithCaller:self completionHandler:^{
+            
+        }];
     });
 }
 
 -(NSArray *) getSelectedOverlays{
     NSMutableArray * overlays = [[NSMutableArray alloc] init];
-    for(CacheOverlay * cacheOverlay in [self.cacheOverlays getOverlays]){
+    NSMutableArray *cacheOverlaysOverlays = [[NSMutableArray alloc] init];
+    CacheOverlays *cacheOverlays = [CacheOverlays getInstance];
+    [cacheOverlays getOverlaysWithCompletionHandler:^(NSArray<CacheOverlay *> * _Nonnull overlays) {
+        [cacheOverlaysOverlays arrayByAddingObjectsFromArray: overlays];
+    }];
+    for(CacheOverlay * cacheOverlay in cacheOverlaysOverlays){
         
         BOOL childAdded = false;
         for(CacheOverlay * childCache in [cacheOverlay getChildren]){
@@ -620,7 +636,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
         default:
             break;
     }
-    [self.cacheOverlays removeCacheOverlay:cacheOverlay];
+    [self.cacheOverlays removeCacheOverlayWithOverlay:cacheOverlay completionHandler:^{
+        
+    }];
 }
 
 -(void) deleteXYZCacheOverlay: (XYZDirectoryCacheOverlay *) xyzCacheOverlay{
@@ -637,7 +655,9 @@ static NSString *PROCESSING_SECTION_NAME = @"Extracting Archives";
     if(![manager delete:[geoPackageCacheOverlay getName]]){
         NSLog(@"Error deleting GeoPackage cache file: %@", [geoPackageCacheOverlay getName]);
     }
-    [self.cacheOverlays removeCacheOverlay:geoPackageCacheOverlay];
+    [self.cacheOverlays removeCacheOverlayWithOverlay:geoPackageCacheOverlay completionHandler:^{
+        
+    }];
 }
 
 @end

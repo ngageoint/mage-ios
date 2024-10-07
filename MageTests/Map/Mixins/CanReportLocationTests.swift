@@ -24,7 +24,15 @@ class CanReportLocationTestImpl : NSObject, CanReportLocation {
     var canReportLocationMixin: CanReportLocationMixin?
 }
 
-class CanReportLocationTests: KIFSpec {
+class CanReportLocationTests: KIFMageCoreDataTestCase {
+    
+    override open func setUp() {
+        super.setUp()
+    }
+    
+    override open func tearDown() {
+        super.tearDown()
+    }
     
     override func spec() {
         
@@ -39,10 +47,11 @@ class CanReportLocationTests: KIFSpec {
             
             var buttonStack: UIStackView!
             
+            
             describe("User not in the event") {
                 
                 beforeEach {
-                    
+                    TestHelpers.clearAndSetUpStack()
                     if (navController != nil) {
                         waitUntil { done in
                             navController.dismiss(animated: false, completion: {
@@ -50,7 +59,7 @@ class CanReportLocationTests: KIFSpec {
                             });
                         }
                     }
-                    TestHelpers.clearAndSetUpStack();
+//                    TestHelpers.clearAndSetUpStack();
                     if (view != nil) {
                         for subview in view.subviews {
                             subview.removeFromSuperview();
@@ -124,7 +133,6 @@ class CanReportLocationTests: KIFSpec {
                     view = nil;
                     window = nil;
                     TestHelpers.clearAndSetUpStack();
-                    HTTPStubs.removeAllStubs()
                 }
                 it("initialize the CanCreateObservation and press the report location button location authorized") {
                     UserDefaults.standard.reportLocation = true
@@ -172,7 +180,7 @@ class CanReportLocationTests: KIFSpec {
             describe("User in the event") {
                 
                 beforeEach {
-                    
+                    TestHelpers.clearAndSetUpStack()
                     if (navController != nil) {
                         waitUntil { done in
                             navController.dismiss(animated: false, completion: {
@@ -180,7 +188,6 @@ class CanReportLocationTests: KIFSpec {
                             });
                         }
                     }
-                    TestHelpers.clearAndSetUpStack();
                     if (view != nil) {
                         for subview in view.subviews {
                             subview.removeFromSuperview();
@@ -254,7 +261,6 @@ class CanReportLocationTests: KIFSpec {
                     view = nil;
                     window = nil;
                     TestHelpers.clearAndSetUpStack();
-                    HTTPStubs.removeAllStubs()
                 }
                 
                 it("initialize the CanCreateObservation with the button at index 0") {

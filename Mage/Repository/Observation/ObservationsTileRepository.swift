@@ -83,7 +83,7 @@ class ObservationsTileRepository: TileRepository, ObservableObject {
         NotificationCenter.default.publisher(for: .MAGEFormFetched)
             .receive(on: DispatchQueue.main)
             .sink { notification in
-                if let event: Event = notification.object as? Event {
+                if let event: EventModel = notification.object as? EventModel {
                     if event.remoteId == Server.currentEventId() {
                         Task {
                             if let eventId = event.remoteId {
