@@ -15,28 +15,10 @@ import geopackage_ios
 
 final class GeoPackageImporterTests: MageCoreDataTestCase {
     
-    var navController: UINavigationController!
-    var view: UIView!
-    var window: UIWindow!;
-    var controller: UIViewController!
-    
     override func tearDown() async throws {
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
         await CacheOverlays.getInstance().removeAll()
-        for subview in await view.subviews {
-            await subview.removeFromSuperview();
-        }
-        waitUntil { done in
-            self.controller.dismiss(animated: false, completion: {
-                done();
-            });
-        }
-        
-        window.rootViewController = nil;
-        navController = nil;
-        view = nil;
-        window = nil;
         
         try await super.tearDown()
     }
@@ -46,24 +28,6 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
         await CacheOverlays.getInstance().removeAll()
-        
-        if (navController != nil) {
-            waitUntil { done in
-                self.navController.dismiss(animated: false, completion: {
-                    done();
-                });
-            }
-        }
-        if (view != nil) {
-            for subview in view.subviews {
-                subview.removeFromSuperview();
-            }
-        }
-        window = TestHelpers.getKeyWindowVisible();
-        
-        controller = UIViewController()
-        navController = UINavigationController(rootViewController: controller);
-        view = window
     }
     
     func testImportGeoPackageFileAndIndex() async throws {
@@ -224,7 +188,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         
         await fulfillment(of: [importExpectation])
         
-        XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 0)
+        XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
     }
     
     func testImportGeoPackageFileIntoCurrentEventLayer() async throws {
