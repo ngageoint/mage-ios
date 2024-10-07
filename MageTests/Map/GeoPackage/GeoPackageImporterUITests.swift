@@ -207,9 +207,10 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
                     
                     XCTAssertTrue(imported)
                     XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
-                    let layers1 = self.context.fetchAll(Layer.self)
-                    XCTAssertEqual(layers1?.count, 1)
-                    
+                    self.context.performAndWait {
+                        let layers1 = self.context.fetchAll(Layer.self)
+                        XCTAssertEqual(layers1?.count, 1)
+                    }
                     try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: urlPath)
                     
                     let importedAgain = await importer.handleGeoPackageImport(urlPath.path())
