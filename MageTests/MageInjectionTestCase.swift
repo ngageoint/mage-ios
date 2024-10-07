@@ -16,6 +16,28 @@ class MageInjectionTestCase: XCTestCase {
     var cancellables: Set<AnyCancellable> = Set()
     
     override func setUp() {
+        injectionSetup()
+        clearAndSetUpStack()
+    }
+    
+    override func tearDown() {
+        clearAndSetUpStack()
+        cancellables.removeAll()
+        HTTPStubs.removeAllStubs();
+    }
+    
+    override func setUp() async throws {
+        injectionSetup()
+        clearAndSetUpStack()
+    }
+    
+    override func tearDown() async throws {
+        clearAndSetUpStack()
+        cancellables.removeAll()
+        HTTPStubs.removeAllStubs();
+    }
+    
+    func injectionSetup() {
         defaultObservationInjection()
         defaultImportantInjection()
         defaultObservationFavoriteInjection()
@@ -32,14 +54,6 @@ class MageInjectionTestCase: XCTestCase {
         defaultObservationLocationInjection()
         defaultObservationIconInjection()
         defaultLayerInjection()
-        
-        clearAndSetUpStack()
-    }
-    
-    override func tearDown() {
-        clearAndSetUpStack()
-        cancellables.removeAll()
-        HTTPStubs.removeAllStubs();
     }
     
     func clearAndSetUpStack() {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF11F1C22F643000CA07F /* CacheOverlays.m */; };
+		043FF1201C22F643000CA07F /* CacheOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043FF11F1C22F643000CA07F /* CacheOverlays.swift */; };
 		043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1221C22F6E4000CA07F /* CacheOverlay.m */; };
 		043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1251C22F875000CA07F /* CacheOverlayTypes.m */; };
 		043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */; };
@@ -811,7 +811,7 @@
 
 /* Begin PBXFileReference section */
 		043FF11E1C22F643000CA07F /* CacheOverlays.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlays.h; sourceTree = "<group>"; };
-		043FF11F1C22F643000CA07F /* CacheOverlays.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlays.m; sourceTree = "<group>"; };
+		043FF11F1C22F643000CA07F /* CacheOverlays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheOverlays.swift; sourceTree = "<group>"; };
 		043FF1211C22F6E4000CA07F /* CacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlay.h; sourceTree = "<group>"; };
 		043FF1221C22F6E4000CA07F /* CacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlay.m; sourceTree = "<group>"; };
 		043FF1241C22F875000CA07F /* CacheOverlayTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayTypes.h; sourceTree = "<group>"; };
@@ -1786,6 +1786,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F718CCF72CA6F8820015DF87 /* GeoPackage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GeoPackage; sourceTree = "<group>"; };
 		F7E1D76B2CB05A1A0003441B /* Layer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Layer; sourceTree = "<group>"; };
+		F7E1D7732CB0833C0003441B /* Cache */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cache; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1843,7 +1844,7 @@
 				043FF1221C22F6E4000CA07F /* CacheOverlay.m */,
 				043FF1271C2303B4000CA07F /* CacheOverlayListener.h */,
 				043FF11E1C22F643000CA07F /* CacheOverlays.h */,
-				043FF11F1C22F643000CA07F /* CacheOverlays.m */,
+				043FF11F1C22F643000CA07F /* CacheOverlays.swift */,
 				0450822A1C44167E00EDEB88 /* CacheOverlayTableCell.h */,
 				0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */,
 				043FF1241C22F875000CA07F /* CacheOverlayTypes.h */,
@@ -3840,6 +3841,7 @@
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				F7E1D7732CB0833C0003441B /* Cache */,
 				F718CCF72CA6F8820015DF87 /* GeoPackage */,
 				F7BEF68027D69DA1000E8CDE /* Mixins */,
 				F7D049A226262A8900BCFCC2 /* StraightLineNav */,
@@ -4101,6 +4103,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				F718CCF72CA6F8820015DF87 /* GeoPackage */,
+				F7E1D7732CB0833C0003441B /* Cache */,
 			);
 			name = MAGETests;
 			productName = MAGETests;
@@ -4680,7 +4683,7 @@
 				F7BFB8D22C4AB07300901479 /* NavigateToButton.swift in Sources */,
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
-				043FF1201C22F643000CA07F /* CacheOverlays.m in Sources */,
+				043FF1201C22F643000CA07F /* CacheOverlays.swift in Sources */,
 				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
 				F7489B3F27A2FE8100A9E314 /* StaticLayerMap.swift in Sources */,
 				F73565032C66619200466813 /* UserViewViewModel.swift in Sources */,

@@ -24,11 +24,11 @@ public extension NSManagedObjectContext {
     }
 
     // Returns the count of objects for the given entity
-    func countOfObjects<T: NSManagedObject>(_ entityClass: T.Type) throws -> Int? {
+    func countOfObjects<T: NSManagedObject>(_ entityClass: T.Type, predicate: NSPredicate? = nil) throws -> Int? {
         guard let request: NSFetchRequest<T> = entityClass.fetchRequest() as? NSFetchRequest<T> else {
             return nil
         }
-        //        let request: NSFetchRequest<T> = fetchRequest(for: entityClass)
+        request.predicate = predicate
         return try self.count(for: request)
     }
     // Returns first object after executing fetchObjects method with given sort and predicates

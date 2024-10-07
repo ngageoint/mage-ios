@@ -25,11 +25,16 @@ protocol LayerRepository: Actor {
     func createGeoPackageLayer(name: String) async -> Layer?
     func markRemoteLayerLoaded(remoteId: NSNumber) async
     func removeOutdatedOfflineMapArchives() async
+    func count(eventId: NSNumber, layerId: Int) async -> Int
 }
 
 actor LayerRepositoryImpl: LayerRepository {
     @Injected(\.layerLocalDataSource)
     var localDataSource: LayerLocalDataSource
+    
+    func count(eventId: NSNumber, layerId: Int) async -> Int {
+        await localDataSource.count(eventId: eventId, layerId: layerId)
+    }
     
     func createLoadedXYZLayer(name: String) async -> Layer? {
         await localDataSource.createLoadedXYZLayer(name: name)

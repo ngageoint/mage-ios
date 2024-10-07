@@ -22,7 +22,7 @@ extension InjectedValues {
 }
 
 protocol GeoPackageRepository {
-    func cleanupBackgroundGeoPackages()
+    func cleanupBackgroundGeoPackages() async
     func getBaseMap() -> BaseMapOverlay?
     func getDarkBaseMap() -> BaseMapOverlay?
     func getGeoPackageFeatureItem(key: GeoPackageFeatureKey) -> GeoPackageFeatureItem?
@@ -35,7 +35,7 @@ class GeoPackageRepositoryImpl: ObservableObject, GeoPackageRepository {
     var darkBackgroundGeoPackage: GPKGGeoPackage?
     var backgroundGeoPackage: GPKGGeoPackage?
     
-    func cleanupBackgroundGeoPackages() {
+    func cleanupBackgroundGeoPackages() async {
         self.backgroundGeoPackage?.close()
         self.darkBackgroundGeoPackage?.close()
         self.backgroundGeoPackage = nil
@@ -45,8 +45,8 @@ class GeoPackageRepositoryImpl: ObservableObject, GeoPackageRepository {
         self.darkBackgroundOverlay?.cleanup()
         self.darkBackgroundOverlay = nil
         
-        CacheOverlays.getInstance().remove(byCacheName: "countries")
-        CacheOverlays.getInstance().remove(byCacheName: "countries_dark")
+        await CacheOverlays.getInstance().remove(byCacheName: "countries")
+        await CacheOverlays.getInstance().remove(byCacheName: "countries_dark")
     }
     
     func getBaseMap() -> BaseMapOverlay? {

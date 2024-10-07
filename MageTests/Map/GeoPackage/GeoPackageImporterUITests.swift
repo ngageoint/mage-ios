@@ -27,7 +27,9 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
             beforeEach {
                 GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
                 
-                CacheOverlays.getInstance().removeAll()
+                Task {
+                    await CacheOverlays.getInstance().removeAll()
+                }
                 
                 if (navController != nil) {
                     waitUntil { done in
@@ -52,7 +54,9 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
             afterEach {
                 GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
                 
-                CacheOverlays.getInstance().removeAll()
+                Task {
+                    await CacheOverlays.getInstance().removeAll()
+                }
                 
                 for subview in view.subviews {
                     subview.removeFromSuperview();
@@ -110,7 +114,9 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
             
             it("Should handle geopackage import twice import as new") {
                 let mockListener = MockCacheOverlayListener()
-                CacheOverlays.getInstance().register(mockListener)
+                Task {
+                    await CacheOverlays.getInstance().register(mockListener)
+                }
                 
                 Server.setCurrentEventId(1)
                 
@@ -168,7 +174,9 @@ final class GeoPackageImporterUITests: KIFMageCoreDataTestCase {
         
             it("Should handle geopackage import twice overwrite") {
                 let mockListener = MockCacheOverlayListener()
-                CacheOverlays.getInstance().register(mockListener)
+                Task {
+                    await CacheOverlays.getInstance().register(mockListener)
+                }
                 
                 Server.setCurrentEventId(1)
                 
