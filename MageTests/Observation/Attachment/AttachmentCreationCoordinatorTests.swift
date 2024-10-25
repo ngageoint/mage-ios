@@ -122,7 +122,7 @@ class AttachmentCreationCoordinatorTests: KIFSpec {
 
             it("converts png to jpeg and marks the attachment as a jpeg") {
 
-                let pngUrl = Bundle(for: AttachmentFieldViewTests.self).url(forResource: "test_image_attachment", withExtension: "png")!
+                let pngUrl = Bundle(for: AttachmentCreationCoordinatorTests.self).url(forResource: "test_image_attachment", withExtension: "png")!
                 var assetId: String? = nil
                 try PHPhotoLibrary.shared().performChangesAndWait {
                     let addPngToLibrary = PHAssetCreationRequest.creationRequestForAssetFromImage(atFileURL: pngUrl)

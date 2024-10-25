@@ -710,7 +710,7 @@ PODS:
     - crs-ios (~> 1.0.5)
     - PROJ (~> 9.4.0)
   - PureLayout (3.1.9)
-  - Quick (4.0.0)
+  - Quick (6.1.0)
   - sf-geojson-ios (4.2.5):
     - sf-ios (~> 4.1.4)
   - sf-ios (4.1.4)
@@ -743,7 +743,7 @@ DEPENDENCIES:
   - OHHTTPStubs/Swift
   - PROJ
   - PureLayout
-  - Quick (from `https://github.com/Quick/Quick.git`, commit `a0a5fc857cea079fbe973e4faa80b6ceaf17bd46`)
+  - Quick (~> 6)
   - SSZipArchive (~> 2.2.2)
   - zxcvbn-ios
 
@@ -774,6 +774,7 @@ SPEC REPOS:
     - PROJ-include
     - proj-ios
     - PureLayout
+    - Quick
     - sf-geojson-ios
     - sf-ios
     - sf-proj-ios
@@ -782,16 +783,6 @@ SPEC REPOS:
     - SSZipArchive
     - tiff-ios
     - zxcvbn-ios
-
-EXTERNAL SOURCES:
-  Quick:
-    :commit: a0a5fc857cea079fbe973e4faa80b6ceaf17bd46
-    :git: https://github.com/Quick/Quick.git
-
-CHECKOUT OPTIONS:
-  Quick:
-    :commit: a0a5fc857cea079fbe973e4faa80b6ceaf17bd46
-    :git: https://github.com/Quick/Quick.git
 
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
@@ -819,7 +810,7 @@ SPEC CHECKSUMS:
   PROJ-include: e7438fba489ea7c636495dc05d197840cdac04da
   proj-ios: 2a8ea337e1b728e669bb0845a1bd12fabce6609d
   PureLayout: 5fb5e5429519627d60d079ccb1eaa7265ce7cf88
-  Quick: 5dc45f9bc11236594a7acc99f7bd85ecdc9a477d
+  Quick: 6676ffb409bf04abba2ff23902af2407bfc6ac90
   sf-geojson-ios: 94a1409bbc463ff5fabf8235815c3d7422d26de2
   sf-ios: 03cc989b70b11d80ab80afc9db2086a621fa4703
   sf-proj-ios: 6cd46b6b9c4bdefa2a8fb8bc65c3b9fd434eedad
@@ -829,6 +820,6 @@ SPEC CHECKSUMS:
   tiff-ios: 1ad6750cd8bb3db75bd2977e40145813389786b9
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: a77687efbd33afe102d96e8d3311846b3040e4cc
+PODFILE CHECKSUM: c4abd1d9e1ab9039fea565d5ce416fbce895d406
 
 COCOAPODS: 1.15.2

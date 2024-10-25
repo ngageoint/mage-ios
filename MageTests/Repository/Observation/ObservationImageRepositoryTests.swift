@@ -89,7 +89,7 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         }
     }
     
-    func tesstShouldGetTheImageWithPrimaryAndSecondaryField() throws {
+    func testShouldGetTheImageWithPrimaryAndSecondaryField() throws {
         let iconPath = "\(getDocumentsDirectory())/events/icons-1/icons/26/Hi/turtle/icon.png"
         
         do {
@@ -344,7 +344,7 @@ class ObservationImageRepositoryTests: MageCoreDataTestCase {
         }
     }
     
-    func testShouldGetTheImageWithPrimaryAndSecondaryField() throws {
+    func testShouldGetTheImageWithPrimaryAndSecondaryField2() throws {
         let iconPath = "\(getDocumentsDirectory())/events/icons-1/icons/26/Hi/turtle/icon.png"
         
         do {

@@ -3,22 +3,21 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		043FF1201C22F643000CA07F /* CacheOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043FF11F1C22F643000CA07F /* CacheOverlays.swift */; };
-		043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1221C22F6E4000CA07F /* CacheOverlay.m */; };
+		043FF1231C22F6E4000CA07F /* CacheOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1221C22F6E4000CA07F /* CacheOverlay.swift */; };
 		043FF1261C22F875000CA07F /* CacheOverlayTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1251C22F875000CA07F /* CacheOverlayTypes.m */; };
-		043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */; };
-		043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */; };
-		043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */; };
-		043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */; };
-		0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */; };
+		043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.swift */; };
+		043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.swift */; };
+		043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.swift */; };
+		043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift */; };
+		0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.swift */; };
 		045082301C44282F00EDEB88 /* CacheActiveSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */; };
-		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */; };
-		046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046877FA1C6D121400967470 /* CacheOverlayUpdate.m */; };
-		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */; };
+		045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift */; };
+		04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.swift */; };
 		04E0CB0F1C40161C00E34F9C /* MageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CB0E1C40161C00E34F9C /* MageConstants.m */; };
 		04E2C89828D346D4001F0812 /* GridTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04E2C89728D346D4001F0812 /* GridTypeCell.xib */; };
 		04E2C89B28D34C29001F0812 /* GridTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E2C89A28D34C29001F0812 /* GridTypeTableViewCell.m */; };
@@ -91,7 +90,7 @@
 		2FD8537A1BE1571C00602CEA /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FD853791BE1571C00602CEA /* Roboto-Medium.ttf */; };
 		2FD9103C1D2421B600CFE797 /* UIImage+Thumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD9103B1D2421B600CFE797 /* UIImage+Thumbnail.m */; };
 		2FF4670C1A12798C00BA8357 /* CALayer+IB.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670B1A12798C00BA8357 /* CALayer+IB.m */; };
-		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */; };
+		2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.swift */; };
 		2FF74A4D1BEBFAD900416090 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF74A4C1BEBFAD900416090 /* WebKit.framework */; };
 		2FFBCA1119DB43F40033132F /* MapViewController_iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFBCA1019DB43F40033132F /* MapViewController_iPad.swift */; };
 		2FFDDB0919D5D7530012C6A7 /* MageSideBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDDB0819D5D7530012C6A7 /* MageSideBarController.swift */; };
@@ -667,7 +666,14 @@
 		F7CF6FA2244E2C5400B9437E /* KingFisherUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CF6FA1244E2C5400B9437E /* KingFisherUIImageView.swift */; };
 		F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7CFC09C2020C9FB003250A3 /* GeometryEditCoordinator.m */; };
 		F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */; };
+		F7D31F862CB8871800126468 /* CacheOverlaysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F842CB8871800126468 /* CacheOverlaysTests.swift */; };
+		F7D31F8B2CB8871B00126468 /* GeoPackageImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F872CB8871B00126468 /* GeoPackageImporterTests.swift */; };
+		F7D31F8C2CB8871B00126468 /* GeoPackageImporterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F882CB8871B00126468 /* GeoPackageImporterUITests.swift */; };
+		F7D31F8D2CB8871B00126468 /* GeoPackageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F892CB8871B00126468 /* GeoPackageTests.swift */; };
+		F7D31F912CB887A000126468 /* LayerLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F8E2CB887A000126468 /* LayerLocalDataSource.swift */; };
 		F7D31F9225E5502F0060EEAA /* MockUIImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */; };
+		F7D31F922CB887A000126468 /* LayerRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F8F2CB887A000126468 /* LayerRepository.swift */; };
+		F7D31F942CB962E100126468 /* CacheActiveSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450822E1C44282F00EDEB88 /* CacheActiveSwitch.swift */; };
 		F7D43BD8269DD67000561A8F /* UIWindowExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */; };
 		F7D43BDC269E0DF900561A8F /* FeatureBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BDB269E0DF900561A8F /* FeatureBottomSheetView.swift */; };
 		F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D43BDD269E0F6D00561A8F /* FeatureActionsDelegate.swift */; };
@@ -740,7 +746,7 @@
 		F7EBAEBF2762400800650F4F /* MapNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEBE2762400800650F4F /* MapNotifications.swift */; };
 		F7EBAEC12762537100650F4F /* BottomSheetEnabled.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBAEC02762537100650F4F /* BottomSheetEnabled.swift */; };
 		F7ECDC9A27A5A37200D0AF92 /* GeoPackageLayerMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ECDC9927A5A37200D0AF92 /* GeoPackageLayerMap.swift */; };
-		F7ECDC9E27A83C8600D0AF92 /* GeoPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ECDC9D27A83C8600D0AF92 /* GeoPackage.m */; };
+		F7ECDC9E27A83C8600D0AF92 /* GeoPackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ECDC9D27A83C8600D0AF92 /* GeoPackage.swift */; };
 		F7ED5CF21FFBF795007BD768 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */; };
 		F7ED5D0E1FFD48A4007BD768 /* GondolaMage-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */; };
 		F7ED5D151FFD95B5007BD768 /* MapSettingsCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F7ED5D141FFD95B5007BD768 /* MapSettingsCoordinator.m */; };
@@ -813,28 +819,25 @@
 		043FF11E1C22F643000CA07F /* CacheOverlays.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlays.h; sourceTree = "<group>"; };
 		043FF11F1C22F643000CA07F /* CacheOverlays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheOverlays.swift; sourceTree = "<group>"; };
 		043FF1211C22F6E4000CA07F /* CacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlay.h; sourceTree = "<group>"; };
-		043FF1221C22F6E4000CA07F /* CacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlay.m; sourceTree = "<group>"; };
+		043FF1221C22F6E4000CA07F /* CacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheOverlay.swift; sourceTree = "<group>"; };
 		043FF1241C22F875000CA07F /* CacheOverlayTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayTypes.h; sourceTree = "<group>"; };
 		043FF1251C22F875000CA07F /* CacheOverlayTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayTypes.m; sourceTree = "<group>"; };
-		043FF1271C2303B4000CA07F /* CacheOverlayListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayListener.h; sourceTree = "<group>"; };
 		043FF1281C243D4D000CA07F /* XYZDirectoryCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYZDirectoryCacheOverlay.h; sourceTree = "<group>"; };
-		043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYZDirectoryCacheOverlay.m; sourceTree = "<group>"; };
+		043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XYZDirectoryCacheOverlay.swift; sourceTree = "<group>"; };
 		043FF12B1C2440A7000CA07F /* GeoPackageCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageCacheOverlay.h; sourceTree = "<group>"; };
-		043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageCacheOverlay.m; sourceTree = "<group>"; };
+		043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoPackageCacheOverlay.swift; sourceTree = "<group>"; };
 		043FF12E1C24481B000CA07F /* GeoPackageTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTableCacheOverlay.h; sourceTree = "<group>"; };
-		043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTableCacheOverlay.m; sourceTree = "<group>"; };
+		043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoPackageTableCacheOverlay.swift; sourceTree = "<group>"; };
 		043FF1311C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageFeatureTableCacheOverlay.h; sourceTree = "<group>"; };
-		043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageFeatureTableCacheOverlay.m; sourceTree = "<group>"; };
+		043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoPackageFeatureTableCacheOverlay.swift; sourceTree = "<group>"; };
 		0450822A1C44167E00EDEB88 /* CacheOverlayTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayTableCell.h; sourceTree = "<group>"; };
-		0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayTableCell.m; sourceTree = "<group>"; };
-		0450822E1C44282F00EDEB88 /* CacheActiveSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheActiveSwitch.h; sourceTree = "<group>"; };
+		0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheOverlayTableCell.swift; sourceTree = "<group>"; };
+		0450822E1C44282F00EDEB88 /* CacheActiveSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheActiveSwitch.swift; sourceTree = "<group>"; };
 		0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheActiveSwitch.m; sourceTree = "<group>"; };
 		045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildCacheOverlayTableCell.h; sourceTree = "<group>"; };
-		045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCacheOverlayTableCell.m; sourceTree = "<group>"; };
-		046877F91C6D121400967470 /* CacheOverlayUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheOverlayUpdate.h; sourceTree = "<group>"; };
-		046877FA1C6D121400967470 /* CacheOverlayUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheOverlayUpdate.m; sourceTree = "<group>"; };
+		045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChildCacheOverlayTableCell.swift; sourceTree = "<group>"; };
 		04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoPackageTileTableCacheOverlay.h; sourceTree = "<group>"; };
-		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoPackageTileTableCacheOverlay.m; sourceTree = "<group>"; };
+		04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoPackageTileTableCacheOverlay.swift; sourceTree = "<group>"; };
 		04E0CB0D1C40161C00E34F9C /* MageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MageConstants.h; sourceTree = "<group>"; };
 		04E0CB0E1C40161C00E34F9C /* MageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MageConstants.m; sourceTree = "<group>"; };
 		04E2C89728D346D4001F0812 /* GridTypeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GridTypeCell.xib; sourceTree = "<group>"; };
@@ -961,7 +964,7 @@
 		2FF4670A1A12798C00BA8357 /* CALayer+IB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+IB.h"; sourceTree = "<group>"; };
 		2FF4670B1A12798C00BA8357 /* CALayer+IB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+IB.m"; sourceTree = "<group>"; };
 		2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineMapTableViewController.h; sourceTree = "<group>"; };
-		2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineMapTableViewController.m; sourceTree = "<group>"; };
+		2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfflineMapTableViewController.swift; sourceTree = "<group>"; };
 		2FF74A4C1BEBFAD900416090 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2FFBCA1019DB43F40033132F /* MapViewController_iPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController_iPad.swift; sourceTree = "<group>"; };
 		2FFDDB0319D1FA5C0012C6A7 /* UserSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSelectionDelegate.h; sourceTree = "<group>"; };
@@ -1637,6 +1640,12 @@
 		F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineNavigationViewTests.swift; sourceTree = "<group>"; };
 		F7D17C8722FA1F9600A77366 /* WMSTileOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMSTileOverlay.h; sourceTree = "<group>"; };
 		F7D17C8822FA1F9600A77366 /* WMSTileOverlay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMSTileOverlay.m; sourceTree = "<group>"; };
+		F7D31F842CB8871800126468 /* CacheOverlaysTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheOverlaysTests.swift; sourceTree = "<group>"; };
+		F7D31F872CB8871B00126468 /* GeoPackageImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageImporterTests.swift; sourceTree = "<group>"; };
+		F7D31F882CB8871B00126468 /* GeoPackageImporterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageImporterUITests.swift; sourceTree = "<group>"; };
+		F7D31F892CB8871B00126468 /* GeoPackageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageTests.swift; sourceTree = "<group>"; };
+		F7D31F8E2CB887A000126468 /* LayerLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerLocalDataSource.swift; sourceTree = "<group>"; };
+		F7D31F8F2CB887A000126468 /* LayerRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerRepository.swift; sourceTree = "<group>"; };
 		F7D31F9125E5502F0060EEAA /* MockUIImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIImagePickerController.swift; sourceTree = "<group>"; };
 		F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowExtensions.swift; sourceTree = "<group>"; };
 		F7D43BDB269E0DF900561A8F /* FeatureBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureBottomSheetView.swift; sourceTree = "<group>"; };
@@ -1714,7 +1723,7 @@
 		F7EBAEC02762537100650F4F /* BottomSheetEnabled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetEnabled.swift; sourceTree = "<group>"; };
 		F7ECDC9927A5A37200D0AF92 /* GeoPackageLayerMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackageLayerMap.swift; sourceTree = "<group>"; };
 		F7ECDC9C27A83C8600D0AF92 /* GeoPackage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoPackage.h; sourceTree = "<group>"; };
-		F7ECDC9D27A83C8600D0AF92 /* GeoPackage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoPackage.m; sourceTree = "<group>"; };
+		F7ECDC9D27A83C8600D0AF92 /* GeoPackage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPackage.swift; sourceTree = "<group>"; };
 		F7ED5CF11FFBF736007BD768 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		F7ED5D0D1FFD4879007BD768 /* GondolaMage-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GondolaMage-Regular.otf"; sourceTree = "<group>"; };
 		F7ED5D131FFD95B5007BD768 /* MapSettingsCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapSettingsCoordinator.h; sourceTree = "<group>"; };
@@ -1783,12 +1792,6 @@
 		F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apiSuccessNoAuthStrategies.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		F718CCF72CA6F8820015DF87 /* GeoPackage */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GeoPackage; sourceTree = "<group>"; };
-		F7E1D76B2CB05A1A0003441B /* Layer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Layer; sourceTree = "<group>"; };
-		F7E1D7732CB0833C0003441B /* Cache */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cache; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		F7A94D6318AD9CB000CB9EE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -1838,31 +1841,28 @@
 		043FF11D1C22F571000CA07F /* Cache */ = {
 			isa = PBXGroup;
 			children = (
-				0450822E1C44282F00EDEB88 /* CacheActiveSwitch.h */,
+				0450822E1C44282F00EDEB88 /* CacheActiveSwitch.swift */,
 				0450822F1C44282F00EDEB88 /* CacheActiveSwitch.m */,
 				043FF1211C22F6E4000CA07F /* CacheOverlay.h */,
-				043FF1221C22F6E4000CA07F /* CacheOverlay.m */,
-				043FF1271C2303B4000CA07F /* CacheOverlayListener.h */,
+				043FF1221C22F6E4000CA07F /* CacheOverlay.swift */,
 				043FF11E1C22F643000CA07F /* CacheOverlays.h */,
 				043FF11F1C22F643000CA07F /* CacheOverlays.swift */,
 				0450822A1C44167E00EDEB88 /* CacheOverlayTableCell.h */,
-				0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.m */,
+				0450822B1C44167E00EDEB88 /* CacheOverlayTableCell.swift */,
 				043FF1241C22F875000CA07F /* CacheOverlayTypes.h */,
 				043FF1251C22F875000CA07F /* CacheOverlayTypes.m */,
-				046877F91C6D121400967470 /* CacheOverlayUpdate.h */,
-				046877FA1C6D121400967470 /* CacheOverlayUpdate.m */,
 				045082341C4467B900EDEB88 /* ChildCacheOverlayTableCell.h */,
-				045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.m */,
+				045082351C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift */,
 				043FF12B1C2440A7000CA07F /* GeoPackageCacheOverlay.h */,
-				043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.m */,
+				043FF12C1C2440A7000CA07F /* GeoPackageCacheOverlay.swift */,
 				043FF1311C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.h */,
-				043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m */,
+				043FF1321C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift */,
 				043FF12E1C24481B000CA07F /* GeoPackageTableCacheOverlay.h */,
-				043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.m */,
+				043FF12F1C24481B000CA07F /* GeoPackageTableCacheOverlay.swift */,
 				04E0CB0A1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.h */,
-				04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m */,
+				04E0CB0B1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.swift */,
 				043FF1281C243D4D000CA07F /* XYZDirectoryCacheOverlay.h */,
-				043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.m */,
+				043FF1291C243D4D000CA07F /* XYZDirectoryCacheOverlay.swift */,
 			);
 			name = Cache;
 			path = Map/Cache;
@@ -2132,7 +2132,7 @@
 				2F5D68F31C4EC11B00E95DF6 /* ObservationAnnotationView.swift */,
 				2F5F2E9519DDD314005BA157 /* MapCalloutTapped.h */,
 				2FF4670D1A12B06600BA8357 /* OfflineMapTableViewController.h */,
-				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.m */,
+				2FF4670E1A12B06600BA8357 /* OfflineMapTableViewController.swift */,
 				F774970122F9FC7A00E69734 /* OnlineMapTableViewController.h */,
 				F774970222F9FC7A00E69734 /* OnlineMapTableViewController.m */,
 				F7E3D4B51A7ACCBB003B7D02 /* StaticPointAnnotation.swift */,
@@ -2267,7 +2267,7 @@
 		F70688B62BB5BD9C00D8E2EA /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				F7E1D76B2CB05A1A0003441B /* Layer */,
+				F7D31F902CB887A000126468 /* Layer */,
 				F7C097A72C824B93003FA115 /* Team */,
 				F7C0975F2C7FA813003FA115 /* Role */,
 				F763FF112C78DE2A00403A00 /* BottomSheet */,
@@ -3841,8 +3841,8 @@
 		F7C641022581503B00C02335 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				F7E1D7732CB0833C0003441B /* Cache */,
-				F718CCF72CA6F8820015DF87 /* GeoPackage */,
+				F7D31F852CB8871800126468 /* Cache */,
+				F7D31F8A2CB8871B00126468 /* GeoPackage */,
 				F7BEF68027D69DA1000E8CDE /* Mixins */,
 				F7D049A226262A8900BCFCC2 /* StraightLineNav */,
 				F75D24BF274C2B11003C0A83 /* ObservationAnnotationTests.swift */,
@@ -3869,6 +3869,33 @@
 				F7D049A326262A9E00BCFCC2 /* StraightLineNavigationViewTests.swift */,
 			);
 			path = StraightLineNav;
+			sourceTree = "<group>";
+		};
+		F7D31F852CB8871800126468 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				F7D31F842CB8871800126468 /* CacheOverlaysTests.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
+		F7D31F8A2CB8871B00126468 /* GeoPackage */ = {
+			isa = PBXGroup;
+			children = (
+				F7D31F872CB8871B00126468 /* GeoPackageImporterTests.swift */,
+				F7D31F882CB8871B00126468 /* GeoPackageImporterUITests.swift */,
+				F7D31F892CB8871B00126468 /* GeoPackageTests.swift */,
+			);
+			path = GeoPackage;
+			sourceTree = "<group>";
+		};
+		F7D31F902CB887A000126468 /* Layer */ = {
+			isa = PBXGroup;
+			children = (
+				F7D31F8E2CB887A000126468 /* LayerLocalDataSource.swift */,
+				F7D31F8F2CB887A000126468 /* LayerRepository.swift */,
+			);
+			path = Layer;
 			sourceTree = "<group>";
 		};
 		F7D9B82D2562EFE900A76E2C /* Attachment */ = {
@@ -3987,7 +4014,7 @@
 			isa = PBXGroup;
 			children = (
 				F7ECDC9C27A83C8600D0AF92 /* GeoPackage.h */,
-				F7ECDC9D27A83C8600D0AF92 /* GeoPackage.m */,
+				F7ECDC9D27A83C8600D0AF92 /* GeoPackage.swift */,
 				F7F08E9327E0EB7100640D89 /* GeoPackageImporter.swift */,
 			);
 			path = GeoPackage;
@@ -4060,9 +4087,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				F7E1D76B2CB05A1A0003441B /* Layer */,
-			);
 			name = MAGE;
 			packageProductDependencies = (
 				F70688822BA37ECE00D8E2EA /* Kingfisher */,
@@ -4100,10 +4124,6 @@
 			);
 			dependencies = (
 				F763326C2059CD4F00C5529C /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				F718CCF72CA6F8820015DF87 /* GeoPackage */,
-				F7E1D7732CB0833C0003441B /* Cache */,
 			);
 			name = MAGETests;
 			productName = MAGETests;
@@ -4585,8 +4605,8 @@
 				F7BFB8E22C501E5E00901479 /* PhoneButton.swift in Sources */,
 				F72D42ED2694B60300F9AC3B /* MagicalRecord+MAGE.m in Sources */,
 				F7C097A12C812630003FA115 /* GeoPackageProperty.swift in Sources */,
-				F7ECDC9E27A83C8600D0AF92 /* GeoPackage.m in Sources */,
-				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.m in Sources */,
+				F7ECDC9E27A83C8600D0AF92 /* GeoPackage.swift in Sources */,
+				043FF1301C24481B000CA07F /* GeoPackageTableCacheOverlay.swift in Sources */,
 				F776ACA52BCDC3BD000FAFB4 /* CountingDataLoadOperation.swift in Sources */,
 				F788AE362432816000C6BC3F /* AttachmentUIImageView.swift in Sources */,
 				F7BFB8D42C4AE84D00901479 /* PageController.swift in Sources */,
@@ -4612,6 +4632,8 @@
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
 				F706888B2BA3A7D900D8E2EA /* DataSourceMap.swift in Sources */,
+				F7D31F912CB887A000126468 /* LayerLocalDataSource.swift in Sources */,
+				F7D31F922CB887A000126468 /* LayerRepository.swift in Sources */,
 				F72D430A2694B60300F9AC3B /* Model8To15.xcmappingmodel in Sources */,
 				F7402C8A276D1A9B00531613 /* HasMapSettings.swift in Sources */,
 				8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */,
@@ -4668,6 +4690,7 @@
 				F74A758E1FD5CC4500FF52A5 /* ChangePasswordViewController.m in Sources */,
 				F70D1BF527299BC800B8015C /* ArrayExtensions.swift in Sources */,
 				F72D43112694B60300F9AC3B /* Model14To15.xcmappingmodel in Sources */,
+				F7D31F942CB962E100126468 /* CacheActiveSwitch.swift in Sources */,
 				F72D43062694B60300F9AC3B /* Server.swift in Sources */,
 				F72D42F62694B60300F9AC3B /* StoredPassword.m in Sources */,
 				F706889F2BA4A2E300D8E2EA /* ObservationMapItem.swift in Sources */,
@@ -4684,7 +4707,7 @@
 				F7E2DF1725768CD100CD2ABA /* ObservationEditCoordinator.swift in Sources */,
 				F72D42DC2694B60300F9AC3B /* Team+CoreDataProperties.swift in Sources */,
 				043FF1201C22F643000CA07F /* CacheOverlays.swift in Sources */,
-				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.m in Sources */,
+				0450822C1C44167E00EDEB88 /* CacheOverlayTableCell.swift in Sources */,
 				F7489B3F27A2FE8100A9E314 /* StaticLayerMap.swift in Sources */,
 				F73565032C66619200466813 /* UserViewViewModel.swift in Sources */,
 				F7D17C8922FA1F9600A77366 /* WMSTileOverlay.m in Sources */,
@@ -4700,7 +4723,7 @@
 				F776ACAE2BD1820A000FAFB4 /* ObservationLocationLocalDataSource.swift in Sources */,
 				2F7D5D8C26025A9800886844 /* SignUpViewController_Server5.m in Sources */,
 				F7C5C8D51F5F28BC002C78D3 /* MageAppCoordinator.m in Sources */,
-				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.m in Sources */,
+				043FF1331C244D4A000CA07F /* GeoPackageFeatureTableCacheOverlay.swift in Sources */,
 				2F0323AE246366B800D2866B /* LocationAccuracy.m in Sources */,
 				2FAC84A92B505A9800FCAB37 /* SearchMapViewController.swift in Sources */,
 				F7E079412C2209A20029C88D /* GeoPackageDataSourceDefinition.swift in Sources */,
@@ -4715,7 +4738,7 @@
 				F7DE988A2C1A4431005372F8 /* UserDefinition.swift in Sources */,
 				F72D42FA2694B60300F9AC3B /* ObservationPushService.swift in Sources */,
 				F7012B9C248E96E8002BBDE8 /* FeedService.swift in Sources */,
-				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.m in Sources */,
+				043FF12D1C2440A7000CA07F /* GeoPackageCacheOverlay.swift in Sources */,
 				F79D2943282C36C6008FD45E /* NumberBadge.swift in Sources */,
 				F7098F2C2497D6E700313703 /* FeedItemPropertyCell.swift in Sources */,
 				04F834001ED5C3B200B5FE1E /* MapShapePointAnnotationView.m in Sources */,
@@ -4810,13 +4833,13 @@
 				F725A9CC195CB819002A699C /* ObservationAnnotation.swift in Sources */,
 				F744ACFD2BFE73A900A6E4CA /* DataSourceMapViewModel.swift in Sources */,
 				F71B7253246C412900E4CF33 /* BaseFieldView.swift in Sources */,
-				043FF1231C22F6E4000CA07F /* CacheOverlay.m in Sources */,
+				043FF1231C22F6E4000CA07F /* CacheOverlay.swift in Sources */,
 				F7DE98982C20D4D7005372F8 /* FeedItemRepository.swift in Sources */,
 				F7E079502C29F5430029C88D /* StaticLayerLocalDataSource.swift in Sources */,
 				F7AA61B827AC394800D617B7 /* DocumentViewer.swift in Sources */,
 				F72D431B2694B60300F9AC3B /* Layer.swift in Sources */,
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,
-				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.m in Sources */,
+				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift in Sources */,
 				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
 				F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
@@ -4845,7 +4868,7 @@
 				F7CFC09D2020C9FB003250A3 /* GeometryEditCoordinator.m in Sources */,
 				F7C097772C80C759003FA115 /* ObservationFormFieldModel.swift in Sources */,
 				F70C34332C73D712007616FA /* DownloadingImageViewModel.swift in Sources */,
-				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.m in Sources */,
+				04E0CB0C1C2458BE00E34F9C /* GeoPackageTileTableCacheOverlay.swift in Sources */,
 				F734C1EB2BC847C300B2E8C8 /* Notifications.swift in Sources */,
 				F796E44A2417E1FC005CA09C /* AttachmentViewCoordinator.swift in Sources */,
 				F73886C725894CEA00EDA036 /* KeyboardHelper.swift in Sources */,
@@ -4926,7 +4949,7 @@
 				F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */,
 				F7331D1126540FF700D645AC /* ColorPickerCelliOS13.swift in Sources */,
 				F754C6532C35E66E00E408E9 /* MapStateRepository.swift in Sources */,
-				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.m in Sources */,
+				043FF12A1C243D4D000CA07F /* XYZDirectoryCacheOverlay.swift in Sources */,
 				F72D42EA2694B60300F9AC3B /* Model10To15.xcmappingmodel in Sources */,
 				F7D43BE6269F3C1800561A8F /* FeedItemActionsDelegate.swift in Sources */,
 				F76A15BF1A93C35400F2BDF1 /* KeyboardConstraint.m in Sources */,
@@ -4941,13 +4964,12 @@
 				F72D431D2694B60300F9AC3B /* StaticLayer.swift in Sources */,
 				F776AC9B2BCDB23E000FAFB4 /* RemoteDataSource.swift in Sources */,
 				F76FFC302624FF4900532330 /* StraightLineNavigationView.swift in Sources */,
-				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.m in Sources */,
+				2FF4670F1A12B06600BA8357 /* OfflineMapTableViewController.swift in Sources */,
 				F763FF0E2C7663A600403A00 /* UserService.swift in Sources */,
 				F7DE987C2C133A97005372F8 /* ObservationLocationTileRepository.swift in Sources */,
 				2F8A2C1F220231E9007FE473 /* FormDefaultsCoordinator.swift in Sources */,
 				F73564D52C6180C500466813 /* ObservationFavoriteRepository.swift in Sources */,
 				F7ED5D1A1FFE99DF007BD768 /* MapTypeTableViewCell.m in Sources */,
-				046877FB1C6D121400967470 /* CacheOverlayUpdate.m in Sources */,
 				F7A8C1C91E953FAA005E3CCA /* Observation+Section.m in Sources */,
 				F7E2970F1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m in Sources */,
 				F7F475F725BF5348006634F7 /* PassThroughStackView.swift in Sources */,
@@ -5029,6 +5051,7 @@
 				F791E22B248542DD00CCC6BA /* CommonFieldsViewTests.swift in Sources */,
 				F7C097862C8102F1003FA115 /* ObservationImageRepositoryMock.swift in Sources */,
 				F7BEF68227D69DC7000E8CDE /* GeoPackageBaseMapTests.swift in Sources */,
+				F7D31F862CB8871800126468 /* CacheOverlaysTests.swift in Sources */,
 				F710D8AE2549B37000798D56 /* ExpandableCardTests.swift in Sources */,
 				F7F62FA4273F186E00AF0A74 /* UserUtilityTests.swift in Sources */,
 				F7F264392806FDF100758C5B /* EventChooserControllerTests.swift in Sources */,
@@ -5071,6 +5094,9 @@
 				F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */,
 				F706B2172554368800C19BA7 /* MockObservationEditCardDelegate.swift in Sources */,
 				F7D9B82F2562EFFE00A76E2C /* AttachmentCreationCoordinatorTests.swift in Sources */,
+				F7D31F8B2CB8871B00126468 /* GeoPackageImporterTests.swift in Sources */,
+				F7D31F8C2CB8871B00126468 /* GeoPackageImporterUITests.swift in Sources */,
+				F7D31F8D2CB8871B00126468 /* GeoPackageTests.swift in Sources */,
 				F76BB96825E6BB54004CFB97 /* MultiDropdownFieldViewTests.swift in Sources */,
 				F7974CD5252DF56E000CC266 /* SignupViewControllerTests.swift in Sources */,
 				F71446F3249BF596005A5EC1 /* FeedItemViewViewControllerTests.swift in Sources */,

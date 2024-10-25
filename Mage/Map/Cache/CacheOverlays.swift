@@ -51,7 +51,7 @@ import Foundation
     }
     
     func addCacheOverlayHelper(overlay: CacheOverlay) {
-        guard let cacheName = overlay.getName() else { return }
+        let cacheName = overlay.name
         if let existingOverlay = overlays[cacheName] {
             // Set existing cache overlays to their current enabled state
             overlay.enabled = existingOverlay.enabled
@@ -88,36 +88,23 @@ import Foundation
     }
     
     @objc func getOverlays() async -> [CacheOverlay] {
-        @Injected(\.nsManagedObjectContext)
-        var context: NSManagedObjectContext?
-        
-        guard let context = context else { return [] }
-        
         var overlaysInCurrentEvent: [CacheOverlay] = []
         
         for cacheOverlayName in overlayNames.sorted() {
             let cacheOverlay = overlays[cacheOverlayName]
-            if let cacheOverlay = cacheOverlay as? GeoPackageCacheOverlay {
-                let filePath = cacheOverlay.filePath
-                // check if this filePath is consistent with a downloaded layer and if so, verify that layer is in this event
-                if let pathComponents = (filePath as? NSString)?.pathComponents,
-                   pathComponents.count >= 3,
-                   pathComponents[pathComponents.count - 3] == "geopackages",
+            if let cacheOverlay = cacheOverlay as? GeoPackageCacheOverlay,
+               let layerId = cacheOverlay.layerId
+            {
+                // check if this layer is in the event
+                @Injected(\.nsManagedObjectContext)
+                var context: NSManagedObjectContext?
+                if let layerIdInt = Int(layerId),
                    let currentEventId = Server.currentEventId()
                 {
-                    let layerId = pathComponents[pathComponents.count - 2]
-                    // check if this layer is in the event
-                    @Injected(\.nsManagedObjectContext)
-                    var context: NSManagedObjectContext?
-                    if let layerIdInt = Int(layerId)
-                    {
-                        let count = await layerRepository.count(eventId: currentEventId, layerId: layerIdInt)
-                        if count != 0 {
-                            overlaysInCurrentEvent.append(cacheOverlay)
-                        }
+                    let count = await layerRepository.count(eventId: currentEventId, layerId: layerIdInt)
+                    if count != 0 {
+                        overlaysInCurrentEvent.append(cacheOverlay)
                     }
-                } else {
-                    overlaysInCurrentEvent.append(cacheOverlay)
                 }
             } else if let cacheOverlay = cacheOverlay {
                 overlaysInCurrentEvent.append(cacheOverlay)
@@ -141,7 +128,7 @@ import Foundation
     }
     
     @objc func removeCacheOverlay(overlay: CacheOverlay) async {
-        await remove(byCacheName: overlay.getCacheName())
+        await remove(byCacheName: overlay.cacheName)
     }
     
     func remove(byCacheName: String) async {

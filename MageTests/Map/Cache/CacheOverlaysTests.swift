@@ -55,7 +55,7 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 1)
         
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
@@ -67,14 +67,14 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 1)
         
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")])
 
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
         
         await CacheOverlays.getInstance().unregisterListener(mockListener)
         
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz2", andDirectory: "directory2")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz2", directory: "directory2")])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
@@ -86,22 +86,22 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 1)
         
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")])
 
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
                 
-        await CacheOverlays.getInstance().addCacheOverlay(overlay: XYZDirectoryCacheOverlay(name: "xyz2", andDirectory: "directory2"))
+        await CacheOverlays.getInstance().addCacheOverlay(overlay: XYZDirectoryCacheOverlay(name: "xyz2", directory: "directory2"))
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 2)
         
         XCTAssertEqual(CacheOverlays.getInstance().count(), 2)
         
-        XCTAssertEqual(CacheOverlays.getInstance().atIndex(index: 0)?.getName(), "xyz")
-        XCTAssertEqual(CacheOverlays.getInstance().atIndex(index: 1)?.getName(), "xyz2")
+        XCTAssertEqual(CacheOverlays.getInstance().atIndex(index: 0)?.name, "xyz")
+        XCTAssertEqual(CacheOverlays.getInstance().atIndex(index: 1)?.name, "xyz2")
         
-        await CacheOverlays.getInstance().setCacheOverlays(overlays: [XYZDirectoryCacheOverlay(name: "xyz3", andDirectory: "directory3")])
+        await CacheOverlays.getInstance().setCacheOverlays(overlays: [XYZDirectoryCacheOverlay(name: "xyz3", directory: "directory3")])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 4)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
@@ -114,14 +114,14 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         await CacheOverlays.getInstance().register(mockListener)
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 1)
-        let overlay1 = XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")!
+        let overlay1 = XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")
         overlay1.enabled = true
         await CacheOverlays.getInstance().add([overlay1])
 
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
                 
-        let overlay = XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")!
+        let overlay = XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")
         overlay.added = true
         XCTAssertFalse(overlay.enabled)
         await CacheOverlays.getInstance().addCacheOverlay(overlay: overlay)
@@ -132,7 +132,7 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         overlay.replaced = overlay1
         
-        let overlay3 = XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")!
+        let overlay3 = XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")
         overlay3.added = true
         XCTAssertFalse(overlay3.enabled)
         XCTAssertNil(overlay3.replaced)
@@ -149,12 +149,12 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 1)
         
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")])
 
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
                 
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz2", andDirectory: "directory2")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz2", directory: "directory2")])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 2)
@@ -178,12 +178,12 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 1)
         
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")])
 
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 2)
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
                 
-        let cache2 = XYZDirectoryCacheOverlay(name: "xyz2", andDirectory: "directory2")!
+        let cache2 = XYZDirectoryCacheOverlay(name: "xyz2", directory: "directory2")
         await CacheOverlays.getInstance().add([cache2])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
@@ -216,15 +216,15 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         XCTAssertEqual(CacheOverlays.getInstance().getProcessing().count, 1)
         XCTAssertEqual(CacheOverlays.getInstance().getProcessing().first!, "xyz")
                 
-        let cache2 = XYZDirectoryCacheOverlay(name: "xyz2", andDirectory: "directory2")!
-        await CacheOverlays.getInstance().addProcessing(from: [cache2.getName()!])
+        let cache2 = XYZDirectoryCacheOverlay(name: "xyz2", directory: "directory2")
+        await CacheOverlays.getInstance().addProcessing(from: [cache2.name])
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 3)
         XCTAssertEqual(CacheOverlays.getInstance().getProcessing().count, 2)
         XCTAssertEqual(CacheOverlays.getInstance().getProcessing().first!, "xyz")
         XCTAssertEqual(CacheOverlays.getInstance().getProcessing()[1] , "xyz2")
         
-        await CacheOverlays.getInstance().removeProcessing(cache2.getName()!)
+        await CacheOverlays.getInstance().removeProcessing(cache2.name)
         
         XCTAssertEqual(mockListener.cacheOverlaysUpdatedCalled, 4)
         XCTAssertEqual(CacheOverlays.getInstance().getProcessing().count, 1)
@@ -233,29 +233,29 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
     
     func testGetOverlaysXYZ() async {
         // XYZ layers are never downloaded so they should always be returned
-        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", andDirectory: "directory")])
+        await CacheOverlays.getInstance().add([XYZDirectoryCacheOverlay(name: "xyz", directory: "directory")])
 
         var overlayCount = await CacheOverlays.getInstance().getOverlays().count
         XCTAssertEqual(overlayCount, 1)
                 
-        let cache2 = XYZDirectoryCacheOverlay(name: "xyz2", andDirectory: "directory2")!
+        let cache2 = XYZDirectoryCacheOverlay(name: "xyz2", directory: "directory2")
         await CacheOverlays.getInstance().add([cache2])
 
         overlayCount = await CacheOverlays.getInstance().getOverlays().count
         XCTAssertEqual(overlayCount, 2)
         
-        var name = await CacheOverlays.getInstance().getOverlays()[0].getName()
-        XCTAssertEqual(name!, "xyz")
-        name = await CacheOverlays.getInstance().getOverlays()[1].getName()
-        XCTAssertEqual(name!, "xyz2")
+        var name = await CacheOverlays.getInstance().getOverlays()[0].name
+        XCTAssertEqual(name, "xyz")
+        name = await CacheOverlays.getInstance().getOverlays()[1].name
+        XCTAssertEqual(name, "xyz2")
         
         await CacheOverlays.getInstance().removeCacheOverlay(overlay: cache2)
         
         overlayCount = await CacheOverlays.getInstance().getOverlays().count
         XCTAssertEqual(overlayCount, 1)
         
-        name = await CacheOverlays.getInstance().getOverlays()[0].getName()
-        XCTAssertEqual(name!, "xyz")
+        name = await CacheOverlays.getInstance().getOverlays()[0].name
+        XCTAssertEqual(name, "xyz")
         
     }
     
@@ -270,7 +270,7 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0] as String
         let path = "\(documentsDirectory)/geopackages/1/gpkgWithMedia.gpkg"
-        let gpCache = GeoPackageCacheOverlay(name: "gp1", andPath: path, andTables: [])!
+        let gpCache = GeoPackageCacheOverlay(name: "gp1", path: path, tables: [])
         await CacheOverlays.getInstance().add([gpCache])
 
         Server.setCurrentEventId(2)
@@ -282,7 +282,7 @@ final class CacheOverlaysTests: MageCoreDataTestCase {
         XCTAssertEqual(overlayCount, 1)
         
         let path2 = "\(documentsDirectory)/MapCache/gpkgWithMedia.gpkg"
-        let gpCache2 = GeoPackageCacheOverlay(name: "gp2", andPath: path2, andTables: [])!
+        let gpCache2 = GeoPackageCacheOverlay(name: "gp2", path: path2, tables: [])
         await CacheOverlays.getInstance().add([gpCache2])
         
         overlayCount = await CacheOverlays.getInstance().getOverlays().count

@@ -32,7 +32,7 @@ target 'MAGE' do
       pod 'OCMock'
       pod 'OHHTTPStubs'
       pod 'OHHTTPStubs/Swift'
-      pod 'Quick', :git=> 'https://github.com/Quick/Quick.git', :commit => 'a0a5fc857cea079fbe973e4faa80b6ceaf17bd46'
+      pod 'Quick', '~> 6'
       pod 'Nimble', '~> 9'
 #      pod 'Nimble-Snapshots', '~> 9'
       pod 'KIF'

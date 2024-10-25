@@ -132,6 +132,7 @@ class MageCoreDataFixtures {
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
         guard let context = context else { return nil }
+        print("XXX using this context \(context)")
         return context.performAndWait {
             var u: User?
             let roleJson: [String: Any] = jsonDictionary["role"] as! [String: Any];
@@ -354,6 +355,7 @@ class MageCoreDataFixtures {
         }
     }
     
+    @discardableResult
     public static func addFeedItemToFeed(feedId: String = "1", itemId: String? = nil, properties: [String: Any]? = nil, simpleFeature: SFGeometry = SFPoint(x: -105.2678, andY: 40.0085)) -> FeedItem? {
         @Injected(\.nsManagedObjectContext)
         var context: NSManagedObjectContext?
