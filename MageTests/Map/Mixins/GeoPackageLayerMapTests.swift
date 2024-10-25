@@ -225,7 +225,6 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         
         await fulfillment(of: [geopackageImported])
         
-        // TODO: doesn't work after here
         var overlayCount = await CacheOverlays.getInstance().getOverlays().count
         XCTAssertEqual(overlayCount, 3)
         let count = await CacheOverlays.getInstance().getOverlays().count
