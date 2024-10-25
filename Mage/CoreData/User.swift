@@ -50,6 +50,7 @@ import Kingfisher
             let user = User(context: context);
             user.update(json: json, context: context);
             try? context.obtainPermanentIDs(for: [user])
+            try? context.save()
             return user;
         }
     }
@@ -62,6 +63,7 @@ import Kingfisher
     
     @objc public static func fetchCurrentUser(context: NSManagedObjectContext) -> User? {
         return context.performAndWait {
+            print("XXX current user \(UserDefaults.standard.currentUserId)")
             return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: UserDefaults.standard.currentUserId ?? "")
         }
     }

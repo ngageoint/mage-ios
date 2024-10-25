@@ -49,7 +49,7 @@ class MagicalRecordPersistence: Persistence {
     }
     
     init() {
-        print("XXX CREATE THE STACK")
+//        print("XXX CREATE THE STACK")
         setupStack()
     }
     
@@ -57,7 +57,7 @@ class MagicalRecordPersistence: Persistence {
         MagicalRecord.setupMageCoreDataStack();
         let context = NSManagedObjectContext.mr_default()
         InjectedValues[\.nsManagedObjectContext] = context
-        print("XXX send context change \(self)")
+//        print("XXX send context change in set up\(self)")
         refreshSubject.send(context)
         MagicalRecord.setLoggingLevel(.verbose);
     }
@@ -83,7 +83,10 @@ class MagicalRecordPersistence: Persistence {
         MagicalRecord.deleteAndSetupMageCoreDataStack()
         let context = NSManagedObjectContext.mr_default()
         InjectedValues[\.nsManagedObjectContext] = context
-        print("XXX send context change \(self)")
+//        print("-----------------------------------------------------------------")
+//        Thread.callStackSymbols.forEach{print($0)}
+//        print("XXX send context change from clear \(self)")
+//        print("-----------------------------------------------------------------")
         refreshSubject.send(context)
         MagicalRecord.setLoggingLevel(.verbose)
 //        NSManagedObject.mr_setDefaultBatchSize(20);

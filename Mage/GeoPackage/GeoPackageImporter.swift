@@ -83,9 +83,8 @@ import SSZipArchive
             var isDirectory: ObjCBool = false
             var exists = FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory)
             if exists && isDirectory.boolValue {
-                if let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, andDirectory: cacheDirectory) {
-                    overlays.append(cacheOverlay)
-                }
+                let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, directory: cacheDirectory)
+                overlays.append(cacheOverlay)
                 
                 _ = await layerRepository.createLoadedXYZLayer(name: cache)
             }
@@ -112,7 +111,7 @@ import SSZipArchive
         if selectedCaches.count > 0 {
             for cacheOverlay in overlays {
                 // Check and enable the cache
-                let cacheName = cacheOverlay.getCacheName()
+                let cacheName = cacheOverlay.cacheName
                 let enabled = selectedCaches.contains { name in
                     name == cacheName
                 }
@@ -121,7 +120,7 @@ import SSZipArchive
                 var enableParent = false
                 for childCache in cacheOverlay.getChildren() {
                     if enabled || selectedCaches.contains(where: { name in
-                        name == childCache.getCacheName()
+                        name == childCache.cacheName
                     }) {
                         childCache.enabled = true
                         enableParent = true
@@ -180,6 +179,7 @@ import SSZipArchive
             NSLog("GeoPackage file %@ has been imported", path)
             await layerRepository.markRemoteLayerLoaded(remoteId: withLayerId)
             await self.processOfflineMapArchives()
+            print("XXX sending gp imported")
             NotificationCenter.default.post(name: .GeoPackageImported, object: nil)
         }
         return imported
@@ -287,18 +287,18 @@ import SSZipArchive
                 // GeoPackage tile tables, build a mapping between table name and the created cache overlays
                 var tileCacheOverlays: [String: GeoPackageTileTableCacheOverlay] = [:]
                 for tileTable in geoPackage.tileTables() ?? [] {
-                    let tableCacheName = CacheOverlay.buildChildCacheName(withName: name, andChildName: tileTable)
+                    let tableCacheName = CacheOverlay.buildChildCacheName(name: name, childName: tileTable)
                     if let tileDao = geoPackage.tileDao(withTableName: tileTable) {
                         let count = tileDao.count()
                         let minZoom = tileDao.minZoom
                         let maxZoom = tileDao.maxZoom
                         let tableCache = GeoPackageTileTableCacheOverlay(
                             name: tileTable,
-                            andGeoPackage: name,
-                            andCacheName: tableCacheName,
-                            andCount: count,
-                            andMinZoom: minZoom,
-                            andMaxZoom: maxZoom
+                            geoPackage: name,
+                            cacheName: tableCacheName,
+                            count: Int(count),
+                            minZoom: Int(minZoom),
+                            maxZoom: Int(maxZoom)
                         )
                         tileCacheOverlays[tileTable] = tableCache
                     }
@@ -311,7 +311,7 @@ import SSZipArchive
                 // GeoPackage feature tables
                 let featureTables = geoPackage.featureTables() ?? []
                 for featureTable in featureTables {
-                    let tableCacheName = CacheOverlay.buildChildCacheName(withName: name, andChildName: featureTable)
+                    let tableCacheName = CacheOverlay.buildChildCacheName(name: name, childName: featureTable)
                     if let featureDao = geoPackage.featureDao(withTableName: featureTable) {
                         let count = featureDao.count()
                         let geometryType = featureDao.geometryType()
@@ -326,12 +326,12 @@ import SSZipArchive
                         
                         let tableCache = GeoPackageFeatureTableCacheOverlay(
                             name: featureTable,
-                            andGeoPackage: name,
-                            andCacheName: tableCacheName,
-                            andCount: count,
-                            andMinZoom: minZoom,
-                            andIndexed: indexed,
-                            andGeometryType: geometryType
+                            geoPackage: name,
+                            cacheName: tableCacheName,
+                            count: Int(count),
+                            minZoom: Int(minZoom),
+                            indexed: indexed,
+                            geometryType: geometryType
                         )
                         
                         // If index, check for linked tile tables
@@ -351,14 +351,12 @@ import SSZipArchive
                                 
                                 // Add the linked tile table to the feature table
                                 if let tileCacheOverlay = tileCacheOverlay {
-                                    tableCache?.addLinkedTileTable(tileCacheOverlay)
+                                    tableCache.addLinkedTileTable(tileTable: tileCacheOverlay)
                                 }
                             }
                         }
                         
-                        if let tableCache = tableCache {
-                            tables.append(tableCache)
-                        }
+                        tables.append(tableCache)
                     }
                 }
                     
@@ -368,7 +366,7 @@ import SSZipArchive
                 }
                 
                 // Create the GeoPackage overlay with child tables
-                cacheOverlay = GeoPackageCacheOverlay(name: name, andPath: geoPackage.path, andTables: tables)
+                cacheOverlay = GeoPackageCacheOverlay(name: name, path: geoPackage.path, tables: tables)
                 
             }
         } catch {
@@ -411,12 +409,11 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
             var isDirectory: ObjCBool = false
             let exists = FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory)
             if exists && isDirectory.boolValue {
-                if let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, andDirectory: cacheDirectory) {
-                    await cacheOverlays.add([cacheOverlay])
-                    NSLog("Imported local XYZ Zip")
-                    
-                    _ = await layerRepository.createLoadedXYZLayer(name: cache)
-                }
+                let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, directory: cacheDirectory)
+                await cacheOverlays.add([cacheOverlay])
+                NSLog("Imported local XYZ Zip")
+                
+                _ = await layerRepository.createLoadedXYZLayer(name: cache)
             }
         }
     }

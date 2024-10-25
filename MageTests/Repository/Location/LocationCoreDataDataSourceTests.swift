@@ -12,24 +12,8 @@ import Nimble
 
 @testable import MAGE
 
-final class LocationCoreDataDataSourceTests: XCTestCase {
+final class LocationCoreDataDataSourceTests: MageCoreDataTestCase {
 
-    var cancellables: Set<AnyCancellable> = Set()
-    var coreDataStack: TestCoreDataStack?
-    var context: NSManagedObjectContext?
-
-    override func setUp() {
-        coreDataStack = TestCoreDataStack()
-        context = coreDataStack!.persistentContainer.newBackgroundContext()
-        InjectedValues[\.nsManagedObjectContext] = context
-    }
-    
-    override func tearDown() {
-        cancellables.removeAll()
-        InjectedValues[\.nsManagedObjectContext] = nil
-        coreDataStack!.reset()
-    }
-    
     func testGetLocation() async {
         guard let context = context else {
             XCTFail("No Managed Object Context")

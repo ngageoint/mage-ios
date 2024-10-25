@@ -179,23 +179,27 @@ class MainMageMapView:
         initiateMapMixins()
         
         viewObservationNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewObservation, object: nil, queue: .main) { [weak self] notification in
-            self?.bottomSheetMixin?.dismissBottomSheet()
-            if let observation = notification.object as? URL {
-                self?.router.appendRoute(ObservationRoute.detail(uri: observation))
+            Task {
+                await self?.bottomSheetMixin?.dismissBottomSheet()
+                if let observation = notification.object as? URL {
+                    await self?.router.appendRoute(ObservationRoute.detail(uri: observation))
+                }
             }
         }
 
         viewUserNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewUser, object: nil, queue: .main) { [weak self] notification in
-            self?.bottomSheetMixin?.dismissBottomSheet()
-            if let user = notification.object as? URL {
-                self?.router.appendRoute(UserRoute.detail(uri: user))
+            Task {
+                await self?.bottomSheetMixin?.dismissBottomSheet()
+                if let user = notification.object as? URL {
+                    await self?.router.appendRoute(UserRoute.detail(uri: user))
+                }
             }
         }
 
         viewFeedItemNotificationObserver = NotificationCenter.default.addObserver(forName: .ViewFeedItem, object: nil, queue: .main) { [weak self] notification in
-            self?.bottomSheetMixin?.dismissBottomSheet()
-            if let feedItemUri = notification.object as? URL {
-                Task {
+            Task {
+                await self?.bottomSheetMixin?.dismissBottomSheet()
+                if let feedItemUri = notification.object as? URL {
                     await self?.viewFeedItemUri(feedItemUri)
                 }
             }

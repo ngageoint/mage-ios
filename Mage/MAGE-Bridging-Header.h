@@ -15,6 +15,7 @@
 // Not sure why this isn't getting added via the geopackage pod...
 #import "GPKGMapShapeConverter.h"
 #import "GPKGFeatureRowData.h"
+#import "GPKGFeatureOverlay.h"
 
 #import "MAGERoutes.h"
 #import "NotificationRequester.h"
@@ -63,11 +64,10 @@
 #import "LocationAccuracyRenderer.h"
 #import "FilterTableViewController.h"
 #import "MapUtils.h"
-#import "CacheOverlays.h"
-#import "GeoPackage.h"
 #import "WMSTileOverlay.h"
 #import "TMSTileOverlay.h"
 #import "XYZTileOverlay.h"
-#import "XYZDirectoryCacheOverlay.h"
-#import "GeoPackageCacheOverlay.h"
-#import "GeoPackageFeatureTableCacheOverlay.h"
+//#import "XYZDirectoryCacheOverlay.h"
+//#import "GeoPackageCacheOverlay.h"
+//#import "GeoPackageFeatureTableCacheOverlay.h"
+//#import "CacheOverlayTypes.h"
