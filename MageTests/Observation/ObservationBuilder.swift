@@ -121,27 +121,44 @@ class ObservationBuilder {
         observation.timestamp = date;
     }
     
-    static func createAttachment(eventId: NSNumber, name: String? = nil, remoteId: String? = nil, observationRemoteId: String? = nil) -> Attachment {
-        let attachment: Attachment = Attachment(context: NSManagedObjectContext.mr_default());
-        attachment.localPath = "";
-        attachment.name = name;
-        attachment.dirty = false;
-        attachment.eventId = eventId;
-        attachment.contentType = "image/png";
-        attachment.observationRemoteId = observationRemoteId;
-        attachment.remoteId = remoteId;
-        if (observationRemoteId != nil && remoteId != nil) {
-            attachment.url = "https://magetest/observation/\(observationRemoteId ?? "")/attachments/remoteid\(remoteId ?? "")";
+    static func createAttachment(eventId: NSNumber, name: String? = nil, remoteId: String? = nil, observationRemoteId: String? = nil) -> Attachment? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        guard let context = context else { return nil }
+        
+        return context.performAndWait {
+            
+            let attachment: Attachment = Attachment(context: context);
+            attachment.localPath = "";
+            attachment.name = name;
+            attachment.dirty = false;
+            attachment.eventId = eventId;
+            attachment.contentType = "image/png";
+            attachment.observationRemoteId = observationRemoteId;
+            attachment.remoteId = remoteId;
+            if (observationRemoteId != nil && remoteId != nil) {
+                attachment.url = "https://magetest/observation/\(observationRemoteId ?? "")/attachments/remoteid\(remoteId ?? "")";
+            }
+            attachment.lastModified = Date()
+            try? context.obtainPermanentIDs(for: [attachment])
+            try? context.save()
+            return attachment;
         }
-        attachment.lastModified = Date()
-        return attachment;
     }
     
-    static func addAttachmentToObservation(observation: Observation) -> Attachment{
-        let attachment: Attachment = createAttachment(eventId: observation.eventId!, name: "name\(observation.attachments?.count ?? 0)", remoteId: "remoteid\(observation.attachments?.count ?? 0)", observationRemoteId: observation.remoteId);
+    static func addAttachmentToObservation(observation: Observation) -> Attachment? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        guard let context = context else { return nil }
         
-        observation.addToAttachments(attachment);
-        return attachment;
+        return context.performAndWait {
+            if let attachment: Attachment = createAttachment(eventId: observation.eventId!, name: "name\(observation.attachments?.count ?? 0)", remoteId: "remoteid\(observation.attachments?.count ?? 0)", observationRemoteId: observation.remoteId) {
+                
+                observation.addToAttachments(attachment)
+                return attachment
+            }
+            return nil
+        }
     }
     
     static func addFormToObservation(observation: Observation, form: Form, values: [String: Any?]? = nil) {
