@@ -16,7 +16,7 @@ import MagicalRecord
 @testable import MAGE
 
 class ObservationViewCardCollectionViewControllerTests: KIFSpec {
-    
+    // TODO: update for swiftui view
 //    override func spec() {
 //        
 //        describe("ObservationViewCardCollectionViewControllerTests") {

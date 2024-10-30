@@ -15,7 +15,7 @@ import OHHTTPStubs
 @testable import MAGE
 
 class ObservationSyncStatusTests: KIFSpec {
-    
+    // TODO: update for swiftui view
 //    override func spec() {
 //        
 //        describe("ObservationSyncStatusTests") {
