@@ -169,8 +169,12 @@ final class GeoPackageImporterUITests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Import As New")
         
-        expect(mockListener.updatedOverlaysWithoutBase?.count).toEventually(equal(2))
-        
+        let predicate = NSPredicate { _, _ in
+            return mockListener.updatedOverlaysWithoutBase?.count == 2
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+        await fulfillment(of: [expectation])
+                
         let layers = self.context.fetchAll(Layer.self)
         XCTAssertEqual(layers?.count, 2)
     }

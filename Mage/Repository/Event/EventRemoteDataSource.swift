@@ -37,6 +37,8 @@ class EventRemoteDataSourceImpl: ObservableObject, EventRemoteDataSource {
                             let json = try JSONSerialization.jsonObject(with: data)
                             if let json = json as? [[AnyHashable: Any]] {
                                 continuation.resume(returning: json)
+                            } else {
+                                continuation.resume(returning: nil)
                             }
                         } catch {
                             print("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")

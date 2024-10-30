@@ -24,6 +24,7 @@ class MockEventChooserDelegate: NSObject, EventChooserDelegate {
 
 class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
     override open func setUp() async throws {
+        print("XXX set up")
         try await super.setUp()
         await setUpViews()
         UserDefaults.standard.baseServerUrl = "https://magetest"
@@ -31,6 +32,7 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
     }
     
     override open func tearDown() async throws {
+        print("XXX tear down")
         try await super.tearDown()
         await tearDownViews()
     }
@@ -184,41 +186,73 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
         expect(Server.currentEventId).to(beNil())
     }
     
-    func testShouldLoadTheEventChooserWithNoEventsAndThenGetANonRecentOneFromTheServerAndAutoSelect() {
+    @MainActor
+    func testShouldLoadTheEventChooserWithNoEventsAndThenGetANonRecentOneFromTheServerAndAutoSelect() async {
+        let myselfExpectation = XCTestExpectation(description: "Myself Stub Called")
         stub(condition: isMethodGET() &&
              isHost("magetest") &&
              isScheme("https") &&
              isPath("/api/users/myself")
         ) { (request) -> HTTPStubsResponse in
+            myselfExpectation.fulfill()
             let stubPath = OHPathForFile("myself.json", MageTests.self);
+            return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
+        }
+        
+        let eventsExpectation = XCTestExpectation(description: "Events Stub Called")
+        stub(condition: isMethodGET() &&
+             isHost("magetest") &&
+             isScheme("https") &&
+             isPath("/api/events")
+        ) { (request) -> HTTPStubsResponse in
+            eventsExpectation.fulfill()
+            let stubPath = OHPathForFile("events.json", MageTests.self);
             return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
         }
         
         stub(condition: isMethodGET() &&
              isHost("magetest") &&
              isScheme("https") &&
-             isPath("/api/events")
+             isPath("/api/users/userabc/icon")
         ) { (request) -> HTTPStubsResponse in
-            let stubPath = OHPathForFile("events.json", MageTests.self);
-            return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
+            return HTTPStubsResponse(jsonObject: [], statusCode: 404, headers: ["Content-Type": "image/png"])
+        }
+        
+        stub(condition: isMethodGET() &&
+             isHost("magetest") &&
+             isScheme("https") &&
+             isPath("/api/users/userabc/avatar")
+        ) { (request) -> HTTPStubsResponse in
+            return HTTPStubsResponse(jsonObject: [], statusCode: 404, headers: ["Content-Type": "image/png"])
         }
         
         MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [2])
         UserDefaults.standard.currentUserId = "userabc"
         
+        let importedNotification = XCTNSNotificationExpectation(name: .MAGEEventsFetched)
         let delegate = MockEventChooserDelegate()
         coordinator = EventChooserCoordinator(viewController: navigationController!, delegate: delegate, scheme: MAGEScheme.scheme())
         
         coordinator?.start()
         
         tester().waitForView(withAccessibilityLabel: "Loading Events")
+        tester().waitForAnimationsToFinish()
+        
+        await fulfillment(of: [myselfExpectation, eventsExpectation], timeout: 2)
+        
+        await fulfillment(of: [importedNotification])
+                
+        let predicate = NSPredicate { _, _ in
+            return delegate.eventChosenCalled == true && delegate.eventChosenEvent?.remoteId == 1
+        }
+        let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+        await fulfillment(of: [delegateExpectation])
         
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
-        expect(delegate.eventChosenCalled).toEventually(beTrue())
-        expect(delegate.eventChosenEvent?.remoteId).to(equal(1))
     }
 
-    func testShouldLoadTheEventChooserWithNoEventsAndThenGetOneNotRecentFromTheServer() {
+    @MainActor
+    func testShouldLoadTheEventChooserWithNoEventsAndThenGetOneNotRecentFromTheServer() async {
         
         stub(condition: isMethodGET() &&
              isHost("magetest") &&
@@ -249,9 +283,13 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
         
         tester().waitForView(withAccessibilityLabel: "Loading Events")
         
+        let predicate = NSPredicate { _, _ in
+            return delegate.eventChosenCalled == true && delegate.eventChosenEvent?.remoteId == 1
+        }
+        let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+        await fulfillment(of: [delegateExpectation])
+        
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
-        expect(delegate.eventChosenCalled).toEventually(beTrue())
-        expect(delegate.eventChosenEvent?.remoteId).to(equal(1))
     }
     
     func testShouldLoadTheEventChooserWithEventsThenGetNewOnes() {
