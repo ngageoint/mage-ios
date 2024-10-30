@@ -595,7 +595,6 @@
 		F7BFB8F32C516C0C00901479 /* FeedItemSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8F22C516C0C00901479 /* FeedItemSummaryView.swift */; };
 		F7BFB8F52C518A2D00901479 /* MageBottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8F42C518A2D00901479 /* MageBottomSheetViewModel.swift */; };
 		F7BFB8F72C52DD7F00901479 /* FeedItemAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BFB8F62C52DD7F00901479 /* FeedItemAnnotation.swift */; };
-		F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */; };
 		F7C01CD42663EB65002D7684 /* ObservationBottomSheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */; };
 		F7C0974A2C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097492C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift */; };
 		F7C0974C2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0974B2C7E4386003FA115 /* ObservationCoreDataDataSourceTests.swift */; };
@@ -652,7 +651,6 @@
 		F7C640FF257EB29100C02335 /* geometryField.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C640FE257EB29100C02335 /* geometryField.json */; };
 		F7C6410A25817BC000C02335 /* MockLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C6410925817BC000C02335 /* MockLocationService.swift */; };
 		F7C812EF25C3077700D4332B /* ObservationActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */; };
-		F7CDD70F2600ED4000F3294C /* ObservationTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */; };
 		F7CDD7132601194600F3294C /* polygonObservation.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CDD7122601194600F3294C /* polygonObservation.json */; };
 		F7CDD71D260138E800F3294C /* MockMKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CDD71C260138E800F3294C /* MockMKMapViewDelegate.swift */; };
 		F7CE22BC2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */; };
@@ -1560,7 +1558,6 @@
 		F7BFB8F22C516C0C00901479 /* FeedItemSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemSummaryView.swift; sourceTree = "<group>"; };
 		F7BFB8F42C518A2D00901479 /* MageBottomSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageBottomSheetViewModel.swift; sourceTree = "<group>"; };
 		F7BFB8F62C52DD7F00901479 /* FeedItemAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemAnnotation.swift; sourceTree = "<group>"; };
-		F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationListCardCellTests.swift; sourceTree = "<group>"; };
 		F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationBottomSheetTests.swift; sourceTree = "<group>"; };
 		F7C0621B19E45B71005D8AD3 /* GeometryEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryEditViewController.h; sourceTree = "<group>"; };
 		F7C0621C19E45B71005D8AD3 /* GeometryEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryEditViewController.m; sourceTree = "<group>"; };
@@ -1623,7 +1620,6 @@
 		F7C640FE257EB29100C02335 /* geometryField.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geometryField.json; sourceTree = "<group>"; };
 		F7C6410925817BC000C02335 /* MockLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationService.swift; sourceTree = "<group>"; };
 		F7C812EE25C3077700D4332B /* ObservationActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationActionHandler.swift; sourceTree = "<group>"; };
-		F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewControllerTests.swift; sourceTree = "<group>"; };
 		F7CDD7122601194600F3294C /* polygonObservation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = polygonObservation.json; sourceTree = "<group>"; };
 		F7CDD71C260138E800F3294C /* MockMKMapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMKMapViewDelegate.swift; sourceTree = "<group>"; };
 		F7CE22BB2540B01700D710DE /* ObservationEditCardCollectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationEditCardCollectionViewControllerTests.swift; sourceTree = "<group>"; };
@@ -3529,8 +3525,6 @@
 				F7A2B5E825E55F1600F1F27A /* Fields */,
 				F7C01CD32663EB65002D7684 /* ObservationBottomSheetTests.swift */,
 				F7C2A24E247960CA0051DAD8 /* ObservationBuilder.swift */,
-				F7C01CD12663E5AF002D7684 /* ObservationListCardCellTests.swift */,
-				F7CDD70E2600ED4000F3294C /* ObservationTableViewControllerTests.swift */,
 				F7F118212602A1F600C7DE9A /* ObservationTransformationTests.swift */,
 				F73886CA258A6BF700EDA036 /* View */,
 			);
@@ -5056,7 +5050,6 @@
 				F7F62FA4273F186E00AF0A74 /* UserUtilityTests.swift in Sources */,
 				F7F264392806FDF100758C5B /* EventChooserControllerTests.swift in Sources */,
 				F7F91222247F046500C068B6 /* DropdownFieldViewTests.swift in Sources */,
-				F7CDD70F2600ED4000F3294C /* ObservationTableViewControllerTests.swift in Sources */,
 				F7F9121E247EC10000C068B6 /* ObservationFormViewTests.swift in Sources */,
 				F7C097B22C8756F8003FA115 /* UserRemoteDataSourceTests.swift in Sources */,
 				F76EB1E4247D83FD0089F3AC /* NumberFieldViewTests.swift in Sources */,
@@ -5145,7 +5138,6 @@
 				F7F08E9A27E9163000640D89 /* OnlineLayerMapTests.swift in Sources */,
 				F7E5749827DF8700009A6E0D /* StaticLayerMapTests.swift in Sources */,
 				F70A708C27D932FE000881F5 /* FilteredUsersMapTests.swift in Sources */,
-				F7C01CD22663E5AF002D7684 /* ObservationListCardCellTests.swift in Sources */,
 				F7911628249154130043A529 /* MageCoreDataFixtures.swift in Sources */,
 				F789EB622BF658F500CF3DF9 /* ObservationIconStaticLocalDataSource.swift in Sources */,
 				F7C0975A2C7F66CE003FA115 /* ObservationImportantRepositoryMock.swift in Sources */,
