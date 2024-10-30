@@ -305,6 +305,7 @@ class MageCoreDataFixtures {
             e.eventDescription = description;
             e.maxObservationForms = maxObservationForms;
             e.minObservationForms = minObservationForms;
+            try? context.obtainPermanentIDs(for: [e])
             let teamJson: [String: Any] = [
                 "id": "teamid",
                 "name": "Team Name",
@@ -312,8 +313,10 @@ class MageCoreDataFixtures {
             ]
             if let team = teamDataSource.updateOrInsert(json: teamJson) {
                 e.addToTeams(team);
+                try? context.obtainPermanentIDs(for: [team])
             }
             Form.deleteAndRecreateForms(eventId: remoteId, formsJson: formsJson, context: context)
+            
             try? context.save()
         }
     }
