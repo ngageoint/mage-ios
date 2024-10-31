@@ -24,18 +24,26 @@ def common_pods
   pod 'SSZipArchive', '~> 2.2.2'
 end
 
+def test_pods
+  pod 'OCMock'
+  pod 'OHHTTPStubs'
+  pod 'OHHTTPStubs/Swift'
+  pod 'Quick', '~> 6'
+  pod 'Nimble', '~> 9'
+  pod 'KIF'
+end
+
 target 'MAGE' do
     common_pods
     target 'MAGETests' do
       inherit! :search_paths
       common_pods
-      pod 'OCMock'
-      pod 'OHHTTPStubs'
-      pod 'OHHTTPStubs/Swift'
-      pod 'Quick', '~> 6'
-      pod 'Nimble', '~> 9'
-#      pod 'Nimble-Snapshots', '~> 9'
-      pod 'KIF'
+      test_pods
+    end
+    target 'MAGEGeoPackageTests' do
+      inherit! :search_paths
+      common_pods
+      test_pods
     end
 end
 
