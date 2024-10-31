@@ -115,7 +115,8 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "OTHER EVENTS (2)")
     }
     
-    func testShouldLoadTheEventChooserWithNoEventsAndThenGetOneFromTheServerAndAutoSelect() {
+    @MainActor
+    func testShouldLoadTheEventChooserWithNoEventsAndThenGetOneFromTheServerAndAutoSelect() async {
         stub(condition: isMethodGET() &&
              isHost("magetest") &&
              isScheme("https") &&
@@ -144,9 +145,13 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
         
         tester().waitForView(withAccessibilityLabel: "Loading Events")
         
+        let predicate = NSPredicate { _, _ in
+            return delegate.eventChosenCalled == true && delegate.eventChosenEvent?.remoteId == 1
+        }
+        let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+        await fulfillment(of: [delegateExpectation])
+        
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
-        expect(delegate.eventChosenCalled).toEventually(beTrue())
-        expect(delegate.eventChosenEvent?.remoteId).to(equal(1))
     }
     
     func testShouldLoadTheCurrentEvent() {

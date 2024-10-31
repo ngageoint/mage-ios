@@ -58,6 +58,17 @@
                ReferencedContainer = "container:MAGE.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F7C183A72CD2E13400BA7DCD"
+               BuildableName = "MAGEGeoPackageTests.xctest"
+               BlueprintName = "MAGEGeoPackageTests"
+               ReferencedContainer = "container:MAGE.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

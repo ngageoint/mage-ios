@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import OHHTTPStubs
+import XCTest
 
 @testable import MAGE
 
