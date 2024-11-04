@@ -139,32 +139,35 @@ class MageTests: MageCoreDataTestCase {
     }
 }
 
-class MageServiceTests: MageCoreDataTestCase {
+class MageServiceTests: AsyncMageCoreDataTestCase {
+    @Injected(\.observationPushService)
+    var pushService: ObservationPushService
     
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         LocationService.singleton().stop();
         LocationFetchService.singleton.stop();
         ObservationFetchService.singleton.stop();
-        ObservationPushService.singleton.stop();
+        await pushService.stop();
         AttachmentPushService.singleton().stop();
         TestHelpers.setupValidToken()
     }
     
-    override func tearDown() {
-        super.tearDown()
+    override func tearDown() async throws {
+        try await super.tearDown()
         LocationService.singleton().stop();
         LocationFetchService.singleton.stop();
         ObservationFetchService.singleton.stop();
-        ObservationPushService.singleton.stop();
+        await pushService.stop();
         AttachmentPushService.singleton().stop();
     }
     
-    func testShouldStartServicesAsInitial() {
+    func testShouldStartServicesAsInitial() async {
         UserDefaults.standard.baseServerUrl = "https://magetest";
         UserDefaults.standard.currentEventId = 1
         MageCoreDataFixtures.addEvent();
-        expect(ObservationPushService.singleton.started).to(beFalse());
+        var started = await pushService.started
+        expect(started).to(beFalse());
         expect(LocationService.singleton().started).to(beFalse());
         expect(LocationFetchService.singleton.started).to(beFalse());
         expect(ObservationFetchService.singleton.started).to(beFalse());
@@ -228,23 +231,31 @@ class MageServiceTests: MageCoreDataTestCase {
         
         Mage.singleton.startServices(initial: true);
                   
-        expect(mapSettingsFetchStubCalled).toEventually(beTrue())
-        expect(rolesFetchStubCalled).toEventually(beTrue())
-        expect(usersFetchStubCalled).toEventually(beTrue());
-        expect(observationsFetchStubCalled).toEventually(beTrue());
-        expect(locationsFetchStubCalled).toEventually(beTrue());
-        expect(ObservationPushService.singleton.started).toEventually(beTrue());
-        expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-        expect(AttachmentPushService.singleton().started).toEventually(beTrue());
-        expect(LocationService.singleton().started).to(beTrue());
-        expect(LocationFetchService.singleton.started).to(beTrue());
+        await awaitBlockTrue {
+            return mapSettingsFetchStubCalled == true &&
+            rolesFetchStubCalled == true &&
+            usersFetchStubCalled == true &&
+            observationsFetchStubCalled == true &&
+            locationsFetchStubCalled == true
+        }
+        started = await pushService.started
+        expect(started).to(beTrue());
+        
+        await awaitBlockTrue {
+            return ObservationFetchService.singleton.started == true &&
+            AttachmentPushService.singleton().started == true &&
+            LocationService.singleton().started == true &&
+            LocationFetchService.singleton.started == true
+        }
     }
-            
-    func testShouldStartServicesAndThenStop() {
+           
+    @MainActor
+    func testShouldStartServicesAndThenStop() async {
         UserDefaults.standard.baseServerUrl = "https://magetest";
         UserDefaults.standard.currentEventId = 1
         MageCoreDataFixtures.addEvent();
-        expect(ObservationPushService.singleton.started).to(beFalse());
+        var started = await pushService.started
+        expect(started).to(beFalse());
         expect(LocationService.singleton().started).to(beFalse());
         expect(LocationFetchService.singleton.started).to(beFalse());
         expect(ObservationFetchService.singleton.started).to(beFalse());
@@ -306,24 +317,32 @@ class MageServiceTests: MageCoreDataTestCase {
         
         Mage.singleton.startServices(initial: false);
         
-        expect(mapSettingsFetchStubCalled).toEventually(beTrue())
-        expect(rolesFetchStubCalled).toEventually(beTrue())
-        expect(usersFetchStubCalled).toEventually(beTrue());
-        expect(observationsFetchStubCalled).toEventually(beTrue());
-        expect(locationsFetchStubCalled).toEventually(beTrue());
-        expect(ObservationPushService.singleton.started).toEventually(beTrue());
-        expect(ObservationFetchService.singleton.started).toEventually(beTrue());
-        expect(AttachmentPushService.singleton().started).toEventually(beTrue());
-        expect(LocationService.singleton().started).to(beTrue());
-        expect(LocationFetchService.singleton.started).to(beTrue());
+        await awaitBlockTrue {
+            return mapSettingsFetchStubCalled == true &&
+            rolesFetchStubCalled == true &&
+            usersFetchStubCalled == true &&
+            observationsFetchStubCalled == true &&
+            locationsFetchStubCalled == true
+        }
+        started = await pushService.started
+        expect(started).to(beTrue());
         
+        await awaitBlockTrue {
+            return ObservationFetchService.singleton.started == true &&
+            AttachmentPushService.singleton().started == true &&
+            LocationService.singleton().started == true &&
+            LocationFetchService.singleton.started == true
+        }
         Mage.singleton.stopServices();
         
-        expect(ObservationPushService.singleton.started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Observation Push Service still running")
+        started = await pushService.started
+        expect(started).to(beFalse())
         // Location Service does not stop when all services are stopped
-        expect(LocationService.singleton().started).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Location Service still running")
-        expect(LocationFetchService.singleton.started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Location Fetch Service still running")
-        expect(ObservationFetchService.singleton.started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Observation Fetch Service still running")
-        expect(AttachmentPushService.singleton().started).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(100), description: "Attachment Push Service still running")
+        await awaitBlockTrue {
+            LocationService.singleton().started == true &&
+            LocationFetchService.singleton.started == false &&
+            ObservationFetchService.singleton.started == false &&
+            AttachmentPushService.singleton().started == false
+        }
     }
 }

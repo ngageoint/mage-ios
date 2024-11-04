@@ -819,6 +819,8 @@
 		F7FC68152CD3D2810022BAF1 /* 000Tile.zip in Resources */ = {isa = PBXBuildFile; fileRef = F718CD052CAC695E0015DF87 /* 000Tile.zip */; };
 		F7FC68172CD3D37B0022BAF1 /* GeoPackageBaseMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BEF68127D69DC7000E8CDE /* GeoPackageBaseMapTests.swift */; };
 		F7FC68182CD3D37B0022BAF1 /* GeoPackageLayerMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F08E9027E0C04900640D89 /* GeoPackageLayerMapTests.swift */; };
+		F7FC681A2CD3E4E80022BAF1 /* observationNoAttachmentResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */; };
+		F7FC681B2CD9570A0022BAF1 /* oneForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F795ED1124BD04730028FBFC /* oneForm.json */; };
 		F7FD4DF61A7FEBA300DAABA6 /* StyledPolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.swift */; };
 		F7FD4DF91A80126300DAABA6 /* StyledPolyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DF81A80126300DAABA6 /* StyledPolyline.swift */; };
 		F7FD4DFC1A810EA900DAABA6 /* AreaAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FD4DFB1A810EA900DAABA6 /* AreaAnnotation.m */; };
@@ -1817,6 +1819,7 @@
 		F7FC68022CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGEGeoPackageTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		F7FC68042CD3C60F0022BAF1 /* TestingAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestingAppDelegate.h; sourceTree = "<group>"; };
 		F7FC68052CD3C6610022BAF1 /* TestingAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestingAppDelegate.m; sourceTree = "<group>"; };
+		F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = observationNoAttachmentResponse.json; sourceTree = "<group>"; };
 		F7FD4DF51A7FEBA300DAABA6 /* StyledPolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyledPolygon.swift; sourceTree = "<group>"; };
 		F7FD4DF81A80126300DAABA6 /* StyledPolyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyledPolyline.swift; sourceTree = "<group>"; };
 		F7FD4DFA1A810EA900DAABA6 /* AreaAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaAnnotation.h; sourceTree = "<group>"; };
@@ -2916,6 +2919,7 @@
 		F7614DA820068FF300676366 /* responses */ = {
 			isa = PBXGroup;
 			children = (
+				F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */,
 				7D0F874A2AA795CD009664E5 /* test_image_attachment.png */,
 				F7CE22FF254368B000D710DE /* allTheThings.json */,
 				F70039452006CB0700E6E660 /* apiFail.json */,
@@ -4330,6 +4334,7 @@
 			files = (
 				F7FC680F2CD3D10E0022BAF1 /* icon27.png in Resources */,
 				F7FC68102CD3D1310022BAF1 /* slateTiles4326.gpkg in Resources */,
+				F7FC681B2CD9570A0022BAF1 /* oneForm.json in Resources */,
 				F7FC68112CD3D15E0022BAF1 /* countries.gpkg in Resources */,
 				F7FC68122CD3D15E0022BAF1 /* countries_dark.gpkg in Resources */,
 				F7FC68132CD3D1BC0022BAF1 /* gpkgWithMedia.gpkg in Resources */,
@@ -4383,6 +4388,7 @@
 				F7F15B1927459A1F008FF6C2 /* myself.json in Resources */,
 				F711248A25F7B8B0008849B1 /* twoFormsObservations.json in Resources */,
 				F76BB9F725ED8195004CFB97 /* oneFormRestricted.json in Resources */,
+				F7FC681A2CD3E4E80022BAF1 /* observationNoAttachmentResponse.json in Resources */,
 				F777AFFA252B541A00B88BD4 /* signupSuccess.json in Resources */,
 				F7BCAC272630B62E006BE2A9 /* testResponse.html in Resources */,
 				F7CE2300254368B000D710DE /* allTheThings.json in Resources */,

@@ -26,6 +26,18 @@ class MageInjectionTestCase: XCTestCase {
         cancellables.removeAll()
         HTTPStubs.removeAllStubs();
     }
+    
+    func awaitPredicate(_ predicate: NSPredicate, timeout: TimeInterval = 2) async {
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+        await fulfillment(of: [expectation], timeout: timeout)
+    }
+    
+    func awaitBlockTrue(block: @escaping () -> Bool, timeout: TimeInterval = 2) async {
+        let predicate = NSPredicate(block: { _, _ in
+            return block()
+        })
+        await awaitPredicate(predicate, timeout: timeout)
+    }
 }
 
 class AsyncMageInjectionTestCase: XCTestCase {
@@ -40,5 +52,17 @@ class AsyncMageInjectionTestCase: XCTestCase {
         TestHelpers.clearAndSetUpStack()
         cancellables.removeAll()
         HTTPStubs.removeAllStubs();
+    }
+    
+    func awaitPredicate(_ predicate: NSPredicate, timeout: TimeInterval = 2) async {
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+        await fulfillment(of: [expectation], timeout: timeout)
+    }
+    
+    func awaitBlockTrue(block: @escaping () -> Bool, timeout: TimeInterval = 2) async {
+        let predicate = NSPredicate(block: { _, _ in
+            return block()
+        })
+        await awaitPredicate(predicate, timeout: timeout)
     }
 }

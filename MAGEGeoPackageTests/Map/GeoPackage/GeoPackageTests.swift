@@ -136,7 +136,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         
         _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
         
         Server.setCurrentEventId(1)
         
@@ -200,7 +200,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         
         _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
         
         Server.setCurrentEventId(1)
         
@@ -516,7 +516,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         
         _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
         
         Server.setCurrentEventId(1)
         
@@ -684,7 +684,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         
         _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
         
         Server.setCurrentEventId(1)
         
@@ -792,7 +792,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         
         _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
         
         Server.setCurrentEventId(1)
         

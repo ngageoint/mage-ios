@@ -9,6 +9,9 @@ import Foundation
 @objc public class Mage: NSObject {
     @Injected(\.nsManagedObjectContext)
     var context: NSManagedObjectContext?
+    
+    @Injected(\.observationPushService)
+    var observationPushService: ObservationPushService
 
     @objc public static let singleton = Mage();
     
@@ -43,7 +46,9 @@ import Foundation
         
         fetchSettings()
         
-        ObservationPushService.singleton.start();
+        Task {
+            await observationPushService.start();
+        }
         if let context = context {
             AttachmentPushService.singleton().start(context)
         }
@@ -57,7 +62,9 @@ import Foundation
     @objc public func stopServices() {
         LocationFetchService.singleton.stop();
         ObservationFetchService.singleton.stop();
-        ObservationPushService.singleton.stop();
+        Task {
+            await observationPushService.stop();
+        }
         AttachmentPushService.singleton().stop();
     }
     
