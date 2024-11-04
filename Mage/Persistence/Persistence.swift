@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-private struct PersistenceProviderKey: InjectionKey {
+private actor PersistenceProviderKey: InjectionKey {
     static var currentValue: Persistence = MagicalRecordPersistence()
 }
 
@@ -21,7 +21,7 @@ extension InjectedValues {
 }
 
 protocol Persistence {
-    var contextChange: AnyPublisher<NSManagedObjectContext?, Never> { get }
+    var contextChange: AnyPublisher<Date, Never> { get }
     func getContext() -> NSManagedObjectContext
     func getNewBackgroundContext(name: String?) -> NSManagedObjectContext
     func setupStack()
@@ -42,9 +42,9 @@ protocol Persistence {
 }
 
 class MagicalRecordPersistence: Persistence {
-    var refreshSubject: PassthroughSubject<NSManagedObjectContext?, Never> = PassthroughSubject<NSManagedObjectContext?, Never>()
+    var refreshSubject: PassthroughSubject<Date, Never> = PassthroughSubject<Date, Never>()
     
-    var contextChange: AnyPublisher<NSManagedObjectContext?, Never> {
+    var contextChange: AnyPublisher<Date, Never> {
         refreshSubject.eraseToAnyPublisher()
     }
     
@@ -57,8 +57,7 @@ class MagicalRecordPersistence: Persistence {
         MagicalRecord.setupMageCoreDataStack();
         let context = NSManagedObjectContext.mr_default()
         InjectedValues[\.nsManagedObjectContext] = context
-//        print("XXX send context change in set up\(self)")
-        refreshSubject.send(context)
+        refreshSubject.send(Date())
         MagicalRecord.setLoggingLevel(.verbose);
     }
     
@@ -85,9 +84,8 @@ class MagicalRecordPersistence: Persistence {
         InjectedValues[\.nsManagedObjectContext] = context
 //        print("-----------------------------------------------------------------")
 //        Thread.callStackSymbols.forEach{print($0)}
-//        print("XXX send context change from clear \(self)")
 //        print("-----------------------------------------------------------------")
-        refreshSubject.send(context)
+        refreshSubject.send(Date())
         MagicalRecord.setLoggingLevel(.verbose)
 //        NSManagedObject.mr_setDefaultBatchSize(20);
     }

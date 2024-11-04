@@ -86,7 +86,7 @@ class GeometryEditViewControllerTests: AsyncMageCoreDataTestCase {
             return mockMapDelegate.finishedRendering == true
         }
         let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [delegateExpectation])
+        await fulfillment(of: [delegateExpectation], timeout: 2)
 //        expect(mockMapDelegate.finishedRendering).toEventually(beTrue())
         
 //                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
@@ -120,7 +120,7 @@ class GeometryEditViewControllerTests: AsyncMageCoreDataTestCase {
             return mockMapDelegate.finishedRendering == true
         }
         let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [delegateExpectation])
+        await fulfillment(of: [delegateExpectation], timeout: 2)
 
 //                let result: XCTWaiter.Result = XCTWaiter.wait(for: [expectation], timeout: 5.0)
 //                XCTAssertEqual(result, .completed)

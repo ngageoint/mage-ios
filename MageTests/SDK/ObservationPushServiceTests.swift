@@ -14,10 +14,14 @@ import OHHTTPStubs
 
 @testable import MAGE
 
-class ObservationPushServiceTests: MageCoreDataTestCase {
+class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     
-    override func setUp() {
-        super.setUp()
+    @Injected(\.observationPushService)
+    var pushService: ObservationPushService
+    
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
         UserDefaults.standard.baseServerUrl = "https://magetest";
         UserDefaults.standard.serverMajorVersion = 6;
         UserDefaults.standard.serverMinorVersion = 0;
@@ -32,16 +36,19 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             LoginParametersKey.acceptedConsent.key: LoginParametersKey.agree.key,
             LoginParametersKey.tokenExpirationDate.key: Date().addingTimeInterval(1000000)
         ]
-        ObservationPushService.singleton.start();
+        
+        await pushService.start();
     }
     
-    override func tearDown() {
-        super.tearDown()
-        ObservationPushService.singleton.stop();
+    @MainActor
+    override func tearDown() async throws {
+        try await super.tearDown()
+        await pushService.stop();
     }
     
-    func testShouldTellTheServerToCreateAnObservationWithAnAttachment() {
-        var idStubCalled = false;
+    func testShouldTellTheServerToCreateAnObservationWithAnAttachment() async {
+        print("XXX --------------------------- starting with an attachment--------------------------- ")
+        let idStubCalled = XCTestExpectation(description: "idStubCalled");
         
         stub(condition: isMethodPOST() &&
              isHost("magetest") &&
@@ -52,11 +59,11 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
                 "id" : "observationabctest",
                 "url": "https://magetest/api/events/1/observations/observationabctest"
             ];
-            idStubCalled = true;
+            idStubCalled.fulfill()
             return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
         }
         
-        var createStubCalled = false;
+        let createStubCalled = XCTestExpectation(description: "createStubCalled");
         
         let url = Bundle(for: ObservationPushServiceTests.self).url(forResource: "test_marker", withExtension: "png")!
         
@@ -98,7 +105,7 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
              isScheme("https") &&
              isPath("/api/events/1/observations/observationabctest")
         ) { (request) -> HTTPStubsResponse in
-            createStubCalled = true;
+            createStubCalled.fulfill()
             let stubPath = OHPathForFile("attachmentPushTestResponse.json", ObservationPushServiceTests.self);
             return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
         }
@@ -111,31 +118,25 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             try? context.save()
         }
         
-        
-        //                MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
         guard let observation: Observation = Observation.mr_findFirst(in: context) else {
             Nimble.fail()
             return;
         }
         print("obs \(observation)")
-        //                    observation.dirty = true;
-        //                });
-        
-        expect(idStubCalled).toEventually(beTrue());
-        expect(createStubCalled).toEventually(beTrue());
-        
-        expect(Attachment.mr_findAll()?.count).toEventually(equal(1))
-        expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+
+        await fulfillment(of: [idStubCalled, createStubCalled], timeout: 2)
+        await awaitBlockTrue {
+            Attachment.mr_findAll()?.count == 1
+        }
+        var isPushing = await pushService.isPushingObservations()
+        expect(isPushing).to(beFalse());
+        print("XXX --------------------------- ending with an attachment--------------------------- ")
     }
     
-    func testShouldCreateAnObservationAndCallDelegates() {
-        let delegate1 = MockObservationPushDelegate();
-        let delegate2 = MockObservationPushDelegate();
-        ObservationPushService.singleton.addDelegate(delegate: delegate1);
-        ObservationPushService.singleton.addDelegate(delegate: delegate2);
-        
+    func testShouldTellTheServerToCreateAnObservationWithAnAttachmentAndThenHaveItDeletedFromTheServer() async {
+        print("XXXX --------------------------- starting and then have it deleted--------------------------- ")
+
         var idStubCalled = false;
-        var createStubCalled = false;
         
         stub(condition: isMethodPOST() &&
              isHost("magetest") &&
@@ -147,6 +148,121 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
                 "url": "https://magetest/api/events/1/observations/observationabctest"
             ];
             idStubCalled = true;
+            return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
+        }
+        
+        var createStubCalled = false;
+        var observationPushedAgain = false
+        
+        let url = Bundle(for: ObservationPushServiceTests.self).url(forResource: "test_marker", withExtension: "png")!
+        
+        var baseObservationJson: [AnyHashable : Any] = [:]
+        baseObservationJson["important"] = nil;
+        baseObservationJson["favoriteUserIds"] = nil;
+        baseObservationJson["attachments"] = nil;
+        baseObservationJson["lastModified"] = nil;
+        baseObservationJson["createdAt"] = nil;
+        baseObservationJson["eventId"] = 1;
+        baseObservationJson["timestamp"] = "2020-06-05T17:21:46.969Z";
+        baseObservationJson["state"] = [
+            "name": "active"
+        ]
+        baseObservationJson["geometry"] = [
+            "coordinates": [-1.1, 2.1],
+            "type": "Point"
+        ]
+        baseObservationJson["properties"] = [
+            "timestamp": "2020-06-05T17:21:46.969Z",
+            "forms": [[
+                "formId":162,
+                "field0":"Turkey"
+            ],
+              [
+                "formId": 163,
+                "field0": [[
+                    "action": "add",
+                    "name": "test_marker.png",
+                    "contentType": "image/png",
+                    "localPath": url.path,
+                    "fieldName": "field0"
+                ]]
+              ]]
+        ];
+        
+        stub(condition: isMethodPUT() &&
+             isHost("magetest") &&
+             isScheme("https") &&
+             isPath("/api/events/1/observations/observationabctest")
+        ) { (request) -> HTTPStubsResponse in
+            if (!createStubCalled) {
+                createStubCalled = true;
+                let stubPath = OHPathForFile("attachmentPushTestResponse.json", ObservationPushServiceTests.self);
+                return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
+            } else {
+                // for the second call, return a no attachment observation
+                observationPushedAgain = true;
+                let stubPath = OHPathForFile("observationNoAttachmentResponse.json", ObservationPushServiceTests.self);
+                return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
+            }
+        }
+        
+        await awaitDidSave {
+            MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: baseObservationJson)
+        
+            self.context.performAndWait {
+                let obs = self.context.fetchFirst(Observation.self, key: "eventId", value: 1)
+                obs!.dirty = true
+                try? self.context.save()
+            }
+        }
+        
+        guard let observation: Observation = Observation.mr_findFirst(in: context) else {
+            Nimble.fail()
+            return;
+        }
+        print("obs \(observation)")
+        
+        await awaitBlockTrue {
+            print("XXX id stub called check \(idStubCalled)")
+            return idStubCalled == true
+        }
+        await awaitBlockTrue { return createStubCalled == true }
+        await awaitBlockTrue { return Attachment.mr_findAll()?.count == 1 }
+        
+        // Now return the observation json with no attachments so they are deleted locally
+        await awaitDidSave {
+            self.context.performAndWait {
+                let obs = self.context.fetchFirst(Observation.self, key: "eventId", value: 1)
+                obs!.dirty = true
+                try? self.context.save()
+            }
+        }
+        
+        await awaitBlockTrue { observationPushedAgain == true }
+        await awaitBlockTrue { Attachment.mr_findAll()?.count == 0 }
+        
+        print("XXXX --------------------------- ending and then have it deleted--------------------------- ")
+    }
+    
+    func testShouldCreateAnObservationAndCallDelegates() async {
+        let delegate1 = MockObservationPushDelegate();
+        let delegate2 = MockObservationPushDelegate();
+        await pushService.addDelegate(delegate: delegate1);
+        await pushService.addDelegate(delegate: delegate2);
+        
+        let idStubCalled = XCTestExpectation(description: "idstubcalled")
+        let createStubCalled = XCTestExpectation(description: "createstubcalled")
+        
+        stub(condition: isMethodPOST() &&
+             isHost("magetest") &&
+             isScheme("https") &&
+             isPath("/api/events/1/observations/id")
+        ) { (request) -> HTTPStubsResponse in
+            let response: [String: Any] = [
+                "id" : "observationabctest",
+                "url": "https://magetest/api/events/1/observations/observationabctest"
+            ];
+            idStubCalled.fulfill()
             return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
         }
         
@@ -175,7 +291,7 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
                 "id" : "observationabctest",
                 "url": "https://magetest/api/events/1/observations/observationabctest"
             ];
-            createStubCalled = true;
+            createStubCalled.fulfill()
             return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
         }
         
@@ -197,15 +313,16 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             observation.dirty = true;
         });
         
-        expect(idStubCalled).toEventually(beTrue());
-        expect(createStubCalled).toEventually(beTrue());
-        expect(delegate1.didPushCalled).toEventually(beTrue());
-        expect(delegate1.pushedObservation).toNot(beNil());
-        expect(delegate1.error).to(beNil());
-        expect(delegate2.didPushCalled).toEventually(beTrue());
-        expect(delegate2.pushedObservation).toNot(beNil());
-        expect(delegate2.error).to(beNil());
-        expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+        await fulfillment(of: [idStubCalled, createStubCalled], timeout: 2)
+        await awaitBlockTrue {
+            print("delegate 1 \n\(delegate1)\n\ndelegate 2 \n\(delegate2)\n\n")
+            return delegate1.didPushCalled
+            && delegate1.pushedObservation != nil
+            && delegate1.error == nil
+            && delegate2.didPushCalled
+            && delegate2.pushedObservation != nil
+            && delegate2.error == nil
+        }
     }
     
     func testShouldNotCreateAnObservationIfTheUserPreferencesSayToNot() {
@@ -244,24 +361,24 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             observation.dirty = true;
         });
         
-        expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
         expect(Observation.mr_findFirst()?.dirty).toEventually(beTrue());
     }
     
-    func testShouldCreateAnObservationAndCallDelegatesUponServerFailure() {
+    @MainActor
+    func testShouldCreateAnObservationAndCallDelegatesUponServerFailure() async {
         let delegate1 = MockObservationPushDelegate();
         let delegate2 = MockObservationPushDelegate();
-        ObservationPushService.singleton.addDelegate(delegate: delegate1);
-        ObservationPushService.singleton.addDelegate(delegate: delegate2);
+        await pushService.addDelegate(delegate: delegate1);
+        await pushService.addDelegate(delegate: delegate2);
         
-        var idStubCalled = false;
+        let idStubCalled = XCTestExpectation(description: "idStubCalled");
         
         stub(condition: isMethodPOST() &&
              isHost("magetest") &&
              isScheme("https") &&
              isPath("/api/events/1/observations/id")
         ) { (request) -> HTTPStubsResponse in
-            idStubCalled = true;
+            idStubCalled.fulfill()
             let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.notConnectedToInternet.rawValue)
             return HTTPStubsResponse(error: notConnectedError);
         }
@@ -290,40 +407,42 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
         ]
         MageCoreDataFixtures.addObservationToCurrentEvent(observationJson: observationJson)
         
-        MagicalRecord.save(blockAndWait: { (localContext: NSManagedObjectContext) in
-            guard let observation: Observation = Observation.mr_findFirst(in: localContext) else {
-                Nimble.fail()
-                return;
+        context.performAndWait {
+            if let observation = try? context.fetchFirst(Observation.self) {
+                observation.dirty = true
+            } else {
+                XCTFail("Could not find observation")
             }
-            observation.dirty = true;
-        });
-        
-        expect(idStubCalled).toEventually(beTrue());
-        expect(delegate1.didPushCalled).toEventually(beTrue());
-        expect(delegate1.pushedObservation).toNot(beNil());
-        expect(delegate1.error).toNot(beNil());
-        expect(delegate2.didPushCalled).toEventually(beTrue());
-        expect(delegate2.pushedObservation).toNot(beNil());
-        expect(delegate2.error).toNot(beNil());
-        
+            try? context.save()
+        }
+
+        await fulfillment(of: [idStubCalled], timeout: 2)
+        tester().waitForAnimationsToFinish()
+        await awaitBlockTrue {
+            return delegate1.didPushCalled
+            && delegate1.pushedObservation != nil
+            && delegate1.error != nil
+            && delegate2.didPushCalled
+            && delegate2.pushedObservation != nil
+            && delegate2.error != nil
+        }
         expect(delegate1.pushedObservation?.errorMessage).to(equal("The operation couldn’t be completed. (NSURLErrorDomain error -1009.)"))
-        expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
     }
     
-    func testShouldCreateAnObservationAndCallDelegatesUponValidationError() {
+    func testShouldCreateAnObservationAndCallDelegatesUponValidationError() async {
         let delegate1 = MockObservationPushDelegate();
         let delegate2 = MockObservationPushDelegate();
-        ObservationPushService.singleton.addDelegate(delegate: delegate1);
-        ObservationPushService.singleton.addDelegate(delegate: delegate2);
+        await pushService.addDelegate(delegate: delegate1);
+        await pushService.addDelegate(delegate: delegate2);
         
-        var idStubCalled = false;
+        let idStubCalled = XCTestExpectation(description: "idstubcalled");
         
         stub(condition: isMethodPOST() &&
              isHost("magetest") &&
              isScheme("https") &&
              isPath("/api/events/1/observations/id")
         ) { (request) -> HTTPStubsResponse in
-            idStubCalled = true;
+            idStubCalled.fulfill()
             return HTTPStubsResponse(data: String("Validation error").data(using: .utf8)!, statusCode: 400, headers: nil);
         }
         
@@ -359,17 +478,17 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             observation.dirty = true;
         });
         
-        expect(idStubCalled).toEventually(beTrue());
-        expect(delegate1.didPushCalled).toEventually(beTrue());
-        expect(delegate1.pushedObservation).toNot(beNil());
-        expect(delegate1.error).toNot(beNil());
-        expect(delegate2.didPushCalled).toEventually(beTrue());
-        expect(delegate2.pushedObservation).toNot(beNil());
-        expect(delegate2.error).toNot(beNil());
+        await fulfillment(of: [idStubCalled], timeout: 2)
+        await awaitBlockTrue {
+            return delegate1.didPushCalled
+            && delegate1.pushedObservation != nil
+            && delegate1.error != nil
+            && delegate2.didPushCalled
+            && delegate2.pushedObservation != nil
+            && delegate2.error != nil
+        }
         
         expect(delegate1.pushedObservation?.errorMessage).to(equal("Validation error"))
-        
-        expect(ObservationPushService.singleton.isPushingObservations()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
     }
     
     func testShouldTellTheServerToAddAnObservationFavorite() {
@@ -402,17 +521,8 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
         @Injected(\.observationFavoriteRepository)
         var repository: ObservationFavoriteRepository
         repository.toggleFavorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: "userabc")
-        //                var toggleFavoriteCalled = false;
-        //                observation.toggleFavorite(completion: { success, error in
-        //                    expect(success).to(beTrue());
-        //                    print("success")
-        //                    toggleFavoriteCalled = true;
-        //                })
-        //                expect(ObservationFavorite.mr_findFirst()?.dirty).toEventually(beFalse());
+
         expect(stubCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "stub not called");
-        //                expect(toggleFavoriteCalled).toEventually(beTrue());
-        
-        //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
     }
     
     func testShouldTellTheServerToAddAnObservationFavoriteAndThenRemoteItBeforeItIsSent() {
@@ -431,33 +541,17 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             Nimble.fail()
             return;
         }
-        //                var toggleFavoriteCalled = false;
-        //                observation.toggleFavorite(completion: { success, error in
-        //                    expect(success).to(beTrue());
-        //                    print("success")
-        //                    toggleFavoriteCalled = true;
-        //                })
         @Injected(\.observationFavoriteRepository)
         var repository: ObservationFavoriteRepository
         repository.toggleFavorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: "userabc")
-        //
-        //                expect(toggleFavoriteCalled).toEventually(beTrue());
         expect(ObservationFavorite.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationFavorite.mr_findFirst()?.favorite).toEventually(beTrue());
-        //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
         
         expect(Observation.mr_findFirst()?.favoritesMap).toEventuallyNot(beEmpty());
-        //                var toggleFavoriteAgainCalled = false;
         
         repository.toggleFavorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: "userabc")
-        //                Observation.mr_findFirst()?.toggleFavorite(completion: { success, error in
-        //                    toggleFavoriteAgainCalled = true;
-        //                })
-        
-        //                expect(toggleFavoriteAgainCalled).toEventually(beTrue());
         expect(ObservationFavorite.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationFavorite.mr_findFirst()?.favorite).toEventually(beFalse());
-        //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
     }
     
     func testShouldNotPushAFavoriteIfTheUserPreferencesSayToNot() {
@@ -476,21 +570,13 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             Nimble.fail()
             return;
         }
-        //                var toggleFavoriteCalled = false;
-        //                observation.toggleFavorite(completion: { success, error in
-        //                    expect(success).to(beTrue());
-        //                    print("success")
-        //                    toggleFavoriteCalled = true;
-        //                })
         @Injected(\.observationFavoriteRepository)
         var repository: ObservationFavoriteRepository
         repository.toggleFavorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: "userabc")
-        //                expect(toggleFavoriteCalled).toEventually(beTrue());
         expect(ObservationFavorite.mr_findFirst()?.dirty).toEventually(beTrue());
-        //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
     }
     
-    func testShouldFailToAddAnObservationFavorite() {
+    func testShouldFailToAddAnObservationFavorite() async {
         var stubCalled = false;
         
         stub(condition: isMethodPUT() &&
@@ -516,20 +602,25 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
             Nimble.fail()
             return;
         }
-        //                var toggleFavoriteCalled = false;
-        //                // this is only saving to the database, not the server
-        //                observation.toggleFavorite(completion: { success, error in
-        //                    expect(success).to(beTrue());
-        //                    toggleFavoriteCalled = true;
-        //                })
-        @Injected(\.observationFavoriteRepository)
-        var repository: ObservationFavoriteRepository
-        repository.toggleFavorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: "userabc")
+
+        await awaitDidSave {
+            @Injected(\.observationFavoriteRepository)
+            var repository: ObservationFavoriteRepository
+            repository.toggleFavorite(observationUri: observation.objectID.uriRepresentation(), userRemoteId: "userabc")
+        }
         
-        expect(stubCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "stub not called");
-        //                expect(toggleFavoriteCalled).toEventually(beTrue());
-        expect(ObservationFavorite.mr_findFirst()?.dirty).toEventually(beTrue());
-        //                expect(ObservationPushService.singleton.isPushingFavorites()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
+        let predicate = NSPredicate { _, _ in
+            return stubCalled == true
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+        await fulfillment(of: [expectation], timeout: 2)
+        
+        let predicate2 = NSPredicate { _, _ in
+            let first = ObservationFavorite.mr_findFirst()
+            return first?.dirty == false && first?.favorite == true
+        }
+        let expectation2 = XCTNSPredicateExpectation(predicate: predicate2, object: .none)
+        await fulfillment(of: [expectation2], timeout: 2)
     }
     
     func testShouldTellTheServerToMakeTheObservationImportant() {
@@ -565,7 +656,6 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
         
         expect(localObservation).toNot(beNil());
         expect(localObservation.isImportant).to(beFalse());
-        //                localObservation.flagImportant(description: "new important", completion: nil)
         
         @Injected(\.observationImportantRepository)
         var repository: ObservationImportantRepository
@@ -575,8 +665,6 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
         
         expect(stubCalled).toEventually(beTrue());
         
-        //                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
-        //                expect(ObservationImportant.mr_findFirst()?.dirty).toEventually(beFalse());
         expect(ObservationImportant.mr_findFirst()?.important).toEventually(beTrue());
     }
     
@@ -601,13 +689,11 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
         
         expect(localObservation).toNot(beNil());
         expect(localObservation.isImportant).to(beFalse());
-        //                localObservation.flagImportant(description: "new important", completion: nil)
         @Injected(\.observationImportantRepository)
         var repository: ObservationImportantRepository
         repository.flagImportant(observationUri: observation.objectID.uriRepresentation(), reason: "new important")
         
         expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-        //                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
         expect(ObservationImportant.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationImportant.mr_findFirst()?.important).toEventually(beTrue());
     }
@@ -642,14 +728,12 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
         
         expect(localObservation).toNot(beNil());
         expect(localObservation.isImportant).to(beFalse());
-//                localObservation.flagImportant(description: "new important", completion: nil)
         @Injected(\.observationImportantRepository)
         var repository: ObservationImportantRepository
         repository.flagImportant(observationUri: observation.objectID.uriRepresentation(), reason: "new important")
         
         expect(stubCalled).toEventually(beTrue());
         expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-//                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
         expect(ObservationImportant.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationImportant.mr_findFirst()?.important).toEventually(beTrue());
     }
@@ -685,14 +769,12 @@ class ObservationPushServiceTests: MageCoreDataTestCase {
         
         expect(localObservation).toNot(beNil());
         expect(localObservation.isImportant).to(beFalse());
-//                localObservation.flagImportant(description: "new important", completion: nil)
         @Injected(\.observationImportantRepository)
         var repository: ObservationImportantRepository
         repository.flagImportant(observationUri: observation.objectID.uriRepresentation(), reason: "new important")
         
         expect(stubCalled).toEventually(beTrue());
         expect(Observation.mr_findFirst()!.isImportant).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(2), pollInterval: DispatchTimeInterval.milliseconds(200), description: "Did not find observation");
-//                expect(ObservationPushService.singleton.isPushingImportant()).toEventually(beFalse(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Observation Push Service is still pushing");
         expect(ObservationImportant.mr_findFirst()?.dirty).toEventually(beTrue());
         expect(ObservationImportant.mr_findFirst()?.important).toEventually(beTrue());
     }

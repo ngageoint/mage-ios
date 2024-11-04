@@ -149,7 +149,7 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
             return delegate.eventChosenCalled == true && delegate.eventChosenEvent?.remoteId == 1
         }
         let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [delegateExpectation])
+        await fulfillment(of: [delegateExpectation], timeout: 2)
         
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
     }
@@ -245,13 +245,13 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
         
         await fulfillment(of: [myselfExpectation, eventsExpectation], timeout: 2)
         
-        await fulfillment(of: [importedNotification])
+        await fulfillment(of: [importedNotification], timeout: 2)
                 
         let predicate = NSPredicate { _, _ in
             return delegate.eventChosenCalled == true && delegate.eventChosenEvent?.remoteId == 1
         }
         let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [delegateExpectation])
+        await fulfillment(of: [delegateExpectation], timeout: 2)
         
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
     }
@@ -292,7 +292,7 @@ class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
             return delegate.eventChosenCalled == true && delegate.eventChosenEvent?.remoteId == 1
         }
         let delegateExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [delegateExpectation])
+        await fulfillment(of: [delegateExpectation], timeout: 2)
         
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Loading Events")
     }

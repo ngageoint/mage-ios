@@ -164,7 +164,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
             Layer.refreshLayers(eventId: 1);
         }
         
-        await fulfillment(of: [stubCalled])
+        await fulfillment(of: [stubCalled], timeout: 2)
         
         context.performAndWait {
             let layers = try? self.context.fetchObjects(Layer.self)
@@ -186,21 +186,21 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
             StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
         }
             
-        await fulfillment(of: [featuresStubCalled])
+        await fulfillment(of: [featuresStubCalled], timeout: 2)
 
         let predicate = NSPredicate { _, _ in
             let staticLayer = self.context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
             return staticLayer?.data != nil
         }
         let layerDataExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [layerDataExpectation])
+        await fulfillment(of: [layerDataExpectation], timeout: 2)
         
         let staticLayer = context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
         expect(staticLayer).toNot(beNil())
         
         expect(staticLayer!.data).toNot(beNil());
         expect(staticLayer!.loaded).to(equal(NSNumber(floatLiteral:Layer.OFFLINE_LAYER_LOADED)))
-        await fulfillment(of: [iconStubCalled])
+        await fulfillment(of: [iconStubCalled], timeout: 2)
 
         let staticLayerFeatures = staticLayer!.data![LayerKey.features.key] as! [[AnyHashable : Any]];
         expect(staticLayerFeatures.count).to(equal(6));
@@ -278,7 +278,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
             Layer.refreshLayers(eventId: 1);
         }
         
-        await fulfillment(of: [stubCalled])
+        await fulfillment(of: [stubCalled], timeout: 2)
         let layers = try? self.context.fetchObjects(Layer.self)
         expect(layers?.count).to(equal(1))
         
@@ -297,21 +297,21 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
         
         StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
         
-        await fulfillment(of: [featuresStubCalled])
+        await fulfillment(of: [featuresStubCalled], timeout: 2)
         
         let predicate = NSPredicate { _, _ in
             let staticLayer = self.context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
             return staticLayer?.data != nil
         }
         let layerDataExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [layerDataExpectation])
+        await fulfillment(of: [layerDataExpectation], timeout: 2)
         
         let staticLayer = context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
         expect(staticLayer).toNot(beNil())
         
         expect(staticLayer!.data).toNot(beNil());
         expect(staticLayer!.loaded).to(equal(NSNumber(floatLiteral:Layer.OFFLINE_LAYER_LOADED)))
-        await fulfillment(of: [iconStubCalled])
+        await fulfillment(of: [iconStubCalled], timeout: 2)
         
         let staticLayerFeatures = staticLayer!.data![LayerKey.features.key] as! [[AnyHashable : Any]];
         expect(staticLayerFeatures.count).to(equal(6));
@@ -412,7 +412,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
             Layer.refreshLayers(eventId: 1);
         }
         
-        await fulfillment(of: [stubCalled])
+        await fulfillment(of: [stubCalled], timeout: 2)
         let layers = try? self.context.fetchObjects(Layer.self)
         expect(layers?.count).to(equal(1))
         
@@ -431,21 +431,21 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
         
         StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
         
-        await fulfillment(of: [featuresStubCalled])
+        await fulfillment(of: [featuresStubCalled], timeout: 2)
         
         let predicate = NSPredicate { _, _ in
             let staticLayer = self.context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
             return staticLayer?.data != nil
         }
         let layerDataExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [layerDataExpectation])
+        await fulfillment(of: [layerDataExpectation], timeout: 2)
         
         let staticLayer = context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
         expect(staticLayer).toNot(beNil())
         
         expect(staticLayer!.data).toNot(beNil());
         expect(staticLayer!.loaded).to(equal(NSNumber(floatLiteral:Layer.OFFLINE_LAYER_LOADED)))
-        await fulfillment(of: [iconStubCalled])
+        await fulfillment(of: [iconStubCalled], timeout: 2)
         
         let staticLayerFeatures = staticLayer!.data![LayerKey.features.key] as! [[AnyHashable : Any]];
         expect(staticLayerFeatures.count).to(equal(6));
@@ -480,7 +480,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
         }
         let countExpectation = XCTNSPredicateExpectation(predicate: annoatationsPredicate, object: .none)
         
-        await fulfillment(of: [countExpectation])
+        await fulfillment(of: [countExpectation], timeout: 2)
         
         expect(self.testimpl.mapView?.overlays.count).to(equal(4))
         expect(self.testimpl.mapView?.annotations.count).to(equal(2))
@@ -495,7 +495,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
             return false
         }
         let countExpectation2 = XCTNSPredicateExpectation(predicate: annoatationsPredicate2, object: .none)
-        await fulfillment(of: [countExpectation2])
+        await fulfillment(of: [countExpectation2], timeout: 2)
         
         expect(self.testimpl.mapView?.overlays.count).to(equal(0))
         expect(self.testimpl.mapView?.annotations.count).to(equal(0))
@@ -559,7 +559,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
             Layer.refreshLayers(eventId: 1);
         }
         
-        await fulfillment(of: [stubCalled])
+        await fulfillment(of: [stubCalled], timeout: 2)
         let layers = try? self.context.fetchObjects(Layer.self)
         expect(layers?.count).to(equal(1))
         
@@ -578,20 +578,20 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
         
         StaticLayer.fetchStaticLayerData(eventId: 1, staticLayer: sl!)
         
-        await fulfillment(of: [featuresStubCalled])
+        await fulfillment(of: [featuresStubCalled], timeout: 2)
         
         let predicate = NSPredicate { _, _ in
             let staticLayer = self.context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
             return staticLayer?.data != nil
         }
         let layerDataExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [layerDataExpectation])
+        await fulfillment(of: [layerDataExpectation], timeout: 2)
         
         let staticLayer = context.fetchFirst(StaticLayer.self, key: "eventId", value: 1)
         expect(staticLayer).toNot(beNil())
         expect(staticLayer!.data).toNot(beNil());
         expect(staticLayer!.loaded).to(equal(NSNumber(floatLiteral:Layer.OFFLINE_LAYER_LOADED)))
-        await fulfillment(of: [iconStubCalled])
+        await fulfillment(of: [iconStubCalled], timeout: 2)
         
         let staticLayerFeatures = staticLayer!.data![LayerKey.features.key] as! [[AnyHashable : Any]];
         expect(staticLayerFeatures.count).to(equal(6));
@@ -623,7 +623,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
         }
         let countExpectation = XCTNSPredicateExpectation(predicate: annotationsPredicate, object: .none)
 
-        await fulfillment(of: [countExpectation])
+        await fulfillment(of: [countExpectation], timeout: 2)
         expect(self.testimpl.mapView?.overlays.count).to(equal(4))
         expect(self.testimpl.mapView?.annotations.count).to(equal(2))
         
@@ -660,7 +660,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
                 && centerCoordinate.longitude + 0.1 >= initialLocation.longitude
             }
             let centerExpecation = XCTNSPredicateExpectation(predicate: centerPredicate, object: .none)
-            await fulfillment(of: [centerExpecation])
+            await fulfillment(of: [centerExpecation], timeout: 2)
             
             expect(la.view).to(beAKindOf(MKAnnotationView.self))
             if let lav = la.view {
@@ -676,7 +676,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
                     return lav.frame.size.height == originalHeight * 2.0
                 }
                 let heightExpecation = XCTNSPredicateExpectation(predicate: heightPredicate, object: .none)
-                await fulfillment(of: [heightExpecation])
+                await fulfillment(of: [heightExpecation], timeout: 2)
                 expect(self.mixin.enlargedAnnotationView).to(equal(lav))
                 
                 // post again, ensure it doesn't double in size again
@@ -687,7 +687,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
                     return lav.frame.size.height == originalHeight * 2.0
                 }
                 let heightExpecation2 = XCTNSPredicateExpectation(predicate: heightPredicate2, object: .none)
-                await fulfillment(of: [heightExpecation2])
+                await fulfillment(of: [heightExpecation2], timeout: 2)
             }
         }
 
@@ -722,7 +722,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
                 && centerCoordinate.longitude + 0.1 >= initialLocation.longitude
             }
             let centerExpecation2 = XCTNSPredicateExpectation(predicate: centerPredicate2, object: .none)
-            await fulfillment(of: [centerExpecation2])
+            await fulfillment(of: [centerExpecation2], timeout: 2)
             
             expect(la2.view).to(beAKindOf(MKAnnotationView.self))
             if let lav = la2.view {
@@ -737,7 +737,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
                     return lav.frame.size.height == originalHeight * 2.0
                 }
                 let heightExpecation3 = XCTNSPredicateExpectation(predicate: heightPredicate3, object: .none)
-                await fulfillment(of: [heightExpecation3])
+                await fulfillment(of: [heightExpecation3], timeout: 2)
                 expect(self.mixin.enlargedAnnotationView).to(equal(lav))
             }
         }
@@ -747,7 +747,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
             return self.mixin.enlargedAnnotationView == nil
         }
         let enlargedNilExpecation = XCTNSPredicateExpectation(predicate: enlargedNilPredicate, object: .none)
-        await fulfillment(of: [enlargedNilExpecation])
+        await fulfillment(of: [enlargedNilExpecation], timeout: 2)
         
         for annotation in testimpl.mapView!.annotations {
             if let la = annotation as? StaticPointAnnotation {
@@ -757,7 +757,7 @@ class StaticLayerMapTests: AsyncMageCoreDataTestCase {
                         return lav.frame.size.height == originalHeight
                     }
                     let heightExpecation4 = XCTNSPredicateExpectation(predicate: heightPredicate4, object: .none)
-                    await fulfillment(of: [heightExpecation4])
+                    await fulfillment(of: [heightExpecation4], timeout: 2)
                 }
             }
         }

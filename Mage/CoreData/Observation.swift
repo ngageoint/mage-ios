@@ -1019,7 +1019,7 @@ enum ObservationState: Int, CustomStringConvertible {
     @objc public var hasValidationError: Bool {
         get {
             if let error = self.error {
-                return error[ObservationPushService.ObservationErrorStatusCode] != nil
+                return error[ObservationErrorKeys.errorStatusCode] != nil
             }
             return false;
         }
@@ -1028,9 +1028,9 @@ enum ObservationState: Int, CustomStringConvertible {
     @objc public var errorMessage: String {
         get {
             if let error = self.error {
-                if let errorMessage = error[ObservationPushService.ObservationErrorMessage] as? String {
+                if let errorMessage = error[ObservationErrorKeys.errorMessage] as? String {
                     return errorMessage
-                } else if let errorMessage = error[ObservationPushService.ObservationErrorDescription] as? String {
+                } else if let errorMessage = error[ObservationErrorKeys.errorDescription] as? String {
                     return errorMessage
                 }
             }

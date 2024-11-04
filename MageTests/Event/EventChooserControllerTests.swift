@@ -309,14 +309,14 @@ class EventChooserControllerTests : AsyncMageCoreDataTestCase {
             let observation: Observation = observations![0]
             observation.dirty = true;
             observation.error = [
-                ObservationPushService.ObservationErrorStatusCode: 503,
-                ObservationPushService.ObservationErrorMessage: "Something Bad"
+                ObservationErrorKeys.errorStatusCode: 503,
+                ObservationErrorKeys.errorMessage: "Something Bad"
             ]
             let observation2: Observation = observations![1]
             observation2.dirty = true;
             observation2.error = [
-                ObservationPushService.ObservationErrorStatusCode: 503,
-                ObservationPushService.ObservationErrorMessage: "Something Really Bad"
+                ObservationErrorKeys.errorStatusCode: 503,
+                ObservationErrorKeys.errorMessage: "Something Really Bad"
             ]
             try? context.save()
         }

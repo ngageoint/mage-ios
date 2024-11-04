@@ -212,7 +212,7 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
 //        let importedNotification = XCTNSNotificationExpectation(name: .GeoPackageImported)
         
         print("XXX waiting import")
-        await fulfillment(of: [importedNotification])
+        await fulfillment(of: [importedNotification], timeout: 2)
 //
 //        NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) {  notification in
 //            Task {
@@ -223,7 +223,7 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
 //            }
 //        }
         
-        await fulfillment(of: [geopackageImported])
+        await fulfillment(of: [geopackageImported], timeout: 2)
         
         var overlayCount = await CacheOverlays.getInstance().getOverlays().count
         XCTAssertEqual(overlayCount, 3)

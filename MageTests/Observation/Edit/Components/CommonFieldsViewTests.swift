@@ -210,7 +210,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
             return self.viewTester().usingLabel("geometry")?.view != nil && self.viewTester().usingLabel("timestamp")?.view != nil
         }
         let viewExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [viewExpectation])
+        await fulfillment(of: [viewExpectation], timeout: 2)
         
 //        expect(self.viewTester().usingLabel("geometry")?.view).toEventuallyNot(beNil());
 //        expect(self.viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
@@ -236,7 +236,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
             return self.viewTester().usingLabel("geometry")?.view != nil && self.viewTester().usingLabel("timestamp")?.view != nil
         }
         let viewExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [viewExpectation])
+        await fulfillment(of: [viewExpectation], timeout: 2)
         
 //        expect(self.viewTester().usingLabel("geometry")?.view).toEventuallyNot(beNil());
 //        expect(self.viewTester().usingLabel("timestamp")?.view).toEventuallyNot(beNil());
@@ -263,7 +263,7 @@ class CommonFieldsViewTests: AsyncMageCoreDataTestCase {
             return self.viewTester().usingLabel("geometry")?.view != nil && self.viewTester().usingLabel("timestamp")?.view != nil
         }
         let viewExpectation = XCTNSPredicateExpectation(predicate: predicate, object: .none)
-        await fulfillment(of: [viewExpectation])
+        await fulfillment(of: [viewExpectation], timeout: 2)
 //        expect(self.viewTester().usingLabel("geometry")?.view).toNot(beNil());
 //        expect(self.viewTester().usingLabel("timestamp")?.view).toNot(beNil());
         

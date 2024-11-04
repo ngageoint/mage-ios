@@ -37,10 +37,10 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
     override init() {
         super.init()
         persistence.contextChange
-            .compactMap {
-                return $0
-            }
-            .sink { [weak self] context in
+            .sink { [weak self] _ in
+                @Injected(\.nsManagedObjectContext)
+                var context: NSManagedObjectContext?
+                guard let context else { return }
                 context.performAndWait { [weak self] in
                     self?.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(
                         by: "observation.\(ObservationKey.timestamp.key)",
@@ -59,7 +59,9 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
         }
         .store(in: &cancellables)
         
-        guard let context = context else { return }
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        guard let context else { return }
         context.performAndWait { [weak self] in
             self?.importantFetchedResultsController = ObservationImportant.mr_fetchAllSorted(
                 by: "observation.\(ObservationKey.timestamp.key)",

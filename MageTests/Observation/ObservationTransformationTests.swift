@@ -15,10 +15,12 @@ import OHHTTPStubs
 @testable import MAGE
 import CoreData
 
-class ObservationTransformationTests: MageCoreDataTestCase {
+class ObservationTransformationTests: AsyncMageCoreDataTestCase {
+    @Injected(\.observationPushService)
+    var pushService: ObservationPushService
     
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         UserDefaults.standard.baseServerUrl = "https://magetest";
         
         context.performAndWait {
@@ -28,12 +30,12 @@ class ObservationTransformationTests: MageCoreDataTestCase {
         }
         Server.setCurrentEventId(1);
         UserDefaults.standard.currentUserId = "userabc";
-        ObservationPushService.singleton.start();
+        await pushService.start();
     }
     
-    override func tearDown() {
-        super.tearDown()
-        ObservationPushService.singleton.stop();
+    override func tearDown() async throws {
+        try await super.tearDown()
+        await pushService.stop();
         HTTPStubs.removeAllStubs();
     }
     

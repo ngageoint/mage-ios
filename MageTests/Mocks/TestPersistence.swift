@@ -12,9 +12,9 @@ import Combine
 @testable import MAGE
 
 class TestPersistence: Persistence {
-    var refreshSubject: PassthroughSubject<NSManagedObjectContext?, Never> = PassthroughSubject<NSManagedObjectContext?, Never>()
+    var refreshSubject: PassthroughSubject<Date, Never> = PassthroughSubject<Date, Never>()
     
-    var contextChange: AnyPublisher<NSManagedObjectContext?, Never> {
+    var contextChange: AnyPublisher<Date, Never> {
         refreshSubject.eraseToAnyPublisher()
     }
     
@@ -59,7 +59,7 @@ class TestPersistence: Persistence {
     func setupStack() {
         setupPersistentContainer()
         InjectedValues[\.nsManagedObjectContext] = persistentContainer.viewContext
-        refreshSubject.send(InjectedValues[\.nsManagedObjectContext])
+        refreshSubject.send(Date())
     }
     
     func clearAndSetupStack() {
@@ -76,7 +76,7 @@ class TestPersistence: Persistence {
         }
         setupPersistentContainer()
         InjectedValues[\.nsManagedObjectContext] = persistentContainer.viewContext
-        refreshSubject.send(InjectedValues[\.nsManagedObjectContext])
+        refreshSubject.send(Date())
     }
     
     lazy var rootContext: NSManagedObjectContext = {

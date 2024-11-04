@@ -138,7 +138,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         let importExpectation = expectation(forNotification: .GeoPackageImported, object: nil)
         _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
 
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
     }
     
     func testImportGeoPackageFileIntoLayer() async throws {
@@ -186,7 +186,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
 
         _ = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
         
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
     }
@@ -343,7 +343,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         let imported = await importer.importGeoPackageFileAsLink(urlPath.path(), andMove: false, withLayerId: 1)
         XCTAssertTrue(imported)
 
-        await fulfillment(of: [importExpectation])
+        await fulfillment(of: [importExpectation], timeout: 2)
         
         XCTAssertEqual(mockListener.updatedOverlaysWithoutBase?.count, 1)
     }
