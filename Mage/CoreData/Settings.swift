@@ -54,7 +54,7 @@ enum MapSearchType: Int32 {
                 return
             }
             context.performAndWait {
-                var settings: Settings {
+                var settings: Settings = {
                     if let settings = try? context.fetchFirst(Settings.self) {
                         return settings
                     } else {
@@ -62,7 +62,7 @@ enum MapSearchType: Int32 {
                         try? context.obtainPermanentIDs(for: [settings])
                         return settings
                     }
-                }
+                }()
 
                 settings.populate(response)
                 do {

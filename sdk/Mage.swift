@@ -12,6 +12,9 @@ import Foundation
     
     @Injected(\.observationPushService)
     var observationPushService: ObservationPushService
+    
+    @Injected(\.attachmentPushService)
+    var attachmentPushService: AttachmentPushService
 
     @objc public static let singleton = Mage();
     
@@ -50,7 +53,7 @@ import Foundation
             await observationPushService.start();
         }
         if let context = context {
-            AttachmentPushService.singleton().start(context)
+            attachmentPushService.start(context)
         }
         
         let sessionTask = SessionTask(tasks: tasks, andMaxConcurrentTasks: 1);
@@ -65,7 +68,7 @@ import Foundation
         Task {
             await observationPushService.stop();
         }
-        AttachmentPushService.singleton().stop();
+        attachmentPushService.stop();
     }
     
     private func fetchSettings() {

@@ -4,18 +4,19 @@
 //
 //
 
-@import AFNetworking;
-
-extern NSString * const kAttachmentBackgroundSessionIdentifier;
-
-@interface AttachmentPushService : AFHTTPSessionManager
-
-@property (copy) void (^backgroundSessionCompletionHandler)(void);
-
-+ (instancetype) singleton;
-
-- (void) start: (NSManagedObjectContext *) context;
-- (void) stop;
-@property (nonatomic) BOOL started;
-
-@end
+//@import AFNetworking;
+//
+//extern NSString * const kAttachmentBackgroundSessionIdentifier;
+//
+//@interface AttachmentPushService : AFHTTPSessionManager
+//
+//@property (copy) void (^backgroundSessionCompletionHandler)(void);
+//
+//+ (instancetype) singleton;
+//
+//- (void) start: (NSManagedObjectContext *) context;
+//- (void) stop;
+//@property (nonatomic) BOOL started;
+//@property (nonatomic, strong) NSManagedObjectContext* context;
+//
+//@end

@@ -6,7 +6,6 @@
 
 #import <UIKit/UIKit.h>
 #import "LocationService.h"
-#import "AttachmentPushService.h"
 
 @class BaseMapOverlay;
 

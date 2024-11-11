@@ -32,7 +32,7 @@ class TeamCoreDataDataSource: CoreDataDataSource<Team>, TeamLocalDataSource {
             return nil
         }
         return context.performAndWait {
-            var team: Team {
+            let team: Team = {
                 if let team = context.fetchFirst(Team.self, key: TeamKey.remoteId.key, value: remoteId) {
                     return team
                 } else {
@@ -40,11 +40,11 @@ class TeamCoreDataDataSource: CoreDataDataSource<Team>, TeamLocalDataSource {
                     try? context.obtainPermanentIDs(for: [team])
                     return team
                 }
-            }
+            }()
+            
             team.name = json[TeamKey.name.key] as? String
             team.teamDescription = json[TeamKey.description.key] as? String
             var teamUsers: Set<User> = Set<User>()
-            
             if let userIds = json[TeamKey.userIds.key] as? [String] {
                 for userId in userIds {
                     if let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: userId) {

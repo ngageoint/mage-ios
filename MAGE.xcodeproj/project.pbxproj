@@ -302,7 +302,7 @@
 		F72D43262694B60300F9AC3B /* Model12To15.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */; };
 		F72D43272694B60300F9AC3B /* GeometrySerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */; };
 		F72D43282694B60300F9AC3B /* preferences-sdk.plist in Resources */ = {isa = PBXBuildFile; fileRef = F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */; };
-		F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */; };
+		F72D43292694B60300F9AC3B /* AttachmentPushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42CD2694B60300F9AC3B /* AttachmentPushService.swift */; };
 		F72D432A2694B60300F9AC3B /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D02694B60300F9AC3B /* Observation.swift */; };
 		F72D432B2694B60300F9AC3B /* ObservationFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D12694B60300F9AC3B /* ObservationFavorite.swift */; };
 		F72D432C2694B60300F9AC3B /* GPSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72D42D22694B60300F9AC3B /* GPSLocation.swift */; };
@@ -789,6 +789,7 @@
 		F7F9122524803F5500C068B6 /* CheckboxFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */; };
 		F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
+		F7FB04602CDEB8D5009C1041 /* AttachmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FB045F2CDEB8D5009C1041 /* AttachmentService.swift */; };
 		F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
 		F7FC67F92CD3C39C0022BAF1 /* GeoPackageImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F872CB8871B00126468 /* GeoPackageImporterTests.swift */; };
@@ -1255,7 +1256,7 @@
 		F72D42C82694B60300F9AC3B /* Model12To15.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Model12To15.xcmappingmodel; sourceTree = "<group>"; };
 		F72D42C92694B60300F9AC3B /* GeometrySerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometrySerializer.swift; sourceTree = "<group>"; };
 		F72D42CA2694B60300F9AC3B /* preferences-sdk.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "preferences-sdk.plist"; sourceTree = "<group>"; };
-		F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentPushService.m; sourceTree = "<group>"; };
+		F72D42CD2694B60300F9AC3B /* AttachmentPushService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentPushService.swift; sourceTree = "<group>"; };
 		F72D42CE2694B60300F9AC3B /* IdpAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdpAuthentication.h; sourceTree = "<group>"; };
 		F72D42CF2694B60300F9AC3B /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
 		F72D42D02694B60300F9AC3B /* Observation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
@@ -1814,6 +1815,7 @@
 		F7F9122324803E2E00C068B6 /* CheckboxFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldView.swift; sourceTree = "<group>"; };
 		F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
+		F7FB045F2CDEB8D5009C1041 /* AttachmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentService.swift; sourceTree = "<group>"; };
 		F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetchServiceTests.swift; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
 		F7FC68022CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGEGeoPackageTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -2564,7 +2566,7 @@
 			isa = PBXGroup;
 			children = (
 				F72D428F2694B60300F9AC3B /* AttachmentPushService.h */,
-				F72D42CD2694B60300F9AC3B /* AttachmentPushService.m */,
+				F72D42CD2694B60300F9AC3B /* AttachmentPushService.swift */,
 				F72D424C2694B60300F9AC3B /* AttachmentRoutes.h */,
 				F72D42962694B60300F9AC3B /* AttachmentRoutes.m */,
 				F72D42A52694B60300F9AC3B /* Authentication.h */,
@@ -3135,6 +3137,7 @@
 		F776AC912BCD9CB5000FAFB4 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				F7FB045E2CDEB8BE009C1041 /* Attachment */,
 				F7C097B32C877738003FA115 /* Event */,
 				F763FF0C2C76634400403A00 /* User */,
 				F776AC922BCD9CBC000FAFB4 /* Observation */,
@@ -4101,6 +4104,14 @@
 			path = Event;
 			sourceTree = "<group>";
 		};
+		F7FB045E2CDEB8BE009C1041 /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				F7FB045F2CDEB8D5009C1041 /* AttachmentService.swift */,
+			);
+			path = Attachment;
+			sourceTree = "<group>";
+		};
 		F7FC59281F3CEDEB0010351A /* Form */ = {
 			isa = PBXGroup;
 			children = (
@@ -4964,7 +4975,7 @@
 				F752B5F72760DDEC00BFA6EC /* GeoPackageBaseMap.swift in Sources */,
 				F76EB1E0247C14DA0089F3AC /* FieldKey.swift in Sources */,
 				F7C097992C8125A8003FA115 /* GeoPackageFeatureBottomSheetViewModel.swift in Sources */,
-				F72D43292694B60300F9AC3B /* AttachmentPushService.m in Sources */,
+				F72D43292694B60300F9AC3B /* AttachmentPushService.swift in Sources */,
 				F734C1D82BBF565B00B2E8C8 /* ObservationMapFeatureRepository.swift in Sources */,
 				F72D43092694B60300F9AC3B /* AttachmentRoutes.m in Sources */,
 				F76A15C21A93F56300F2BDF1 /* UIResponder+FirstResponder.m in Sources */,
@@ -5119,6 +5130,7 @@
 				F7225F462C54492C00B7D935 /* EventLocalDataSource.swift in Sources */,
 				F7388708258A8D0900EDA036 /* ObservationFullView.swift in Sources */,
 				2FCDC35322C27B9C004189AD /* UIColor+Adjust.m in Sources */,
+				F7FB04602CDEB8D5009C1041 /* AttachmentService.swift in Sources */,
 				F7467B7C209A2F0B00EABA63 /* OrView.m in Sources */,
 				F734C1DE2BC72FA600B2E8C8 /* ObservationMapItemView.swift in Sources */,
 				F73564F92C65642D00466813 /* LocationSummaryView.swift in Sources */,

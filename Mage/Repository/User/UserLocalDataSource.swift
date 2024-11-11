@@ -257,7 +257,7 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
         
         return await withCheckedContinuation { [weak self] continuation in
             context.perform {
-                var user: User {
+                var user: User = {
                     if let user = context.fetchFirst(User.self, key: UserKey.remoteId.key, value: userId) {
                         return user
                     } else {
@@ -265,7 +265,7 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
                         try? context.obtainPermanentIDs(for: [user])
                         return user
                     }
-                }
+                }()
                 user.remoteId = response[UserKey.id.key] as? String
                 user.username = response[UserKey.username.key] as? String
                 user.email = response[UserKey.email.key] as? String

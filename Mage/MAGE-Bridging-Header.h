@@ -58,7 +58,6 @@
 #import "ObservationTableHeaderView.h"
 #import "LocationFilterTableViewController.h"
 
-#import "AttachmentPushService.h"
 #import "LocationAnnotation.h"
 #import "LocationAccuracy.h"
 #import "LocationAccuracyRenderer.h"

@@ -149,7 +149,7 @@ class MageServiceTests: AsyncMageCoreDataTestCase {
         LocationFetchService.singleton.stop();
         ObservationFetchService.singleton.stop();
         await pushService.stop();
-        AttachmentPushService.singleton().stop();
+        AttachmentPushService.singleton.stop();
         TestHelpers.setupValidToken()
     }
     
@@ -159,7 +159,7 @@ class MageServiceTests: AsyncMageCoreDataTestCase {
         LocationFetchService.singleton.stop();
         ObservationFetchService.singleton.stop();
         await pushService.stop();
-        AttachmentPushService.singleton().stop();
+        AttachmentPushService.singleton.stop();
     }
     
     func testShouldStartServicesAsInitial() async {
@@ -171,7 +171,7 @@ class MageServiceTests: AsyncMageCoreDataTestCase {
         expect(LocationService.singleton().started).to(beFalse());
         expect(LocationFetchService.singleton.started).to(beFalse());
         expect(ObservationFetchService.singleton.started).to(beFalse());
-        expect(AttachmentPushService.singleton().started).to(beFalse());
+        expect(AttachmentPushService.singleton.started).to(beFalse());
         
         UNUserNotificationCenter.current().removeAllDeliveredNotifications();
         
@@ -243,7 +243,7 @@ class MageServiceTests: AsyncMageCoreDataTestCase {
         
         await awaitBlockTrue {
             return ObservationFetchService.singleton.started == true &&
-            AttachmentPushService.singleton().started == true &&
+            AttachmentPushService.singleton.started == true &&
             LocationService.singleton().started == true &&
             LocationFetchService.singleton.started == true
         }
@@ -259,7 +259,7 @@ class MageServiceTests: AsyncMageCoreDataTestCase {
         expect(LocationService.singleton().started).to(beFalse());
         expect(LocationFetchService.singleton.started).to(beFalse());
         expect(ObservationFetchService.singleton.started).to(beFalse());
-        expect(AttachmentPushService.singleton().started).to(beFalse());
+        expect(AttachmentPushService.singleton.started).to(beFalse());
         
         var mapSettingsFetchStubCalled = false;
         stub(condition: isMethodGET() &&
@@ -329,7 +329,7 @@ class MageServiceTests: AsyncMageCoreDataTestCase {
         
         await awaitBlockTrue {
             return ObservationFetchService.singleton.started == true &&
-            AttachmentPushService.singleton().started == true &&
+            AttachmentPushService.singleton.started == true &&
             LocationService.singleton().started == true &&
             LocationFetchService.singleton.started == true
         }
@@ -342,7 +342,7 @@ class MageServiceTests: AsyncMageCoreDataTestCase {
             LocationService.singleton().started == true &&
             LocationFetchService.singleton.started == false &&
             ObservationFetchService.singleton.started == false &&
-            AttachmentPushService.singleton().started == false
+            AttachmentPushService.singleton.started == false
         }
     }
 }
