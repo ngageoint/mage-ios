@@ -16,43 +16,18 @@ public protocol InjectionKey {
     static var currentValue: Self.Value { get set }
 }
 
-/**
- private struct NetworkProviderKey: InjectionKey {
-     static var currentValue: NetworkProviding = NetworkProvider()
- }
- 
- extension InjectedValues {
-     var networkProvider: NetworkProviding {
-         get { Self[NetworkProviderKey.self] }
-         set { Self[NetworkProviderKey.self] = newValue }
-     }
- }
- */
-
-actor InjectedValuesHolder {
-    var values: [AnyHashable : Any] = [:]
-    
-    func setValue(key: AnyHashable, value: Any) {
-        values[key] = value
-    }
-}
 
 // Provides access to injected dependencies.
 struct InjectedValues {
     
     /// This is only used as an accessor to the computed properties within extensions of `InjectedValues`.
     private static var current = InjectedValues()
-    private static var holder = InjectedValuesHolder()
     
     /// A static subscript for updating the `currentValue` of `InjectionKey` instances.
     static subscript<K>(key: K.Type) -> K.Value where K : InjectionKey {
         get { key.currentValue }
         set {
             key.currentValue = newValue
-//            Task {
-//                
-//                await holder.setValue(key: key as! (AnyHashable), value: newValue)
-//            }
         }
     }
     
@@ -60,15 +35,9 @@ struct InjectedValues {
     static subscript<T>(_ keyPath: WritableKeyPath<InjectedValues, T>) -> T {
         get {
             let v = current[keyPath: keyPath]
-            if keyPath == \InjectedValues.nsManagedObjectContext {
-                print("XXX returning \(v) for keypath \(keyPath)")
-            }
             return v
         }
         set {
-            if keyPath == \InjectedValues.nsManagedObjectContext {
-                print("XXX setting \(newValue) for keypath \(keyPath)")
-            }
             current[keyPath: keyPath] = newValue
         }
     }

@@ -20,6 +20,8 @@
 #import "MageConstants.h"
 #import "MAGE-Swift.h"
 
+@protocol AttachmentPushService;
+
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) TransitionViewController *splashView;
 @property (nonatomic, strong) NSManagedObjectContext *pushManagedObjectContext;
@@ -286,10 +288,9 @@
 
 - (void) application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler {
     // Handle attachments uploaded in the background
-    if ([identifier isEqualToString:kAttachmentBackgroundSessionIdentifier]) {
+    if ([identifier isEqualToString:@"mil.nga.mage.background.attachment"]) {
         NSLog(@"ATTACHMENT - AppDelegate handleEventsForBackgroundURLSession");
-        AttachmentPushService *service = [AttachmentPushService singleton];
-        service.backgroundSessionCompletionHandler = completionHandler;
+        [AttachmentPushServiceProvider.instance getAttachmentPushService].backgroundSessionCompletionHandler = completionHandler;
     }
 }
 

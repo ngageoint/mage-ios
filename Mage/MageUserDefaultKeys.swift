@@ -735,4 +735,13 @@ extension UserDefaults {
             set(newValue, forKey: "shape_screen_click_percentage")
         }
     }
+    
+    var attachmentPushFrequency: TimeInterval {
+        get {
+            return double(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
 }

@@ -50,6 +50,39 @@ class MageCoreDataFixtures {
 //        localContext.mr_saveToPersistentStoreAndWait();
 //        return cleared;
     }
+    
+    public static func addAttachment(
+        observationUri: URL,
+        remoteId: String = "attachmentabc",
+        contentType: String = "image/png",
+        observationFormId: String = "observationformid2",
+        localPath: String
+    ) -> Attachment? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        guard let context = context else { return nil }
+        
+        return context.performAndWait {
+            let attachment = Attachment(context: context)
+            attachment.remoteId = remoteId
+            attachment.contentType = contentType
+            attachment.observationFormId = "observationformid2"
+            attachment.localPath = localPath
+            attachment.dirty = false
+            attachment.name = URL(fileURLWithPath: localPath).lastPathComponent
+            
+            if let objectID = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: observationUri),
+               let observation = context.object(with: objectID) as? Observation
+            {
+                attachment.observation = observation
+                attachment.observationRemoteId = observation.remoteId
+            }
+            
+            try? context.obtainPermanentIDs(for: [attachment])
+            try? context.save()
+            return attachment
+        }
+    }
         
     public static func addLocation(userId: String = "userabc", geometry: SFPoint? = nil, date: Date? = nil) -> Location? {
         let jsonDictionary: NSArray = parseJsonFile(jsonFile: "locationsabc") as! NSArray;

@@ -41,7 +41,7 @@ final class EventRepositoryTests: MageCoreDataTestCase {
             return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "application/json"]);
         }
         
-        MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
+        let user = MageCoreDataFixtures.addUser(userId: "userabc", recentEventIds: [1])
         UserDefaults.standard.currentUserId = "userabc"
         
         let repository = EventRepositoryImpl()
@@ -50,5 +50,12 @@ final class EventRepositoryTests: MageCoreDataTestCase {
         let events = context.fetchAll(Event.self)
         
         XCTAssertEqual(events?.count, 3)
+        
+        Server.setCurrentEventId(1)
+        
+        let event = context.fetchFirst(Event.self, key: "remoteId", value: 1)
+        
+        XCTAssertNotNil(event)
+        XCTAssertTrue(event!.isUserInEvent(user: user))
     }
 }
