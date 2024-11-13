@@ -30,6 +30,8 @@ extension InjectedValues {
     func start(_ context: NSManagedObjectContext)
     func stop()
     var backgroundSessionCompletionHandler: (() -> Void)? { get set }
+    var context: NSManagedObjectContext? { get }
+    var started: Bool { get }
 }
 
 // TODO: This is temporary while obj-c classes are removed

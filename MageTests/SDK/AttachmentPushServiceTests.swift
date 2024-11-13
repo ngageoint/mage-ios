@@ -15,8 +15,8 @@ import OHHTTPStubs
 
 class AttachmentPushServiceTests: AsyncMageCoreDataTestCase {
     
-//    @Injected(\.observationPushService)
-//    var observationPushService: ObservationPushService
+    @Injected(\.attachmentPushService)
+    var attachmentPushService: AttachmentPushService
     
     @MainActor
     override func setUp() async throws {
@@ -27,7 +27,7 @@ class AttachmentPushServiceTests: AsyncMageCoreDataTestCase {
         MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "attachmentFormPlusOne")
         
         tester().waitForAnimationsToFinish()
-        AttachmentPushService.singleton.start(context)
+        attachmentPushService.start(context)
         
         
         
@@ -37,7 +37,7 @@ class AttachmentPushServiceTests: AsyncMageCoreDataTestCase {
         await awaitBlockTrue {
             @Injected(\.nsManagedObjectContext)
             var context: NSManagedObjectContext?
-            return AttachmentPushService.singleton.context == context
+            return self.attachmentPushService.context == context
         }
         
 //        await observationPushService.start();
@@ -45,7 +45,7 @@ class AttachmentPushServiceTests: AsyncMageCoreDataTestCase {
     
     override func tearDown() async throws {
         try await super.tearDown()
-        AttachmentPushService.singleton.stop()
+        attachmentPushService.stop()
 //        await observationPushService.stop();
     }
     

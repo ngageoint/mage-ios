@@ -37,7 +37,7 @@
 #import "SignUpViewController_Server5.h"
 #import "ChangePasswordViewController.h"
 #import "LocalLoginView.h"
-#import "DeviceUUID.h"
+//#import "DeviceUUID.h"
 #import "Authentication.h"
 #import "FormDefaults.h"
 #import "AttachmentCollectionDataStore.h"
