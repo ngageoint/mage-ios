@@ -97,7 +97,7 @@
 		2FFF8E551CFF7B06002FD563 /* SelectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF8E541CFF7B06002FD563 /* SelectEditViewController.m */; };
 		4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C390F49197DB7B000AB3CCB /* MessageUI.framework */; };
 		4C546FEC195A27F4000CF230 /* LocationAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C546FEB195A27F4000CF230 /* LocationAnnotation.m */; };
-		4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.m */; };
+		4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF141B11992A5D900C4B70E /* DeviceUUID.swift */; };
 		6C279DE5F410CDAB6348A088 /* libPods-MAGEGeoPackageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */; };
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
@@ -790,6 +790,7 @@
 		F7F9122724804D2100C068B6 /* CheckboxFieldViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */; };
 		F7F9122924819D5D00C068B6 /* emptyForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F9122824819D5D00C068B6 /* emptyForm.json */; };
 		F7FB04602CDEB8D5009C1041 /* AttachmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FB045F2CDEB8D5009C1041 /* AttachmentService.swift */; };
+		F7FB04622CE2BF51009C1041 /* DeviceUUIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FB04612CE2BF51009C1041 /* DeviceUUIDTests.swift */; };
 		F7FBBD7E274FC8BF001EDA6A /* LocationFetchServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */; };
 		F7FC59251F3CEBF80010351A /* FormPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */; };
 		F7FC67F92CD3C39C0022BAF1 /* GeoPackageImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D31F872CB8871B00126468 /* GeoPackageImporterTests.swift */; };
@@ -1010,7 +1011,7 @@
 		4C546FEA195A27F4000CF230 /* LocationAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationAnnotation.h; sourceTree = "<group>"; };
 		4C546FEB195A27F4000CF230 /* LocationAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationAnnotation.m; sourceTree = "<group>"; };
 		4CF141B01992A5D900C4B70E /* DeviceUUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUUID.h; sourceTree = "<group>"; };
-		4CF141B11992A5D900C4B70E /* DeviceUUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUUID.m; sourceTree = "<group>"; };
+		4CF141B11992A5D900C4B70E /* DeviceUUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceUUID.swift; sourceTree = "<group>"; };
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
@@ -1816,6 +1817,7 @@
 		F7F9122624804D2100C068B6 /* CheckboxFieldViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxFieldViewTests.swift; sourceTree = "<group>"; };
 		F7F9122824819D5D00C068B6 /* emptyForm.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyForm.json; sourceTree = "<group>"; };
 		F7FB045F2CDEB8D5009C1041 /* AttachmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentService.swift; sourceTree = "<group>"; };
+		F7FB04612CE2BF51009C1041 /* DeviceUUIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUUIDTests.swift; sourceTree = "<group>"; };
 		F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetchServiceTests.swift; sourceTree = "<group>"; };
 		F7FC59241F3CEBF80010351A /* FormPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormPickerViewController.swift; sourceTree = "<group>"; };
 		F7FC68022CD3C5A20022BAF1 /* MAGEGeoPackageTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAGEGeoPackageTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -3435,7 +3437,7 @@
 				8474FD9426FB8AFE0041891A /* Contact */,
 				F7A5A336270CE20F00961CAA /* CoreData */,
 				4CF141B01992A5D900C4B70E /* DeviceUUID.h */,
-				4CF141B11992A5D900C4B70E /* DeviceUUID.m */,
+				4CF141B11992A5D900C4B70E /* DeviceUUID.swift */,
 				F7B3B3EB1B863A0E00EC0349 /* DisclaimerViewController.swift */,
 				F76949131AA6434A00CB680B /* Event */,
 				F743008A2547759C00DCE050 /* Extensions */,
@@ -3531,6 +3533,7 @@
 				F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */,
 				F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */,
 				F7613D5027EE03B300570145 /* ReleaseTestPlan.md */,
+				F7FB04612CE2BF51009C1041 /* DeviceUUIDTests.swift */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -5056,7 +5059,7 @@
 				F72D431B2694B60300F9AC3B /* Layer.swift in Sources */,
 				F74020BB2492767900B5A8BA /* FeedItemsViewController.swift in Sources */,
 				045082361C4467B900EDEB88 /* ChildCacheOverlayTableCell.swift in Sources */,
-				4CF141B21992A5D900C4B70E /* DeviceUUID.m in Sources */,
+				4CF141B21992A5D900C4B70E /* DeviceUUID.swift in Sources */,
 				F7D43BDE269E0F6D00561A8F /* FeatureActionsDelegate.swift in Sources */,
 				2F2582F024EC6AE6009CA918 /* FeedItemSummary.swift in Sources */,
 				F776ACA32BCDC362000FAFB4 /* CoreDataDataSource.swift in Sources */,
@@ -5362,6 +5365,7 @@
 				F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */,
 				F7C0974A2C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift in Sources */,
 				F7F15B1B2745BEA7008FF6C2 /* MockObservationPushDelegate.swift in Sources */,
+				F7FB04622CE2BF51009C1041 /* DeviceUUIDTests.swift in Sources */,
 				F7F08EA027EA40DC00640D89 /* SingleObservationMapTests.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,
 				F77085482593F85F008903BA /* ObservationHeaderViewTests.swift in Sources */,

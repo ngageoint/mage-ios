@@ -4,10 +4,11 @@
 //
 //
 
-#import <Foundation/Foundation.h>
-
-@interface DeviceUUID : NSObject
-
-+ (NSUUID *) retrieveDeviceUUID;
-
-@end
+//#import <Foundation/Foundation.h>
+//
+//@interface DeviceUUID : NSObject
+//
+//+ (NSUUID *) retrieveDeviceUUID;
+//+ (NSString *) persistUUIDToKeyChain;
+//
+//@end
