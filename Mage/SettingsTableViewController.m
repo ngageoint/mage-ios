@@ -34,7 +34,7 @@
 
 @implementation SettingsTableViewController
 
-- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme delegate: (id<SettingsDelegate>) delegate ontext: (NSManagedObjectContext *) context {
+- (instancetype) initWithScheme: (id<MDCContainerScheming>) containerScheme delegate: (id<SettingsDelegate>) delegate context: (NSManagedObjectContext *) context {
     if (self = [self initWithStyle:UITableViewStyleGrouped]) {
         self.scheme = containerScheme;
         self.delegate = delegate;
