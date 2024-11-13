@@ -19,7 +19,7 @@ final class DeviceUUIDTests: XCTestCase {
         if let previousUUID {
             let query = [
                 kSecClass: kSecClassGenericPassword,
-                kSecAttrService: "mil.nga.giat.mage.uuid",
+                kSecAttrService: DeviceUUIDKeys.service.rawValue,
                 kSecAttrAccessible: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
                 kSecValueData: previousUUID.uuidString.data(using: .utf8)!
             ] as CFDictionary
@@ -34,7 +34,7 @@ final class DeviceUUIDTests: XCTestCase {
             if let currentUUID = DeviceUUID.retrieveDeviceUUID() {
                 let query = [
                     kSecClass: kSecClassGenericPassword,
-                    kSecAttrService: "mil.nga.giat.mage.uuid",
+                    kSecAttrService: DeviceUUIDKeys.service.rawValue,
                     kSecAttrAccessible: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
                     kSecValueData: currentUUID.uuidString.data(using: .utf8)!
                 ] as CFDictionary
@@ -46,7 +46,7 @@ final class DeviceUUIDTests: XCTestCase {
             // Now store it in the KeyChain
             let query = [
                 kSecClass: kSecClassGenericPassword,
-                kSecAttrService: "mil.nga.giat.mage.uuid",
+                kSecAttrService: DeviceUUIDKeys.service.rawValue,
                 kSecAttrAccessible: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
                 kSecValueData: uuidString.data(using: .utf8)!
             ] as CFDictionary

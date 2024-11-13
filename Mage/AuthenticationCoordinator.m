@@ -16,7 +16,6 @@
 #import "MageOfflineObservationManager.h"
 #import "FadeTransitionSegue.h"
 #import "MageSessionManager.h"
-#import "DeviceUUID.h"
 #import "AppDelegate.h"
 #import "Authentication.h"
 #import "UIColor+Hex.h"

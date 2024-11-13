@@ -3,8 +3,7 @@ import Foundation
 import Security
 
 enum DeviceUUIDKeys: String {
-    case attachmentPushFrequency,
-         sessionIdentifier = "mil.nga.giat.mage.uuid"
+    case service = "mil.nga.giat.mage.uuid"
 }
 
 @objc class DeviceUUID: NSObject {
@@ -22,7 +21,7 @@ enum DeviceUUIDKeys: String {
     static func retrieveUUIDFromKeyChain() -> String? {
         let query = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: "mil.nga.giat.mage.uuid",
+            kSecAttrService: DeviceUUIDKeys.service.rawValue,
             kSecMatchLimit: kSecMatchLimitOne,
             kSecReturnAttributes: kCFBooleanTrue!,
             kSecReturnData: true
@@ -49,7 +48,7 @@ enum DeviceUUIDKeys: String {
         let uuidString = uuid.uuidString
         let query = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: "mil.nga.giat.mage.uuid",
+            kSecAttrService: DeviceUUIDKeys.service.rawValue,
             kSecAttrAccessible: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
             kSecValueData: uuidString.data(using: .utf8)!
         ] as CFDictionary
