@@ -136,7 +136,7 @@ class MageCoreDataFixtures {
     }
     
     @discardableResult
-    public static func addUser(userId: String = "userabc", recentEventIds: [Int]? = nil) -> User? {
+    public static func addUser(userId: String = "userabc", username: String? = nil, recentEventIds: [Int]? = nil) -> User? {
         var jsonDictionary: [AnyHashable : Any] = parseJsonFile(jsonFile: "userabc") as! [AnyHashable : Any];
         if let recentEventIds = recentEventIds {
             jsonDictionary["recentEventIds"] = recentEventIds
@@ -179,6 +179,9 @@ class MageCoreDataFixtures {
             print("inserting a user")
             u = User.insert(json: jsonDictionary, context: context)!
             u?.remoteId = userId;
+            if let username {
+                u?.username = username
+            }
             u?.role = existingRole;
             try? context.save()
             return u
