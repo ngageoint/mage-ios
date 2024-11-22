@@ -4,8 +4,21 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 ## Pending on develop
+##### Features
+##### Bug Fixes
+
+## 4.0.7
+
+##### Features
+* UI/UX improvement on server connection error
 
 ##### Bug Fixes
+* Feeds timestamp field should be formatted as a date/time
+* Unsaved map symbology changes now update when editing an observation
+* Observation feed reflects remote attachment delete 
+* Ensure video attachment header matches contentType
+* Remove animated activity indicator to fix crash when attachment cells are recycled
+* Set kingfisher cache key for attachment video thumbnails to fix duplicate thumbnails
 * Update Kingfisher library to latest 7.x.
 * Update references to Kingfisher's `ImageResource` struct because Xcode 15 introduced a conflicting `ImageResource` symbol.
 
