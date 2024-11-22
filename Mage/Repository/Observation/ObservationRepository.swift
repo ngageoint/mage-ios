@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct ObservationRepositoryProviderKey: InjectionKey {
-    static var currentValue: ObservationRepository = ObservationRepository()
+    static var currentValue: ObservationRepository = ObservationRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,8 +20,28 @@ extension InjectedValues {
     }
 }
 
-class ObservationRepository: ObservableObject {
-    @Injected(\.observationLocalDataSource) 
+protocol ObservationRepository {
+    var refreshPublisher: AnyPublisher<Date, Never>? { get }
+    func observeFilteredCount() -> AnyPublisher<Int, Never>?
+    func observations(
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func userObservations(
+        userUri: URL,
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>?
+    @available(*, deprecated, message: "Use getObservation to get a model")
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation?
+    func getObservation(remoteId: String?) async -> ObservationModel?
+    func getObservation(observationUri: URL?) async -> ObservationModel?
+    func syncObservation(uri: URL?)
+    func fetchObservations() async -> Int
+    func observeObservationFavorites(observationUri: URL?) -> AnyPublisher<ObservationFavoritesModel, Never>?
+}
+
+class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
+    @Injected(\.observationLocalDataSource)
     var localDataSource: ObservationLocalDataSource
     
     @Injected(\.observationRemoteDataSource)
@@ -84,7 +104,7 @@ class ObservationRepository: ObservableObject {
         NotificationCenter.default.publisher(for: .MAGEFormFetched)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] notification in
-                if let event: Event = notification.object as? Event {
+                if let event: EventModel = notification.object as? EventModel {
                     if let eventId = event.remoteId, eventId == Server.currentEventId() {
                         Task { [weak self] in
                             self?.refreshSubject?.send(Date())
@@ -101,14 +121,14 @@ class ObservationRepository: ObservableObject {
     
     func observations(
         paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[ObservationItem], Error> {
+    ) -> AnyPublisher<[URIItem], Error> {
         localDataSource.observations(paginatedBy: paginator)
     }
     
     func userObservations(
         userUri: URL,
         paginatedBy paginator: Trigger.Signal? = nil
-    ) -> AnyPublisher<[ObservationItem], Error> {
+    ) -> AnyPublisher<[URIItem], Error> {
         localDataSource.userObservations(
             userUri: userUri,
             paginatedBy: paginator
@@ -118,15 +138,21 @@ class ObservationRepository: ObservableObject {
     func observeObservation(observationUri: URL?) -> AnyPublisher<ObservationModel, Never>? {
         localDataSource.observeObservation(observationUri: observationUri)
     }
+    
+    @available(*, deprecated, message: "Use getObservation to get a model")
+    func getObservationNSManagedObject(observationUri: URL?) async -> Observation? {
+        await localDataSource.getObservationNSManagedObject(observationUri: observationUri)
+    }
 
-    func getObservation(remoteId: String?) async -> Observation? {
+    func getObservation(remoteId: String?) async -> ObservationModel? {
         await localDataSource.getObservation(remoteId: remoteId)
     }
 
-    func getObservation(observationUri: URL?) async -> Observation? {
+    func getObservation(observationUri: URL?) async -> ObservationModel? {
         await localDataSource.getObservation(observationUri: observationUri)
     }
     
+    // TODO: implement this
     func syncObservation(uri: URL?) {
         print("XXX SYNC IT")
     }

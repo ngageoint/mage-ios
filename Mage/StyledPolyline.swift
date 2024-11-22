@@ -35,8 +35,11 @@ import DataSourceDefinition
             guard let observationRemoteId = observationRemoteId else {
                 return _observation
             }
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
             
-            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId, in: NSManagedObjectContext.mr_default())
+            guard let context = context else { return nil }
+            return Observation.mr_findFirst(byAttribute: "remoteId", withValue: observationRemoteId, in: context)
         }
         set {
             if let remoteId = newValue?.remoteId {

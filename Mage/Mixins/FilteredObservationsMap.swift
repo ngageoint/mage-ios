@@ -18,6 +18,9 @@ protocol FilteredObservationsMap {
 }
 
 class FilteredObservationsMapMixin: NSObject, MapMixin {
+    @Injected(\.nsManagedObjectContext)
+    var context: NSManagedObjectContext?
+    
     var filteredObservationsMap: FilteredObservationsMap
     var mapAnnotationFocusedObserver: AnyObject?
     var user: User?
@@ -75,7 +78,7 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
         NotificationCenter.default.addObserver(forName: .MAGEFormFetched, object: nil, queue: .main) { [weak self] notification in
-            if let event: Event = notification.object as? Event {
+            if let event: EventModel = notification.object as? EventModel {
                 if event.remoteId == Server.currentEventId() {
                     self?.addFilteredObservations()
                 }
@@ -122,15 +125,15 @@ class FilteredObservationsMapMixin: NSObject, MapMixin {
             }
         }
         
-        if let user = user {
-            observations = Observations(for: user)
+        if let user = user, let context = context {
+            observations = Observations(for: user, context: context)
             observations?.delegate = self
         } else if let observations = observations,
-           let observationPredicates = Observations.getPredicatesForObservationsForMap() as? [NSPredicate] {
+                  let observationPredicates = Observations.getPredicatesForObservations(forMap: context) as? [NSPredicate] {
             observations.fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: observationPredicates)
             
         } else {
-            observations = Observations.forMap()
+            observations = Observations.init(forMap: context)
             observations?.delegate = self
         }
         

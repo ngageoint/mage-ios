@@ -41,14 +41,14 @@ class GeometryView : BaseFieldView {
         let mapView = SingleFeatureMapView(observation: nil, scheme: scheme)
         mapView.autoSetDimension(.height, toSize: editMode ? 150 : 200);
 
-        mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
-            if let mapView = mapView.mapView,
-               let notification = notification.object as? MapItemsTappedNotification,
-               notification.mapView == mapView
-            {
-                print("XXX map item clicked annotations \(notification.annotations) items \(notification.items)")
-            }
-        }
+//        mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
+//            if let mapView = mapView.mapView,
+//               let notification = notification.object as? MapItemsTappedNotification,
+//               notification.mapView == mapView
+//            {
+//                print("XXX map item clicked annotations \(notification.annotations) items \(notification.items)")
+//            }
+//        }
 
         return mapView;
     }()

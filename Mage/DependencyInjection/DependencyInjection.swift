@@ -16,18 +16,6 @@ public protocol InjectionKey {
     static var currentValue: Self.Value { get set }
 }
 
-/**
- private struct NetworkProviderKey: InjectionKey {
-     static var currentValue: NetworkProviding = NetworkProvider()
- }
- 
- extension InjectedValues {
-     var networkProvider: NetworkProviding {
-         get { Self[NetworkProviderKey.self] }
-         set { Self[NetworkProviderKey.self] = newValue }
-     }
- }
- */
 
 // Provides access to injected dependencies.
 struct InjectedValues {
@@ -38,13 +26,20 @@ struct InjectedValues {
     /// A static subscript for updating the `currentValue` of `InjectionKey` instances.
     static subscript<K>(key: K.Type) -> K.Value where K : InjectionKey {
         get { key.currentValue }
-        set { key.currentValue = newValue }
+        set {
+            key.currentValue = newValue
+        }
     }
     
     /// A static subscript accessor for updating and references dependencies directly.
     static subscript<T>(_ keyPath: WritableKeyPath<InjectedValues, T>) -> T {
-        get { current[keyPath: keyPath] }
-        set { current[keyPath: keyPath] = newValue }
+        get {
+            let v = current[keyPath: keyPath]
+            return v
+        }
+        set {
+            current[keyPath: keyPath] = newValue
+        }
     }
 }
 

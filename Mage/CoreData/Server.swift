@@ -13,11 +13,15 @@ import MagicalRecord
 @objc public class Server: NSManagedObject {
     
     @objc public static func serverUrl() -> String? {
-        return Server.getPropertyForKey(key: "serverUrl", context: NSManagedObjectContext.mr_default()) as? String
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        return Server.getPropertyForKey(key: "serverUrl", context: context) as? String
     }
     
-    @objc public static func setServerUrl(serverUrl: String, completion: MRSaveCompletionHandler? = nil) {
-        Server.setProperty(property: serverUrl, key: "serverUrl", completion: completion)
+    @objc public static func setServerUrl(serverUrl: String) {
+        Server.setProperty(property: serverUrl, key: "serverUrl")
     }
     
     @objc public static func currentEventId() -> NSNumber? {
@@ -37,24 +41,31 @@ import MagicalRecord
     }
     
     static func getPropertyForKey(key: String, context: NSManagedObjectContext) -> Any? {
-        if let server = Server.mr_findFirst(in: context), let properties = server.properties {
+        if let server = try? context.fetchFirst(Server.self), let properties = server.properties {
             return properties[key];
         }
         return nil;
     }
     
-    static func setProperty(property: Any, key: String, completion: MRSaveCompletionHandler? = nil) {
-        MagicalRecord.save({ localContext in
-            if let server = Server.mr_findFirst(in: localContext) {
+    static func setProperty(property: Any, key: String) {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return }
+        context.performAndWait({
+            if let server = try? context.fetchFirst(Server.self) {
                 var properties = server.properties ?? [:];
                 properties[key] = property
                 server.properties = properties;
-            } else if let server = Server.mr_createEntity(in: localContext) {
+            } else {
+                let server = Server(context: context)
                 server.properties = [
                     key: property
                 ]
+                try? context.obtainPermanentIDs(for: [server])
             }
-        }, completion: completion);
+
+        })
     }
     
     static func raiseEventTaskPriorities(eventId: NSNumber) {

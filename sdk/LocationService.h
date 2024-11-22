@@ -16,7 +16,7 @@ extern NSString * const kLocationReportingFrequencyKey;
 
 + (instancetype) singleton;
 
-- (void) start;
+- (void) start: (NSManagedObjectContext *) context;
 - (void) stop;
 
 - (CLLocation *) location;

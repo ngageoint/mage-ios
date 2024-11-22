@@ -14,17 +14,45 @@ class StaticPointAnnotation: DataSourceAnnotation {
         }
         set { }
     }
-    var feature: [AnyHashable: Any]?
+//    var feature: [AnyHashable: Any]?
     var iconUrl: String?
     var layerName: String?
     var title: String?
     var subtitle: String?
     var view: MKAnnotationView?
+    var timestamp: Date?
     
     public init(feature: [AnyHashable: Any]) {
-        self.feature = feature
-        // set a title so that the annotation tap event will actually occur on the map delegate
-        self.title = " "
+//        self.feature = feature
+        self.title = {
+            if let properties = feature["properties"] as? [AnyHashable: Any],
+               let name = properties["name"] as? String
+            {
+                return name
+            }
+            return " "
+        }()
+        
+        self.subtitle = {
+            if let properties = feature["properties"] as? [AnyHashable: Any],
+               let description = properties["description"] as? String
+            {
+                return description
+            }
+            return nil
+        }()
+        
+        self.timestamp = {
+            guard let timestamp = (feature["properties"] as? [AnyHashable : Any])?["timestamp"] as? String else {
+                return nil
+            }
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withDashSeparatorInDate, .withFullDate, .withTime, .withColonSeparatorInTime, .withTimeZone];
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)!;
+            let lastModifiedDate = formatter.date(from: timestamp) ?? Date();
+            return lastModifiedDate
+        }()
+        
         var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid
         if let coordinates = (feature["geometry"] as? [AnyHashable: Any])?["coordinates"] as? [Double] {
             coordinate = CLLocationCoordinate2D(latitude: coordinates[1], longitude: coordinates[0])
@@ -124,24 +152,6 @@ class StaticPointAnnotation: DataSourceAnnotation {
     }
     
     func detailTextForAnnotation() -> String {
-        let title: String? = {
-            if let properties = feature?["properties"] as? [AnyHashable: Any],
-               let name = properties["name"] as? String
-            {
-                return name
-            }
-            return nil
-        }()
-        
-        let description: String? = {
-            if let properties = feature?["properties"] as? [AnyHashable: Any],
-               let description = properties["description"] as? String
-            {
-                return description
-            }
-            return nil
-        }()
-        
-        return "\(title ?? "")</br>\(description ?? "")"
+        return "\(title ?? "")</br>\(subtitle ?? "")"
     }
 }

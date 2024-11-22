@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct LocationRepositorySourceProviderKey: InjectionKey {
-    static var currentValue: LocationRepository = LocationRepository()
+    static var currentValue: LocationRepository = LocationRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,7 +20,18 @@ extension InjectedValues {
     }
 }
 
-class LocationRepository: ObservableObject {
+protocol LocationRepository {
+    var refreshPublisher: AnyPublisher<Date, Never>? { get }
+    func observeLatestFiltered() -> AnyPublisher<Date, Never>?
+    func locations(
+        userIds: [String]?,
+        paginatedBy paginator: Trigger.Signal?
+    ) -> AnyPublisher<[URIItem], Error>
+    func getLocation(locationUri: URL) async -> LocationModel?
+    func observeLocation(locationUri: URL) -> AnyPublisher<LocationModel, Never>?
+}
+
+class LocationRepositoryImpl: ObservableObject, LocationRepository {
     @Injected(\.locationLocalDataSource)
     var localDataSource: LocationLocalDataSource
     
@@ -36,7 +47,7 @@ class LocationRepository: ObservableObject {
         UserDefaults.standard.publisher(for: \.locationTimeFilter)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(DataSources.observation.key): \(order)")
+                NSLog("locationTimeFilter update: \(order)")
                 Task { [weak self] in
                     self?.refreshSubject?.send(Date())
                 }
@@ -45,7 +56,7 @@ class LocationRepository: ObservableObject {
         UserDefaults.standard.publisher(for: \.locationTimeFilterUnit)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(DataSources.observation.key): \(order)")
+                NSLog("locationTimeFilterUnit update: \(order)")
                 Task { [weak self] in
                     self?.refreshSubject?.send(Date())
                 }
@@ -54,7 +65,7 @@ class LocationRepository: ObservableObject {
         UserDefaults.standard.publisher(for: \.locationTimeFilterNumber)
             .removeDuplicates()
             .sink { [weak self] order in
-                NSLog("Order update \(DataSources.observation.key): \(order)")
+                NSLog("locationTimeFilterNumber update: \(order)")
                 Task { [weak self] in
                     self?.refreshSubject?.send(Date())
                 }
@@ -62,14 +73,15 @@ class LocationRepository: ObservableObject {
             .store(in: &cancellable)
     }
     
-    func observeLatest() -> AnyPublisher<Date, Never>? {
-        localDataSource.observeLatest()
+    func observeLatestFiltered() -> AnyPublisher<Date, Never>? {
+        localDataSource.observeLatestFiltered()
     }
     
     func locations(
+        userIds: [String]? = nil,
         paginatedBy paginator: Trigger.Signal? = nil
     ) -> AnyPublisher<[URIItem], Error> {
-        localDataSource.locations(paginatedBy: paginator)
+        localDataSource.locations(userIds: userIds, paginatedBy: paginator)
     }
     
     func getLocation(locationUri: URL) async -> LocationModel? {

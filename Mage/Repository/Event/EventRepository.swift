@@ -9,7 +9,7 @@
 import Foundation
 
 private struct EventRepositoryProviderKey: InjectionKey {
-    static var currentValue: EventRepository = EventRepository()
+    static var currentValue: EventRepository = EventRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -19,11 +19,32 @@ extension InjectedValues {
     }
 }
 
-class EventRepository: ObservableObject {
+protocol EventRepository {
+    func getEvent(eventId: NSNumber) -> EventModel?
+    func fetchEvents() async
+    func getEvents() -> [EventModel]
+}
+
+class EventRepositoryImpl: ObservableObject, EventRepository {
     @Injected(\.eventLocalDataSource)
     var localDataSource: EventLocalDataSource
     
-    func getEvent(eventId: NSNumber) -> Event? {
+    @Injected(\.eventRemoteDataSource)
+    var remoteDataSource: EventRemoteDataSource
+    
+    func getEvent(eventId: NSNumber) -> EventModel? {
         localDataSource.getEvent(eventId: eventId)
+    }
+    
+    func fetchEvents() async {
+        if let response = await remoteDataSource.fetchEvents() {
+            await localDataSource.handleEventsResponse(response: response)
+        }
+        // TODO: this shouldn't matter as we should be observing the repository at some point
+        NotificationCenter.default.post(name: .MAGEEventsFetched, object:nil)
+    }
+    
+    func getEvents() -> [EventModel] {
+        localDataSource.getEvents()
     }
 }

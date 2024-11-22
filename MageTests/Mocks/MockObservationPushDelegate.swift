@@ -21,4 +21,8 @@ class MockObservationPushDelegate: NSObject, ObservationPushDelegate {
         self.success = success;
         self.error = error;
     }
+    
+    override var description: String {
+        return "<\(type(of: self)): \ndidPushCalled = \(didPushCalled) \npushedObservation = \(pushedObservation == nil ? "nil" : "not nil") \nsuccess = \(success) \nerror = \(error?.localizedDescription ?? "nil")>"
+    }
 }

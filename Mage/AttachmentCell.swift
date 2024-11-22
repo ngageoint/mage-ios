@@ -126,11 +126,11 @@ import Kingfisher
             self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loading";
             self.imageView.showThumbnail(cacheOnly: !DataConnectionUtilities.shouldFetchAttachments(),
                                          completionHandler:
-                                            { result in
+                                            { [weak self] result in
                                                 switch result {
                                                 case .success(_):
-                                                    self.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
-                                                    NSLog("Loaded the image \(self.imageView.accessibilityLabel ?? "")")
+                                                    self?.imageView.accessibilityLabel = "attachment \(attachment.name ?? "") loaded";
+                                                    NSLog("Loaded the image \(self?.imageView.accessibilityLabel ?? "")")
                                                 case .failure(let error):
                                                     print(error);
                                                 }

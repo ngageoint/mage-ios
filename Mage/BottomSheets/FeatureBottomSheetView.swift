@@ -10,18 +10,6 @@ import Foundation
 import SwiftUI
 import MaterialViews
 
-class StaticLayerBottomSheetViewModel: ObservableObject {
-    @Injected(\.staticLayerRepository)
-    var repository: StaticLayerRepository
-    
-    @Published
-    var featureItem: FeatureItem
-    
-    init(featureItem: FeatureItem) {
-        self.featureItem = featureItem
-    }
-}
-
 struct FeatureBottomSheet: View {
     @ObservedObject
     var viewModel: StaticLayerBottomSheetViewModel

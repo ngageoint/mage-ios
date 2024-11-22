@@ -79,7 +79,12 @@ class FollowUserMapMixin: NSObject, MapMixin {
             fetchRequest.predicate = NSPredicate(value: true)
             fetchRequest.fetchLimit = 1
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: GPSLocationKey.timestamp.key, ascending: true)]
-            gpsFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else { return }
+            
+            gpsFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
             gpsFetchedResultsController?.delegate = self
             do {
                 try gpsFetchedResultsController?.performFetch()
@@ -88,6 +93,8 @@ class FollowUserMapMixin: NSObject, MapMixin {
                 print("Unable to Perform Fetch Request")
                 print("\(fetchError), \(fetchError.localizedDescription)")
             }
+            print("XXX fetched objects \(gpsFetchedResultsController?.fetchedObjects)")
+            print("XXX location \(gpsFetchedResultsController!.fetchedObjects![0].cllocation)")
             if let fetchedObjects = gpsFetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty, let cllocation = fetchedObjects[0].cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
             }
@@ -95,7 +102,12 @@ class FollowUserMapMixin: NSObject, MapMixin {
             let fetchRequest = Location.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "user = %@", user)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+            @Injected(\.nsManagedObjectContext)
+            var context: NSManagedObjectContext?
+            
+            guard let context = context else { return }
+            
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
             fetchedResultsController?.delegate = self
             do {
                 try fetchedResultsController?.performFetch()
