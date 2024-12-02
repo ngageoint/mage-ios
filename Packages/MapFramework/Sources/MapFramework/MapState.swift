@@ -9,6 +9,18 @@
 import Foundation
 import SwiftUI
 import MapKit
+import Combine
+
+extension UserDefaults {
+    @objc public var mapType: Int {
+        get {
+            return integer(forKey: #function)
+        }
+        set {
+            set(newValue, forKey: #function)
+        }
+    }
+}
 
 public class MapState: ObservableObject, Hashable {
     public static func == (lhs: MapState, rhs: MapState) -> Bool {
@@ -20,12 +32,19 @@ public class MapState: ObservableObject, Hashable {
     }
 
     public var id = UUID()
+    
+    private var cancellable: Set<AnyCancellable> = Set()
 
     public init() {
-        
+        UserDefaults.standard.publisher(for: \.mapType)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] mapType in
+                self?.mapType = mapType
+            }
+            .store(in: &cancellable)
     }
 
-    @AppStorage("mapType") public var mapType: Int = Int(MKMapType.standard.rawValue)
+    @Published public var mapType: Int = Int(MKMapType.standard.rawValue)
 
     @Published public var userTrackingMode: Int = Int(MKUserTrackingMode.none.rawValue)
     @Published public var mixinStates: [String: Any] = [:]

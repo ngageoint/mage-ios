@@ -6,8 +6,8 @@
 //  Copyright © 2015 National Geospatial Intelligence Agency. All rights reserved.
 //
 
-#import "CacheOverlayTypes.h"
-
-@implementation CacheOverlayTypes
-
-@end
+//#import "CacheOverlayTypes.h"
+//
+//@implementation CacheOverlayTypes
+//
+//@end

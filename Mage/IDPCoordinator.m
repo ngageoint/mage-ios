@@ -7,7 +7,7 @@
 //
 
 #import "IDPCoordinator.h"
-#import "DeviceUUID.h"
+#import "MAGE-Swift.h"
 
 @interface IDPCoordinator ()
 @property (weak, nonatomic) NSString *url;

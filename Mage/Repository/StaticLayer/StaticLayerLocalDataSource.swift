@@ -23,19 +23,31 @@ protocol StaticLayerLocalDataSource {
     func getStaticLayer(remoteId: NSNumber?) -> StaticLayer?
 }
 
-class StaticLayerCoreDataDataSource: CoreDataDataSource, StaticLayerLocalDataSource, ObservableObject {
+class StaticLayerCoreDataDataSource: CoreDataDataSource<StaticLayer>, StaticLayerLocalDataSource, ObservableObject {
     
     func getStaticLayer(remoteId: NSNumber?, eventId: NSNumber?) -> StaticLayer? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         guard let remoteId = remoteId, let eventId = eventId else {
             return nil
         }
-        return StaticLayer.mr_findFirst(with: NSPredicate(format: "remoteId == %@ AND eventId == %@", remoteId, eventId), in: NSManagedObjectContext.mr_default())
+        return context.performAndWait {
+            return try? context.fetchFirst(StaticLayer.self, predicate: NSPredicate(format: "remoteId == %@ AND eventId == %@", remoteId, eventId))
+        }
     }
     
     func getStaticLayer(remoteId: NSNumber?) -> StaticLayer? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
         guard let remoteId = remoteId else {
             return nil
         }
-        return StaticLayer.mr_findFirst(byAttribute: "remoteId", withValue: remoteId, in: NSManagedObjectContext.mr_default())
+        return context.performAndWait {
+            return context.fetchFirst(StaticLayer.self, key: "remoteId", value: remoteId)
+        }
     }
 }

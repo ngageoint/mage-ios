@@ -12,11 +12,10 @@
 #import "SignUpViewController_Server5.h"
 #import "IDPLoginView.h"
 #import "IDPCoordinator.h"
-#import "MagicalRecord+MAGE.h"
+//#import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "FadeTransitionSegue.h"
 #import "MageSessionManager.h"
-#import "DeviceUUID.h"
 #import "AppDelegate.h"
 #import "Authentication.h"
 #import "UIColor+Hex.h"
@@ -34,6 +33,7 @@
 @property (strong, nonatomic) LoginViewController *loginView;
 @property (strong, nonatomic) IDPCoordinator *idpCoordinator;
 @property (strong, nonatomic) id<MDCContainerScheming> scheme;
+@property (strong, nonatomic) NSManagedObjectContext *context;
 
 @end
 
@@ -41,10 +41,10 @@
 
 BOOL signingIn = YES;
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme {
+- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate:(id<AuthenticationDelegate>) delegate andScheme:(id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context {
     self = [super init];
     if (!self) return nil;
-    
+    _context = context;
     _scheme = containerScheme;
     _navigationController = navigationController;
     _delegate = delegate;
@@ -190,7 +190,7 @@ BOOL signingIn = YES;
 
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
     self.server = mageServer;
-    User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
+    User *currentUser = [User fetchCurrentUserWithContext:_context];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
     [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
     [self.navigationController pushViewController:self.loginView animated:NO];
@@ -214,7 +214,8 @@ BOOL signingIn = YES;
 }
 
 - (BOOL) didUserChange: (NSString *) username {
-    User *currentUser = [User fetchCurrentUserWithContext:[NSManagedObjectContext MR_defaultContext]];
+    NSLog(@"XXXX Context is to search %@", _context);
+    User *currentUser = [User fetchCurrentUserWithContext:_context];
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 

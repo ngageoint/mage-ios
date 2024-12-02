@@ -7,7 +7,6 @@
 //
 
 #import "LocalLoginView.h"
-#import "DeviceUUID.h"
 #import <PureLayout/PureLayout.h>
 #import "MAGE-Swift.h"
 @import MaterialComponents;

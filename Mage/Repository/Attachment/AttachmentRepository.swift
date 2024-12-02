@@ -11,7 +11,7 @@ import Combine
 import Kingfisher
 
 private struct AttachmentRepositoryProviderKey: InjectionKey {
-    static var currentValue: AttachmentRepository = AttachmentRepository()
+    static var currentValue: AttachmentRepository = AttachmentRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -21,7 +21,17 @@ extension InjectedValues {
     }
 }
 
-class AttachmentRepository: ObservableObject {
+protocol AttachmentRepository {
+    func getAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) async -> [AttachmentModel]?
+    func observeAttachments(observationUri: URL?, observationFormId: String?, fieldName: String?) -> AnyPublisher<CollectionDifference<AttachmentModel>, Never>?
+    func getAttachment(attachmentUri: URL?) async -> AttachmentModel?
+    func saveLocalPath(attachmentUri: URL?, localPath: String)
+    func markForDeletion(attachmentUri: URL?)
+    func undelete(attachmentUri: URL?)
+    func appendAttachmentViewRoute(router: MageRouter, attachment: AttachmentModel)
+}
+
+class AttachmentRepositoryImpl: ObservableObject, AttachmentRepository {
     @Injected(\.attachmentLocalDataSource)
     var localDataSource: AttachmentLocalDataSource
     

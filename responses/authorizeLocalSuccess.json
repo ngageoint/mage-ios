@@ -36,8 +36,8 @@
             "permissions": ["CREATE_DEVICE","READ_DEVICE","UPDATE_DEVICE","DELETE_DEVICE","CREATE_USER","READ_USER","UPDATE_USER","DELETE_USER","CREATE_ROLE","READ_ROLE","UPDATE_ROLE","DELETE_ROLE","CREATE_EVENT","READ_EVENT_ALL","UPDATE_EVENT","DELETE_EVENT","CREATE_LAYER","READ_LAYER_ALL","UPDATE_LAYER","DELETE_LAYER","CREATE_OBSERVATION","READ_OBSERVATION_ALL","UPDATE_OBSERVATION_ALL","DELETE_OBSERVATION","CREATE_LOCATION","READ_LOCATION_ALL","UPDATE_LOCATION_ALL","DELETE_LOCATION","CREATE_TEAM","READ_TEAM","UPDATE_TEAM","DELETE_TEAM","READ_SETTINGS","UPDATE_SETTINGS","UPDATE_USER_ROLE"],
             "id":"2a"
         },
-        "avatarUrl":"https://magedemo.geointservices.io/api/users/1a/avatar",
-        "iconUrl":"https://magedemo.geointservices.io/api/users/1a/icon"
+        "avatarUrl":"https://magetest/api/users/1a/avatar",
+        "iconUrl":"https://magetest/api/users/1a/icon"
     },
     "device":{
         "uid":"12345",
@@ -53,9 +53,9 @@
         "name":"mage-server",
         "description":"Geospatial situation awareness application.",
         "version":{
-            "major":5,
-            "minor":3,
-            "micro":3
+            "major":6,
+            "minor":0,
+            "micro":0
         },
         "authenticationStrategies":{
             "local":{
@@ -64,6 +64,11 @@
         },
         "provision":{
             "strategy":"uid"
+        },
+        "disclaimer": {
+            "show": true,
+            "text": "disclaimer text",
+            "title": "disclaimer title"
         }
     }
 }

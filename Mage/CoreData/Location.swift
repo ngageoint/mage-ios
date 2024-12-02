@@ -15,10 +15,15 @@ import MagicalRecord
 @objc public class Location: NSManagedObject, Navigable {
     
     static func mostRecentLocationFetchedResultsController(_ user: User, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<Location>? {
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        guard let context = context else { return nil }
+        
         let fetchRequest = Location.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "user = %@", user)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-        let locationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: NSManagedObjectContext.mr_default(), sectionNameKeyPath: nil, cacheName: nil)
+        let locationFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         locationFetchedResultsController.delegate = delegate
         do {
             try locationFetchedResultsController.performFetch()
@@ -232,8 +237,15 @@ import MagicalRecord
     }
     
     static func fetchLastLocationDate() -> Date? {
-        if let currentEventId = Server.currentEventId() {
-            let location = Location.mr_findFirst(with: NSPredicate(format: "\(LocationKey.eventId.key) == %@", currentEventId), sortedBy: LocationKey.timestamp.key, ascending: false);
+        @Injected(\.nsManagedObjectContext)
+        var context: NSManagedObjectContext?
+        
+        if let currentEventId = Server.currentEventId(), let context = context {
+            let location = try? context.fetchFirst(
+                Location.self,
+                sortBy: [NSSortDescriptor(key: LocationKey.timestamp.key, ascending: false)], 
+                predicate: NSPredicate(
+                    format: "\(LocationKey.eventId.key) == %@", currentEventId));
             
             return location?.timestamp
         }

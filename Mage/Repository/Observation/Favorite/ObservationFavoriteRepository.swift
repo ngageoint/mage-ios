@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 private struct ObservationFavoriteRepositoryProviderKey: InjectionKey {
-    static var currentValue: ObservationFavoriteRepository = ObservationFavoriteRepository()
+    static var currentValue: ObservationFavoriteRepository = ObservationFavoriteRepositoryImpl()
 }
 
 extension InjectedValues {
@@ -20,7 +20,13 @@ extension InjectedValues {
     }
 }
 
-class ObservationFavoriteRepository: ObservableObject {
+protocol ObservationFavoriteRepository {
+    func sync()
+    func toggleFavorite(observationUri: URL?, userRemoteId: String)
+    func pushFavorites(favorites: [ObservationFavoriteModel]?) async
+}
+
+class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, ObservableObject {
     @Injected(\.observationFavoriteLocalDataSource)
     var localDataSource: ObservationFavoriteLocalDataSource
     
@@ -31,12 +37,15 @@ class ObservationFavoriteRepository: ObservableObject {
     var cancellables: Set<AnyCancellable> = Set()
     
     init() {
-        localDataSource.pushSubject?.sink(receiveValue: { favorite in
+        print("XXX setup push subject for favorites")
+        localDataSource.pushSubject?.sink(receiveValue: { [weak self] favorite in
+            print("XXX favorite push subject activated")
             Task { [weak self] in
                 await self?.pushFavorites(favorites: [favorite])
             }
         })
         .store(in: &cancellables)
+        print("XXX favorite cancellables \(cancellables)")
     }
     
     func sync() {
@@ -50,10 +59,12 @@ class ObservationFavoriteRepository: ObservableObject {
     }
     
     func pushFavorites(favorites: [ObservationFavoriteModel]?) async {
+        print("XXX push favorites \(favorites)")
         guard let favorites = favorites, !favorites.isEmpty else {
             return
         }
 
+        print("XXX should push? \(DataConnectionUtilities.shouldPushObservations())")
         if !DataConnectionUtilities.shouldPushObservations() {
             return
         }

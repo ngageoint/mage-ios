@@ -108,7 +108,11 @@ class MageNavStack: UIViewController {
                 }
             }
         case .showFavoritedUsers(remoteIds: let remoteIds):
-            showFavorites(userIds: remoteIds)
+            if (remoteIds.count != 0) {
+                let locationViewController = LocationListWrapperViewController(userRemoteIds: remoteIds, scheme: scheme, router: router)
+                locationViewController.title = "Favorited By";
+                self.pushViewController(vc: locationViewController)
+            }
         }
     }
     
@@ -116,7 +120,7 @@ class MageNavStack: UIViewController {
         switch (route) {
         case .observationMoreActions(observationUri: let uri):
             Task {
-                guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
+                guard let observation = await self.observationRepository.getObservationNSManagedObject(observationUri: uri) else {
                     return
                 }
                 let actionsSheet: ObservationActionsSheetController = ObservationActionsSheetController(observation: observation, delegate: self, router: router);
@@ -440,18 +444,10 @@ class MageNavStack: UIViewController {
         { localPath, contentType in
             
         }
-    .environmentObject(router)
+        .environmentObject(router)
         
         let ovc2 = SwiftUIViewController(swiftUIView: observationView)
         self.pushViewController(vc: ovc2)
-    }
-    
-    func showFavorites(userIds: [String]) {
-        if (userIds.count != 0) {
-            let locationViewController = LocationsTableViewController(userIds: userIds, actionsDelegate: nil, scheme: scheme, router: router);
-            locationViewController.title = "Favorited By";
-            self.pushViewController(vc: locationViewController)
-        }
     }
 }
 
@@ -472,7 +468,7 @@ extension MageNavStack: ObservationActionsDelegate {
     
     func editObservation(uri: URL) async {
         self.bottomSheet?.dismiss(animated: true, completion: nil)
-        guard let observation = await self.observationRepository.getObservation(observationUri: uri) else {
+        guard let observation = await self.observationRepository.getObservationNSManagedObject(observationUri: uri) else {
             return;
         }
         let observationEditCoordinator = ObservationEditCoordinator(rootViewController: self.navigationController, delegate: self, observation: observation);

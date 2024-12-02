@@ -16,6 +16,9 @@ struct LocationModel {
     var eventId: NSNumber?
     
     var userModel: UserModel?
+}
+
+extension LocationModel {
     
     init(location: Location) {
         locationUri = location.objectID.uriRepresentation()

@@ -27,7 +27,8 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -37,6 +38,15 @@
             ReferencedContainer = "container:MAGE.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F7A94D6518AD9CB000CB9EE0"
+            BuildableName = "MAGE.app"
+            BlueprintName = "MAGE"
+            ReferencedContainer = "container:MAGE.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -45,6 +55,17 @@
                BlueprintIdentifier = "F7ED5D2320052161007BD768"
                BuildableName = "MAGETests.xctest"
                BlueprintName = "MAGETests"
+               ReferencedContainer = "container:MAGE.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F7C183A72CD2E13400BA7DCD"
+               BuildableName = "MAGEGeoPackageTests.xctest"
+               BlueprintName = "MAGEGeoPackageTests"
                ReferencedContainer = "container:MAGE.xcodeproj">
             </BuildableReference>
          </TestableReference>
