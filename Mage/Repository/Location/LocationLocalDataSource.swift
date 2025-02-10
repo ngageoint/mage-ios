@@ -29,7 +29,7 @@ enum URIItem: Hashable, Identifiable {
             return header
         }
     }
-
+    
     case listItem(_ uri: URL)
     case sectionHeader(header: String)
 }
@@ -78,11 +78,16 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
             request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
             
             return context.listPublisher(for: request, transformer: { $0 })
-            .catch { _ in Empty() }
-            .map({ output in
-                output[0].timestamp ?? Date()
-            })
-            .eraseToAnyPublisher()
+                .catch { _ in Empty() }
+                .map({ output in
+                    if output.isEmpty {
+                        print("There are no timestamps to observe")
+                    } else {
+                        output[0].timestamp
+                    }
+                    return Date()
+                })
+                .eraseToAnyPublisher()
         }
         return itemChanges
     }
@@ -150,12 +155,12 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
         at page: Page?,
         currentHeader: String?
     ) -> AnyPublisher<URIModelPage, Error> {
-
+        
         let request = Location.fetchRequest()
         let predicates: [NSPredicate] = Locations.getPredicatesForLocations() as? [NSPredicate] ?? []
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.predicate = predicate
-
+        
         request.includesSubentities = false
         request.fetchLimit = 100
         request.fetchOffset = (page ?? 0) * request.fetchLimit
@@ -165,19 +170,19 @@ class LocationCoreDataDataSource: CoreDataDataSource, LocationLocalDataSource, O
         var uris: [URIItem] = []
         context.performAndWait {
             if let fetched = context.fetch(request: request) {
-
+                
                 uris = fetched.flatMap { user in
                     return [URIItem.listItem(user.objectID.uriRepresentation())]
                 }
             }
         }
-
+        
         let page: URIModelPage = URIModelPage(
             list: uris,
             next: (page ?? 0) + 1,
             currentHeader: previousHeader
         )
-
+        
         return Just(page)
             .setFailureType(to: Error.self)
             .receive(on: DispatchQueue.main)
