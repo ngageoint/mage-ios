@@ -80,14 +80,11 @@ class LocationCoreDataDataSource: CoreDataDataSource<Location>, LocationLocalDat
             request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
             
             return context.listPublisher(for: request, transformer: { $0 })
-            .catch { _ in Empty() }
-            .compactMap({ output in
-                output.first
-            })
-            .map({ output in
-                output.timestamp ?? Date(timeIntervalSince1970: 0)
-            })
-            .eraseToAnyPublisher()
+                .catch { _ in Empty() }
+                .compactMap { output in
+                    output.first?.timestamp
+                }
+                .eraseToAnyPublisher()
         }
         return itemChanges
     }
