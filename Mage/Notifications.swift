@@ -16,3 +16,9 @@ extension Notification.Name {
 struct SnackbarNotification {
     var snackbarModel: SnackbarModel?
 }
+
+class Example {
+    init () {
+        let w = 0
+    }
+}
