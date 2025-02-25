@@ -104,6 +104,8 @@
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
+		A844657C2D6E20030041AE2E /* SwiftLintFramework in Frameworks */ = {isa = PBXBuildFile; productRef = A844657B2D6E20030041AE2E /* SwiftLintFramework */; };
+		A844657E2D6E20030041AE2E /* swiftlint in Frameworks */ = {isa = PBXBuildFile; productRef = A844657D2D6E20030041AE2E /* swiftlint */; };
 		BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B61E70D96990B16652014926 /* libPods-MAGE.a */; };
 		F70039442006BA1700E6E660 /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
 		F70039462006CCA400E6E660 /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
@@ -1698,6 +1700,7 @@
 				F706888F2BA3A85600D8E2EA /* DataSourceDefinition in Frameworks */,
 				F7DE98932C1B3B9B005372F8 /* DebugUtilities in Frameworks */,
 				F776AC902BC9E178000FAFB4 /* MapFramework in Frameworks */,
+				A844657C2D6E20030041AE2E /* SwiftLintFramework in Frameworks */,
 				4C390F4A197DB7B000AB3CCB /* MessageUI.framework in Frameworks */,
 				F7A94DA118ADBD5400CB9EE0 /* MapKit.framework in Frameworks */,
 				F776AC952BCD9DE3000FAFB4 /* Alamofire in Frameworks */,
@@ -1717,6 +1720,7 @@
 				BFC94C4360074DCC5E09B8EA /* libPods-MAGE.a in Frameworks */,
 				F7BFB8D72C4F074E00901479 /* SwiftUIKitView in Frameworks */,
 				F706888D2BA3A85600D8E2EA /* CLLocationCoordinate2DExtensions in Frameworks */,
+				A844657E2D6E20030041AE2E /* swiftlint in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3683,6 +3687,8 @@
 				F7DE98922C1B3B9B005372F8 /* DebugUtilities */,
 				F7E079452C2223B80029C88D /* ExceptionCatcher */,
 				F7BFB8D62C4F074E00901479 /* SwiftUIKitView */,
+				A844657B2D6E20030041AE2E /* SwiftLintFramework */,
+				A844657D2D6E20030041AE2E /* swiftlint */,
 			);
 			productName = Mage;
 			productReference = F7A94D6618AD9CB000CB9EE0 /* MAGE.app */;
@@ -3719,9 +3725,7 @@
 				ORGANIZATIONNAME = "National Geospatial Intelligence Agency";
 				TargetAttributes = {
 					F7A94D6518AD9CB000CB9EE0 = {
-						DevelopmentTeam = ZL8G5D9G2H;
 						LastSwiftMigration = 1130;
-						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 1;
@@ -3760,6 +3764,7 @@
 				F776AC932BCD9DE3000FAFB4 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				F7E079442C2223B80029C88D /* XCRemoteSwiftPackageReference "ExceptionCatcher" */,
 				F7BFB8D52C4F074E00901479 /* XCRemoteSwiftPackageReference "SwiftUIKitView" */,
+				A844657A2D6E20030041AE2E /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = F7A94D6718AD9CB000CB9EE0 /* Products */;
 			projectDirPath = "";
@@ -4852,11 +4857,9 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
@@ -4868,8 +4871,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "MAGE Development";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MAGE Development";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -4888,11 +4890,9 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MAGE/MAGE.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZL8G5D9G2H;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = ZL8G5D9G2H;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mage/MAGE-Prefix.pch";
@@ -4903,8 +4903,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.mage;
 				PRODUCT_NAME = MAGE;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "MAGE Development";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MAGE Development";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Mage/MAGE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -5081,6 +5080,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A844657A2D6E20030041AE2E /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.58.2;
+			};
+		};
 		F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -5116,6 +5123,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A844657B2D6E20030041AE2E /* SwiftLintFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A844657A2D6E20030041AE2E /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = SwiftLintFramework;
+		};
+		A844657D2D6E20030041AE2E /* swiftlint */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A844657A2D6E20030041AE2E /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = swiftlint;
+		};
 		F70688822BA37ECE00D8E2EA /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F70688812BA37ECE00D8E2EA /* XCRemoteSwiftPackageReference "Kingfisher" */;
