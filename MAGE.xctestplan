@@ -1,0 +1,56 @@
+{
+  "configurations" : [
+    {
+      "id" : "EA35DCE3-8567-4F1E-9349-44532C30FF5F",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:MAGE.xcodeproj",
+          "identifier" : "F7A94D6518AD9CB000CB9EE0",
+          "name" : "MAGE"
+        }
+      ]
+    },
+    "environmentVariableEntries" : [
+      {
+        "key" : "OS_ACTIVITY_MODE",
+        "value" : "enable"
+      },
+      {
+        "key" : "CFNETWORK_DIAGNOSTICS",
+        "value" : "3"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:MAGE.xcodeproj",
+      "identifier" : "F7A94D6518AD9CB000CB9EE0",
+      "name" : "MAGE"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:MAGE.xcodeproj",
+        "identifier" : "F7ED5D2320052161007BD768",
+        "name" : "MAGETests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:MAGE.xcodeproj",
+        "identifier" : "F7C183A72CD2E13400BA7DCD",
+        "name" : "MAGEGeoPackageTests"
+      }
+    }
+  ],
+  "version" : 1
+}
