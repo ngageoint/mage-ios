@@ -22,9 +22,12 @@
 #import "ContactInfo.h"
 #import "MAGE-Swift.h"
 
+//#import "AuthenticationCoordinator+Testing.h"
+
+
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
-@property (weak, nonatomic) UINavigationController *navigationController;
+@property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) MageServer *server;
 @property (strong, nonatomic) NSString *signupUsername;
 @property (strong, nonatomic) NSString *captchaToken;
@@ -176,8 +179,11 @@ BOOL signingIn = YES;
 
 - (void) startLoginOnly {
     NSURL *url = [MageServer baseURL];
+    NSLog(@"🔥 startLoginOnly called with URL: %@", url);
+    
     __weak __typeof__(self) weakSelf = self;
     [MageServer serverWithUrl:url success:^(MageServer *mageServer) {
+        NSLog(@"✅ Server fetched successfully: %@", mageServer);
         [weakSelf showLoginViewForCurrentUserForServer:mageServer];
     } failure:^(NSError *error) {
         NSLog(@"failed to contact server");
@@ -185,10 +191,13 @@ BOOL signingIn = YES;
 }
 
 - (void) start:(MageServer *) mageServer {
-    [self showLoginViewForServer:mageServer];
+    NSLog(@"🔥 Coordinator Start Called");  // Debugging log
+    NSLog(@"🔥 Navigation Controller Before Start: %@", self.navigationController);
+    [self showLoginViewForServer: mageServer];
 }
 
 - (void) showLoginViewForCurrentUserForServer: (MageServer *) mageServer {
+    NSLog(@"🔥 showLoginViewForCurrentUserForServer called");
     self.server = mageServer;
     User *currentUser = [User fetchCurrentUserWithContext:_context];
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andUser: currentUser andDelegate:self andScheme:_scheme];
@@ -198,28 +207,42 @@ BOOL signingIn = YES;
 
 - (void) showLoginViewForServer: (MageServer *) mageServer {
     signingIn = YES;
+    
+    NSLog(@"🔥 showLoginViewForServer called");
     self.server = mageServer;
+    NSLog(@"✅ Server set in AuthenticationCoordinator: %@", self.server);
+    
     // If the user is logging in, force them to pick the event again
     [Server removeCurrentEventId];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"loginType"];
     [defaults synchronize];
-    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    
+    NSLog(@"📌 Before push: %@", self.navigationController.viewControllers);
+
     self.loginView = [[LoginViewController alloc] initWithMageServer:mageServer andDelegate:self andScheme:_scheme];
+    
+    [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
+    
     [self.navigationController pushViewController:self.loginView animated:NO];
+    
+    NSLog(@"📌 After push: %@", self.navigationController.viewControllers);
 }
 
 - (void) changeServerURL {
+    NSLog(@"🔥 changeServerURL called");
     [self.delegate changeServerUrl];
 }
 
 - (BOOL) didUserChange: (NSString *) username {
+    NSLog(@"🔥 didUserChange called");
     NSLog(@"XXXX Context is to search %@", _context);
     User *currentUser = [User fetchCurrentUserWithContext:_context];
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
 
 - (void) loginWithParameters:(NSDictionary *)parameters withAuthenticationStrategy:(NSString *) authenticationStrategy complete:(void (^)(AuthenticationStatus, NSString *))complete {
+    NSLog(@"🔥 loginWithParameters called");
     id<AuthenticationProtocol> authenticationModule = [self.server.authenticationModules objectForKey:authenticationStrategy];
     if (!authenticationModule) {
         authenticationModule = [self.server.authenticationModules objectForKey:@"offline"];
@@ -272,6 +295,7 @@ BOOL signingIn = YES;
 }
 
 - (void) accountCreationSuccess: (NSDictionary *) parameters {
+    NSLog(@"🔥 accountCreationSuccess called");
     [self.navigationController popToViewController:self.loginView animated:NO];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"MAGE Account Created"
@@ -284,6 +308,7 @@ BOOL signingIn = YES;
 }
 
 - (void) failedToAuthenticate:(NSString *) message username: (NSString *) username {
+    NSLog(@"🔥 failedToAuthenticate called");
     NSString *error = [message isEqualToString:@"Unauthorized"] ? @"The username or password you entered is incorrect" : message;
     
     ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage:error];
@@ -292,6 +317,7 @@ BOOL signingIn = YES;
 }
 
 - (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    NSLog(@"🔥 unableToAuthenticate called");
     __weak typeof(self) weakSelf = self;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -339,6 +365,7 @@ BOOL signingIn = YES;
 }
 
 - (void) workOffline: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    NSLog(@"🔥 workOffline called");
     __weak typeof(self) weakSelf = self;
 
     NSLog(@"work offline");
@@ -362,11 +389,12 @@ BOOL signingIn = YES;
 }
 
 - (void) returnToLogin: (void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete {
+    NSLog(@"🔥 returnToLogin called");
     complete(UNABLE_TO_AUTHENTICATE, @"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored.");
 }
 
 - (void) authenticationWasSuccessfulWithModule: (id<AuthenticationProtocol>) module {
-    
+    NSLog(@"🔥 authenticationWasSuccessfulWithModule called");
     [module finishLogin:^(AuthenticationStatus authenticationStatus, NSString *errorString, NSString *errorDetail) {
         if (authenticationStatus == AUTHENTICATION_SUCCESS) {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -379,20 +407,31 @@ BOOL signingIn = YES;
                 DisclaimerViewController *viewController = [[DisclaimerViewController alloc] init];
                 viewController.delegate = self;
                 [viewController applyThemeWithContainerScheme:self.scheme];
-                [FadeTransitionSegue addFadeTransitionToView:self.navigationController.view];
                 
-                [self.navigationController popToRootViewControllerAnimated:NO];
+                NSLog(@"📌 Before Disclaimer Push: %@", self.navigationController.viewControllers);
+                
+                if (![self.navigationController.topViewController isKindOfClass:[LoginViewController class]]) {
+                    NSLog(@"⚠️ LoginViewController is missing before pushing Disclaimer");
+                }
+                
+                [FadeTransitionSegue addFadeTransitionToView: self.navigationController.view];
+                
+//                [self.navigationController popToRootViewControllerAnimated:NO];
                 [self.navigationController pushViewController:viewController animated:NO];
+                
+                NSLog(@"📌 After Disclaimer Push: %@", self.navigationController.viewControllers);
+
             }
         } else {
-            ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage: errorString andDetailedInfo: errorDetail];
+            ContactInfo *info = [[ContactInfo alloc] initWithTitle: @"Login Failed" andMessage: errorString andDetailedInfo: errorDetail];
 //            info.username = username;
-            [self.loginView setContactInfo:info];
+            [self.loginView setContactInfo: info];
         }
     }];
 }
 
 - (void) registrationWasSuccessful: (NSString *) username {
+    NSLog(@"🔥 registrationWasSuccessful called");
     NSString *error = @"Your device has been registered.  \nAn administrator has been notified to approve this device.";
     
     ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Registration Sent" andMessage:error];
@@ -403,11 +442,13 @@ BOOL signingIn = YES;
 }
 
 - (void) disclaimerDisagree {
+    NSLog(@"🔥 disclaimerDisagree called");
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate logout];
 }
 
 - (void) disclaimerAgree {
+    NSLog(@"🔥 disclaimerAgree called");
     [[UserUtility singleton] acceptConsent];
     [self.navigationController popToRootViewControllerAnimated:NO];
     [self.delegate authenticationSuccessful];

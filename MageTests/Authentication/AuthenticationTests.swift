@@ -11,10 +11,36 @@ import OHHTTPStubs
 
 @testable import MAGE
 
+// Starting from server responses and working backward
+protocol AuthenticationServiceProtocol {
+    func signIn(username: String, password: String, completion: @escaping (Result<AuthResponse, Error>) -> Void)
+    func fetchAuthToken(uid: String, completion: @escaping (Result<TokenResponse, Error>) -> Void)
+}
+
+struct AuthResponse: Codable {
+    let token: String
+    let userId: String
+}
+
+struct TokenResponse: Codable {
+    let accessToken: String
+}
+
+
+
+
+
+
+
+// Starting from server responses and working backward
+
+
+
 class AuthenticationTestDelegate: AuthenticationDelegate {
     var authenticationSuccessfulCalled = false
     var couldNotAuthenticateCalled = false
     var changeServerUrlCalled = false
+    
     func authenticationSuccessful() {
         authenticationSuccessfulCalled = true
     }
@@ -31,11 +57,24 @@ class AuthenticationTestDelegate: AuthenticationDelegate {
 final class AuthenticationTests: AsyncMageCoreDataTestCase {
     
     var window: UIWindow!
+    var navigationController: UINavigationController!
+    var delegate: AuthenticationTestDelegate!
+    var coordinator: AuthenticationCoordinator!
+    
+    private var apiExpectations: [String: XCTestExpectation] = [:]
+    private var stubFulfillmentHandlers: [String: (() -> Void)] = [:]
     
     @MainActor
     override func setUp() async throws {
         try await super.setUp()
-        window = TestHelpers.getKeyWindowVisible();
+        setUpAuthenticationTestEnvironment()
+        
+        // Store fulfillment handlers for each API endpoint
+        stubFulfillmentHandlers = [
+            "/api": { self.apiExpectations["/api"]?.fulfill() },
+            "/auth/local/signin": { self.apiExpectations["/auth/local/signin"]?.fulfill() },
+            "/auth/token": { self.apiExpectations["/auth/token"]?.fulfill() }
+        ]
     }
     
     @MainActor
@@ -44,8 +83,372 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         window.rootViewController = nil;
     }
     
+    private func configureAuthenticationEnvironment() {
+        MageSessionManager.shared()?.setToken("TOKEN")
+        StoredPassword.persistToken(toKeyChain: "TOKEN")
+    }
+
+    private func configureUserDefaults() {
+        let defaults = UserDefaults.standard
+        defaults.set("https://magetest", forKey: "baseServerUrl")
+        defaults.set(true, forKey: "deviceRegistered")
+    }
+    
+    private func setUpAuthenticationTestEnvironment() {
+        window = TestHelpers.getKeyWindowVisible()
+        navigationController = UINavigationController()
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+
+        delegate = AuthenticationTestDelegate()
+        UserDefaults.standard.baseServerUrl = "https://magetest"
+        UserDefaults.standard.register(defaults: ["deviceRegistered": true])
+        MageSessionManager.shared()?.clearToken()
+
+        coordinator = AuthenticationCoordinator(
+            navigationController: navigationController,
+            andDelegate: delegate,
+            andScheme: MAGEScheme.scheme(),
+            context: context)
+    }
+    
+    /// 🔥 Creates expectations for API calls and assigns fulfillment handlers
+    private func createAPIExpectations() -> ([String: XCTestExpectation], [String: () -> Void]) {
+        var apiExpectations: [String: XCTestExpectation] = [:]
+        var stubFulfillmentHandlers: [String: () -> Void] = [:]
+
+        let endpoints = ["/api", "/auth/local/signin", "/auth/token"]
+
+        for endpoint in endpoints {
+            let expectation = XCTestExpectation(description: "response of \(endpoint) complete")
+            apiExpectations[endpoint] = expectation
+            stubFulfillmentHandlers[endpoint] = { expectation.fulfill() }
+        }
+        
+        return (apiExpectations, stubFulfillmentHandlers)
+    }
+    
+    /// 🔥 Stub all required API responses for authentication tests
+    private func stubAPIResponses(with fulfillmentHandlers: [String: () -> Void]) {
+        stub(condition: isMethodGET() && isHost("magetest") && isPath("/api")) { _ in
+            print("\nFulfilled stubbed: /api\n")
+            fulfillmentHandlers["/api"]?()
+            return HTTPStubsResponse(fileAtPath: OHPathForFile("apiSuccess.json", AuthenticationTests.self)!,
+                                     statusCode: 200, headers: ["Content-Type": "application/json"])
+        }
+
+        stub(condition: isMethodPOST() && isPath("/auth/local/signin")) { _ in
+            print("\nFulfilled stubbed: /auth/local/signin\n")
+            fulfillmentHandlers["/auth/local/signin"]?()  // Call the fulfillment closure
+            return HTTPStubsResponse(fileAtPath: OHPathForFile("signinSuccess.json", AuthenticationTests.self)!,
+                                     statusCode: 200, headers: ["Content-Type": "application/json"])
+        }
+        
+        // 🔥 Added: Token authentication stub
+        stub(condition: isMethodPOST() && isPath("/auth/token")) { _ in
+            print("\nFulfilled stubbed: /auth/token\n")
+            fulfillmentHandlers["/auth/token"]?()  // Call the fulfillment closure
+            return HTTPStubsResponse(fileAtPath: OHPathForFile("authorizeLocalSuccess.json", AuthenticationTests.self)!,
+                                     statusCode: 200, headers: ["Content-Type": "application/json"])
+        }
+
+        // 🔥 Added: User icon stub
+        stub(condition: isMethodPOST() && isPath("/api/users/1a/icon")) { _ in
+            print("Fulfilled stubbed: /api/users/1a/icon")
+            self.apiExpectations["/api/users/1a/icon"]?.fulfill()
+            return HTTPStubsResponse(fileAtPath: OHPathForFile("icon27.png", AuthenticationTests.self)!,
+                                     statusCode: 200, headers: ["Content-Type": "image/png"])
+        }
+
+        // 🔥 Added: User avatar stub
+        stub(condition: isMethodPOST() && isPath("/api/users/1a/avatar")) { _ in
+            print("Fulfilled stubbed: /api/users/1a/avatar")
+            self.apiExpectations["/api/users/1a/avatar"]?.fulfill()
+            return HTTPStubsResponse(fileAtPath: OHPathForFile("icon27.png", AuthenticationTests.self)!,
+                                     statusCode: 200, headers: ["Content-Type": "image/png"])
+        }
+        
+    }
+
+//    /// 🚀 Helper function to create a MageServer instance
+//    private func createTestServer() async -> MageServer {
+//        let url = MageServer.baseURL()
+//        return await withCheckedContinuation { continuation in
+//            MageServer.server(url: url) { server in
+//                continuation.resume(returning: server)
+//            } failure: { _ in
+//                XCTFail("❌ Failed to create MageServer instance")
+//            }
+//        }
+//    }
+    
+//    /// 🚀 Helper function to verify login screen appears
+//    @MainActor
+//    private func verifyLoginScreenAppeared() async {
+//        await awaitBlockTrue(block: { [weak self] in  // ✅ Weak capture of `self`
+//            guard let self = self else { return false }
+//            guard let topVC = self.navigationController?.topViewController else {
+//                XCTFail("❌ No top view controller in navigation stack!")
+//                return false
+//            }
+//            if !(topVC is LoginViewController) {
+//                XCTFail("❌ Expected LoginViewController, but found \(type(of: topVC))")
+//                return false
+//            }
+//            return true
+//        }, timeout: 2)
+//    }
+    
+//    /// 🚀 Helper function to perform a login
+//    @MainActor
+//    private func performLogin(username: String, password: String) -> Bool {
+//        let parameters: [String: Any] = [
+//            "username": username,
+//            "password": password,
+//            "uid": "uuid",
+//            "strategy": ["identifier": "local"],
+//            "appVersion": "6.0.0"
+//        ]
+//        
+//        var authenticationStatus: AuthenticationStatus?
+//        
+//        let loginDelegate = coordinator as! LoginDelegate
+//        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { status, _ in
+//            authenticationStatus = status
+//        }
+//        
+//        return authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS
+//    }
+
+//    @MainActor
+//    private func verifyNavigationStackContains(_ expectedViewController: AnyClass, timeout: TimeInterval = 2) async {
+//        await awaitBlockTrue(block: { [weak self] in
+//            guard let self = self else { return false }
+//            guard let navigationController = self.navigationController else {
+//                XCTFail("❌ navigationController is nil before checking the navigation stack!")
+//                return false
+//            }
+//
+//            // ✅ Check if any view controller in the stack matches
+//            let containsExpectedVC = navigationController.viewControllers.contains { $0.isKind(of: expectedViewController) }
+//
+//            if !containsExpectedVC {
+//                print("⚠️ \(expectedViewController) not found in navigation stack.")
+//                return false
+//            }
+//
+//            return true
+//        }, timeout: timeout)
+//    }
+
+
     @MainActor
-    func testLoginWithRegisteredDeviceAndRandomToken() async {
+    private func verifyNavigationStackContains(_ expectedViewController: AnyClass, timeout: TimeInterval = 2) async {
+        await awaitBlockTrue(block: { [weak self] in
+            guard let self = self else { return false }
+            guard let navigationController = self.navigationController else {
+                XCTFail("❌ navigationController is nil before checking the navigation stack!")
+                return false
+            }
+
+            print("📌 Navigation Stack Contains: \(navigationController.viewControllers)")
+
+            let stack = navigationController.viewControllers.map { String(describing: type(of: $0)) }
+            print("📌 Navigation Stack: \(stack)")
+
+            let containsExpectedVC = navigationController.viewControllers.contains { $0.isKind(of: expectedViewController) }
+
+            if !containsExpectedVC {
+                XCTFail("❌ Expected \(expectedViewController), but got stack: \(stack)")
+                return false
+            }
+
+            return true
+        }, timeout: timeout)
+    }
+
+    
+    @MainActor
+    func testLoginWithRegisteredDeviceAndRandomTokenBrent() async {
+        configureAuthenticationEnvironment()
+        configureUserDefaults()
+
+        // Create expectations dynamically
+        (apiExpectations, stubFulfillmentHandlers) = createAPIExpectations()
+        
+        // Apply the stubs
+        stubAPIResponses(with: stubFulfillmentHandlers)
+
+        let navigationController = UINavigationController()
+        window.rootViewController = navigationController
+        delegate = AuthenticationTestDelegate()
+        
+        let url = MageServer.baseURL()
+        
+        let server: MageServer = await withCheckedContinuation { continuation in
+            MageServer.server(url: url) { server in
+                continuation.resume(returning: server)
+            } failure: { error in
+                XCTFail("❌ Failed to create MageServer")
+            }
+        }
+        
+        XCTAssertEqual(url?.absoluteString, "https://magetest")
+        
+        coordinator = AuthenticationCoordinator(
+            navigationController: navigationController,
+            andDelegate: delegate,
+            andScheme: MAGEScheme.scheme(),
+            context: context
+        )!
+
+        // Ensure coordinator starts before checking the navigation stack
+        Task {
+            coordinator.start(server)
+            try? await Task.sleep(nanoseconds: 500_000_000)  // ⏳ Wait for 0.5 sec
+            await verifyNavigationStackContains(LoginViewController.self)
+        }
+            
+        let parameters: [String: Any] = [
+            "username": "test",
+            "password": "test",
+            "uid": "uuid",
+            "strategy": [
+                "identifier": "local"
+            ],
+            "appVersion": "6.0.0"
+        ]
+        
+        let loginDelegate = coordinator as! LoginDelegate
+        print("🚀 Initiating login request...")
+        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+            print("✅ Login response received! Status: \(authenticationStatus)")
+            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS)
+            let token = StoredPassword.retrieveStoredToken()
+            let mageSessionToken = MageSessionManager.shared().getToken()
+            XCTAssertEqual(token, "TOKEN")
+            XCTAssertEqual(token, mageSessionToken)
+        }
+        
+        await verifyNavigationStackContains(DisclaimerViewController.self, timeout: 4)
+        
+        let disclaimerDelegate = coordinator as! DisclaimerDelegate
+        disclaimerDelegate.disclaimerAgree()
+        
+        XCTAssertTrue(delegate.authenticationSuccessfulCalled)
+        
+        // Wait for API expectations to be fulfilled
+        await fulfillment(of: apiExpectations.values.map { $0 }, timeout: 5)
+    }
+
+    
+
+    @MainActor
+    func testLoginWithRegisteredDeviceAndRandomTokenBrentZZZ() async {
+        configureAuthenticationEnvironment()
+        configureUserDefaults()
+
+        // Create expectations dynamically
+        let (apiExpectations, stubFulfillmentHandlers) = createAPIExpectations()
+        
+        // Apply the stubs
+        stubAPIResponses(with: stubFulfillmentHandlers)
+
+        let navigationController = UINavigationController()
+        window.rootViewController = navigationController
+        let delegate = AuthenticationTestDelegate()
+        
+        let url = MageServer.baseURL()
+        
+        let server: MageServer = await withCheckedContinuation { continuation in
+            MageServer.server(url: url) { (server: MageServer) in
+                continuation.resume(returning: server)
+            } failure: { error in
+                XCTFail()
+            }
+        }
+        
+        XCTAssertEqual(url?.absoluteString, "https://magetest")
+        
+        let coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme(), context: context)!
+        
+        Task {
+            coordinator.start(server)
+            await verifyNavigationStackContains(LoginViewController.self)
+        }
+        
+        let parameters: [String: Any] = [
+            "username": "test",
+            "password": "test",
+            "uid": "uuid",
+            "strategy": [
+                "identifier": "local"
+            ],
+            "appVersion": "6.0.0"
+        ]
+        
+        let loginDelegate = coordinator as! LoginDelegate
+        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+            // login complete
+            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS)
+            let token = StoredPassword.retrieveStoredToken()
+            let mageSessionToken = MageSessionManager.shared().getToken()
+            XCTAssertEqual(token, "TOKEN")
+            XCTAssertEqual(token, mageSessionToken)
+        }
+        
+        await verifyNavigationStackContains(DisclaimerViewController.self)
+        
+        let disclaimerDelegate = coordinator as! DisclaimerDelegate
+        disclaimerDelegate.disclaimerAgree()
+        
+        XCTAssertTrue(delegate.authenticationSuccessfulCalled)
+        
+        // Wait for API expectations to be fulfilled
+        await fulfillment(of: apiExpectations.values.map { $0 }, timeout: 5)
+    }
+
+    
+    
+//    @MainActor
+//    func testLoginWithRegisteredDeviceAndRandomToken() async {
+//        // 🎯 Configure the authentication & user defaults
+//        configureAuthenticationEnvironment()
+//        configureUserDefaults()
+//
+//        // 🎯 Step 1: Verify Login Screen Appeared
+//        await verifyLoginScreenAppeared()
+//
+//        // 🎯 Step 2: Perform Login
+//        let apiSigninResponseArrived = XCTestExpectation(description: "response of /auth/local/signin complete")
+//        let apiTokenStub = XCTestExpectation(description: "response of /auth/token complete")
+//
+//        let loginSuccess = performLogin(username: "test", password: "test")
+//        XCTAssertTrue(loginSuccess, "❌ Expected login to succeed")
+//
+//        // 🎯 Step 3: Verify Token Storage
+//        let storedToken = StoredPassword.retrieveStoredToken()
+//        let sessionToken = MageSessionManager.shared().getToken()
+//        XCTAssertEqual(storedToken, "TOKEN", "❌ Stored token mismatch")
+//        XCTAssertEqual(sessionToken, "TOKEN", "❌ Session token mismatch")
+//
+//        // 🎯 Step 4: Verify Navigation to Disclaimer Screen
+//        await verifyNavigationStackContains(DisclaimerViewController.self)
+//
+//        // 🎯 Step 5: Agree to Disclaimer
+//        let disclaimerDelegate = coordinator as! DisclaimerDelegate
+//        disclaimerDelegate.disclaimerAgree()
+//
+//        // 🎯 Step 6: Verify Authentication Delegate Callback
+//        XCTAssertTrue(delegate.authenticationSuccessfulCalled, "❌ Expected authentication success callback")
+//
+//        // 🎯 Ensure API stubs were triggered
+//        await fulfillment(of: [apiSigninResponseArrived, apiTokenStub], timeout: 2)
+//    }
+    
+    
+    @MainActor
+    func testLoginWithRegisteredDeviceAndRandomToken_original() async {
         let baseUrlKey = "baseServerUrl"
         MageSessionManager.shared()?.setToken("TOKEN")
         StoredPassword.persistToken(toKeyChain: "TOKEN")
@@ -253,6 +656,8 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
     @MainActor
     func testLoginWithRegisteredDevice() async {
         let baseUrlKey = "baseServerUrl"
+        MageSessionManager.shared()?.setToken("TOKEN")
+        StoredPassword.persistToken(toKeyChain: "TOKEN")
         
         let defaults = UserDefaults.standard
         defaults.set("https://magetest", forKey: baseUrlKey)
@@ -324,16 +729,16 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
             // login complete
             XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS)
             let token = StoredPassword.retrieveStoredToken()
-//            let mageSessionToken = MageSessionManager.shared().getToken()
+            let mageSessionToken = MageSessionManager.shared().getToken()
             XCTAssertEqual(token, "TOKEN")
-//            XCTAssertEqual(token, mageSessionToken)
+            XCTAssertEqual(token, mageSessionToken)
         }
         
         await awaitBlockTrue(block: {
@@ -437,7 +842,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
@@ -476,6 +881,8 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
     
     @MainActor
     func testLoginWithInactiveUser() async {
+//        StoredPassword.clearToken()
+        
         let baseUrlKey = "baseServerUrl"
         
         let defaults = UserDefaults.standard
@@ -538,7 +945,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
@@ -622,7 +1029,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
@@ -707,7 +1114,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
@@ -801,7 +1208,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
@@ -917,7 +1324,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
@@ -1011,7 +1418,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
             "appVersion": "6.0.0"
         ]
         
-        let deviceRegistered = XCTestExpectation(description: "device registered")
+//        let deviceRegistered = XCTestExpectation(description: "device registered")
 
         let loginDelegate = coordinator as! LoginDelegate
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
@@ -1649,8 +2056,8 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
 //    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
 //    [HTTPStubs removeAllStubs];
 //}
-
-
+//
+//
 //
 //- (void) skipped_testLoginWithRegisteredDevice {
 //    NSString *baseUrlKey = @"baseServerUrl";
@@ -2406,5 +2813,5 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
 //        OCMVerifyAll(navControllerPartialMock);
 //    }];
 //}
-
+//
 //@end

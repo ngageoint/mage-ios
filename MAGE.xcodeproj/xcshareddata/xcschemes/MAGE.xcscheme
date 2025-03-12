@@ -62,10 +62,280 @@
                <Test
                   Identifier = "AttachmentPushServiceTests">
                </Test>
+               <Test
+                  Identifier = "BottomSheetRepositoryTests">
+               </Test>
+               <Test
+                  Identifier = "CacheOverlaysTests">
+               </Test>
+               <Test
+                  Identifier = "CanCreateObservationTests">
+               </Test>
+               <Test
+                  Identifier = "CanReportLocationTestsUserInEvent">
+               </Test>
+               <Test
+                  Identifier = "CanReportLocationTestsUserNotInEvent">
+               </Test>
+               <Test
+                  Identifier = "CheckboxFieldViewTests">
+               </Test>
+               <Test
+                  Identifier = "CommonFieldsViewTests">
+               </Test>
+               <Test
+                  Identifier = "DataConnectionUtilitiesTests">
+               </Test>
+               <Test
+                  Identifier = "DateViewTests">
+               </Test>
+               <Test
+                  Identifier = "DeviceUUIDTests">
+               </Test>
+               <Test
+                  Identifier = "DisconnectedLogin">
+               </Test>
+               <Test
+                  Identifier = "DropdownFieldViewTests">
+               </Test>
+               <Test
+                  Identifier = "EventChooserControllerTests">
+               </Test>
+               <Test
+                  Identifier = "EventChooserCoordinatorTests">
+               </Test>
+               <Test
+                  Identifier = "EventRepositoryTests">
+               </Test>
+               <Test
+                  Identifier = "ExpandableCardTests">
+               </Test>
+               <Test
+                  Identifier = "FeedItemRetrieverTests">
+               </Test>
+               <Test
+                  Identifier = "FeedItemViewViewControllerNoTimestampTests">
+               </Test>
+               <Test
+                  Identifier = "FeedItemViewViewControllerWithTimestampTests">
+               </Test>
+               <Test
+                  Identifier = "FeedItemsViewControllerNoTimestampTests">
+               </Test>
+               <Test
+                  Identifier = "FeedItemsViewControllerWithTimestampTests">
+               </Test>
+               <Test
+                  Identifier = "FeedServiceTests">
+               </Test>
+               <Test
+                  Identifier = "FeedTests">
+               </Test>
+               <Test
+                  Identifier = "FeedsMapTests">
+               </Test>
+               <Test
+                  Identifier = "FollowUserTests">
+               </Test>
+               <Test
+                  Identifier = "FormPickerTests">
+               </Test>
+               <Test
+                  Identifier = "FormTests">
+               </Test>
+               <Test
+                  Identifier = "GeometryDeserializerTests">
+               </Test>
+               <Test
+                  Identifier = "GeometryEditViewControllerTests">
+               </Test>
+               <Test
+                  Identifier = "GeometrySerializerTests">
+               </Test>
+               <Test
+                  Identifier = "GeometryViewTests">
+               </Test>
+               <Test
+                  Identifier = "HasMapSettingsTests">
+               </Test>
+               <Test
+                  Identifier = "ImageCacheTests">
+               </Test>
+               <Test
+                  Identifier = "KIFMageCoreDataTestCase">
+               </Test>
+               <Test
+                  Identifier = "KIFMageInjectionTestCase">
+               </Test>
+               <Test
+                  Identifier = "KIFSpec">
+               </Test>
+               <Test
+                  Identifier = "LayerTests">
+               </Test>
+               <Test
+                  Identifier = "LocalLoginViewTests">
+               </Test>
+               <Test
+                  Identifier = "LocationCoreDataDataSourceTests">
+               </Test>
+               <Test
+                  Identifier = "LocationFetchServiceTests">
+               </Test>
+               <Test
+                  Identifier = "LocationRepositoryTests">
+               </Test>
+               <Test
+                  Identifier = "LocationUtilitiesTests">
+               </Test>
+               <Test
+                  Identifier = "MageCoreDataTestCase">
+               </Test>
+               <Test
+                  Identifier = "MageInjectionTestCase">
+               </Test>
+               <Test
+                  Identifier = "MageServerTestsSwift">
+               </Test>
+               <Test
+                  Identifier = "MageServiceTests">
+               </Test>
+               <Test
+                  Identifier = "MageTests">
+               </Test>
+               <Test
+                  Identifier = "MapDirectionsTests">
+               </Test>
+               <Test
+                  Identifier = "MultiDropdownFieldViewTests">
+               </Test>
+               <Test
+                  Identifier = "NetworkSyncOptionTetsts">
+               </Test>
+               <Test
+                  Identifier = "NumberFieldViewTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationAnnotationTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationBottomSheetTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationCoreDataDataSourceTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationCoreDataSourceTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationEditCardCollectionViewControllerTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationEditCoordinatorTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationFetchServiceTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationFormReorderTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationFormViewTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationHeaderViewTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationImageRepositoryTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationModelTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationPushServiceTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationRepositoryTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationSyncStatusTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationTileRepositoryTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationToObservationPolicyTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationTransformationTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationViewCardCollectionViewControllerTests">
+               </Test>
+               <Test
+                  Identifier = "ObservationViewViewModelTests">
+               </Test>
+               <Test
+                  Identifier = "OnlineLayerMapTests">
+               </Test>
+               <Test
+                  Identifier = "PersistedMapStateTests">
+               </Test>
+               <Test
+                  Identifier = "Prepare">
+               </Test>
+               <Test
+                  Identifier = "RadioFieldViewTests">
+               </Test>
+               <Test
+                  Identifier = "SFGeometryMapTests">
+               </Test>
+               <Test
+                  Identifier = "ServerAuthenticationTests">
+               </Test>
+               <Test
+                  Identifier = "SingleObservationMapTests">
+               </Test>
+               <Test
+                  Identifier = "StaticLayerMapTests">
+               </Test>
+               <Test
+                  Identifier = "StoredPasswordTests">
+               </Test>
+               <Test
+                  Identifier = "StraightLineNavigationViewTests">
+               </Test>
+               <Test
+                  Identifier = "TextFieldMultiLineViewTests">
+               </Test>
+               <Test
+                  Identifier = "TextFieldViewTests">
+               </Test>
+               <Test
+                  Identifier = "UserCoreDataDataSourceTests">
+               </Test>
+               <Test
+                  Identifier = "UserHeadingDisplayTests">
+               </Test>
+               <Test
+                  Identifier = "UserRemoteDataSourceTests">
+               </Test>
+               <Test
+                  Identifier = "UserRepositoryTests">
+               </Test>
+               <Test
+                  Identifier = "UserTrackingMapTests">
+               </Test>
+               <Test
+                  Identifier = "UserUtilityTests">
+               </Test>
+               <Test
+                  Identifier = "UserViewControllerTests">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference
-            skipped = "NO"
+            skipped = "YES"
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"

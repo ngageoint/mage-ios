@@ -101,6 +101,8 @@
 		6C279DE5F410CDAB6348A088 /* libPods-MAGEGeoPackageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA1A9AC6685AEF62062AB6 /* libPods-MAGEGeoPackageTests.a */; };
 		7BE337090E1E1E71380E1A61 /* libPods-MAGETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E35CAAC522CDD65F899A0C68 /* libPods-MAGETests.a */; };
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
+		846D0BF72D7B4B8C009C68CB /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0BF62D7B4B8C009C68CB /* UserDefaults+Extensions.swift */; };
+		846D0BFD2D7BAAF4009C68CB /* AuthenticationCoordinatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0BFC2D7BAAF4009C68CB /* AuthenticationCoordinatorSpy.swift */; };
 		8474FD9726FB8B220041891A /* EmailBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9626FB8B220041891A /* EmailBuilder.m */; };
 		8474FD9A26FB8B890041891A /* LinkGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9926FB8B890041891A /* LinkGenerator.m */; };
 		8474FD9D26FB8C410041891A /* ContactInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474FD9C26FB8C410041891A /* ContactInfo.m */; };
@@ -1015,6 +1017,9 @@
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
+		846D0BF62D7B4B8C009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
+		846D0BFC2D7BAAF4009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
+		846D0BFE2D81DFD9009C68CB /* AuthenticationCoordinator+Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AuthenticationCoordinator+Testing.h"; sourceTree = "<group>"; };
 		8474FD9526FB8B220041891A /* EmailBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmailBuilder.h; sourceTree = "<group>"; };
 		8474FD9626FB8B220041891A /* EmailBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmailBuilder.m; sourceTree = "<group>"; };
 		8474FD9826FB8B890041891A /* LinkGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkGenerator.h; sourceTree = "<group>"; };
@@ -2075,6 +2080,7 @@
 				2FCDC35422C2866A004189AD /* AuthenticationButton.h */,
 				2FCDC35522C2866A004189AD /* AuthenticationButton.m */,
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
+				846D0BFE2D81DFD9009C68CB /* AuthenticationCoordinator+Testing.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
@@ -2549,6 +2555,7 @@
 			isa = PBXGroup;
 			children = (
 				F72C175A2523B52300682052 /* AuthenticationCoordinatorTests.swift */,
+				846D0BFC2D7BAAF4009C68CB /* AuthenticationCoordinatorSpy.swift */,
 				F7ED5D2E20052248007BD768 /* AuthenticationTests.swift */,
 				F79CC3EA252F832E005692DC /* ChangePasswordViewTests.swift */,
 				F79CC3EE2530AC4B005692DC /* LocalLoginViewTests.swift */,
@@ -3534,6 +3541,7 @@
 				F7489B36279A13CE00A9E314 /* CoordinateFieldTests.swift */,
 				F7613D5027EE03B300570145 /* ReleaseTestPlan.md */,
 				F7FB04612CE2BF51009C1041 /* DeviceUUIDTests.swift */,
+				846D0BF62D7B4B8C009C68CB /* UserDefaults+Extensions.swift */,
 			);
 			path = MageTests;
 			sourceTree = SOURCE_ROOT;
@@ -5336,6 +5344,7 @@
 				F730B94F268523B2004AD64A /* MockObservationFormReorderDelegate.swift in Sources */,
 				F7DDF46F2748023A00689550 /* ObservationImageRepositoryTests.swift in Sources */,
 				F7C097502C7E73ED003FA115 /* ObservationStaticLocalDataSource.swift in Sources */,
+				846D0BF72D7B4B8C009C68CB /* UserDefaults+Extensions.swift in Sources */,
 				F7E5749427DBDC28009A6E0D /* UserTrackingMapTests.swift in Sources */,
 				F70B47B224B5F27A00D0BFE5 /* FeedTests.swift in Sources */,
 				F718CCF62CA468790015DF87 /* MageInjectionTestCase.swift in Sources */,
@@ -5365,6 +5374,7 @@
 				F7EF4BEB2744206600D0C304 /* ObservationPushServiceTests.swift in Sources */,
 				F7C0974A2C7CFAE6003FA115 /* LocationCoreDataDataSourceTests.swift in Sources */,
 				F7F15B1B2745BEA7008FF6C2 /* MockObservationPushDelegate.swift in Sources */,
+				846D0BFD2D7BAAF4009C68CB /* AuthenticationCoordinatorSpy.swift in Sources */,
 				F7FB04622CE2BF51009C1041 /* DeviceUUIDTests.swift in Sources */,
 				F7F08EA027EA40DC00640D89 /* SingleObservationMapTests.swift in Sources */,
 				F729E9DB2034CCD100C2600D /* TestingAppDelegate.h in Sources */,

@@ -85,7 +85,15 @@ static NSDictionary<NSNumber *, NSArray<NSNumber *> *> * eventTasks;
 }
 
 -(void) clearToken {
+    NSLog(@"\n.\nClearToken called");
+    NSLog(@"Token Value 1: %@", _token);
+    NSLog(@"StoredPassword Token Value 1: %@\n", StoredPassword.retrieveStoredToken);
+    
+    StoredPassword.clearToken;
     [self setToken:nil];
+    
+    NSLog(@"Token Value 2: %@", _token);
+    NSLog(@"StoredPassword Token Value 2: %@\n.\n.\n", StoredPassword.retrieveStoredToken);
 }
 
 -(void) setTokenInRequestSerializer: (AFHTTPRequestSerializer *) requestSerializer{

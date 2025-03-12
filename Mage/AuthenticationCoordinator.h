@@ -12,16 +12,21 @@
 @class MageServer;
 
 @protocol AuthenticationDelegate
-
 - (void) authenticationSuccessful;
 - (void) couldNotAuthenticate;
 - (void) changeServerUrl;
-
 @end
 
 @interface AuthenticationCoordinator : NSObject
 
-- (instancetype) initWithNavigationController: (UINavigationController *) navigationController andDelegate: (id<AuthenticationDelegate>) delegate andScheme: (id<MDCContainerScheming>) containerScheme context: (NSManagedObjectContext *) context;
-- (void) start:(MageServer *) mageServer;
+//@property (nonatomic, readonly, strong, nullable) MageServer *server; // Add this line
+
+- (instancetype _Nullable) initWithNavigationController: (UINavigationController * _Nullable) navigationController
+                                  andDelegate: (id<AuthenticationDelegate> _Nullable) delegate
+                                    andScheme: (id<MDCContainerScheming> _Nullable) containerScheme
+                                      context: (NSManagedObjectContext * _Nullable) context;
+
+- (void) start:(MageServer * _Nullable) mageServer;
 - (void) startLoginOnly;
+- (void) showLoginViewForServer:(MageServer * _Nullable) mageServer;
 @end
