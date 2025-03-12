@@ -63,6 +63,51 @@
                   Identifier = "AttachmentPushServiceTests">
                </Test>
                <Test
+                  Identifier = "AuthenticationTests/testLoginFailWithRegisteredDevice()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginFailed()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginServerIncompatible()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithInactiveUser()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithInvalidPassword()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithInvalidToken()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithInvalidTokenExpirationDate()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithInvalidUsername()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithNoConnection()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithNoConnectionForToken()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithOtherErrorForToken()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithRegisteredDevice()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithRegisteredDeviceAndRandomToken_original()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testLoginWithUpdatedUser()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTests/testRegisterDevice()">
+               </Test>
+               <Test
                   Identifier = "BottomSheetRepositoryTests">
                </Test>
                <Test
