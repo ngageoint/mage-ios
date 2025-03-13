@@ -39,6 +39,8 @@ class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
 
 class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     
+    var spy: AuthenticationCoordinatorSpy!
+
     var window: UIWindow?
     var coordinator: AuthenticationCoordinator?
     var delegate: MockAuthenticationCoordinatorDelegate?
@@ -46,9 +48,12 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     
     override func setUp() async throws {
         try await super.setUp()
+        
         UserDefaults.standard.baseServerUrl = "https://magetest";
         UserDefaults.standard.mapType = 0;
         UserDefaults.standard.locationDisplay = .latlng;
+        
+        MageSessionManager.shared()?.clearToken()
         
         Server.setCurrentEventId(1)
         MageCoreDataFixtures.addEvent()
@@ -56,13 +61,23 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         await setupNavigationController()
         
-        print("XXX context in creating coordinator \(context)")
+        print("XXX context in creating coordinator \(String(describing: context))")
+        
         coordinator = AuthenticationCoordinator(
             navigationController: navigationController,
             andDelegate: delegate,
             andScheme: MAGEScheme.scheme(),
             context: context
         )
+        
+        spy = AuthenticationCoordinatorSpy(
+            navigationController: navigationController,
+            andDelegate: delegate,
+            andScheme: MAGEScheme.scheme(),
+            context: context
+        )
+        
+        stubServerResponse()
     }
     
     @MainActor
@@ -79,6 +94,9 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         await tearDownNavigationController()
         coordinator = nil
         delegate = nil
+        UserDefaults.standard.clearAll()
+        
+        MageSessionManager.shared()?.clearToken()
     }
     
     @MainActor
@@ -89,65 +107,44 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         navigationController = nil
     }
     
-//    override func spec() {
-//        
-//        describe("AuthenticationCoordinatorTests") {
-//            
-//            var window: UIWindow?;
-//            var coordinator: AuthenticationCoordinator?;
-//            var delegate: MockAuthenticationCoordinatorDelegate?;
-//            var navigationController: UINavigationController?;
-//            
-////            @Injected(\.persistence)
-////            var coreDataStack: Persistence
-//            @Injected(\.nsManagedObjectContext)
-//            var context: NSManagedObjectContext!
-//            
-//            beforeEach {
-//                InjectedValues[\.nsManagedObjectContext] = context
-////                NSManagedObject.mr_setDefaultBatchSize(0);
-//                TestHelpers.clearAndSetUpStack()
-//                
-//                UserDefaults.standard.baseServerUrl = "https://magetest";
-//                UserDefaults.standard.mapType = 0;
-//                UserDefaults.standard.locationDisplay = .latlng;
-//                
-//                MageCoreDataFixtures.addEvent()
-//                
-//                Server.setCurrentEventId(1);
-//                
-//                delegate = MockAuthenticationCoordinatorDelegate();
-////                waitUntil { done in
-////                    Task { @MainActor in
-//                        navigationController = UINavigationController();
-//                        navigationController?.isNavigationBarHidden = true;
-//                        window = TestHelpers.getKeyWindowVisible();
-//                        window!.rootViewController = navigationController;
-////                        done()
-////                    }
-////                }
-//                
-//                coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme(), context: context);
-//            }
-//            
-//            afterEach {
-//                waitUntil { done in
-//                    Task { @MainActor in
-//                        navigationController?.viewControllers = [];
-//                        window?.rootViewController?.dismiss(animated: false, completion: nil);
-//                        window?.rootViewController = nil;
-//                        done()
-//                    }
-//                }
-//                navigationController = nil;
-//                coordinator = nil;
-//                delegate = nil;
-//                HTTPStubs.removeAllStubs();
-//                TestHelpers.clearAndSetUpStack();
-//                
-//            }
-//
+    /// Stub MageServer response for testing
+    func stubServerResponse() {
+        let mockServerDelegate: MockMageServerDelegate = MockMageServerDelegate();
+        
+        MockMageServer.stubJSONSuccessRequest(
+            url: "https://magetest/api/server",
+            filePath: "server_response.json",
+            delegate: mockServerDelegate
+        )
+        
+        print("✅ Stubbed server response for /api/server")
+    }
+
+    func testShowLoginViewForServerCalled() {
+        let expectation = self.expectation(description: "Server request should complete")
+        
+        guard let testUrl = URL(string: "https://magetest") else {
+            XCTFail("\n❌ Failed to create URL instance\n")
+            return
+        }
+        
+        let testServer = MageServer(url: testUrl)
+
+        spy.start(testServer) // Calls showLoginViewForServer internally
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            print("🔍 Checking if showLoginViewForServer was called")
+            XCTAssertTrue(self.spy.showLoginViewForServerCalled, "Expected showLoginViewForServer to be called")
+            XCTAssertEqual(self.spy.showLoginViewForServerParam, testServer, "Expected the correct MageServer instance to be passed")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
     func testShouldLoadTheLoginViewController() {
+        // Set a fake "oldToken" so we can validate it gets changed.
+        // TODO: Why are we doing this in 2 different places?
         MageSessionManager.shared()?.setToken("oldToken");
         StoredPassword.persistToken(toKeyChain: "oldToken");
         UserDefaults.standard.deviceRegistered = true;
@@ -172,7 +169,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         expect(self.navigationController?.topViewController).toEventually(beAnInstanceOf(LoginViewController.self));
     }
 
-//            it("should login with registered device") {
     func testShouldLoginWithRegisteredDevice() {
         UserDefaults.standard.deviceRegistered = true;
         
@@ -205,18 +201,16 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
         
         tester().waitForView(withAccessibilityLabel: "AGREE");
         tester().tapView(withAccessibilityLabel: "AGREE");
         
-        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
+        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
     }
           
     func testShouldLoginWithAnInactiveUser() {
-        
-//            it("should login with an inactive user") {
         UserDefaults.standard.deviceRegistered = true;
         
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
@@ -248,17 +242,16 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
         
         tester().waitForView(withAccessibilityLabel: "AGREE");
         tester().tapView(withAccessibilityLabel: "AGREE");
         
-        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
+        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
     }
             
     func testShouldLoginWithRegisteredDeviceAndSkipTheDisclaimerScreen() {
-//            it("should login with registered device and skip the disclaimer screen") {
         UserDefaults.standard.deviceRegistered = true;
         
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
@@ -290,16 +283,15 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
             
-        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
+        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
     }
             
     func testShouldLoginAsADifferentUser() {
-//            it("should login as a different user") {
         let u = MageCoreDataFixtures.addUser();
-        print("XXX user that was added \(u!.remoteId)")
+        print("XXX user that was added \(String(describing: u!.remoteId))")
         print("XXX user id \(u!.objectID)")
         MageCoreDataFixtures.addUnsyncedObservationToEvent();
         
@@ -337,8 +329,8 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
         
         tester().waitForTappableView(withAccessibilityLabel: "Loss of Unsaved Data");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -350,11 +342,10 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "AGREE");
         tester().tapView(withAccessibilityLabel: "AGREE");
         
-        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
+        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
     }
             
     func testShouldStopLoggingInAsDifferentUser() {
-//            it("should stop logging in as a different user") {
         MageCoreDataFixtures.addUser();
         MageCoreDataFixtures.addUnsyncedObservationToEvent();
         
@@ -392,8 +383,8 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
         
         tester().waitForTappableView(withAccessibilityLabel: "Loss of Unsaved Data");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -404,7 +395,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
          
     func testShouldLogInWithAnInactiveUser() {
-//            it("should log in with an inactive user") {
         MageCoreDataFixtures.addUser();
         
         UserDefaults.standard.deviceRegistered = true;
@@ -439,7 +429,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
         
         tester().waitForTappableView(withAccessibilityLabel: "MAGE Account Created");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -449,7 +439,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldFailToGetToken() {
-//            it("should fail to get a token") {
         MageCoreDataFixtures.addUser();
         
         UserDefaults.standard.deviceRegistered = true;
@@ -489,9 +478,9 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
         
         tester().waitForView(withAccessibilityLabel: "Login Failed");
         let view: UITextView = (viewTester().usingLabel("Login Failed")?.view as! UITextView);
@@ -500,7 +489,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldNotBeAbleToLogInOfflineWithNoStoredPassword() {
-//            it("should not be able to log in offline with no stored password") {
         MageCoreDataFixtures.addUser();
         
         UserDefaults.standard.deviceRegistered = true;
@@ -538,7 +526,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
         
         tester().waitForTappableView(withAccessibilityLabel: "Unable to Login");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -548,7 +536,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldLogInOfflineWithStoredPassword() {
-//            it("should log in offline with stored password") {
         MageCoreDataFixtures.addUser();
         
         UserDefaults.standard.deviceRegistered = true;
@@ -591,7 +578,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
         
         tester().waitForTappableView(withAccessibilityLabel: "Disconnected Login");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -602,11 +589,10 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "AGREE");
         tester().tapView(withAccessibilityLabel: "AGREE");
         
-        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
+        expect(self.delegate?.authenticationSuccessfulCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
     }
             
     func testShouldLogInOfflineAgainWithStoredPassword() {
-//            it("should log in offline again with stored password") {
         MageCoreDataFixtures.addUser();
         UserDefaults.standard.loginType = "offline";
         UserDefaults.standard.deviceRegistered = true;
@@ -638,7 +624,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
         
         tester().waitForTappableView(withAccessibilityLabel: "Disconnected Login");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -646,11 +632,10 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         expect(alert.message).to(equal("We are still unable to connect to the server to log you in. You will continue to work offline."));
         tester().tapView(withAccessibilityLabel: "OK");
         
-        expect(self.delegate?.couldNotAuthenticateCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
+        expect(self.delegate?.couldNotAuthenticateCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Authentication Successful was never called");
     }
             
     func testShouldInitializeLoginViewWithUser() {
-//            it("should initialize the login view with a user") {
         MageCoreDataFixtures.addUser();
         
         UserDefaults.standard.deviceRegistered = true;
@@ -676,7 +661,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldLoginWithAnUnregisteredDevice() {
-//            it("should login with an unregistered device") {
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
             let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
             return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
@@ -709,8 +693,8 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
         
         tester().waitForView(withAccessibilityLabel: "Registration Sent");
         let view: UITextView = (viewTester().usingLabel("Registration Sent")?.view as! UITextView);
@@ -722,7 +706,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldLoginWithRegisteredDeviceAndDisagreeToTheDisclaimer() {
-//            it("should login with registered device and disagree to the disclaimer") {
         UserDefaults.standard.deviceRegistered = true;
         
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
@@ -733,7 +716,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
         
         MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/local/signin", filePath: "signinSuccess.json", delegate: serverDelegate);
-        
         MockMageServer.stubJSONSuccessRequest(url: "https://magetest/auth/token", filePath: "tokenSuccess.json", delegate: serverDelegate);
         
         var mageServer: MageServer?;
@@ -754,8 +736,8 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Sign In");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/local/signin")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signin request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/auth/token")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Token request was not made")
         
         tester().waitForView(withAccessibilityLabel: "DISAGREE");
         tester().tapView(withAccessibilityLabel: "DISAGREE");
@@ -764,8 +746,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldCreateAnAccount() {
-//            it("should create an account") {
-//                
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
             let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
             return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
@@ -811,14 +791,14 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         tester().enterText("display", intoViewWithAccessibilityLabel: "Display Name");
         tester().setText("password", intoViewWithAccessibilityLabel: "Password");
         tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Captcha request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Captcha request made")
         
         tester().setText("captcha", intoViewWithAccessibilityLabel: "Captcha");
         
         tester().waitForView(withAccessibilityLabel: "Sign Up");
         tester().tapView(withAccessibilityLabel: "Sign Up");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signup request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signup request made")
 
         tester().waitForTappableView(withAccessibilityLabel: "Account Created");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -830,8 +810,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldCreateAnInactiveAccount() {
-//            it("should create an inactive account") {
-        
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
             let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
             return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
@@ -877,14 +855,14 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         tester().enterText("display", intoViewWithAccessibilityLabel: "Display Name");
         tester().setText("password", intoViewWithAccessibilityLabel: "Password");
         tester().setText("password", intoViewWithAccessibilityLabel: "Confirm Password");
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Captcha request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Captcha request made")
         
         tester().setText("captcha", intoViewWithAccessibilityLabel: "Captcha");
         
         tester().waitForView(withAccessibilityLabel: "Sign Up");
         tester().tapView(withAccessibilityLabel: "Sign Up");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Signup request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Signup request made")
         
         tester().waitForTappableView(withAccessibilityLabel: "Account Created");
         let alert: UIAlertController = (UIApplication.getTopViewController() as! UIAlertController);
@@ -896,8 +874,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
    
     func testShouldFailToCreateAccount() {
-//            it("should fail to create an account") {
-        
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
             let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
             return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
@@ -935,7 +911,7 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "Sign Up");
         tester().tapView(withAccessibilityLabel: "Sign Up");
         
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api/users/signups/verifications")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "Sign Up request made")
         
         tester().waitForTappableView(withAccessibilityLabel: "Error Creating Account");
         let alert: UIAlertController = (navigationController?.presentedViewController as! UIAlertController);
@@ -947,8 +923,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldCancelCreatingAnAccount() {
-//            it("should cancel creating an account") {
-        
         stub(condition: isHost("magetest") && isPath("/api") ) { _ in
             let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
             return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
@@ -984,7 +958,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     }
             
     func testShouldTellTheDelegateToShowTheChangeServerUrlView() {
-//            it("should tell the delegate to show the change server url view") {
         let serverDelegate: MockMageServerDelegate = MockMageServerDelegate();
 
         MockMageServer.stubJSONSuccessRequest(url: "https://magetest/api", filePath: "apiSuccess6.json", delegate: serverDelegate);
@@ -1003,7 +976,28 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         
         tester().tapView(withAccessibilityLabel: "Server URL")
 
-        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(10), pollInterval: DispatchTimeInterval.seconds(1), description: "API request not made")
+        expect(serverDelegate.urls).toEventually(contain(URL(string: "https://magetest/api")), timeout: DispatchTimeInterval.seconds(5), pollInterval: DispatchTimeInterval.seconds(1), description: "API request not made")
         expect(self.delegate?.changeServerUrlCalled).to(beTrue());
     }
+    
+    
+    func testStartLoginOnly() {
+        let expectation = self.expectation(description: "Server request should complete")
+
+        stub(condition: isHost("magetest") && isPath("/api")) { _ in
+            let stubPath = OHPathForFile("apiSuccess6.json", type(of: self))
+            return fixture(filePath: stubPath!, headers: ["Content-Type":"application/json"])
+        }
+
+        coordinator?.startLoginOnly()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            XCTAssertNotNil(self.coordinator?.server, "Expected a valid MageServer to be set")
+            XCTAssertNotNil(self.navigationController?.topViewController as? LoginViewController, "Expected LoginViewController to be shown")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
 }

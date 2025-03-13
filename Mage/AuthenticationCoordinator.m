@@ -24,7 +24,7 @@
 
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
-@property (weak, nonatomic) UINavigationController *navigationController;
+@property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) MageServer *server;
 @property (strong, nonatomic) NSString *signupUsername;
 @property (strong, nonatomic) NSString *captchaToken;
