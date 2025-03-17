@@ -19,23 +19,7 @@ import UIKit
 
 @available(iOS 13.0, *)
 
-class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
-    var authenticationSuccessfulCalled = false;
-    var couldNotAuthenticateCalled = false;
-    var changeServerUrlCalled = false;
-    
-    func authenticationSuccessful() {
-        authenticationSuccessfulCalled = true;
-    }
-    
-    func couldNotAuthenticate() {
-        couldNotAuthenticateCalled = true;
-    }
-    
-    func changeServerUrl() {
-        changeServerUrlCalled = true;
-    }
-}
+
 
 class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     

@@ -15,7 +15,9 @@ class AuthenticationTestDelegate: AuthenticationDelegate {
     var authenticationSuccessfulCalled = false
     var couldNotAuthenticateCalled = false
     var changeServerUrlCalled = false
+    
     func authenticationSuccessful() {
+        print("✅ authenticationSuccessful() was called in AuthenticationCoordinator")
         authenticationSuccessfulCalled = true
     }
     
@@ -43,210 +45,59 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         try await super.tearDown()
         window.rootViewController = nil;
     }
-    
+        
     @MainActor
     func testLoginWithRegisteredDeviceAndRandomToken() async {
-        let baseUrlKey = "baseServerUrl"
-        MageSessionManager.shared()?.setToken("TOKEN")
-        StoredPassword.persistToken(toKeyChain: "TOKEN")
+        TestHelpers.setupTestSession()
         
-        let defaults = UserDefaults.standard
-        defaults.set("https://magetest", forKey: baseUrlKey)
-        defaults.set(true, forKey: "deviceRegistered")
-        
-        let apiResponseArrived = XCTestExpectation(description: "response of /api complete")
-        
-        stub(condition: isMethodGET() &&
-             isHost("magetest") &&
-             isPath("/api")
-        ) { (request) -> HTTPStubsResponse in
-            apiResponseArrived.fulfill()
-            return HTTPStubsResponse(fileAtPath: OHPathForFile("apiSuccess.json", AuthenticationTests.self)!, statusCode: 200, headers: ["Content-Type": "application/json"])
-        }
-        
-        let apiSigninResponseArrived = XCTestExpectation(description: "response of /auth/local/signin complete")
+        let navigationController = TestHelpers.initializeTestNavigation()
+        let delegate = MockAuthenticationCoordinatorDelegate()
+        let server: MageServer = await TestHelpers.getTestServer()
+        let coordinator = AuthenticationCoordinator(
+            navigationController: navigationController,
+            andDelegate: delegate,
+            andScheme: MAGEScheme.scheme(),
+            context: context
+        )!
 
-        stub(condition: isMethodPOST() &&
-             isHost("magetest") &&
-             isPath("/auth/local/signin")
-        ) { (request) -> HTTPStubsResponse in
-            apiSigninResponseArrived.fulfill()
-            return HTTPStubsResponse(fileAtPath: OHPathForFile("signinSuccess.json", AuthenticationTests.self)!, statusCode: 200, headers: ["Content-Type": "application/json"])
-        }
-        
-        let apiTokenStub = XCTestExpectation(description: "response of /auth/token complete")
-
-        stub(condition: isMethodPOST() &&
-             isHost("magetest") &&
-             isPath("/auth/token")
-        ) { (request) -> HTTPStubsResponse in
-            apiTokenStub.fulfill()
-            return HTTPStubsResponse(fileAtPath: OHPathForFile("authorizeLocalSuccess.json", AuthenticationTests.self)!, statusCode: 200, headers: ["Content-Type": "application/json"])
-        }
-
-        stub(condition: isMethodPOST() &&
-             isHost("magetest") &&
-             isPath("/api/users/1a/icon")
-        ) { (request) -> HTTPStubsResponse in
-            return HTTPStubsResponse(fileAtPath: OHPathForFile("icon27.png", AuthenticationTests.self)!, statusCode: 200, headers: ["Content-Type": "image/png"])
-        }
-        
-        stub(condition: isMethodPOST() &&
-             isHost("magetest") &&
-             isPath("/api/users/1a/avatar")
-        ) { (request) -> HTTPStubsResponse in
-            return HTTPStubsResponse(fileAtPath: OHPathForFile("icon27.png", AuthenticationTests.self)!, statusCode: 200, headers: ["Content-Type": "image/png"])
-        }
-        
-        let navigationController = UINavigationController()
-        window.rootViewController = navigationController
-        
-        let delegate = AuthenticationTestDelegate()
-        
-        let url = MageServer.baseURL()
-        
-        let server: MageServer = await withCheckedContinuation { continuation in
-            MageServer.server(url: url) { (server: MageServer) in
-                continuation.resume(returning: server)
-            } failure: { error in
-                XCTFail()
-            }
-        }
-        XCTAssertEqual(url?.absoluteString, "https://magetest")
-        
-        let coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme(), context: context)!
+        print("🚀 Starting AuthenticationCoordinator")
         coordinator.start(server)
-        
-        await awaitBlockTrue(block: {
-            if let _ = navigationController.topViewController as? LoginViewController {
-                return true
-            }
-            return false
-        }, timeout: 2)
-        
-        let parameters: [String: Any] = [
-            "username": "test",
-            "password": "test",
-            "uid": "uuid",
-            "strategy": [
-                "identifier": "local"
-            ],
-            "appVersion": "6.0.0"
-        ]
-        let loginDelegate = coordinator as! LoginDelegate
-        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
-            // login complete
-            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS)
-            let token = StoredPassword.retrieveStoredToken()
-            let mageSessionToken = MageSessionManager.shared().getToken()
-            XCTAssertEqual(token, "TOKEN")
-            XCTAssertEqual(token, mageSessionToken)
-        }
-        
-        await awaitBlockTrue(block: {
-            if let _ = navigationController.topViewController as? DisclaimerViewController {
-                return true
-            }
-            return false
-        }, timeout: 2)
-        
-        let disclaimerDelegate = coordinator as! DisclaimerDelegate
-        disclaimerDelegate.disclaimerAgree()
-        
-        XCTAssertTrue(delegate.authenticationSuccessfulCalled)
-        
-        await fulfillment(of: [apiSigninResponseArrived, apiTokenStub], timeout: 2)
+
+        await TestHelpers.waitForLoginScreen(navigationController: navigationController)
+        TestHelpers.executeTestLogin(coordinator: coordinator)
+        await TestHelpers.handleDisclaimerAcceptance(coordinator: coordinator, navigationController: navigationController)
+        await TestHelpers.waitForAuthenticationSuccess(delegate: delegate)
+
+        print("🔍 Final Check: authenticationSuccessfulCalled = \(delegate.authenticationSuccessfulCalled)")
+        XCTAssertTrue(delegate.authenticationSuccessfulCalled, "❌ Expected authenticationSuccessful to be called")
     }
     
     @MainActor
     func testRegisterDevice() async {
-        let baseUrlKey = "baseServerUrl"
-        MageSessionManager.shared()?.setToken("TOKEN")
-        StoredPassword.persistToken(toKeyChain: "TOKEN")
+        TestHelpers.setupTestSession()
+        MockMageServer.stubRegisterDeviceResponses() // ✅ Uses both general + custom stubs
         
-        let defaults = UserDefaults.standard
-        defaults.set("https://magetest", forKey: baseUrlKey)
+        let navigationController = TestHelpers.initializeTestNavigation()
+        let delegate = MockAuthenticationCoordinatorDelegate()
+        let server: MageServer = await TestHelpers.getTestServer()
         
-        let navigationController = UINavigationController()
-        window.rootViewController = navigationController
-        
-        let delegate = AuthenticationTestDelegate()
-        
-        let url = MageServer.baseURL()
-        
-        let apiResponseArrived = XCTestExpectation(description: "response of /api complete")
-        
-        stub(condition: isMethodGET() &&
-             isHost("magetest") &&
-             isPath("/api")
-        ) { (request) -> HTTPStubsResponse in
-            apiResponseArrived.fulfill()
-            return HTTPStubsResponse(fileAtPath: OHPathForFile("apiSuccess.json", AuthenticationTests.self)!, statusCode: 200, headers: ["Content-Type": "application/json"])
-        }
-        
-        let server: MageServer = await withCheckedContinuation { continuation in
-            MageServer.server(url: url) { (server: MageServer) in
-                continuation.resume(returning: server)
-            } failure: { error in
-                XCTFail()
-            }
-        }
-        XCTAssertEqual(url?.absoluteString, "https://magetest")
-        
-        let apiSigninResponseArrived = XCTestExpectation(description: "response of /auth/local/signin complete")
+        let coordinator = AuthenticationCoordinator(
+            navigationController: navigationController,
+            andDelegate: delegate,
+            andScheme: MAGEScheme.scheme(),
+            context: context
+        )!
 
-        stub(condition: isMethodPOST() &&
-             isHost("magetest") &&
-             isPath("/auth/local/signin")
-        ) { (request) -> HTTPStubsResponse in
-            apiSigninResponseArrived.fulfill()
-            return HTTPStubsResponse(fileAtPath: OHPathForFile("signinSuccess.json", AuthenticationTests.self)!, statusCode: 200, headers: ["Content-Type": "application/json"])
-        }
-        
-        let apiTokenStub = XCTestExpectation(description: "response of /auth/token complete")
-
-        stub(condition: isMethodPOST() &&
-             isHost("magetest") &&
-             isPath("/auth/token")
-        ) { (request) -> HTTPStubsResponse in
-            apiTokenStub.fulfill()
-            let response = HTTPStubsResponse()
-            response.statusCode = 403
-            return response
-        }
-        
-        let coordinator = AuthenticationCoordinator(navigationController: navigationController, andDelegate: delegate, andScheme: MAGEScheme.scheme(), context: context)!
+        print("🚀 Starting AuthenticationCoordinator")
         coordinator.start(server)
+
+        await TestHelpers.waitForLoginScreen(navigationController: navigationController)
         
-        await awaitBlockTrue(block: {
-            if let _ = navigationController.topViewController as? LoginViewController {
-                return true
-            }
-            return false
-        }, timeout: 2)
-        
-        let parameters: [String: Any] = [
-            "username": "test",
-            "password": "test",
-            "uid": "uuid",
-            "strategy": [
-                "identifier": "local"
-            ],
-            "appVersion": "6.0.0"
-        ]
         let deviceRegistered = XCTestExpectation(description: "device registered")
-        let loginDelegate = coordinator as! LoginDelegate
-        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
-            // login complete
-            XCTAssertTrue(authenticationStatus == AuthenticationStatus.REGISTRATION_SUCCESS)
-            let token = StoredPassword.retrieveStoredToken()
-            let mageSessionToken = MageSessionManager.shared().getToken()
-            XCTAssertEqual(token, "TOKEN")
-            XCTAssertEqual(token, mageSessionToken)
-            deviceRegistered.fulfill()
-        }
+        TestHelpers.executeTestLoginForRegistration(coordinator: coordinator, expectation: deviceRegistered)
         
         await fulfillment(of: [deviceRegistered], timeout: 2)
+
         tester().waitForView(withAccessibilityLabel: "Registration Sent")
     }
     
@@ -360,10 +211,11 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
     func testLoginWithUpdatedUser() async {
         MageCoreDataFixtures.addUser(userId: "1a");
         
+        let testServerURL = "https://magetest"
         let baseUrlKey = "baseServerUrl"
         
         let defaults = UserDefaults.standard
-        defaults.set("https://magetest", forKey: baseUrlKey)
+        defaults.set(testServerURL, forKey: baseUrlKey)
         defaults.set(true, forKey: "deviceRegistered")
         
         let navigationController = UINavigationController()
@@ -474,6 +326,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         }
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginWithInactiveUser() async {
         let baseUrlKey = "baseServerUrl"
@@ -641,6 +494,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         await fulfillment(of: [apiSigninResponseArrived], timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginFailed() async {
         let baseUrlKey = "baseServerUrl"
@@ -820,6 +674,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         await fulfillment(of: [apiSigninResponseArrived, apiTokenStub], timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginServerIncompatible() async {
         let baseUrlKey = "baseServerUrl"
@@ -936,6 +791,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         await fulfillment(of: [apiSigninResponseArrived, apiTokenStub], timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginWithOtherErrorForToken() async {
         let baseUrlKey = "baseServerUrl"
@@ -1030,6 +886,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         await fulfillment(of: [apiSigninResponseArrived, apiTokenStub], timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginFailWithRegisteredDevice() async {
         let baseUrlKey = "baseServerUrl"
@@ -1110,6 +967,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         }, timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginWithInvalidToken() async {
         let baseUrlKey = "baseServerUrl"
@@ -1228,6 +1086,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         }, timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginWithInvalidTokenExpirationDate() async {
         let baseUrlKey = "baseServerUrl"
@@ -1346,6 +1205,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         }, timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginWithInvalidUsername() async {
         let baseUrlKey = "baseServerUrl"
@@ -1465,6 +1325,7 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         }, timeout: 2)
     }
     
+    // TODO: Flaky Test
     @MainActor
     func testLoginWithInvalidPassword() async {
         let baseUrlKey = "baseServerUrl"
@@ -1589,66 +1450,6 @@ final class AuthenticationTests: AsyncMageCoreDataTestCase {
         TestHelpers.printAllAccessibilityLabelsInWindows()
     }
 }
-
-//@import OHHTTPStubs;
-//
-//#import <XCTest/XCTest.h>
-//#import <OCMock/OCMock.h>
-//#import "AuthenticationCoordinator.h"
-//#import "LoginViewController.h"
-//#import "MageSessionManager.h"
-//#import "StoredPassword.h"
-//#import "Authentication.h"
-//#import "MageOfflineObservationManager.h"
-//#import "MagicalRecord+MAGE.h"
-//#import "MAGE-Swift.h"
-//
-//@interface ServerURLController ()
-//@property (strong, nonatomic) NSString *error;
-//@end
-//
-//@interface AuthenticationCoordinator ()
-//@property (strong, nonatomic) NSString *urlController;
-//- (void) unableToAuthenticate: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
-//- (void) workOffline: (NSDictionary *) parameters complete:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
-//- (void) returnToLogin:(void (^) (AuthenticationStatus authenticationStatus, NSString *errorString)) complete;
-//- (void) changeServerURL;
-//@end
-//
-//@interface AuthenticationTests : XCTestCase
-//
-//@end
-//
-//@interface AuthenticationTestDelegate : NSObject
-//
-//@end
-//
-//@interface AuthenticationTestDelegate() <AuthenticationDelegate>
-//
-//@end
-//
-//@implementation AuthenticationTestDelegate
-//
-//-(void) authenticationSuccessful {
-//}
-//
-//@end
-//
-//@implementation AuthenticationTests
-//
-//- (void)setUp {
-//    [super setUp];
-//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-//    [MagicalRecord setupCoreDataStackWithInMemoryStore];
-//}
-//
-//- (void)tearDown {
-//    [super tearDown];
-//    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
-//    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-//    [HTTPStubs removeAllStubs];
-//}
 
 
 //

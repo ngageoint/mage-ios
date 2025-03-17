@@ -17,8 +17,6 @@ class MockMageServerDelegate {
     }
 }
 
-
-
 class MockMageServer: NSObject {
     
     public static func initializeHttpStubs() {
@@ -45,3 +43,47 @@ class MockMageServer: NSObject {
         return stubbed;
     }
 }
+
+extension MockMageServer {
+    static func stubAPIResponses() {
+        print("🛠 Stubbing API responses...")
+        
+        stub(condition: isMethodGET() && isHost("magetest") && isPath("/api")) { _ in
+            print("📡 Stubbed /api request")
+            return fixture(filePath: "apiSuccess.json", status: 200)
+        }
+        
+        stub(condition: isMethodPOST() && isHost("magetest") && isPath("/auth/local/signin")) { _ in
+            print("📡 Stubbed /auth/local/signin request")
+            return fixture(filePath: "signinSuccess.json", status: 200)
+        }
+
+        stub(condition: isMethodPOST() && isHost("magetest") && isPath("/auth/token")) { _ in
+            print("📡 Stubbed /auth/token request")
+            return fixture(filePath: "authorizeLocalSuccess.json", status: 200)
+        }
+    }
+
+    private static func fixture(filePath: String, status: Int32) -> HTTPStubsResponse {
+        let stubPath = OHPathForFile(filePath, MockMageServer.self)!
+        return HTTPStubsResponse(fileAtPath: stubPath, statusCode: status, headers: ["Content-Type": "application/json"])
+    }
+}
+
+extension MockMageServer {
+    static func stubRegisterDeviceResponses() {
+        print("🛠 Stubbing API responses for Register Device...")
+
+        // 🔹 Call the existing general stubbing function
+        stubAPIResponses()
+
+        // 🔹 Override the /auth/token response to simulate device registration
+        stub(condition: isMethodPOST() && isHost("magetest") && isPath("/auth/token")) { _ in
+            print("📡 Stubbed /auth/token request (403 - Registration Required)")
+            let response = HTTPStubsResponse()
+            response.statusCode = 403
+            return response
+        }
+    }
+}
+

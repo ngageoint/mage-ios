@@ -11,6 +11,7 @@ import MagicalRecord
 import Nimble
 import Kingfisher
 
+import XCTest
 @testable import MAGE
 
 extension XCTestCase {
@@ -29,6 +30,68 @@ extension XCTestCase {
 }
 
 class TestHelpers {
+    @MainActor
+    public static func setupAuthenticatedSession() {
+        MageSessionManager.shared()?.setToken("TOKEN")
+        StoredPassword.persistToken(toKeyChain: "TOKEN")
+        UserDefaults.standard.set("https://magetest", forKey: "baseServerUrl")
+        UserDefaults.standard.set(true, forKey: "deviceRegistered")
+    }
+    
+    @MainActor
+    public static func setupNavigationController() -> UINavigationController {
+        let navigationController = UINavigationController()
+        let window = TestHelpers.getKeyWindowVisible()
+        window.rootViewController = navigationController
+        return navigationController
+    }
+    
+    @MainActor
+    public static func setupTestSession() {
+        setupAuthenticatedSession()
+        MockMageServer.stubAPIResponses()
+    }
+    
+    @MainActor
+    public static func initializeTestNavigation() -> UINavigationController {
+        return setupNavigationController()
+    }
+
+    @MainActor
+    public static func executeTestLogin(coordinator: AuthenticationCoordinator) {
+        let loginDelegate = coordinator as! LoginDelegate
+        let parameters: [String: Any] = [
+            "username": "test",
+            "password": "test",
+            "uid": "uuid",
+            "strategy": ["identifier": "local"],
+            "appVersion": "6.0.0"
+        ]
+        print("🔹 Manually triggering login...")
+        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+            print("🔍 Login completed with status: \(authenticationStatus)")
+        }
+    }
+    
+    @MainActor
+    public static func handleDisclaimerAcceptance(coordinator: AuthenticationCoordinator, navigationController: UINavigationController) async {
+        await waitForCondition({
+            navigationController.topViewController is DisclaimerViewController
+        }, timeout: 2, message: "❌ Disclaimer screen never appeared")
+
+        let disclaimerDelegate = coordinator as! DisclaimerDelegate
+        print("✅ Simulating disclaimer acceptance")
+        disclaimerDelegate.disclaimerAgree()
+    }
+
+    @MainActor
+    public static func waitForAuthenticationSuccess(delegate: MockAuthenticationCoordinatorDelegate) async {
+        await waitForCondition({
+            delegate.authenticationSuccessfulCalled
+        }, timeout: 2, message: "❌ authenticationSuccessful was never called")
+    }
+
+    
     @MainActor
     public static func getKeyWindowVisibleMainActor() -> UIWindow {
         var window: UIWindow;
@@ -314,5 +377,72 @@ class TestHelpers {
     static func defaultObservationIconInjection() {
         InjectedValues[\.observationIconLocalDataSource] = ObservationIconCoreDataDataSource()
         InjectedValues[\.observationIconRepository] = ObservationIconRepository()
+    }
+}
+
+extension TestHelpers {
+    @MainActor
+    static func waitForCondition(_ condition: @escaping () -> Bool, timeout: TimeInterval, message: String) async {
+        let startTime = Date()
+        while !condition() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail(message)
+                return
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s delay
+        }
+    }
+
+    @MainActor
+    static func awaitBlockTrue(block: @escaping () -> Bool, timeout: TimeInterval) async {
+        let startTime = Date()
+        
+        while !block() {
+            if Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("❌ Timeout waiting for condition to be true")
+                return
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds delay
+        }
+    }
+
+    @MainActor
+    static func waitForLoginScreen(navigationController: UINavigationController, timeout: TimeInterval = 2) async {
+        await awaitBlockTrue(block: {
+            navigationController.topViewController is LoginViewController
+        }, timeout: timeout)
+    }
+
+    static func getTestServer() async -> MageServer {
+        let url = MageServer.baseURL()
+        return await withCheckedContinuation { continuation in
+            MageServer.server(url: url) { server in
+                continuation.resume(returning: server)
+            } failure: { error in
+                XCTFail("Failed to create test MageServer instance")
+            }
+        }
+    }
+}
+
+extension TestHelpers {
+    static func executeTestLoginForRegistration(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation) {
+        let loginDelegate = coordinator as! LoginDelegate
+        let parameters: [String: Any] = [
+            "username": "test",
+            "password": "test",
+            "uid": "uuid",
+            "strategy": ["identifier": "local"],
+            "appVersion": "6.0.0"
+        ]
+        print("🔹 Manually triggering login for device registration...")
+        loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
+            XCTAssertTrue(authenticationStatus == AuthenticationStatus.REGISTRATION_SUCCESS)
+            let token = StoredPassword.retrieveStoredToken()
+            let mageSessionToken = MageSessionManager.shared().getToken()
+            XCTAssertEqual(token, "TOKEN")
+            XCTAssertEqual(token, mageSessionToken)
+            expectation.fulfill()
+        }
     }
 }
