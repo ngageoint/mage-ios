@@ -1,0 +1,43 @@
+{
+  "originHash" : "207c6ed47e45e25f40d2ab20afcc890a28577e7ad35a49d3145f40980c999e56",
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "exceptioncatcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/ExceptionCatcher",
+      "state" : {
+        "revision" : "3cd1997e3663078812efca8652af06104b5160bb",
+        "version" : "2.1.0"
+      }
+    },
+    
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
+        "version" : "7.12.0"
+      }
+    },
+    {
+      "identity" : "swiftuikitview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AvdLee/SwiftUIKitView.git",
+      "state" : {
+        "revision" : "56f2a1f8e35d5c258f633e8472cd59345ed5ae59",
+        "version" : "2.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}
