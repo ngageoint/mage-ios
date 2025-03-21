@@ -14,6 +14,9 @@ import OHHTTPStubs
 
 @testable import MAGE
 
+// TODO: Tests are flaky
+/// `testShouldNotTellTheServerTOMakeTheObservationImportantIfTheUserPreferencesSayToNot`
+/// was last to fail
 class ObservationPushServiceTests: AsyncMageCoreDataTestCase {
     
     @Injected(\.observationPushService)

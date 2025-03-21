@@ -58,8 +58,10 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
         localDataSource.toggleFavorite(observationUri: observationUri, userRemoteId: userRemoteId)
     }
     
+    // TODO: There is some sort of bug causing a crash here.
+    // BRENT: 03/21/2025
     func pushFavorites(favorites: [ObservationFavoriteModel]?) async {
-        print("XXX push favorites \(favorites)")
+        print("XXX push favorites \(String(describing: favorites))")
         guard let favorites = favorites, !favorites.isEmpty else {
             return
         }

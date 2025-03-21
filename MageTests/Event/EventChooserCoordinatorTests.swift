@@ -22,6 +22,8 @@ class MockEventChooserDelegate: NSObject, EventChooserDelegate {
     }
 }
 
+// TODO: FLAKY TESTS
+// BRENT: These tests sometimes CRASH.
 class EventChooserCoordinatorTests : AsyncMageCoreDataTestCase {
     override open func setUp() async throws {
         print("XXX set up")

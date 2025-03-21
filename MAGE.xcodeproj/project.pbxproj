@@ -103,6 +103,62 @@
 		7D0F874B2AA795CD009664E5 /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
+		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
+		842210B22D8C4E1C008BE357 /* MageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210B12D8C4E1C008BE357 /* MageServiceTests.swift */; };
+		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
+		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
+		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
+		843A5E4D2D8DD42800E95F4B /* checkboxForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2303254369BD00D710DE /* checkboxForm.json */; };
+		843A5E4E2D8DD42800E95F4B /* twoFormsAlternate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B815255B1DB500A76E2C /* twoFormsAlternate.json */; };
+		843A5E4F2D8DD42800E95F4B /* geometryObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711241D25F69BF5008849B1 /* geometryObservations.json */; };
+		843A5E502D8DD42800E95F4B /* apiFail.json in Resources */ = {isa = PBXBuildFile; fileRef = F70039452006CB0700E6E660 /* apiFail.json */; };
+		843A5E512D8DD42800E95F4B /* apiSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7614DA92006902000676366 /* apiSuccess.json */; };
+		843A5E522D8DD42800E95F4B /* noResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7103F01266A5D7D000832CD /* noResponse.html */; };
+		843A5E532D8DD42800E95F4B /* loginSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7003947200D3FFA00E6E660 /* loginSuccess.json */; };
+		843A5E542D8DD42800E95F4B /* twoEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02E2829870B002EA135 /* twoEvents.json */; };
+		843A5E552D8DD42800E95F4B /* attachmentFormPlusOne.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B764527442D0B00799BBF /* attachmentFormPlusOne.json */; };
+		843A5E562D8DD42800E95F4B /* testResponse.html in Resources */ = {isa = PBXBuildFile; fileRef = F7BCAC262630B62E006BE2A9 /* testResponse.html */; };
+		843A5E572D8DD42800E95F4B /* allTheThings.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE22FF254368B000D710DE /* allTheThings.json */; };
+		843A5E582D8DD42800E95F4B /* apiSuccess6NoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A972608D2A0002C8617 /* apiSuccess6NoDisclaimer.json */; };
+		843A5E592D8DD42800E95F4B /* tokenSuccessNoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F777B00D252CF1F800B88BD4 /* tokenSuccessNoDisclaimer.json */; };
+		843A5E5A2D8DD42800E95F4B /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B142745865F008FF6C2 /* users.json */; };
+		843A5E5B2D8DD42800E95F4B /* twoOneFieldForms.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B81D255C69A300A76E2C /* twoOneFieldForms.json */; };
+		843A5E5C2D8DD42800E95F4B /* tokenSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF52527D05200B88BD4 /* tokenSuccess.json */; };
+		843A5E5D2D8DD42800E95F4B /* observationsUpdate.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154AB6260BEAE3002C8617 /* observationsUpdate.json */; };
+		843A5E5E2D8DD42800E95F4B /* geometryField.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C640FE257EB29100C02335 /* geometryField.json */; };
+		843A5E5F2D8DD42800E95F4B /* twoForms.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE22BF2540DF2D00D710DE /* twoForms.json */; };
+		843A5E602D8DD42800E95F4B /* apiSuccessNoDisclaimer.json in Resources */ = {isa = PBXBuildFile; fileRef = F777B009252CF13F00B88BD4 /* apiSuccessNoDisclaimer.json */; };
+		843A5E612D8DD42800E95F4B /* attachmentForm.json in Resources */ = {isa = PBXBuildFile; fileRef = F7D9B821255D6D9500A76E2C /* attachmentForm.json */; };
+		843A5E622D8DD42800E95F4B /* oneFormRestricted.json in Resources */ = {isa = PBXBuildFile; fileRef = F76BB9F625ED8195004CFB97 /* oneFormRestricted.json */; };
+		843A5E632D8DD42800E95F4B /* userabc.json in Resources */ = {isa = PBXBuildFile; fileRef = F795ED1524BD0B9A0028FBFC /* userabc.json */; };
+		843A5E642D8DD42800E95F4B /* testRecording.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F755B55A25E41BFF008E8D41 /* testRecording.mp4 */; };
+		843A5E652D8DD42800E95F4B /* zeroForms.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CE22C52540DF7600D710DE /* zeroForms.json */; };
+		843A5E662D8DD42800E95F4B /* signupSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFF9252B541A00B88BD4 /* signupSuccess.json */; };
+		843A5E672D8DD42800E95F4B /* settingsMap.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C097BE2C87B857003FA115 /* settingsMap.json */; };
+		843A5E682D8DD42800E95F4B /* staticFeatures.geojson in Resources */ = {isa = PBXBuildFile; fileRef = F786492F273C5E71002D3DC2 /* staticFeatures.geojson */; };
+		843A5E692D8DD42800E95F4B /* feedContent.json in Resources */ = {isa = PBXBuildFile; fileRef = F71446F424A3FAF5005A5EC1 /* feedContent.json */; };
+		843A5E6A2D8DD42800E95F4B /* registrationSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F7059AB320446B1D00A6B7CC /* registrationSuccess.json */; };
+		843A5E6B2D8DD42800E95F4B /* multipleGeometryFields.json in Resources */ = {isa = PBXBuildFile; fileRef = F70688A92BADDF0A00D8E2EA /* multipleGeometryFields.json */; };
+		843A5E6C2D8DD42800E95F4B /* feeds.json in Resources */ = {isa = PBXBuildFile; fileRef = F70B47B324B5F7AF00D0BFE5 /* feeds.json */; };
+		843A5E6D2D8DD42800E95F4B /* roles.json in Resources */ = {isa = PBXBuildFile; fileRef = F7C097BC2C87B778003FA115 /* roles.json */; };
+		843A5E6E2D8DD42800E95F4B /* authorizeLocalSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F760910123FDA78F000233A6 /* authorizeLocalSuccess.json */; };
+		843A5E6F2D8DD42800E95F4B /* plantsAnimalsBuildingsIcons.zip in Resources */ = {isa = PBXBuildFile; fileRef = F70D19E22742CE0D006E12F8 /* plantsAnimalsBuildingsIcons.zip */; };
+		843A5E702D8DD42800E95F4B /* apiSuccess6.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A932605391D002C8617 /* apiSuccess6.json */; };
+		843A5E712D8DD42800E95F4B /* signupSuccessInactive.json in Resources */ = {isa = PBXBuildFile; fileRef = F777AFFD252CB4FE00B88BD4 /* signupSuccessInactive.json */; };
+		843A5E722D8DD42800E95F4B /* testmovie.MOV in Resources */ = {isa = PBXBuildFile; fileRef = F7F7532A2565862F00EF51FF /* testmovie.MOV */; };
+		843A5E732D8DD42800E95F4B /* signinSuccessInactiveUser.json in Resources */ = {isa = PBXBuildFile; fileRef = F777B011252D049400B88BD4 /* signinSuccessInactiveUser.json */; };
+		843A5E742D8DD42800E95F4B /* 110.png in Resources */ = {isa = PBXBuildFile; fileRef = F789EB632BF6778700CF3DF9 /* 110.png */; };
+		843A5E752D8DD42800E95F4B /* signups.json in Resources */ = {isa = PBXBuildFile; fileRef = F7154A8D2604F157002C8617 /* signups.json */; };
+		843A5E762D8DD42800E95F4B /* myself.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B1827459A1F008FF6C2 /* myself.json */; };
+		843A5E772D8DD42800E95F4B /* locationsabc.json in Resources */ = {isa = PBXBuildFile; fileRef = F795ED1724BF36DD0028FBFC /* locationsabc.json */; };
+		843A5E782D8DD42800E95F4B /* observations.json in Resources */ = {isa = PBXBuildFile; fileRef = F795ED1324BD061C0028FBFC /* observations.json */; };
+		843A5E792D8DD42800E95F4B /* signinSuccess.json in Resources */ = {isa = PBXBuildFile; fileRef = F76090FF23FDA5E5000233A6 /* signinSuccess.json */; };
+		843A5E7A2D8DD42800E95F4B /* twoFormsObservations.json in Resources */ = {isa = PBXBuildFile; fileRef = F711248925F7B8B0008849B1 /* twoFormsObservations.json */; };
+		843A5E7B2D8DD42800E95F4B /* events.json in Resources */ = {isa = PBXBuildFile; fileRef = F7F15B16274596B1008FF6C2 /* events.json */; };
+		843A5E7C2D8DD42800E95F4B /* test_image_attachment.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0F874A2AA795CD009664E5 /* test_image_attachment.png */; };
+		843A5E7D2D8DD42800E95F4B /* apiSuccessNoAuthStrategies.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FED9DC275692850000915B /* apiSuccessNoAuthStrategies.json */; };
+		843A5E7E2D8DD42800E95F4B /* polygonObservation.json in Resources */ = {isa = PBXBuildFile; fileRef = F7CDD7122601194600F3294C /* polygonObservation.json */; };
+		843A5E7F2D8DD42800E95F4B /* observationNoAttachmentResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F7FC68192CD3E4E80022BAF1 /* observationNoAttachmentResponse.json */; };
 		846D0C002D834440009C68CB /* AuthenticationCoordinatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */; };
 		846D0C022D834519009C68CB /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */; };
 		846D0C052D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
@@ -1020,6 +1076,8 @@
 		4FF82DA2D695899B2556C0D1 /* Pods-MAGE-MAGETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGE-MAGETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MAGE-MAGETests/Pods-MAGE-MAGETests.debug.xcconfig"; sourceTree = "<group>"; };
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
+		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
+		842210B12D8C4E1C008BE357 /* MageServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageServiceTests.swift; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AuthenticationCoordinator+Testing.h"; sourceTree = "<group>"; };
@@ -2087,6 +2145,7 @@
 				F723FB191F606DD100620B58 /* AuthenticationCoordinator.h */,
 				F723FB1A1F606DD100620B58 /* AuthenticationCoordinator.m */,
 				846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */,
+				842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */,
 				F74A758C1FD5CC4500FF52A5 /* ChangePasswordViewController.h */,
 				F74A758D1FD5CC4500FF52A5 /* ChangePasswordViewController.m */,
 				2F52827024732B740023E974 /* IDPCoordinator.h */,
@@ -3590,6 +3649,7 @@
 				F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */,
 				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
 				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
+				842210B12D8C4E1C008BE357 /* MageServiceTests.swift */,
 				F71EFE4A2757F810001E6134 /* Networking */,
 				F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */,
 				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
@@ -4360,14 +4420,68 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */,
+				843A5E4D2D8DD42800E95F4B /* checkboxForm.json in Resources */,
+				843A5E4E2D8DD42800E95F4B /* twoFormsAlternate.json in Resources */,
+				843A5E4F2D8DD42800E95F4B /* geometryObservations.json in Resources */,
+				843A5E502D8DD42800E95F4B /* apiFail.json in Resources */,
+				843A5E512D8DD42800E95F4B /* apiSuccess.json in Resources */,
+				843A5E522D8DD42800E95F4B /* noResponse.html in Resources */,
+				843A5E532D8DD42800E95F4B /* loginSuccess.json in Resources */,
+				843A5E542D8DD42800E95F4B /* twoEvents.json in Resources */,
+				843A5E552D8DD42800E95F4B /* attachmentFormPlusOne.json in Resources */,
+				843A5E562D8DD42800E95F4B /* testResponse.html in Resources */,
+				843A5E572D8DD42800E95F4B /* allTheThings.json in Resources */,
+				843A5E582D8DD42800E95F4B /* apiSuccess6NoDisclaimer.json in Resources */,
+				843A5E592D8DD42800E95F4B /* tokenSuccessNoDisclaimer.json in Resources */,
+				843A5E5A2D8DD42800E95F4B /* users.json in Resources */,
+				843A5E5B2D8DD42800E95F4B /* twoOneFieldForms.json in Resources */,
+				843A5E5C2D8DD42800E95F4B /* tokenSuccess.json in Resources */,
+				843A5E5D2D8DD42800E95F4B /* observationsUpdate.json in Resources */,
+				843A5E5E2D8DD42800E95F4B /* geometryField.json in Resources */,
+				843A5E5F2D8DD42800E95F4B /* twoForms.json in Resources */,
+				843A5E602D8DD42800E95F4B /* apiSuccessNoDisclaimer.json in Resources */,
+				843A5E612D8DD42800E95F4B /* attachmentForm.json in Resources */,
+				843A5E622D8DD42800E95F4B /* oneFormRestricted.json in Resources */,
+				843A5E632D8DD42800E95F4B /* userabc.json in Resources */,
+				843A5E642D8DD42800E95F4B /* testRecording.mp4 in Resources */,
+				843A5E652D8DD42800E95F4B /* zeroForms.json in Resources */,
+				843A5E662D8DD42800E95F4B /* signupSuccess.json in Resources */,
+				843A5E672D8DD42800E95F4B /* settingsMap.json in Resources */,
+				843A5E682D8DD42800E95F4B /* staticFeatures.geojson in Resources */,
+				843A5E692D8DD42800E95F4B /* feedContent.json in Resources */,
+				843A5E6A2D8DD42800E95F4B /* registrationSuccess.json in Resources */,
+				843A5E6B2D8DD42800E95F4B /* multipleGeometryFields.json in Resources */,
+				843A5E6C2D8DD42800E95F4B /* feeds.json in Resources */,
+				843A5E6D2D8DD42800E95F4B /* roles.json in Resources */,
+				843A5E6E2D8DD42800E95F4B /* authorizeLocalSuccess.json in Resources */,
+				843A5E6F2D8DD42800E95F4B /* plantsAnimalsBuildingsIcons.zip in Resources */,
+				843A5E702D8DD42800E95F4B /* apiSuccess6.json in Resources */,
+				843A5E712D8DD42800E95F4B /* signupSuccessInactive.json in Resources */,
+				843A5E722D8DD42800E95F4B /* testmovie.MOV in Resources */,
+				843A5E732D8DD42800E95F4B /* signinSuccessInactiveUser.json in Resources */,
+				843A5E742D8DD42800E95F4B /* 110.png in Resources */,
+				843A5E752D8DD42800E95F4B /* signups.json in Resources */,
+				843A5E762D8DD42800E95F4B /* myself.json in Resources */,
+				843A5E772D8DD42800E95F4B /* locationsabc.json in Resources */,
+				843A5E782D8DD42800E95F4B /* observations.json in Resources */,
+				843A5E792D8DD42800E95F4B /* signinSuccess.json in Resources */,
+				843A5E7A2D8DD42800E95F4B /* twoFormsObservations.json in Resources */,
+				843A5E7B2D8DD42800E95F4B /* events.json in Resources */,
+				843A5E7C2D8DD42800E95F4B /* test_image_attachment.png in Resources */,
+				843A5E7D2D8DD42800E95F4B /* apiSuccessNoAuthStrategies.json in Resources */,
+				843A5E7E2D8DD42800E95F4B /* polygonObservation.json in Resources */,
+				843A5E7F2D8DD42800E95F4B /* observationNoAttachmentResponse.json in Resources */,
 				F7FC680F2CD3D10E0022BAF1 /* icon27.png in Resources */,
 				F7FC68102CD3D1310022BAF1 /* slateTiles4326.gpkg in Resources */,
 				F7FC681B2CD9570A0022BAF1 /* oneForm.json in Resources */,
 				F7FC68112CD3D15E0022BAF1 /* countries.gpkg in Resources */,
 				F7FC68122CD3D15E0022BAF1 /* countries_dark.gpkg in Resources */,
+				843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */,
 				F7FC68132CD3D1BC0022BAF1 /* gpkgWithMedia.gpkg in Resources */,
 				F7FC68142CD3D1F10022BAF1 /* tile.png in Resources */,
 				F7FC68152CD3D2810022BAF1 /* 000Tile.zip in Resources */,
+				843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4864,6 +4978,7 @@
 				F73564E52C650B5300466813 /* CurrentLocationRepository.swift in Sources */,
 				F72088A91E73600100EBFF81 /* TimeSettingsTableViewController.m in Sources */,
 				F72D42E32694B60300F9AC3B /* Model2To15.xcmappingmodel in Sources */,
+				842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */,
 				F706888B2BA3A7D900D8E2EA /* DataSourceMap.swift in Sources */,
 				F7D31F912CB887A000126468 /* LayerLocalDataSource.swift in Sources */,
 				F7D31F922CB887A000126468 /* LayerRepository.swift in Sources */,
@@ -5436,6 +5551,7 @@
 				F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */,
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F7C0975C2C7F70D4003FA115 /* AttachmentRepositoryMock.swift in Sources */,
+				842210B22D8C4E1C008BE357 /* MageServiceTests.swift in Sources */,
 				F7C097522C7E8208003FA115 /* ObservationRemoteDataSourceMock.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F7F08E9627E8B35F00640D89 /* FeedsMapTests.swift in Sources */,

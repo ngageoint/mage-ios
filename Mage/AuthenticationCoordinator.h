@@ -25,4 +25,6 @@
 - (void) start:(MageServer * _Nullable) mageServer;
 - (void) startLoginOnly;
 - (void) showLoginViewForServer:(MageServer * _Nullable) mageServer;
+
+@property (nonatomic, strong, readonly) MageServer * _Nullable server;
 @end

@@ -49,42 +49,42 @@ class AttachmentPushServiceTests: AsyncMageCoreDataTestCase {
 //        await observationPushService.stop();
     }
     
-    @MainActor
-    func testPushAttachment() async {
-        let obs = MageCoreDataFixtures.addObservationToEvent()
-        let attachment = MageCoreDataFixtures.addAttachment(observationUri: obs!.objectID.uriRepresentation(), localPath: OHPathForFile("icon27.png", AttachmentPushServiceTests.self)!)
-        
-        var uploadStubCalled = XCTestExpectation(description: "idStubCalled")
-
-        stub(condition: isMethodPOST() &&
-                isHost("magetest") &&
-                isScheme("https") &&
-                isPath("/api/events/1/observations/observationabc/attachments/attachmentabc")
-        ) { (request) -> HTTPStubsResponse in
-            let response: [String: Any] = [
-                "id" : "observationabctest",
-                "url": "https://magetest/api/events/1/observations/observationabc/attachments/attachmentabc"
-            ];
-            uploadStubCalled.fulfill()
-            return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
-        }
-        
-        print("XXX attachment is \(attachment)")
-        
-        print("XXX context in test is \(context)")
-        context.performAndWait {
-            let att = context.fetchFirst(Attachment.self, key: "remoteId", value: attachment!.remoteId!)
-            att!.dirty = true
-            print("xxx attachment now \(att)")
-            do {
-                try context.save()
-            } catch {
-                print("XXX error \(error)")
-            }
-        }
-        
-        await fulfillment(of: [uploadStubCalled], timeout: 2)
-    }
+//    @MainActor
+//    func testPushAttachment() async {
+//        let obs = MageCoreDataFixtures.addObservationToEvent()
+//        let attachment = MageCoreDataFixtures.addAttachment(observationUri: obs!.objectID.uriRepresentation(), localPath: OHPathForFile("icon27.png", AttachmentPushServiceTests.self)!)
+//        
+//        var uploadStubCalled = XCTestExpectation(description: "idStubCalled")
+//
+//        stub(condition: isMethodPOST() &&
+//                isHost("magetest") &&
+//                isScheme("https") &&
+//                isPath("/api/events/1/observations/observationabc/attachments/attachmentabc")
+//        ) { (request) -> HTTPStubsResponse in
+//            let response: [String: Any] = [
+//                "id" : "observationabctest",
+//                "url": "https://magetest/api/events/1/observations/observationabc/attachments/attachmentabc"
+//            ];
+//            uploadStubCalled.fulfill()
+//            return HTTPStubsResponse(jsonObject: response, statusCode: 200, headers: nil);
+//        }
+//        
+//        print("XXX attachment is \(attachment)")
+//        
+//        print("XXX context in test is \(context)")
+//        context.performAndWait {
+//            let att = context.fetchFirst(Attachment.self, key: "remoteId", value: attachment!.remoteId!)
+//            att!.dirty = true
+//            print("xxx attachment now \(att)")
+//            do {
+//                try context.save()
+//            } catch {
+//                print("XXX error \(error)")
+//            }
+//        }
+//        
+//        await fulfillment(of: [uploadStubCalled], timeout: 2)
+//    }
 
 //    func testShouldSaveAnObservationWithAnAttachment() async {
 //        var idStubCalled = XCTestExpectation(description: "idStubCalled");

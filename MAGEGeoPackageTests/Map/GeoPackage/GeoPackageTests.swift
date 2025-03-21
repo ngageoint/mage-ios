@@ -746,6 +746,8 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(annotations2.count, 0)
     }
     
+    // TODO: Fails
+    // BRENT
     @MainActor
     func testAddGeoPackageTileLayerThenReAdd() async throws {
         
@@ -826,6 +828,7 @@ final class GeoPackageTests: MageCoreDataTestCase {
         XCTAssertEqual(annotations2.count, 0)
     }
     
+    // TODO: FAILS. Looks like data leakage is causing it
     @MainActor
     func testGetFeatureKeys() async throws {
         UserDefaults.standard.geoPackageFeaturesMaxFeaturesPerTable = 1000000

@@ -58,7 +58,7 @@ class TestHelpers {
     }
 
     @MainActor
-    public static func executeTestLogin(coordinator: AuthenticationCoordinator) {
+    public static func executeTestLogin(coordinator: AuthenticationCoordinator, expectation: XCTestExpectation? = nil) {
         let loginDelegate = coordinator as! LoginDelegate
         let parameters: [String: Any] = [
             "username": "test",
@@ -67,11 +67,19 @@ class TestHelpers {
             "strategy": ["identifier": "local"],
             "appVersion": "6.0.0"
         ]
+        
         print("🔹 Manually triggering login...")
+        
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
             print("🔍 Login completed with status: \(authenticationStatus)")
+            
+            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS, "❌ Authentication failed")
+            
+            // ✅ Only fulfill expectation if it was provided
+            expectation?.fulfill()
         }
     }
+
     
     @MainActor
     public static func handleDisclaimerAcceptance(coordinator: AuthenticationCoordinator, navigationController: UINavigationController) async {
@@ -444,5 +452,63 @@ extension TestHelpers {
             XCTAssertEqual(token, mageSessionToken)
             expectation.fulfill()
         }
+    }
+}
+
+//extension TestHelpers {
+//    @MainActor
+//    static func waitForDisclaimerScreen(navigationController: UINavigationController) async {
+//        await waitForCondition({
+//            navigationController.topViewController is DisclaimerViewController
+//        }, timeout: 2, message: "❌ Disclaimer screen never appeared")
+//
+//        await waitForCondition({
+//            let topView = navigationController.topViewController?.view
+//            let titleLabel = topView?.viewWithAccessibilityLabel("disclaimer title") as? UILabel
+//            let textLabel = topView?.viewWithAccessibilityLabel("disclaimer text") as? UILabel
+//            return titleLabel != nil && textLabel != nil
+//        }, timeout: 2, message: "❌ Disclaimer text/title not found")
+//
+//    }
+//}
+
+extension TestHelpers {
+    @MainActor
+    static func waitForDisclaimerScreen(navigationController: UINavigationController) async {
+        await waitForCondition({
+            navigationController.topViewController is DisclaimerViewController
+        }, timeout: 2, message: "❌ Disclaimer screen never appeared")
+
+        await waitForCondition({
+            guard let topView = navigationController.topViewController?.view else { return false }
+            return viewHasAccessibilityLabel(topView, label: "disclaimer title") &&
+                   viewHasAccessibilityLabel(topView, label: "disclaimer text")
+        }, timeout: 2, message: "❌ Disclaimer text/title not found")
+    }
+
+    private static func viewHasAccessibilityLabel(_ view: UIView, label: String) -> Bool {
+        if view.accessibilityLabel == label {
+            return true
+        }
+        for subview in view.subviews {
+            if viewHasAccessibilityLabel(subview, label: label) {
+                return true
+            }
+        }
+        return false
+    }
+}
+
+extension TestHelpers {
+    static func defaultLoginParameters(username: String = "test", password: String = "test") -> [String: Any] {
+        return [
+            "username": username,
+            "password": password,
+            "uid": "uuid",
+            "strategy": [
+                "identifier": "local"
+            ],
+            "appVersion": "6.0.0"
+        ]
     }
 }

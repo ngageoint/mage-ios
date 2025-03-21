@@ -25,7 +25,7 @@
 @interface AuthenticationCoordinator() <LoginDelegate, DisclaimerDelegate, SignupDelegate, IDPButtonDelegate>
 
 @property (strong, nonatomic) UINavigationController *navigationController;
-@property (strong, nonatomic) MageServer *server;
+@property (strong, nonatomic, readwrite) MageServer *server;
 @property (strong, nonatomic) NSString *signupUsername;
 @property (strong, nonatomic) NSString *captchaToken;
 @property (strong, nonatomic) NSDictionary *signupParameters;
@@ -325,16 +325,17 @@ BOOL signingIn = YES;
             [weakSelf returnToLogin: complete];
         }]];
 
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.navigationController presentViewController: alert animated: YES completion: nil];
     } else {
         // there is no stored password for this server
-        UIAlertController *alert = [UIAlertController
-                                    alertControllerWithTitle:@"Unable to Login" message:@"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Unable to Login"
+                                                                       message: @"We are unable to connect to the server. Please try logging in again when your connection to the internet has been restored."
+                                                                preferredStyle: UIAlertControllerStyleAlert];
         alert.accessibilityLabel = @"Unable to Login";
-        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alert addAction: [UIAlertAction actionWithTitle: @"OK" style: UIAlertActionStyleDefault handler: ^(UIAlertAction * _Nonnull action) {
             [weakSelf returnToLogin: complete];
         }]];
-        [self.navigationController presentViewController:alert animated:YES completion:nil];
+        [self.navigationController presentViewController: alert animated: YES completion: nil];
     }
 }
 

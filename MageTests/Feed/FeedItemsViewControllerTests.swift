@@ -16,6 +16,8 @@ import Kingfisher
 
 @testable import MAGE
 
+// TODO: These tests are flaky
+// BRENT
 class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     let recordSnapshots = false;
     var controller: FeedItemsViewController!
@@ -106,6 +108,10 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
         }
     }
                 
+    // TODO: FLAKY Test, causes CRASH
+    // BRENT: Here is the error thrown in the test
+    /// UITableViewDiffableDataSource cell provider returned nil for index path <NSIndexPath: 0xbdd6ae0311845a50> {length = 2, path = 0 - 0} with item identifier '0xbdd6ae0311a44625 <x-coredata://52EDFE6D-5413-4FD7-9821-F0D60C2E9782/FeedItem/p1>', which is not allowed. You must always return a cell to the table view: <UITableView: 0x49fdd5800; frame = (0 0; 440 956); clipsToBounds = YES; autoresize = W+H; gestureRecognizers = <NSArray: 0x600004fabae0>; backgroundColor = <UIDynamicCatalogColor: 0x60000a10b340; name = background>; layer = <CALayer: 0x6000046bbfa0>; contentOffset: {0, -62}; contentSize: {440, 144.33333333333331}; adjustedContentInset: {62, 0, 34, 0}; dataSource: <_TtGC5UIKit29UITableViewDiffableDataSourceSiCSo17NSManagedObjectID_: 0x600004106110>> (NSInternalInconsistencyException)
+    
     func testOneFeedItemWithPrimaryValue() {
 //                it("one feed item with primary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"])
@@ -141,7 +147,9 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
             Nimble.fail();
         }
     }
-                
+              
+    // TODO: Failing test
+    // BRENT
     func testOneFeedItemWithPrimaryAndSecondaryValueAndIcon() {
 //                it("one feed item with primary and secondary value and icon") {
         MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
@@ -259,6 +267,8 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
 
     }
             
+    // TODO: Another flaky test.
+    // BRENT
     func testOneFeedItemWithPrimaryValue() {
 //            it("one feed item with primary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445])
@@ -309,6 +319,8 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
         }
     }
             
+    // TODO: Failing
+    // BRENT
     func testOneFeedItemWithPrimaryAndSecondaryValueAndIconWithoutTimestamp() {
 //            it("one feed item with primary and secondary value and icon without timestamp") {
         MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])

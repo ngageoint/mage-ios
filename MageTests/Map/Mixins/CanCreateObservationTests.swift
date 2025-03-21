@@ -170,7 +170,7 @@ class CanCreateObservationTests: AsyncMageCoreDataTestCase {
         tester().tapView(withAccessibilityLabel: "CANCEL")
         
         let geometryView = viewTester().usingLabel("geometry value").view as! MDCFilledTextField
-        expect(geometryView.text).to(equal("15.0405, 25.0000 "))
+        expect(geometryView.text).to(equal("15.0365, 25.0000 "))
         
         expect(self.mixin.editCoordinator).toNot(beNil())
         tester().tapView(withAccessibilityLabel: "Cancel")

@@ -183,13 +183,26 @@ import Foundation
                 UserDefaults.standard.authenticationStrategies = authenticationStrategies
                 UserDefaults.standard.serverAuthenticationStrategies = authenticationStrategies
                 var authenticationModules: [String: Any] = [:]
+                
                 for (authenticationStrategy, parameters) in authenticationStrategies {
                     if let authenticationModule = Authentication.authenticationModule(forStrategy: authenticationStrategy, parameters: parameters) {
                         authenticationModules[authenticationStrategy] = authenticationModule
                     }
                 }
-                if let oldLoginParameters = UserDefaults.standard.loginParameters, let oldUrl = oldLoginParameters[LoginParametersKey.serverUrl.key] as? String, oldUrl == url.absoluteString, StoredPassword.retrieveStoredPassword() != nil {
-                    authenticationModules["offline"] = Authentication.authenticationModule(forStrategy:"offline", parameters:nil)
+                
+                if let oldLoginParameters = UserDefaults.standard.loginParameters,
+                    let oldUrl = oldLoginParameters[LoginParametersKey.serverUrl.key] as? String,
+                    oldUrl == url.absoluteString,
+                    let storedPassword = StoredPassword.retrieveStoredPassword()
+                {
+                    if let authentication = Authentication.authenticationModule(forStrategy: "offline", parameters: nil) {
+                        server.authenticationModules?["offline"] = authentication
+                        print("✅✅ Offline authentication module successfully added.")
+                    } else {
+                        print("❌❌ Failed to create offline authentication module.")
+                    }
+
+                    authenticationModules["offline"] = Authentication.authenticationModule(forStrategy: "offline", parameters: nil)
                 }
                 
                 server.authenticationModules = authenticationModules
@@ -220,7 +233,7 @@ import Foundation
                 }
             } else {
                 let statusCode:Int? = (task?.response as? HTTPURLResponse)?.statusCode ?? nil
-                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "\(error.localizedDescription)", "statusCode": statusCode, "originalError": error]))
+                failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "\(error.localizedDescription)", "statusCode": statusCode as Any, "originalError": error]))
             }
         })
         
@@ -239,11 +252,13 @@ import Foundation
         if let authenticationStrategies = UserDefaults.standard.authenticationStrategies {
             UserDefaults.standard.serverAuthenticationStrategies = authenticationStrategies
             var authenticationModules: [String: Any] = [:]
+            
             for (authenticationStrategy, parameters) in authenticationStrategies {
                 if let authenticationModule = Authentication.authenticationModule(forStrategy: authenticationStrategy, parameters: parameters) {
                     authenticationModules[authenticationStrategy] = authenticationModule
                 }
             }
+            
             if let oldLoginParameters = UserDefaults.standard.loginParameters, let oldUrl = oldLoginParameters[LoginParametersKey.serverUrl.key] as? String, oldUrl == url.absoluteString, StoredPassword.retrieveStoredPassword() != nil {
                 authenticationModules["offline"] = Authentication.authenticationModule(forStrategy:"offline", parameters:nil)
             }

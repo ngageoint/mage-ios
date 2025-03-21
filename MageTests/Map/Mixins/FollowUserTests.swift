@@ -219,6 +219,8 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
         mixin.cleanupMixin()
     }
         
+    // TODO: FLAKY TEST
+    // BRENT
     func testInitializeTheFollowUserMapMixinWithAUserThenMoveIt() {
 //            it("initialize the FollowUserMapMixin with a user then move it") {
                 
@@ -231,7 +233,7 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
         testimpl.followUserMapMixin = mixin
         
         let mapState = MapState()
-        mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
+        mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)  // *** -[__NSArray0 objectAtIndex:]: index 0 beyond bounds for empty array (NSRangeException)
 
         let initialLocation = userabc.coordinate
         
@@ -272,6 +274,8 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
         mixin.cleanupMixin()
     }
             
+    // TODO: FLAKY TEST
+    // BRENT
     func testInitializeTheFollowUserMapMixinWithAUserThenStopFollowingAndMoveIt() {
 //            it("initialize the FollowUserMapMixin with a user then stop following and move it") {
                 

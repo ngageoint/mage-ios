@@ -219,6 +219,9 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
         return false
     }
     
+    // TODO: Random failure in here while testing
+    // BRENT
+    /// `Thread 1: "Object 0x9efe727cff74d814 <x-coredata://0275D695-CA3D-4ADC-B6D5-F48ADAD1FF67/ObservationImportant/p1> persistent store is not reachable from this NSManagedObjectContext's coordinator"`
     func handleServerPushResponse(important: ObservationImportantModel, response: [AnyHashable: Any]) {
         // verify that the current state in our data is the same as returned from the server
         guard let context = context else { return }
@@ -238,7 +241,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     localImportant.managedObjectContext?.refresh(observation, mergeChanges: false);
                 }
             }
-            try? context.save()
+            try? context.save()  // Error happened here.
         }
     }
 }
