@@ -2203,7 +2203,6 @@
 			children = (
 				2FF4670A1A12798C00BA8357 /* CALayer+IB.h */,
 				2FF4670B1A12798C00BA8357 /* CALayer+IB.m */,
-				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
 				F7E2970D1A8D0E3D000F62C6 /* UIBarButtonItem+IB.h */,
 				F7E2970E1A8D0E3D000F62C6 /* UIBarButtonItem+IB.m */,
 				2FCDC35122C27B9C004189AD /* UIColor+Adjust.h */,
@@ -2902,6 +2901,7 @@
 				F7F8B4B826D4319300DACCC7 /* UIViewExtensions.swift */,
 				F7D43BD7269DD67000561A8F /* UIWindowExtensions.swift */,
 				F7E079512C32EB750029C88D /* MKShapeExtensions.swift */,
+				F795ED0424B8DFB80028FBFC /* LocationUtilities.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
