@@ -253,9 +253,10 @@ static const NSInteger LEGAL_SECTION = 8;
 
 - (NSDictionary *) servicesSection {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    CLLocationManager *manager = [CLLocationManager init];
     
     NSString *locationServicesLabel = nil;
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    CLAuthorizationStatus authorizationStatus = manager.authorizationStatus;
     if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
         locationServicesLabel = [defaults boolForKey:kReportLocationKey] ? @"On" : @"Off";
     } else {
@@ -356,6 +357,9 @@ static const NSInteger LEGAL_SECTION = 8;
             break;
         case LocationDisplayDms:
             locationDisplayString = @"Degrees Minutes Seconds";
+            break;
+        case LocationDisplayGars:
+            NSLog(@"LocationDisplayGars switch not handled in SettingsDataSource.m");
             break;
     }
     return [@{
@@ -458,6 +462,18 @@ static const NSInteger LEGAL_SECTION = 8;
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     
+    NSString *email = @"magesuitesupport@nga.mil";
+    NSString *subject = @"MAGE App Support";
+
+    NSString *encodedSubject = [subject stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+
+    // Construct the mailto URL string
+    NSString *mailtoString = [NSString stringWithFormat:@"mailto:%@?subject=%@", email, encodedSubject];
+
+    // Create attributed string for UILabel
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"magesuitesupport@nga.mil"];
+    [attributedString addAttribute:NSLinkAttributeName value:mailtoString range:NSMakeRange(0, attributedString.length)];
+    
     return [@{
               @"header": @"About",
               @"rows": @[@{
@@ -474,7 +490,14 @@ static const NSInteger LEGAL_SECTION = 8;
                              @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
                              @"textLabel": @"Version",
                              @"detailTextLabel": self.versionCellSelectionCount >= 5 ? [NSString stringWithFormat:@"%@ (%@)", versionString, buildString] : versionString
-                             }]
+                             },
+                         @{
+                             @"type": [NSNumber numberWithInteger: kContactUs],
+                             @"style": [NSNumber numberWithInteger: UITableViewCellStyleSubtitle],
+                             @"textLabel": @"Contact Us",
+                             @"detailTextLabel": attributedString
+                         }
+              ]
               } mutableCopy];
 }
 
