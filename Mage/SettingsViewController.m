@@ -256,6 +256,15 @@
             [self showDetailViewController:viewController sender:nil];
             break;
         }
+        case kContactUs: {
+            break;
+        }
+        case kDataFetching: {
+            break;
+        }
+        case kDataPushing: {
+            break;
+        }
     }
 }
 
