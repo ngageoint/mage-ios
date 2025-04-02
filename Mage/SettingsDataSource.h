@@ -30,7 +30,8 @@ typedef NS_ENUM(NSUInteger, SettingType) {
     kLogout,
     kChangePassword,
     kAttributions,
-    kDisclaimer
+    kDisclaimer,
+    kContactUs
 };
 
 @protocol SettingsDelegate
