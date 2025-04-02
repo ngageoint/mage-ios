@@ -219,6 +219,32 @@
             
             break;
         }
+        case kContactUs: {
+            [self onContactUs];
+            break;
+        }
+    }
+}
+
+- (void) onContactUs {
+    NSLog(@"*** onContactUs ***");
+
+    // Define your recipient and subject
+    NSString *recipient = @"magesuitesupport@nga.mil";
+    NSString *subject = @"MAGE App Support";
+    
+    // Percent-encode the subject
+    NSString *encodedSubject = [subject stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+
+    // Construct the mailto URL
+    NSString *mailtoURLString = [NSString stringWithFormat:@"mailto:%@?subject=%@", recipient, encodedSubject];
+    NSURL *mailtoURL = [NSURL URLWithString:mailtoURLString];
+
+    // Open the mail client
+    if ([[UIApplication sharedApplication] canOpenURL:mailtoURL]) {
+        [[UIApplication sharedApplication] openURL:mailtoURL options:@{} completionHandler:nil];
+    } else {
+        NSLog(@"Cannot open mail client.");
     }
 }
 
