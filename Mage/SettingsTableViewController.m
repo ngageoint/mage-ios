@@ -227,17 +227,8 @@
 }
 
 - (void) onContactUs {
-    NSLog(@"*** onContactUs ***");
-
-    // Define your recipient and subject
     NSString *recipient = @"magesuitesupport@nga.mil";
-    NSString *subject = @"MAGE App Support";
-    
-    // Percent-encode the subject
-    NSString *encodedSubject = [subject stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-
-    // Construct the mailto URL
-    NSString *mailtoURLString = [NSString stringWithFormat:@"mailto:%@?subject=%@", recipient, encodedSubject];
+    NSString *mailtoURLString = [NSString stringWithFormat:@"mailto:%@", recipient];
     NSURL *mailtoURL = [NSURL URLWithString:mailtoURLString];
 
     // Open the mail client
