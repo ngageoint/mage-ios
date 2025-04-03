@@ -67,15 +67,9 @@ class TestHelpers {
             "strategy": ["identifier": "local"],
             "appVersion": "6.0.0"
         ]
-        
-        print("🔹 Manually triggering login...")
-        
+
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
-            print("🔍 Login completed with status: \(authenticationStatus)")
-            
-            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS, "❌ Authentication failed")
-            
-            // ✅ Only fulfill expectation if it was provided
+            XCTAssertTrue(authenticationStatus == AuthenticationStatus.AUTHENTICATION_SUCCESS, "Authentication failed")
             expectation?.fulfill()
         }
     }
@@ -85,10 +79,9 @@ class TestHelpers {
     public static func handleDisclaimerAcceptance(coordinator: AuthenticationCoordinator, navigationController: UINavigationController) async {
         await waitForCondition({
             navigationController.topViewController is DisclaimerViewController
-        }, timeout: 2, message: "❌ Disclaimer screen never appeared")
+        }, timeout: 2, message: "Disclaimer screen never appeared")
 
         let disclaimerDelegate = coordinator as! DisclaimerDelegate
-        print("✅ Simulating disclaimer acceptance")
         disclaimerDelegate.disclaimerAgree()
     }
 
@@ -96,7 +89,7 @@ class TestHelpers {
     public static func waitForAuthenticationSuccess(delegate: MockAuthenticationCoordinatorDelegate) async {
         await waitForCondition({
             delegate.authenticationSuccessfulCalled
-        }, timeout: 2, message: "❌ authenticationSuccessful was never called")
+        }, timeout: 2, message: "authenticationSuccessful was never called")
     }
 
     
@@ -107,10 +100,6 @@ class TestHelpers {
             window = UIWindow(forAutoLayout: ());
             window.autoSetDimensions(to: UIScreen.main.bounds.size);
         } else {
-            NSLog("There are \(UIApplication.shared.windows.count) windows");
-            if (UIApplication.shared.windows.count != 1) {
-                NSLog("Windows are \(UIApplication.shared.windows)")
-            }
             window = UIApplication.shared.windows[0];
         }
         window.backgroundColor = .systemBackground;
@@ -124,10 +113,6 @@ class TestHelpers {
             window = UIWindow(forAutoLayout: ());
             window.autoSetDimensions(to: UIScreen.main.bounds.size);
         } else {
-            NSLog("There are \(UIApplication.shared.windows.count) windows");
-            if (UIApplication.shared.windows.count != 1) {
-                NSLog("Windows are \(UIApplication.shared.windows)")
-            }
             window = UIApplication.shared.windows[0];
         }
         window.backgroundColor = .systemBackground;
@@ -165,7 +150,6 @@ class TestHelpers {
     public static func getAllAccessibilityLabelsInWindows() -> [String]! {
         var labelArray = [String]()
         for  window in UIApplication.shared.windowsWithKeyWindow() {
-            print("window \(window)")
             labelArray += getAllAccessibilityLabels(window as! UIWindow )
         }
         
@@ -174,7 +158,6 @@ class TestHelpers {
     
     public static func printAllAccessibilityLabelsInWindows() {
         let labelArray = TestHelpers.getAllAccessibilityLabelsInWindows();
-        NSLog("labelArray = \(labelArray ?? [])")
     }
     
     public static func clearImageCache() {
@@ -196,25 +179,25 @@ class TestHelpers {
             do {
                 try FileManager.default.removeItem(at: attachmentsDirectory);
             } catch {
-                print("Failed to remove attachments directory.  Moving on.")
+                os_log("Failed to remove attachments directory.  Moving on.")
             }
             
             do {
                 try FileManager.default.removeItem(at: eventsDirectory);
             } catch {
-                print("Failed to remove events directory.  Moving on.")
+                os_log("Failed to remove events directory.  Moving on.")
             }
             
             do {
                 try FileManager.default.removeItem(at: geopackagesDirectory);
             } catch {
-                print("Failed to remove geopackages directory.  Moving on.")
+                os_log("Failed to remove geopackages directory.  Moving on.")
             }
             
             do {
                 try FileManager.default.removeItem(at: mapCacheDirectory);
             } catch {
-                print("Failed to remove geopackages directory.  Moving on.")
+                os_log("Failed to remove geopackages directory.  Moving on.")
             }
         }
         
@@ -222,14 +205,6 @@ class TestHelpers {
     
     static var coreDataStack: TestCoreDataStack?
     static var context: NSManagedObjectContext?
-    
-//    @discardableResult
-//    public static func clearAndSetUpStack() -> [String: Bool] {
-//        TestHelpers.clearDocuments();
-//        TestHelpers.clearImageCache();
-//        TestHelpers.resetUserDefaults();
-//        return [:]
-//    }
     
     public static func cleanUpStack() {
         if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
@@ -245,9 +220,6 @@ class TestHelpers {
         InjectedValues[\.nsManagedObjectContext] = nil
         coreDataStack!.reset()
         
-//        if (NSManagedObjectContext.mr_default() != nil) {
-//            NSManagedObjectContext.mr_default().reset();
-//        }
         MagicalRecord.cleanUp();
     }
     
@@ -407,7 +379,7 @@ extension TestHelpers {
         
         while !block() {
             if Date().timeIntervalSince(startTime) > timeout {
-                XCTFail("❌ Timeout waiting for condition to be true")
+                XCTFail("Timeout waiting for condition to be true")
                 return
             }
             try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds delay
@@ -443,7 +415,7 @@ extension TestHelpers {
             "strategy": ["identifier": "local"],
             "appVersion": "6.0.0"
         ]
-        print("🔹 Manually triggering login for device registration...")
+
         loginDelegate.login(withParameters: parameters, withAuthenticationStrategy: "local") { authenticationStatus, errorString in
             XCTAssertTrue(authenticationStatus == AuthenticationStatus.REGISTRATION_SUCCESS)
             let token = StoredPassword.retrieveStoredToken()
@@ -455,35 +427,18 @@ extension TestHelpers {
     }
 }
 
-//extension TestHelpers {
-//    @MainActor
-//    static func waitForDisclaimerScreen(navigationController: UINavigationController) async {
-//        await waitForCondition({
-//            navigationController.topViewController is DisclaimerViewController
-//        }, timeout: 2, message: "❌ Disclaimer screen never appeared")
-//
-//        await waitForCondition({
-//            let topView = navigationController.topViewController?.view
-//            let titleLabel = topView?.viewWithAccessibilityLabel("disclaimer title") as? UILabel
-//            let textLabel = topView?.viewWithAccessibilityLabel("disclaimer text") as? UILabel
-//            return titleLabel != nil && textLabel != nil
-//        }, timeout: 2, message: "❌ Disclaimer text/title not found")
-//
-//    }
-//}
-
 extension TestHelpers {
     @MainActor
     static func waitForDisclaimerScreen(navigationController: UINavigationController) async {
         await waitForCondition({
             navigationController.topViewController is DisclaimerViewController
-        }, timeout: 2, message: "❌ Disclaimer screen never appeared")
+        }, timeout: 2, message: "Disclaimer screen never appeared")
 
         await waitForCondition({
             guard let topView = navigationController.topViewController?.view else { return false }
             return viewHasAccessibilityLabel(topView, label: "disclaimer title") &&
                    viewHasAccessibilityLabel(topView, label: "disclaimer text")
-        }, timeout: 2, message: "❌ Disclaimer text/title not found")
+        }, timeout: 2, message: "Disclaimer text/title not found")
     }
 
     private static func viewHasAccessibilityLabel(_ view: UIView, label: String) -> Bool {

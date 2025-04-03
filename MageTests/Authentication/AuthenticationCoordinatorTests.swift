@@ -19,8 +19,6 @@ import UIKit
 
 @available(iOS 13.0, *)
 
-
-
 class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
     
     var spy: AuthenticationCoordinatorSpy!
@@ -44,8 +42,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         delegate = MockAuthenticationCoordinatorDelegate()
         
         await setupNavigationController()
-        
-        print("XXX context in creating coordinator \(String(describing: context))")
         
         coordinator = AuthenticationCoordinator(
             navigationController: navigationController,
@@ -91,7 +87,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         navigationController = nil
     }
     
-    /// Stub MageServer response for testing
     func stubServerResponse() {
         let mockServerDelegate: MockMageServerDelegate = MockMageServerDelegate();
         
@@ -100,15 +95,13 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
             filePath: "server_response.json",
             delegate: mockServerDelegate
         )
-        
-        print("✅ Stubbed server response for /api/server")
     }
 
     func testShowLoginViewForServerCalled() {
         let expectation = self.expectation(description: "Server request should complete")
         
         guard let testUrl = URL(string: "https://magetest") else {
-            XCTFail("\n❌ Failed to create URL instance\n")
+            XCTFail("\nFailed to create URL instance\n")
             return
         }
         
@@ -117,7 +110,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
         spy.start(testServer) // Calls showLoginViewForServer internally
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            print("🔍 Checking if showLoginViewForServer was called")
             XCTAssertTrue(self.spy.showLoginViewForServerCalled, "Expected showLoginViewForServer to be called")
             XCTAssertEqual(self.spy.showLoginViewForServerParam, testServer, "Expected the correct MageServer instance to be passed")
             expectation.fulfill()
@@ -275,8 +267,6 @@ class AuthenticationCoordinatorTests: AsyncMageCoreDataTestCase {
             
     func testShouldLoginAsADifferentUser() {
         let u = MageCoreDataFixtures.addUser();
-        print("XXX user that was added \(String(describing: u!.remoteId))")
-        print("XXX user id \(u!.objectID)")
         MageCoreDataFixtures.addUnsyncedObservationToEvent();
         
         UserDefaults.standard.deviceRegistered = true;

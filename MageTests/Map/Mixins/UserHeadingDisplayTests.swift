@@ -34,7 +34,6 @@ extension UserHeadingDisplayTestImpl : MKMapViewDelegate {
 }
 
 // TODO: THESE TESTS ARE FLAKY
-// BRENT
 class UserHeadingDisplayTests: AsyncMageCoreDataTestCase {
     
     var navController: UINavigationController!

@@ -34,10 +34,6 @@ extension GeoPackageLayerMapTestImpl : MKMapViewDelegate {
 }
 
 class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
-    
-//    override func spec() {
-//        
-//        describe("GeoPackageLayerMapTests") {
     var navController: UINavigationController!
     var view: UIView!
     var window: UIWindow!;
@@ -111,10 +107,8 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
     }
     
     // TODO: Failing test
-    // BRENT
     @MainActor
     func testInitializeTheStaticLayerMapWithANotLoadedLayerThenLoadItButDontAddItToTheMap() async {
-//    it("initialize the StaticLayerMap with a not loaded layer then load it but don't add to the map") {
         
         var stubCalled = XCTestExpectation(description: "Layers Stub Called")
         
@@ -175,7 +169,6 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         
         await fulfillment(of: [stubCalled], timeout: 3)
 
-//        expect(stubCalled).toEventually(beTrue(), timeout: DispatchTimeInterval.seconds(5));
         let layer = context.performAndWait {
             let layers = try? self.context.fetchObjects(Layer.self)
             expect(layers?.count).to(equal(1))
@@ -192,11 +185,9 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         
         var successfulDownload = XCTestExpectation(description: "Download successful")
         Layer.downloadGeoPackage(layer: layer) {
-            print("Successful download")
             successfulDownload.fulfill()
         } failure: { error in
             XCTFail(error.localizedDescription)
-            //            tester().failWithError(error, stopTest: false)
         }
         
         await fulfillment(of: [geopackageStubCalled, successfulDownload], timeout: 3)
@@ -205,25 +196,13 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
 
         await GeoPackageImporter().importGeoPackageFileAsLink(urlPath.path, andMove: false, withLayerId: 1)
 
-        print("XXX imported...")
         let mapState = MapState()
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
-        print("XXX setup mixin")
         var geopackageImported = XCTestExpectation(description: "GeoPackage imported")
         
-//        let importedNotification = XCTNSNotificationExpectation(name: .GeoPackageImported)
-        
-        print("XXX waiting import")
         await fulfillment(of: [importedNotification], timeout: 2)
-//
-//        NotificationCenter.default.addObserver(forName: .GeoPackageImported, object: nil, queue: .main) {  notification in
-//            Task {
-        print("XXX notify listeners")
-                await CacheOverlays.getInstance().notifyListeners()
-        print("XXX fulfilling gp imported")
-                geopackageImported.fulfill()
-//            }
-//        }
+        await CacheOverlays.getInstance().notifyListeners()
+        geopackageImported.fulfill()
         
         await fulfillment(of: [geopackageImported], timeout: 2)
         
@@ -231,7 +210,7 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         XCTAssertEqual(overlayCount, 3)
         let count = await CacheOverlays.getInstance().getOverlays().count
         expect(count).to(equal(3))
-        print("Cache overlays \(await CacheOverlays.getInstance().getOverlays())")
+
         for overlay in await CacheOverlays.getInstance().getOverlays() {
             if overlay.cacheName == "gpkgWithMedia_1_from_server" {
                 overlay.enabled = true
@@ -239,13 +218,11 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
                     overlay.enabled = true
                 }
                 UserDefaults.standard.selectedCaches = ["gpkgWithMedia_1_from_server"]
-                print("XXX notify")
                 await CacheOverlays.getInstance().notifyListeners()
             }
         }
         
         let predicate = NSPredicate { _, _ in
-          // some logic returning true if the expectation is met
             if let overlays = self.testimpl.mapView?.overlays {
                 return overlays.count == 1
             }
@@ -257,9 +234,7 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         if let region = testimpl.mapView?.regionThatFits(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:39.57367, longitude:-104.66225), latitudinalMeters: 5000, longitudinalMeters: 5000)) {
             testimpl.mapView?.setRegion(region, animated: false)
         }
-//        
-//        tester().wait(forTimeInterval: 6)
-//
+
         let items = await mixin.itemKeys(at: CLLocationCoordinate2D(latitude: 39.57367, longitude: -104.66225), mapView: testimpl.mapView!, touchPoint: .zero)
         expect(items.count).to(equal(1))
         let item = items[DataSources.geoPackage.key]![0]
@@ -282,7 +257,6 @@ class GeoPackageLayerMapTests: AsyncMageCoreDataTestCase {
         }
         
         let predicate2 = NSPredicate { _, _ in
-          // some logic returning true if the expectation is met
             if let overlays = self.testimpl.mapView?.overlays {
                 return overlays.count == 0
             }

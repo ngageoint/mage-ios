@@ -13,7 +13,6 @@ class MockAuthenticationCoordinatorDelegate: NSObject, AuthenticationDelegate {
     var changeServerUrlCalled = false;
     
     func authenticationSuccessful() {
-        print("✅ authenticationSuccessful() was called in MockAuthenticationCoordinatorDelegate")
         authenticationSuccessfulCalled = true;
     }
     

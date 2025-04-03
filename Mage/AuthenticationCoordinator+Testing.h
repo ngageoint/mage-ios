@@ -11,6 +11,6 @@
 
 @interface AuthenticationCoordinator (Testing)
 
-@property (nonatomic, strong, nullable) MageServer *server; // ✅ Expose for tests only
+@property (nonatomic, strong, nullable) MageServer *server;
 
 @end

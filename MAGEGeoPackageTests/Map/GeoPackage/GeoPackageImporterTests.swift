@@ -40,7 +40,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: countriesGeoPackagePath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("countriesGeoPackagePath.path: \(countriesGeoPackagePath.path) - is not deletable.")
             }
         }
 
@@ -51,7 +51,6 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         try FileManager.default.copyItem(at: URL(fileURLWithPath: stubPath), to: countriesGeoPackagePath)
         
         let manager = GPKGGeoPackageFactory.manager()!
-        NSLog("Countries GeoPackage path \(countriesGeoPackagePath.absoluteString)")
         
         if !manager.exists("countries2") {
             manager.importGeoPackage(fromPath: countriesGeoPackagePath.path())
@@ -63,10 +62,8 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             let index = GPKGFeatureTableIndex(geoPackage: geoPackage, andFeatureDao: featureDao)!
             if index.isIndexed() {
                 let deleted = index.deleteIndex()
-                print("XXX dleted index? \(deleted)")
-                print("XXX is it still index? \(index.isIndexed())")
             } else {
-                print("XXX not indexed")
+                os_log("\(index) not indexed.")
             }
         }
         try FileManager.default.createDirectory(at: URL(fileURLWithPath: "\(documentsDirectory)/2"), withIntermediateDirectories: true)
@@ -77,7 +74,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: countriesGeoPackagePath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         let countriesGeoPackagePath2 = URL(fileURLWithPath: "\(documentsDirectory)/2/countries2.gpkg")
@@ -97,7 +94,6 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         XCTAssertEqual(self.context.fetchAll(Layer.self)?.count, 1)
         XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
 
-        // verify that the geopackage was indexed
         let indexGP = manager.open("countries2")!
         for featureTable in indexGP.featureTables() {
             let featureDao = indexGP.featureDao(withTableName: featureTable)!
@@ -105,7 +101,6 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             XCTAssertTrue(index.isIndexed())
         }
 
-        print("XXXX CLEAN UP THE THINGS")
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
 
         await awaitDidSave {
@@ -142,7 +137,6 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
     }
     
     // TODO: Fails RANDOMLY
-    // BRENT: XCTAssertEqual failed: ("Optional(0)") is not equal to ("Optional(1)")
     func testImportGeoPackageFileIntoLayer() async throws {
         let mockListener = MockCacheOverlayListener()
         await CacheOverlays.getInstance().register(mockListener)
@@ -330,7 +324,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -361,7 +355,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -383,8 +377,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             XCTAssertEqual(layers?.count, 1)
         }
         XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
-        
-        print("XXXX CLEAN UP THE THINGS")
+
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
         await awaitDidSave {
@@ -404,7 +397,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -425,7 +418,6 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         }
         XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
         
-        print("XXXX CLEAN UP THE THINGS")
         GPKGGeoPackageFactory.manager().deleteAllAndFiles(false)
         
         await awaitDidSave {
@@ -446,7 +438,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -469,8 +461,6 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         }
         XCTAssertEqual(self.context.fetchFirst(Layer.self, key: "eventId", value: -1)?.loaded, NSNumber(floatLiteral: Layer.EXTERNAL_LAYER_LOADED))
         
-        print("XXXX CLEAN UP THE THINGS")
-        
         let documentPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentPath = documentPaths[0] as String
         
@@ -478,7 +468,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
         do {
             try FileManager.default.removeItem(atPath: gpPath.path)
         } catch {
-            print("XXX error \(error)")
+            os_log("Error: \(error)")
         }
         
         await awaitDidSave {
@@ -499,7 +489,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -541,7 +531,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         
@@ -607,7 +597,7 @@ final class GeoPackageImporterTests: MageCoreDataTestCase {
             do {
                 try FileManager.default.removeItem(atPath: urlPath.path)
             } catch {
-                print("XXX error \(error)")
+                os_log("Error: \(error)")
             }
         }
         

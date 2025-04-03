@@ -25,8 +25,6 @@ class MageTests: MageCoreDataTestCase {
         super.tearDown()
     }
     
-    // TODO: Fails
-    // BRENT
     func testShouldFetchEvents() async {
         TestHelpers.setupValidToken()
         UserDefaults.standard.baseServerUrl = "https://magetest";

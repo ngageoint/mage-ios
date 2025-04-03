@@ -78,21 +78,14 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
         }
     }
     
-//    func getFavoritesToPush() -> [ObservationFavoriteModel] {
-//        return self.favoritesFetchedResultsController?.fetchedObjects?.map({ favorite in
-//            ObservationFavoriteModel(favorite: favorite)
-//        }) ?? []
-//    }
     func getFavoritesToPush() -> [ObservationFavoriteModel] {
         guard let favorites = self.favoritesFetchedResultsController?.fetchedObjects else { return [] }
 
         return favorites.compactMap { favorite in
             guard let context = favorite.managedObjectContext else {
-                print("❌ ERROR: favorite \(favorite) has no context!")
                 return nil
             }
 
-            // Convert to object ID and refetch in the correct context
             let objectID = favorite.objectID
             return context.performAndWait {
                 if let refreshedFavorite = context.object(with: objectID) as? ObservationFavorite {
@@ -161,7 +154,6 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
     }
 
     func handleServerPushResponse(favorite: ObservationFavoriteModel, response: [AnyHashable: Any]) {
-        NSLog("Successfuly submitted favorite")
         guard let context = context else { return }
         
         context.performAndWait {
@@ -183,9 +175,7 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
         if let favorite = anObject as? ObservationFavorite {
             switch type {
             case .insert:
-                NSLog("favorite inserted, push em")
                 if favorite.observation?.remoteId != nil {
-                    print("sending favorite to push subject")
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }
             case .delete:
@@ -193,7 +183,6 @@ extension ObservationFavoriteCoreDataDataSource: NSFetchedResultsControllerDeleg
             case .move:
                 break
             case .update:
-                NSLog("favorite updated, push em")
                 if favorite.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationFavoriteModel(favorite: favorite))
                 }

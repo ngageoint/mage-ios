@@ -20,9 +20,9 @@ extension UserDefaults {
         let dictionary = dictionaryRepresentation()
         
         if dictionary.isEmpty {
-            print("🛑 UserDefaults is empty.")
+            print("UserDefaults is empty.")
         } else {
-            print("🔍 Current UserDefaults Contents:")
+            print("Current UserDefaults Contents:")
             for (key, value) in dictionary {
                 print("\(key): \(value)")
             }
@@ -34,11 +34,10 @@ extension UserDefaults {
     /// Completely clears all stored data in `UserDefaults.standard`
     func clearAll() {
         for key in dictionaryRepresentation().keys {
-//            print("Key: \(key)")
             removeObject(forKey: key)
         }
         synchronize() // Ensures changes are committed immediately
-        print("🚮 UserDefaults has been fully cleared!")
+        os_log("UserDefaults has been fully cleared!")
     }
     
     static func resetDefaults() {

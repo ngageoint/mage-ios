@@ -117,89 +117,8 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
         view = nil;
         window = nil;
     }
-    
-//    override func spec() {
-//        
-//        describe("FollowUserTests") {
-//
-//            
-//            beforeEach {
-//                
-//                if (navController != nil) {
-//                    waitUntil { done in
-//                        navController.dismiss(animated: false, completion: {
-//                            done();
-//                        });
-//                    }
-//                }
-//                if (view != nil) {
-//                    for subview in view.subviews {
-//                        subview.removeFromSuperview();
-//                    }
-//                }
-//                window = TestHelpers.getKeyWindowVisible();
-//                UserDefaults.standard.mapType = 0;
-//                UserDefaults.standard.mapRegion = MKCoordinateRegion(center: kCLLocationCoordinate2DInvalid, span: MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0));
-//                
-//                UserDefaults.standard.baseServerUrl = "https://magetest";
-//                UserDefaults.standard.selectedStaticLayers = nil
-//                
-//                MageCoreDataFixtures.addEvent(remoteId: 1, name: "Event", formsJsonFile: "oneForm")
-//                
-//                Server.setCurrentEventId(1);
-//                MageCoreDataFixtures.addUser(userId: "userabc")
-//                userabc = User.mr_findFirst(byAttribute: "remoteId", withValue: "userabc")
-//                MageCoreDataFixtures.addUser(userId: "userdef")
-//                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userabc")
-//                MageCoreDataFixtures.addUserToEvent(eventId: 1, userId: "userdef")
-//                
-//                controller = UIViewController()
-//                let mapView = MKMapView()
-//                controller.view = mapView
-//                
-//                testimpl = FollowUserTestImpl()
-//                testimpl.mapView = mapView
-//                mapView.delegate = testimpl
-//                
-//                navController = UINavigationController(rootViewController: controller);
-//                
-//                window.rootViewController = navController;
-//                
-//                view = window
-//                if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
-//                    window.overrideUserInterfaceStyle = .unspecified
-//                }
-//            }
-//            
-//            afterEach {
-//                mixin = nil
-//                testimpl = nil
-//                
-//                for subview in view.subviews {
-//                    subview.removeFromSuperview();
-//                }
-//                waitUntil { done in
-//                    controller.dismiss(animated: false, completion: {
-//                        done();
-//                    });
-//                }
-//                
-//                UserDefaults.standard.mapRegion = MKCoordinateRegion(center: kCLLocationCoordinate2DInvalid, span: MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0));
-//                
-//                if let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
-//                    window.overrideUserInterfaceStyle = .unspecified
-//                }
-//                window?.resignKey();
-//                window.rootViewController = nil;
-//                navController = nil;
-//                view = nil;
-//                window = nil;
-//            }
             
     func testInitializeTheFollowUserMapMixinWithAUser() {
-        print("XXX run the test")
-//            it("initialize the FollowUserMapMixin with a user") {
-        
         UserDefaults.standard.currentUserId = nil
 
         MageCoreDataFixtures.addLocation(userId: "userabc")
@@ -220,10 +139,7 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
     }
         
     // TODO: FLAKY TEST
-    // BRENT
     func testInitializeTheFollowUserMapMixinWithAUserThenMoveIt() {
-//            it("initialize the FollowUserMapMixin with a user then move it") {
-                
         UserDefaults.standard.currentUserId = nil
         
         MageCoreDataFixtures.addLocation(userId: "userabc")
@@ -249,8 +165,6 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
     }
             
     func testInitializeTheFollowUserMapMixinWithAUserWithNoLocationThenAddOne() {
-//            it("initialize the FollowUserMapMixin with a user with no location then add one") {
-                
         UserDefaults.standard.currentUserId = nil
                         
         mixin = FollowUserMapMixin(followUser: testimpl, user: userabc, scheme: MAGEScheme.scheme())
@@ -275,10 +189,7 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
     }
             
     // TODO: FLAKY TEST
-    // BRENT
     func testInitializeTheFollowUserMapMixinWithAUserThenStopFollowingAndMoveIt() {
-//            it("initialize the FollowUserMapMixin with a user then stop following and move it") {
-                
         UserDefaults.standard.currentUserId = nil
         
         MageCoreDataFixtures.addLocation(userId: "userabc")
@@ -306,8 +217,6 @@ class FollowUserTests: AsyncMageCoreDataTestCase {
     }
             
     func testInitializeWithNoUserThenFollowThenMoveIt() {
-//            it("initialize the FollowUserMapMixin with no user then follow then move it") {
-        
         UserDefaults.standard.currentUserId = nil
         
         MageCoreDataFixtures.addLocation(userId: "userabc")

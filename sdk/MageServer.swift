@@ -2,7 +2,6 @@
 //  MageServer.m
 //  mage-ios-sdk
 //
-//
 
 import Foundation
 
@@ -138,9 +137,9 @@ import Foundation
         let manager = MageSessionManager.shared()
         let apiURL = "\(url.absoluteString)/api"
         let methodStart = Date()
-        NSLog("TIMING API @ \(methodStart)")
+        os_log("TIMING API @ \(methodStart)")
         let task = manager?.get_TASK(apiURL, parameters: nil, progress: nil, success: { task, response in
-            NSLog("TIMING Fetched API. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            os_log("TIMING Fetched API. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             if let dataResponse = response as? Data {
                 if dataResponse.count == 0 {
                     failure?(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: "Empty API response received from server."]))
@@ -197,9 +196,8 @@ import Foundation
                 {
                     if let authentication = Authentication.authenticationModule(forStrategy: "offline", parameters: nil) {
                         server.authenticationModules?["offline"] = authentication
-                        print("✅✅ Offline authentication module successfully added.")
                     } else {
-                        print("❌❌ Failed to create offline authentication module.")
+                        os_log("Failed to create offline authentication module.")
                     }
 
                     authenticationModules["offline"] = Authentication.authenticationModule(forStrategy: "offline", parameters: nil)

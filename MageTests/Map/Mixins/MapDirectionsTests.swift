@@ -33,6 +33,7 @@ extension MapDirectionsTestImpl : MKMapViewDelegate {
     }
 }
 
+// NOTE: These are being kept for now as a reference in case we want to try having Map Direction Tests again.
 class MapDirectionsTests: AsyncMageCoreDataTestCase {
     
     var navController: UINavigationController!

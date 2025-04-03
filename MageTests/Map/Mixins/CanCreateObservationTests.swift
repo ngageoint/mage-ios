@@ -36,9 +36,6 @@ class CanCreateObservationTests: AsyncMageCoreDataTestCase {
         super.tearDown()
     }
     
-//    override func spec() {
-//        
-//        describe("CanCreateObservationTests") {
     var navController: UINavigationController!
     var view: UIView!
     var window: UIWindow!;

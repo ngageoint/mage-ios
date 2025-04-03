@@ -12,7 +12,6 @@
 #import "SignUpViewController_Server5.h"
 #import "IDPLoginView.h"
 #import "IDPCoordinator.h"
-//#import "MagicalRecord+MAGE.h"
 #import "MageOfflineObservationManager.h"
 #import "FadeTransitionSegue.h"
 #import "MageSessionManager.h"
@@ -214,7 +213,7 @@ BOOL signingIn = YES;
 }
 
 - (BOOL) didUserChange: (NSString *) username {
-    NSLog(@"XXXX Context is to search %@", _context);
+    NSLog(@"Context is to search %@", _context);
     User *currentUser = [User fetchCurrentUserWithContext:_context];
     return (currentUser != nil && ![currentUser.username isEqualToString:username]);
 }
@@ -387,7 +386,6 @@ BOOL signingIn = YES;
             }
         } else {
             ContactInfo *info = [[ContactInfo alloc] initWithTitle:@"Login Failed" andMessage: errorString andDetailedInfo: errorDetail];
-//            info.username = username;
             [self.loginView setContactInfo:info];
         }
     }];

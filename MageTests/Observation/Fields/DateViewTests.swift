@@ -9,7 +9,6 @@
 import Foundation
 import Quick
 import Nimble
-//import Nimble_Snapshots
 
 @testable import MAGE
 
@@ -69,15 +68,6 @@ class DateViewTests: XCTestCase {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter.date(from: dateString)
-        
-//        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Force UTC
-//        
-//        if let date = formatter.date(from: dateString) {
-//            return date
-//        } else {
-//            print("❌ Failed to parse date: \(dateString)")
-//            return nil
-//        }
     }
 
     func formatDate(_ date: Date) -> String {
@@ -89,8 +79,8 @@ class DateViewTests: XCTestCase {
     
     func formatDateToLocal(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm z" // Ensure timezone is included
-        formatter.timeZone = TimeZone.current // ✅ Convert to system's timezone (CDT in your case)
+        formatter.dateFormat = "yyyy-MM-dd HH:mm z"
+        formatter.timeZone = TimeZone.current
 
         return formatter.string(from: date)
     }
@@ -99,11 +89,11 @@ class DateViewTests: XCTestCase {
         guard let text = text else { return nil }
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm z" // Assume UI displays this format
-        formatter.timeZone = TimeZone.current // ✅ Assume the UI is already localized
+        formatter.dateFormat = "yyyy-MM-dd HH:mm z"
+        formatter.timeZone = TimeZone.current
 
         if let date = formatter.date(from: text) {
-            return formatDateToLocal(date) // Convert UI string to a normalized format
+            return formatDateToLocal(date)
         }
 
         return nil
@@ -118,21 +108,13 @@ class DateViewTests: XCTestCase {
         dateFieldView.autoPinEdgesToSuperviewEdges();
     }
 
-//    "2020-11-01T08:18:00.000Z" -> 4
-//    "2013-06-22T08:18:20.000Z" -> 6
-    
-//    "2013-06-22T08:18:00.000Z" -> 1
-//    "2020-11-02T14:00:00.000Z" -> 1
-//    "2020-11-02T07:00:00.000Z" -> 1
-    
     struct TestDates {
         static let default2013 = "2013-06-22T08:18:20.000Z"
         static let default2020 = "2020-11-01T08:18:00.000Z"
         
-        /// Convert a test date string to a `Date` object
         static func date(from string: String) -> Date? {
             let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds] // Handle milliseconds
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
             return formatter.date(from: string)
         }
     }
@@ -149,14 +131,12 @@ class DateViewTests: XCTestCase {
         tester().waitForView(withAccessibilityLabel: field["name"] as? String)
         
         guard let expectedDate = parseDate("2013-06-22T08:18:00.000Z") else {
-            XCTFail("❌ Failed to parse expected date.")
             return
         }
         
-        let formattedExpectedDate = formatDateToLocal(expectedDate) // ✅ Convert to CDT format
-        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text) // ✅ Convert UI date format
+        let formattedExpectedDate = formatDateToLocal(expectedDate)
+        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text)
         
-        // ✅ Compare both formatted values
         expect(formattedActualDate).to(equal(formattedExpectedDate))
     }
     
@@ -168,19 +148,16 @@ class DateViewTests: XCTestCase {
         view.addSubview(dateFieldView)
         dateFieldView.autoPinEdgesToSuperviewEdges()
         
-        // ✅ Set the value using the default test date
         dateFieldView.setValue(TestDates.default2013)
         
-        // ✅ Convert the expected date to local time zone format
         guard let expectedDate = TestDates.date(from: TestDates.default2013) else {
-            XCTFail("❌ Failed to parse expected date.")
+            XCTFail("Failed to parse expected date.")
             return
         }
 
-        let formattedExpectedDate = formatDateToLocal(expectedDate) // ✅ Convert to CDT format
-        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text) // ✅ Convert UI date format
+        let formattedExpectedDate = formatDateToLocal(expectedDate)
+        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text)
         
-        // ✅ Compare both formatted values
         expect(formattedActualDate).to(equal(formattedExpectedDate))
     }
     
@@ -194,16 +171,14 @@ class DateViewTests: XCTestCase {
         
         dateFieldView.setValue(TestDates.default2013 as Any?)
         
-        // ✅ Convert the expected date to local time zone format
         guard let expectedDate = TestDates.date(from: TestDates.default2013) else {
-            XCTFail("❌ Failed to parse expected date.")
+            XCTFail("Failed to parse expected date.")
             return
         }
 
-        let formattedExpectedDate = formatDateToLocal(expectedDate) // ✅ Convert to CDT format
-        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text) // ✅ Convert UI date format
+        let formattedExpectedDate = formatDateToLocal(expectedDate)
+        let formattedActualDate = convertUITextToComparableFormat(self.dateFieldView.textField.text)
         
-        // ✅ Compare both formatted values
         expect(formattedActualDate).to(equal(formattedExpectedDate))
     }
     
@@ -223,7 +198,6 @@ class DateViewTests: XCTestCase {
         tester().selectDatePickerValue(["Nov 2", "8", "00", "AM"], with: .forwardFromCurrentValue);
         tester().tapView(withAccessibilityLabel: "Done");
         
-        // ✅ Ensure Delegate Triggered
         expect(delegate.fieldChangedCalled).to(beTrue())
 
         let formatter = DateFormatter();
@@ -234,7 +208,6 @@ class DateViewTests: XCTestCase {
         
         let expectedFormattedDate = formatDateToLocal(date)  // Convert to UI time zone
 
-        // ✅ Compare with UI text field value
         expect(self.dateFieldView.textField.text).to(equal(expectedFormattedDate))
     }
     
@@ -301,7 +274,7 @@ class DateViewTests: XCTestCase {
         expect(self.dateFieldView.textField.text).to(equal((date as NSDate).formattedDisplay()));
     }
     
-    // this test is finicky
+    // TODO: This test is finicky
     @MainActor
     func testSetClearTheTextFieldViaTouch() {
         let delegate = MockFieldDelegate()

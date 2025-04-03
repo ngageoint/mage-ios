@@ -104,7 +104,6 @@
 		842210A42D887B7B008BE357 /* MockMageServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F795ECFF24B8BCAC0028FBFC /* MockMageServer.swift */; };
 		842210A52D88852E008BE357 /* MockAuthenticationCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846D0C042D838927009C68CB /* MockAuthenticationCoordinatorDelegate.swift */; };
 		842210AC2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */; };
-		842210B22D8C4E1C008BE357 /* MageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842210B12D8C4E1C008BE357 /* MageServiceTests.swift */; };
 		843A5E4A2D8DD20700E95F4B /* attachmentPushTestResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F73B7647274438FA00799BBF /* attachmentPushTestResponse.json */; };
 		843A5E4B2D8DD40D00E95F4B /* test_marker.png in Resources */ = {isa = PBXBuildFile; fileRef = F7098F252492C36700313703 /* test_marker.png */; };
 		843A5E4C2D8DD42800E95F4B /* threeEvents.json in Resources */ = {isa = PBXBuildFile; fileRef = F709F02C28297AD2002EA135 /* threeEvents.json */; };
@@ -677,7 +676,6 @@
 		F7C097732C80C52C003FA115 /* AttachmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097722C80C52C003FA115 /* AttachmentModel.swift */; };
 		F7C097752C80C73C003FA115 /* ObservationFormModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097742C80C73C003FA115 /* ObservationFormModel.swift */; };
 		F7C097772C80C759003FA115 /* ObservationFormFieldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097762C80C759003FA115 /* ObservationFormFieldModel.swift */; };
-		F7C0977A2C80C7C5003FA115 /* ObservationModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097792C80C7C5003FA115 /* ObservationModelTests.swift */; };
 		F7C0977D2C80E0A5003FA115 /* FormModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0977C2C80E0A5003FA115 /* FormModel.swift */; };
 		F7C0977F2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0977E2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift */; };
 		F7C097822C80FA5E003FA115 /* ObservationImportantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C097802C80FA52003FA115 /* ObservationImportantModel.swift */; };
@@ -1077,7 +1075,6 @@
 		665E44101FEA86D8CD6AD241 /* Pods-MAGEGeoPackageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MAGEGeoPackageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MAGEGeoPackageTests/Pods-MAGEGeoPackageTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D0F874A2AA795CD009664E5 /* test_image_attachment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_attachment.png; sourceTree = "<group>"; };
 		842210AB2D8A06AE008BE357 /* AuthenticationCoordinator+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationCoordinator+Offline.swift"; sourceTree = "<group>"; };
-		842210B12D8C4E1C008BE357 /* MageServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageServiceTests.swift; sourceTree = "<group>"; };
 		846D0BFF2D834440009C68CB /* AuthenticationCoordinatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorSpy.swift; sourceTree = "<group>"; };
 		846D0C012D834519009C68CB /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		846D0C032D834623009C68CB /* AuthenticationCoordinator+Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AuthenticationCoordinator+Testing.h"; sourceTree = "<group>"; };
@@ -1688,7 +1685,6 @@
 		F7C097722C80C52C003FA115 /* AttachmentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentModel.swift; sourceTree = "<group>"; };
 		F7C097742C80C73C003FA115 /* ObservationFormModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormModel.swift; sourceTree = "<group>"; };
 		F7C097762C80C759003FA115 /* ObservationFormFieldModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFormFieldModel.swift; sourceTree = "<group>"; };
-		F7C097792C80C7C5003FA115 /* ObservationModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationModelTests.swift; sourceTree = "<group>"; };
 		F7C0977C2C80E0A5003FA115 /* FormModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormModel.swift; sourceTree = "<group>"; };
 		F7C0977E2C80F3DB003FA115 /* ObservationFavoriteRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationFavoriteRepositoryMock.swift; sourceTree = "<group>"; };
 		F7C097802C80FA52003FA115 /* ObservationImportantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationImportantModel.swift; sourceTree = "<group>"; };
@@ -3649,7 +3645,6 @@
 				F7FBBD7D274FC8BF001EDA6A /* LocationFetchServiceTests.swift */,
 				F7BCAC20263093F8006BE2A9 /* MageServerTests.swift */,
 				F7F15B12274565A8008FF6C2 /* MageTests.swift */,
-				842210B12D8C4E1C008BE357 /* MageServiceTests.swift */,
 				F71EFE4A2757F810001E6134 /* Networking */,
 				F7384FDD274D74EA00EA1A96 /* ObservationFetchServiceTests.swift */,
 				F7EF4BEA2744206600D0C304 /* ObservationPushServiceTests.swift */,
@@ -3826,7 +3821,6 @@
 		F7C097782C80C79F003FA115 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F7C097792C80C7C5003FA115 /* ObservationModelTests.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5510,7 +5504,6 @@
 				F763FF282C790F4600403A00 /* EventRepositoryMock.swift in Sources */,
 				F763FF372C7BAC3900403A00 /* LocationStaticLocalDataSource.swift in Sources */,
 				F706B21F2554391000C19BA7 /* MockAttachmentCreationDelegate.swift in Sources */,
-				F7C0977A2C80C7C5003FA115 /* ObservationModelTests.swift in Sources */,
 				F7E2DF0B2575A13200CD2ABA /* ObservationEditCoordinatorTests.swift in Sources */,
 				F763FF162C78EBFA00403A00 /* UserStaticLocalDataSource.swift in Sources */,
 				F760910823FDCAAE000233A6 /* NetworkSyncOptionTetsts.m in Sources */,
@@ -5551,7 +5544,6 @@
 				F79CC3EF2530AC4B005692DC /* LocalLoginViewTests.swift in Sources */,
 				F7081D3B254C4CEA009F8C4A /* FormPickerTests.swift in Sources */,
 				F7C0975C2C7F70D4003FA115 /* AttachmentRepositoryMock.swift in Sources */,
-				842210B22D8C4E1C008BE357 /* MageServiceTests.swift in Sources */,
 				F7C097522C7E8208003FA115 /* ObservationRemoteDataSourceMock.swift in Sources */,
 				F75A10E420486489002F9906 /* StoredPasswordTests.m in Sources */,
 				F7F08E9627E8B35F00640D89 /* FeedsMapTests.swift in Sources */,

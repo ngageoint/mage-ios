@@ -19,21 +19,21 @@ class AuthenticationCoordinatorSpy: AuthenticationCoordinator {
 
     override func start(_ mageServer: MageServer?) {
         startCalled = true
-        print("🔵 start(_:) called with server: \(String(describing: mageServer))")
+        os_log("start(_:) called with server: \(String(describing: mageServer))")
         super.start(mageServer)
     }
 
     override func startLoginOnly() {
         startLoginOnlyCalled = true
-        print("🔵 startLoginOnly() called")
+        os_log("startLoginOnly() called")
         super.startLoginOnly()
     }
 
-    /// ✅ Properly override `showLoginViewForServer` to track when it's called
+    /// Properly override `showLoginViewForServer` to track when it's called
     override func showLoginView(for mageServer: MageServer?) {
         showLoginViewForServerCalled = true
         showLoginViewForServerParam = mageServer
-        print("🟢 showLoginViewForServer(_:) was called with \(String(describing: mageServer))")
+        os_log("showLoginViewForServer(_:) was called with \(String(describing: mageServer))")
         super.showLoginView(for: mageServer)
     }
 }

@@ -115,7 +115,6 @@ class UserTrackingMapTests: AsyncMageCoreDataTestCase {
     
     @MainActor
     func testInitializeTheUserTrackingMapWithTheButtonAtIndex0() {
-//    it("initialize the UserTrackingMap with the button at index 0") {
         let mapState = MapState()
         mixin.setupMixin(mapView: testimpl.mapView!, mapState: mapState)
 
@@ -145,10 +144,6 @@ class UserTrackingMapTests: AsyncMageCoreDataTestCase {
         tester().tapView(withAccessibilityLabel: "track location")
         expect(button.currentImage).to(equal(UIImage(systemName: "location.north.line.fill")))
         expect(self.mixin.mapView?.userTrackingMode).to(equal(.follow))
-
-//        tester().tapView(withAccessibilityLabel: "track location")
-//        expect(button.currentImage).to(equal(UIImage(systemName: "location")))
-//        expect(self.mixin.mapView?.userTrackingMode).to(equal(MKUserTrackingMode.none))
         
         mixin.cleanupMixin()
     }
@@ -170,10 +165,6 @@ class UserTrackingMapTests: AsyncMageCoreDataTestCase {
         tester().waitForView(withAccessibilityLabel: "Location Services Disabled")
         expect(button.currentImage).to(equal(UIImage(systemName: "location")))
         
-        // TODO: figure out how to test this
-        // tapping the button works fine, but there is now way to verify that the settings screen opened
-        //                tester().tapView(withAccessibilityLabel: "Settings")
-        // in the mean time do this
         tester().tapView(withAccessibilityLabel: "Cancel")
         
         mixin.cleanupMixin()

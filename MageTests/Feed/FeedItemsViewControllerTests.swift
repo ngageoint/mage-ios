@@ -9,7 +9,6 @@
 import Foundation
 import Quick
 import Nimble
-//import Nimble_Snapshots
 import PureLayout
 import OHHTTPStubs
 import Kingfisher
@@ -17,7 +16,6 @@ import Kingfisher
 @testable import MAGE
 
 // TODO: These tests are flaky
-// BRENT
 class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     let recordSnapshots = false;
     var controller: FeedItemsViewController!
@@ -64,41 +62,7 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
         controller = nil;
     }
 
-//    override func spec() {
-//        
-//        describe("FeedItemsViewController no timestamp") {
-
-                
-            
-//                afterEach {
-//                    controller.dismiss(animated: false, completion: nil);
-//                    window.rootViewController = nil;
-//                    controller = nil;
-//                }
-//            
-//                beforeEach {
-//                    ImageCache.default.clearMemoryCache();
-//                    ImageCache.default.clearDiskCache();
-//                    
-//                    HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-//                        return request.url == URL(string: "https://magetest/icon.png");
-//                    }) { (request) -> HTTPStubsResponse in
-//                        let stubPath = OHPathForFile("icon27.png", type(of: self))
-//                        return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
-//                    };
-//                    
-//                    window = TestHelpers.getKeyWindowVisible();
-//                                        
-//                    UserDefaults.standard.mapType = 0;
-//                    UserDefaults.standard.locationDisplay = .latlng;
-//                    Server.setCurrentEventId(1);
-//                    
-//                    MageCoreDataFixtures.addEvent();
-//                    MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary");
-//                }
-                
     func testEmptyFeed() {
-//                it("empty feed") {
         if let feed: Feed = try? context.fetchFirst(Feed.self) {
         
             controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
@@ -113,7 +77,6 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     /// UITableViewDiffableDataSource cell provider returned nil for index path <NSIndexPath: 0xbdd6ae0311845a50> {length = 2, path = 0 - 0} with item identifier '0xbdd6ae0311a44625 <x-coredata://52EDFE6D-5413-4FD7-9821-F0D60C2E9782/FeedItem/p1>', which is not allowed. You must always return a cell to the table view: <UITableView: 0x49fdd5800; frame = (0 0; 440 956); clipsToBounds = YES; autoresize = W+H; gestureRecognizers = <NSArray: 0x600004fabae0>; backgroundColor = <UIDynamicCatalogColor: 0x60000a10b340; name = background>; layer = <CALayer: 0x6000046bbfa0>; contentOffset: {0, -62}; contentSize: {440, 144.33333333333331}; adjustedContentInset: {62, 0, 34, 0}; dataSource: <_TtGC5UIKit29UITableViewDiffableDataSourceSiCSo17NSManagedObjectID_: 0x600004106110>> (NSInternalInconsistencyException)
     
     func testOneFeedItemWithPrimaryValue() {
-//                it("one feed item with primary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item"])
                             
         if let feed: Feed = Feed.mr_findFirst() {
@@ -125,7 +88,6 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     }
                 
     func testOneFeedItemWithSecondaryValue() {
-//                it("one feed item with secondary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item"])
         
         if let feed: Feed = Feed.mr_findFirst() {
@@ -137,7 +99,6 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     }
                 
     func testOneFeedItemWithPrimaryAndSecondaryValue() {
-//                it("one feed item with primary and secondary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
         
         if let feed: Feed = Feed.mr_findFirst() {
@@ -149,9 +110,7 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     }
               
     // TODO: Failing test
-    // BRENT
     func testOneFeedItemWithPrimaryAndSecondaryValueAndIcon() {
-//                it("one feed item with primary and secondary value and icon") {
         MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
         
@@ -165,7 +124,6 @@ class FeedItemsViewControllerNoTimestampTests: AsyncMageCoreDataTestCase {
     }
                 
     func testOneFeedItemNoContent() {
-//                it("one feed item no content") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item"])
         
         if let feed: Feed = Feed.mr_findFirst() {
@@ -224,40 +182,8 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
         window?.rootViewController = nil
         controller = nil
     }
-//        describe("FeedItemsViewController with timestamp") {
-//            
-//            var controller: FeedItemsViewController!
-//            var window: UIWindow!;
-//            
-//            afterEach {
-//                controller.dismiss(animated: false, completion: nil);
-//                window.rootViewController = nil;
-//                controller = nil;
-//            }
-//            
-//            beforeEach {
-//                ImageCache.default.clearMemoryCache();
-//                ImageCache.default.clearDiskCache();
-//                
-//                HTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-//                    return request.url == URL(string: "https://magetest/icon.png");
-//                }) { (request) -> HTTPStubsResponse in
-//                    let stubPath = OHPathForFile("icon27.png", type(of: self))
-//                    return HTTPStubsResponse(fileAtPath: stubPath!, statusCode: 200, headers: ["Content-Type": "image/png"]);
-//                };
-//                
-//                window = TestHelpers.getKeyWindowVisible();
-//                                
-//                UserDefaults.standard.mapType = 0;
-//                UserDefaults.standard.locationDisplay = .latlng;
-//                Server.setCurrentEventId(1);
-//                
-//                MageCoreDataFixtures.addEvent();
-//                MageCoreDataFixtures.addFeedToEvent(eventId: 1, id: "1", title: "My Feed", primaryProperty: "primary", secondaryProperty: "secondary", timestampProperty: "timestamp")
-//            }
-            
+
     func testEmptyFeed() {
-//            it("empty feed") {
         if let feed: Feed = Feed.mr_findFirst() {
             controller = FeedItemsViewController(feed: feed, scheme: MAGEScheme.scheme());
             window.rootViewController = controller;
@@ -268,9 +194,7 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
     }
             
     // TODO: Another flaky test.
-    // BRENT
     func testOneFeedItemWithPrimaryValue() {
-//            it("one feed item with primary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "timestamp": 1593440445])
         
         if let feed: Feed = Feed.mr_findFirst() {
@@ -282,7 +206,6 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
     }
             
     func testOneFeedItemWithSecondaryValue() {
-//            it("one feed item with secondary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["secondary": "Secondary Value for item", "timestamp": 1593440445])
         
         if let feed: Feed = Feed.mr_findFirst() {
@@ -294,7 +217,6 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
     }
             
     func testOneFeedItemWithPrimaryAndSecondaryValue() {
-//            it("one feed item with primary and secondary value") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
         
         if let feed: Feed = Feed.mr_findFirst() {
@@ -307,7 +229,6 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
     }
             
     func testOneFeedItemWithPrimaryAndSecondaryValueAndIcon() {
-//            it("one feed item with primary and secondary value and icon") {
         MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item", "timestamp": 1593440445])
         
@@ -320,9 +241,7 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
     }
             
     // TODO: Failing
-    // BRENT
     func testOneFeedItemWithPrimaryAndSecondaryValueAndIconWithoutTimestamp() {
-//            it("one feed item with primary and secondary value and icon without timestamp") {
         MageCoreDataFixtures.updateStyleForFeed(eventId: 1, id: "1", style: ["icon": ["id": "abcdefg"]])
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["primary": "Primary Value for item", "secondary": "Seconary value for the item"])
         if let feed: Feed = Feed.mr_findFirst() {
@@ -334,7 +253,6 @@ class FeedItemsViewControllerWithTimestampTests: AsyncMageCoreDataTestCase {
     }
             
     func testOneFeedItemNoContent() {
-//            it("one feed item no content") {
         MageCoreDataFixtures.addFeedItemToFeed(feedId: "1", properties: ["notprimary": "Primary Value for item", "notsecondary": "Seconary value for the item", "timestamp": 1593440445])
                         
         if let feed: Feed = Feed.mr_findFirst() {
