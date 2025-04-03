@@ -253,7 +253,7 @@ static const NSInteger LEGAL_SECTION = 8;
 
 - (NSDictionary *) servicesSection {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    CLLocationManager *manager = [CLLocationManager init];
+    CLLocationManager *manager = [[CLLocationManager alloc] init];
     
     NSString *locationServicesLabel = nil;
     CLAuthorizationStatus authorizationStatus = manager.authorizationStatus;
@@ -462,17 +462,11 @@ static const NSInteger LEGAL_SECTION = 8;
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     
-    NSString *email = @"magesuitesupport@nga.mil";
-    NSString *subject = @"MAGE App Support";
+//    NSString *email = @"magesuitesupport@nga.mil";
+//    NSString *mailtoString = [NSString stringWithFormat:@"mailto:%@", email];
 
-    NSString *encodedSubject = [subject stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-
-    // Construct the mailto URL string
-    NSString *mailtoString = [NSString stringWithFormat:@"mailto:%@?subject=%@", email, encodedSubject];
-
-    // Create attributed string for UILabel
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"magesuitesupport@nga.mil"];
-    [attributedString addAttribute:NSLinkAttributeName value:mailtoString range:NSMakeRange(0, attributedString.length)];
+//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"magesuitesupport@nga.mil"];
+//    [attributedString addAttribute:NSLinkAttributeName value:mailtoString range:NSMakeRange(0, attributedString.length)];
     
     return [@{
               @"header": @"About",
@@ -493,9 +487,10 @@ static const NSInteger LEGAL_SECTION = 8;
                              },
                          @{
                              @"type": [NSNumber numberWithInteger: kContactUs],
-                             @"style": [NSNumber numberWithInteger: UITableViewCellStyleSubtitle],
+                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
                              @"textLabel": @"Contact Us",
-                             @"detailTextLabel": attributedString
+                             @"systemImage": @"envelope.fill",
+                             @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
                          }
               ]
               } mutableCopy];
