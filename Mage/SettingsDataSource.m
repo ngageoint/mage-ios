@@ -462,12 +462,6 @@ static const NSInteger LEGAL_SECTION = 8;
     NSString *versionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *buildString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     
-//    NSString *email = @"magesuitesupport@nga.mil";
-//    NSString *mailtoString = [NSString stringWithFormat:@"mailto:%@", email];
-
-//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"magesuitesupport@nga.mil"];
-//    [attributedString addAttribute:NSLinkAttributeName value:mailtoString range:NSMakeRange(0, attributedString.length)];
-    
     return [@{
               @"header": @"About",
               @"rows": @[@{
