@@ -219,6 +219,23 @@
             
             break;
         }
+        case kContactUs: {
+            [self onContactUs];
+            break;
+        }
+    }
+}
+
+- (void) onContactUs {
+    NSString *recipient = @"magesuitesupport@nga.mil";
+    NSString *mailtoURLString = [NSString stringWithFormat:@"mailto:%@", recipient];
+    NSURL *mailtoURL = [NSURL URLWithString:mailtoURLString];
+
+    // Open the mail client
+    if ([[UIApplication sharedApplication] canOpenURL:mailtoURL]) {
+        [[UIApplication sharedApplication] openURL:mailtoURL options:@{} completionHandler:nil];
+    } else {
+        NSLog(@"Cannot open mail client.");
     }
 }
 

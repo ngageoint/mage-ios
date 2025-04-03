@@ -253,9 +253,10 @@ static const NSInteger LEGAL_SECTION = 8;
 
 - (NSDictionary *) servicesSection {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    CLLocationManager *manager = [[CLLocationManager alloc] init];
     
     NSString *locationServicesLabel = nil;
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+    CLAuthorizationStatus authorizationStatus = manager.authorizationStatus;
     if (authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
         locationServicesLabel = [defaults boolForKey:kReportLocationKey] ? @"On" : @"Off";
     } else {
@@ -356,6 +357,9 @@ static const NSInteger LEGAL_SECTION = 8;
             break;
         case LocationDisplayDms:
             locationDisplayString = @"Degrees Minutes Seconds";
+            break;
+        case LocationDisplayGars:
+            NSLog(@"LocationDisplayGars switch not handled in SettingsDataSource.m");
             break;
     }
     return [@{
@@ -474,7 +478,15 @@ static const NSInteger LEGAL_SECTION = 8;
                              @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
                              @"textLabel": @"Version",
                              @"detailTextLabel": self.versionCellSelectionCount >= 5 ? [NSString stringWithFormat:@"%@ (%@)", versionString, buildString] : versionString
-                             }]
+                             },
+                         @{
+                             @"type": [NSNumber numberWithInteger: kContactUs],
+                             @"style": [NSNumber numberWithInteger:UITableViewCellStyleSubtitle],
+                             @"textLabel": @"Contact Us",
+                             @"systemImage": @"envelope.fill",
+                             @"accessoryType": [NSNumber numberWithInteger:UITableViewCellAccessoryDisclosureIndicator]
+                         }
+              ]
               } mutableCopy];
 }
 
