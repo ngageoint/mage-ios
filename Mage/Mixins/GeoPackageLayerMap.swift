@@ -93,7 +93,7 @@ class GeoPackageLayerMapMixin: NSObject, MapMixin {
 
 extension GeoPackageLayerMapMixin : CacheOverlayListener {
     func cacheOverlaysUpdated(_ cacheOverlays: [CacheOverlay]) {
-        print("XXX got notified")
+        MageLogger.misc.debug("XXX got notified")
         updateGeoPackageLayers()
     }
 }

@@ -55,11 +55,11 @@ class ObservationImportantRemoteDataSource {
                                 continuation.resume(returning: json)
                             }
                         } catch {
-                            print("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
+                            MageLogger.misc.error("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
                             continuation.resume(returning: [:])
                         }
                     case .failure(let error):
-                        print("Error \(error)")
+                        MageLogger.misc.error("Error \(error)")
                         continuation.resume(returning: [:])
                     }
                 }

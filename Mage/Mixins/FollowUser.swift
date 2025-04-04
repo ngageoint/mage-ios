@@ -90,11 +90,11 @@ class FollowUserMapMixin: NSObject, MapMixin {
                 try gpsFetchedResultsController?.performFetch()
             } catch {
                 let fetchError = error as NSError
-                print("Unable to Perform Fetch Request")
-                print("\(fetchError), \(fetchError.localizedDescription)")
+                MageLogger.misc.error("Unable to Perform Fetch Request")
+                MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
             }
-            print("XXX fetched objects \(gpsFetchedResultsController?.fetchedObjects)")
-            print("XXX location \(gpsFetchedResultsController!.fetchedObjects![0].cllocation)")
+            MageLogger.misc.debug("XXX fetched objects \(gpsFetchedResultsController?.fetchedObjects)")
+            MageLogger.misc.debug("XXX location \(gpsFetchedResultsController!.fetchedObjects![0].cllocation)")
             if let fetchedObjects = gpsFetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty, let cllocation = fetchedObjects[0].cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
             }
@@ -113,8 +113,8 @@ class FollowUserMapMixin: NSObject, MapMixin {
                 try fetchedResultsController?.performFetch()
             } catch {
                 let fetchError = error as NSError
-                print("Unable to Perform Fetch Request")
-                print("\(fetchError), \(fetchError.localizedDescription)")
+                MageLogger.misc.error("Unable to Perform Fetch Request")
+                MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
             }
             if let fetchedObjects = fetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty {
                 zoomAndCenterMap(location: fetchedObjects[0])
@@ -142,16 +142,16 @@ extension FollowUserMapMixin : NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            print("insert")
+            MageLogger.misc.debug("insert")
             if let location = anObject as? Location {
                 zoomAndCenterMap(location: location)
             } else if let gpsLocation = anObject as? GPSLocation, let cllocation = gpsLocation.cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
             }
         case .delete:
-            print("delete")
+            MageLogger.misc.debug("delete")
         case .update:
-            print("update")
+            MageLogger.misc.debug("update")
             if let location = anObject as? Location {
                 zoomAndCenterMap(location: location)
             } else if let gpsLocation = anObject as? GPSLocation, let cllocation = gpsLocation.cllocation {

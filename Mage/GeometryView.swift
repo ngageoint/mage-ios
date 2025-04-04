@@ -41,15 +41,6 @@ class GeometryView : BaseFieldView {
         let mapView = SingleFeatureMapView(observation: nil, scheme: scheme)
         mapView.autoSetDimension(.height, toSize: editMode ? 150 : 200);
 
-//        mapItemsTappedObserver = NotificationCenter.default.addObserver(forName: .MapItemsTapped, object: nil, queue: .main) { [weak self] notification in
-//            if let mapView = mapView.mapView,
-//               let notification = notification.object as? MapItemsTappedNotification,
-//               notification.mapView == mapView
-//            {
-//                print("XXX map item clicked annotations \(notification.annotations) items \(notification.items)")
-//            }
-//        }
-
         return mapView;
     }()
     
@@ -193,13 +184,8 @@ class GeometryView : BaseFieldView {
         if (value != nil) {
             latitudeLongitudeButton.isEnabled = true;
             setAccuracy(accuracy, provider: provider);
-//            if (self.observation == nil) {
                 addToMap();
-//            } else {
-//                self.observation?.geometry = value;
-//                addToMapAsObservation();
-//            }
-            
+
             if let point: SFPoint = (self.value as? SFGeometry)!.centroid() {
                 let coordinate = CLLocationCoordinate2D(latitude: point.y.doubleValue, longitude: point.x.doubleValue)
                 latitudeLongitudeButton.coordinate = coordinate

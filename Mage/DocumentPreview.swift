@@ -45,7 +45,7 @@ class DocumentController: NSObject, ObservableObject, UIDocumentInteractionContr
     func dismissPreview() {
         controller?.dismissPreview(animated: true)
         presentingViewController?.dismiss(animated: true, completion: {
-            print("dismissed")
+            MageLogger.misc.debug("dismissed")
         })
     }
     

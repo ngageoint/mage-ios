@@ -25,13 +25,13 @@ import CoreData
         let url = "\(baseURL.absoluteURL)/api/events";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Events @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Events @ \(methodStart)")
 
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Events. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Events. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
 
             let saveStart = Date()
-            NSLog("TIMING Saving Events @ \(saveStart)")
+            MageLogger.misc.debug("TIMING Saving Events @ \(saveStart)")
             context.performAndWait {
                 let localUser = User.fetchCurrentUser(context: context);
                 var eventsReturned: [NSNumber] = []
@@ -98,7 +98,7 @@ import CoreData
         guard let currentEventId = Server.currentEventId(), let task: URLSessionDataTask = manager?.post_TASK("\(baseURL.absoluteURL)/api/users/\(u.remoteId ?? "")/events/\(currentEventId)/recent", parameters: nil, progress: nil, success: { task, response in
             
         }, failure: { task, error in
-            print("Error posting recent event")
+            MageLogger.misc.error("Error posting recent event")
         }) else {
             return
         }
@@ -193,13 +193,9 @@ import CoreData
                 }
             }
         }
-        print("User \(user.name ?? "") is not in the event \(self.name ?? "")");
+        MageLogger.misc.debug("User \(user.name ?? "") is not in the event \(self.name ?? "")");
         return false;
     }
-    
-//    @objc public func form(observation: Observation) -> Form? {
-//        return observation.primaryEventForm;
-//    }
     
     @objc public func form(id: NSNumber?) -> Form? {
         guard let id = id, let managedObjectContext = self.managedObjectContext, let remoteId = remoteId else {

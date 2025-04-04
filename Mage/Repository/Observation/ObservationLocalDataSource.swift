@@ -108,7 +108,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
         }()
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         request.predicate = predicate
-        print("Predicate \(predicate.debugDescription)")
+        MageLogger.misc.debug("Predicate \(predicate.debugDescription)")
 
         request.includesSubentities = false
         request.propertiesToFetch = ["timestamp", "user"]
@@ -249,7 +249,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
 
     func insert(task: BGTask?, observations: [[AnyHashable: Any]], eventId: Int) async -> Int {
         let count = observations.count
-        NSLog("Received \(count) \(DataSources.observation.key) records.")
+        MageLogger.misc.debug("Received \(count) \(DataSources.observation.key) records.")
 
         // Create an operation that performs the main part of the background task.
         operation = ObservationDataLoadOperation(observations: observations, eventId: eventId)
@@ -260,15 +260,12 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
     func batchImport(from propertyList: [[AnyHashable: Any]], eventId: Int) async throws -> Int {
         let initial = true
         let saveStart = Date()
-        NSLog("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
+        MageLogger.misc.debug("TIMING Saving Observations for event \(eventId) @ \(saveStart)")
         
         let backgroundContext = persistence.getNewBackgroundContext(name: #function)
         
-//        let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
-//        let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
         return await backgroundContext.perform {
-            NSLog("TIMING There are \(propertyList.count) features to save, chunking into groups of 250")
-//            localContext.mr_setWorkingName(#function)
+            MageLogger.misc.debug("TIMING There are \(propertyList.count) features to save, chunking into groups of 250")
 
             var chunks = propertyList.chunked(into: 250);
             var newObservationCount = 0;
@@ -282,7 +279,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                 }
             }
             backgroundContext.reset();
-            NSLog("TIMING we have \(chunks.count) groups to save")
+            MageLogger.misc.debug("TIMING we have \(chunks.count) groups to save")
             while (chunks.count > 0) {
                 autoreleasepool {
                     guard let features = chunks.last else {
@@ -290,7 +287,7 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                     }
                     chunks.removeLast();
                     let createObservationsDate = Date()
-                    NSLog("TIMING creating \(features.count) observations for chunk \(chunks.count)")
+                    MageLogger.misc.debug("TIMING creating \(features.count) observations for chunk \(chunks.count)")
 
                     for observation in features {
                         if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: backgroundContext) {
@@ -300,46 +297,46 @@ class ObservationCoreDataDataSource: CoreDataDataSource<Observation>, Observatio
                             }
                         }
                     }
-                    NSLog("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
+                    MageLogger.misc.debug("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
                 }
 
                 // only save once per chunk
                 let localSaveDate = Date()
                 do {
-                    NSLog("TIMING saving \(propertyList.count) observations on local context")
+                    MageLogger.misc.debug("TIMING saving \(propertyList.count) observations on local context")
                     try backgroundContext.save()
                 } catch {
-                    print("Error saving observations: \(error)")
+                    MageLogger.misc.error("Error saving observations: \(error)")
                 }
-                NSLog("TIMING saved \(propertyList.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
+                MageLogger.misc.debug("TIMING saved \(propertyList.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
 
                 let rootContext = self.persistence.getRootContext()
                 rootContext.perform {
                     let rootSaveDate = Date()
 
                     do {
-                        NSLog("TIMING saving \(propertyList.count) observations on root context")
+                        MageLogger.misc.debug("TIMING saving \(propertyList.count) observations on root context")
                         try rootContext.save()
                     } catch {
-                        print("Error saving observations: \(error)")
+                        MageLogger.misc.error("Error saving observations: \(error)")
                     }
-                    NSLog("TIMING saved \(propertyList.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
+                    MageLogger.misc.debug("TIMING saved \(propertyList.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
 
                 }
 
                 backgroundContext.reset();
-                NSLog("TIMING reset the local context for chunk \(chunks.count)")
-                NSLog("Saved chunk \(chunks.count)")
+                MageLogger.misc.debug("TIMING reset the local context for chunk \(chunks.count)")
+                MageLogger.misc.debug("Saved chunk \(chunks.count)")
             }
 
-            NSLog("Received \(newObservationCount) new observations and send bulk is \(initial)")
+            MageLogger.misc.debug("Received \(newObservationCount) new observations and send bulk is \(initial)")
             if ((initial && newObservationCount > 0) || newObservationCount > 1) {
                 NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: backgroundContext));
             } else if let observationToNotifyAbout = observationToNotifyAbout {
                 NotificationRequester.observationPulled(observationToNotifyAbout);
             }
 
-            NSLog("TIMING Saved Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Saved Observations for event \(eventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
             return newObservationCount
         }
     }

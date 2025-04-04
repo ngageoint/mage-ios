@@ -167,19 +167,19 @@ import SSZipArchive
             }
         } catch {
             imported = false
-            NSLog("Failed to import GeoPackage \(error)")
+            MageLogger.misc.error("Failed to import GeoPackage \(error)")
         }
         manager?.close()
         
         if !imported {
-            NSLog("Error importing GeoPackage file: \(path)")
+            MageLogger.misc.error("Error importing GeoPackage file: \(path)")
             
             await layerRepository.markRemoteLayerNotDownloaded(remoteId: withLayerId)
         } else {
-            NSLog("GeoPackage file %@ has been imported", path)
+            MageLogger.misc.debug("GeoPackage file %@ has been imported", path)
             await layerRepository.markRemoteLayerLoaded(remoteId: withLayerId)
             await self.processOfflineMapArchives()
-            print("XXX sending gp imported")
+            MageLogger.misc.debug("XXX sending gp imported")
             NotificationCenter.default.post(name: .GeoPackageImported, object: nil)
         }
         return imported
@@ -201,7 +201,7 @@ import SSZipArchive
                 var imported = false
                 let alreadyImported = self.isGeoPackageAlreadyImported(name: name)
                 imported = manager?.importGeoPackage(fromPath: path, withName: name, andOverride: overwrite, andMove: true) ?? false
-                NSLog("Imported local Geopackage \(imported)")
+                MageLogger.misc.debug("Imported local Geopackage \(imported)")
                 if (imported && !alreadyImported) {
                     if let geoPackage = manager?.open(name) {
                         // index any feature tables that were not indexed already
@@ -210,7 +210,7 @@ import SSZipArchive
                             if let featureTableIndex = GPKGFeatureTableIndex(geoPackage: geoPackage, andFeatureDao: featureDao) {
                                 if !featureTableIndex.isIndexed() {
                                     let count = featureTableIndex.index()
-                                    NSLog("Indexed \(featureTable) with \(count) features")
+                                    MageLogger.misc.debug("Indexed \(featureTable) with \(count) features")
                                 }
                             }
                         }
@@ -224,12 +224,12 @@ import SSZipArchive
             }
         } catch {
             imported = false
-            NSLog("Failed to import GeoPackage \(error)")
+            MageLogger.misc.error("Failed to import GeoPackage \(error)")
         }
         manager?.close()
         
         if !imported {
-            NSLog("Error importing GeoPackage file: \(path)")
+            MageLogger.misc.error("Error importing GeoPackage file: \(path)")
         } else {
             await processOfflineMapArchives()
         }
@@ -265,7 +265,7 @@ import SSZipArchive
                 }
             }
         } catch {
-            NSLog("Problem getting GeoPackages \(error)")
+            MageLogger.misc.error("Problem getting GeoPackages \(error)")
         }
         return cacheOverlays
     }
@@ -370,7 +370,7 @@ import SSZipArchive
                 
             }
         } catch {
-            NSLog("Failed to import GeoPackage \(error)")
+            MageLogger.misc.error("Failed to import GeoPackage \(error)")
         }
         geoPackage.close()
         
@@ -395,7 +395,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
             do {
                  try FileManager.default.removeItem(atPath: path)
             } catch {
-                NSLog("Error removing file at path: %@", error.localizedDescription)
+                MageLogger.misc.error("Error removing file at path: %@", error.localizedDescription)
             }
         }
         
@@ -411,7 +411,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
             if exists && isDirectory.boolValue {
                 let cacheOverlay = XYZDirectoryCacheOverlay(name: cache, directory: cacheDirectory)
                 await cacheOverlays.add([cacheOverlay])
-                NSLog("Imported local XYZ Zip")
+                MageLogger.misc.debug("Imported local XYZ Zip")
                 
                 _ = await layerRepository.createLoadedXYZLayer(name: cache)
             }

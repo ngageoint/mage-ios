@@ -130,7 +130,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     important.reason = reason
                     // this will get overridden by the server, but let's set an initial value so the UI has something to display
                     important.timestamp = Date();
-                    print("Important existed, updating it")
+                    MageLogger.misc.debug("Important existed, updating it")
                 } else {
                     let important = ObservationImportant(context: context)
                     important.observation = observation
@@ -142,15 +142,15 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
                     // this will get overridden by the server, but let's set an initial value so the UI has something to display
                     important.timestamp = Date();
                     try? context.obtainPermanentIDs(for: [important])
-                    print("Important created")
+                    MageLogger.misc.debug("Important created")
                 }
             }
-            print("Saving the flagged important")
+            MageLogger.misc.debug("Saving the flagged important")
             do {
                 try context.save()
-                print("Saved")
+                MageLogger.misc.debug("Saved")
             } catch {
-                print("Error saving important \(error)")
+                MageLogger.misc.error("Error saving important \(error)")
             }
         }
     }
@@ -245,11 +245,11 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
 
 extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("fetch controller found a thing \(anObject)")
+        MageLogger.misc.debug("fetch controller found a thing \(anObject)")
         if let observationImportant = anObject as? ObservationImportant {
             switch type {
             case .insert:
-                NSLog("important inserted, push em")
+                MageLogger.misc.debug("important inserted, push em")
                 if observationImportant.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
                 }
@@ -258,7 +258,7 @@ extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDele
             case .move:
                 break
             case .update:
-                NSLog("important updated, push em")
+                MageLogger.misc.debug("important updated, push em")
                 if observationImportant.observation?.remoteId != nil {
                     self.pushSubject?.send(ObservationImportantModel(observationImportant: observationImportant))
                 }

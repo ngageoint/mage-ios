@@ -18,11 +18,8 @@ protocol FeedItemSelectionDelegate {
     
     var scheme: MDCContainerScheming?;
     fileprivate lazy var fetchedResultsController: NSFetchedResultsController<FeedItem>? = {
-        // Create Fetch Request
         let fetchRequest: NSFetchRequest<FeedItem> = FeedItem.fetchRequest();
         fetchRequest.predicate = NSPredicate(format: "feed = %@", self.feed);
-        
-        // Configure Fetch Request
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "temporalSortValue", ascending: false), NSSortDescriptor(key: "remoteId", ascending: true)]
         
         @Injected(\.nsManagedObjectContext)
@@ -30,10 +27,7 @@ protocol FeedItemSelectionDelegate {
         
         guard let context = context else { return nil }
         
-        // Create Fetched Results Controller
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        
-        // Configure Fetched Results Controller
         fetchedResultsController.delegate = self
         
         return fetchedResultsController
@@ -78,9 +72,8 @@ protocol FeedItemSelectionDelegate {
             tableView: tableView,
             cellProvider: { (tableView, indexPath, feedItemId) in
                 guard let feedItem = try? self.fetchedResultsController?.managedObjectContext.existingObject(with: feedItemId) as? FeedItem else {
-                    print("feed item \(feedItemId) not found in managed object context")
+                    MageLogger.misc.debug("feed item \(feedItemId) not found in managed object context")
                     return nil
-//                    fatalError("feed item \(feedItemId) not found in managed object context")
                 }
                 let feedCell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseIdentifier, for: indexPath) as! FeedItemTableViewCell
                 feedCell.configure(feedItem: feedItem, actionsDelegate: self, scheme: self.scheme);
@@ -102,8 +95,8 @@ protocol FeedItemSelectionDelegate {
             try self.fetchedResultsController?.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("Unable to perform fetch request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+            MageLogger.misc.error("Unable to perform fetch request")
+            MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
         }
     }
     

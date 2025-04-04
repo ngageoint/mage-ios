@@ -58,17 +58,17 @@ class OnlineLayerMapMixin: NSObject, MapMixin {
                     if format == "WMS" {
                         if let url = onlineLayer.url {
                             let wms = onlineLayer.options ?? [:]
-                            print("Adding the WMS layer \(onlineLayer.name ?? "") to the map")
+                            MageLogger.misc.debug("Adding the WMS layer \(onlineLayer.name ?? "") to the map")
                             return WMSTileOverlay(url: url, andParameters: wms)
                         }
                     } else if format == "XYZ" {
                         if let url = onlineLayer.url {
-                            print("Adding the XYZ layer \(onlineLayer.name ?? "") to the map url \(url)");
+                            MageLogger.misc.debug("Adding the XYZ layer \(onlineLayer.name ?? "") to the map url \(url)");
                             return XYZTileOverlay(urlTemplate: url)
                         }
                     } else if format == "TMS" {
                         if let url = onlineLayer.url {
-                            print("Adding the TMS layer \(onlineLayer.name ?? "") to the map url \(url)");
+                            MageLogger.misc.debug("Adding the TMS layer \(onlineLayer.name ?? "") to the map url \(url)");
                             return TMSTileOverlay(urlTemplate: url)
                         }
                     }

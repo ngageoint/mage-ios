@@ -110,7 +110,7 @@ class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate
             case .success(_):
                 self.setNeedsLayout()
             case .failure(let error):
-                print("Job failed: \(error.localizedDescription)")
+                MageLogger.misc.error("Job failed: \(error.localizedDescription)")
             }
         }
         
@@ -122,6 +122,5 @@ class FeatureSummaryView : CommonSummaryView<FeatureItem, FeatureActionsDelegate
         if (secondaryLabelIcon.superview == nil) {
             secondaryContainer.insertArrangedSubview(secondaryLabelIcon, at: 0);
         }
-//        secondaryField.text = item.featureDetail;
     }
 }

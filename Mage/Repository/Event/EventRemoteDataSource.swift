@@ -41,12 +41,12 @@ class EventRemoteDataSourceImpl: ObservableObject, EventRemoteDataSource {
                                 continuation.resume(returning: nil)
                             }
                         } catch {
-                            print("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
+                            MageLogger.misc.error("Error while decoding response: \(error) from: \(String(data: data, encoding: .utf8) ?? "empty")")
                             // TODO: what should this throw?
                             continuation.resume(returning: nil)
                         }
                     case .failure(let error):
-                        print("Error \(error)")
+                        MageLogger.misc.error("Error \(error)")
                         // TODO: what should this throw?
                         continuation.resume(returning: nil)
                     }
