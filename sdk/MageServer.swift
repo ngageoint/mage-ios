@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OSLog
 
 @objc class MageServer: NSObject {
     

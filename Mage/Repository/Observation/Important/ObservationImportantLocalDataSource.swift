@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import OSLog
 
 private struct ObservationImportantDataSourceProviderKey: InjectionKey {
     static var currentValue: ObservationImportantLocalDataSource = ObservationImportantCoreDataDataSource()
