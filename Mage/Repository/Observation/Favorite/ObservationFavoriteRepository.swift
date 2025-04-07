@@ -45,7 +45,6 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
             }
         })
         .store(in: &cancellables)
-        MageLogger.misc.debug("XXX favorite cancellables \(cancellables)")
     }
     
     func sync() {
@@ -59,7 +58,7 @@ class ObservationFavoriteRepositoryImpl: ObservationFavoriteRepository, Observab
     }
     
     func pushFavorites(favorites: [ObservationFavoriteModel]?) async {
-        MageLogger.misc.debug("XXX push favorites \(favorites)")
+        MageLogger.misc.debug("XXX push favorites \(String(describing: favorites))")
         guard let favorites = favorites, !favorites.isEmpty else {
             return
         }

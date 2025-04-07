@@ -50,7 +50,6 @@ public enum LayerType : String {
         let url = "\(baseURL)/api/events/\(eventId)/layers";
         MageLogger.misc.debug("XXX url \(url)")
         let task = manager.get_TASK(url, parameters: nil, progress: nil) { task, response in
-            MageLogger.misc.debug("XXX response: \(response)")
             guard let response = response as? [[AnyHashable : Any]] else {
                 return;
             }

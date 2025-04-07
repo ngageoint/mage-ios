@@ -43,7 +43,7 @@ import sf_proj_ios
     }
     
     @objc public func updateCacheOverlaysSynchronized(_ cacheOverlays: [CacheOverlay]) async {
-        MageLogger.misc.debug("Update Cache Overlays %@", cacheOverlays)
+        MageLogger.misc.debug("Update Cache Overlays: \(cacheOverlays)")
         cacheOverlayUpdate = cacheOverlays
         var overlaysToUpdate = getNextCacheOverlaysToUpdate()
         while(overlaysToUpdate != nil) {

@@ -218,7 +218,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
                 }
                 catch {
-                    MageLogger.misc.error("error creating directory \(attachmentsDirectory) to save scaled attachment file \(fileName ?? "<unknown file>")", error)
+                    MageLogger.misc.error("error creating directory \(attachmentsDirectory) to save scaled attachment file \(fileName ?? "<unknown file>") - \(error)")
                     return
                 }
                 guard let baseImage = CIImage(data: data) else {
@@ -232,7 +232,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                     self.addAttachmentForSaving(location: scaledImagePath, contentType: "image/jpeg")
                 }
                 catch {
-                    MageLogger.misc.error("error saving scaled attachment image \(scaledImagePath) from base image \(fileName ?? "<unknown file>")", error)
+                    MageLogger.misc.error("error saving scaled attachment image \(scaledImagePath) from base image \(fileName ?? "<unknown file>") - \(error)")
                 }
             }
         }
@@ -265,7 +265,7 @@ extension AttachmentCreationCoordinator: PHPickerViewControllerDelegate {
                 try FileManager.default.createDirectory(at: attachmentsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
             }
             catch {
-                MageLogger.misc.error("error creating directory \(attachmentsDirectory) to export attachment video", error)
+                MageLogger.misc.error("error creating directory \(attachmentsDirectory) to export attachment video - \(error)")
                 return
             }
             guard let exportSession = AVAssetExportSession(asset: avAsset, presetName: self.videoUploadQuality()) else {
@@ -561,7 +561,7 @@ extension AttachmentCreationCoordinator: UIImagePickerControllerDelegate {
                 exportSession.outputFileType = .mp4;
                 MageLogger.misc.debug("exporting async")
                 exportSession.exportAsynchronously {
-                    MageLogger.misc.debug("export session status \(exportSession.status)")
+                    let foo = exportSession.status
                     switch (exportSession.status) {
                         case .completed:
                             print("Export complete")

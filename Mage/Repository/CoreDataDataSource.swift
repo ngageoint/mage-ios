@@ -110,7 +110,6 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         at page: Page?,
         currentHeader: String?
     ) -> AnyPublisher<URIModelPage, Error> {
-        MageLogger.misc.debug("XXX getting page number \(page)")
         let request = getFetchRequest(parameters: parameters)
         request.fetchLimit = fetchLimit
         request.fetchOffset = (page ?? 0) * request.fetchLimit

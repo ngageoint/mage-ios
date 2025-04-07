@@ -176,7 +176,7 @@ import SSZipArchive
             
             await layerRepository.markRemoteLayerNotDownloaded(remoteId: withLayerId)
         } else {
-            MageLogger.misc.debug("GeoPackage file %@ has been imported", path)
+            MageLogger.misc.debug("GeoPackage file \(path) has been imported")
             await layerRepository.markRemoteLayerLoaded(remoteId: withLayerId)
             await self.processOfflineMapArchives()
             MageLogger.misc.debug("XXX sending gp imported")
@@ -395,7 +395,7 @@ extension GeoPackageImporter: SSZipArchiveDelegate {
             do {
                  try FileManager.default.removeItem(atPath: path)
             } catch {
-                MageLogger.misc.error("Error removing file at path: %@", error.localizedDescription)
+                MageLogger.misc.error("Error removing file at path: \(error.localizedDescription)")
             }
         }
         

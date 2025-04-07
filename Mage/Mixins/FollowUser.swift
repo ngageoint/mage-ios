@@ -93,8 +93,6 @@ class FollowUserMapMixin: NSObject, MapMixin {
                 MageLogger.misc.error("Unable to Perform Fetch Request")
                 MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
             }
-            MageLogger.misc.debug("XXX fetched objects \(gpsFetchedResultsController?.fetchedObjects)")
-            MageLogger.misc.debug("XXX location \(gpsFetchedResultsController!.fetchedObjects![0].cllocation)")
             if let fetchedObjects = gpsFetchedResultsController?.fetchedObjects, !fetchedObjects.isEmpty, let cllocation = fetchedObjects[0].cllocation {
                 zoomAndCenterMap(cllocation: cllocation)
             }

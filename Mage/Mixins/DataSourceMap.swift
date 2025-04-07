@@ -240,7 +240,7 @@ class DataSourceMap: MapMixin {
                 if existing == nil, let element = element as? MKOverlay {
                     inserts.append(element)
                 }
-                MageLogger.misc.debug("insert offset \(offset) for element \(element)")
+                MageLogger.misc.debug("insert offset: \(String(describing: offset)) for element: \(String(describing: element))")
             case .remove(let offset, let element, _):
                 let existing = mapView.overlays.compactMap({ mapOverlay in
                     mapOverlay as? DataSourceIdentifiable
@@ -254,7 +254,7 @@ class DataSourceMap: MapMixin {
                     identifiable as? MKOverlay
                 }
                 removals.append(contentsOf: existing)
-                MageLogger.misc.debug("remove offset \(offset) for element \(element)")
+                MageLogger.misc.debug("remove offset: \(String(describing: offset)) for element: \(String(describing: element))")
             }
         }
         MageLogger.misc.debug("Inserting \(inserts.count), removing: \(removals.count)")

@@ -382,11 +382,11 @@ enum ObservationState: Int, CustomStringConvertible {
     
     static func operationToCreate(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         let create = MAGERoutes.observation().createId(observation);
-        MageLogger.misc.debug("Trying to create observation %@", create.route);
-        let manager = MageSessionManager.shared();
+        MageLogger.misc.debug("Trying to create observation \(String(describing: create.route))")
+        let manager = MageSessionManager.shared()
         
         let task = manager?.post_TASK(create.route, parameters: nil, progress: nil, success: { task, response in
-            MageLogger.misc.debug("Successfully created location for observation resource");
+            MageLogger.misc.debug("Successfully created location for observation resource")
             guard let response = response as? [AnyHashable : Any], let observationUrl = response[ObservationKey.url.key] as? String, let remoteId = response[ObservationKey.id.key] as? String else {
                 return;
             }
@@ -598,8 +598,8 @@ enum ObservationState: Int, CustomStringConvertible {
         if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
             // if the observation is archived, delete it
             if state == .Archive {
-                MageLogger.misc.debug("Deleting archived observation with id: %@", remoteId);
-                existingObservation.mr_deleteEntity(in: context);
+                MageLogger.misc.debug("Deleting archived observation with id: \(String(describing: remoteId))")
+                existingObservation.mr_deleteEntity(in: context)
             } else if !existingObservation.isDirty {
                 // if the observation is not dirty, and has been updated, update it
                 if let lastModified = feature[ObservationKey.lastModified.key] as? String {

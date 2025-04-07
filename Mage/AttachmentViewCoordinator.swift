@@ -205,7 +205,7 @@ import QuickLook
         if let attachment = self.attachment {
             name = attachment.name ?? "file"
             if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
-                MageLogger.misc.debug("Playing locally", localPath);
+                MageLogger.misc.debug("Playing locally: \(localPath)");
                 self.urlToLoad = URL(fileURLWithPath: localPath);
             } else if let attachmentUrl = attachment.url {
                 MageLogger.misc.debug("Playing from link \(attachmentUrl)");

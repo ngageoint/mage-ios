@@ -245,7 +245,7 @@ class ObservationImportantCoreDataDataSource: CoreDataDataSource<ObservationImpo
 
 extension ObservationImportantCoreDataDataSource: NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        MageLogger.misc.debug("fetch controller found a thing \(anObject)")
+        MageLogger.misc.debug("fetch controller found a thing \(String(describing: anObject))")
         if let observationImportant = anObject as? ObservationImportant {
             switch type {
             case .insert:

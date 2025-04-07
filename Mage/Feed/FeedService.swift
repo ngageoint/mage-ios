@@ -61,7 +61,7 @@ import Foundation
             MageLogger.misc.error("Unable to Perform Fetch Request")
             MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
         }
-        MageLogger.misc.debug("starting feed service with objects \(feedFetchedResultsController!.fetchedObjects!)")
+        MageLogger.misc.debug("starting feed service with objects \(self.feedFetchedResultsController!.fetchedObjects!)")
         for feed: Feed in feedFetchedResultsController!.fetchedObjects! {
             MageLogger.misc.debug("Pulling feed items for feed \(feed.remoteId ?? "nil") in event \(feed.eventId ?? -1)");
             if let remoteId = feed.remoteId, let eventId = feed.eventId {
@@ -90,7 +90,7 @@ import Foundation
         if let feedId: String = userInfo["feedId"] as? String {
             if (feedTimers[feedId] == nil) { return }
             if let eventId: NSNumber = userInfo["eventId"] as? NSNumber, let context = context {
-                MageLogger.misc.debug("Pulling feed items for feed", feedId);
+                MageLogger.misc.debug("Pulling feed items for feed: \(feedId)");
                 Feed.pullFeedItems(feedId: feedId, eventId: eventId, context: context)
                     self.scheduleTimerToPullFeedItems(feedId: feedId, eventId: eventId, pullFrequency: userInfo["pullFrequency"] as? NSNumber ?? self.defaultPullFrequency);
             }

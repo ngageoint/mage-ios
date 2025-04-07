@@ -188,7 +188,7 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
             try FileManager.default.createDirectory(at: avatarsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
         }
         catch {
-            MageLogger.misc.error("error creating directory \(avatarsDirectory) to save user avatars", error)
+            MageLogger.misc.error("error creating directory \(avatarsDirectory) to save user avatars: \(error)")
             return
         }
         let userAvatarPath = avatarsDirectory.appendingPathComponent(remoteId)

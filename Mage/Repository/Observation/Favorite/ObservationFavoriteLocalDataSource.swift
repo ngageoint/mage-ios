@@ -141,7 +141,7 @@ class ObservationFavoriteCoreDataDataSource: CoreDataDataSource<ObservationFavor
     }
 
     func handleServerPushResponse(favorite: ObservationFavoriteModel, response: [AnyHashable: Any]) {
-        NSMageLogger.misc.debug("Successfuly submitted favorite")
+        MageLogger.misc.debug("Successfuly submitted favorite")
         guard let context = context else { return }
         
         context.performAndWait {

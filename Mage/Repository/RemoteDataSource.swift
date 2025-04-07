@@ -44,7 +44,7 @@ class RemoteDataSource<T> {
     func endBackgroundTaskIfActive() {
         let isBackgroundTaskActive = backgroundTask != .invalid
         if isBackgroundTaskActive {
-            MageLogger.misc.debug("Background task ended. \(dataSource.name) Fetch")
+            MageLogger.misc.debug("Background task ended. \(String(describing: self.dataSource.name)) Fetch")
             UIApplication.shared.endBackgroundTask(backgroundTask)
             backgroundTask = .invalid
         }
