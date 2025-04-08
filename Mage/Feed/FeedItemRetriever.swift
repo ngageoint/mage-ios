@@ -162,8 +162,8 @@ extension UIImage {
             try fetchedResultsController?.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("Unable to Perform Fetch Request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+            MageLogger.misc.error("Unable to Perform Fetch Request")
+            MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
         }
         return fetchedResultsController?.fetchedObjects?.compactMap({ feedItem in
             if feedItem.isMappable {

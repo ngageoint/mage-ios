@@ -154,7 +154,7 @@ class ObservationFormView: UIStackView {
                 fieldView = GeometryView(field: fieldDictionary, editMode: editMode, delegate: self, observationActionsDelegate: observationActionsDelegate);
                 (fieldView as! GeometryView).setValue(value as? SFGeometry)
             default:
-                print("No view is configured for type \(type)")
+                MageLogger.misc.error("No view is configured for type \(type)")
             }
             if let baseFieldView = fieldView as? BaseFieldView, let key = fieldDictionary[FieldKey.name.key] as? String {
                 baseFieldView.applyTheme(withScheme: scheme)

@@ -126,13 +126,13 @@ extension InjectedValues {
     
     func onTimerFire() {
         if !UserUtility.singleton.isTokenExpired {
-            NSLog("ATTACHMENT - push timer fired, checking for attachments to push")
+            MageLogger.misc.debug("ATTACHMENT - push timer fired, checking for attachments to push")
             pushAttachments(fetchedResultsController?.fetchedObjects as? [Attachment] ?? [])
         }
     }
         
     func pushAttachments(_ attachments: [Attachment]) {
-        print("XXX told to push attachments \(attachments)")
+        MageLogger.misc.debug("XXX told to push attachments \(attachments)")
         if !DataConnectionUtilities.shouldPushAttachments() { return }
                 
         for attachment in attachments {
@@ -160,7 +160,7 @@ extension InjectedValues {
             .responseData { response in
                 switch response.result {
                 case .success(_):
-                    NSLog("Attachment deleted")
+                    MageLogger.misc.debug("Attachment deleted")
                     guard let context = self.context else { return }
                     context.performAndWait {
                         guard let attachment = context.object(with: attachment.objectID) as? Attachment else {
@@ -170,7 +170,7 @@ extension InjectedValues {
                         try? context.save()
                     }
                 case .failure(let error):
-                    print("Failure to delete attachment \(error)")
+                    MageLogger.misc.error("Failure to delete attachment \(error)")
                 }
             }
 
@@ -180,7 +180,7 @@ extension InjectedValues {
         guard let localPath = attachment.localPath,
             let attachmentData = try? Data(contentsOf: URL(filePath: localPath))
         else {
-            NSLog("Attachment data nil for observation: \(attachment.observation?.remoteId ?? "") at path: \(attachment.localPath ?? "")")
+            MageLogger.misc.debug("Attachment data nil for observation: \(attachment.observation?.remoteId ?? "") at path: \(attachment.localPath ?? "")")
             guard let context = self.context else { return }
             context.performAndWait {
                 guard let attachment = context.object(with: attachment.objectID) as? Attachment else {
@@ -194,7 +194,7 @@ extension InjectedValues {
         
         let push = MAGERoutes.attachment().push(attachment)
         
-        NSLog("pushing attachment \(push.route)")
+        MageLogger.misc.debug("pushing attachment \(push.route)")
 
         guard let observationRemoteId = attachment.observation?.remoteId,
               let attachmentRemoteId = attachment.remoteId,
@@ -226,7 +226,7 @@ extension InjectedValues {
     
     
     func attachmentUploadReceivedData(data: Data, forTask: URLSessionTask) {
-        NSLog("ATTACHMENT - upload received data for task \(forTask)")
+        MageLogger.misc.debug("ATTACHMENT - upload received data for task \(forTask)")
         let taskIdentifier = forTask.taskIdentifier
         
         if let existingData = pushData[taskIdentifier] {
@@ -239,7 +239,7 @@ extension InjectedValues {
     
     func attachmentUploadCompleteWithTask(response: AFDataResponse<Data?>, task: URLSessionTask?, error: Error?) {
         if let request = task?.originalRequest, request.httpMethod == "DELETE" {
-            NSLog("ATTACHMENT - delete complete with error \(error?.localizedDescription ?? "none")")
+            MageLogger.misc.error("ATTACHMENT - delete complete with error \(error?.localizedDescription ?? "none")")
             return
         }
         
@@ -247,7 +247,7 @@ extension InjectedValues {
         let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
         
         if let error {
-            NSLog("ATTACHMENT - upload complete with error \(error)")
+            MageLogger.misc.error("ATTACHMENT - upload complete with error \(error)")
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
@@ -256,9 +256,9 @@ extension InjectedValues {
         if let httpResponse = task?.response as? HTTPURLResponse,
            httpResponse.statusCode != 200
         {
-            NSLog("ATTACHMENT - non 200 response, \(httpResponse)")
+            MageLogger.misc.debug("ATTACHMENT - non 200 response, \(httpResponse)")
             if let json {
-                NSLog("ATTACHMENT - non 200 json response, \(json)")
+                MageLogger.misc.debug("ATTACHMENT - non 200 json response, \(json)")
             }
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
@@ -266,7 +266,7 @@ extension InjectedValues {
         }
         
         if data == nil {
-            NSLog("ATTACHMENT - error uploading attachment, did not receive response from the server")
+            MageLogger.misc.debug("ATTACHMENT - error uploading attachment, did not receive response from the server")
             // try again
             removeTask(taskIdentifier: task?.taskIdentifier)
             return
@@ -280,7 +280,7 @@ extension InjectedValues {
             guard let taskIdentifier = task?.taskIdentifier,
                   let attachment = context.fetchFirst(Attachment.self, key: "taskIdentifier", value: taskIdentifier)
             else {
-                NSLog("ATTACHMENT - error completing attachment upload, could not retrieve attachment for task id \("\(task?.taskIdentifier)")")
+                MageLogger.misc.debug("ATTACHMENT - error completing attachment upload, could not retrieve attachment for task id \("\(task?.taskIdentifier)")")
                 return
             }
             
@@ -323,7 +323,7 @@ extension InjectedValues {
         }
         
         if let handler = self.backgroundSessionCompletionHandler {
-            NSLog("ATTACHMENT - MageBackgroundSessionManager calling backgroundSessionCompletionHandler");
+            MageLogger.misc.debug("ATTACHMENT - MageBackgroundSessionManager calling backgroundSessionCompletionHandler");
             self.backgroundSessionCompletionHandler = nil;
             handler()
         }
@@ -342,10 +342,6 @@ extension InjectedValues {
 final class AttachmentPushServiceImplFetchedResultsControllerDelgate : NSObject, NSFetchedResultsControllerDelegate {
     @Injected(\.attachmentPushService)
     var attachmentPushService: AttachmentPushService
-    
-//    init(attachmentPushService: AttachmentPushService) {
-//        self.attachmentPushService = attachmentPushService
-//    }
     
     public func controller(
         _ controller: NSFetchedResultsController<NSFetchRequestResult>,

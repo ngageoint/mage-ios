@@ -98,17 +98,6 @@ class MapDirectionsMixin: NSObject, MapMixin {
     
     func startStraightLineNavigation(notification: StraightLineNavigationNotification) {
         self.straightLineNotification = notification
-//        if let observation = notification.observation {
-//            observationFetchedResultsController = Observation.fetchedResultsController(observation, delegate: self)
-//            try? observationFetchedResultsController?.performFetch()
-//        } else if let user = notification.user {
-//            locationFetchedResultsController = Location.mostRecentLocationFetchedResultsController(user, delegate: self)
-//            try? locationFetchedResultsController?.performFetch()
-//        } else if let feedItem = notification.feedItem {
-//            feedItemFetchedResultsController = FeedItem.fetchedResultsController(feedItem, delegate: self)
-//            try? feedItemFetchedResultsController?.performFetch()
-//        }
-        
         self.locationManager = self.locationManager ?? CLLocationManager()
         self.locationManager?.delegate = self;
         self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
@@ -233,9 +222,6 @@ class MapDirectionsMixin: NSObject, MapMixin {
         var extraActions: [UIAlertAction] = [];
         await extraActions.append(UIAlertAction(title:"Bearing", style: .default, handler: { (action) in
             var straightLineNavigationNotification = StraightLineNavigationNotification(coordinate: location.coordinate)
-//            straightLineNavigationNotification.observation = notification.observation
-//            straightLineNavigationNotification.feedItem = notification.feedItem
-//            straightLineNavigationNotification.user = notification.user
             straightLineNavigationNotification.title = title
             straightLineNavigationNotification.image = image
             straightLineNavigationNotification.imageURL = notification.imageUrl
@@ -344,19 +330,3 @@ extension MapDirectionsMixin : StraightLineNavigationDelegate {
         locationFetchedResultsController = nil
     }
 }
-
-//extension MapDirectionsMixin : NSFetchedResultsControllerDelegate {
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        guard let locationManager = locationManager else {
-//            return
-//        }
-//        
-//        if type != .update {
-//            return
-//        }
-//        
-//        if let navigable = anObject as? Navigable {
-//            straightLineNavigation?.updateNavigationLines(manager: locationManager, destinationCoordinate: navigable.coordinate)
-//        }
-//    }
-//}

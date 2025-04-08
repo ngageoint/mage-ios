@@ -58,21 +58,15 @@ import Foundation
             try feedFetchedResultsController?.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("Unable to Perform Fetch Request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+            MageLogger.misc.error("Unable to Perform Fetch Request")
+            MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
         }
-        print("starting feed service with objects \(feedFetchedResultsController!.fetchedObjects!)")
+        MageLogger.misc.debug("starting feed service with objects \(self.feedFetchedResultsController!.fetchedObjects!)")
         for feed: Feed in feedFetchedResultsController!.fetchedObjects! {
-            print("Pulling feed items for feed \(feed.remoteId ?? "nil") in event \(feed.eventId ?? -1)");
+            MageLogger.misc.debug("Pulling feed items for feed \(feed.remoteId ?? "nil") in event \(feed.eventId ?? -1)");
             if let remoteId = feed.remoteId, let eventId = feed.eventId {
                 Feed.pullFeedItems(feedId: remoteId, eventId: eventId, context: context)
-//                , success: {_,_ in
                     self.scheduleTimerToPullFeedItems(feedId: remoteId, eventId: eventId, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
-//                    
-//                }) { (task, error) in
-//                    self.scheduleTimerToPullFeedItems(feedId: remoteId, eventId: eventId, pullFrequency: feed.pullFrequency ?? self.defaultPullFrequency);
-//                    
-//                }
             }
         }
     }
@@ -96,13 +90,9 @@ import Foundation
         if let feedId: String = userInfo["feedId"] as? String {
             if (feedTimers[feedId] == nil) { return }
             if let eventId: NSNumber = userInfo["eventId"] as? NSNumber, let context = context {
-                print("Pulling feed items for feed", feedId);
+                MageLogger.misc.debug("Pulling feed items for feed: \(feedId)");
                 Feed.pullFeedItems(feedId: feedId, eventId: eventId, context: context)
-//            success: {_,_ in
                     self.scheduleTimerToPullFeedItems(feedId: feedId, eventId: eventId, pullFrequency: userInfo["pullFrequency"] as? NSNumber ?? self.defaultPullFrequency);
-//                }) { (task, error) in
-//                    self.scheduleTimerToPullFeedItems(feedId: feedId, eventId: eventId, pullFrequency: context["pullFrequency"] as? NSNumber ?? self.defaultPullFrequency);
-//                }
             }
         }
     }
@@ -110,7 +100,7 @@ import Foundation
 
 extension FeedService: NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("fetched results controller fired");
+        MageLogger.misc.debug("fetched results controller fired");
         if let feed: Feed = anObject as? Feed {
             switch type {
             case .insert:

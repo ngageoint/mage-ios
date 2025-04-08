@@ -34,11 +34,11 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     func registerBackgroundTask(name: String) {
         NSLog("Register the background task \(name)")
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: name) { [weak self] in
-            NSLog("iOS has signaled time has expired \(name)")
+            MageLogger.misc.debug("iOS has signaled time has expired \(name)")
             self?.cleanup?()
-            print("canceling \(name)")
+            MageLogger.misc.debug("canceling \(name)")
             self?.operation?.cancel()
-            print("calling endBackgroundTask \(name)")
+            MageLogger.misc.debug("calling endBackgroundTask \(name)")
             self?.endBackgroundTaskIfActive()
         }
     }
@@ -46,7 +46,7 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
     func endBackgroundTaskIfActive() {
         let isBackgroundTaskActive = backgroundTask != .invalid
         if isBackgroundTaskActive {
-            NSLog("Background task ended. \(NSStringFromClass(type(of: self))) Load")
+            MageLogger.misc.debug("Background task ended. \(NSStringFromClass(type(of: self))) Load")
             UIApplication.shared.endBackgroundTask(backgroundTask)
             backgroundTask = .invalid
         }
@@ -110,11 +110,10 @@ class CoreDataDataSource<T: NSManagedObject>: NSObject {
         at page: Page?,
         currentHeader: String?
     ) -> AnyPublisher<URIModelPage, Error> {
-        print("XXX getting page number \(page)")
         let request = getFetchRequest(parameters: parameters)
         request.fetchLimit = fetchLimit
         request.fetchOffset = (page ?? 0) * request.fetchLimit
-        print("XXX request \(request)")
+        MageLogger.misc.debug("XXX request \(request)")
         let previousHeader: String? = currentHeader
         var users: [URIItem] = []
         context?.performAndWait {

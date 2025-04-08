@@ -189,7 +189,7 @@ import QuickLook
     }
     
     func downloadApproved() {
-        print("Download the attachment")
+        MageLogger.misc.debug("Download the attachment")
         FadeTransitionSegue.addFadeTransition(to: self.rootViewController.view);
         self.ignoreNextDelegateCall = true;
         self.rootViewController.popViewController(animated: false);
@@ -205,10 +205,10 @@ import QuickLook
         if let attachment = self.attachment {
             name = attachment.name ?? "file"
             if let localPath = attachment.localPath, FileManager.default.fileExists(atPath: localPath) {
-                print("Playing locally", localPath);
+                MageLogger.misc.debug("Playing locally: \(localPath)");
                 self.urlToLoad = URL(fileURLWithPath: localPath);
             } else if let attachmentUrl = attachment.url {
-                print("Playing from link \(attachmentUrl)");
+                MageLogger.misc.debug("Playing from link \(attachmentUrl)");
                 let token: String = StoredPassword.retrieveStoredToken();
 
                 if let url = URL(string: attachmentUrl) {
@@ -260,7 +260,7 @@ extension AttachmentViewCoordinator : AVAssetResourceLoaderDelegate {
 
 extension AttachmentViewCoordinator : MediaLoaderDelegate {
     func mediaLoadComplete(filePath: String, newFile: Bool) {
-        print("Media load complete");
+        MageLogger.misc.debug("Media load complete");
         if (newFile) {
             attachmentRepository.saveLocalPath(attachmentUri: attachment?.attachmentUri, localPath: filePath)
         }

@@ -57,7 +57,7 @@ class StraightLineNavigationView: UIView {
                 case .success(_):
                     self.setNeedsLayout()
                 case .failure(let error):
-                    print("Job failed: \(error.localizedDescription)")
+                    MageLogger.misc.error("Job failed: \(error.localizedDescription)")
                 }
             }
         }

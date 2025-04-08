@@ -48,9 +48,8 @@ public enum LayerType : String {
             return nil;
         }
         let url = "\(baseURL)/api/events/\(eventId)/layers";
-        print("XXX url \(url)")
+        MageLogger.misc.debug("XXX url \(url)")
         let task = manager.get_TASK(url, parameters: nil, progress: nil) { task, response in
-            print("XXX response: \(response)")
             guard let response = response as? [[AnyHashable : Any]] else {
                 return;
             }
@@ -61,9 +60,9 @@ public enum LayerType : String {
             guard let context else { return }
             
             context.performAndWait {
-                print("XXX saving \(response.count)")
+                MageLogger.misc.debug("XXX saving \(response.count)")
                 let layerRemoteIds = Layer.populateLayers(json: response, eventId: eventId, context: context)
-                print("XXX saved \(layerRemoteIds)")
+                MageLogger.misc.debug("XXX saved \(layerRemoteIds)")
                 let layers = try? context.fetchObjects(
                     Layer.self,
                     predicate: NSPredicate(
@@ -129,15 +128,8 @@ public enum LayerType : String {
                     failure?(task, error)
                 }
             }
-//            completion: { contextDidSave, error in
-//                if let error = error {
-//                    failure?(task, error);
-//                } else {
-//                    success?(task, response);
-//                }
-//            }
         } failure: { task, error in
-            NSLog("XXX Error \(error)")
+            MageLogger.misc.error("XXX Error \(error)")
             failure?(task, error);
         };
 
@@ -268,7 +260,7 @@ public enum LayerType : String {
                         return;
                     }
                     localLayer.downloadedBytes = NSNumber(value:downloadProgress.completedUnitCount);
-                    NSLog("GeoPackage downloaded bytes \(downloadProgress.completedUnitCount)")
+                    MageLogger.misc.debug("GeoPackage downloaded bytes \(downloadProgress.completedUnitCount)")
                     try? context?.save()
                 }
             } destination: { targetPath, response in
@@ -282,7 +274,7 @@ public enum LayerType : String {
                 }
                 
                 if let fileString = filePath?.path {
-                    NSLog("Downloaded GeoPackage to \(fileString)")
+                    MageLogger.misc.debug("Downloaded GeoPackage to \(fileString)")
                     NotificationCenter.default.post(
                         name: .GeoPackageDownloaded,
                         object: nil,
@@ -297,18 +289,18 @@ public enum LayerType : String {
             task.taskDescription = "geopackage_download_\(remoteId)"
             if !FileManager.default.fileExists(atPath: urlPath.path) {
                 let directoryToCreate = urlPath.deletingLastPathComponent();
-                NSLog("Create directory for geopackage \(directoryToCreate)")
+                MageLogger.misc.debug("Create directory for geopackage \(directoryToCreate)")
                 try FileManager.default.createDirectory(at: directoryToCreate, withIntermediateDirectories: true, attributes: nil)
             } else {
-                NSLog("GeoPackage still exists at \(urlPath), delete it")
+                MageLogger.misc.debug("GeoPackage still exists at \(urlPath), delete it")
                 do {
                     try FileManager.default.removeItem(at: urlPath)
                 } catch {
-                    NSLog("Error deleting existing GeoPackage \(error)")
+                    MageLogger.misc.error("Error deleting existing GeoPackage \(error)")
                 }
                 
                 if FileManager.default.fileExists(atPath: urlPath.path) {
-                    NSLog("GeoPackage file still exists at \(urlPath.path) after attempted deletion")
+                    MageLogger.misc.debug("GeoPackage file still exists at \(urlPath.path) after attempted deletion")
                 }
             }
             

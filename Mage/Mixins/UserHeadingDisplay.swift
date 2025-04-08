@@ -114,7 +114,7 @@ class UserHeadingDisplayMixin: NSObject, MapMixin {
         case .followWithHeading:
             start()
         @unknown default:
-            print("Unknown tracking mode \(mode)")
+            MageLogger.misc.debug("Unknown tracking mode \(String(describing: mode))")
         }
     }
 }

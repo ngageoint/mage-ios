@@ -152,7 +152,7 @@ extension SearchSheetController : UISearchBarDelegate {
                     self.searchType = type
                     self.searchResults = results
                 case let .error(message):
-                    print("search error \(message)")
+                MageLogger.misc.error("search error \(message)")
             }
             self.delegate?.clearSearchResult()
             self.tableView.reloadData()

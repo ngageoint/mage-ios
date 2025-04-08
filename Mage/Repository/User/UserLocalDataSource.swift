@@ -32,17 +32,6 @@ extension InjectedValues {
     }
 }
 
-//private struct ManagedObjectViewContextProviderKey: InjectionKey {
-//    static var currentValue: NSManagedObjectContext? = nil
-//}
-//
-//extension InjectedValues {
-//    var viewContext: NSManagedObjectContext? {
-//        get { Self[ManagedObjectViewContextProviderKey.self] }
-//        set { Self[ManagedObjectViewContextProviderKey.self] = newValue }
-//    }
-//}
-
 protocol UserLocalDataSource {
     func getUser(userUri: URL?) async -> UserModel?
     func getCurrentUser() -> UserModel?
@@ -75,7 +64,6 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
     var roleLocalDataSource: RoleLocalDataSource
     
     private func getUserNSManagedObject(remoteId: String, context: NSManagedObjectContext) async -> User? {
-//        guard let context = context else { return nil }
         return await context.perform {
             return context.fetchFirst(User.self, key: UserKey.remoteId.key, value: remoteId)
         }
@@ -200,14 +188,14 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
             try FileManager.default.createDirectory(at: avatarsDirectory, withIntermediateDirectories: true, attributes: [.protectionKey : FileProtectionType.complete])
         }
         catch {
-            print("error creating directory \(avatarsDirectory) to save user avatars", error)
+            MageLogger.misc.error("error creating directory \(avatarsDirectory) to save user avatars: \(error)")
             return
         }
         let userAvatarPath = avatarsDirectory.appendingPathComponent(remoteId)
         do {
             try imageData.write(to: userAvatarPath)
         } catch {
-            print("Could not write image file to destination \(error)")
+            MageLogger.misc.error("Could not write image file to destination \(error)")
         }
     }
     
@@ -233,7 +221,7 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
                                     continuation.resume(returning: true)
                                     return
                                 } catch {
-                                    print("error saving user after avatar save \(error)")
+                                    MageLogger.misc.error("error saving user after avatar save \(error)")
                                 }
                                 continuation.resume(returning: false)
                             }
@@ -323,7 +311,7 @@ class UserCoreDataDataSource: CoreDataDataSource<User>, UserLocalDataSource, Obs
             prefetcher.start()
         }
         if let cacheAvatarUrl = avatarUrl, let url = URL(string: cacheAvatarUrl) {
-            print("caching avatar \(url)")
+            MageLogger.misc.debug("caching avatar \(url)")
             let prefetcher = ImagePrefetcher(urls: [url], options: [
                 .requestModifier(ImageCacheProvider.shared.accessTokenModifier)
             ]) {

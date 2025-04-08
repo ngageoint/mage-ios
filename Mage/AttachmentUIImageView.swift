@@ -133,11 +133,6 @@ import Kingfisher
             thumbUrl = URL(string: String(format: "%@_thumbnail", attachmentUrl)) ?? url
         }
         
-//        if let indicator = indicator {
-//            self.kf.indicatorType = .custom(indicator: indicator);
-//        } else {
-//            self.kf.indicatorType = .activity;
-//        }
         var options: KingfisherOptionsInfo = [
             .requestModifier(ImageCacheProvider.shared.accessTokenModifier),
             .transition(.fade(0.3)),
@@ -172,7 +167,7 @@ import Kingfisher
                     switch result {
                     case .failure(let error):
                         if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
-                            print("cache miss \(key)")
+                            MageLogger.misc.debug("cache miss \(key)")
                         }
                     case .success(_):
                         if (thumbnail) {
@@ -199,7 +194,7 @@ import Kingfisher
                         switch result {
                         case .failure(let error):
                             if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
-                                print("cache miss \(key)")
+                                MageLogger.misc.debug("cache miss \(key)")
                             }
                         case .success(_):
                             self.loadedThumb = true;
@@ -217,7 +212,7 @@ import Kingfisher
                         switch result {
                         case .failure(let error):
                             if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
-                                print("cache miss \(key)")
+                                MageLogger.misc.debug("cache miss \(key)")
                             }
                         case .success(_):
                             self.loadedThumb = true;
@@ -244,7 +239,7 @@ import Kingfisher
                 switch result {
                 case .failure(let error):
                     if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
-                        print("cache miss \(key)")
+                        MageLogger.misc.debug("cache miss \(key)")
                     }
                 case .success(_):
                     self.loadedThumb = true;
@@ -261,7 +256,7 @@ import Kingfisher
                 switch result {
                 case .failure(let error):
                     if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
-                        print("cache miss \(key)")
+                        MageLogger.misc.debug("cache miss \(key)")
                     }
                 case .success(_):
                     self.loadedThumb = true;
@@ -279,7 +274,7 @@ import Kingfisher
                 switch result {
                 case .failure(let error):
                     if case KingfisherError.cacheError(reason: .imageNotExisting(let key)) = error {
-                        print("cache miss \(key)")
+                        MageLogger.misc.debug("cache miss \(key)")
                     }
                 case .success(_):
                     self.loaded = true;

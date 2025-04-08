@@ -30,12 +30,12 @@ import CoreData
         let url = "\(baseURL.absoluteURL)/api/roles";
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Roles @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Roles @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: nil, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Roles. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Roles. Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             if let responseData = responseObject as? Data {
                 if responseData.count == 0 {
-                    print("Roles are empty");
+                    MageLogger.misc.debug("Roles are empty");
                     success?(task, nil);
                     return;
                 }
@@ -46,7 +46,7 @@ import CoreData
                 return;
             }
             let saveStart = Date()
-            NSLog("TIMING Saving Roles @ \(saveStart)")
+            MageLogger.misc.debug("TIMING Saving Roles @ \(saveStart)")
             
             @Injected(\.nsManagedObjectContext)
             var context: NSManagedObjectContext?
@@ -55,7 +55,6 @@ import CoreData
                 success?(task, nil)
                 return
             }
-//            MagicalRecord.save { localContext in
             context.performAndWait {
                 // Get the role ids to query
                 var roleIds: [String] = [];
@@ -80,12 +79,12 @@ import CoreData
                     }
                     if let role = roleIdMap[roleId] {
                         // already exists in core data, lets update the object we have
-                        print("Updating role in the database \(role.remoteId ?? "")");
+                        MageLogger.misc.debug("Updating role in the database \(role.remoteId ?? "")");
                         role.update(json: roleJson, context: context);
 
                     } else {
                         // not in core data yet need to create a new managed object
-                        print("Inserting new role into database");
+                        MageLogger.misc.debug("Inserting new role into database");
                         Role.insert(json: roleJson, context: context)
                     }
                 }
@@ -97,17 +96,6 @@ import CoreData
                     failure?(task, error)
                 }
             } 
-//        completion: { contextDidSave, error in
-//                NSLog("TIMING inserted roles. Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
-//
-//                if let error = error {
-//                    if let failure = failure {
-//                        failure(task, error);
-//                    }
-//                } else if let success = success {
-//                    success(task, nil);
-//                }
-//            }
         }, failure: { task, error in
             if let failure = failure {
                 failure(task, error);

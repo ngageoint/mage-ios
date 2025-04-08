@@ -78,7 +78,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
                 continue
             }
             if !unselectedStaticLayerIds.contains(staticLayerId) {
-                print("Adding the static layer \(staticLayer.name ?? "No Name") to the map")
+                MageLogger.misc.debug("Adding the static layer \(staticLayer.name ?? "No Name") to the map")
                 guard let features = staticLayer.features else {
                     continue
                 }
@@ -148,7 +148,7 @@ class StaticLayerMapMixin: NSObject, MapMixin {
         
         for unselectedStaticLayerId in unselectedStaticLayerIds {
             if let unselectedStaticLayer = repository.getStaticLayer(remoteId: unselectedStaticLayerId), let staticItems = staticLayers[unselectedStaticLayerId] {
-                print("removing the layer \(unselectedStaticLayer.name ?? "No Name") from the map")
+                MageLogger.misc.debug("removing the layer \(unselectedStaticLayer.name ?? "No Name") from the map")
                 for staticItem in staticItems {
                     if let overlay = staticItem as? MKOverlay {
                         staticLayerMap.mapView?.removeOverlay(overlay)

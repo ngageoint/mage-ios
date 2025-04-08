@@ -133,8 +133,8 @@ enum ObservationState: Int, CustomStringConvertible {
             try observationFetchedResultsController.performFetch()
         } catch {
             let fetchError = error as NSError
-            print("Unable to Perform Fetch Request")
-            print("\(fetchError), \(fetchError.localizedDescription)")
+            MageLogger.misc.error("Unable to Perform Fetch Request")
+            MageLogger.misc.error("\(fetchError), \(fetchError.localizedDescription)")
         }
         return observationFetchedResultsController
     }
@@ -157,7 +157,7 @@ enum ObservationState: Int, CustomStringConvertible {
             return nil;
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(currentEventId)/observations";
-        print("Fetching observations from event \(currentEventId)");
+        MageLogger.misc.debug("Fetching observations from event \(currentEventId)");
         
         var parameters: [AnyHashable : Any] = [
             // does this work on the server?
@@ -170,26 +170,26 @@ enum ObservationState: Int, CustomStringConvertible {
         
         let manager = MageSessionManager.shared();
         let methodStart = Date()
-        NSLog("TIMING Fetching Observations for event \(currentEventId) @ \(methodStart)")
+        MageLogger.misc.debug("TIMING Fetching Observations for event \(currentEventId) @ \(methodStart)")
         let task = manager?.get_TASK(url, parameters: parameters, progress: nil, success: { task, responseObject in
-            NSLog("TIMING Fetched Observations for event \(currentEventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
+            MageLogger.misc.debug("TIMING Fetched Observations for event \(currentEventId). Elapsed: \(methodStart.timeIntervalSinceNow) seconds")
             guard let features = responseObject as? [[AnyHashable : Any]] else {
                 success?(task, nil);
                 return;
             }
             
-            print("Fetched \(features.count) observations from the server, saving");
+            MageLogger.misc.debug("Fetched \(features.count) observations from the server, saving");
             if features.count == 0 {
                 success?(task, responseObject)
                 return;
             }
             
             let saveStart = Date()
-            NSLog("TIMING Saving Observations for event \(currentEventId) @ \(saveStart)")
+            MageLogger.misc.debug("TIMING Saving Observations for event \(currentEventId) @ \(saveStart)")
             let rootSavingContext = NSManagedObjectContext.mr_rootSaving();
             let localContext = NSManagedObjectContext.mr_context(withParent: rootSavingContext);
             localContext.perform {
-                NSLog("TIMING There are \(features.count) features to save, chunking into groups of 250")
+                MageLogger.misc.debug("TIMING There are \(features.count) features to save, chunking into groups of 250")
                 localContext.mr_setWorkingName(#function)
                 
                 var chunks = features.chunked(into: 250);
@@ -204,7 +204,7 @@ enum ObservationState: Int, CustomStringConvertible {
                     }
                 }
                 localContext.reset();
-                NSLog("TIMING we have \(chunks.count) groups to save")
+                MageLogger.misc.debug("TIMING we have \(chunks.count) groups to save")
                 while (chunks.count > 0) {
                     autoreleasepool {
                         guard let features = chunks.last else {
@@ -212,7 +212,7 @@ enum ObservationState: Int, CustomStringConvertible {
                         }
                         chunks.removeLast();
                         let createObservationsDate = Date()
-                        NSLog("TIMING creating \(features.count) observations for chunk \(chunks.count)")
+                        MageLogger.misc.debug("TIMING creating \(features.count) observations for chunk \(chunks.count)")
 
                         for observation in features {
                             if let newObservation = Observation.create(feature: observation, eventForms: eventFormDictionary, context: localContext) {
@@ -222,51 +222,51 @@ enum ObservationState: Int, CustomStringConvertible {
                                 }
                             }
                         }
-                        NSLog("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
+                        MageLogger.misc.debug("TIMING created \(features.count) observations for chunk \(chunks.count) Elapsed: \(createObservationsDate.timeIntervalSinceNow) seconds")
                     }
                     
                     // only save once per chunk
                     let localSaveDate = Date()
                     do {
-                        NSLog("TIMING saving \(features.count) observations on local context")
+                        MageLogger.misc.debug("TIMING saving \(features.count) observations on local context")
                         try localContext.save()
                     } catch {
-                        print("Error saving observations: \(error)")
+                        MageLogger.misc.error("Error saving observations: \(error)")
                     }
-                    NSLog("TIMING saved \(features.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
+                    MageLogger.misc.debug("TIMING saved \(features.count) observations on local context. Elapsed \(localSaveDate.timeIntervalSinceNow) seconds")
                     
                     rootSavingContext.perform {
                         let rootSaveDate = Date()
 
                         do {
-                            NSLog("TIMING saving \(features.count) observations on root context")
+                            MageLogger.misc.debug("TIMING saving \(features.count) observations on root context")
                             try rootSavingContext.save()
                         } catch {
-                            print("Error saving observations: \(error)")
+                            MageLogger.misc.error("Error saving observations: \(error)")
                         }
-                        NSLog("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
+                        MageLogger.misc.debug("TIMING saved \(features.count) observations on root context. Elapsed \(rootSaveDate.timeIntervalSinceNow) seconds")
 
                     }
                     
                     localContext.reset();
-                    NSLog("TIMING reset the local context for chunk \(chunks.count)")
-                    NSLog("Saved chunk \(chunks.count)")
+                    MageLogger.misc.debug("TIMING reset the local context for chunk \(chunks.count)")
+                    MageLogger.misc.debug("Saved chunk \(chunks.count)")
                 }
                 
-                NSLog("Received \(newObservationCount) new observations and send bulk is \(initial)")
+                MageLogger.misc.debug("Received \(newObservationCount) new observations and send bulk is \(initial)")
                 if ((initial && newObservationCount > 0) || newObservationCount > 1) {
                     NotificationRequester.sendBulkNotificationCount(UInt(newObservationCount), in: Event.getCurrentEvent(context: localContext));
                 } else if let observationToNotifyAbout = observationToNotifyAbout {
                     NotificationRequester.observationPulled(observationToNotifyAbout);
                 }
                 
-                NSLog("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
+                MageLogger.misc.debug("TIMING Saved Observations for event \(currentEventId). Elapsed: \(saveStart.timeIntervalSinceNow) seconds")
                 DispatchQueue.main.async {
                     success?(task, responseObject);
                 }
             }
         }, failure: { task, error in
-            print("Error \(error)")
+            MageLogger.misc.error("Error \(error)")
             failure?(task, error);
         })
         
@@ -291,7 +291,7 @@ enum ObservationState: Int, CustomStringConvertible {
             return nil;
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/favorite";
-        NSLog("Trying to push favorite to server \(url)")
+        MageLogger.misc.debug("Trying to push favorite to server \(url)")
 
         let manager = MageSessionManager.shared();
         
@@ -307,7 +307,7 @@ enum ObservationState: Int, CustomStringConvertible {
             return nil;
         }
         let url = "\(baseURL.absoluteURL)/api/events/\(eventId)/observations/\(observationRemoteId)/important";
-        NSLog("Trying to push favorite to server \(url)")
+        MageLogger.misc.debug("Trying to push favorite to server \(url)")
         
         let manager = MageSessionManager.shared();
         
@@ -322,7 +322,7 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     static func operationToDelete(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error?) -> Void)?) -> URLSessionDataTask? {
-        NSLog("Trying to delete observation \(observation.url ?? "no url")");
+        MageLogger.misc.debug("Trying to delete observation \(observation.url ?? "no url")");
         let deleteMethod = MAGERoutes.observation().deleteRoute(observation);
         
         let manager = MageSessionManager.shared();
@@ -337,11 +337,11 @@ enum ObservationState: Int, CustomStringConvertible {
                 failure?(task, nil);
             }
         }, failure: { task, error in
-            NSLog("Failure to delete")
+            MageLogger.misc.error("Failure to delete")
             let error = error as NSError
             if let data = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] as? Data {
                 let errorString = String(data: data, encoding: .utf8);
-                NSLog("Error deleting observation \(errorString ?? "unknown error")");
+                MageLogger.misc.error("Error deleting observation \(errorString ?? "unknown error")");
                 if let response = task?.response as? HTTPURLResponse {
                     if (response.statusCode == 404) {
                         // Observation does not exist on the server, delete it
@@ -363,7 +363,7 @@ enum ObservationState: Int, CustomStringConvertible {
     }
     
     static func operationToUpdate(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
-        NSLog("Trying to update observation \(observation.url ?? "unknown url")")
+        MageLogger.misc.debug("Trying to update observation \(observation.url ?? "unknown url")")
         let manager = MageSessionManager.shared();
         guard let context = observation.managedObjectContext, let event = Event.getCurrentEvent(context:context) else {
             return nil;
@@ -377,22 +377,16 @@ enum ObservationState: Int, CustomStringConvertible {
                 return manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
             }
         }
-//        else {
-//            // TODO: 6.1 and above
-//            if let observationUrl = observation.url {
-//                return manager?.patch_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: success, failure: failure);
-//            }
-//        }
         return nil;
     }
     
     static func operationToCreate(observation: Observation, success: ((URLSessionDataTask,Any?) -> Void)?, failure: ((URLSessionDataTask?, Error) -> Void)?) -> URLSessionDataTask? {
         let create = MAGERoutes.observation().createId(observation);
-        NSLog("Trying to create observation %@", create.route);
-        let manager = MageSessionManager.shared();
+        MageLogger.misc.debug("Trying to create observation \(String(describing: create.route))")
+        let manager = MageSessionManager.shared()
         
         let task = manager?.post_TASK(create.route, parameters: nil, progress: nil, success: { task, response in
-            NSLog("Successfully created location for observation resource");
+            MageLogger.misc.debug("Successfully created location for observation resource")
             guard let response = response as? [AnyHashable : Any], let observationUrl = response[ObservationKey.url.key] as? String, let remoteId = response[ObservationKey.id.key] as? String else {
                 return;
             }
@@ -404,16 +398,16 @@ enum ObservationState: Int, CustomStringConvertible {
                 localObservation.url = observationUrl;
             } completion: { contextDidSave, error in
                 if !contextDidSave {
-                    NSLog("Failed to save observation to DB after getting an ID")
+                    MageLogger.misc.error("Failed to save observation to DB after getting an ID")
                 }
                 guard let context = observation.managedObjectContext, let event = Event.getCurrentEvent(context: context) else {
                     return;
                 }
                 let putTask = manager?.put_TASK(observationUrl, parameters: observation.createJsonToSubmit(event:event), success: { task, response in
-                    print("successfully submitted observation")
+                    MageLogger.misc.debug("successfully submitted observation")
                     success?(task, response);
                 }, failure: { task, error in
-                    print("failure");
+                    MageLogger.misc.error("failure");
                 });
                 manager?.addTask(putTask);
             }
@@ -601,13 +595,11 @@ enum ObservationState: Int, CustomStringConvertible {
         
         let state = Observation.stateFromJson(json: feature);
         
-//        NSLog("TIMING create the observation \(remoteId)")
-        
         if let remoteId = remoteId, let existingObservation = Observation.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: remoteId, in: context) {
             // if the observation is archived, delete it
             if state == .Archive {
-                NSLog("Deleting archived observation with id: %@", remoteId);
-                existingObservation.mr_deleteEntity(in: context);
+                MageLogger.misc.debug("Deleting archived observation with id: \(String(describing: remoteId))")
+                existingObservation.mr_deleteEntity(in: context)
             } else if !existingObservation.isDirty {
                 // if the observation is not dirty, and has been updated, update it
                 if let lastModified = feature[ObservationKey.lastModified.key] as? String {
@@ -630,9 +622,9 @@ enum ObservationState: Int, CustomStringConvertible {
                             let manager = MageSessionManager.shared();
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
+                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
                             } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                             }
                             manager?.addTask(fetchUserTask)
                         }
@@ -641,10 +633,10 @@ enum ObservationState: Int, CustomStringConvertible {
                         let manager = MageSessionManager.shared();
                         
                         let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                            NSLog("Fetched user \(userId) successfully.")
+                            MageLogger.misc.debug("Fetched user \(userId) successfully.")
                             existingObservation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
                         } failure: { task, error in
-                            NSLog("Failed to fetch user \(userId) error \(error)")
+                            MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                         }
                         manager?.addTask(fetchUserTask)
                     }
@@ -736,9 +728,9 @@ enum ObservationState: Int, CustomStringConvertible {
                                 let manager = MageSessionManager.shared();
                                 
                                 let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                    NSLog("Fetched user \(userId) successfully.")
+                                    MageLogger.misc.debug("Fetched user \(userId) successfully.")
                                 } failure: { task, error in
-                                    NSLog("Failed to fetch user \(userId) error \(error)")
+                                    MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                                 }
                                 manager?.addTask(fetchUserTask)
                             }
@@ -747,10 +739,10 @@ enum ObservationState: Int, CustomStringConvertible {
                             let manager = MageSessionManager.shared();
                             
                             let fetchUserTask = User.operationToFetchUser(userId: userId) { task, response in
-                                NSLog("Fetched user \(userId) successfully.")
+                                MageLogger.misc.debug("Fetched user \(userId) successfully.")
                                 observation.user = User.mr_findFirst(byAttribute: ObservationKey.remoteId.key, withValue: userId, in: context)
                             } failure: { task, error in
-                                NSLog("Failed to fetch user \(userId) error \(error)")
+                                MageLogger.misc.error("Failed to fetch user \(userId) error \(error)")
                             }
                             manager?.addTask(fetchUserTask)
                         }

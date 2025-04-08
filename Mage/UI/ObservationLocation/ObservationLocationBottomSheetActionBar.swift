@@ -78,19 +78,19 @@ enum ObservationActions {
         switch (self) {
  
         case .favorite(observationUri: let observationUri, userRemoteId: let userRemoteId):
-            print("favorite")
+            MageLogger.misc.debug("favorite")
             if let userRemoteId = userRemoteId {
                 @Injected(\.observationFavoriteRepository)
                 var observationFavoriteRepository: ObservationFavoriteRepository
                 observationFavoriteRepository.toggleFavorite(observationUri: observationUri, userRemoteId: userRemoteId)
             }
         case .syncNow(observationUri: let observationUri):
-            print("sync now")
+            MageLogger.misc.debug("sync now")
             @Injected(\.observationRepository)
             var observationRepository: ObservationRepository
             observationRepository.syncObservation(uri: observationUri)
         case .toggleImportant(observationUri: let observationUri):
-            print("toggle important")
+            MageLogger.misc.debug("toggle important")
         }
     }
 }

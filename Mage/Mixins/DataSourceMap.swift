@@ -183,7 +183,7 @@ class DataSourceMap: MapMixin {
                 } else {
                     inserts.append(element)
                 }
-                print("insert offset \(offset) for element \(element)")
+                MageLogger.misc.debug("insert offset \(offset) for element \(element)")
             case .remove(let offset, let element, _):
                 let existing = mapView.annotations.compactMap({ mapAnnotation in
                     mapAnnotation as? DataSourceAnnotation
@@ -195,14 +195,14 @@ class DataSourceMap: MapMixin {
                     return false
                 })
                 removals.append(contentsOf: existing)
-                print("remove offset \(offset) for element \(element)")
+                MageLogger.misc.debug("remove offset \(offset) for element \(element)")
             }
         }
-        NSLog("Inserting \(inserts.count), removing: \(removals.count)")
+        MageLogger.misc.debug("Inserting \(inserts.count), removing: \(removals.count)")
         
         mapView.addAnnotations(inserts)
         mapView.removeAnnotations(removals)
-        NSLog("Annotation count: \(mapView.annotations.count)")
+        MageLogger.misc.debug("Annotation count: \(mapView.annotations.count)")
         
         return !inserts.isEmpty || !removals.isEmpty
     }
@@ -240,7 +240,7 @@ class DataSourceMap: MapMixin {
                 if existing == nil, let element = element as? MKOverlay {
                     inserts.append(element)
                 }
-                print("insert offset \(offset) for element \(element)")
+                MageLogger.misc.debug("insert offset: \(String(describing: offset)) for element: \(String(describing: element))")
             case .remove(let offset, let element, _):
                 let existing = mapView.overlays.compactMap({ mapOverlay in
                     mapOverlay as? DataSourceIdentifiable
@@ -254,24 +254,17 @@ class DataSourceMap: MapMixin {
                     identifiable as? MKOverlay
                 }
                 removals.append(contentsOf: existing)
-                print("remove offset \(offset) for element \(element)")
+                MageLogger.misc.debug("remove offset: \(String(describing: offset)) for element: \(String(describing: element))")
             }
         }
-        NSLog("Inserting \(inserts.count), removing: \(removals.count)")
+        MageLogger.misc.debug("Inserting \(inserts.count), removing: \(removals.count)")
         
         mapView.addOverlays(inserts)
         mapView.removeOverlays(removals)
-        NSLog("Annotation count: \(mapView.overlays.count)")
+        MageLogger.misc.debug("Annotation count: \(mapView.overlays.count)")
         return !inserts.isEmpty || !removals.isEmpty
     }
     
-//    deinit {
-//        for cancellable in cancellable {
-//            cancellable.cancel()
-//        }
-//    }
-
-
     func removeMixin(mapView: MKMapView, mapState: MapState) {
         mapView.removeOverlays(viewModel?.featureOverlays ?? [])
         mapView.removeAnnotations(viewModel?.annotations ?? [])
@@ -287,7 +280,6 @@ class DataSourceMap: MapMixin {
         touchPoint: CGPoint
     ) async -> [Any]? {
         return nil
-//        return await viewModel.items(at: location, mapView: mapView, touchPoint: touchPoint)
     }
 
     func itemKeys(

@@ -30,13 +30,13 @@ class RemoteDataSource<T> {
     }()
 
     func registerBackgroundTask(name: String) {
-        NSLog("Register the background task \(name)")
+        MageLogger.misc.debug("Register the background task \(name)")
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: name) { [weak self] in
-            NSLog("iOS has signaled time has expired \(name)")
+            MageLogger.misc.debug("iOS has signaled time has expired \(name)")
             self?.cleanup?()
-            print("canceling \(name)")
+            MageLogger.misc.debug("canceling \(name)")
             self?.operation?.cancel()
-            print("calling endBackgroundTask \(name)")
+            MageLogger.misc.debug("calling endBackgroundTask \(name)")
             self?.endBackgroundTaskIfActive()
         }
     }
@@ -44,7 +44,7 @@ class RemoteDataSource<T> {
     func endBackgroundTaskIfActive() {
         let isBackgroundTaskActive = backgroundTask != .invalid
         if isBackgroundTaskActive {
-            NSLog("Background task ended. \(dataSource.name) Fetch")
+            MageLogger.misc.debug("Background task ended. \(String(describing: self.dataSource.name)) Fetch")
             UIApplication.shared.endBackgroundTask(backgroundTask)
             backgroundTask = .invalid
         }
@@ -63,7 +63,7 @@ class RemoteDataSource<T> {
             self.operation?.cancel()
         }
 
-        NSLog("Start the operation to fetch new data \(operation)")
+        MageLogger.misc.debug("Start the operation to fetch new data \(operation)")
         // Start the operation.
         self.backgroundFetchQueue.addOperation(operation)
 
@@ -72,7 +72,7 @@ class RemoteDataSource<T> {
             // when the operation completes.
             operation.completionBlock = {
                 task?.setTaskCompleted(success: !(self.operation?.isCancelled ?? false))
-                NSLog("\(self.dataSource.name) Remote Data Source count \(self.operation?.data.count ?? 0)")
+                MageLogger.misc.debug("\(self.dataSource.name) Remote Data Source count \(self.operation?.data.count ?? 0)")
                 continuation.resume(returning: self.operation?.data ?? [])
             }
         }

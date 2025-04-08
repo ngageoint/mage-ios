@@ -7,6 +7,14 @@
 //
 
 import Foundation
+import os
+
+enum MageLogger {
+    static let network = Logger(subsystem: "mil.nga.mage", category: "networking")
+    static let ui = Logger(subsystem: "mil.nga.mage", category: "ui")
+    static let db = Logger(subsystem: "mil.nga.mage", category: "database")
+    static let misc = Logger(subsystem: "mil.nga.mage", category: "misc")
+}
 
 @objc class MageInitializer: NSObject {
     @Injected(\.geoPackageRepository)

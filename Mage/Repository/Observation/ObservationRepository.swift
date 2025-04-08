@@ -154,11 +154,11 @@ class ObservationRepositoryImpl: ObservationRepository, ObservableObject {
     
     // TODO: implement this
     func syncObservation(uri: URL?) {
-        print("XXX SYNC IT")
+        MageLogger.misc.debug("XXX SYNC IT")
     }
 
     func fetchObservations() async -> Int {
-        NSLog("Fetching Observations")
+        MageLogger.misc.debug("Fetching Observations")
 
         guard let eventId = Server.currentEventId() else {
             return 0

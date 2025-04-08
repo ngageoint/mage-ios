@@ -137,8 +137,7 @@ class DocumentViewer : UIViewController {
             documentInteractionController?.delegate = self
             documentInteractionController?.presentOptionsMenu(from: sender.frame, in: view, animated: true)
         } catch {
-            // Prints the localized description of the error from the do block
-            print("Error writing the file: \(error.localizedDescription)")
+            MageLogger.misc.error("Error writing the file: \(error.localizedDescription)")
         }
     }
 }

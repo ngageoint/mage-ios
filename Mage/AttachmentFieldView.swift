@@ -442,7 +442,7 @@ extension AttachmentFieldView : AttachmentCreationCoordinatorDelegate {
     }
     
     func attachmentCreationCancelled() {
-        print("Cancelled")
+        MageLogger.misc.debug("Cancelled")
     }
 }
 
